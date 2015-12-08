@@ -1,0 +1,67 @@
+{{define "repaymentCredit"}}
+<script>
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#credit_id").val()+','+$("#amount").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'credit_id' : $('#credit_id').val(),
+						'amount' : $('#amount').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('credits', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		});
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.payment_on_the_loan}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#credits">{{.Lang.credits}}</a></li>
+		<li class="active">{{.Lang.payment_on_the_loan}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="main_data">
+
+		<div class="form-horizontal">
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="amount">{{.Lang.amount}}</label>
+				<div class="col-md-4">
+					<input style="min-width: 100px" id="amount"  class="form-control" type="text">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="save"></label>
+				<div class="col-md-4">
+					<button type="button" class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
+				</div>
+			</div>
+
+		</div>
+
+		<input type="hidden" id="credit_id" value="{{.CreditId}}">
+
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

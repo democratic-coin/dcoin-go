@@ -1,0 +1,37 @@
+{{define "chat"}}
+<h1 class="page-header" id="chatTitle">Chat</h1>
+
+<script>
+	var userId = {{.UserId}}
+	$(function() {
+		check_key_and_show_modal();
+	});
+</script>
+<script src="/static/js/chat.js"></script>
+
+<style>
+	#chat img{width: 50px; float: left; margin-right: 10px}
+	#chatLock { padding: 3px 7px; font-size: 20px; }
+	.col-lg-12{padding: 0}
+</style>
+<div id="chat" class="col-lg-12">
+	<div id="chat_alert"></div>
+	<div style="max-height: 500px; overflow-y: auto; margin-bottom: 5px" id="chatwindow">
+		<table class="table table-striped table-bordered table-hover">
+			<tbody id="chatMessages">
+			</tbody>
+		</table>
+	</div>
+
+	<div class="navbar-fixed-bottom row-fluid" style="padding-top: 3px; padding-bottom: 3px; background-color: rgb(248, 248, 248); border-top: 1px solid rgb(204, 204, 204);  opacity: 0.95; display: block; margin-bottom: 50px">
+		<input type="hidden" id="chatUserIdReceiver" value="0">
+
+		{{if not .Community}}<button class="btn btn-default"  onclick="lock_unlock(); return false" id="chatLock" style="display: inline-block; margin: 5px; width: 40px"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
+
+		<span id="selectReceiver" style="display: none;vertical-align: middle;">Please, select receiver</span>
+		<input type="text" class="form-control" id="myChatMessage" style="display: inline-block;vertical-align: middle; width: 200px" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
+		<button class="btn btn-primary" id="sendToChat" style="display: inline-block" onclick="document.getElementById('sendToChat').innerHTML='wait'">Send</button>
+	</div>
+</div>
+
+{{end}}

@@ -1,0 +1,43 @@
+{{define "dbInfoNodes"}}
+<h1 class="page-header">{{.Lang.db_info}}</h1>
+
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#dbInfo">dbInfo</a></li>
+	<li class="active">Nodes}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+<table class="table table-bordered">
+<thead><tr>
+	<th>host</th>
+	<th>time</th>
+	<th>block_id</th>
+	<th>db_version</th>
+	<th>sum_promised_amount</th>
+	<th>sum_promised_tdc_amount</th>
+	<th>sum_wallets_amount</th>
+	<th>sum_forex_amount</th>
+	{{range $id, $title := .Titles}}
+		<th>{{$title}}</th>
+	{{end}}
+</tr></thead>
+<tbody>
+{{range $id0, $data := .NodesData}}
+<tr>
+	<th>{{index $data "host"}}</th>
+	<th class="unixtime">{{index $data "time"}}</th>
+	<th>{{index $data "block_id"}}</th>
+	<th>{{index $data "db_version"}}</th>
+	<th>{{index $data "sum_promised_amount"}}</th>
+	<th>{{index $data "sum_promised_tdc_amount"}}</th>
+	<th>{{index $data "sum_wallets_amount"}}</th>
+	<th>{{index $data "sum_forex_amount"}}</th>
+	{{range $id1, $title := $.Titles}}
+		<th>{{index $data $title}}</th>
+	{{end}}
+</tr>
+{{end}}
+</tbody>
+</table>
+
+<script src="static/js/unixtime.js"></script>
+{{end}}

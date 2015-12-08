@@ -1,0 +1,126 @@
+{{define "cashRequestIn"}}
+<script>
+
+	$('#next').bind('click', function () {
+
+		var error_message = '';
+		code =  $('#code').val();
+		hash_code =  $('#hash_code').val();
+
+		sha256 = hex_sha256(hex_sha256(code));
+		if ( sha256 != hash_code && hash_code!='' ) {
+			console.log(sha256);
+			console.log(hash_code);
+			error_message = '{{.Lang.invalid_code}}';
+		}
+		if (error_message!='') {
+			$("#message").html( '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>'+error_message+'</div>' );
+		}
+		else {
+			$("#wallets").css("display", "none");
+			$("#sign").css("display", "block");
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#cash_request_id').val()+','+$('#code').val());
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		}
+
+	});
+
+		$('#send_to_net').bind('click', function () {
+
+			code =  $('#code').val();
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'cash_request_id' : $('#cash_request_id').val(),
+				'code' : code,
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function () {
+				dc_navigate ('cashRequestIn', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			});
+		} );
+
+		$('#profileclose').bind('click', function () {
+			$("#profile_window").css("display", "none");
+		});
+
+</script>
+
+<script src="static/js/js.js"></script>
+<div id="profile_window" style="display: none; width: 500px;	padding:10px 10px; background-color: #fff; border:  1px solid black; ">
+	<button type="button" class="close" id="profileclose">×</button>
+	<div style="float: left; margin-right: 10px"><img id="profile_photo" width="200"></div>
+	{{.Lang.abuses}}: <span id="profile_abuses"></span><br>
+	{{.Lang.reg_time}}: <span id="profile_reg_time"></span>
+	<div id="reloadbtn"></div>
+</div>
+<h1 class="page-header">{{.Lang.cash_request_in_title}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.cash_request_in_title}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<div id="message"></div>
+
+{{if .ActualData}}
+<div id="wallets">
+
+	<table class="table" style="width:500px">
+		<tr><td><strong>User_id</strong></td><td><a href='#' onclick='show_profile({{.ActualData.from_user_id}});return false'>{{.ActualData.from_user_id}}</a></td></tr>
+		<tr><td><strong>{{.Lang.currency}}</strong></td><td>{{index .CurrencyList (strToInt64 .ActualData.currency_id)}}</td></tr>
+		<tr><td><strong>{{.Lang.amount}}</strong></td><td>{{.ActualData.amount}}</td></tr>
+		<tr><td><strong>{{.Lang.contact}}</strong></td>
+		{{if eq .ActualData.comment_status "decrypted"}}
+			<td>{{.ActualData.comment}}</td>
+		{{else}}
+			<td><div id="comment_{{.ActualData.id}}"><input type="hidden" id="encrypt_comment_{{.ActualData.id}}" value="{{.ActualData.comment}}"><button class="btn" onclick="decrypt_comment({{.ActualData.id}}, 'cash_requests')">{{.Lang.decrypt}}</button></div></td>
+		{{end}}
+		</tr>
+	</table>
+	{{.Lang.enter_code}}<br>
+	<input type="text" id="code" class="form-control"><br>
+	<button id="next" class="btn btn-primary" type="button">{{.Lang.next}}</button>
+</div>
+{{else}}
+	{{.Lang.no_requests}}
+{{end}}
+
+{{template "signatures".}}
+
+<div id="list">
+	{{if .MyCashRequests}}
+		<br><br><h3>{{.Lang.list_of_requests}}</h3>
+		<table class="table" style="width:500px">
+		<tr><th>{{.Lang.time}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.recipient}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.comment}}</th><th>{{.Lang.status}}</th></tr>
+		{{range $key, $data := .MyCashRequests}}
+			<tr>
+			{{if $data.time}}
+				<td class="unixtime">{{$data.time}}</td>
+			{{else}}
+				<td></td>
+			{{end}}
+			<td>{{index $.CurrencyList (strToInt64 (index $.ActualData "currency_id"))}}</td><td>{{$data.to_user_id}}</td><td>{{$data.amount}}</td>
+			{{if eq $data.comment_status  "decrypted"}}
+				<td>{{$data.comment}}</td>
+			{{else}}
+				<td><div id="comment_{{$data.id}}"><input type="hidden" id="encrypt_comment_{{$data.id}}" value="{{$data.comment}}"><button class="btn" onclick="decrypt_comment({{$data.id}}, 'cash_requests')">{{$.Lang.decrypt}}</button></div></td>
+			{{end}}
+			<td>{{index $.CashRequestsStatus $data.status}}</td></tr>
+		{{end}}
+		</table>
+	{{end}}
+</div>
+
+{{noescape .LastTxFormatted}}
+
+<input type="hidden" id="hash_code" value="{{.ActualData.hash_code}}">
+<input type="hidden" id="cash_request_id" value="{{.ActualData.cash_request_id}}">
+
+<script src="static/js/unixtime.js"></script>
+{{end}}

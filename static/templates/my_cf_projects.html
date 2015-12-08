@@ -1,0 +1,91 @@
+{{define "myCfProjects"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		$("#main_div").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#currency_id").val()+','+$("#amount").val()+','+$("#end_time").val()+','+$("#latitude").val()+','+$("#longitude").val()+','+$("#category_id").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'currency_id' : $('#currency_id').val(),
+						'amount' : $('#amount').val(),
+						'end_time' : $('#end_time').val(),
+						'latitude' : $('#latitude').val(),
+						'longitude' : $('#longitude').val(),
+						'category_id' : $('#category_id').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('newCfProject', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		} );
+
+		$('#newCfProject').bind('click', function () {
+
+			$('#wrapper').spin();
+			$( "#dc_content" ).load( "content", { tpl_name: "newCfProject" }, function() {
+				$.getScript("https://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize", function(){
+					$('#wrapper').spin(false);
+				});
+			});
+
+		});
+
+
+</script>
+<style>
+	.mlng li{padding-right:5px; padding-left: 0px}
+</style>
+<link href="static/css/cf.css" rel="stylesheet">
+
+<h1 class="page-header">{{.Lang.my_cf_projects_title}}</h1>
+
+{{template "alertSuccess".}}
+
+<button type="button" class="btn btn-primary" data-toggle="button"  id="newCfProject">{{.Lang.add_new_project}}</button><br><br>
+
+<div id="main_div">
+
+	{{if .Projects}}
+	{{range $projectId, $data := .Projects}}
+	<div class="well project-card" style="float:left; margin-right:20px">
+		<a href="#cfPagePreview/onlyProjectId={{$data.id}}{{if $data.lang_id}}, 'lang_id':{{$data.lang_id}}{{end}}"><img src="{{$data.blurb_img}}" style="width:200px; height:310px"></a>
+		<ul class="list-inline mlng" style="margin-left:0px; margin-top:5px; padding-left: 0px">
+			{{range $dataId, $langId := index $.ProjectsLang $data.id}}
+				<li><a href="#addCfProjectData/id={{$dataId}}">{{index $.CfLng $langId}}</a></li>
+			{{end}}
+		</ul>
+		<p><a href="#addCfProjectData/projectId={{$data.id}}">{{$.Lang.add_description}}</a></p>
+		<p>{{$.Lang.currency}}: {{$data.project_currency_name}}</p>
+		<p>{{$.Lang.project_id}}: {{$data.id}}</p>
+		<p>{{$.Lang.category}}: {{cfCategoryLang $.Lang $data.category_id}} <a href="#" onclick="dc_navigate('cfProjectChangeCategory', {'project_id':'{{$data.id}}'})"><i class="fa  fa-pencil fa-fw"></i></a></p>
+		<div>
+			<div class="card-location" style="margin-top:10px;font-size: 13px; color: #828587;"><i class="fa  fa-map-marker  fa-fw"></i> {{$data.country}},{{$data.city}}</div>
+			<div class="progress" style="height:5px; margin-top:10px; margin-bottom:10px"><div class="progress-bar progress-bar-success" style="width: {{$data.pct}}%;"></div></div>
+			<div class="card-bottom">
+				<div style="float:left; overflow:auto; padding-right:10px"><h5>{{$data.pct}}%</h5>funded</div>
+				<div style="float:left; overflow:auto; padding-right:10px"><h5>{{$data.funding_amount}} D{{index $.CurrencyList (strToInt64 $data.currency_id)}} </h5>pledged</div>
+				<div style="float:left; overflow:auto;"><h5>{{round $data.days 0}}</h5>days to go</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<p style="margin-top:5px; margin-bottom: 0px"><a href="#" onclick="dc_navigate('delCfProject', {'del_id':{{$data.id}}})">{{$.Lang.delete_project}}</a></p>
+	</div>
+	{{end}}
+	{{end}}
+</div>
+
+{{template "signatures".}}
+
+{{end}}

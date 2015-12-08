@@ -1,0 +1,17 @@
+{{define "voteForMe"}}
+
+<h1 class="page-header">{{.Lang.vote_for_me}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.vote_for_me}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+<table class="table table-bordered" style="width:600px">
+<thead><tr><th>type</th><th>vote_id</th><th>comment</th></tr></thead>
+<tbody>
+	{{range $data := .MyComments}}
+		<tr><td>{{$data.type}}</td><td>{{$data.id}}</td><td>{{$data.comment}}</td></tr>
+	{{end}}
+</tbody>
+</table>
+
+{{end}}

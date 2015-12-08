@@ -1,0 +1,3 @@
+http://dcoin.club
+
+Windows (<a href="http://dcoin.club/dcoin64.exe">64</a>/<a href="http://dcoin.club/dcoin32.exe">32</a>), OSX(<a href="http://dcoin.club/dcoin64.dmg">64</a>/<a href="http://dcoin.club/dcoin32.dmg">32</a>), Linux(<a href="http://dcoin.club/dcoin64.deb">64</a>/<a href="http://dcoin.club/dcoin32.deb">32</a>), FreeBSD(<a href="http://dcoin.club/dcoin_freebsd64.zip">64</a>/<a href="http://dcoin.club/dcoin_freebsd32.zip">32</a>), <a href="http://dcoin.club/dcoin.apk">Android</a>, <a href="http://dcoin.club/en/ios.html">IOS</a>

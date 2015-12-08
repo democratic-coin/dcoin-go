@@ -1,0 +1,39 @@
+{{define "changeKeyClose"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main").css("display", "none");	$("#sign").css("display", "block");{{end}}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}}');
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+		});
+
+		$('#send_to_net').bind('click', function () {
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('restoringAccess', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		} );
+
+</script>
+
+<h1 class="page-header">{{.Lang.change_key_close}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+	<button id="save" class="btn btn-outline btn-primary">{{.Lang.cancel_the_requests}}</button>
+</div>
+
+{{template "signatures".}}
+
+{{end}}

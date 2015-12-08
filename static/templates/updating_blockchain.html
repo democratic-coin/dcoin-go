@@ -1,0 +1,434 @@
+<style>
+	body{padding-top: 30px}
+	#page-wrapper{
+		margin: 0px 10% 0px 10%;
+		border: 1px solid #E7E7E7;
+	}
+	#wrapper{height: 100%;}
+	#dc_content{
+		vertical-align: middle;
+	}
+	#dc_menu{display: none}
+
+	@-webkit-keyframes ui-spinner-rotate-right {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+		25% {
+			-webkit-transform: rotate(180deg);
+		}
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+		75% {
+			-webkit-transform: rotate(360deg);
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+	@-webkit-keyframes ui-spinner-rotate-left {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+		25% {
+			-webkit-transform: rotate(0deg);
+		}
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+		75% {
+			-webkit-transform: rotate(180deg);
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+	@-moz-keyframes ui-spinner-rotate-right {
+		0% {
+			-moz-transform: rotate(0deg);
+		}
+		25% {
+			-moz-transform: rotate(180deg);
+		}
+		50% {
+			-moz-transform: rotate(180deg);
+		}
+		75% {
+			-moz-transform: rotate(360deg);
+		}
+		100% {
+			-moz-transform: rotate(360deg);
+		}
+	}
+	@-moz-keyframes ui-spinner-rotate-left {
+		0% {
+			-moz-transform: rotate(0deg);
+		}
+		25% {
+			-moz-transform: rotate(0deg);
+		}
+		50% {
+			-moz-transform: rotate(180deg);
+		}
+		75% {
+			-moz-transform: rotate(180deg);
+		}
+		100% {
+			-moz-transform: rotate(360deg);
+		}
+	}
+	@keyframes ui-spinner-rotate-right {
+		0% {
+			transform: rotate(0deg);
+		}
+		25% {
+			transform: rotate(180deg);
+		}
+		50% {
+			transform: rotate(180deg);
+		}
+		75% {
+			transform: rotate(360deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+	@keyframes ui-spinner-rotate-left {
+		0% {
+			transform: rotate(0deg);
+		}
+		25% {
+			transform: rotate(0deg);
+		}
+		50% {
+			transform: rotate(180deg);
+		}
+		75% {
+			transform: rotate(180deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+	.ui-spinner {
+		position: relative;
+		border-radius: 100%;
+	}
+	.ui-spinner .side {
+		width: 50%;
+		height: 100%;
+		overflow: hidden;
+		position: absolute;
+	}
+	.ui-spinner .side .fill {
+		border-radius: 999px;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		-webkit-animation-iteration-count: infinite;
+		-moz-animation-iteration-count: infinite;
+		animation-iteration-count: infinite;
+		-webkit-animation-timing-function: linear;
+		-moz-animation-timing-function: linear;
+		animation-timing-function: linear;
+	}
+	.ui-spinner .side-left {
+		left: 0;
+	}
+	.ui-spinner .side-left .fill {
+		left: 100%;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		-webkit-animation-name: ui-spinner-rotate-left;
+		-moz-animation-name: ui-spinner-rotate-left;
+		animation-name: ui-spinner-rotate-left;
+		-webkit-transform-origin: 0 50%;
+		-moz-transform-origin: 0 50%;
+		transform-origin: 0 50%;
+	}
+	.ui-spinner .side-right {
+		left: 50%;
+	}
+	.ui-spinner .side-right .fill {
+		left: -100%;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		-webkit-animation-name: ui-spinner-rotate-right;
+		-moz-animation-name: ui-spinner-rotate-right;
+		animation-name: ui-spinner-rotate-right;
+		-webkit-transform-origin: 100% 50%;
+		-moz-transform-origin: 100% 50%;
+		transform-origin: 100% 50%;
+	}
+
+	.example-hole .ui-spinner {
+		width: 225px;
+		height: 225px;
+		background: #ddd;
+	}
+
+	.example-hole .ui-spinner .side .fill {
+		background: #3c76ca;
+		-webkit-animation-duration: 5s;
+		-moz-animation-duration: 5s;
+		animation-duration: 5s;
+		opacity: 0.8;
+	}
+
+	.example-hole .ui-spinner:after {
+		content: "";
+		background: #fff;
+		position: absolute;
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+		top: 45px;
+		left: 45px;
+		display: block;
+	}
+/*------------------------------------------*/
+
+	.meter1 {
+		height: 20px;
+		position: relative;
+		margin: 20px 0 20px 0;
+		background: #f0f0f0;
+		-moz-border-radius: 25px;
+		-webkit-border-radius: 25px;
+		border-radius: 25px;
+		padding: 0px;
+		-webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+		-moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);
+		box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);
+	}
+	.meter1 > span {
+		display: block;
+		-webkit-border-top-right-radius: 8px;
+		-webkit-border-bottom-right-radius: 8px;
+		-moz-border-radius-topright: 8px;
+		-moz-border-radius-bottomright: 8px;
+		border-top-right-radius: 8px;
+		border-bottom-right-radius: 8px;
+		-webkit-border-top-left-radius: 20px;
+		-webkit-border-bottom-left-radius: 20px;
+		-moz-border-radius-topleft: 20px;
+		-moz-border-radius-bottomleft: 20px;
+		border-top-left-radius: 20px;
+		border-bottom-left-radius: 20px;
+		background-color: rgb(43,194,83);
+		background-image: -webkit-gradient(
+			linear,
+			left bottom,
+			left top,
+			color-stop(0, rgb(43,194,83)),
+			color-stop(1, rgb(84,240,84))
+		);
+		background-image: -moz-linear-gradient(
+			center bottom,
+			rgb(43,194,83) 37%,
+			rgb(84,240,84) 69%
+		);
+		-webkit-box-shadow:
+		inset 0 2px 9px  rgba(255,255,255,0.3),
+		inset 0 -2px 6px rgba(0,0,0,0.4);
+		-moz-box-shadow:
+		inset 0 2px 9px  rgba(255,255,255,0.3),
+		inset 0 -2px 6px rgba(0,0,0,0.4);
+		box-shadow:
+		inset 0 2px 9px  rgba(255,255,255,0.3),
+		inset 0 -2px 6px rgba(0,0,0,0.4);
+		position: relative;
+		overflow: hidden;
+	}
+	.meter1 > span:after, .animate > span > span {
+		content: "";
+		position: absolute;
+		top: 0; left: 0; bottom: 0; right: 0;
+		background-image:
+		-webkit-gradient(linear, 0 0, 100% 100%,
+		color-stop(.25, rgba(255, 255, 255, .2)),
+		color-stop(.25, transparent), color-stop(.5, transparent),
+		color-stop(.5, rgba(255, 255, 255, .2)),
+		color-stop(.75, rgba(255, 255, 255, .2)),
+		color-stop(.75, transparent), to(transparent)
+		);
+		background-image:
+		-moz-linear-gradient(
+			-45deg,
+			rgba(255, 255, 255, .2) 25%,
+			transparent 25%,
+			transparent 50%,
+			rgba(255, 255, 255, .2) 50%,
+			rgba(255, 255, 255, .2) 75%,
+			transparent 75%,
+			transparent
+		);
+		z-index: 1;
+		-webkit-background-size: 50px 50px;
+		-moz-background-size: 50px 50px;
+		background-size: 50px 50px;
+		-webkit-animation: move 2s linear infinite;
+		-moz-animation: move 2s linear infinite;
+		-webkit-border-top-right-radius: 8px;
+		-webkit-border-bottom-right-radius: 8px;
+		-moz-border-radius-topright: 8px;
+		-moz-border-radius-bottomright: 8px;
+		border-top-right-radius: 8px;
+		border-bottom-right-radius: 8px;
+		-webkit-border-top-left-radius: 20px;
+		-webkit-border-bottom-left-radius: 20px;
+		-moz-border-radius-topleft: 20px;
+		-moz-border-radius-bottomleft: 20px;
+		border-top-left-radius: 20px;
+		border-bottom-left-radius: 20px;
+		overflow: hidden;
+	}
+
+	.animate > span:after {
+		display: none;
+	}
+
+	@-webkit-keyframes move {
+		0% {
+			background-position: 0 0;
+		}
+		100% {
+			background-position: 50px 50px;
+		}
+	}
+
+	@-moz-keyframes move {
+		0% {
+			background-position: 0 0;
+		}
+		100% {
+			background-position: 50px 50px;
+		}
+	}
+
+	.nostripes > span > span, .nostripes > span:after {
+		-webkit-animation: none;
+		-moz-animation: none;
+		background-image: none;
+	}
+</style>
+
+<script>
+	$('#start_daemons').bind('click', function () {
+		$.post( 'ajax?controllerName=start_daemons', { } ,
+			function () {
+				$.post( 'ajax?controllerName=clear_daemons_time', { } ,
+					function () {
+						$('#start_daemons_div').html('Please restart dcoin');
+					});
+			});
+	});
+</script>
+
+<script>
+	$(document).ready(function() 	{
+		var refreshId = setInterval( function() {
+			$.post( 'ajax?controllerName=synchronizationBlockchain', {}, function (data) {
+					console.log(data.block_time);
+					console.log(data.block_id);
+					if (data.block_id>1) {
+						$('#blockchain_loading').css('display', 'none');
+						$('#blocks_counter').css('display', 'block');
+						var time = Number(data.block_time + '000');
+						console.log(time);
+						var d = new Date(time);
+						$('#block_time').text(d);
+						$('#cur_block_id').text(data.block_id);
+						$('#confirmed_block_id').text(data.confirmed_block_id);
+						if (data.current_load_blockchain=="nodes") {
+							if (data.connections == "0") {
+								$('#current_load_blockchain').html("Connections: "+data.connections + " <img src='/static/img/rolling.gif'>");
+							} else {
+								$('#current_load_blockchain').html("Connections: "+data.connections);
+							}
+						} else {
+							$('#current_load_blockchain').html("Loading from "+data.current_load_blockchain);
+						}
+						console.log(d);
+						var pct = Math.round(data.block_id/{{.LastBlock}}*100) - 1;
+						$('#meter').width(pct+'%');
+						$('#meter').text(pct+'%');
+					} else if (data.block_id==-1) {
+						window.clearInterval(refreshId);
+						window.location.href = "/";
+					} else if (data.download > 0) {
+						console.log(data.download);
+						$('#meter0').width(data.download+'%');
+						$('#meter0').text(data.download+'%');
+					} else if (data.error > 0) {
+						console.log(data.error);
+						$('#error').text(data.error);
+						alert(data.error);
+					}
+				}, 'JSON'
+			);
+		}, 5000);
+	});
+</script>
+<div style="max-width: 600px; margin: auto; text-align: center">
+	<div id="blockchain_loading" style="display: {{if .WaitText}} block {{else}} none {{end}}"><div class="blockchain_loader" >Loading...</div>
+	<br>
+	{{.WaitText}}
+		<div class="meter1">
+			<span style="width: 0%; height: 20px; color: #fff" id="meter0">{{.BlockMeter}}%</span>
+		</div>
+	</div>
+	<div id="blocks_counter" style="display: {{if .WaitText}} none {{else}} block {{end}}">
+		<h3 style="margin-bottom: 20px">{{.Lang.synchronization_blockchain}}</h3>
+		<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+		<p id="current_load_blockchain">Connections: 0</p>
+		<div style="text-align:center; position:relative; width:225px; margin:auto; margin-bottom: 10px">
+			<div class="example example-hole">
+				<div class="ui-spinner">
+                <span class="side side-left">
+                    <span class="fill"></span>
+                </span>
+                <span class="side side-right">
+                    <span class="fill"></span>
+                </span>
+				</div>
+			</div>
+			<div style="top:100px; left:50%; margin-left:-50px;position:absolute;text-align:center; width:100px; font-size: 20px" id="cur_block_id">{{.BlockId}}</div>
+			<div style="top:130px; left:50%; margin-left:-50px;position:absolute;text-align:center; width:100px; font-size: 10px" id="confirmed_block_id">0</div>
+			</div>
+		<div class="meter1">
+			<span style="width: {{.BlockMeter}}%; height: 20px; color: #fff" id="meter">{{.BlockMeter}}%</span>
+		</div>
+	</div>
+
+	<a hrep="#" id="debug">Debug</a>
+	<div id="debugDiv"></div>
+
+	{{if not .Mobile}}
+	<div id="check_time" style="margin-top: 50px">{{.AlertTime}} {{noescape .CheckTime}}</div>
+	{{else}}
+	<div id="check_time" style="margin-top: 50px">{{.AlertTime}}</div>
+	{{end}}
+
+	<div id="help" style="margin-top: 10px"><a href="mailto:darwin@dcoin.club">help</a></div>
+
+</div>
+<script>
+	$('#debug').bind('click', function () {
+		$.get('ajax?controllerName=DebugInfo', function (data) {
+			console.log(data)
+			$('#debugDiv').html("<textarea>"+data+"</textarea>")
+		});
+	});
+	$( document ).ready(function() {
+		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#AlertMessage').css("display", "block");
+				$('#AlertMessage p').html(data.success);
+			}
+		}, 'JSON');
+	});
+</script>
+<script src="static/js/unixtime.js"></script>

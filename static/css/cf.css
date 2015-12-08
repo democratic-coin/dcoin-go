@@ -1,0 +1,25 @@
+
+
+	#project-info{font-weight:bold;}
+	#project-info h1{margin-bottom:0px; line-height: 0.9; font-size: 46px;font-weight:bold;}
+	#project-info h5{margin-bottom:20px; line-height: 1.3; font-size: 15px;font-weight:bold; padding-top:8px}
+	#project-info h4{margin-bottom:0px; line-height: 1.1; font-size: 15px;font-weight:bold;}
+
+	.menu a:link, .card-location a:link    {color:#828587; text-decoration:none}
+	.menu a:visited, .card-location a:visited {color:#828587;}
+	.menu a:hover, .card-location a:hover   {color:#081245;}
+	.menu a:active , .card-location a:active  {color:#000;}
+	.menu li{padding-left:15px}
+	.menu ul{margin-bottom:10px;margin-top:10px;}
+
+	.count{border-radius:3px;background:#828587;font-weight:bold;color:white;padding:2px 5px; font-size: 13px;}
+    .width_max {width:980px;min-width:980px;}
+
+	.lng li{padding-right:15px}
+	.project-card{ width:220px; overflow:auto; background-color:#fff; padding:10px;}
+	.navigation{list-style: none outside none;}
+	.navigation li{padding-top:5px; padding-left:0px;margin: 0px 0px 2px -38px;}
+	.menu{float:left; width:170px; overflow:auto; margin-left:10px}
+	.menu h3{font-size: 14px;color: #0F2105;margin: 0px 0px 0px 0px; line-height: 20px;font-weight: bold;}
+	.card-bottom{font-size: 12px; color:#828587}
+	.card-bottom h5{color:#000; margin:0; line-height: 1.3; font-size: 13px;font-weight:bold; padding-top:0px};

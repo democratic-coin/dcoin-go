@@ -1,0 +1,103 @@
+{{define "credits"}}
+<script>
+
+	function change_creditor(credit_id) {
+		dc_navigate('changeCreditor', {'credit_id':credit_id});
+	}
+
+	$('#new_credit').bind('click', function () {
+		dc_navigate('newCredit');
+	});
+
+	$('#credit_part_save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#credit_part").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'pct' : $('#credit_part').val(),
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('credits', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+	});
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.credits}}</h1>
+	<ul class="nav nav-tabs" id="myTab">
+		<li><a href="#walletsList">{{.Lang.send_to_wallet}}</a></li>
+		<li><a href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+		<li class="active"><a href="#credits">{{.Lang.credits}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+	</ul>
+
+	<div id="main_data">
+		{{template "alertSuccess".}}
+
+		<h3>{{.Lang.I_creditor}}</h3>
+		<table class="table" style="width:600px">
+				<tr><th>{{.Lang.time}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.currency}}</th><th>User_ID</th><th style='text-align: center'>{{.Lang.action}}</th></tr>
+			{{range .I_creditor}}
+				<tr>
+			 	<td class="unixtime">{{.Time}}</td>
+				<td>{{.Amount}}</td>
+				<td>D{{index $.CurrencyList .Currency_id}}</td>
+				<td>{{.From_user_id}}</td>
+				<td><button type='button' class='btn btn-default' onclick="change_creditor({{.Id}})">{{$.Lang.transfer}}</button> <a class="btn btn-danger" href="#" onclick="dc_navigate('delCredit', {'credit_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
+				</tr>
+			{{end}}
+		</table>
+
+		<br>
+		<h3>{{.Lang.I_debtor}}</h3>
+		<table class="table" style="width:500px">
+			<tr><th>{{.Lang.time}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.currency}}</th><th>User_ID</th><th>%</th><th style='text-align: center'>{{.Lang.pay}}</th></tr>
+			{{range .I_debtor}}
+				<tr>
+				<td class="unixtime">{{.Time}}</td>
+				<td>{{.Amount}}</td>
+				<td>D{{index $.CurrencyList .Currency_id}}</td>
+				<td>{{.To_user_id}}</td>
+				<td>{{.Pct}}</td>
+				<td style='text-align: center'><button type='button' class='btn btn-default' onclick="dc_navigate('repaymentCredit', {'credit_id':'{{.Id}}'}); return false;">{{$.Lang.pay}}</button></td>
+				</tr>
+			{{end}}
+		</table>
+
+		<button type="button" class="btn btn-primary" id="new_credit">{{.Lang.create_credit}}</button>
+
+		<div class="form-inline" style="margin-top: 50px">
+			{{noescape .Lang.will_not_be_used}}<br>
+			<input id="credit_part" type="text" class="form-control" style="width: 100px" value="{{.CreditPart}}"/>
+			<button type="button" class="btn btn-default" id="credit_part_save">{{.Lang.save}}</button>
+		</div>
+
+
+		<div style=" max-width: 600px;" id="tx_history">
+
+			{{noescape .LastTxFormatted}}
+
+
+		</div>
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+<script src="static/js/unixtime.js"></script>
+{{end}}

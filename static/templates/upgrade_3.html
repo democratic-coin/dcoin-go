@@ -1,0 +1,170 @@
+{{define "upgrade3"}}
+<script>
+	var w = 350;
+	var h = 500;
+	if ($(window).width() <= 320) {
+		w = 300;
+		h = 428;
+	}
+	var jcrop_api = '';
+	window['crop_img_text'] = "{{.Lang.crop_img}}";
+	$(document).ready(function() {
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+		$('.canvas').attr('width', w);
+		$('.canvas').attr('height', h);
+	});
+
+</script>
+<style>
+
+	.divwidth {
+		width: 350px;
+	}
+	.bgwidth {
+		background-size: 350px;
+	}
+	.divheight {
+		height: 500px;
+	}
+
+	@media (max-width: 320px) {
+		.divwidth{
+			width: 300px;
+		}
+		.bgwidth{
+			background-size: 300px;
+		}
+		.divheight {
+			height: 428px;
+		}
+	}
+</style>
+<script src="static/js/spots.js"></script>
+
+<h1 class="page-header">{{.Lang.upgrade_title}}</h1>
+{{if not .Mobile}}
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.upgrade_title}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+{{end}}
+
+<div class="row seven-cols">
+	<div class="row bs-wizard" style="border-bottom:0;">
+		{{noescape .UpgradeMenu}}
+	</div>
+</div>
+
+<h3>{{.Lang.put_points_on_photo}}</h3>
+
+<div id="main1" style="position: relative;">
+
+	<div id="comment-face" style="font-weight:bold;">1</div>
+
+	<div class="divwidth" style="position: relative; float: left">
+		<canvas class="canvas bgwidth" id="example_face" style="position: absolute; background-image: url('static/img/face.jpg');"></canvas>
+		<canvas class="canvas" style="position: relative; top:0px; left:0px;"></canvas>
+	</div>
+	<div class="divwidth" style="position: relative; float: left; text-align: center">
+		<canvas class="canvas bgwidth"  id="face_coords_mouse" style=" top:0px; left:0px; position: absolute; background-image: url('{{.UserFace}}');"></canvas>
+		<canvas class="canvas divheight" id="face" style="position: relative; top:0px; left:0px;"></canvas>
+		<br>
+		<button onclick="fclear('face')"  type="button" class="btn btn-warning">{{.Lang.clean}}</button><br><br>
+	</div>
+
+	<div class="clearfix"></div>
+
+	<div id="comment-profile" style="font-weight:bold;">2</div>
+	<div class="divwidth" style="position: relative; float: left">
+		<canvas class="canvas bgwidth" id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg');"></canvas>
+		<canvas class="canvas" style="position: relative; top:0px; left:0px;"></canvas>
+	</div>
+	<div class="divwidth" style="position: relative; float: left; text-align: center">
+		<canvas class="canvas bgwidth"  id="profile_coords_mouse" style=" top:0px; left:0px; position: absolute; background-image: url('{{.UserProfile}}');" ></canvas>
+		<canvas class="canvas divheight" id="profile" style="position: relative; top:0px; left:0px;"></canvas>
+		<br><button onclick="fclear('profile')"  type="button" class="btn btn-warning">{{.Lang.clean}}</button><br><br>
+	</div>
+	<div class="clearfix"></div>
+
+
+
+
+	<script>
+
+		var example_face = [
+			{{js .ExamplePoints.face}}
+		]
+		var example_profile = [
+			{{js .ExamplePoints.profile}}
+		]
+		if (w == 300) {
+			for (var i=0; i < example_face.length; i++) {
+				example_face[i][0] = example_face[i][0]*0.85;
+				example_face[i][1] = example_face[i][1]*0.85;
+			}
+			for (var i=0; i < example_profile.length; i++) {
+				example_profile[i][0] = example_profile[i][0]*0.85;
+				example_profile[i][1] = example_profile[i][1]*0.85;
+			}
+		}
+
+		coords.getObject("face").init({
+			for_mouse_move : "face_coords_mouse",
+			example_area : "example_face",
+			main_area : "face",
+			type : "face",
+			line_color : "#593AE0",
+		{{if .FaceCoords}}user_coords: {{js .FaceCoords}},{{end}}
+
+		example_coords : example_face
+
+		});
+
+		coords.getObject("profile").init({
+
+			for_mouse_move : "profile_coords_mouse",
+			example_area : "example_profile",
+			main_area : "profile",
+			type : "profile",
+			line_color : "#593AE0",
+		{{if .ProfileCoords}}user_coords: {{js .ProfileCoords}},{{end}}
+
+
+		example_coords : example_profile
+		});
+
+		function fclear (name) {
+			coords.getObject(name).clear();
+		}
+
+		$('#comment-face').text( '' );
+		$('#comment-profile').text( '' );
+
+
+		$('#next_step').bind('click', function () {
+			/*$('#wrapper').spin();
+			$( "#dc_content" ).load( "content", { tpl_name: page }, function() {
+
+			} );
+			$('#wrapper').spin(false);
+			window.scrollTo(0,0);
+			if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
+				$('.sidebar-collapse').collapse('toggle');
+			}*/
+			{{if .IOS}}
+			document.getElementById("gotoupgrade4").click();
+			{{else}}
+			dc_navigate('upgrade4');
+			{{end}}
+		});
+	</script>
+</div>
+<br>
+
+<button class="btn btn-success" id="next_step">{{.SaveAndGotoStep}}</button>
+
+<a id="gotoupgrade4" href="/?upgrade4=1"></a>
+
+<div class="for-signature"></div>
+       
+{{end}}

@@ -1,0 +1,101 @@
+{{ define "installStep0" }}
+
+<style>
+	#page-wrapper{
+		margin: 0px 10% 0px 10%;
+		border: 1px solid #E7E7E7;
+		/*min-height: 550px;*/
+	}
+	#wrapper{height: 100%;}
+	#dc_content{
+		/*height: 550px;*/
+		vertical-align: middle;
+	}
+</style>
+<script>
+
+	$('.db_settings').hide();
+
+	$('#extended').bind('click', function () {
+		$('#extended_div').css("display", "block")
+		$("#settings_extended").prop("checked", true)
+	});
+	$('#standard').bind('click', function () {
+		$('#extended_div').css("display", "none")
+		$("#settings_standard").prop("checked", true)
+	});
+	$('#first_load').on('change', function() {
+		if (this.value=="nodes") {
+			$('#url').css("display", "none")
+		} else {
+			$('#url').css("display", "block")
+		}
+	});
+	$('#db_type').on('change', function() {
+		console.log(this.value)
+		if (this.value=="sqlite") {
+			$('.db_settings').hide();
+			$('.sqlite_settings').show();
+		} else {
+			$('.db_settings').show();
+			$('.sqlite_settings').hide();
+		}
+	});
+
+	$('#next').bind('click', function () {
+		$('#next').prop('disabled', true);
+		$('#wrapper').spin();
+		$.post( 'content', {
+			'tpl_name' : 'installStep1',
+			'type' : $('input[name=settings]:checked').val(),
+			'url' : $('#url').val(),
+			'sqlite_db_url' : $('#sqlite_db_url').val(),
+			'first_load' : $('#first_load').val(),
+			'db_type' : $('#db_type').val(),
+			'host' : $('#host').val(),
+			'port' : $('#port').val(),
+			'db_name' : $('#db_name').val(),
+			'username' : $('#username').val(),
+			'password' : $('#password').val(),
+			'setup_password' : $('#setup_password').val(),
+			'key_password' : $('#key_password').val()
+		}, function (data) { $('#dc_content').html( data );  $('#wrapper').spin(false); }, 'html' );
+	} );
+
+</script>
+
+<div style="max-width: 600px; margin: auto; margin-top: 50px">
+
+	<!--<ul class="nav nav-tabs" style="margin-bottom: 20px">
+		<li class="active"><a href="#installStep0">Step 0</a></li>
+		<li><a href="#installStep1">Step 1</a></li>
+	</ul>-->
+	<h3>Settings</h3>
+	<lebel id="standard"><input id="settings_standard" type="radio" name="settings" value="standard" checked> Standard</lebel><br>
+	<lebel id="extended"><input id="settings_extended" type="radio" name="settings" id="extended" value="extended"> Extended</lebel><br>
+	<div id="extended_div" style="display: none">
+		<table class="table">
+
+			<tr class="setup_password"><td>Setup password</td><td><input class="form-control" type="password" id="setup_password"></td></tr>
+
+			<tr class="user_id"><td>Your user_id</td><td><input class="form-control" type="text" id="user_id"></td></tr>
+
+			<tr><td>First load</td><td><select class="form-control" id="first_load"><option value="file">Url</option><option value="nodes">Nodes</option></select><br>
+				<input class="form-control" type="text" id="url" value="http://dcoin.club/blockchain"></td></tr>
+			<tr><td>DB type</td><td><select class="form-control" id="db_type"><option value="sqlite">Sqlite</option><option value="postgresql">Postgresql</option><option value="mysql">Mysql</option></select></td></tr>
+
+			<tr class="db_settings"><td>host</td><td><input class="form-control" type="text" id="host"></td></tr>
+			<tr class="db_settings"><td>port</td><td><input class="form-control" type="text" id="port"></td></tr>
+			<tr class="db_settings"><td>db_name</td><td><input class="form-control" type="text" id="db_name"></td></tr>
+			<tr class="db_settings"><td>username</td><td><input class="form-control" type="text" id="username"></td></tr>
+			<tr class="db_settings"><td>password</td><td><input class="form-control" type="password" id="password"></td></tr>
+
+			<tr class="sqlite_settings"><td>db url</td><td><input class="form-control" type="text" id="sqlite_db_url" value="http://dcoin.club/mlitedb.db"></td></tr>
+
+		</table>
+	</div>
+	<br>
+	<button class="btn btn-outline btn-primary btn-block" id="next">{{.Lang.next}}</button>
+</div>
+
+{{end}}

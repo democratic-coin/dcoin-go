@@ -1,0 +1,143 @@
+{{define "upgrade5"}}
+<style>
+	#map_canvas {
+		width: 640px;
+		height: 480px;
+	}
+	@media  (max-width: 1024px) {
+		#map_canvas {
+			width: 100%;
+			height: 300px;
+		}
+	}
+	@media  (max-width: 320px) {
+		#map_canvas {
+			width: 100%;
+			height: 200px;
+		}
+	}
+
+</style>
+<script>
+	$(document).ready(function() {
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+		//alert("22");
+		//document.getElementById("show_map").click();
+	});
+</script>
+<script src="static/js/index.js"></script>
+
+<script>
+
+	function geoFindMe(){
+
+		if(navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(success, error, geo_options);
+		}else{
+			alert("Geolocation services are not supported by your web browser.");
+			map_init (latitude, longitude, 'map_canvas', true, true);
+			google.maps.event.trigger(map, 'resize');
+		}
+
+		function success(position) {
+			latitude = position.coords.latitude;
+			longitude = position.coords.longitude;
+			var altitude = position.coords.altitude;
+			var accuracy = position.coords.accuracy;
+			console.log('success: '+latitude+','+longitude);
+			$('#latitude').val(latitude);
+			$('#longitude').val(longitude);
+			map_init (latitude, longitude, 'map_canvas', true, true);
+			google.maps.event.trigger(map, 'resize');
+		}
+
+		function error(error) {
+			alert("Unable to retrieve your location due to "+error.code + " : " + error.message);
+		};
+
+		var geo_options = {
+			enableHighAccuracy: true,
+			maximumAge : 30000,
+			timeout : 27000
+		};
+	}
+
+	{{if not .GeolocationLat}}
+		var latitude = 39.94887
+		var longitude = -75.15005
+		geoFindMe()
+	{{else}}
+		var latitude = {{.GeolocationLat}}
+		var longitude = {{.GeolocationLon}}
+		function initialize() {
+			map_init (latitude, longitude, 'map_canvas', true, true)
+		}
+
+		$(document).ready(function() {
+			google.maps.event.addDomListener(window, 'load', initialize);
+			$(document).ajaxStop(initialize);
+		});
+
+	{{end}}
+	$('#latitude').val(latitude);
+	$('#longitude').val(longitude);
+
+	$('#save').bind('click', function () {
+		$('#alert').css("display", "none");
+
+		var latitude = $('#latitude').val();
+		var longitude = $('#longitude').val();
+		$.post( 'ajax?controllerName=saveGeolocation', { 'geolocation' : latitude+', '+longitude } ,
+				function (data) {
+					if (data.error!="0") {
+						$('#alert').css("display", "block");
+					}
+					else {
+						dc_navigate('upgrade6');
+					}
+				}, "JSON");
+	});
+
+	/*$('#show_map').bind('click', function () {
+	//$(document).ready(function() {
+		map_init (latitude, longitude, 'map_canvas', true, true);
+		google.maps.event.trigger(map, 'resize');
+	});
+
+	function initialize() {
+		map_init (latitude, longitude, 'map_canvas', true, true)
+	}
+
+	$(document).ready(function() {
+		google.maps.event.addDomListener(window, 'load', initialize);
+		$(document).ajaxStop(initialize);
+	});*/
+
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div input").width( 150 );
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.upgrade_title}}</h1>
+	{{if not .Mobile}}
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.upgrade_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+	{{end}}
+	{{template "alertSuccess".}}
+	<div class="row seven-cols">
+		<div class="row bs-wizard" style="border-bottom:0;">
+			{{noescape .UpgradeMenu}}
+		</div>
+	</div>
+
+	<h3>{{.Lang.your_location}}</h3>
+	<div id="map_canvas" style="margin-bottom:20px; display:none"></div>
+	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
+	<br>
+	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
+
+</div>
+
+{{end}}

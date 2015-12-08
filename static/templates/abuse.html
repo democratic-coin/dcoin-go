@@ -1,0 +1,86 @@
+{{define "abuse"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		var data='';
+		var comment='';
+		var user_id='';
+		for (i=0; i<100; i++)	{
+
+			comment = $('#comment_'+i).val();
+			user_id = $('#user_id_'+i).val();
+			if ( typeof user_id != "undefined" && typeof comment != "undefined" && user_id!='' && comment!='' && ( /^[a-zA-Z0-9\,\s\.\-]*$/.test(comment) ) )
+				data = data + '"'+user_id + '":"' + comment + '",';
+
+		}
+		data = '{'+data.substr(0, data.length-1)+'}';
+
+		$("#generate").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+data );
+		$('#abuses').val( data );
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+		} );
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'abuses' :  $('#abuses').val(),
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function(data) {
+				dc_navigate ('abuse', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			});
+
+		} );
+
+		$("#main_div select").addClass( "form-control" );
+		$("#main_div input").addClass( "form-control" );
+		$("#main_div button").addClass( "btn-outline btn-primary" );
+
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.abuses_title}}</h1>
+
+	{{template "alertSuccess".}}
+
+	<div id="generate">
+
+		<table>
+			<thead>
+			<tr>
+				<th>user_id</th>
+				<th>abuse</th>
+			</tr>
+			</thead>
+
+			<tbody>
+
+			{{range $i := .CountAbusesArr}}
+				<tr><td><input class='input-mini' id='user_id_{{$i}}' type='text'></td><td><input class='input-xxlarge' id='comment_{{$i}}' type='text'></td></tr>
+			{{end}}
+
+			</tbody>
+		</table>
+
+		<br>
+
+		<button class="btn" type="button" id="save">{{.Lang.next}}</button>
+		<br><br>
+
+	</div>
+
+	{{template "signatures".}}
+
+	<input type="hidden" id="abuses">
+</div>
+
+{{end}}

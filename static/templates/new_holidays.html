@@ -1,0 +1,108 @@
+{{define "newHolidays"}}
+
+<script>
+
+	function add_holidays() {
+
+		$("#add_holidays").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+startDateTextBox.datetimepicker("getDate").getTime() / 1000+','+endDateTextBox.datetimepicker("getDate").getTime() / 1000 );
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+	}
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'start_time' :  startDateTextBox.datetimepicker("getDate").getTime() / 1000,
+				'end_time' :  endDateTextBox.datetimepicker("getDate").getTime() / 1000,
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			});
+			dc_navigate ('holidaysList', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		});
+
+
+		var startDateTextBox = $('#hol_time_start');
+		var endDateTextBox = $('#hol_time_end');
+
+		startDateTextBox.datetimepicker({
+			numberOfMonths: 2,
+			minDate: 0,
+			maxDate: 365,
+			timeFormat: 'HH:mm',
+			onClose: function(dateText, inst) {
+				if (endDateTextBox.val() != '') {
+					var testStartDate = startDateTextBox.datetimepicker('getDate');
+					var testEndDate = endDateTextBox.datetimepicker('getDate');
+					if (testStartDate > testEndDate)
+						endDateTextBox.datetimepicker('setDate', testStartDate);
+				}
+				else {
+					endDateTextBox.val(dateText);
+				}
+
+			},
+			onSelect: function (selectedDateTime){
+				endDateTextBox.datetimepicker('option', 'minDate', startDateTextBox.datetimepicker('getDate') );
+			}
+		});
+		endDateTextBox.datetimepicker({
+			numberOfMonths: 2,
+			minDate: 0,
+			maxDate: 365,
+			timeFormat: 'HH:mm',
+			onClose: function(dateText, inst) {
+				if (startDateTextBox.val() != '') {
+					var testStartDate = startDateTextBox.datetimepicker('getDate');
+					var testEndDate = endDateTextBox.datetimepicker('getDate');
+					if (testStartDate > testEndDate)
+						startDateTextBox.datetimepicker('setDate', testEndDate);
+				}
+				else {
+					startDateTextBox.val(dateText);
+				}
+			},
+			onSelect: function (selectedDateTime){
+				startDateTextBox.datetimepicker('option', 'maxDate', endDateTextBox.datetimepicker('getDate') );
+			}
+		});
+
+		$("#main_div select").addClass( "form-control" );
+		$("#main_div input").addClass( "form-control" );
+		$("#main_div button").addClass( "btn-outline btn-primary" );
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.new_holidays_title}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li><a href="#holidays_list">{{.Lang.holidays_title}}</a></li>
+		<li class="active">{{.Lang.new_holidays_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="add_holidays">
+
+		<div id="start"></div>
+
+		<form class="form-inline">
+			<label>{{.Lang.start_time}}:</label> <input type="text" name="hol_time_start" id="hol_time_start" value="" class="input-medium"/>
+
+			<label>{{.Lang.end_time}}:</label> <input type="text" name="hol_time_end" id="hol_time_end" value="" class="input-medium" />
+		</form>
+
+		<br>
+		<button class="btn" onclick="add_holidays()">{{.Lang.next}}</button>
+
+	</div>
+
+	{{template "signatures".}}
+
+</div>
+
+{{end}}

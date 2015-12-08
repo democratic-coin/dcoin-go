@@ -1,0 +1,39 @@
+{{define "availableKeys"}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dcoin keys</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.0.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="margin: 50px auto 0 auto; width: 650px; height: 500px; overflow: auto; text-align: center" >
+    {{if .Key}}
+        {{if not .AutoLogin}}
+		    <a type="button" class="btn btn-primary" href='/tools?controllerName=availableKeys&download=1'>Download</a>
+        {{else}}
+            <form id="target" action="http://pool.dcoin.club/" method="post">
+                <input type="hidden" name="key" value="{{.Key}}">
+                <input type="hidden" name="lang" value="{{.LangId}}">
+                <input type="submit" style="display: none">
+            </form>
+            <script>$( "#target" ).submit();</script>
+        {{end}}
+    {{else}}
+        <div class="center-block" style="width: 250px"><h3>Sorry, all the keys over.</h3></div>
+    {{end}}
+</div>
+</body>
+
+{{end}}

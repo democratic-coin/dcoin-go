@@ -1,0 +1,134 @@
+{{define "upgrade6"}}
+<script>
+	$(document).ready(function() {
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+	});
+
+	$('#change_node_http_host').bind('click', function () {
+		$('#node_http_host').html('<input class="form-control" style="width:300px" type="text" id="http_host" value="{{.HttpHost}}"><br>{{.Lang.host_http_example}}');
+	});
+	$('#change_node_tcp_host').bind('click', function () {
+		$('#node_tcp_host').html('<input class="form-control" style="width:300px" type="text" id="tcp_host" value="{{.TcpHost}}"><br>{{.Lang.host_tcp_example}}');
+	});
+
+	$('#save').bind('click', function () {
+		$('#alert').css("display", "none");
+		$.post( 'ajax?controllerName=saveHost', { 'http_host' : $('#http_host').val(), 'tcp_host' : $('#tcp_host').val() } ,
+				function (data) {
+					if (data.error!="0") {
+						$('#alert').css("display", "block");
+					}
+					else {
+						map_navigate('upgrade7');
+					}
+				}, "JSON");
+	});
+
+	function signInPool(i) {
+
+		$( "#signUpInPool" ).append( "<tr><td>"+pools[i][1]+"</td><td id='pool"+i+"'><p>Sign up In the pool: <span id='signup"+i+"'><img src='static/img/progress.gif' width='20'></span></p></td></tr>" );
+		$.getJSON( pools[i][1]+'ajax?controllerName=SignLogin',
+			function (code) {
+				console.log(code);
+				$("#for-signature").val(code);
+				doSign("sign");
+				$.post( pools[i][1]+'ajax?controllerName=SignUpInPool', { 'code_sign' : $('#signature1').val(), 'user_id' : {{.UserId}}, 'email' : $('#email').val(), 'node_private_key' : $('#node_private_key').val() },
+				function (data) {
+					if (typeof(data.error) != "undefined") {
+						$( "#signup"+i ).html( ""+data.error+"" );
+						if (i < pools.length-1) {
+							signInPool(i + 1)
+						}
+					}
+					else {
+						$( "#signup"+i ).html( "<strong>OK</strong>" );
+						$("#for-signature").val({{.FaceHash}}+","+{{.ProfileHash}}+","+{{.VideoHash}})
+						doSign("sign");
+						$( "#pool"+i ).append( "<p>Sending data to the pool: <span id='send"+i+"'><img src='static/img/progress.gif' width='20'></span></p>" );
+						$.post( 'ajax?controllerName=SendToPool', { 'filesSign' : $('#signature1').val(), 'poolUid' : pools[i][0] },
+									function (data) {
+										if (data.success == "1") {
+											$( "#send"+i ).html( "<strong>OK</strong>" );
+											dc_navigate('upgrade7');
+										} else {
+											$( "#send"+i ).html( "<strong>"+data.error+"</strong>" )
+											if (i < pools.length-1) {
+												signInPool(i + 1)
+											}
+										}
+									}, "JSON");
+
+					}
+				}, "JSON");
+			}).fail(function() {
+				if (i < pools.length-1) {
+					signInPool(i + 1)
+				}
+			});
+	}
+
+	var pools = [{{.Pools}}]
+
+	$('#findPool').bind('click', function () {
+		$( "#signUpInPool").html("");
+		//$.get( 'http://dcoin.club/pools',
+		//	function (data) {
+		//		pools = data
+				signInPool(0)
+		//	}, "JSON");
+	});
+
+</script>
+<style>
+	td{padding: 5px}
+	table, td {border-color: #ccc;}
+</style>
+<h1 class="page-header">{{.Lang.upgrade_title}}</h1>
+{{if not .Mobile}}
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.upgrade_title}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+{{end}}
+
+<div class="row seven-cols">
+	<div class="row bs-wizard" style="border-bottom:0;">
+		{{noescape .UpgradeMenu}}
+	</div>
+</div>
+
+{{if eq .HostType "findPool"}}
+	<h3>Sign up in the pool</h3>
+{{else}}
+	<h3>Host</h3>
+{{end}}
+<div class="clearfix"></div>
+
+<table id="signUpInPool" border="1"></table>
+
+<div class="clearfix"></div>
+<div class="alert alert-error" id="alert" style="display: none">{{.Lang.invalid_host}}</div>
+
+{{if eq .HostType "pool"}}
+	<div id='node_http_host'><input type='hidden' id='http_host' value='{{.HttpHost}}'><p><strong>{{.HttpHost}}</strong><!--<br>[<a href='#' id='change_node_http_host'>change</a>]</p>--></div><br>
+	<div id='node_tcp_host'><input type='hidden' id='tcp_host' value='{{.TcpHost}}'><p><strong>{{.TcpHost}}</strong><!--<br>[<a href='#' id='change_node_tcp_host'>change</a>]</p>--></div>
+	<br>
+	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
+{{else if eq .HostType "normal"}}
+	<div id='node_http_host'><input type='hidden' id='http_host' value='{{.HttpHost}}'><p><strong>{{.HttpHost}}</strong><br>[<a href='#' id='change_node_http_host'>change</a>]</p></div><br>
+	<div id='node_tcp_host'><input type='hidden' id='tcp_host' value='{{.TcpHost}}'><p><strong>{{.TcpHost}}</strong><br>[<a href='#' id='change_node_tcp_host'>change</a>]</p></div>
+	<br>
+	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
+{{else if eq .HostType "findPool"}}
+	{{.Lang.enter_your_email}}<br>
+	<input class="form-control" style="width:300px" type="text" id="email" value=""><br>
+	<button class="btn btn-success" id="findPool">{{.Lang.next}}</button>
+{{end}}
+
+<input type="hidden" id="node_private_key" value="{{.NodePrivateKey}}">
+
+<br>
+
+{{template "signatures".}}
+
+{{end}}

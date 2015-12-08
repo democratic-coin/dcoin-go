@@ -1,0 +1,29 @@
+{{define "upgradeResend"}}
+
+<h1 class="page-header">{{.Lang.upgrade_resend_title}}</h1>
+
+{{template "signatures".}}
+
+<br>
+<script>
+	$('#save_queue').bind('click', function () {
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'user_id' : {{.UserId}},
+			'time' : {{.TimeNow}},
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function (data) {
+			dc_navigate ('upgrade_0', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		});
+	});
+</script>
+
+<button class="btn btn-success"  type="button" id="save_queue">{{.Lang.send_to_net}}</button>
+<script>
+	doSign();
+	{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+</script>
+
+{{end}}

@@ -1,0 +1,45 @@
+{{define "miningPromisedAmount"}}
+<script>
+	$('#send_to_net').bind('click', function () {
+		if ( $('#amount').val() > 0 ) {
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'promised_amount_id' :  $('#promised_amount_id').val(),
+				'amount' :  $('#amount').val(),
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function(data) {
+				dc_navigate ('promisedAmountList', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			});
+		}
+		else	{
+			alert('null amount');
+		}
+	} );
+
+	$("#main_div textarea").addClass( "form-control" );
+
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.mining}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li><a href="#promisedAmountList">{{.Lang.promised_amount_title}}</a></li>
+		<li class="active">{{.Lang.mining}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	{{template "signatures".}}
+
+	<script>
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	</script>
+
+	<input type="hidden" id="amount" value="{{.Amount}}">
+	<input type="hidden" id="promised_amount_id" value="{{.PromisedAmountId}}">
+</div>
+{{end}}

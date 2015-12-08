@@ -1,0 +1,1689 @@
+{{ define "home" }}
+<!--<link rel="stylesheet" type="text/css" href="static/css/tooltipster.css" />
+<link rel="stylesheet" type="text/css" href="static/css/tooltipster-shadow.css" />
+<script type="text/javascript" src="static/js/jquery.tooltipster.min.js"></script>-->
+<style>
+	@media (min-width: 1024px) {
+		.qtip-close{display: none}
+	}
+
+	@media (min-width: 768px) {
+		.col-sm-6 {
+			width: 100%;
+		}
+	}
+	@media (min-width: 840px) {
+			.col-sm-6 {
+				width: 50%;
+			}
+	}
+	@media  (min-width: 1350px) {
+		.col-lg-3 {
+			width: 25%;
+		}
+	}
+</style>
+
+
+<script>
+	if (typeof intervalIdArray != "undefined") {
+		for (i=0; i<intervalIdArray.length; i++)
+			clearInterval(intervalIdArray[i]);
+	}
+	$(function() {
+		check_key_and_show_modal();
+		/*$('[title!=""]').qtip( {
+			position: {target: 'mouse', adjust: { x: 5, y: 5 }},
+			style: { classes: 'qtip-blue qtip-bootstrap qtip-shadow' },
+			content: {	button: true }
+			}
+		);*/
+
+		/*$.ajax({
+			url: "http://dcoinsimple.com/api.php",
+			type: 'GET',
+			dataType: "json",
+			crossDomain: true,
+			success: function (data) {
+				console.log(data);
+				if(typeof data.total_buy[1] != "undefined")
+					$('#dwoc_ex_buy_sum').html('$'+Math.round(data.total_buy[1]*100)/100);
+				if(typeof data.max_buy_rate[1] != "undefined")
+					$('#dwoc_ex_buy_rate').html('1 dWOC = $'+Math.round(data.max_buy_rate[1]*100)/100);
+
+				if(typeof data.total_buy[72] != "undefined")
+					$('#dusd_ex_buy_sum').html('$'+Math.round(data.total_buy[72]*100)/100);
+				if(typeof data.max_buy_rate[72] != "undefined")
+					$('#dusd_ex_buy_rate').html('1 dUSD = $'+Math.round(data.max_buy_rate[72]*100)/100);
+
+				if(typeof data.total_buy[23] != "undefined")
+					$('#deur_ex_buy_sum').html('$'+Math.round(data.total_buy[23]*100)/100);
+				if(typeof data.max_buy_rate[23] != "undefined")
+					$('#deur_ex_buy_rate').html('1 dEUR = $'+Math.round(data.max_buy_rate[23]*100)/100);
+
+				if(typeof data.total_buy[58] != "undefined")
+					$('#drub_ex_buy_sum').html('$'+Math.round(data.total_buy[58]*100)/100);
+				if(typeof data.max_buy_rate[58] != "undefined")
+					$('#drub_ex_buy_rate').html('1 dRUB = $'+Math.round(data.max_buy_rate[58]*1000)/1000);
+			}
+		});*/
+
+	});
+	{{if and (or (eq .MyNotice.account_status "user") (eq .MyNotice.account_status "miner") ) (not .UserId)}}
+		$("#main-login").html('<a href="#myModal" data-backdrop="static" data-toggle="modal" role="button" class="btn btn-danger  btn-block "><i class="fa fa-sign-in fa-lg"></i> Login</a><div style="margin: 2px 10px; font-size: 11px">{{.Lang.login_alert}}</div>');
+	{{else}}
+
+	{{end}}
+</script>
+<style>
+	.alert-info a:link{text-decoration: underline}
+	.page-header{margin-top: 10px}
+	{{if not .Mobile}}#dc_content{margin-top:30px}{{end}}
+</style>
+<link href="static/css/cf.css" rel="stylesheet">
+<script>
+
+	function updDcoin() {
+
+		$('#UpdateMessage').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+		$('#UpdateMessage').prop('disabled', true);
+
+		$.get('ajax?controllerName=UpdateDcoin', function (data) {
+			if (typeof data.success !== 'undefined') {
+				console.log("Download succeed");
+				$('#UpdateMessage').html("Download succeed");
+			}
+			$('#UpdateMessage').html('complete');
+		}, 'JSON');
+
+	}
+
+	$( document ).ready(function() {
+		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#AlertMessage').css("display", "block");
+				$('#AlertMessage p').html(data.success);
+			}
+		}, 'JSON');
+		$.get('ajax?controllerName=Update', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#UpdateMessage').css("display", "block");
+				$('#UpdateMessage p').html(data.success);
+			}
+		}, 'JSON');
+	});
+</script>
+<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+<div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+{{ template "alertSuccess". }}
+
+<style>
+	.fd-tile.detail .content {
+		background: none repeat scroll 0% 0% transparent;
+		padding: 10px 10px 13px;
+		display: inline-block;
+		position: relative;
+		z-index: 3;
+	}
+	.fd-tile .content p {
+		margin-bottom: 0px;
+		font-size: 14px;
+	}
+	.fd-tile .content h1 {
+		margin: 0px;
+		font-weight: 300;
+		font-size: 40px;
+	}
+	.tab-content h3, h2, h1:first-child {
+		margin-top: 0px;
+	}
+	.cl-mcont h1 {
+		line-height: 1.3em;
+	}
+	.text-left {
+		text-align: left;
+	}
+	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+		font-family: "Open Sans",sans-serif;
+		font-weight: 300;
+	}
+	h1, .h1 {
+		font-size: 36px;
+	}
+	h1, .h1, h2, .h2, h3, .h3 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+		font-family: inherit;
+		font-weight: 500;
+		line-height: 1.1;
+		color: inherit;
+	}
+	p {
+		font-size: 13px;
+		line-height: 22px;
+	}
+	p {
+		margin: 0px 0px 10px;
+	}
+	.fd-tile.clean {
+		color: #888;
+	}
+	.cl-mcont {
+		color: inherit;
+		font-size: 13px;
+		font-weight: 200;
+		line-height: 21px;
+	}
+
+	.ex {
+		font-family: "Open Sans",sans-serif;
+		font-size: 12px;
+		color: #555;
+	}
+	.fa-flag:before {
+		content: "";
+	}
+
+	.fd-tile.detail .icon i {
+		color: rgba(0, 0, 0, 0.05);
+		font-size: 100px;
+		line-height: 65px;
+	}
+	.fd-tile.clean .icon i {
+		color: #E5E5E5;
+	}
+	/*.fa {
+		display: inline-block;
+		font-family: FontAwesome;
+		font-style: normal;
+		font-weight: normal;
+		line-height: 1;
+	}*/
+	.fd-tile.detail .icon {
+		display: block;
+		float: right;
+		height: 80px;
+		margin-bottom: 10px;
+		padding-left: 15px;
+		padding-top: 10px;
+		width: 80px;
+	}
+	.fd-tile.detail .icon {
+		display: block;
+		float: right;
+		height: 80px;
+		margin-bottom: 10px;
+		padding-left: 15px;
+		padding-top: 10px;
+		position: absolute;
+		right: 10px;
+		top: 0px;
+		width: 80px;
+	}
+	.fd-tile.clean.tile-purple .details {
+		background-color: #5D9CEC;
+	}
+	.fd-tile.detail {
+		position: relative;
+		overflow: hidden;
+	}
+	.fd-tile.detail .details {
+		clear: both;
+		display: block;
+		padding: 5px 10px;
+		color: #FFF;
+		text-transform: uppercase;
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	.ex a {
+		color: #23C0A2;
+		text-decoration: none;
+		outline: 0px none;
+	}
+	.ex a {
+		color: #428BCA;
+		text-decoration: none;
+	}
+	.ex a {
+		background: none repeat scroll 0% 0% transparent;
+	}
+	.ex a:focus, .ex a:hover, .ex a:active {
+		outline: 0px none;
+		text-decoration: none;
+		color: #0FAC8E;
+	}
+	.fd-tile.detail .details i {
+		font-size: 18px;
+		color: rgba(255, 255, 255, 0.4);
+	}
+	.fa.pull-right {
+		margin-left: 0.3em;
+	}
+	.fd-tile.detail .icon i {
+		color: rgba(0, 0, 0, 0.05);
+		font-size: 100px;
+		line-height: 65px;
+	}
+	.fd-tile.clean.tile-green .details {
+		background-color: #37BC9B;
+	}
+	.fd-tile.clean.tile-prusia .details {
+		background-color: #AD4B84;
+	}
+	.fd-tile.clean.tile-red .details {
+		background-color: #EA6153;
+	}
+</style>
+
+
+
+<div id="message"></div>
+<script>
+
+	function dc_counter(amount, pct, amount_id, characters)
+	{
+		console.log($('#'+amount_id).text());
+		var amount_str = $('#'+amount_id).text();
+		var amount = parseFloat(amount_str);
+		console.log('dc_counter/'+amount_id+'/'+amount+'/'+pct);
+		var i=0;
+		pct = pct / 3;
+
+		var intervalID = setInterval( function() {
+			 i++;
+			 //console.log(i);
+			 var new_amount =  Math.pow(1+pct, i) * amount;
+			 var number = Math.pow(10, Number(characters));
+			//console.log('characters='+characters);
+			//console.log('number='+number);
+			 if (new_amount<number) {
+				 if (parseFloat(new_amount)<1)
+					 var s = 2;
+				 else
+					 var s = 1;
+				 new_amount = new_amount.toString();
+				 new_amount = new_amount.substr(0, characters+s);
+				 //console.log('new_amount<number='+new_amount+'/'+s);
+			 }
+			 else {
+				 new_amount = new_amount.toFixed();
+				 //console.log('new_amount.toFixed='+new_amount);
+			 }
+			if (new_amount!="NaN" ) {
+				$('#'+amount_id).text(new_amount);
+				//console.log('new_amount='+new_amount);
+			}
+			else {
+				amount = parseFloat($('#'+amount_id).text());
+				//console.log('amount='+amount);
+			}
+		} , 300);
+		intervalIdArray.push(intervalID);
+	}
+
+</script>
+<script>
+	/*$(document).ready(function() {
+		$('.tooltip').tooltipster({
+			delay: 50,
+			contentAsHTML: true,
+			interactive: true,
+			theme: 'tooltipster-shadow'
+		});
+	});*/
+</script>
+
+<style>
+
+	.phoney {
+		background-color: rgba (0, 0, 0, 0.7);
+		background: rgba(0, 0, 0, 0.7);
+
+	}
+
+	.phoneytext {
+		text-shadow: 0 -1px 0 #000;
+		color: #fff;
+		font-family: Helvetica Neue, Helvetica, arial;
+		font-size: 18px;
+		line-height: 25px;
+		padding: 4px 45px 4px 15px;
+		font-weight: bold;
+		background: url(static/img/us-ru.png) 95% 50% no-repeat;
+	}
+
+	.phoneytab {
+		text-shadow: 0 -1px 0 #000;
+		color: #fff;
+		font-family: Helvetica Neue, Helvetica, arial;
+		font-size: 18px;
+		background: rgb(112,112,112) !important;
+	}
+
+	.img_face{
+		width: 80px;
+		height: 80px;
+		background-size: 80px Auto;
+		border-radius: 50%;
+		margin:auto;
+	}
+	.panel-img {
+		display: block;
+		margin: auto;
+		margin-top: -50px;
+		border-radius: 50%;
+		border: 7px solid #FFF;
+		width: 93px;
+		height: 93px;
+		line-height: 80px;
+		text-align: center;
+		text-shadow: -6px 8px 5px rgba(0, 0, 0, 0.3);
+	}
+	.profile_div{
+		padding-top: 15px;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		height:75px;
+		background:none repeat scroll 0% 0% #5B90BF;
+	}
+	.profile_text{
+		background:none repeat scroll 0% 0% #ffffff;
+		text-align:center;
+		font-size:13px;
+	}
+	.profile_text strong {
+		font-size:25px;
+	}
+	.profile_text .dc_amount {
+		font-size:20px;
+	}
+	.profile_text .amount_1year {
+		font-size:24px;
+	}
+
+	.profile_main_div{
+		background:#ffffff;
+		padding-bottom:5px;
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
+		width:198px;
+		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		line-height: 1.1;
+		color:#555;
+	}
+	.profile_main_div hr{
+		width:20%; margin:10px auto; border:none; height:1px; background:#ccc;
+	}
+
+</style>
+
+<script src="static/js/infobubble.js"></script>
+<!--<script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/src/infobubble-compiled.js" type="text/javascript"></script>-->
+
+
+<script type="text/javascript">
+	var infoBubble;
+
+	function get_img_home (i, user_id, urls, lnglat, html, counters, pct_sec, start) {
+		console.log('html='+html);
+		console.log('counters='+counters);
+		console.log('pct_sec='+pct_sec);
+		console.log('start='+start);
+		if (typeof urls == 'undefined' || typeof urls[i] == 'undefined' )
+			return 0;
+		$.ajax({
+			url: urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg",
+			type: 'GET',
+			error:
+				function(){
+					console.log('==========error ' + urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg");
+					var bg = $('#img_' + user_id).css("background-image");
+					if (typeof bg == 'undefined' || bg.length < 10)
+						get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
+				},
+			success:
+				function(response) {
+					if (response=='ok') {
+						if (typeof urls[i] != 'undefined' && urls[i] != '' && urls[i] != '0') {
+							var image = new Image();
+							console.log('TRY ' + urls[i] + "/public/" + user_id + "_user_face.jpg" + "\ni=" + i);
+							image.src = urls[i] + "/public/" + user_id + "_user_face.jpg";
+							image.onload = function () {
+								console.log('OK ' + urls[i]);
+								image = null;
+								//$('#img_'+user_id).css("background", "url('"+urls[i]+"/public/"+user_id+"_user_face.jpg')  50% 50%");
+								//$('#img_'+user_id).css("background-size", "100px Auto");
+								//infowindow = new google.maps.InfoWindow();
+								//infowindow.setContent('<div id="infowin_content" style="width:190px; overflow:none"><div id="img_'+user_id+'" style="width:100px; height:100px; background:  url('+urls[i]+'/public/'+user_id+'_user_face.jpg)  50% 50%; background-size: 100px Auto; border-radius:50%"></div>'+html+'</div>');
+
+								//infowindow.setPosition(lnglat);
+								//infowindow.open(map);
+
+								console.log('===============>lnglat');
+								console.log(lnglat);
+
+								infoBubble2 = new InfoBubble({
+									map: map,
+									content: '<div class="profile_main_div"><div class="profile_div"></div><div class="panel-img"><div id="img_' + user_id + '" style="width:80px; height:80px; background:  url(' + urls[i] + '/public/' + user_id + '_user_face.jpg)  50% 50%; background-size: 80px Auto; border-radius:50%"></div></div><div class="profile_text">' + html + '</div></div>',
+									position: new google.maps.LatLng(lnglat.lat, lnglat.lng),
+									shadowStyle: 1,
+									padding: 0,
+									backgroundColor: 'rgb(0,0,0,0)',
+									borderRadius: 4,
+									arrowSize: 10,
+									borderWidth: 1,
+									borderColor: '#ccc',
+									disableAutoPan: true,
+									hideCloseButton: false,
+									arrowPosition: 50,
+									backgroundClassName: 'phoney',
+									arrowStyle: 2
+								});
+								infoBubble2.open();
+
+								if (start == 1)
+									var lat = lnglat.lat + 3;
+								else
+									var lat = lnglat.lat;
+								var center = new google.maps.LatLng(lat, lnglat.lng);
+								map.panTo(center);
+
+
+								//console.log(i+'/'+user_id+'/'+urls);
+								$('#map_canvas').spin(false);
+								for (var k = 0; k < counters.length; k++) {
+									dc_counter(0, pct_sec, counters[k], 8);
+								}
+							};
+							// handle failure
+							image.onerror = function () {
+								image = null;
+								console.log('error ' + urls[i]);
+								var bg = $('#img_' + user_id).css("background-image");
+								if (typeof bg == 'undefined' || bg.length < 10)
+									get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
+							};
+							setTimeout
+							(
+								function () {
+									if (image != null && (!image.complete || !image.naturalWidth)) {
+										var bg = $('#img_' + user_id).css("background-image");
+										image = null;
+										console.log('error');
+										if (typeof bg == 'undefined' || bg.length < 10)
+											get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
+									}
+								},
+								2000
+							);
+						}
+						else {
+							$('#map_canvas').spin(false);
+						}
+					}
+					else {
+						console.log('response='+response+'==========error 2 ' + urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg");
+						var bg = $('#img_' + user_id).css("background-image");
+						if (typeof bg == 'undefined' || bg.length < 10)
+							get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
+					}
+				},
+				timeout: 3000
+		});
+	}
+
+
+	var gMapsLoaded = false;
+	window.gMapsCallback = function(){
+		gMapsLoaded = true;
+		$(window).trigger('gMapsLoaded');
+	}
+	window.loadGoogleMaps = function(){
+		if(gMapsLoaded) return window.gMapsCallback();
+		var script_tag = document.createElement('script');
+		script_tag.setAttribute("type","text/javascript");
+		script_tag.setAttribute("src","http://maps.google.com/maps/api/js?sensor=false&callback=gMapsCallback");
+		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
+	}
+
+	$(document).ready(function(){
+		function initialize(){
+
+			console.log('-----------------------------------------------------------------------');
+
+			$.get( 'ajax?controllerName=GetMinerDataMap', function (map_markers) {
+
+				var markers = [];
+				var mapOptions = {
+					zoom: 5,
+					scrollwheel: false,
+					center: new google.maps.LatLng(56.55258, 43.83508),
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					styles: [	{		featureType:'water',		stylers:[{color:'#46bcec'},{visibility:'on'}]	},{		featureType:'landscape',		stylers:[{color:'#f2f2f2'}]	},{		featureType:'road',		stylers:[{saturation:-100},{lightness:45}]	},{		featureType:'road.highway',		stylers:[{visibility:'simplified'}]	},{		featureType:'road.arterial',		elementType:'labels.icon',		stylers:[{visibility:'off'}]	},{		featureType:'administrative',		elementType:'labels.text.fill',		stylers:[{color:'#444444'}]	},{		featureType:'transit',		stylers:[{visibility:'off'}]	},{		featureType:'poi',		stylers:[{visibility:'off'}]	}]
+				};
+				map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);
+
+
+
+
+				infowindow = new google.maps.InfoWindow();
+
+				markers.markerClickFunction = function(user_id) {
+					return function(e) {
+						e.cancelBubble = true;
+						e.returnValue = false;
+						if (e.stopPropagation) {
+							e.stopPropagation();
+							e.preventDefault();
+						}
+
+						$('#map_canvas').spin();
+						$.get( 'ajax?controllerName=GetMinerData?userId='+user_id, function (data) {
+							get_img_home (0, user_id, data.hosts, data.lnglat, data.html,  data.counters, data.pct_sec, 0);
+						}, "json" );
+
+					};
+				};
+
+
+				for (var i = 0; i < map_markers.info.length; i++) {
+
+					var datainfo = map_markers.info[i];
+					var latLng = new google.maps.LatLng(datainfo.latitude,
+						datainfo.longitude);
+					var marker = new google.maps.Marker({
+						position: latLng,
+						draggable: true
+					});
+
+					var fn = markers.markerClickFunction(datainfo.user_id);
+					google.maps.event.addListener(marker, 'click', fn);
+
+					markers[i] = marker;
+
+				}
+
+				var markerCluster = new MarkerClusterer(map, markers, { maxZoom: 18 });
+
+				{{range $i, $minerId := .RandMiners}}
+					$.get( 'ajax?controllerName=getMinerData&userId={{$minerId}}', function (data) {
+										get_img_home (0, {{$minerId}}, data.hosts, data.lnglat, data.html, data.counters, data.pct_sec, 1);
+									}, "json" );
+				{{end}}
+
+
+			}, "json" );
+
+		}
+
+		$(window).unbind( 'gMapsLoaded' );
+		$(window).bind('gMapsLoaded', initialize);
+		window.loadGoogleMaps();
+	});
+</script>
+
+
+<div id="generate" style="margin-top: 15px">
+
+<style>
+	.mini-box {
+		min-height: 105px;
+		padding: 20px;
+	}
+	.panel {
+		margin-bottom: 20px;
+		background-color: #FFF;
+		border: 1px solid transparent;
+		border-radius: 2px;
+		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+	}
+	.mini-box .box-icon {
+		display: block;
+		float: left;
+		margin: 0px 10px 10px 0px;
+		width: 65px;
+		height: 65px;
+		border-radius: 50%;
+		line-height: 65px;
+		vertical-align: middle;
+		text-align: center;
+		font-size: 35px;
+	}
+	.bg-success {
+		background-color: #5D9CEC;
+		color: #FFF;
+	}
+	.bg-info {
+		background-color: #37BC9B;
+		color: #FFF;
+	}
+	.bg-danger {
+		background-color: #EA6153;
+		color: #FFF;
+	}
+	.bg-warning {
+		background-color: #AD4B84;
+		color: #FFF;
+	}
+	.panel0 {
+		font-family: "Lato",Helvetica,Arial,sans-serif;
+		font-size: 14px;
+		line-height: 1.42857;
+		color: #767676;
+	}
+	.mini-box .box-info p {
+		margin: 0px;
+	}
+	.size-h2 {
+		font-size: 30px;
+		font-family: sans-serif;
+		line-height: 33px;
+	}
+	.size-h4 {
+		 font-size: 18px;
+	 }
+	.text-muted {
+		color: #777;
+		font-family: "Open Sans",sans-serif;
+		font-size: 14px;
+		line-height: 14px;
+	}
+
+</style>
+<div class="panel0">
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel mini-box" title="{{.Lang.home_account_text}}">
+	                <span class="box-icon bg-success">
+	                    <i class="fa fa-credit-card"></i>
+	                </span>
+			<div class="box-info">
+				<p class="size-h2">{{.UserId}}</p>
+				<p class="text-muted"><span data-i18n="Growth">{{.Lang.account_number}}</span></p>
+			</div>
+		</div>
+	</div>
+	{{if eq .MyNotice.account_status "miner" }}
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel mini-box">
+	                <span class="box-icon bg-danger">
+	                    <i class="fa fa-bell"></i>
+	                </span>
+			<div class="box-info">
+				<p class="size-h2"><a href="#cashRequestIn">{{.CashRequests}}</a></p>
+				<p class="text-muted"><span data-i18n="New users">{{.Lang.inbox}}</span></p>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel mini-box">
+	                <span class="box-icon bg-usd">
+	                    <i class="fa fa-check"></i>
+	                </span>
+			<div class="box-info">
+				<p class="size-h2"><a href="#points">{{.Points}}</a></p>
+				<p class="text-muted"><span data-i18n="New users">{{.Lang.points}}</span></p>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel mini-box">
+	                <span class="box-icon bg-euro">
+	                    <i class="fa fa-camera"></i>
+	                </span>
+			<div class="box-info">
+				<p class="size-h2"><a href="#assignments">{{.Assignments}}</a></p>
+				<p class="text-muted"><span data-i18n="New users">{{.Lang.tasks}}</span></p>
+			</div>
+		</div>
+	</div>
+	{{end}}
+</div>
+	<script>
+		var currency_name = new Array();
+		{{range $id, $currencyName := .CurrencyList}}
+		currency_name[{{$id}}] = "{{$currencyName}}";
+		{{end}}
+
+		var key = $("#key").text();
+		var pass = $("#password").text();
+		if ($(window).width() <= 360) {
+			$(".exNext").addClass("btn-block");
+			$(".exNext").css("margin-top", "10px");
+		}
+
+		function selectEx(url, user_id, bId) {
+
+			$('#'+bId).html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+			$('#'+bId).prop('disabled', true);
+			$("#"+bId).css("background-color", "#ccc");
+
+			$.post( url+'ajax?controllerName=ESignLogin', {
+				}, function (forsignature) {
+					console.log("forsignature:", "#"+forsignature+"#");
+
+					var objEx =
+					{
+						key: key,
+						pass: pass,
+						forsign: forsignature,
+					};
+
+					var workerAjax = new Worker("/static/js/worker.js");
+					workerAjax.onmessage = function(event)	{
+						if(typeof event.data.error != "undefined") {
+							$("#wrapper").spin(false);
+							$("#ex_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+event.data.error+'</p></div>');
+							$('#'+bId).prop('disabled', false);
+							$('#'+bId).html('Buy');
+						} else {
+							console.log(url+'ajax?controllerName=ECheckSign');
+							$.get( url+'ajax?controllerName=ECheckSign', {
+								'sign': event.data.hSig,
+								'user_id': {{.UserId}}
+							}, function (data) {
+									console.log("ECheckSign", data);
+									if (data.result=="1") {
+										// сохраним токен у себя в БД
+										$.post('ajax?controllerName=saveToken', {
+											'token': data.token,
+											'e_owner_id': user_id
+										}, function () {
+											console.log(data);
+											$('#'+bId).prop('disabled', false);
+											$('#'+bId).html('Buy');
+											$('#sendForm').attr('action', url+'ajax');
+											$('input[name="FormExPs"]').val($("#payment_system").val());
+											$('input[name="FormExAmount"]').val($("#exAmount").val());
+											$('input[name="FormDC"]').val($("#buy_currency_id").val());
+											$('input[name="FormToken"]').val(data.token);
+											$("#sendForm").submit();
+										});
+									} else {
+										$("#ex_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>Incorrect Signature</p></div>');
+										$('#'+bId).prop('disabled', false);
+										$('#'+bId).html('Buy');
+									}
+									//$('#'+bId).prop('disabled', false);
+									//$('#'+bId).html('Buy');
+							}, "JSON");
+						}
+					};
+					workerAjax.onerror = function(err) {
+						alert(err.message);
+					};
+					workerAjax.postMessage(objEx);
+
+
+					//var e_n_sign = get_e_n_sign(key, pass, forsignature, 'ex_alert');
+
+			}, "JSON");
+		}
+
+		$('#exNext').bind('click', function () {
+			$('#buyDC').css("display", "none");
+			$('#eList').css("display", "block");
+		});
+
+
+		$('#refreshEx').bind('click', function () {
+			getExData()
+		});
+
+		$(document).ready(function() {
+			getExData()
+		});
+
+		var exDataDisplay = false;
+		$('#displayEx').bind('click', function () {
+			if (exDataDisplay == true) {
+				$('#exOrders').css("display", "none");
+				$('#exBalances').css("display", "none");
+				$('#exWithdraw').css("display", "none");
+				$('#refreshEx').css("display", "none");
+				$('#displayEx').html("Показать информацию с биржи");
+				exDataDisplay = false
+			} else {
+				exDataDisplay = true;
+				$('#exOrders').css("display", "inline-table");
+				$('#exBalances').css("display", "inline-table");
+				$('#exWithdraw').css("display", "inline-table");
+				$('#refreshEx').css("display", "inline-block");
+				$('#displayEx').html("Убрать иформацию с биржи");
+				getExData()
+			}
+		});
+
+		var token = {{.Token}};
+
+		function getExData() {
+			if (token != "") {
+				$('#refreshEx').html('<img src="/static/img/squares2.gif" style="width:20px; margin:0px">');
+				$.post( '{{.ExchangeUrl}}ajax?controllerName=EInfo', {
+					'token': token
+				}, function (data) {
+					$('#refreshEx').html('<i class="fa fa-refresh"></i>');
+					if (typeof data.Token !== "undefined") {
+						$('#tokens').css("display", "block");
+						$('#tokensTable').html("<tr><td>Покупка " + data.Token.amount_fiat + " " + currency_name[data.Token.buy_currency_id] + "</td><td>" + data.Token.status + "</td></tr>");
+					}
+					$('#balancesTable').html("");
+					if (typeof data.Wallets !== "undefined") {
+						for (var i = 0; i < data.Wallets.length; i++) {
+							$('#balancesTable').append("<tr><td>" + currency_name[data.Wallets[i].currency_id] + "</td><td>" + data.Wallets[i].amount + "</td></tr>");
+						}
+					}
+					$('#ordersTable').html("");
+					if (typeof data.Orders !== "undefined") {
+						for (var i=0; i < data.Orders.length; i++) {
+							$('#ordersTable').append("<tr><td>"+currency_name[data.Orders[i].buy_currency_id]+"/"+currency_name[data.Orders[i].sell_currency_id]+"</td><td>"+parseFloat(data.Orders[i].sell_rate, 2).toFixed(2)+"</td><td>"+parseFloat(data.Orders[i].begin_amount * (1/data.Orders[i].sell_rate), 2).toFixed(2)+"</td><td>"+parseFloat(data.Orders[i].begin_amount, 2).toFixed(2)+"</td><td>"+parseFloat(100-(data.Orders[i].amount/data.Orders[i].begin_amount)*100, 2).toFixed(2)+"%</td></tr>");
+						}
+					}
+					$('#withdrawTable').html("");
+					if (typeof data.Withdraw !== "undefined") {
+						for (var i = 0; i < data.Withdraw.length; i++) {
+							var status = "wait"
+							if (typeof data.Withdraw[i].close_time != "undefined") {
+								status = "complete"
+							}
+							$('#withdrawTable').append("<tr><td>" + data.Withdraw[i].open_time + "</td><td>" + data.Withdraw[i].amount + "</td><td>" + status + "</td></tr>");
+						}
+					}
+				}, 'JSON');
+			}
+		}
+
+
+	</script>
+	<div style="clear: both"></div>
+
+<div style="display: inline-table" class="col-sm-6">
+	<div id="ex_alert"></div>
+
+	<div style="display: none" id="eList">
+		<table class="table">
+			<tbody><tr>
+				<th>Payment systems</th>
+				<th>Buy</th>
+				<th>Url</th>
+				<th>Owner</th>
+				<th>+</th>
+				<th>-</th>
+				<th style="min-width: 100px">In stock</th>
+				{{if .Miner}}<th>Voting</th>{{end}}
+			</tr></tbody>
+			{{range $id, $data := .TopExMap}}
+			<tr>
+				<td id="ps-{{$id}}"></td>
+				<td id="btnbuy-{{$id}}"><button onclick="selectEx('{{$data.Host}}', '{{$data.UserId}}', 'btn-{{$id}}')" id="btn-{{$id}}" class="btn btn-default">Buy</button></td>
+				<td>{{$data.Host}}</td>
+				<td>{{$data.UserId}}</td>
+				<td>{{$data.Vote1}}</td>
+				<td>{{$data.Vote0}}</td>
+				<td id="values-{{$id}}"></td>
+				{{if $.Miner}}<td><button class="btn btn-default btn-xs" onclick="dc_navigate('votesExchange', {'result':'1', 'e_owner_id':'{{$data.UserId}}'})">+</button><button class="btn btn-default btn-xs" onclick="dc_navigate('votesExchange', {'result':'0', 'e_owner_id':'{{$data.UserId}}'})">-</button></td>
+				{{end}}
+			</tr>
+			<script>
+				$.get( '{{$data.Host}}ajax?controllerName=EData', {}, function (data) {
+					var patt = /^([\w,\.\s:]+)$/i;
+					if (patt.test(data.values)) {
+						$('#values-{{$id}}').html(data.values);
+					}
+					if (patt.test(data.ps)) {
+						$('#ps-{{$id}}').html(data.ps);
+					}
+				}, 'JSON').fail(function() { $('#ps-{{$id}}').html("Unavailable"); $('#btnbuy-{{$id}}').html(""); });
+			</script>
+			{{end}}
+		</table>
+	</div>
+	<div class="panel0" id="buyDC">
+		Buy on exchange <input type="text" style="width: 60px;display: inline-block" class="form-control" id="exAmount">
+		<select id="buy_currency_id" style="width: {{if .Mobile}}80{{else}}100{{end}}px; display: inline-block" class="form-control" >
+			<option value='72'>dUSD</option>
+		</select>
+		<button class="btn btn-primary exNext" id="exNext" style="vertical-align: top;">Next</button>
+	</div>
+	<script>
+		$('#exAmount').bind("keyup change", function(e) {
+
+			var amount = $("#exAmount").val();
+			if (amount > 0) {
+				amount_ = parseFloat(amount.replace(",", "."));
+				amount_ = amount_.toFixed(2);
+
+				$("#exAmount").val(amount_);
+			}
+		});
+
+	</script>
+	<form method="get" id="sendForm">
+		<input type="hidden" name="FormExAmount">
+		<input type="hidden" name="FormDC">
+		<input type="hidden" name="FormToken">
+		<input type="hidden" name="controllerName" value="ERedirect">
+	</form>
+	<div style="clear: both; margin-bottom: 20px"></div>
+	<div>
+		<table class="table" style="max-width: 340px; display: none" id="tokens">
+			<tbody><tr><th>Операция</th><th>Статус</th></tr></tbody>
+			<tbody id="tokensTable"></tbody>
+		</table>
+		<button class="btn btn-outline btn-primary" id="displayEx">Показать информацию с биржи</button>
+		<button class="btn btn-outline btn-primary" id="refreshEx" style="display: none"><i class="fa fa-refresh"></i></button>
+	</div>
+</div>
+
+<div style="display: none" id="exOrders" class="col-sm-6">
+
+	<h3>Orders</h3>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>Пара</th>
+			<th>Цена</th>
+			<th>Кол-во</th>
+			<th>Всего</th>
+			<th>Ready</th>
+		</tr>
+		</thead>
+		<tbody id="ordersTable">
+		</tbody>
+	</table>
+</div>
+<div style="display: none" id="exBalances" class="col-sm-6">
+	<h3>Balances</h3>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>Currency</th>
+			<th>Amount</th>
+		</tr>
+		</thead>
+		<tbody id="balancesTable">
+		</tbody>
+	</table>
+
+</div>
+<div style="display: none" id="exWithdraw" class="col-sm-6">
+	<h3>История операций</h3>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>Время</th>
+			<th>Количество</th>
+			<th>Статус</th>
+		</tr>
+		</thead>
+		<tbody id="withdrawTable">
+		</tbody>
+	</table>
+</div>
+
+<div style="clear: both"></div>
+
+	<script>
+		var userId = {{.UserId}}
+	</script>
+	<script src="/static/js/chat.js"></script>
+
+	{{if eq .ChatEnabled "1"}}
+	<style>
+		#chat img{width: 50px; float: left; margin-right: 10px}
+		#chatLock { padding: 3px 7px; font-size: 20px; }
+		#chatLockIco{}
+	</style>
+	<h3 style="margin-top: 20px" id="chatTitle">Chat</h3>
+	<div id="chat" class="col-lg-12">
+		<div id="chat_alert"></div>
+		<div style="max-height: 300px; overflow-y: auto; margin-bottom: 5px" id="chatwindow">
+			<table class="table table-striped table-bordered table-hover">
+			<tbody id="chatMessages">
+			</tbody>
+			</table>
+		</div>
+		<input type="hidden" id="chatUserIdReceiver" value="0">
+		{{if not .Community}}<button class="btn btn-default"  onclick="lock_unlock(); return false" id="chatLock" style="display: inline-block; margin: 5px; width: 40px"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
+		<span id="selectReceiver" style="display: none;vertical-align: middle;">Please, select receiver</span>
+		<input type="text" class="form-control" id="myChatMessage" style="display: inline-block;vertical-align: middle; width: 200px" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
+		<button class="btn btn-primary" id="sendToChat" style="display: inline-block">Send</button>
+	</div>
+	{{end}}
+
+<style>
+	.panel {
+		margin-bottom: 21px;
+		background-color: #FFF;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+	}
+	.widget.panel, .widget .panel {
+		overflow: hidden;
+	}
+	.widget {
+		margin-bottom: 20px;
+		border: 0px none;
+	}
+	.row-table > [class*="col-"] {
+		display: table-cell;
+		float: none;
+		table-layout: fixed;
+		vertical-align: middle;
+	}
+
+	.pv-lg {
+		padding-top: 15px !important;
+		padding-bottom: 15px !important;
+	}
+	.bg-primary-dark {
+		color: #FFF !important;
+	}
+	.text-center {
+		text-align: center;
+	}
+	.pv-lg {
+		padding-top: 15px !important;
+		padding-bottom: 15px !important;
+	}
+	.mt0 {
+		margin-top: 0px !important;
+	}
+	.dc_promised {
+		font-size: 28px;
+		font-weight: 600;
+	}
+	.text-uppercase {
+		text-transform: uppercase;
+	}
+	.bg-primary {
+		color: #FFF !important;
+	}
+
+	.bg-primary-dark {
+		background-color: #2F80E7;
+		color: #FFF !important;
+	}
+	.bg-primary {
+		background-color: #5D9CEC;
+		color: #FFF !important;
+	}
+	.bg-red {
+		background-color: #F27B56;
+		color: #FFF !important;
+	}
+	.bg-red-dark {
+		background-color: #D66543;
+		color: #FFF !important;
+	}
+
+	.pct small{color: #ffffff}
+
+	.bg-usd {
+		background-color: #37BC9B;
+		color: #FFF !important;
+	}
+	.bg-usd-dark {
+		background-color: #2B957A;
+		color: #FFF !important;
+	}
+
+	.bg-woc {
+		background-color: #5D9CEC;
+		color: #FFF !important;
+	}
+	.bg-woc-dark {
+		background-color: #2F80E7;
+		color: #FFF !important;
+	}
+
+	.bg-euro {
+		background-color: #AD4B84;
+		color: #FFF !important;
+	}
+	.bg-euro-dark {
+		background-color: #89456C;
+		color: #FFF !important;
+	}
+
+	.bg-rub {
+		background-color: #EA6153;
+		color: #FFF !important;
+	}
+	.bg-rub-dark {
+		background-color: #BC5247;
+		color: #FFF !important;
+	}
+	.col-xs-8{width:66.6667%; float:none}
+	.col-xs-4{width:33.3333%; float:none}
+
+</style>
+
+<div style="clear: both"></div>
+
+<h3 style="margin-top: 20px">{{.Lang.mining}}</h3>
+<div class="pct">
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel widget bg-woc">
+			<div class="row-table">
+				<div class="col-xs-4 text-center bg-woc-dark pv-lg">
+					<em class="fa fa-globe fa-3x" style="width: 40px; margin: 0px 10px 0px 10px"></em>
+				</div>
+				<div class="col-xs-8 pv-lg">
+					<div class="dc_promised mt0" id="promised_currency_1">{{(index .PromisedAmountListGen 1).Tdc}}</div>
+					<div class="h4 mt0">{{(index .PromisedAmountListGen 1).Amount}}&nbsp;WOC</div>
+					{{if gt (index .PromisedAmountListGen 1).PctSec 0.0}}
+						<script>dc_counter({{(index .PromisedAmountListGen 1).Tdc}}, {{(index .PromisedAmountListGen 1).PctSec}}, 'promised_currency_1', 8);</script>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel widget bg-usd">
+			<div class="row-table">
+				<div class="col-xs-4 text-center bg-usd-dark pv-lg">
+					<em class="fa fa-usd fa-3x" style="width: 40px; margin: 0px 10px 0px 10px"></em>
+				</div>
+				<div class="col-xs-8 pv-lg">
+					<div class="dc_promised mt0" id="promised_currency_72">{{(index .PromisedAmountListGen 72).Tdc}}</div>
+					<div class="h4 mt0">{{(index .PromisedAmountListGen 72).Amount}}&nbsp;USD</div>
+					
+					{{if gt (index .PromisedAmountListGen 72).PctSec 0.0}}
+						<script>dc_counter({{(index .PromisedAmountListGen 72).Tdc}}, {{(index .PromisedAmountListGen 72).PctSec}}, 'promised_currency_72', 8);</script>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel widget bg-euro">
+			<div class="row-table">
+				<div class="col-xs-4 text-center bg-euro-dark pv-lg">
+					<em class="fa fa-euro fa-3x" style="width: 40px; margin: 0px 10px 0px 10px"></em>
+				</div>
+				<div class="col-xs-8 pv-lg">
+					<div class="dc_promised mt0" id="promised_currency_23">{{(index .PromisedAmountListGen 23).Tdc}}</div>
+					<div class="h4 mt0">{{(index .PromisedAmountListGen 23).PctSec}}&nbsp;EUR</div>
+					{{if gt (index .PromisedAmountListGen 23).PctSec 0.0}}
+						<script>dc_counter({{(index .PromisedAmountListGen 23).Tdc}}, {{(index .PromisedAmountListGen 23).PctSec}}, 'promised_currency_23', 8);</script>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="panel widget bg-rub">
+			<div class="row-table">
+				<div class="col-xs-4 text-center bg-rub-dark pv-lg">
+					<em class="fa fa-ruble fa-3x" style="width: 40px; margin: 0px 10px 0px 10px"></em>
+				</div>
+				<div class="col-xs-8 pv-lg">
+					<div class="dc_promised mt0" id="promised_currency_58">{{(index .PromisedAmountListGen 58).Tdc}}</div>
+					<div class="h4 mt0">{{(index .PromisedAmountListGen 58).PctSec}}&nbsp;RUB</div>
+					{{if gt (index .PromisedAmountListGen 58).PctSec 0.0}}
+						<script>dc_counter({{(index .PromisedAmountListGen 58).Tdc}}, {{(index .PromisedAmountListGen 58).PctSec}}, 'promised_currency_58', 8);</script>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div style="clear: both"></div>
+
+<style>
+	.m-bottom-md {
+		margin-bottom: 20px;
+	}
+	.statistic-box {
+		padding: 20px;
+		text-align: center;
+		position: relative;
+		overflow: hidden;
+		border-radius: 6px;
+	}
+	.statistic-box .statistic-title {
+		font-size: 20px;
+		z-index: 2;
+	}
+	.statistic-box .statistic-value {
+		font-size: 36px;
+		font-weight: 600;
+		z-index: 2;
+	}
+	.m-top-md {
+		margin-top: 20px;
+	}
+	.statistic-box .statistic-icon-background {
+		position: absolute;
+		font-size: 160px;
+		right: -5px;
+		bottom: -50px;
+		opacity: 0.2;
+	}
+	.statistic-box .statistic-icon-background {
+		font-size: 160px;
+	}
+</style>
+
+
+<h3  title="{{.Lang.home_account_text}}">{{.Lang.my_accounts}}</h3>
+<div>
+
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="statistic-box bg-success m-bottom-md" title="{{.Lang.home_dwoc_text}}">
+			<div class="statistic-title">
+				dWOC
+			</div>
+
+			<div class="statistic-value" id="currency_1">
+				{{(index .Wallets 1).Amount}}
+			</div>
+			{{if gt (index .Wallets 1).PctSec 0.0}}
+				<script>dc_counter({{(index .Wallets 1).Amount}}, {{(index .Wallets 1).PctSec}}, 'currency_1', 8);</script>
+			{{end}}
+			<div class="statistic-icon-background">
+				<i class="ion-stats-bars"></i>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="statistic-box bg-info m-bottom-md" title="{{replaceCurrency .Lang.home_dc_text "DUSD"}}">
+			<div class="statistic-title">
+				dUSD
+			</div>
+
+			<div class="statistic-value" id="currency_72">
+				{{(index .Wallets 72).Amount}}
+			</div>
+			{{if gt (index .Wallets 72).PctSec 0.0}}
+				<script>dc_counter({{(index .Wallets 72).Amount}}, {{(index .Wallets 72).PctSec}}, 'currency_72', 8);</script>
+			{{end}}
+
+			<div class="statistic-icon-background">
+				<i class="ion-ios7-cart-outline"></i>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="statistic-box bg-euro m-bottom-md" title="{{replaceCurrency .Lang.home_dc_text "EUR"}}">
+			<div class="statistic-title">
+				dEUR
+			</div>
+
+			<div class="statistic-value" id="currency_23">
+				{{(index .Wallets 23).Amount}}
+			</div>
+			{{if gt (index .Wallets 23).PctSec 0.0}}
+				<script>dc_counter({{(index .Wallets 23).Amount}}, {{(index .Wallets 23).PctSec}}, 'currency_23', 8);</script>
+			{{end}}
+
+			<div class="statistic-icon-background">
+				<i class="ion-person-add"></i>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="statistic-box bg-danger m-bottom-md" title="{{replaceCurrency .Lang.home_dc_text "RUB"}}">
+			<div class="statistic-title">
+				dRUB
+			</div>
+
+			<div class="statistic-value" id="currency_58">
+				{{(index .Wallets 58).Amount}}
+			</div>
+			{{if gt (index .Wallets 58).PctSec 0.0}}
+				<script>dc_counter({{(index .Wallets 58).Amount}}, {{(index .Wallets 58).PctSec}}, 'currency_58', 8);</script>
+			{{end}}
+
+
+			<div class="statistic-icon-background">
+				<i class="ion-eye"></i>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!--
+<div style="clear: both"></div>
+<h3  title="{{.Lang.home_ex_text}}">{{.Lang.applications_from_exchange}}</h3>
+<div class="ex">
+	<div class="col-lg-3 col-sm-6">
+		<div class="fd-tile detail clean tile-purple">
+			<div class="content"><p>{{.Lang.total}}</p><h1 class="text-left" id="dwoc_ex_buy_sum">0</h1><p>{{.Lang.best_rate}}:</p><p id="dwoc_ex_buy_rate" style="font-weight: bold">0</p></div>
+			<div class="icon"><i class="fa fa-globe"></i></div>
+			<a class="details" href="http://dcoinsimple.com" target="_blank">{{.Lang.details}} <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+		</div>
+	</div>
+
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="fd-tile detail clean tile-green">
+			<div class="content"><p>{{.Lang.total}}</p><h1 class="text-left" id="dusd_ex_buy_sum">0</h1><p>{{.Lang.best_rate}}:</p><p id="dusd_ex_buy_rate" style="font-weight: bold">0</p></div>
+			<div class="icon"><i class="fa fa-usd"></i></div>
+			<a class="details" href="http://dcoinsimple.com" target="_blank">{{.Lang.details}} <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+		</div>
+	</div>
+
+
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="fd-tile detail clean tile-prusia">
+			<div class="content"><p>{{.Lang.total}}</p><h1 class="text-left" id="deur_ex_buy_sum">0</h1><p>{{.Lang.best_rate}}:</p><p id="deur_ex_buy_rate" style="font-weight: bold">0</p></div>
+			<div class="icon"><i class="fa fa-euro"></i></div>
+			<a class="details" href="http://dcoinsimple.com" target="_blank">{{.Lang.details}} <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+		</div>
+	</div>
+
+	<div class="col-lg-3 col-sm-6">
+		<div class="fd-tile detail clean tile-red">
+			<div class="content"><p>{{.Lang.total}}</p><h1 class="text-left" id="drub_ex_buy_sum">0</h1><p>{{.Lang.best_rate}}:</p><p id="drub_ex_buy_rate" style="font-weight: bold">0</p></div>
+			<div class="icon"><i class="fa fa-ruble"></i></div>
+			<a class="details" href="http://dcoinsimple.com" target="_blank">{{.Lang.details}} <span><i class="fa fa-arrow-circle-right pull-right"></i></span></a>
+		</div>
+	</div>
+</div>
+
+{{if .ShowMap}}
+	<div style="clear: both"></div>
+	<h3  style="margin-top: 30px;margin-bottom: 0px;"
+	    title="{{.Lang.home_miners_text}}">{{.Lang.miners_on_the_map}}</h3>
+	{{if eq .SessRestricted 0}}<div style="float: right"><a href="#interface/show_map=0">Hide map</a></div>{{end}}
+	<div class="clearfix"></div>
+	<div id="map_canvas" style="width: 100%; height:500px;"></div>
+{{end}}
+-->
+	<style>
+		.ibox {
+			clear: both;
+			margin-bottom: 25px;
+			margin-top: 0px;
+			padding: 0px 0px 10px 0px;
+		}
+
+		.ibox-title {
+
+			color: inherit;
+			margin-bottom: 0px;
+			padding: 14px 15px 7px;
+			height: 48px;
+		}
+
+		.ibox-title .label {
+			float: left;
+			margin-left: 4px;
+		}
+
+		.label-success, .badge-success {
+			background-color: #1C84C6;
+			color: #FFF;
+		}
+
+		.label {
+			background-color: #D1DADE;
+			color: #5E5E5E;
+			font-family: "Open Sans";
+			font-size: 10px;
+			font-weight: 600;
+			padding: 3px 8px;
+			text-shadow: none;
+		}
+
+		.pull-right {
+			float: right;
+		}
+
+		.pull-right {
+			float: right !important;
+		}
+
+		.label-success {
+			background-color: #5CB85C;
+		}
+
+		.label {
+			display: inline;
+			padding: 0.2em 0.6em 0.3em;
+			font-size: 75%;
+			font-weight: 700;
+			line-height: 1;
+			color: #FFF;
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: baseline;
+			border-radius: 0.25em;
+		}
+
+		.ibox-title h5 {
+			display: inline-block;
+			font-size: 14px;
+			margin: 0px 0px 7px;
+			padding: 0px;
+			text-overflow: ellipsis;
+			float: left;
+		}
+
+		.ibox-content {
+			clear: both;
+		}
+
+		.ibox-content {
+			color: inherit;
+			padding: 15px 20px 20px;
+			border-color: #E7EAEC;
+			border-image: none;
+			border-style: solid solid none;
+			border-width: 1px 0px;
+		}
+
+		.no-margins {
+			margin: 0px !important;
+		}
+
+		.no-margins h1 {
+			font-size: 30px;
+		}
+
+		.text-success {
+			color: #1C84C6;
+		}
+
+		.font-bold {
+			font-weight: 600;
+		}
+
+		.stat-percent {
+			float: right;
+		}
+
+		.ibox-title h5 {
+			font-size: 20px
+		}
+	</style>
+	<div style="clear: both"></div>
+
+<h3  style="margin-top: 30px" title="{{.Lang.home_promised_text}}">{{.Lang.promised_amounts_of_cash}}</h3>
+<div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-woc">
+			<div class="ibox-title">
+				<h5>WOC</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 class="no-margins">0</h1>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-usd">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_promised_text_personal "dUSD"}}">USD</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dUSD"}}">{{index .SumPromisedAmount "72"}}</h1>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-euro">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_promised_text_personal "dEUR"}}">EUR</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dEUR"}}">{{index .SumPromisedAmount "23"}}</h1>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-rub">
+			<div class="ibox-title">
+				<h5   title="{{replaceCurrency .Lang.home_promised_text_personal "dRUB"}}">RUB</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 class="no-margins"  title="{{replaceCurrency .Lang.home_promised_text_personal "dRUB"}}">{{index .SumPromisedAmount "58"}}</h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div style="clear: both"></div>
+<h3  style="margin-top: 0px" title="{{.Lang.home_total_coins}}">{{.Lang.total_amount_of_coins}}</h3>
+<div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-woc">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_total_coins_personal "dWOC"}}">dWOC</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 id="total_currency_1" class="no-margins" title="{{replaceCurrency .Lang.home_total_coins_personal "dWOC"}}">{{index .SumWallets 1}}</h1>
+				{{if gt (index .CurrencyPct 1).UserSec 0.0}}
+					<script>dc_counter({{index .SumWallets 1}}, {{(index .CurrencyPct 1).UserSec}}, 'total_currency_1', 8);</script>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-usd">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_total_coins_personal "dUSD"}}">dUSD</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 id="total_currency_72"  class="no-margins" title="{{replaceCurrency .Lang.home_total_coins_personal "dUSD"}}">{{index .SumWallets  72}}</h1>
+				{{if gt (index .CurrencyPct 72).UserSec 0.0}}
+					<script>dc_counter({{index .SumWallets 72}}, {{(index .CurrencyPct 72).UserSec}}, 'total_currency_72', 8);</script>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-euro">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_total_coins_personal "dEUR"}}">dEUR</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 id="total_currency_23" class="no-margins" title="{{replaceCurrency .Lang.home_total_coins_personal "dEUR"}}">{{index .SumWallets 23}}</h1>
+				{{if gt (index .CurrencyPct 23).UserSec 0.0}}
+					<script>dc_counter({{index .SumWallets 23}}, {{(index .CurrencyPct 23).UserSec}}, 'total_currency_23', 8);</script>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6">
+		<div class="ibox float-e-margins bg-rub">
+			<div class="ibox-title">
+				<h5 title="{{replaceCurrency .Lang.home_total_coins_personal "dRUB"}}">dRUB</h5>
+			</div>
+			<div class="ibox-content">
+				<h1 id="total_currency_58" class="no-margins" title="{{replaceCurrency .Lang.home_total_coins_personal "dRUB"}}	">{{index .SumWallets 58}}</h1>
+				{{if gt (index .CurrencyPct 58).UserSec 0.0}}
+					<script>dc_counter({{index .SumWallets 58}}, {{(index .CurrencyPct 58).UserSec}}, 'total_currency_58', 8);</script>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var currency_list = [];
+	{{range $id, $data := .CurrencyPct}}	{{if $data.Miner}}
+			currency_list[{{$id}}] = []
+			currency_list[{{$id}}]['miner'] = {{$data.MinerSec}}
+			currency_list[{{$id}}]['user'] = {{$data.UserSec}}
+			currency_list[{{$id}}]['name'] = '{{$data.Name}}'
+	{{end}}{{end}}
+
+	$('#calc_amount, #calc_currency_id, #calc_status, #calc_period').bind("keyup change", function(e) {
+		var amount = $('#calc_amount').val();
+		var pct_sec = currency_list[$('#calc_currency_id').val()][$('#calc_status').val()];
+		var sec =  $('#calc_period').val();
+		var new_amount =  Math.pow(1+pct_sec, sec) * amount - amount;
+
+		var number = Math.pow(10, 2);
+		if (new_amount<number) {
+			if (parseFloat(new_amount)<1)
+				var s = 2;
+			else
+				var s = 1;
+			new_amount = new_amount.toString();
+			new_amount = new_amount.substr(0, 3+s);
+		}
+		else {
+			new_amount = new_amount.toFixed();
+		}
+		new_amount = new_amount.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		$('#calc_total').text('+'+new_amount+' d'+currency_list[$('#calc_currency_id').val()]['name']);
+	});
+</script>
+<!--
+<div style="clear: both;"></div>
+<h3  style="margin-top: 0px" title="{{.Lang.home_total_coins}}">{{.Lang.forecast_number_coins}}</h3>
+<div class="form-inline">
+	{{.Lang.my_balance}}: <input id="calc_amount" type="text" class="form-control" value="100"  style="width: 80px; display: inline-block">
+	<select id="calc_currency_id" style="width: 100px; display: inline-block" class="form-control" >
+		{{range $id, $data := .CurrencyPct}}
+			{{if $data.Miner}}
+				{{if eq $id 72}}
+					<option value='{{$id}}' selected>d{{$data.Name}}</option>
+				{{else}}
+					<option value='{{$id}}' >d{{$data.Name}}</option>
+				{{end}}
+			{{end}}
+		{{end}}
+	</select><br><br>
+	{{.Lang.my_status}}:  <select id="calc_status" style="width: 100px; display: inline-block" class="form-control" >
+		<option value='miner' selected>{{.Lang.status_miner}}</option>
+		<option value='user'>{{.Lang.status_user}}</option>
+	</select>
+	<br><br>
+	{{.Lang.home_after}} <select id="calc_period" style="width: 100px; display: inline-block" class="form-control" >
+		<option value='86400'>{{.Lang.day}}</option>
+		<option value='604800'>{{.Lang.week}}</option>
+		<option value='2592000' selected>{{.Lang.month}}</option>
+		<option value='15768000'>{{.Lang.half_year}}</option>
+		<option value='31536000'>{{.Lang.year}}</option>
+		<option value='63072000'>{{.Lang.years_2}}</option>
+		<option value='94608000'>{{.Lang.years_3}}</option>
+		<option value='157680000'>{{.Lang.years_5}}</option>
+	</select> {{.Lang.i_will}} <span title="{{.Lang.unless_reduction}}" style="border-bottom: 1px dotted black;">{{.Lang.probably}}</span> {{.Lang.be}} <span id="calc_total">+{{.CalcTotal}}dUSD</span>
+</div>
+-->
+<div style="clear: both; margin-bottom: 25px"></div>
+
+</div>
+
+
+{{ template "signatures". }}
+
+{{end}}

@@ -1,0 +1,132 @@
+{{define "statisticVoting"}}
+<style>
+	.demo-container-plot {
+		box-sizing: border-box;
+		width: 450px;
+		height: 200px;
+		padding: 20px 15px 15px 15px;
+		margin: 15px auto 30px auto;
+		border: 1px solid #ddd;
+		background: #fff;
+		background: linear-gradient(#f6f6f6 0, #fff 50px);
+		background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+		background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+		background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+		background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+		box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+		-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+		-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+		-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+		-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	}
+
+	.demo-placeholder {
+		width: 100%;
+		height: 100%;
+		font-size: 14px;
+		line-height: 1.2em;
+	}
+</style>
+<script src="static/js/jquery_002.js"></script>
+
+<script src="static/js/js.js"></script>
+
+<h1 class="page-header">{{.Lang.voting}}</h1>
+
+<h3>max_promised_amounts</h3>
+<table class="table table-bordered" style="width:600px">
+<thead><tr><th>currency</th><th>votes</th><th>result</th></tr></thead>
+<tbody>
+	{{if .MaxPromisedAmountVotes}}
+	{{range $currencyId, $arr := .MaxPromisedAmountVotes}}
+			<tr>
+				<td>d{{index $.CurrencyList $currencyId}}</td>
+				<td><div class='demo-container-plot'><div id='max_promised_amounts_{{$currencyId}}' class='demo-placeholder'></div></div></td>
+				<td>{{index $.NewMaxPromisedAmounts $currencyId}}</td>
+			</tr>
+		{{end}}
+	{{end}}
+</tbody>
+</table>
+
+<h3>max_other_currencies</h3>
+<table class="table table-bordered" style="width:600px">
+	<thead><tr><th>currency</th><th>votes</th><th>result</th></tr></thead>
+	<tbody>
+	{{if .MaxOtherCurrenciesVotes}}
+		{{range $currencyId, $data := .MaxOtherCurrenciesVotes}}
+		<tr>
+			<td>d{{index $.CurrencyList $currencyId}}</td>
+			<td><div class='demo-container-plot'><div id='max_other_currencies_votes_{{$currencyId}}' class='demo-placeholder'></div></div></td>
+			<td>{{index $.NewMaxOtherCurrencies $currencyId}}</td>
+		</tr>
+		{{end}}
+	{{end}}
+	</tbody>
+</table>
+
+<h3>votes_reduction</h3>
+<table class="table table-bordered" style="width:600px">
+<thead><tr><th>currency</th><th>votes</th><th>need</th></tr></thead>
+<tbody>
+	{{if .VotesReduction}}
+		{{range $currencyId, $data := .VotesReduction}}
+			<tr>
+				<td>d{{index $.CurrencyList $currencyId}}</td>
+				<td><pre style='height:100px'>{{$data}}</pre></td>
+				<td>d{{div (index $.PromisedAmount $currencyId) 2}}</td>
+			</tr>
+		{{end}}
+	{{end}}
+</tbody>
+</table>
+
+
+<h3>votes_referral</h3>
+<table class="table table-bordered" style="width:600px">
+<thead><tr><th>currency</th><th>votes</th><th>result</th></tr></thead>
+<tbody>
+	{{if .VotesReferral}}
+		{{range $level, $data := .VotesReferral}}
+		<tr>
+			<td>{{$level}}</td>
+			<td><div class='demo-container-plot'><div id='votes_referral_{{$level}}' class='demo-placeholder'></div></div></td>
+			<td>{{index $.NewReferralPct $level}}</td>
+		</tr>
+		{{end}}
+	{{end}}
+</tbody>
+</table>
+
+
+<h3>votes_pct</h3>
+<table class="table table-bordered" style="width:600px">
+<thead><tr><th>currency</th><th>miner pct votes</th><th>result</th><th>user pct votes</th><th>result</th></tr></thead>
+<tbody>
+	{{if .PctVotes}}
+		{{range $currencyId, $data := .PctVotes}}
+			<tr>
+			<td>d{{index $.CurrencyList $currencyId}}</td>
+			<td><div class='demo-container-plot'><div id='miner_pct_{{$currencyId}}' class='demo-placeholder'></div></div></td>
+			<td>{{index $.NewPctTpl (int64ToStr $currencyId) "miner_pct"}}</td>
+			<td><div class='demo-container-plot'><div id='user_pct_{{$currencyId}}' class='demo-placeholder'></div></div></td>
+			<td>{{index $.NewPctTpl (int64ToStr $currencyId) "user_pct"}}</td>
+			</tr>
+		{{end}}
+	{{end}}
+</tbody>
+</table>
+
+	<script type="text/javascript">
+
+	$(function() {
+
+		{{.Js}}
+		{{range $k, $v := .Divs}}
+			$.plot("#{{$v}}", [{ data: {{js $v}}, 	bars: { show: true } }]);
+		{{end}}
+
+	});
+
+	</script>
+{{end}}

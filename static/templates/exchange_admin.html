@@ -1,0 +1,132 @@
+{{define "exchangeAdmin"}}
+<script>
+
+	$('#single_mode').bind('click', function () {
+		dc_navigate ('nodeConfigControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
+	});
+
+</script>
+<link rel="stylesheet" href="static/css/progress.css" type="text/css" />
+<script type="text/javascript" src="static/js/uploader.js"></script>
+<script src="static/js/js.js"></script>
+<div id="main_div">
+	<h1 class="page-header">Exchange admin</h1>
+	{{template "alertSuccess".}}
+
+	<p>lock: {{.Lock}} <button onclick="dc_navigate('exchangeAdmin', {'change_reduction_lock':1})">change</button></p>
+
+	<h3 class="page-header">Withdraw</h3>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>#</th>
+			<th>open_time</th>
+			<th>close_time</th>
+			<th>user_id</th>
+			<th>email</th>
+			<th>currency_id</th>
+			<th>amount</th>
+			<th>wd_amount</th>
+			<th>method</th>
+			<th>account</th>
+		</tr>
+		</thead>
+		<tbody>
+		{{range $id, $data := .Withdraw}}
+			<tr><td>{{index $data "e_withdraw_id"}}</td><td class="unixtime">{{index $data "open_time"}}</td>
+
+				{{if eq (index $data "close_time") "0"}}
+					<td><button onclick="dc_navigate('exchangeAdmin', {'withdraw_id':{{$data.e_withdraw_id}}})">close</button></td>
+				{{else}}
+					<td class="unixtime">{{index $data "close_time"}}</td>
+				{{end}}
+
+				<td>{{index $data "user_id"}}</td><td>{{index $data "email"}}</td><td>{{index $data "currency_id"}}</td><td>{{index $data "amount"}}</td><td>{{index $data "wd_amount"}}</td><td>{{index $data "method"}}</td><td>{{index $data "account"}}</td></tr>
+		{{end}}
+		</tbody>
+	</table>
+
+
+	<h3 class="page-header">Users</h3>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>#</th>
+			<th>email</th>
+			<th>ip</th>
+			<th>lock</th>
+			<th>user_id</th>
+		</tr>
+		</thead>
+		<tbody>
+		{{range $id, $data := .Users}}
+		<tr><td>{{index $data "id"}}</td><td>{{index $data "email"}}</td><td>{{index $data "ip"}}</td><td>{{index $data "lock"}}</td><td>{{index $data "user_id"}}</td></tr>
+		{{end}}
+		</tbody>
+	</table>
+
+	<h3>Pages</h3>
+
+	<label>About</label><br>
+	<input id="e_pages_about_title" class="form-control" type="text" value="{{.EPages.about.title}}">
+	<br>
+	<textarea id="e_pages_about" class="form-control">{{.EPages.about.text}}</textarea><br><br>
+
+	<label>Rules</label><br>
+	<input id="e_pages_rules_title" class="form-control" type="text" value="{{.EPages.rules.title}}">
+	<br>
+	<textarea id="e_pages_rules" class="form-control">{{.EPages.rules.text}}</textarea><br><br>
+
+	<label>FAQ</label><br>
+	<input id="e_pages_faq_title" class="form-control" type="text" value="{{.EPages.faq.title}}">
+	<br>
+	<textarea id="e_pages_faq" class="form-control">{{.EPages.faq.text}}</textarea><br><br>
+
+	<label>Contacts</label><br>
+	<input id="e_pages_contacts_title" class="form-control" type="text" value="{{.EPages.contacts.title}}">
+	<br>
+	<textarea id="e_pages_contacts" class="form-control">{{.EPages.contacts.text}}</textarea><br><br>
+
+	<button class="btn" id="e_save">{{.Lang.save}}</button>
+
+	<br>
+	Export to sql: <a type="button" href="ajax?controllerName=EDataBaseDump" id="singlebutton" name="singlebutton" class="btn btn-primary">Download</a>
+	<br>
+
+	<div id="sql_progress" class="my_progress">0%</div><br>
+	<div id="sql_ok" class="alert alert-success" style="display: none"></div>
+	Import users from sql: <input id="sql" name="file" class="input-file" type="file">
+
+</div>
+<script>
+
+	$('#sql').change(function () {
+		file_upload('sql', 'sql_progress', 'sql', 'eImportData');
+	});
+
+	$('#e_save').bind('click', function () {
+
+		var json = JSON.stringify({
+			'e_pages_about_title' : $('#e_pages_about_title').val(),
+			'e_pages_about' : $('#e_pages_about').val(),
+			'e_pages_rules_title' : $('#e_pages_rules_title').val(),
+			'e_pages_rules' : $('#e_pages_rules').val(),
+			'e_pages_faq_title' : $('#e_pages_faq_title').val(),
+			'e_pages_faq' : $('#e_pages_faq').val(),
+			'e_pages_contacts_title' : $('#e_pages_contacts_title').val(),
+			'e_pages_contacts' : $('#e_pages_contacts').val()
+		});
+
+		$.post( 'ajax?controllerName=exchangeAdmin', {
+					parameters: json
+				},
+				function () {
+					dc_navigate ('exchangeAdmin', {'alert': '{{.Lang.saved}}'} );
+				});
+	});
+
+</script>
+
+<script src="static/js/unixtime.js"></script>
+
+{{end}}

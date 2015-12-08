@@ -1,0 +1,84 @@
+{{define "moneyBackRequest"}}
+<script>
+
+	var arbitrator_enc_text = [];
+	var seller_enc_text = '';
+
+	$('#next').bind('click', function () {
+
+		var json = JSON.stringify({'0':{{.Order.arbitrator0}},'1':{{.Order.arbitrator1}},'2':{{.Order.arbitrator2}},'3':{{.Order.arbitrator3}},'4':{{.Order.arbitrator4}}});
+		$.post( 'ajax?controllerName=encryptComment', {
+			'to_ids' : json,
+			'type' : 'arbitration_arbitrators',
+			'comment' :  $("#comment").val()
+	}, function (arbitrator_enc_text_) {
+
+		arbitrator_enc_text = arbitrator_enc_text_;
+
+		$.post( 'ajax?controllerName=encryptComment', {
+			'to_id' : {{.Order.seller}},
+			'type' : 'arbitration_seller',
+			'comment' :  $("#comment").val()
+	}, function (seller_enc_text_) {
+
+		seller_enc_text = seller_enc_text_;
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},{{.Order.id}},'+arbitrator_enc_text[0]+','+arbitrator_enc_text[1]+','+arbitrator_enc_text[2]+','+arbitrator_enc_text[3]+','+arbitrator_enc_text[4]+','+seller_enc_text);
+		console.log($("#for-signature").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+		});
+	}, 'JSON');
+
+	});
+
+	$('#send_to_net').bind('click', function () {
+		var json = JSON.stringify(arbitrator_enc_text);
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'order_id' : '{{.Order.id}}',
+					'arbitrator_enc_text' : json,
+					'seller_enc_text' : seller_enc_text,
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('arbitrationBuyer', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+	});
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.arbitration}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+		<li class="active">{{.Lang.i_buyer}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="main_data">
+		{{template "alertSuccess".}}
+
+		<h3>Money back</h3>
+		<table class="table" style="max-width: 600px">
+			<tr><td>ID</td><td>{{.Order.id}}</td></tr>
+			<tr><td>{{.Lang.amount}}</td><td>{{.Order.amount}}</td></tr>
+			<tr><td>{{.Lang.seller}}</td><td>{{.Order.seller}}</td></tr>
+			<tr><td>{{.Lang.your_email_for_arbitrator}}</td><td><input type="text" class="form-control" id="comment"></td></tr>
+		</table>
+		<button type="button" class="btn btn-outline btn-primary" id="next">{{.Lang.send_to_net}}</button>
+	</div>
+
+</div>
+
+{{template "signatures".}}
+<script src="static/js/unixtime.js"></script>
+
+{{end}}

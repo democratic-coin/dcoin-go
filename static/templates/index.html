@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Democratic Coin</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MetisMenu CSS -->
+<link href="static/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="static/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="static/css/font-awesome.css" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.static/js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+	<script language="JavaScript" type="text/javascript" src="static/js/md5.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/jsbn.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/jsbn2.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsa.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsa2.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/sha1.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/sha256.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/base64.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsapem-1.1.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsasign-1.2.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/asn1hex-1.1.min.js"></script>
+
+
+	<script src="static/js/sha256.js"></script>
+
+	<script type="text/javascript" src="static/js/rijndael.js"></script>
+	<script type="text/javascript" src="static/js/mcrypt.js"></script>
+
+
+<script src="static/js/index.js"></script>
+
+	<script src="static/js/js.js"></script>
+
+	<script src="static/js/aes.js"></script>
+	<script src="static/js/enc-base64-min.js"></script>
+
+	<script src="static/js/crypto-js-aes.js"></script>
+	<script src="static/js/crypto-js-mode-ecb.js"></script>
+	<script src="static/js/crypto-js-pad-iso10126.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+	function Generate_key() {
+		var key = "";
+		var hex = "0123456789abcdef";
+
+		for (i = 0; i < 64; i++) {
+			key += hex.charAt(Math.floor(Math.random() * 16));
+		}
+		return key;
+	}
+	//console.log(iv.toString())
+
+	function doSign(type){
+		doSign_(type);
+	}
+</script>
+
+	<script src="static/js/jquery-1.11.0.js"></script>
+	<script src="static/js/jquery.qtip.min.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="static/css/jquery.qtip.min.css" />
+
+	<link rel="stylesheet" media="all" type="text/css" href="static/css/jquery-ui.css" />
+	<link rel="stylesheet" media="all" type="text/css" href="static/css/jquery-ui-timepicker-addon.css" />
+
+	<link rel="icon" href="http://dcoin.club/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="http://dcoin.club/favicon.ico" type="image/x-icon">
+
+	<link href="static/css/upgrade.css" rel="stylesheet">
+<style>
+	.DCava{
+		display:inline-block;
+		position:relative;
+		overflow:hidden;
+	}
+	.DCava>img{
+		vertical-align:top;
+	}
+	.DCava, .DCava:before{
+		-moz-border-radius:100em;
+		border-radius:100em;
+
+	}
+	.DCava>img{
+		-webkit-border-radius:100em;
+	}
+	.DCava:before {
+		content: '';
+		display: block;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		margin: -10em;
+		border: 10em solid #333;
+		-moz-box-sizing: padding-box;
+	}
+
+	@media screen and (max-width: 768px) {
+		body{background-color: #fff}
+	}
+	html, #wrapper {
+		height: 100%;
+	}
+	body,  #dc_content{
+		min-height: 100%;
+	 }
+	#page-wrapper {
+		min-height: 100%;
+		/*height:1px;*/
+	}
+	body{
+		height: 1px;
+	}
+	#dc_content{
+		margin-bottom: 10px;
+	}
+
+	{{if .Mobile}}
+	.page-header {
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 50%;
+		margin-left: -105px;
+		z-index: 9999;
+		font-size: 16px;
+		text-align: center;
+		border-bottom: none;
+		opacity: 0.99;
+		width: 210px;
+	}
+	#dc_content{
+		margin-bottom: 60px;
+	}
+	{{end}}
+
+	{{if .IOS}}
+	.navbar-fixed-top{
+		padding-top: 15px;
+	}
+	.navbar {
+		min-height: 65px;
+	}
+	.navbar-default {
+		display:block;
+		opacity: 0.95;
+	}
+	#wrapper{
+		padding-top: 15px;
+	}
+	.page-header {
+		margin: 35px auto;
+		margin-left: -105px;
+	}
+	{{end}}
+
+	{{if .Android}}
+	.page-header {
+		margin: 20px auto;
+		margin-left: -105px;
+	}
+	{{end}}
+
+
+
+</style>
+</head>
+
+<body>
+
+
+<div id="wrapper">
+
+<div id="dc_menu"></div>
+
+<div id="page-wrapper">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="dc_content"></div>
+
+
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+	<div style="display: none;">
+		<div id="key">key</div>
+		<div id="password">password</div>
+		<div id="setup_password">setup_password</div>
+		<div id="save_key">save_key</div>
+		<img  id="image_key">
+		<canvas  id="canvas_key"></canvas>
+	</div>
+
+
+
+     <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="static/js/bootstrap.min.js"></script>
+
+
+	<!--<script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>-->
+	<script src="static/js/markerclusterer.js"></script>
+
+	<script type="text/javascript" src="static/js/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="static/js/jquery-ui-timepicker-addon.js"></script>
+	<script type="text/javascript" src="static/js/jquery-ui-sliderAccess.js"></script>
+
+	<script language="JavaScript" type="text/javascript" src="static/js/spin.js"></script>
+
+
+<script>
+	(function ($) {
+		$.fn.spin = function (opts, color) {
+			var presets = {
+				"tiny": {
+					lines: 8,
+					length: 2,
+					width: 2,
+					radius: 3
+				},
+				"small": {
+					lines: 8,
+					length: 4,
+					width: 3,
+					radius: 5
+				},
+				"large": {
+					lines: 10,
+					length: 8,
+					width: 4,
+					radius: 8
+				}
+			};
+			if (Spinner) {
+				return this.each(function () {
+					var $this = $(this),
+							data = $this.data();
+
+					if (data.spinner) {
+						data.spinner.stop();
+						delete data.spinner;
+					}
+					if (opts !== false) {
+						if (typeof opts === "string") {
+							if (opts in presets) {
+								opts = presets[opts];
+							} else {
+								opts = {};
+							}
+							if (color) {
+								opts.color = color;
+							}
+						}
+						data.spinner = new Spinner($.extend({
+							color: $this.css('color')
+						}, opts)).spin(this);
+					}
+				});
+			} else {
+				throw "Spinner class not available.";
+			}
+		};
+	})(jQuery);
+
+	//$('#wrapper').spin();
+
+
+</script>
+
+<style>
+	.db_loader {
+		font-size: 90px;
+		text-indent: -9999em;
+		overflow: hidden;
+		width: 1em;
+		height: 1em;
+		border-radius: 50%;
+		margin: 0.8em auto;
+		position: relative;
+		-webkit-animation: load6 1.7s infinite ease;
+		animation: load6 1.7s infinite ease;
+	}
+	@-webkit-keyframes load6 {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+		5%,
+		95% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+		30% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.51em -0.66em 0 -0.42em #cccccc, -0.75em -0.36em 0 -0.44em #cccccc, -0.83em -0.03em 0 -0.46em #cccccc, -0.81em 0.21em 0 -0.477em #cccccc;
+		}
+		55% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.29em -0.78em 0 -0.42em #cccccc, -0.43em -0.72em 0 -0.44em #cccccc, -0.52em -0.65em 0 -0.46em #cccccc, -0.57em -0.61em 0 -0.477em #cccccc;
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+			transform: rotate(360deg);
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+	}
+	@keyframes load6 {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+		5%,
+		95% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+		30% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.51em -0.66em 0 -0.42em #cccccc, -0.75em -0.36em 0 -0.44em #cccccc, -0.83em -0.03em 0 -0.46em #cccccc, -0.81em 0.21em 0 -0.477em #cccccc;
+		}
+		55% {
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.29em -0.78em 0 -0.42em #cccccc, -0.43em -0.72em 0 -0.44em #cccccc, -0.52em -0.65em 0 -0.46em #cccccc, -0.57em -0.61em 0 -0.477em #cccccc;
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+			transform: rotate(360deg);
+			box-shadow: -0.11em -0.83em 0 -0.4em #cccccc, -0.11em -0.83em 0 -0.42em #cccccc, -0.11em -0.83em 0 -0.44em #cccccc, -0.11em -0.83em 0 -0.46em #cccccc, -0.11em -0.83em 0 -0.477em #cccccc;
+		}
+	}
+
+	.blockchain_loader:before,
+	.blockchain_loader:after,
+	.blockchain_loader {
+		border-radius: 50%;
+		width: 2.5em;
+		height: 2.5em;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+		-webkit-animation: load7 1.8s infinite ease-in-out;
+		animation: load7 1.8s infinite ease-in-out;
+	}
+	.blockchain_loader {
+		margin: 8em auto;
+		font-size: 10px;
+		position: relative;
+		text-indent: -9999em;
+		-webkit-animation-delay: 0.16s;
+		animation-delay: 0.16s;
+	}
+	.blockchain_loader:before {
+		left: -3.5em;
+	}
+	.blockchain_loader:after {
+		left: 3.5em;
+		-webkit-animation-delay: 0.32s;
+		animation-delay: 0.32s;
+	}
+	.blockchain_loader:before,
+	.blockchain_loader:after {
+		content: '';
+		position: absolute;
+		top: 0;
+	}
+	@-webkit-keyframes load7 {
+		0%,
+		80%,
+		100% {
+			box-shadow: 0 2.5em 0 -1.3em #ccc;
+		}
+		40% {
+			box-shadow: 0 2.5em 0 0 #ccc;
+		}
+	}
+	@keyframes load7 {
+		0%,
+		80%,
+		100% {
+			box-shadow: 0 2.5em 0 -1.3em #ccc;
+		}
+		40% {
+			box-shadow: 0 2.5em 0 0 #ccc;
+		}
+	}
+
+
+
+	#loading_db{display: block}
+</style>
+
+{{if not .DbOk}}
+<style>
+	#page-wrapper{
+		margin: 0px 10% 0px 10%;
+		border: 1px solid #E7E7E7;
+		min-height: 550px;
+	}
+	#wrapper{height: 100%;}
+	#dc_content{
+		height: 550px;
+		vertical-align: middle;
+	}
+</style>
+<div style="position:absolute; top:100px; left:50%; width:300px; margin-left:-150px; text-align:center" id="loading_db">
+	<div class="db_loader" >Loading...</div>
+	{{.Lang.db_setup_wait}}
+</div>
+{{end}}
+
+<script>
+	$( document ).ready(function() {
+		{{if not .DbOk}}
+			$("#dc_content").load("content", function(response, status) {
+				if ( status == "error" ) { window.location.href = "index"; console.log("load dc_content error/"+response+"/"+status) ;}
+				$("#loading_db").css("display", "none");
+				console.log("loading_db none /"+response+"/"+status) ;
+			})
+		{{else if .Upgrade3}}
+			$("#wrapper").spin();
+			$( "#dc_menu" ).load( "ajax?controllerName=menu", { }, function() {
+				$.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
+					$.getScript("static/js/sb-admin.js");
+				});
+				$("#dc_content").load( "content", { "tpl_name": "upgrade3" }, function() {
+					$("#modal_key").val("{{.Key}}");
+					console.log("modal_key: "+$("#modal_key").val());
+					save_key(); doSign('login');$('#wrapper').spin(false);
+				})
+			});
+		{{else if .Upgrade4}}
+			$("#wrapper").spin();
+			$( "#dc_menu" ).load( "ajax?controllerName=menu", { }, function() {
+				$.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
+					$.getScript("static/js/sb-admin.js");
+				});
+				$("#dc_content").load( "content", { "tpl_name": "upgrade4" }, function() {
+					$("#modal_key").val("{{.Key}}");
+					console.log("modal_key: "+$("#modal_key").val());
+					save_key(); doSign('login');$('#wrapper').spin(false);
+				})
+			});
+		{{else if .Key}}
+			$("#wrapper").spin();
+			$("#dc_content").load( "content", { {{if .SetLang}}"parameters": {"lang":{{.SetLang}} }{{end}} }, function() {
+				$("#modal_key").val("{{.Key}}");
+				console.log("modal_key: "+$("#modal_key").val());
+				save_key(); doSign('login');$('#wrapper').spin(false);
+			})
+			load_menu();
+		{{else}}
+			$("#wrapper").spin();
+			$("#dc_content").load( "content", function() {$("#wrapper").spin(false);});
+			load_menu();
+		{{end}}
+	});
+</script>
+
+<script type="text/javascript" >
+
+	var intervalIdArray = [];
+
+	console.log("intervalIdArray", intervalIdArray)
+	if (typeof intervalIdArray != "undefined") {
+		for (i=0; i<intervalIdArray.length; i++)
+			clearInterval(intervalIdArray[i]);
+	}
+
+	var lastLinkEvent;
+	function dcNavHash(e) {
+		//console.log('dcNavHash start');
+		if (lastLinkEvent!=location.hash) {
+			console.log(lastLinkEvent);
+			dcNav({'target': {'hash': location.hash}});
+		}
+		//console.log('dcNavHash end');
+	}
+
+	function dcNav(e){
+
+		//console.log('dcNav start');
+
+		//console.log(e.target);
+		//var str = location.hash;
+		if (typeof e.target.hash=='undefined') {
+			window.addEventListener("hashchange", dcNavHash);
+			return false;
+		}
+
+		lastLinkEvent = e.target.hash;
+
+		var str = e.target.hash;
+		var page_match = str.match(/#(\w+)/i);
+		if (page_match && typeof page_match[1]!='undefined' && page_match[1]!='tab1' && page_match[1]!='tab2' && page_match[1]!='tab3'  && page_match[1]!='myModal'  ) {
+			var page = page_match[1];
+			var param_match = str.match(/\/\w+=\w+/gi);
+			var param_obj = {};
+			if (param_match) {
+				for (var i = 0; i < param_match.length; i++) {
+					var param = param_match[i].match(/(\w+)=(\w+)/i);
+					param_obj[param[1]] = param[2];
+				}
+				//console.log(param_obj);
+			}
+			//console.log(page);
+			/*if (page=='upgrade3') {
+				window.open('/#upgrade3', '', '')
+			}
+			else if (page=='upgrade4') {
+				window.open('/#upgrade4', '', '')
+			}*/
+
+			console.log("intervalIdArray", intervalIdArray)
+			if (typeof intervalIdArray != "undefined") {
+				for (i=0; i<intervalIdArray.length; i++)
+					clearInterval(intervalIdArray[i]);
+			}
+
+
+			if (page=='upgrade1'|| page=='upgrade2')
+				user_photo_navigate(page);
+			else if (page=='upgrade5')
+				map_navigate(page);
+			else if (page=='upgrade4')
+				user_webcam_navigate(page);
+			else
+				dc_navigate(page, param_obj);
+
+			/*if (/waitingAcceptNewKey|SetupPassword|CfCatalog|CfPagePreview|CfStart|Index|IndexCf|InstallStep0|InstallStep1|InstallStep2|Login|SignLogin|SynchronizationBlockchain|UpdatingBlockchain/.test(page)) {
+				$("#ios_menu").css("display", "none");
+				console.log(page, "ios_menu none")
+			}*/
+
+			if (param_obj && typeof param_obj['lang']!='undefined') {
+				load_menu();
+			}
+		}
+
+		console.log('dcNav end');
+	}
+
+	window.addEventListener("click", dcNav);
+
+	window.addEventListener("hashchange", dcNavHash);
+
+	//window.onhashchange = function(e) {
+	//}
+
+	function rTpl() {
+		console.log("1111");
+		console.log($('#tpl_name').val());
+		dc_navigate($('#tpl_name').val())
+	}
+
+</script>
+
+
+<style>
+	.ico{font-size:2em; color: #8e8e98;}
+	.icoDiv{padding-top: 5px; display: inline-block;  text-align: center}
+	.icoDiv p{font-size: 11px; color: #8e8e98;line-height: 19px;}
+	.icoMarginRight{margin-right: 24px}
+	{{if .ShowIOSMenu}}#page-wrapper{padding-bottom: 40px;} .navbar-default {border-color: #ccc;} {{end}}
+	.icoDiv:hover .ico, .icoDiv:hover p{color:#007aff}
+
+</style>
+<div id="ios_menu" class="navbar-fixed-bottom row-fluid" style="padding-top: 3px;background-color: #F8F8F8; border-top:1px solid #ccc; height: 50px;opacity: 0.95; display: {{if .ShowIOSMenu}}block{{else}}none{{end}}">
+	<div class="navbar-inner" style="">
+		<div class="container" style="">
+			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#home'"><i class="fa fa-home fa-lg ico"></i><p>Home</p></div>
+			{{if eq .ChatEnabled "1"}}<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#chat'"><i class="fa fa-wechat fa-lg ico"></i><p>Chat</p></div>{{end}}
+			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#walletsList'"><i class="fa fa-credit-card fa-lg ico"></i><p>Account</p></div>
+			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#miningMenu'"><i class="fa fa-money fa-lg ico"></i><p>Mining</p></div>
+			<div class="icoDiv" onclick="javascript:location.href='#statistic'"><i class="fa fa-database fa-lg ico"></i><p>Statistic</p></div>
+		</div>
+	</div>
+</div>
+
+<input type="hidden" id="mobileos" value="{{if .Mobile}}1{{else}}0{{end}}">
+
+</body></html>

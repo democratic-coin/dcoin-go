@@ -1,0 +1,72 @@
+{{define "upgrade0"}}
+
+<script>
+	$('#next').bind('click', function () {
+		var sel = $('input:radio[name=race]:checked').val();
+		var country = $("#country option:selected").val();
+		if(typeof sel == "undefined" || typeof country == "undefined") {
+			$('#alert').html('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Please select race.</div>')
+		} else {
+			$('#wrapper').spin(false);
+			$.post('ajax?controllerName=saveRaceCountry', {
+						'race': $('input:radio[name=race]:checked').val(),
+						'country': country
+					},
+					function (data) {
+						$('#wrapper').spin(false);
+						user_photo_navigate('upgrade1');
+						window.scrollTo(0, 0);
+					});
+		}
+	});
+	check_key_and_show_modal();
+	$(document).ready(function() {
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+	});
+</script>
+
+<h1 class="page-header">{{.Lang.upgrade_title}}</h1>
+
+{{if not .Mobile}}
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.upgrade_title}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+{{end}}
+
+{{template "alertSuccess".}}
+
+<div class="row seven-cols">
+		<div class="row bs-wizard" style="border-bottom:0;">
+			{{noescape .UpgradeMenu}}
+		</div>
+</div>
+
+<h3>{{.Lang.your_race}}</h3>
+
+<div>
+	<div class="race_photo"><label for="race1"><img src="static/img/race_1.png"><br><input id="race1" type="radio" name="race" value="1" {{ if eq .Race 1}}checked{{end}}></label></div>
+	<div class="race_photo"><label for="race2"><img src="static/img/race_2.png"><br><input id="race2" type="radio" name="race" value="2" {{ if eq .Race 2}}checked{{end}}></label></div>
+	<div class="race_photo"><label for="race3"><img src="static/img/race_3.png"><br><input id="race3" type="radio" name="race" value="3" {{ if eq .Race 3}}checked{{end}}></label></div>
+</div>
+<div class="clearfix"></div>
+<Br>
+{{noescape .Lang.find_your_race}}
+
+<h3>{{.Lang.country}}</h3>
+{{.Lang.any_country}}<br>
+<select id='country' class="form-control"><option value=''></option>
+{{range $i, $country := .Countries}}
+	<option value='{{$i}}' {{if eq $i $.Country}}selected{{end}}>{{$country}}</option>
+{{end}}
+</select>
+
+<br>
+<div id="alert">
+</div>
+
+<button class="btn btn-success" id="next">{{.SaveAndGotoStep}}</button>
+
+<div class="for-signature"></div>
+
+{{end}}

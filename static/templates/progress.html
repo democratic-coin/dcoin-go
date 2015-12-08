@@ -1,0 +1,24 @@
+{{define "progress"}}
+
+<h1 class="page-header">Progress</h1>
+
+{{if .ProgressBarPct}}
+		<table class="table table-bordered" style="max-width:400px">
+		<thead><tr><th style='width:15px'>Status</th><th>Name</th><th>%</th></tr></thead>
+		<tbody>
+		{{range $name, $pct := .ProgressBarPct}}
+			{{if ne $name "referral"}}
+				{{if index $.ProgressBar $name}}<tr style='background-color:#DFF0D8;'><td style="text-align:center"><i class="fa fa-check-square-o"></i></td>{{else}}<tr><td></td>{{end}}
+			{{else}}
+				{{$pct := mult $pct 30}}
+				<td></td>
+			{{end}}
+			<td>{{progressBarLang $.Lang $name}}</td>
+			<td>+{{$pct}}%</td>
+			</tr>
+		{{end}}
+		</tbody>
+		</table>
+{{end}}
+
+{{end}}

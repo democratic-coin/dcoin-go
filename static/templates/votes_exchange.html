@@ -1,0 +1,69 @@
+{{define "votesExchange"}}
+<script>
+
+	{{if ne .EOwner 0}}
+	var e_owner = '{{.EOwner}}';
+	var result = '{{.Result}}';
+	{{if .ShowSignData}}$("#main").css("display", "none");$("#sign").css("display", "block");{{end}}
+
+	{{else}}
+	var e_owner = "";
+	var result = "";
+	{{end}}
+
+
+	$('#save').bind('click', function () {
+
+		{{if eq .EOwner 0}}
+
+			e_owner = $('#e_owner_id').val();
+			result = $('#result').val();
+
+			$("#main").css("display", "none");
+			$("#sign").css("display", "block");
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+e_owner+','+result);
+			doSign();
+		{{if .ShowSignData}}$("#main").css("display", "none");$("#sign").css("display", "block");{{end}}
+
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+		{{end}}
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'time' : '{{.TimeNow}}',
+			'user_id' : '{{.UserId}}',
+			'e_owner' : e_owner,
+			'result' : result,
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function (data) {
+			dc_navigate ('home', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		} );
+	} );
+
+</script>
+<h1 class="page-header">Votes Exchange</h1>
+
+{{template "alertSuccess".}}
+
+{{if eq .EOwner 0}}
+<div id="main">
+	User Id <input type="text" id="e_owner_id"><br>
+	Result <select id="result"><option value="0">0</option>><option value="1">1</option></select><br><br>
+	<button type="submit" class="btn" id="save">{{.Lang.next}}</button>
+</div>
+{{else}}
+<script>
+	doSign();
+	{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+</script>
+{{end}}
+{{template "signatures".}}
+
+{{end}}

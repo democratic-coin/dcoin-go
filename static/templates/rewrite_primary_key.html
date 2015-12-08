@@ -1,0 +1,65 @@
+{{define "rewritePrimaryKey"}}
+
+<script>
+
+	$('#save').bind('click', function () {
+
+		var key = $("#new_private_key").val();
+		var pass = $("#new_password").val();
+		if (pass) {
+
+			ivAndText = atob(key);
+			iv = ivAndText.substr(0, 16);
+			encText = ivAndText.substr(16);
+			cipherParams = CryptoJS.lib.CipherParams.create({
+				ciphertext: CryptoJS.enc.Base64.parse(btoa(encText))
+			});
+			pass = CryptoJS.enc.Latin1.parse(hex_md5(pass));
+			var decrypted = CryptoJS.AES.decrypt(cipherParams, pass, {mode: CryptoJS.mode.CBC, iv: CryptoJS.enc.Utf8.parse(iv), padding: CryptoJS.pad.Iso10126 });
+			decrypt_PEM = hex2a(decrypted.toString());
+		}
+		else
+			var decrypt_PEM = key;
+		console.log('decrypt_PEM='+decrypt_PEM);
+		if (decrypt_PEM.indexOf('RSA PRIVATE KEY')==-1) {
+			alert('Incorrect key or password');
+		}
+		else {
+			var rsa = new RSAKey();
+			rsa.readPrivateKeyFromPEMString(decrypt_PEM);
+			var a = rsa.readPrivateKeyFromPEMString(decrypt_PEM);
+			var modulus = a[1];
+			var exp = a[2];
+			$.post( 'ajax?controllerName=rewritePrimaryKeySave', {
+				'n' : modulus,
+				'e': exp
+			}, function (data) {
+				if (data.error)
+					$('#alert-result').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+				else
+					$('#alert-result').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.success+'</div>');
+			}, 'JSON' );
+		}
+	} );
+
+</script>
+<script>
+	$("#main_div textarea").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+</script>
+<h1 class="page-header">{{.Lang.change_primary_key_title}}</h1>
+{{template "alertSuccess".}}
+
+<div id="main_div">
+	<div id="alert-result"></div>
+	<label>{{.Lang.your_new_key}}</label>
+		<textarea rows="5" id="new_private_key" style="width:600px;text-align: justify"></textarea><br>
+	<label>Password (if exists)</label>
+	<input type="password" id="new_password"><br>
+
+	<button class="btn" type="button" id="save">{{.Lang.save}}</button>
+
+</div>
+
+{{end}}

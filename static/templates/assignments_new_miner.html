@@ -1,0 +1,378 @@
+{{define "assignmentsNewMiner"}}
+<script src="static/js/spots.js"></script>
+
+<script>
+
+	var photo_hosts = [];
+	{{range $id, $host :=  .PhotoHosts}}
+		photo_hosts.push('{{$host}}');
+	{{end}}
+	function get_miner_photos (i) {
+
+		console.log('get_miner_photos');
+		var image = new Image();
+		if (typeof photo_hosts[i] != 'undefined' && photo_hosts[i]!='' && photo_hosts[i]!='0') {
+			image.src = photo_hosts[i]+"public/face_{{.UserInfo.user_id}}.jpg";
+			image.onload = function(){
+				image = null;
+				console.log('#face_coords_mouse = url('+photo_hosts[i]+'public/profile_{{.UserInfo.user_id}}.jpg)');
+				$('#face_coords_mouse,#main_face,#step_3_face').css("background", "url('"+photo_hosts[i]+"public/face_{{.UserInfo.user_id}}.jpg')  no-repeat 50% 50%");
+				$('#face_coords_mouse').css("background-size", "350px Auto");
+				$('#profile_coords_mouse,#main_profile,#step_3_profile').css("background", "url('"+photo_hosts[i]+"public/profile_{{.UserInfo.user_id}}.jpg') no-repeat 50% 50%");
+				$('#profile_coords_mouse').css("background-size", "350px Auto");
+				$('#main_face,#step_3_face').css("background-size", "150px Auto");
+				$('#main_profile,#step_3_profile').css("background-size", "150px Auto");
+				//$('#clone_photo_profile['+user_id+']').html("<img src='"+photo_hosts[user_id][i]+"' width=150 >");
+			};
+			// handle failure
+			image.onerror = function(){
+				image = null;
+				console.log('error get_miner_photos'+photo_hosts[i]);
+				get_miner_photos (i+1);
+			};
+			setTimeout
+			(
+					function()
+					{
+						if ( image!=null && (!image.complete || !image.naturalWidth) )
+						{
+							image = null;
+							console.log('error get_miner_photos'+photo_hosts[i]);
+							get_miner_photos (i+1);
+						}
+					},
+					3000
+			);
+		}
+		else {
+			console.log('null');
+		}
+	}
+
+	$(function() {
+		get_miner_photos (0);
+	});
+
+
+	var clone_hosts = [];
+	{{range $cloneUserId, $hosts := .CloneHosts}}
+		clone_hosts[{{$cloneUserId}}] = [];
+		{{range $id, $host :=  $hosts}}
+			clone_hosts[{{$cloneUserId}}].push('{{$host}}');
+		{{end}}
+	{{end}}
+
+
+	function get_clone_photos (i, user_id) {
+
+		var image = new Image();
+		if (typeof clone_hosts[user_id][i] != 'undefined' && clone_hosts[user_id][i]!='' && clone_hosts[user_id][i]!='0') {
+			image.src = clone_hosts[user_id][i]+"public/face_"+user_id+".jpg";
+			image.onload = function(){
+				image = null;
+				console.log('#clone_photo_face['+user_id+'] = url('+clone_hosts[user_id][i]+'public/profile_'+user_id+'.jpg)');
+				$('#clone_photo_face\\['+user_id+'\\]').css("background", "url('"+clone_hosts[user_id][i]+"public/face_"+user_id+".jpg')  no-repeat 50% 50%");
+				$('#clone_photo_face\\['+user_id+'\\]').css("background-size", "150px Auto");
+				$('#clone_photo_profile\\['+user_id+'\\]').css("background", "url('"+clone_hosts[user_id][i]+"public/profile_"+user_id+".jpg') no-repeat 50% 50%");
+				$('#clone_photo_profile\\['+user_id+'\\]').css("background-size", "150px Auto");
+				//$('#clone_photo_profile['+user_id+']').html("<img src='"+clone_hosts[user_id][i]+"' width=150 >");
+			};
+			// handle failure
+			image.onerror = function(){
+				image = null;
+				console.log('error get_clone_photos'+clone_hosts[user_id][i]);
+				get_clone_photos (i+1, user_id);
+			};
+		}
+		else {
+			console.log('null:'+user_id+'/'+i);
+		}
+	}
+
+	$(function() {
+		{{range  $cloneUserId, $hosts := .CloneHosts}}
+			get_clone_photos (0, {{$cloneUserId}});
+		{{end}}
+	});
+
+	var comment = '';
+
+	function reload_photo(user_id, face_id, profile_id) {
+		$.post( 'ajax?controllerName=newPhoto', {
+			'user_id' : user_id
+		}, function (data) {
+
+			alert(data.face+"\n"+data.profile+"\n"+face_id+"\n"+profile_id);
+			$('#'+face_id).css("background-image", "url("+data.face+")");
+			$('#'+profile_id).css("background-image", "url("+data.profile+")");
+
+		}, "json" );
+	}
+
+	function reload_photo2(user_id, face_id, profile_id) {
+		$.post( 'ajax?controllerName=newPhoto', {
+			'user_id' : user_id
+		}, function (data) {
+
+			alert(data.face+"\n"+data.profile+"\n"+face_id+"\n"+profile_id);
+			$('#'+face_id).attr('src', data.face);
+			$('#'+profile_id).attr('src', data.profile);
+
+		}, "json" );
+	}
+
+	function write_for_signature (result) {
+		if (comment=='') {
+			comment = 'null';
+		}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},{{.UserInfo.vote_id}},'+result+','+comment);
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		}
+
+		$('#btn-bad').bind('click', function () {
+			comment = $('#comment_step_1').val();
+		});
+
+		$('#btn-bad2').bind('click', function () {
+			comment = $('#comment_step_2').val();
+		});
+
+		$('#btn-bad3').bind('click', function () {
+			comment = $('#comment_step_3').val();
+		});
+
+		$('#btn-bad,#btn-bad2,#btn-bad3').bind('click', function () {
+
+			$('#step_1').css('display', 'none');
+			$('#step_2').css('display', 'none');
+			$('#step_3').css('display', 'none');
+			$('#sign').css('display', 'block');
+			$('#result').val( '0' );
+
+			write_for_signature(0);
+
+		} );
+
+		$('#reload-user-photos').bind('click', function () {
+
+			reload_photo($('#candidate-id').val(), 'face_coords_mouse', 'profile_coords_mouse')
+
+		} );
+
+		$('#btn-step1-back').bind('click', function () {
+
+			$('#step_1').css('display', 'block');
+			$('#step_2').css('display', 'none');
+			$('#step_3').css('display', 'none');
+			//$('#title').css('display', 'none');
+			$('#task_title_li').text("{{.Lang.tasks_new_miner_spots}}");
+			window.scrollTo(0,0);
+		} );
+
+		$('#btn-step2,#btn-step2-back').bind('click', function () {
+
+			comment = $('#comment_step_1').val();
+			$('#comment_step_2').val(comment);
+
+			$('#step_1').css('display', 'none');
+			$('#step_2').css('display', 'block');
+			$('#step_3').css('display', 'none');
+			$('#task_title_li').text("{{.Lang.tasks_new_miner_clones}}");
+			//$('#title').css('display', 'none');
+			window.scrollTo(0,0);
+		} );
+
+		$('#btn-step3,#btn-step3-back').bind('click', function () {
+
+			comment = $('#comment_step_2').val();
+			$('#comment_step_3').val(comment);
+
+			$('#step_1').css('display', 'none');
+			$('#step_2').css('display', 'none');
+			$('#step_3').css('display', 'block');
+			$('#sign').css('display', 'none');
+			//$('#title').css('display', 'block');
+			$('#task_title_li').text("{{.Lang.tasks_new_miner_video}}");
+			window.scrollTo(0,0);
+		} );
+
+		$('#btn-step4').bind('click', function () {
+
+			comment = $('#comment_step_3').val();
+
+			$('#step_1').css('display', 'none');
+			$('#step_2').css('display', 'none');
+			$('#step_3').css('display', 'none');
+			$('#sign').css('display', 'block');
+			$('#result').val( '1' );
+			window.scrollTo(0,0);
+
+			write_for_signature(1);
+		} );
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'vote_id' : $('#vote_id').val(),
+				'result' : $('#result').val(),
+				'comment' : comment,
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function () {
+				dc_navigate ('assignments', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			} );
+		} );
+
+		check_key_and_show_modal();
+
+</script>
+<h1 class="page-header">{{.Lang.tasks_title_new_miner}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li><a href="#assignments">{{.Lang.tasks_title}}</a></li>
+	<li id="task_title_li">{{.Lang.tasks_new_miner_spots}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<!-- S T E P   1 -->
+
+<div id="step_1" style="position: relative;">
+	<p>{{.Lang.tasks_new_miner_spots}}</p>
+
+	{{.Lang.accounted_country}}: {{.MyCountry}} {{.Lang.and_race}}: {{.MyRace}} <a href="#changeCountryRace">{{.Lang.change}}</a><br>
+	<input type="hidden" id="candidate-id" value="{{.UserInfo.user_id}}">
+
+	<canvas id="example_face" style="position: absolute; background-image: url('static/img/face.jpg'); background-size: 350px;" width="350" height="500"></canvas>
+	<canvas style="position: relative; top:0px; left:0px;" width="350" height="500"></canvas>
+
+	<canvas  id="face_coords_mouse" style="position: absolute;" width="350" height="500"></canvas>
+	<canvas id="face" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
+
+	<br><br>
+
+	<canvas id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg'); background-size: 350px;" width="350" height="500"></canvas>
+	<canvas style="position: relative; top:0px; left:0px;" width="350" height="500"></canvas>
+
+	<canvas  id="profile_coords_mouse" style="position: absolute;" width="350" height="500"></canvas>
+	<canvas id="profile" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
+
+	<br><br>
+
+	{{.Lang.attention}}
+	<br>
+	Comment: <input type="text" id="comment_step_1" value="">English only<br>
+	<button class="btn btn-inverse" id="btn-bad">{{.Lang.errors}}</button>
+	<button class="btn btn-success" id="btn-step2">{{.Lang.all_right}}</button>
+
+
+	<br><br><br>
+
+	<script>
+
+		coords.getObject("face").init({
+			for_mouse_move : "face_coords_mouse",
+			example_area : "example_face",
+			main_area : "face",
+			type : "face",
+			line_color : "#593AE0",
+		{{if .UserInfo.face_coords}}user_coords: {{js .UserInfo.face_coords}},{{end}}
+		example_coords : [
+			{{js .ExamplePoints.face}}
+		]
+		});
+
+
+		coords.getObject("profile").init({
+			for_mouse_move : "profile_coords_mouse",
+			example_area : "example_profile",
+			main_area : "profile",
+			type : "profile",
+			line_color : "#593AE0",
+		{{if .UserInfo.profile_coords}}user_coords: {{js .UserInfo.profile_coords}},{{end}}
+		example_coords : [
+				{{js .ExamplePoints.profile}}
+		]
+		});
+
+
+	</script>
+</div>
+
+
+<!-- S T E P   2 -->
+
+<div id="step_2" style="display:none; ">
+	<div id="xx1" style="width:300px; position:fixed;">
+		<div style="float:left;width:150px; height:220px" id="main_face"></div>
+		<div style="float:left;width:150px; height:220px" id="main_profile"></div>
+	</div>
+
+	<div style="padding-top:220px">
+		{{range $cloneUserId, $hosts := .CloneHosts}}
+			<div style='width: 300px; height:220px'>
+			<div style='width: 150px; height: 220px; float:left' id='clone_photo_face[{{$cloneUserId}}]'></div>
+			<div style='width: 150px; height: 220px; float:left' id='clone_photo_profile[{{$cloneUserId}}]'></div>
+			</div>
+		{{end}}
+	</div>
+
+	<div style="margin-top: 15px; ">
+		Comment: <input type="text" id="comment_step_2" value="">English only<br>
+		<button class="btn btn-success" id="btn-step1-back">{{.Lang.back}}</button>
+		<button class="btn btn-inverse" id="btn-bad2">{{.Lang.errors}}</button>
+		<button class="btn btn-success" id="btn-step3">{{.Lang.all_right}}</button>
+	</div>
+
+
+</div>
+
+
+
+<!-- S T E P   3 -->
+
+<div id="step_3" style="display:none;">
+	<p>{{.Lang.tasks_new_miner_video}}</p>
+	<div style="width:300px;float: left;">
+		<div style="float: left;width:150px; height:220px;" id="step_3_face"></div>
+		<div style="float: left;width:150px; height:220px;" id="step_3_profile"></div>
+	</div>
+	<div>
+		{{if ne .UserInfo.video_url_id "null"}}
+			<iframe width="320" height="240" src="http://www.youtube.com/embed/{{.UserInfo.video_url_id}}" frameborder="0" allowfullscreen></iframe>
+		{{else}}
+			<video class="video-js vjs-default-skin" controls preload="none" width="320" height="240" data-setup="{}"><source src="{{.UserInfo.http_host}}public/{{.UserInfo.user_id}}_user_video.mp4" type="video/mp4" /></video>
+		{{end}}
+	</div>
+
+	Comment: <input type="text" id="comment_step_3" value=""><br>
+	<button class="btn btn-success" id="btn-step2-back">{{.Lang.back}}</button>
+	<button class="btn btn-inverse" id="btn-bad3">{{.Lang.errors}}</button>
+	<button class="btn btn-success" id="btn-step4">{{.Lang.all_right}}</button>
+
+</div>
+
+<!-- S I G N -->
+
+<div id="sign" style="display:none">
+
+	<label>{{.Lang.data}}</label>
+		<textarea id="for-signature" style="width:500px;" rows="4" class="form-control"></textarea><br>
+		{{range $i := .CountSignArr}}
+		<div class="form-group"><label>{{$.Lang.sign}} {{if gt $i 0}}{{$i}}{{end}}</label><textarea class="form-control" id="signature{{sum $i 1}}" style="" rows="4">-</textarea></div>
+		{{end}}
+	<br>
+	<button class="btn btn-success" id="btn-step3-back">{{.Lang.back}}</button>
+	<button class="btn" id="send_to_net">{{.Lang.send_to_net}}</button>
+
+</div>
+
+<input type="hidden" id="vote_id" value="{{.UserInfo.vote_id}}">
+<input type="hidden" id="result" value="">
+
+{{end}}

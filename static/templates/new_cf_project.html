@@ -1,0 +1,249 @@
+{{define "newCfProject"}}
+<script>
+
+	$('#next').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main").css("display", "none");	$("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#currency_id").val()+','+$("#amount").val()+','+$('#end_time').val()+','+$("#latitude").val()+','+$("#longitude").val()+','+$("#category_id").val()+','+$("#cf_currency").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		function make_my_time(days)
+		{
+			var unixtime = Number((new Date().getTime() / 1000).toFixed(0));
+			var end_time = Number(days) * 3600*24 + unixtime;
+			$('#end_time').val(end_time);
+			var end_date = new Date(end_time*1000);
+			var curr_date = end_date.getDate();
+			var curr_month = end_date.getMonth() + 1;
+			var curr_year = end_date.getFullYear();
+			var curr_min = end_date.getMinutes();
+			var curr_hour = end_date.getHours();
+			$('#end_date').text(curr_date+"/"+curr_month+"/"+curr_year+" "+curr_hour+":"+curr_min);
+		}
+
+		$('#days').on('change', function() {
+			make_my_time(this.value);
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'currency_id' : $('#currency_id').val(),
+						'amount' : $('#amount').val(),
+						'end_time' : $('#end_time').val(),
+						'latitude' : $('#latitude').val(),
+						'longitude' : $('#longitude').val(),
+						'category_id' : $('#category_id').val(),
+						'currency_name' : $('#cf_currency').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('myCfProjects', {'alert': '{{.Lang.sent_to_dc_cf}}'} );
+					}
+			);
+		} );
+
+		function init (lat, lng, map_canvas, drag) {
+
+			$("#"+map_canvas).css("display", "block");
+
+			var point = new google.maps.LatLng(lat, lng);
+			var geocoder = new google.maps.Geocoder();
+
+			var mapOptions = {
+				center: point,
+				zoom: 1,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				streetViewControl: false
+			};
+			map = new google.maps.Map(document.getElementById(map_canvas), mapOptions);
+
+			var marker = new google.maps.Marker({
+				position: point,
+				map: map,
+				draggable: drag,
+				title: 'You'
+			});
+
+			google.maps.event.trigger(map, 'resize');
+
+			google.maps.event.addListener(marker, "dragend", function() {
+
+				var lat = marker.getPosition().lat();
+				lat = lat.toFixed(5);
+				var lng = marker.getPosition().lng();
+				lng = lng.toFixed(5);
+				document.getElementById('latitude').value = lat;
+				document.getElementById('longitude').value = lng;
+
+
+				geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						if (results[results.length-2]) {
+							$("#my_location").html(results[results.length-2].formatted_address);
+						} else {
+							alert('No results found');
+						}
+					} else {
+						alert('Geocoder failed due to: ' + status);
+					}
+				});
+			});
+			marker.setMap(map);
+		}
+
+		$('#check_cf_currency').bind('click', function () {
+			var cf_currency = $("#cf_currency").val().toUpperCase();
+			$("#cf_currency").val(cf_currency);
+			$.post( 'ajax?controllerName=checkCfCurrency', {
+						'project_currency_name' : cf_currency
+					}, function (data) {
+						if (data.success) {
+							$("#check_result").attr( "class", "has-success" );
+							$("#check_result_text").html('<label class="control-label">'+data.success+'</label>');
+						}
+						else {
+							$("#check_result").attr( "class", "has-error" );
+							$("#check_result_text").html('<label class="control-label">error: '+data.error+'</label>');
+						}
+					},
+					'JSON'
+			);
+
+		});
+
+		$('#cf_currency').keyup(function(e) {
+			$("#cf_currency").val($("#cf_currency").val().toUpperCase());
+		});
+
+</script>
+
+<h1 class="page-header">{{.Lang.new_cf_project_title}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#">CrowdFunding</a></li>
+	<li><a href="#myCfProjects">{{.Lang.myCfProjects_title}}</a></li>
+	<li class="active">{{.Lang.new_project}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+	<form class="form-horizontal">
+		<fieldset>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="amount">{{.Lang.amount}}</label>
+				<div class="col-md-4">
+					<div class="input-group">
+						<input style="min-width: 100px" id="amount" name="amount" class="form-control" type="text">
+						<div class="input-group-btn">
+							<select class="form-control" id="currency_id" style="min-width: 100px">
+								{{range $id, $name := .CurrencyList}}
+									{{$sel := ""}}
+									{{if eq  $id 72}} {{$sel := "selected"}}{{end}}
+									<option value='{{$id}}' {{$sel}}>D{{$name}}</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
+					<span class="help-block">{{.Lang.cf_target}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="days">{{.Lang.number_of_days}}</label>
+				<div class="col-md-4">
+					<select id="days" name="days" class="form-control">
+						{{range $i, $day := .CountDaysArr}}
+							<option value='{{$day}}'>{{$day}}</option>
+						{{end}}
+					</select>
+					<span class="help-block">{{.Lang.how_many_days}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="days">{{.Lang.end_date}}</label>
+				<div class="col-md-4">
+					<p class="form-control-static" id="end_date"></p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="category_id">{{.Lang.category}}</label>
+				<div class="col-md-4">
+					<select id="category_id" name="category_id" class="form-control">
+						{{range $i, $data := .CfCategory}}
+							<option value='{{$data.id}}'>{{$data.name}}</option>
+						{{end}}
+					</select>
+					<span class="help-block">{{.Lang.category_for_your_project}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="cf_currency">{{.Lang.name_of_the_currency}}</label>
+				<div class="col-md-4">
+					<div id="check_result">
+						<div id="check_result_text"></div>
+						<div class="input-group">
+							<input style="min-width: 100px" id="cf_currency" name="cf_currency" class="form-control" type="text">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-primary" id="check_cf_currency">{{.Lang.check_currency_name}}</button>
+							</div>
+						</div>
+					</div>
+					<span class="help-block">{{.Lang.name_for_currency}}</span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="city">{{.Lang.your_city}}</label>
+				<div class="col-md-4">
+					<div id="my_location" style="font-weight: bold">{{.City}}</div>
+					<a id="show_map" href="#">{{.Lang.show_map}}</a>
+					<div id="map_canvas" style="width: 400px; height: 300px; display:none"></div>
+					<span class="help-block">{{.Lang.your_city_on_map}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="singlebutton"></label>
+				<div class="col-md-4">
+					<button type="button" class="btn btn-outline btn-primary" id="next">{{.Lang.send_to_net}}</button>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+
+	<input id="latitude" class="input" type="hidden" value="{{.Latitude}}">
+	<input id="longitude" class="input" type="hidden" value="{{.Longitude}}">
+	<input id="end_time" class="input" type="hidden" value="{{.EndTime}}">
+
+
+	<div class="alert alert-info">
+		<strong>{{.Lang.limits}}:</strong> {{.Lang.cf_new_projects_limit}}
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+<script>
+	$('#show_map').bind('click', function () {
+		init ({{.Latitude}},{{.Longitude}}, 'map_canvas', true);
+		google.maps.event.trigger(map, 'resize');
+	});
+	make_my_time(7);
+</script>
+
+{{end}}

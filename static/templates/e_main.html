@@ -1,0 +1,223 @@
+{{define "eMain"}}
+<script>
+
+	function save_order(type) {
+		if (type=='buy') {
+			var sell_rate =  parseFloat($('#'+type+'_sell_rate').val());
+			var amount =  parseFloat($('#'+type+'_amount').val()) * sell_rate;
+		}
+		else {
+			var sell_rate =  1/parseFloat($('#'+type+'_sell_rate').val());
+			var amount =  parseFloat($('#'+type+'_amount').val());
+		}
+		$.post( 'ajax?controllerName=ESaveOrder', {
+			'amount': amount,
+			'sell_rate': sell_rate,
+			'sell_currency_id': $('#'+type+'_sell_currency_id').val(),
+			'buy_currency_id': $('#'+type+'_buy_currency_id').val(),
+			'type': type
+		}, function(data) {
+
+			if (data.error)
+				$('#alerts-'+type).html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+			else {
+				$('#alerts-'+type).html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.success+'</div>');
+				get_balance();
+			}
+
+		}, 'JSON');
+	}
+
+	$('#buy_amount, #buy_sell_rate, #sell_amount, #sell_sell_rate').keyup(function(e) {
+
+		var myArray = this.id.match(/^(buy|sell)/);
+		var type = myArray[0];
+
+		var amount = $("#"+type+"_amount").val();
+		var sell_rate = $("#"+type+"_sell_rate").val();
+		var amount_ = '';
+		amount_ = amount.replace(",", ".");
+
+		if (amount.indexOf(",")!=-1) {
+			$("#"+type+"_amount").val(amount_);
+		}
+		amount = amount_;
+		amount = parseFloat(amount);
+
+		var sell_rate_ = sell_rate.replace(",", ".");
+		if (sell_rate.indexOf(",")!=-1) {
+			$("#"+type+"_sell_rate").val(sell_rate_);
+		}
+		sell_rate = sell_rate_;
+		sell_rate = parseFloat(sell_rate);
+
+		var buy_total = (amount*sell_rate).toFixed(6)-0;
+		if (!buy_total)
+			buy_total = 0;
+
+		if (type=='buy')
+			var commission = buy_total * ({{.Commission}} / 100);
+		else
+			var commission = amount * ({{.Commission}} / 100);
+		commission = commission.toFixed(6)-0;
+		if (!commission)
+			commission = 0;
+
+		$("#"+type+"_commission").text(commission);
+		$("#"+type+"_total").text(buy_total);
+
+	});
+
+
+</script>
+
+<style>
+	.orders-table{max-height: 500px; overflow: auto}
+	.table1 td{padding:10px}
+	#table2 td{padding-top: 1px; padding-bottom: 1px; }
+	table caption{font-weight:bold}
+	{{if not .UserId}}
+	.row { margin-right: auto; margin-left: auto;}
+	#page-wrapper {width:900px}
+	{{end}}
+</style>
+<div class="row">
+	<div class="col-lg-12">
+
+		<div class="row" style="width: 800px; padding-top: 25px">
+
+			<div class="col-md-12">
+				<!--<div class="alert alert-info alert-dismissable">
+					{{.Lang.wiki_hello}}
+				</div>-->
+
+				<div class="panel panel-default">
+					<div class="panel-body text-center">
+
+						{{range $id, $pair := .CurrencyListPair}}
+						<button type="button" class="btn btn-default {{if and (eq (index $pair 0) $.CurrencyId) (eq (index $pair 1) $.DcCurrencyId)}} disabled {{end}}"
+								onclick="dc_navigate('eMain',  {'currency_id':'{{index $pair 0}}', 'dc_currency_id':'{{index $pair 1}}'})">{{index $.CurrencyList (index $pair 1)}}/{{index $.CurrencyList (index $pair 0)}}</button>
+						{{end}}
+					</div>
+				</div>
+
+			</div>
+
+			<div style="clear: both"></div>
+
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-arrow-circle-down"></i> {{.Lang.buy}} {{.DcCurrency}}</h3>
+					</div>
+					<div class="panel-body">
+
+						<table class="table1">
+							<tr><td>{{.Lang.min_price}}: </td><td style="width: 145px;">{{.BuyMin}}  {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.amount}} {{.DcCurrency}}:</td><td><input type="text" class="form-control" id="buy_amount" style="width: 90px" value="0"> </td></tr>
+							<tr><td>{{.Lang.price_per}} {{.DcCurrency}}:</td><td class="form-inline"><input type="text" class="form-control" id="buy_sell_rate" style="width: 90px" value="{{.BuyMin}}"> {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.total}}:</td><td><span id="buy_total">0</span> {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.commission}}:</td><td><span id="buy_commission">0</span> {{.Currency}}</td></tr>
+							<tr><td colspan="2"><input type="hidden" id="buy_buy_currency_id" value="{{.DcCurrencyId}}"><input type="hidden" id="buy_sell_currency_id" value="{{.CurrencyId}}"><div id="alerts-buy"></div><button class="btn btn-success" id="buy" onclick="save_order('buy')">{{.Lang.buy}} {{.DcCurrency}}</button></td></tr>
+						</table>
+						<div class="orders-table">
+						<p><strong>{{.Lang.orders_for_sale}} {{.DcCurrency}}</strong></p>
+						<table class=" table table-striped" id="table2">
+							<thead>
+							<tr>
+								<th>{{.Lang.price}}</th>
+								<th>{{.DcCurrency}}</th>
+								<th>{{.Currency}}</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{range $k, $data := .EOrdersSell}}
+								<tr><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{round (mult $data.sell_rate $data.amount) 6}}</td></tr>
+							{{end}}
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-arrow-circle-up"></i> {{.Lang.sell}} {{.DcCurrency}}</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table1">
+							<tr><td>{{.Lang.max_price}}: </td><td style="width: 145px;">{{.SellMax}} {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.amount}} {{.DcCurrency}}:</td><td><input type="text" class="form-control" id="sell_amount" style="width: 90px" value="0"> </td></tr>
+							<tr><td>{{.Lang.price_per}} {{.DcCurrency}}:</td><td class="form-inline"><input type="text" class="form-control" id="sell_sell_rate" style="width: 90px" value="{{.SellMax}}"> {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.total}}:</td><td><span id="sell_total">0</span> {{.Currency}}</td></tr>
+							<tr><td>{{.Lang.commission}}:</td><td><span id="sell_commission">0</span> {{.DcCurrency}}</td></tr>
+							<tr><td colspan="2"><input type="hidden" id="sell_buy_currency_id" value="{{.CurrencyId}}"><input type="hidden" id="sell_sell_currency_id" value="{{.DcCurrencyId}}"><div id="alerts-sell"></div><button class="btn btn-primary" onclick="save_order('sell')">{{.Lang.sell}} {{.DcCurrency}}</button></td></tr>
+						</table>
+						<div class="orders-table">
+						<p><strong>{{.Lang.orders_for_purchase}} {{.DcCurrency}}</strong></p>
+						<table class=" table table-striped" id="table2">
+							<thead>
+							<tr>
+								<th>{{.Lang.price}}</th>
+								<th>{{.DcCurrency}}</th>
+								<th>{{.Currency}}</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{range $k, $data := .EOrdersBuy}}
+								<tr><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{round (mult $data.sell_rate $data.amount) 6}}</td></tr>
+							{{end}}
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div style="clear: both"></div>
+
+			<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-history"></i> {{.Lang.history_deals}}</h3>
+				</div>
+				<div class="panel-body" style="overflow: auto; height: 500px">
+					<table class=" table table-striped" id="table2">
+						<thead>
+						<tr>
+							<th>{{.Lang.date}}</th>
+							<th>{{.Lang.type}}</th>
+							<th>{{.Lang.price}}</th>
+							<th>{{.Lang.amount}} ({{.DcCurrency}})</th>
+							<th>{{.Lang.total}} ({{.Currency}})</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						{{range $id, $data := .TradeHistory}}
+							<tr>
+								<td>{{index $data "Time"}}</td>
+								<td class="text-{{if eq (index $data "Type") "sell"}}danger{{else}}success{{end}}"><strong>{{index $data "Type"}}</strong></td>
+								<td>{{index $data "SellRate"}} {{$.Currency}}</td>
+								<td>{{index $data "Amount"}} {{$.DcCurrency}}</td>
+								<td>{{index $data "Total"}}  {{$.Currency}}</td>
+							</tr>
+						{{end}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+				<a href="https://payeer.com/" target="_blank"><img src="https://payeer.com/bitrix/templates/difiz/img/quote-logo.png" alt=""></a>
+				<br>
+				<div style="text-align: center; width: 800px; margin-bottom: 10px">{{.CommissionText}}</div>
+				<div style="text-align: center; width: 800px; margin-bottom: 50px">{{.Lang.members}}: {{.Members}}</div>
+		</div>
+		</div>
+
+
+
+	</div>
+</div>
+{{end}}

@@ -1,0 +1,20 @@
+ 		.my_progress {
+			width:0%;
+			overflow:hidden;
+			height:20px;
+			display:inline-block;
+			vertical-align:middle;
+			color:#FFF;
+			text-align:right;
+			text-shadow:1px 1px 0 #000;
+			background:-o-linear-gradient(top,#888888,#333333);
+			background:-moz-linear-gradient(top,#888888,#333333);
+			background:-webkit-gradient(linear,left top,left bottom,from(#888888),to(#333333));
+			background:-webkit-linear-gradient(top,#888888,#333333);
+			-o-transition-property:width;
+			-o-transition-duration:.5s;
+			-moz-transition-property:width;
+			-moz-transition-duration:.5s;
+			-webkit-transition-property:width;
+			-webkit-transition-duration:.5s;
+		}

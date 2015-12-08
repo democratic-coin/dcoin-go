@@ -1,0 +1,52 @@
+{{define "eMyOrders"}}
+<script>
+	function del_order(order_id) {
+		$.post( 'ajax?controllerName=eDelOrder', {
+			'order_id': order_id
+		}, function(data) {
+			dc_navigate('eMyOrders',  {'status':'success'});
+		});
+	}
+</script>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{.Lang.orders}}</h1>
+	</div>
+
+		<div class="col-lg-12">
+
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th>#</th>
+								<th>{{.Lang.pair}}</th>
+								<th class="unixtime">{{.Lang.time}}</th>
+								<th>{{.Lang.type}}</th>
+								<th>{{.Lang.price}}</th>
+								<th>{{.Lang.amount}}</th>
+								<th>{{.Lang.total}}</th>
+								<th>{{.Lang.filled}}</th>
+								<th>{{.Lang.status}}</th>
+								<th>{{.Lang.actions}}</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{range $id, $data := .MyOrders}}
+								<tr><td>{{$data.Id}}</td><td>{{$data.Pair}}</td><td class="unixtime">{{$data.Time}}</td><td class="text-{{if eq $data.OrderType "sell"}}danger{{else}}success{{end}}"><strong>{{$data.OrderType}}</strong></td><td>{{$data.SellRate}}</td><td>{{$data.Amount}}</td><td>{{$data.Total}}</td><td title="{{$data.OrderComplete}}%"><div class="progress"><div class="progress-bar progress-bar-success" style="width: {{$data.OrderComplete}}%;"></div></div></td><td>{{$data.Status}}</td>
+
+								{{if and (eq $data.EmptyTime 0) (eq $data.DelTime 0)}}
+									<td><button type="button" class="btn btn-default btn-xs" onclick='del_order({{$data.Id}})'>{{$.Lang.delete}}</button></td>
+								{{else}}
+									<td></td>
+								{{end}}
+								</tr>
+							{{end}}
+							</tbody>
+						</table>
+					</div>
+		</div>
+</div>
+<script src="static/js/unixtime.js"></script>
+
+{{end}}

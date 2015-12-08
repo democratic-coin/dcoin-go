@@ -1,0 +1,404 @@
+{{define "notifications"}}
+
+<script>
+
+
+
+	$('#send_test_mobile').bind('click', function () {
+
+		$.ajax({
+			type: "POST",
+			url: "ajax?controllerName=sendMobile",
+			data: { text: $('#sms_text').val() },
+			dataType: "json",
+			timeout: 10000, // in milliseconds
+			success: function(data) {
+				console.log("data.error"+data.error)
+				if (data.error!='null') {
+					$("#html_errors").html(data.error);
+					$("#html_errors").css("display", "block");
+				}
+				else {
+					dc_navigate ('notifications', {'alert': '{{.Lang.mobile_sent}}'} );
+				}
+			},
+			error: function(request, status, err) {
+				console.log("data.error status"+status)
+				$("#html_errors").html('Error ('+status+')');
+				$("#html_errors").css("display", "block");
+			}
+		});
+	});
+
+/*
+	$('#send_test_sms').bind('click', function () {
+
+		$.ajax({
+			type: "POST",
+			url: "ajax?controllerName=sendSms",
+			data: { text: $('#sms_text').val() },
+			dataType: "json",
+			timeout: 10000, // in milliseconds
+			success: function(data) {
+				console.log("data.error"+data.error)
+				if (data.error!='null') {
+					$("#html_errors").html(data.error);
+					$("#html_errors").css("display", "block");
+				}
+				else	{
+					dc_navigate ('notifications', {'alert': '{{.Lang.sms_sent}}'} );
+				}
+			},
+			error: function(request, status, err) {
+				console.log("data.error status"+status)
+				$("#html_errors").html('Error ('+status+')');
+				$("#html_errors").css("display", "block");
+			}
+		});
+	});
+*/
+	/*
+	$('#send_test_email').bind('click', function () {
+
+
+		$.ajax({
+			type: "POST",
+			url: "ajax?controllerName=sendTestEmail",
+			dataType: "json",
+			timeout: 10000, // in milliseconds
+			success: function(data) {
+				if (data.error!='null') {
+					$("#html_errors").html(data.error);
+					$("#html_errors").css("display", "block");
+				}
+				else	{
+					dc_navigate ('notifications', {'alert': '{{.Lang.mail_sent}}'} );
+				}
+			},
+			error: function(request, status, err) {
+				dc_navigate ('notifications', {'alert': '{{.Lang.mail_sent}}'} );
+				$("#html_errors").html('Error ('+status+')');
+				$("#html_errors").css("display", "block");
+			}
+		});
+		/*
+		 $.post( 'ajax?controllerName=sendTestEmail', { 'text' : $('#sms_text').val() } ,
+		 function (data) {
+		 alert(data);
+
+		 if (data.error!='null') {
+		 $("#html_errors").html(data);
+		 $("#html_errors").css("display", "block");
+		 }
+		 else	{
+		 dc_navigate ('notifications', {'alert': '{{.Lang.mail_sent}}'} );
+		 }
+		 }, 'JSON');
+		 */
+	/*});*/
+
+	$('#save_email_and_send_test').bind('click', function () {
+
+		$("#html_errors").html("");
+		$.post( 'ajax?controllerName=saveEmailAndSendTestMess', {
+					'email' : $('#simple_email').val(),
+					'smtp_username' :  $('#simple_username').val(),
+					'smtp_password' :  $('#simple_password').val()
+				} ,
+				function (data) {
+					if (typeof data.error != "undefined") {
+						$("#html_errors").html('<div class="alert alert-danger alert-dismissable" style="margin-top: 30px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><div>'+data.error+'</div></div>');
+						$("#html_errors").css("display", "block");
+					} else {
+						dc_navigate('notifications', {'alert': '{{.Lang.saved}}'});
+					}
+				}, 'JSON');
+	});
+
+	/*
+	$('#save1').bind('click', function () {
+
+		if	($("#use_smtp").is(':checked'))
+			use_smtp = 1;
+		else
+			use_smtp = 0;
+
+		$.post( 'ajax?controllerName=saveEmailSms', {
+					'email' : $('#email').val(),
+					'sms_http_get_request' : $('#sms_http_get_request').val(),
+					'use_smtp' :  use_smtp,
+					'smtp_server' :  $('#smtp_server').val(),
+					'smtp_port' :  $('#smtp_port').val(),
+					'smtp_ssl' :  $("#smtp_ssl :selected").val(),
+					'smtp_auth' :  $("#smtp_auth :selected").val(),
+					'smtp_username' :  $('#smtp_username').val(),
+					'smtp_password' :  $('#smtp_password').val()
+				} ,
+				function (data) {
+					//alert(data);
+					dc_navigate ('notifications', {'alert': '{{.Lang.email_and_sms_change}}'} );
+				});
+	});*/
+
+	/*$('#show_smtp').bind('click', function () {
+	 $("#smtp").css("display", "block");
+	 $("#smtp_data").html("<a onlick='hide_smtp()'>Убрать</a>");
+	 });*/
+/*
+	function show_smtp () {
+
+		$("#smtp").css("display", "block");
+		$("#smtp_data").html("<a href='#' onclick='hide_smtp()'>{{.Lang.hide_smtp}}</a>");
+	}
+
+	function hide_smtp () {
+
+		//$("#use_smtp").attr("checked","checked");
+		$("#use_smtp").removeAttr("checked");
+		$("#smtp").css("display", "none");
+		$("#smtp_data").html("<a href='#' onclick='show_smtp()'>{{.Lang.mail_problems}}</a>");
+	}
+*/
+
+	var my_notifications = [];
+	$('#save2').bind('click', function () {
+
+		i=0;
+		$("input[type=hidden]", $("#notifications")).each(function(){
+			name = $(this).val();
+			sms = name+'_sms';
+			email = name+'_email';
+			mobile = name+'_mobile';
+			my_notifications[i] = {};
+			my_notifications[i].name = name;
+			if	($("#"+sms).is(':checked'))
+				my_notifications[i].sms = 1;
+			else
+				my_notifications[i].sms = 0;
+
+			if	($("#"+mobile).is(':checked'))
+				my_notifications[i].mobile = 1;
+			else
+				my_notifications[i].mobile = 0;
+
+			if	($("#"+email).is(':checked'))
+				my_notifications[i].email = 1;
+			else
+				my_notifications[i].email = 0;
+
+			i++;
+
+		});
+
+		$.post( 'ajax?controllerName=saveNotifications', { 'data' : JSON.stringify(my_notifications) } ,
+				function (data) {
+					//alert(data);
+					dc_navigate ('notifications', {'alert': '{{.Lang.saved}}'} );
+					window.scrollTo(0, 0);
+				});
+	});
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div textarea").addClass( "form-control" );
+	$("#main_div textarea").width( 500 );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.notifications_title}}</h1>
+
+	{{template "alertSuccess".}}
+
+	<div id="html_errors" style="display: none"></div>
+
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				Email уведомления
+			</div>
+			<div class="panel-body">
+				<style>
+					.simpleMailSpan{min-width: 80px; float: left; line-height: 33px;}
+				</style>
+				<p>Пожалуйста, зарегиструйте новый ящик в одном из сервисов: <a href="http://gmail.com" target="_blank">gmail.com</a>, <a href="http://yahoo.com" target="_blank">yahoo.com</a>, <a href="http://yandex.ru" target="_blank">yandex.ru</a>, <a href="http://mail.ru" target="_blank">mail.ru</a> и укажите данные в форме ниже. Это нужно т.к. у Dcoin нет собственного SMTP-сервера для рассылки уведомлений, поэтому письма будут приходить с указанного ниже Email на Ваш Email.</p>
+				<!--<div class="form-inline" style="margin-bottom: 5px">
+					<span class="simpleMailSpan">Сервер</span>
+					<div class="form-group">
+						<select id="simple_mail_server" class="input-large" style="width: 150px">
+							<option value="Gmail" selected="selected">Gmail</option>
+							<option value="Yahoo">Yahoo</option>
+							<option value="Hotmail">Hotmail</option>
+							<option value="Yandex">Yandex</option>
+							<option value="Mail.ru">Mail.ru</option>
+						</select>
+					</div>
+				</div>-->
+				<div class="form-inline" style="margin-bottom: 5px">
+					<span class="simpleMailSpan">Email</span>
+					<div class="form-group">
+						<input type="text" id="simple_username" class="input-xlarge"  style="width: 170px" value="{{.Data.smtp_username}}">
+					</div>
+				</div>
+				<div class="form-inline" style="margin-bottom: 5px">
+					<span class="simpleMailSpan">Password</span>
+					<div class="form-group">
+						<input type="password" id="simple_password" class="input-xlarge"  style="width: 170px" value="{{.Data.smtp_password}}">
+					</div>
+				</div>
+				<div class="form-inline">
+					<span class="simpleMailSpan">Ваш Email</span>
+					<div class="form-group">
+						<input type="text" id="simple_email" class="input-xlarge"  style="width: 170px" value="{{.Data.email}}">
+					</div>
+				</div>
+			</div>
+
+			<div class="panel-footer">
+				<button type="submit" class="btn" id="save_email_and_send_test">{{.Lang.send_test_email}}</button>
+			</div>
+		</div>
+	<div class="clearfix"></div>
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			Мобильные уведомления
+		</div>
+		<div class="panel-body">
+			{{if not .Mobile}}Мобильные уведомления доступны только в <a href="http://dcoin.club/ru/#start">IOS или Android версии Dcoin</a>{{else}}<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>{{end}}
+		</div>
+
+	</div>
+<!--
+	<a href="http://sms.dcoin.club/?lang={{.LangInt}}" target="_blank" class="btn btn-outline btn-primary">{{.Lang.notifications_simple_sms}}</a>
+	<br><br>
+	<h3>{{.Lang.notifications_advanced}}</h3>
+
+	<form class="form-horizontal">
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">Email</label>
+			<div class="controls">
+				<input type="text" id="email" placeholder="Email" class="input-xlarge" value="{{.Data.email}}">
+				<div id="smtp_data"><a href="#" onclick="show_smtp()">{{.Lang.mail_problems}}</a></div>
+			</div>
+		</div>
+
+		<div id="smtp" {{if not .Data.use_smtp}} style="display: none"{{end}}>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">{{.Lang.use_smtp}}</label>
+			<div class="controls">
+				<input type="checkbox" id="use_smtp" {{if .Data.use_smtp}} checked {{end}}>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">SMTP server</label>
+			<div class="controls">
+				<input type="text" id="smtp_server" class="input-xlarge" value="{{.Data.smtp_server}}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">SMTP port</label>
+			<div class="controls">
+				<input type="text" id="smtp_port" class="input-xlarge" value="{{if .Data.smtp_port}} {{.Data.smtp_port}} {{else}} 465 {{end}}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">Requires SSL</label>
+			<div class="controls">
+				<select id="smtp_ssl" class="input-xlarge">
+					<option value="1" {{if or (not .Data.use_smtp) (.Data.smtp_ssl)}}selected="selected"{{end}}>Yes</option>
+					<option value="0" {{if or (not .Data.use_smtp) (.Data.smtp_ssl)}}{{else}}selected="selected"{{end}}>No</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">Requires authentication</label>
+			<div class="controls">
+				<select id="smtp_auth" class="input-xlarge">
+					<option value="1" {{if or (not .Data.use_smtp) (.Data.smtp_auth)}}selected="selected"{{end}}>Yes</option>
+					<option value="0" {{if or (not .Data.use_smtp) (.Data.smtp_auth)}}{{else}}selected="selected"{{end}}>No</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">SMTP account username</label>
+			<div class="controls">
+				<input type="text" id="smtp_username" class="input-xlarge" value="{{.Data.smtp_username}}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputEmail">SMTP password</label>
+			<div class="controls">
+				<input type="text" id="smtp_password" class="input-xlarge" value="{{.Data.smtp_password}}">
+			</div>
+		</div>
+
+
+</div>
+
+{{if .NodeAdmin}}
+<br><br><div class="control-group">
+	<label class="control-label" for="inputPassword">SMS HTTP GET-request</label>
+	<div class="controls">
+			<textarea id="sms_http_get_request" class="input-xlarge">{{.Data.sms_http_get_request}}</textarea>
+	</div>
+</div>
+{{end}}
+<div class="control-group">
+	<div class="controls">
+		<button class="btn" id="save1">Save</button>
+	</div>
+</div>
+</form>
+-->
+
+	<!--
+<p><span class="label label-important">{{.Lang.warn}}</span> {{.Lang.after_saving_changes_to_the_email}}</p>
+
+<form class="form-inline">
+
+	<input type="hidden" id="sms_text" value="test test"><button type="submit" class="btn" id="send_test_email">{{.Lang.send_test_email}}</button>
+</form>
+{{if .NodeAdmin}}
+<p><span class="label label-important">{{.Lang.warn}}</span> {{.Lang.after_saving_changes_to_the_sms}}</p>
+<form class="form-inline">
+	<button type="submit" class="btn" id="send_test_sms">{{.Lang.send_a_test_sms}}</button>
+</form>
+	<br><br>
+<form class="form-inline">
+	<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>
+</form>
+{{end}}
+-->
+<h3>{{.Lang.configuring_notifications}}</h3>
+<div id="notifications">
+	<table class="table table-striped" style="max-width:500px">
+		<tr><th></th>{{if .Mobile}}<th>Mobile</th><!--<th>SMS</th>-->{{end}}<th>Email</th></tr>
+		{{range $name, $data := .MyNotifications}}
+			<tr><td><input type='hidden' id='names' value='{{$name}}'><span {{if $data.important}} class='text-error'{{end}}>{{notificationsLang $.Lang $name}}</span></td>
+			{{if $.Mobile}}
+				<td><input id='{{$name}}_mobile' type='checkbox' {{if eq $data.mobile "1"}}checked{{end}}></td>
+				<!--<td><input id='{{$name}}_sms' type='checkbox' {{if eq $data.sms "1"}}checked{{end}}></td>-->
+			{{else}}
+				<!--<td><input id='{$name}_sms' type='checkbox' ".($data['sms']?"checked":"")."></td>-->
+			{{end}}
+			<td><input id='{{$name}}_email' type='checkbox' {{if eq $data.email "1"}}checked{{end}}></td></tr>
+		{{end}}
+		<tr><td colspan="{{if .NodeAdmin}}3{{else}}2{{end}}" style="text-align: center"><button type="submit" class="btn" id="save2">{{.Lang.save}}</button></td></tr>
+	</table>
+</div>
+<br><br>
+
+
+<script>
+	if	($("#use_smtp").is(':checked'))
+		show_smtp ();
+</script>
+</div>
+
+{{end}}

@@ -1,0 +1,23 @@
+{{define "interface"}}
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.interface}}</h1>
+
+	{{template "alertSuccess".}}
+
+	<div>
+		<p>show_sign_data: {{if eq .Show_sign_data 1}}{{.Lang.now_enable}}{{else}}{{.Lang.now_off}}{{end}}</p>
+		<a class="btn btn-outline btn-primary" href="#interface/show_sign_data={{if eq .Show_sign_data 1}}0{{else}}1{{end}}">{{if eq .Show_sign_data 1}}{{.Lang.off}}{{else}}{{.Lang.enable}}{{end}}</a>
+		<br><br>
+		<p>map: {{if eq .Show_map 1}}{{.Lang.now_enable}}{{else}}{{.Lang.now_off}}{{end}}</p>
+		<a class="btn btn-outline btn-primary" href="#interface/show_map={{if eq .Show_map 1}}0{{else}}1{{end}}">{{if eq .Show_map 1}}{{.Lang.off}}{{else}}{{.Lang.enable}}{{end}}</a>
+		<br><br>
+		<p>progess bar: {{if eq .Show_progress_bar 1}}{{.Lang.now_enable}}{{else}}{{.Lang.now_off}}{{end}}</p>
+		<a class="btn btn-outline btn-primary" href="#interface/show_progress_bar={{if eq .Show_progress_bar 1}}0{{else}}1{{end}}">{{if eq .Show_progress_bar 1}}{{.Lang.off}}{{else}}{{.Lang.enable}}{{end}}</a>
+		<br><br>
+
+		{{if eq .Param_show_progress_bar 1}}<script>$( "#progress_bar" ).load( "ajax?controllerName=progressBar");</script>{{end}}
+
+	</div>
+</div>
+
+{{end}}

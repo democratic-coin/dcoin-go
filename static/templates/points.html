@@ -1,0 +1,33 @@
+{{define "points"}}
+<h1 class="page-header">{{.Lang.points}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.points}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+{{.Lang.points_min}}:<br>
+<strong>{{.Mean}}</strong><br>
+{{.Lang.points_yours}}: <br>
+<strong>{{.MyPoints}}</strong><br>
+{{noescape .Lang.points_votes}}: <br><strong>{{.VotesOk}}</strong><br>
+
+{{if .PointsStatus}}
+	<table class="table table-bordered" style="width:500px"><caption><h3>{{.Lang.points_status}}</h3></caption>
+	<thead><tr><th>{{.Lang.start_time}}</th><th>{{.Lang.status}}</th></tr></thead>
+	<tbody>
+	{{range $data := .PointsStatus}}
+		<tr>
+			<td class="unixtime">{{$data.time_start}}</td>
+			<td>{{$data.status}}</td>
+		</tr>
+	{{end}}
+	</tbody>
+	</table>
+	{{.Lang.points_votes_period}}
+{{end}}
+
+{{end}}
+
+<script src="static/js/unixtime.js"></script>

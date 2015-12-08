@@ -1,0 +1,71 @@
+{{define "signUpInThePool"}}
+<script language="JavaScript" type="text/javascript">
+
+	check_key_and_show_modal();
+
+	$('#send').bind('click', function () {
+
+		$('#send').prop('disabled', true);
+		var key = $("#key").text();
+		var pass = $("#password").text();
+
+		var e_n_sign = get_e_n_sign(key, pass, '', 'modal_alert');
+
+		// шлем подпись на сервер на проверку
+		$.post( 'ajax?controllerName=signUpInPool', {
+			'email': $('#email').val(),
+			'node_private_key': $('#node_private_key').val()
+			//'n' : e_n_sign['modulus'],
+			//'e': e_n_sign['exp']
+		}, function (data) {
+			console.log(data);
+			if (data.success) {
+				load_menu();
+				dc_navigate('miningMenu');
+			}
+			else {
+				console.log(data.error);
+				$('#alertsERR').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + data.error + '</div>');
+				$('#send').prop('disabled', false);
+			}
+		}, 'JSON');
+	});
+
+</script>
+
+<h1 class="page-header">{{.Lang.mining}}</h1>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		{{.Lang.insufficient_privileges}}
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+			<fieldset>
+
+				<legend>{{.Lang.register_key_at_the_pool}}</legend>
+				<div id="alertsERR"></div>
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="email">E-mail</label>
+					<div class="col-md-4">
+						<input id="email" name="email" placeholder="" class="form-control input-md" type="text">
+						<span class="help-block">{{.Lang.enter_your_email}}</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="send"></label>
+					<div class="col-md-4">
+						<button id="send" name="send" class="btn btn-primary">{{.Lang.send}}</button>
+					</div>
+				</div>
+
+				<input id="node_private_key" type="hidden" value="{{.NodePrivateKey}}">
+
+			</fieldset>
+		</div>
+
+	</div>
+</div>
+
+{{end}}

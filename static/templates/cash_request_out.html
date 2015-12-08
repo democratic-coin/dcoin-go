@@ -1,0 +1,272 @@
+{{define "cashRequestOut"}}
+<style>
+	.table td {
+		vertical-align: middle;
+	}
+	.table input, .table textarea {
+		margin-bottom: 0px;
+	}
+	.form-control{display: inline}
+</style>
+
+<script type="text/javascript">
+	$('#comment').keyup(function () {
+		var left = {{.MaxLength}} - $(this).val().length;
+	if (left < 0) {
+		left = 0;
+	}
+	$('#counter').text('Characters left: ' + left);
+	});
+</script>
+
+<script>
+	$('#next').bind('click', function () {
+
+		var error_message='';
+		to_user_id = $("#to_user_id").text();
+		comment = $("#comment").val();
+		console.log('to_user_id='+to_user_id);
+
+		if ( comment.length<10 ) {
+			error_message = '{{.Lang.invalid_contacts}}';
+		}
+		if ( !to_user_id || to_user_id=='0') {
+			error_message = '{{.Lang.user_not_selected}}';
+		}
+		if (error_message!='') {
+			$("#message").html( '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>'+error_message+'</div>' );
+		}
+		else {
+			$.post( 'ajax?controllerName=encryptComment', {
+
+				'to_id' : to_user_id,
+				'type' : 'cash_request',
+				'comment' :  $("#comment").val()
+
+			}, function (data) {
+
+				//alert(data);
+
+				$("#comment_encrypted").val(data);
+
+				$("#wallets").css("display", "none");
+				$("#onmap").css("display", "none");
+				$("#sign").css("display", "block");
+				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').text()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
+				doSign();
+				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+				});
+			}
+		} );
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'to_user_id' : $('#to_user_id').text(),
+				'currency_id' : currency_id,
+				'amount' : $('#send_amount').val(),
+				'hash_code' : $('#hash_code').val(),
+				'code' : $('#code').val(),
+				'comment' : $('#comment_encrypted').val(),
+				'comment_text' : $('#comment').val(),
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function (data) { } );
+
+			dc_navigate ('cashRequestOut', {'alert': '{{.Lang.sent_to_the_net}}'} );
+
+		} );
+
+
+</script>
+
+<script>
+	var map;
+
+	var currency_name;
+	var currency_id;
+	var payment_system;
+	var min;
+	var currency_data = '{ {{.JsonCurrencyWallets}} }';
+	currency_data = JSON.parse(currency_data);
+	console.log(currency_data)
+	$('#show_map').bind('click', function () {
+
+		$("#amount,#total_amount,#total_amount_text,#to_user_id").text(0);
+
+		$("#new").css("display", "block");
+		$("#map_canvas_list").css("display", "none");
+
+		//min_amount = $("#need_min_amount").val();
+		min_amount=100;
+
+		currency_id = $("#need_currency :selected").val();
+		payment_system = $("#payment_system :selected").val();
+		$("#currency_id").val(currency_id);
+		currency_name = currency_data[currency_id][0];
+		$("#available").text(currency_data[currency_id][1]+' D'+currency_name);
+		$("[id = 'currency_name']").text(currency_name);
+
+		$.post('ajax?controllerName=minersMap', {'min_amount': min_amount, 'currency_id': currency_id, 'payment_system_id': payment_system}, function(data) {
+
+			var markers = [];
+
+			var center = new google.maps.LatLng(37.35, -122.07);
+
+			map = new google.maps.Map(document.getElementById('map_canvas'), {
+				zoom: 3,
+				center: center,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+			google.maps.event.trigger(map, 'resize');
+
+			infowindow = new google.maps.InfoWindow({ maxWidth: 350 });
+
+			markers.markerClickFunction = function(user_id, amount, currency, latlng) {
+				return function(e) {
+					e.cancelBubble = true;
+					e.returnValue = false;
+					if (e.stopPropagation) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+					console.log('amount='+amount);
+					min = amount/{{.MinPromisedAmount}};
+				console.log('min='+min);
+				min = min.toFixed(2);
+				if (min<0.01)
+					min =  0.01;
+				console.log('min='+min);
+				infowindow.setContent('User ID: '+user_id+'<input type="hidden" id="find_user_id" value="'+user_id+'"><br>min:<Br>'+min+'<br>max:'+amount);
+				infowindow.setContent('User ID: '+user_id+'<input type="hidden" id="find_user_id" value="'+user_id+'"><br>min:<Br>'+min+'<br>max:'+amount);
+				$("#to_user_id").text(user_id);
+				$('#send_amount').val(min);
+				$("#amount_due").text(min);
+				infowindow.setPosition(latlng);
+				infowindow.open(map);
+			};
+		};
+
+
+		for (var i = 0; i < data.info.length; i++) {
+
+			var datainfo = data.info[i];
+
+			var latLng = new google.maps.LatLng(datainfo.latitude,
+					datainfo.longitude);
+			var marker = new google.maps.Marker({
+				position: latLng
+			});
+
+			var fn = markers.markerClickFunction(datainfo.user_id, datainfo.amount, datainfo.currency, latLng);
+			google.maps.event.addListener(marker, 'click', fn);
+
+			markers[i] = marker;
+
+		}
+
+		var markerCluster = new MarkerClusterer(map, markers);
+
+	}, 'json');
+	google.maps.event.trigger(map, 'resize');
+	});
+
+	$('#send_amount').keyup(function(e) {
+		$("#amount_due").text($('#send_amount').val());
+	});
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div textarea").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+	$("#main_div input").width( 170 );
+	$("#main_div textarea").width( 170 );
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.cash_request_out_title}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.cash_request_out_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	{{template "alertSuccess".}}
+
+	{{if .AvailableCurrency}}
+	<div id="onmap">
+		<h3>{{.Lang.search}}</h3>
+		<div class="form-inline" style="padding-bottom: 10px">
+			<select id="need_currency" class="span2">
+				{{range $k, $currencyId := .AvailableCurrency}}
+					<option value='{{$currencyId}}'>{{index $.CurrencyList $currencyId}}</option>
+				{{end}}
+			</select>
+			<select id="payment_system" class="span2">
+				<option value='0'>{{.Lang.cash}}</option>
+				{{range $id, $name := .PaymentSystems}}
+					<option value='{{$id}}'>{{$name}}</option>
+				{{end}}
+			</select>
+			<button class="btn" id="show_map">{{.Lang.find_on_map}}</button>
+		</div>
+
+		<div id="new" style="display:none">
+
+			<div id="map_canvas" style="width: 640px; height: 320px;"></div>
+			<br>
+
+		</div>
+
+	</div>
+
+
+	<div id="wallets">
+		<h3>{{.Lang.send_request}}</h3>
+		<table style="max-width: 600px" class="table">
+			<tr><td>{{.Lang.to}}</td><td><span id="to_user_id"></span></td></tr>
+			<tr><td>{{.Lang.available}}</td><td><span id="available"></span><input id="currency_id" type="hidden"></td></tr>
+			<tr><td>{{.Lang.you_send}}</td><td><input type="text" id="send_amount" class="input-mini"> D<span id="currency_name"></span></td></tr>
+			<tr><td>{{.Lang.amount_due}}</td><td><span id="amount_due"></span> <span id="currency_name"></span></td></tr>
+		<tr><td>{{.Lang.you_contacts}}</td><td><textarea id="comment" maxlength="{{.MaxLength}}"></textarea><p id="counter"></p></td></tr>
+			<tr><td>{{.Lang.code}}</td><td><strong>{{.Code}}</strong><br>({{.Lang.after_transfer}})</td></tr>
+		</table>
+		<div id="message"></div>
+		<button id="next" class="btn btn-primary" type="button">{{.Lang.send_to_net}}</button><br><br>
+
+	</div>
+	{{else}}
+		 {{.Lang.empty_wallets}}
+	{{end}}
+
+	{{template "signatures".}}
+
+	<div id="list">
+		{{if .MyCashRequests}}
+			<h3>{{.Lang.you_requests}}</h3>
+			<table class="table" style="width:500px">
+			<tr><th>{{.Lang.time}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.recipient}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.secret_code}}</th><th>{{.Lang.comment}}</th><th>{{.Lang.status}}</th></tr>
+			{{range $id, $data := .MyCashRequests}}
+				<tr>
+				{{if ne (index $data "time") "0"}}
+					<td class="unixtime">{{index $data "time"}}</td>
+				{{else}}
+					<td></td>
+				{{end}}
+				<td>{{index $.CurrencyList (strToInt64 (index $data "currency_id"))}}</td><td>{{index $data "to_user_id"}}</td><td>{{index $data "amount"}}</td><td>{{index $data "code"}}</td><td>{{index $data "comment"}}</td><td>{{index $.CashRequestsStatus (index $data "status")}}</td></tr>
+			{{end}}
+			</table>
+		{{end}}
+	</div>
+
+
+	<input type="hidden" id="comment_encrypted" value="">
+	<input type="hidden" id="hash_code" value="{{.HashCode}}">
+	<input type="hidden" id="code" value="{{.Code}}">
+	<script src="static/js/unixtime.js"></script>
+
+</div>
+{{end}}

@@ -1,0 +1,66 @@
+{{define "changeHost"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		$("#change_host").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#http_host").val()+','+$("#tcp_host").val()+','+$("#e_host").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			var all = 0;
+			if ( $("#all").is(':checked') ) {
+				all = 1
+			}
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'http_host' : $('#http_host').val(),
+						'tcp_host' : $('#tcp_host').val(),
+						'e_host' : $('#e_host').val(),
+						'all' : all,
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('changeHost', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+
+		} );
+
+</script>
+
+<h1 class="page-header">{{.Lang.change_host_title}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="change_host">
+
+	<form>
+		<fieldset>
+			http_host
+			<input class="form-control" type="text" placeholder="" id="http_host" value="{{.Data.http_host}}"><br>
+			tcp_host
+			<input class="form-control" type="text" placeholder="" id="tcp_host" value="{{.Data.tcp_host}}"><br>
+			e_host
+			<input class="form-control" type="text" placeholder="" id="e_host" value="{{.Data.e_host}}"><br>
+			{{if .Community}}<input type="checkbox" id="all"> ALL<br>{{end}}
+			({{.Data.host_status}})<br>
+			<button type="submit" class="btn" id="save">{{.Lang.next}}</button>
+		</fieldset>
+	</form>
+
+	<br>
+	<p><span class="label label-important">{{.Lang.limits}}</span> {{.LimitsText}}</p>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

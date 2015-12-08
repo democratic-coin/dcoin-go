@@ -1,0 +1,38 @@
+{{define "firstSelect"}}
+<script>
+	$('#send_first_select').bind('click', function () {
+
+		var sel = $('input:radio[name=first_select]:checked').val();
+		if ( sel == "anonim" ) {
+			dc_navigate ('home', {"first_select":"1"});
+		} else if ( sel == "pers" ) {
+			dc_navigate ('miningMenu', {"first_select":"1"});
+		} else {
+			alert("Please select")
+		}
+	});
+</script>
+<div id="main_div" style="display: table; margin: 0 auto; padding-top: 40px">
+
+	<label for="f1"><input type="radio" id="f1" name="first_select" value="anonim" style=" margin-right: 10px;display:inline-block;   vertical-align: middle;"><img src="static/img/anonim.png" width="150" style="display:inline-block;   vertical-align: middle;"></label>
+	<div style="margin-left: 10px;	display:inline-block;   vertical-align: middle; margin-bottom: 20px">
+		<strong>Анонимный</strong><br>
+		- Монеты можно купить/продать на бирже</div>
+
+	<div class="clearfix"></div>
+
+	<label for="f2"><input type="radio" id="f2" name="first_select" value="pers" style=" margin-right: 10px;display:inline-block;   vertical-align: middle;"><img src="static/img/pers.jpg" width="150" style="display:inline-block;   vertical-align: middle;"></label>
+	<div style="margin-left: 10px;	display:inline-block;   vertical-align: middle;">
+		<strong>Видео идентификация</strong><br>
+		- Монеты можно создавать из ничего<br>
+		- P2P покупка/продажа в 67 платежных системах
+	</div>
+
+	<div class="clearfix"></div>
+
+	<button class="btn btn-primary" id="send_first_select" style="display: table; margin: 0 auto; margin-top: 10px">{{.Lang.next}}</button>
+
+
+</div>
+
+{{end}}

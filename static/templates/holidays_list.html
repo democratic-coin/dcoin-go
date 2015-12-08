@@ -1,0 +1,65 @@
+{{define "holidaysList"}}
+<script>
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.holidays_title}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.holidays_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+{{.Lang.holidays_warning}}
+<p><a href="#newHolidays">Add holidays</a></p>
+
+{{if .MyHolidaysPending}}
+	<table class="table table-bordered" style="width:500px"><caption><h3>{{.Lang.my_pending}}</h3></caption>
+	<thead><tr><th>{{.Lang.start_time}}</th><th>{{.Lang.end_time}}</th></tr></thead>
+	<tbody>
+	{{range $k, $data := .MyHolidaysPending}}
+		<tr>
+			<td><span id='holidays_start_{{$k}}'>{{$data.start_time}}</span></td>
+			<td><span id='holidays_end_{{$k}}'>{{$data.end_time}}</span></td>
+		</tr>
+	{{end}}
+	</tbody>
+	</table>
+{{end}}
+
+{{if .MyHolidaysAccepted}}
+	<table class="table table-bordered" style="width:500px"><caption><h3>{{.Lang.found_in_blocks}}</h3></caption>
+	<thead><tr><th>{{.Lang.start_time}}</th><th>{{.Lang.end_time}}</th><!--<th colspan="2" style="text-align:center">{{.Lang.action}}</th>--></tr></thead>
+	<tbody>
+	{{range $k, $data := .MyHolidaysAccepted}}
+		<tr>
+			<td><span id='holidays_start_{{$k}}'>{{$data.start_time}}</span></td>
+			<td><span id='holidays_end_{{$k}}'>{{$data.end_time}}</span></td>
+		</tr>
+	{{end}}
+	</tbody>
+	</table>
+{{end}}
+
+<script>
+	var holidays_time = new Date();
+	for (i=0; i<{{len .MyHolidaysAccepted}}; i++) {
+		time = $("#holidays_start_"+i).text()*1000;
+		holidays_time.setTime(time);
+		$("#holidays_start_"+i).text(holidays_time.toLocaleString());
+		time = $("#holidays_end_"+i).text()*1000;
+		holidays_time.setTime(time);
+		$("#holidays_end_"+i).text(holidays_time.toLocaleString());
+	}
+</script>
+<br>
+<p><span class="label label-important">{{.Lang.limits}}</span> {{.LimitsText}}</p>
+
+{{noescape .LastTxFormatted}}
+
+</div>
+
+{{end}}

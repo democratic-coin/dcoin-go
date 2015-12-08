@@ -1,0 +1,180 @@
+{{define "addCfProjectData"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_div").css("display", "none");	$("#sign").css("display", "block");{{end}}
+
+		if (!$("#blurb_img").val()) $("#blurb_img").val(0);
+		if (!$("#head_img").val()) $("#head_img").val(0);
+		if (!$("#description_img").val()) $("#description_img").val(0);
+		if (!$("#picture").val()) $("#picture").val(0);
+		if (!$("#video_type").val()) $("#video_type").val(0);
+		if (!$("#video_url_id").val()) $("#video_url_id").val(0);
+		if (!$("#news_img").val()) $("#news_img").val(0);
+		if (!$("#links").val()) $("#links").val(0);
+		if($("#hide").is(':checked'))
+			var hide = '1';
+		else
+			var hide = '0';
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#project_id").val()+','+$("#lang_id").val()+','+$("#blurb_img").val()+','+$("#head_img").val()+','+$("#description_img").val()+','+$("#picture").val()+','+$("#video_type").val()+','+$("#video_url_id").val()+','+$("#news_img").val()+','+$("#links").val()+','+hide);
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			if($("#hide").is(':checked'))
+				var hide = '1';
+			else
+				var hide = '0';
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'project_id' : $('#project_id').val(),
+						'lang_id' : $('#lang_id').val(),
+						'blurb_img' : $('#blurb_img').val(),
+						'head_img' : $('#head_img').val(),
+						'description_img' : $('#description_img').val(),
+						'picture' : $('#picture').val(),
+						'video_type' : $('#video_type').val(),
+						'video_url_id' : $('#video_url_id').val(),
+						'news_img' : $('#news_img').val(),
+						'links' : $('#links').val(),
+						'hide' : hide,
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('myCfProjects', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		});
+
+</script>
+
+<h1 class="page-header">{{if gt .Id 0}}{{.Lang.edit_cf_project_data_title}}{{else}}{{.Lang.new_cf_project_data_title}}{{end}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#">CrowdFunding</a></li>
+	<li><a href="#myCfProjects">{{.Lang.myCfProjects_title}}</a></li>
+	<li class="active">{{if gt .Id 0}}{{.Lang.edit_cf_project_data_title}}{{else}}{{.Lang.new_cf_project_data_title}}{{end}} {{.CfCurrencyName}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<div id="main_div">
+
+	<form class="form-horizontal" target="_blank" method="post" action="content">
+		<fieldset>
+
+			<input type="hidden" name="project_id" id="project_id" value="{{.ProjectId}}"><br>
+			<input type="hidden" name="tpl_name" value="cfPagePreview"><br>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="lang_id">{{.Lang.language}}</label>
+				<div class="col-md-4">
+					{{if and (.CfData.lang_id) (ne (index .CfData "lang_id") "0")}}
+						<p class="form-control-static">{{index .CfLng .CfData.lang_id}}</p><input type="hidden" id="lang_id" name="lang_id" value="{{.CfData.langId}}">
+					{{else}}
+					<select id="lang_id" name="lang_id" class="form-control">
+						{{range $id, $name := .CfLng}}
+							<option value='{{$id}}'>{{$name}}</option>
+						{{end}}
+					</select>
+					<span class="help-block">{{.Lang.language_description}}</span>
+					{{end}}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="hide">{{.Lang.cf_hide}}</label>
+				<div class="col-md-4">
+					<input id="hide" name="hide" type="checkbox" {{if ne (index .CfData "hide") "0"}}checked{{end}}>
+					<span class="help-block">{{.Lang.cf_hide_info}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="blurb_img">{{.Lang.image_directory}}</label>
+				<div class="col-md-4">
+					<input id="blurb_img" name="blurb_img" class="form-control" type="text" maxlength="50" value="{{.CfData.blurb_img}}">
+					<span class="help-block">{{.Lang.cf_resolution1}}{{.Lang.cf_url_size}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="blurb_img">{{.Lang.page_header}}</label>
+				<div class="col-md-4">
+					<input id="head_img" name="head_img" class="form-control" type="text" maxlength="50" value="{{.CfData.head_img}}">
+					<span class="help-block">{{.Lang.cf_resolution2}}{{.Lang.cf_url_size}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="picture">{{.Lang.video_or_picture}}</label>
+				<div class="col-md-4">
+
+					<div class="input-group">
+						<div class="input-group-addon">http://youtube.com/watch?v=</div>
+						<input type="hidden"  id="video_type" name="video_type" value="youtube">
+						<input style="min-width: 110px" class="form-control" type="text" id="video_url_id" name="video_url_id" placeholder="" maxlength="20" value="{{.CfData.video_url_id}}">
+					</div>
+
+					{{.Lang.or_picture}}
+					<input id="picture" name="picture" class="form-control" type="text" maxlength="50" value="{{.CfData.picture}}">
+					<span class="help-block">{{.Lang.if_you_have_a_video}}{{.Lang.cf_url_size}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="description_img">{{.Lang.picture_description}}</label>
+				<div class="col-md-4">
+					<input id="description_img" name="description_img" class="form-control" type="text" maxlength="50" value="{{.CfData.description_img}}">
+					<span class="help-block">{{.Lang.cf_width_height1}}{{.Lang.cf_url_size}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="news_img">{{.Lang.image_news}}</label>
+				<div class="col-md-4">
+					<input id="news_img" name="news_img" class="form-control" type="text" maxlength="50" value="{{.CfData.news_img}}">
+					<span class="help-block">{{.Lang.cf_width_height1}}{{.Lang.cf_url_size}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="links">{{.Lang.links_to_pictures}}</label>
+				<div class="col-md-4">
+						<textarea id="links" name="links" class="form-control" maxlength="512">{{.CfData.links}}</textarea>
+					<span class="help-block">{{.Lang.links_format}}</span>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="singlebutton"></label>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-outline btn-primary" id="next">{{.Lang.preview}}</button>
+					<button type="button" class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
+				</div>
+			</div>
+
+
+		</fieldset>
+	</form>
+
+	<div class="alert alert-info">
+		<strong>{{.Lang.limits}}:</strong> {{.Lang.cf_data_limits}}
+	</div>
+
+	<input type="hidden" placeholder="video_type" id="video_type" value="">
+	<input type="hidden" placeholder="video_url_id" id="video_url_id" value="">
+
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

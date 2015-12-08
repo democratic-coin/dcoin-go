@@ -1,0 +1,143 @@
+{{define "bugReporting"}}
+<script>
+
+	var message_id = 0;
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'time' : '{{.TimeNow}}',
+			'user_id' : '{{.UserId}}',
+			'message_id' : message_id,
+			'parent_id' : $('#parent_id').val(),
+			'subject' : $('#subject').val(),
+			'message' : $('#message').val(),
+			'message_type' : 0,
+			'message_subtype' : subtype,
+			'encrypted_message' : $('#encrypted_message').val(),
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function(data){
+			//alert(data);
+			dc_navigate ('bugReporting', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		});
+
+	} );
+
+	$('#save').bind('click', function () {
+
+		subtype = $('input[name=subtype]:checked').val();
+		if (!subtype)
+			subtype = 0;
+
+		subject =  $('#subject').val();
+		if (!subject)
+			subject = '';
+
+		$.post( 'ajax?controllerName=saveMessageToAdmin', {
+			'parent_id' : $('#parent_id').val(),
+			'subject' : subject,
+			'message' : $('#message').val(),
+			'message_type' : 0,
+			'message_subtype' : subtype
+
+		}, function (message_id_) {
+			message_id = message_id_;
+			comment = '{"parent_id":"'+$('#parent_id').val()+'","message_id":"'+message_id+'","subject":"'+subject+'","message":"'+$("#message").val()+'","type":"0","subtype":"'+subtype+'"}';
+
+			$.post( 'ajax?controllerName=encryptComment', {
+
+				'to_user_id' : 1,
+				'type' : 'bugReporting',
+				'comment' : comment
+
+			}, function (data) {
+
+				$("#encrypted_message").val(data);
+				$("#data").css("display", "none");
+				$("#sign").css("display", "block");
+				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+data );
+				doSign();
+				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+				});
+			});
+		});
+
+
+		function decrypt_admin_message(id) {
+			var key = $("#key").text();
+			var e_text = $("#encrypt_message_"+id).val();
+			var pass = $("#password").text();
+			if (pass) {
+				ivAndText = atob(key)
+				iv = ivAndText.substr(0, 16)
+				encText = ivAndText.substr(16)
+				cipherParams = CryptoJS.lib.CipherParams.create({
+					ciphertext: CryptoJS.enc.Base64.parse(btoa(encText))
+				});
+				pass = CryptoJS.enc.Latin1.parse(hex_md5(pass))
+				var decrypted = CryptoJS.AES.decrypt(cipherParams, pass, {mode: CryptoJS.mode.CBC, iv: CryptoJS.enc.Utf8.parse(iv), padding: CryptoJS.pad.Iso10126 });
+				decrypt_PEM = hex2a(decrypted.toString());
+				/*cipherParams = CryptoJS.lib.CipherParams.create({
+					ciphertext: CryptoJS.enc.Base64.parse((key.replace(/\n|\r/g, "")))
+				});
+				key = CryptoJS.enc.Latin1.parse(hex_md5(pass))
+				var decrypted = CryptoJS.AES.decrypt(cipherParams, key, {mode: CryptoJS.mode.CBC, iv: CryptoJS.enc.Base64.parse("AAAAAAAAAAAAAAAAAAAAAA=="), padding: CryptoJS.pad.NoPadding });
+				var decrypt_PEM = hex2a(decrypted.toString());*/
+			}
+			else {
+				decrypt_PEM = key;
+			}
+			var rsa2 = new RSAKey();
+			rsa2.readPrivateKeyFromPEMString(decrypt_PEM); // N,E,D,P,Q,DP,DQ,C
+
+			decrypt_comment = rsa2.decrypt(e_text);
+			$.post( 'ajax?controllerName=saveAdminDecryptMessage', {
+				'id' : id,
+				'data' : decrypt_comment
+			}, function (data) {
+				dc_navigate('bugReporting', {'parent_id':data.parent_id});
+			}, 'json' );
+		}
+
+		$("#main_div select").addClass( "form-control" );
+		$("#main_div input").addClass( "form-control" );
+		$("#main_div textarea").addClass( "form-control" );
+		$("#main_div button").addClass( "btn-outline btn-primary" );
+
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.bug_reporting_title}}</h1>
+
+	{{template "alertSuccess".}}
+
+	<div id="data">
+
+		<table class="table">
+			{{range $k, $data := .Messages}}
+				{{if and (eq $data.parent_id "0") (ne (strToInt64 $data.id) .ParentId) (eq $data.decrypted "1") }}
+					<tr><td>parent: {{$data.id}} <a href='#bugReporting/parentId={{$data.id}}'>{{$data.subject}}</a></td></tr>
+				{{else if and (or (ne $data.parent_id "0") (eq (strToInt64 $data.id) .ParentId)) (eq $data.decrypted "1" ) }}
+					<tr><td>Type: {{$data.type}}<br>Status: {{$data.status}}<br>Message: {{$data.message}}</td></tr>
+				{{else}}
+					<tr><td><a onclick="decrypt_admin_message({{$data.id}})">encrypted</a><input type="hidden" id="encrypt_message_{{$data.id}}" value="{{bin2hex $data.encrypted}}"></td></tr>
+				{{end}}
+			{{end}}
+		</table>
+
+		<input type="hidden" id="parent_id" value="{{.ParentId}}"><br>
+		{{if eq .ParentId 0}}Title: <br><input type="text" id="subject"><br>{{end}}
+		{{.Lang.message}}:<br>
+		<textarea id="message" style="width: 600px; height: 300px"></textarea>
+		<br>
+		<button class="btn" id="save">{{.Lang.next}}</button>
+	</div>
+
+	{{template "signatures".}}
+
+	<input type="hidden" id="encrypted_message">
+</div>
+
+{{end}}

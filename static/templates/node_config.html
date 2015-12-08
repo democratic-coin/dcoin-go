@@ -1,0 +1,237 @@
+{{define "nodeConfig"}}
+<script>
+	$('#save').bind('click', function () {
+
+			var json = JSON.stringify({
+				'save_config' : 1,
+				'in_connections_ip_limit' : $('#in_connections_ip_limit').val(),
+				'in_connections' : $('#in_connections').val(),
+				'out_connections' : $('#out_connections').val(),
+				'auto_reload' : $('#auto_reload').val(),
+				'cf_url' : $('#cf_url').val(),
+				'pool_url' : $('#pool_url').val(),
+				'pool_admin_user_id' : $('#pool_admin_user_id').val(),
+				'exchange_api_url' : $('#exchange_api_url').val(),
+				'tcp_listening' : $('#tcp_listening').val(),
+				'http_host' : $('#http_host').val(),
+				'auto_update' : $('#auto_update').val(),
+				'auto_update_url' : $('#auto_update_url').val(),
+				'chat_enabled' : $('#chat_enabled').val(),
+				'config_ini' : $('#config_ini').val()
+			});
+
+			$.post( 'ajax?controllerName=nodeConfigControl', {
+					parameters: json
+				},
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': '{{.Lang.saved}}'} );
+				});
+	});
+
+	$('#start').bind('click', function () {
+		$('#wait').text('{{.Lang.please_wait}}');
+		$.post( 'ajax?controllerName=startDaemons', { } ,
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': 'complete'} );
+					$('#status').text('ON');
+				});
+	});
+
+	$('#stop').bind('click', function () {
+		$('#wait').text('{{.Lang.please_wait}}');
+		$.post( 'ajax?controllerName=stopDaemons', { } ,
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': 'complete'} );
+					$('#status').text('OFF');
+				});
+	});
+
+	$('#single_mode').bind('click', function () {
+			dc_navigate ('nodeConfigControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
+			load_menu();
+			$('#mode').text('Single');
+	});
+
+	$('#pool_mode').bind('click', function () {
+			dc_navigate ('nodeConfigControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
+			load_menu();
+			$('#mode').text('Pool');
+	});
+
+
+	$('#full').bind('click', function () {
+		$('#wait').text('{{.Lang.please_wait}}');
+		$.post( 'ajax?controllerName=clearDb', { } ,
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
+				});
+	});
+
+	$('#lite').bind('click', function () {
+		$.post( 'ajax?controllerName=clearDbLite', { } ,
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': '{{.Lang.please_wait}}'} );
+				});
+	});
+
+	$('#clear_daemons_time').bind('click', function () {
+		$.post( 'ajax?controllerName=clearDaemonsTime', { } ,
+				function () {
+					dc_navigate ('dbInfo', {'alert': 'Complete!'} );
+				});
+	});
+
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+	$("#main_div input[type=text]").width( 500 );
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.node_config_title}}</h1>
+	{{template "alertSuccess".}}
+
+	<div>
+		<label>{{.Lang.in_connections_ip_limit}}</label>
+		<input id="in_connections_ip_limit" class="input" type="text" value="{{.Config.in_connections_ip_limit}}">
+		<label>{{.Lang.in_connections}}</label>
+		<input id="in_connections" class="input" type="text" value="{{.Config.in_connections}}">
+		<label>{{.Lang.out_connections}}</label>
+		<input id="out_connections" class="input" type="text" value="{{.Config.out_connections}}">
+		<label>cf_url</label>
+		<input id="cf_url" class="input" type="text" value="{{.Config.cf_url}}">
+		<label>pool_admin_user_id</label>
+		<input id="pool_admin_user_id" class="input" type="text" value="{{.Config.pool_admin_user_id}}">
+		<label>pool_url</label>
+		<input id="pool_url" class="input" type="text" value="{{.Config.pool_url}}">
+		<label>exchange_api_url</label>
+		<input id="exchange_api_url" class="input" type="text" value="{{.Config.exchange_api_url}}">
+		<label>tcp_listening</label>
+		<input id="tcp_listening" class="input" type="text" value="{{.Config.tcp_listening}}">
+		<label>http_host</label>
+		<input id="http_host" class="input" type="text" value="{{.Config.http_host}}">
+		<label>{{.Lang.auto_reload}}</label>
+		<input id="auto_reload" class="input" type="text" value="{{.Config.auto_reload}}">
+		<label>Auto Update</label>
+		<input id="auto_update" class="input" type="text" value="{{.Config.auto_update}}">
+		<label>Auto Update url</label>
+		<input id="auto_update_url" class="input" type="text" value="{{.Config.auto_update_url}}">
+		<label>Chat</label>
+		<input id="chat_enabled" class="input" type="text" value="{{.Config.chat_enabled}}">
+		<br>
+
+		<textarea style="width: 300px; height: 150px" id="config_ini">{{.ConfigIni}}</textarea>
+		<br>
+
+		<button class="btn" id="save">{{.Lang.save}}</button>
+
+	</div>
+
+	<br><br>
+
+	<div>
+		<div class="alert alert-success" id="wait" style="display:none"></div>
+		Status: <span id="status">{{.MyStatus}}</span><br>
+		<button class="btn" id="start">Start</button> 	<button class="btn" id="stop">Stop</button>
+	</div>
+	<br><br>
+
+	<div>
+		{{if .ModeError}}<div class="alert alert-danger" id="mode_error">{{.ModeError}}</div>{{end}}
+		Mode: <span id="mode">{{.MyMode}}</span><br>
+		<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button>
+	</div>
+	<br><br>
+
+	<div>
+		<button class="btn" id="lite">Lite nulling</button><br><br>
+		<button class="btn" id="full">Full nulling</button>
+	</div>
+	<br><br>
+
+	<div>
+		<button class="btn" id="clear_daemons_time">clear_daemons_time</button>
+	</div>
+	<br><br>
+
+	<div>
+		<button class="btn" onclick="dc_navigate('rewritePrimaryKey')">rewrite primary key</button>
+	</div>
+
+	<h3>Exchange</h3>
+
+	<label>Enable</label>
+	<input id="e_enable" class="input" type="text" value="{{index .EConfig "enable"}}">
+
+	<label>DC Account number</label>
+	<input id="e_main_dc_account" class="input" type="text" value="{{index .EConfig "main_dc_account"}}">
+	<label>Commission</label>
+	<input id="e_commission" class="input" type="text" value="{{index .EConfig "commission"}}">
+	<label>Domain</label>
+	<input id="e_domain" class="input" type="text" value="{{index .EConfig "domain"}}">
+	<label>Catalog</label>
+	<input id="e_catalog" class="input" type="text" value="{{index .EConfig "catalog"}}">
+	<label>Payment Systems</label>
+	<input id="e_ps" class="input" type="text" value="{{index .EConfig "ps"}}">
+	<label>Perfect money key (PM_S_KEY)</label>
+	<input id="e_pm_s_key" class="input" type="text" value="{{index .EConfig "pm_s_key"}}">
+	<label>Interkassa key (IK_S_KEY)</label>
+	<input id="e_ik_s_key" class="input" type="text" value="{{index .EConfig "ik_s_key"}}">
+	<label>Payeer key (PAYEER_S_KEY)</label>
+	<input id="e_payeer_s_key" class="input" type="text" value="{{index .EConfig "payeer_s_key"}}">
+	<label>Perfect money ID</label>
+	<input id="e_pm_id" class="input" type="text" value="{{index .EConfig "pm_id"}}">
+	<label>Interkassa ID</label>
+	<input id="e_ik_id" class="input" type="text" value="{{index .EConfig "ik_id"}}">
+	<label>Payeer ID</label>
+	<input id="e_payeer_id" class="input" type="text" value="{{index .EConfig "payeer_id"}}">
+	<label>DC withdraw commission</label>
+	<input id="e_dc_commission" class="input" type="text" value="{{index .EConfig "dc_commission"}}">
+	<label>PM withdraw commission</label>
+	<input id="e_pm_commission" class="input" type="text" value="{{index .EConfig "pm_commission"}}">
+	<label>static_file_path</label>
+	<input id="e_static_file_path" class="input" type="text" value="{{index .EConfig "static_file_path"}}">
+	<label>static_file</label>
+	<input id="e_static_file" class="input" type="text" value="{{index .EConfig "static_file"}}">
+
+	<button class="btn" id="e_save">{{.Lang.save}}</button><br><br>
+
+	<button class="btn" onclick="dc_navigate('exchangeAdmin')">Exchange admin</button>
+
+
+
+</div>
+<script>
+	$('#e_save').bind('click', function () {
+
+		var json = JSON.stringify({
+			'save_e_config' : 1,
+			'e_enable' : $('#e_enable').val(),
+			'e_main_dc_account' : $('#e_main_dc_account').val(),
+			'e_domain' : $('#e_domain').val(),
+			'e_catalog' : $('#e_catalog').val(),
+			'e_ps' : $('#e_ps').val(),
+			'e_commission' : $('#e_commission').val(),
+			'e_pm_s_key' : $('#e_pm_s_key').val(),
+			'e_ik_s_key' : $('#e_ik_s_key').val(),
+			'e_payeer_s_key' : $('#e_payeer_s_key').val(),
+			'e_pm_id' : $('#e_pm_id').val(),
+			'e_ik_id' : $('#e_ik_id').val(),
+			'e_payeer_id' : $('#e_payeer_id').val(),
+			'e_dc_commission' : $('#e_dc_commission').val(),
+			'e_pm_commission' : $('#e_pm_commission').val(),
+			'e_static_file_path' : $('#e_static_file_path').val(),
+			'e_static_file' : $('#e_static_file').val()
+		});
+
+		$.post( 'ajax?controllerName=nodeConfigControl', {
+					parameters: json
+				},
+				function () {
+					dc_navigate ('nodeConfigControl', {'alert': '{{.Lang.saved}}'} );
+				});
+	});
+
+</script>
+{{end}}

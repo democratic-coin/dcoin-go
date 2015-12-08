@@ -1,0 +1,101 @@
+{{define "changeCommission"}}
+<script>
+	$( document ).ready(function() {
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+	});
+</script>
+
+<script>
+
+	var	json_data = '';
+
+	$('#save').bind('click', function () {
+
+		var data = '';
+		$("input[type=text],input[type=hidden]", $("#change_commission")).each(function(){
+			if ($(this).attr('name')=='currency_id')
+				data=data+'"'+$(this).val()+'":';
+			if ($(this).attr('name')=='pct')
+				data=data+'['+$(this).val()+',';
+			if ($(this).attr('name')=='min')
+				data=data+''+$(this).val()+',';
+			if ($(this).attr('name')=='max')
+				data=data+''+$(this).val()+'],';
+		} );
+		json_data = '{'+data.substr(0, data.length-1)+'}';
+
+		$("#change_commission").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}}"; ?>,'+json_data);
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'commission' : json_data,
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('{{.Navigate}}', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+
+	} );
+
+	$('#skip').bind('click', function () {
+		dc_navigate ('{{.Navigate}}', {'skip_commission': 1} );
+	});
+
+	$("#main_div input").width( 60 );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+
+	if ( $('#key').text().length < 256 ) {
+		$('#myModal').modal({ backdrop: 'static' });
+	}
+
+	$('#show_list').bind('click', function (e) {
+		$("#commission_div").css("display", "block");
+		e.preventDefault();
+		e.stopPropagation();
+	});
+</script>
+<style>
+	.input-group-addon{width: 100px}
+</style>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.change_commission_title}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.change_commission_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	{{template "alertSuccess".}}
+
+	<div id="change_commission">
+
+		<button class="btn" id="save">{{.Lang.send_to_net}}</button> <button  class="btn" id="skip">{{.Lang.skip}}</button><br><br>
+		<a href="#" id="show_list">{{.Lang.change}}</a>
+
+		<table class="table" style="width: 500px; display: none" id="commission_div">
+			<tr><th>{{.Lang.currency}}</th><th style="text-align: center">%</th><th style="text-align: center">{{.Lang.min}}</th><th style="text-align: center">{{.Lang.max}}</th></tr>
+			{{range $currencyId, $data := .Commission}}
+				<tr><td>{{index $.CurrencyList $currencyId}}<input type='hidden' name='currency_id' value='{{$currencyId}}'></td>
+				<td><div class="input-group"><input id="pct" name="pct" class="form-control" value="{{index $data 0}}" type="text"><span class="input-group-addon">max: {{if index $.ConfigCommission $currencyId}}{{index $.ConfigCommission $currencyId 0}}{{end}}</span></div></td>
+				<td><div class="input-group"><input id="min" name="min" class="form-control" value="{{index $data 1}}" type="text"><span class="input-group-addon">max: {{if index $.ConfigCommission $currencyId}}{{index $.ConfigCommission $currencyId 1}}{{end}}</span></div></td>
+				<td><input class='form-control' type='text' name='max' value="{{index $data 2}}"></td></tr>
+			{{end}}
+		</table>
+
+	</div>
+
+	{{template "signatures".}}
+
+</div>
+
+{{end}}

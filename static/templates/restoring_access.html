@@ -1,0 +1,76 @@
+{{define "restoringAccess"}}
+<script>
+
+	var encrypted_message = '';
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main").css("display", "none");	$("#sign").css("display", "block");{{end}}
+
+		if ($("#change_key_status").val()=='1') {
+			encrypted_message = 30;
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+encrypted_message );
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+			}
+		else {
+				$.post( 'ajax?controllerName=encryptComment', {
+
+					'to_id' : {{.AdminUserId}},
+					'type' : 'restoringAccess',
+					'comment' : $("#secret").val()
+
+		}, function (data) {
+
+			encrypted_message = data;
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+encrypted_message );
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+			});
+		}
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'secret' : encrypted_message,
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('restoringAccess', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+
+	} );
+
+</script>
+
+<h1 class="page-header">{{.Lang.restoring_access}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+
+	{{if eq .ChangeKeyStatus "1"}}
+		<button type="submit" class="btn" id="save">{{.Lang.forbid_admin_to_change_my_key}}</button>
+	{{else}}
+		{{.Lang.restoring_secret_text}}<br><textarea id="secret" class="form-control"></textarea><br><button type="submit"  id="save" class="btn btn-outline btn-primary">{{.Lang.next}}</button>
+	{{end}}
+
+	<br><br><br>
+	<button onclick="dc_navigate('changeKeyRequest')" class="btn btn-primary">{{.Lang.make_a_request_for_a_access_to_the_account}}</button><br><br>
+	{{if .Requests}}
+		<p>Request: {{.Requests}}</p>
+		<a href="#changeKeyClose" class="btn btn-primary">{{.Lang.cancel_the_requests}}</a>
+	{{end}}
+
+</div>
+
+<input type="hidden" id="change_key_status" value="{{.ChangeKeyStatus}}">
+
+{{template "signatures".}}
+
+{{end}}

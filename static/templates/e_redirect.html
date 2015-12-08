@@ -1,0 +1,79 @@
+{{define "eRedirect"}}
+<html>
+<head>
+<meta charset="utf-8">
+<script src="static/js/jquery-1.11.0.js"></script>
+</head>
+
+<body style="margin: auto; display: table;">
+<div style="margin: auto; display: table-cell;">
+<select id="ps_select" class="form-control">
+  <option value="pm">Perfect Money</option>
+  <option value="ik">Mobile</option>
+  <option value="payeer">BTC</option>
+</select>
+<button id="next">Next</button>
+<form action="https://perfectmoney.is/api/step1.asp" method="POST" id="pm">
+  <input type="hidden" name="PAYEE_ACCOUNT" value="{{index .EConfig "pm_id"}}">
+  <input type="hidden" name="PAYEE_NAME" value="Dcoin">
+  <input type="hidden" name="PAYMENT_ID" value="token-{{.TokenId}}">
+  <input type="hidden" name="PAYMENT_UNITS" value="USD">
+  <input type="hidden" name="STATUS_URL" value="{{.EURL}}ajax?controllerName=EGatePm">
+  <input type="hidden" name="PAYMENT_URL" value="{{.EURL}}ajax?controllerName=ESuccess">
+  <input type="hidden" name="PAYMENT_URL_METHOD" value="LINK">
+  <input type="hidden" name="NOPAYMENT_URL" value="{{.EURL}}ajax?controllerName=EFailure">
+  <input type="hidden" name="NOPAYMENT_URL_METHOD" value="LINK">
+  <input type="hidden" name="SUGGESTED_MEMO" value="Dcoins">
+  <input type="hidden" name="BAGGAGE_FIELDS" value="">
+  <input type="hidden" name="PAYMENT_AMOUNT" value="{{.Amount}}">
+</form>
+
+<form name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8" id="ik">
+  <input type="hidden" name="ik_co_id" value="{{index .EConfig "ik_id"}}" />
+  <input type="hidden" name="ik_pm_no" value="ik_pm_no" />
+  <input type="hidden" name="ik_cur" value="USD" />
+  <input type="hidden" name="ik_ia_u" value="{{.EURL}}ajax?controllerName=EGateIk" />
+  <input type="hidden" name="ik_suc_u" value="{{.EURL}}ajax?controllerName=ESuccess" />
+  <input type="hidden" name="ik_fal_u" value="{{.EURL}}ajax?controllerName=EFailure" />
+  <input type="hidden" name="ik_desc" value="token-{{.TokenId}}" />
+  <input type="hidden" name="ik_am" value="{{.Amount}}" >
+</form>
+
+
+  <form id="payeer_form_data" name="payment" method="post" action="https://payeer.com/merchant/" enctype="utf-8">
+    <input type="hidden" id="m_shop" name="m_shop" value="{{index .EConfig "payeer_id"}}">
+    <input type="hidden" id="m_orderid" name="m_orderid" value="1234">
+    <input type="hidden" id="m_curr" name="m_curr" value="USD">
+    <input type="hidden" id="m_desc" name="m_desc" value="{{.MDesc}}">
+    <input type="hidden" id="m_sign" name="m_sign" value="">
+    <input type="hidden" id="m_amount" name="m_amount" value="{{.Amount}}">
+  </form>
+</div>
+
+<script>
+
+  $('#next').bind('click', function () {
+    if ($('#ps_select').val() == 'ik') {
+      document.forms["ik"].submit();
+    }
+    else if ($('#ps_select').val() == 'payeer') {
+      $.post( 'ajax?controllerName=EPayeerSign', {
+                m_orderid: $('input[name=m_orderid]').val(),
+                m_desc: $('input[name=m_desc]').val(),
+                m_amount: $('input[name=m_amount]').val()
+              },
+              function (data) {
+                console.log("data", data)
+                $('input[name=m_sign]').val(data);
+                $("#payeer_form_data").submit();
+              });
+    }
+    else {
+      document.forms["pm"].submit();
+    }
+  });
+
+</script>
+</body>
+</html>
+{{end}}

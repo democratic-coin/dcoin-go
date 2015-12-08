@@ -1,0 +1,67 @@
+{{define "cfProjectChangeCategory"}}
+<script>
+
+	$('#category_id').on('change', function() {
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},{{.ProjectId}},'+this.value);
+		console.log($("#for-signature").val());
+		doSign();
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+				$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'project_id' : {{.ProjectId}},
+					'category_id' : $('#category_id').val(),
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+	}, function (data) {
+		dc_navigate ('myCfProjects', {'alert': '{{.Lang.sent_to_the_net}}'} );
+	} );
+	} );
+
+</script>
+<h1 class="page-header">{{.Lang.cf_project_change_category_title}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#">CrowdFunding</a></li>
+	<li><a href="#myCfProjects">{{.Lang.my_projects}}</a></li>
+	<li class="active">{{.Lang.cf_project_change_category_title}}  {{.ProjectCurrencyName}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<form class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="category_id">{{.Lang.category}}</label>
+			<div class="col-md-4">
+				<select id="category_id" name="category_id" class="form-control">
+					{{range $i, $data := .CfCategory}}
+						{{$sel:=""}}
+						{{if eq $.CategoryId $data.id}}{{$sel:="selected"}}{{end}}
+						<option value='{{$data.id}}' {{$sel}}>{{$data.name}}</option>
+					{{end}}
+				</select>
+				<span class="help-block">{{.Lang.category_for_your_project}}</span>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+<div class="form-group">
+	<label class="col-md-4 control-label" for="singlebutton"></label>
+	<div class="col-md-4">
+		<button type="button" class="btn btn-outline btn-primary" id="send_to_net">{{.Lang.send_to_net}}</button>
+	</div>
+</div>
+
+{{template "signatures".}}
+
+<script>
+	doSign();
+</script>
+
+{{end}}

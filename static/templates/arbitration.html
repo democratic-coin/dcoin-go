@@ -1,0 +1,142 @@
+{{define "arbitration"}}
+<script>
+	var arbitration_trust_list = '';
+	var get_key_and_sign = 'null';
+
+	$('#next').bind('click', function () {
+
+		$(".arbitrator_id", $("#my_trust_list")).each(function(){
+			if ($(this).text()) {
+				arbitration_trust_list = arbitration_trust_list+$(this).text()+',';
+			}
+		} );
+		if (arbitration_trust_list)
+			arbitration_trust_list = '['+arbitration_trust_list.substr(0, arbitration_trust_list.length-1)+']';
+		else
+			arbitration_trust_list = '[0]';
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+arbitration_trust_list);
+
+		get_key_and_sign = {{if not .ShowSignData}}"send_to_net"{{else}}"sign"{{end}}
+		check_key_and_show_modal2();
+
+	});
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'arbitration_trust_list' : arbitration_trust_list,
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('arbitration', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+	});
+
+
+	$("table.trust_list").on("click", ".btn_del", function (event) {
+		$(this).closest("tr").remove();
+	});
+
+	$("#add_arbitrator").on("click", function (event) {
+		$('.trust_list').css('display', 'block');
+		$('.trust_list > tbody:last').append('<tr><td class="arbitrator_id">'+$("#new_arbitrator").val()+'</td><td></td><td></td><td><button class="btn btn-default  btn_del">del</button></td></tr>');
+	});
+
+</script>
+<style>
+	#my_trust_list > input{margin-top:5px}
+</style>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.arbitration}}</h1>
+	{{template "alertSuccess".}}
+	<ul class="nav nav-tabs" id="myTab">
+		<li><a href="#walletsList">{{.Lang.send_to_wallet}}</a></li>
+		<li><a href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+		<li><a href="#credits">{{.Lang.credits}}</a></li>
+		<li class="active"><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+	</ul>
+
+	<div id="main_data">
+		<div style="float:left; margin-right: 20px; max-width: 400px">
+
+			<h3>{{.Lang.my_trust_list}}</h3>
+
+			<div id="my_trust_list" style="{{if eq .PendingTx 0}}display:block{{else}}display:none{{end}}">
+				{{.Lang.id_of_the_new_arbitrator}}<input type="text" class="form-control" id="new_arbitrator" style="display: inline-block; max-width: 50px; margin: 5px;"><button class="btn btn-default" id="add_arbitrator"  style="display: inline-block">{{.Lang.add}}</button>
+
+				<table class="trust_list table" {{if not .MyTrustList}}style="display:none"{{end}}>
+				<tr>
+					<th>ID</th>
+					<th>Link</th>
+					<th>{{.Lang.trust_pers}}</th>
+					<th>{{.Lang.delete}}</th>
+				</tr>
+				<tbody>
+				{{range $id, $data := .MyTrustList}}
+				<tr>
+					<td class='arbitrator_id'>{{index $data "arbitrator_user_id"}}</td>
+					{{if ne (index $data "url") "0"}}<td><a href='{{index $data "url"}}' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
+					<td>{{index $data "count"}}</td>
+					<td><button class='btn btn-default btn_del'>del</button></td>
+				</tr>
+				{{end}}
+				</tbody>
+				</table>
+				<br>
+				<button type="button" class="btn btn-outline btn-primary" id="next">{{.Lang.send_to_net}}</button>
+			</div>
+			<div id="pending" style="{{if eq .PendingTx 0}}display:none{{else}}display:block{{end}}">
+				<div class="alert alert-success">
+					{{.Lang.being_processed}}
+				</div>
+			</div>
+		</div>
+
+		<div style="float:left; padding-top: 75px; padding-left: 70px; overflow: auto">
+			<a type="button" class="btn btn-primary" href="#arbitrationBuyer">{{.Lang.i_buyer}}</a><br><br>
+			<a type="button" class="btn btn-primary" href="#arbitrationSeller">{{.Lang.i_seller}}</a><br>{{if and .ArbitrationDaysRefund .ArbitrationTrustList}}{{.Lang.you_seller}}{{end}}<br>
+			<a type="button" class="btn btn-primary" href="#arbitrationArbitrator">{{.Lang.i_arbitrator}}</a><br>{{if .Arbitrator}}{{.Lang.you_arbitrator}}{{end}}
+		</div>
+		<div class="clearfix"></div>
+		<table class="table" style="max-width: 700px; margin-top: 20px">
+			<caption><strong>{{.Lang.top_10_arbitrators}}</strong></caption>
+			<tr>
+				<td colspan="1" rowspan="2" style="vertical-align: middle;">ID</td>
+				<td colspan="1" rowspan="2" style="vertical-align: middle;">Link</td>
+				<td colspan="1" rowspan="2" style="vertical-align: middle;">{{.Lang.trust_pers}}</td>
+				<td colspan="3" rowspan="1" style="text-align: center">{{.Lang.for_last_month}}</td>
+			</tr>
+			<tr>
+				<td>{{.Lang.resolution_in_favor_of_the_buyer}}</td>
+				<td>{{.Lang.average_refund_amount}}</td>
+				<td>{{.Lang.resolution_in_favor_of_the_seller}}</td>
+			</tr>
+			{{range .Arbitrators}}
+			<tr>
+			<td>{{.Arbitrator_user_id}}</td>
+			{{if ne .Url "0"}}<td><a href='{{.Url}}' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
+			<td>{{.Count}}</td>
+			<td>{{.Refund_data_count}}</td>
+			<td>{{if gt .Refund_data_count 0}}{{round (div .Refund_data_sum .Refund_data_count) 2}}{{else}}0{{end}}</td>
+			<td>{{.Count_rejected_refunds}}</td>
+			</tr>
+			{{end}}
+		</table>
+
+		{{noescape .LastTxFormatted}}
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+<script src="static/js/unixtime.js"></script>
+{{end}}

@@ -1,0 +1,41 @@
+{{define "cfStart"}}
+<link href="{{.CfUrl}}css/cf.css" rel="stylesheet">
+<style>
+	{{if eq .UserId 0}}
+		#dc_content{width:900px; margin:0 auto}
+		#wrapper{background-color:#fff}
+		#page-wrapper{margin:0}
+	{{end}}
+	.list-inline {margin-left:0px}
+</style>
+<script>
+	$(document).ready(function () {
+		$.ajax({
+			url: "http://dcoin.club/ajax?controllerName=getVer",
+			type: 'GET',
+			dataType: "html",
+			crossDomain: true,
+			success: function (ver) {
+				$( "#version" ).html( ver );
+				$("#exe").attr("href", 'https://dcoin.club/Dcoin.exe');
+			}
+		});
+	});
+</script>
+
+<div style="float:left; width:900px; overflow:auto; text-align: center; padding-top: 100px">
+	<div style="margin-bottom:5px">
+
+		<a id="exe" href="https://github.com/c-darwin/dcoin/releases/download/v0.0.9b4/Dcoin.exe" class="btn btn-default btn-lg"><span class="network-name">{{.Lang.download}}</span></a>
+
+	</div>
+	<span style="color:#ccc">Windows <span id="version">v0.0.9b4</span></span><br><br>{{.Lang.or}}
+	<div style="margin-top:10px">
+
+		<a href="http://pool.dcoin.club" class="btn btn-default btn-lg"><span class="network-name">{{.Lang.open_in_the_pool}}</span></a>
+
+	</div>
+	<Br>
+	<a href="#" onclick="history.go(-1);return false;">BACK</a>
+</div>
+{{end}}

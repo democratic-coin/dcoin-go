@@ -1,0 +1,138 @@
+{{define "arbitrationSeller"}}
+
+<script>
+
+	var tx_type = '';
+	var get_key_and_sign = 'null';
+
+	$('#next').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#arbitration_days_refund').val()+','+$('#hold_back_pct').val());
+
+		get_key_and_sign = {{if .ShowSignData}}"sign"{{else}}"send_to_net"{{end}}
+		check_key_and_show_modal2();
+	});
+
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'arbitration_days_refund' : $('#arbitration_days_refund').val(),
+					'hold_back_pct' : $('#hold_back_pct').val(),
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('arbitrationSeller', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+	});
+
+	function money_back(id) {
+		dc_navigate('money_back', {'order_id': id, 'amount': $('#money_back_amount_'+id).val()})
+	}
+
+	$('#generate_token').bind('click', function (e) {
+		$('#shop_secret_key').val(Math.random().toString(36).slice(-10));
+		e.preventDefault();
+	});
+
+	$('#save_shop_data').bind('click', function () {
+		$.post( 'ajax?controllerName=saveShopData', {
+					'shop_callback_url' : $('#shop_callback_url').val(),
+					'shop_secret_key' : $('#shop_secret_key').val()
+				},
+				function () {
+					dc_navigate ('arbitrationSeller', {'alert': '{{.Lang.saved}}'} );
+				});
+	});
+
+	function decrypt_comment_0 (id) {
+		iv = CryptoJS.enc.Hex.parse(Generate_key());
+		decrypt_comment_01 (id, 'seller', {{.MinerId}}, iv.toString());
+	}
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.arbitration}}</h1>
+	{{template "alertSuccess".}}
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+		<li class="active">{{.Lang.i_seller}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="main_data">
+
+		<h3>{{.Lang.my_deals}}</h3>
+		<table class="table" style="max-width: 600px">
+			<tr><td>ID</td><td>{{.Lang.time}}</td><td>{{.Lang.amount}}</td><td>{{.Lang.seller}}</td><td>{{.Lang.money_back}}</td></tr>
+			{{range $data := .MyOrders}}
+				<tr>
+				<td>{{$data.id}}</td>
+				<td class='unixtime'>{$data.time}}</td>
+				<td>{{$data.amount}}</td>
+				<td>{{$data.seller}}</td>
+				// возможно покупатель запросил манибек
+				{{if eq $data.status "refund"}}
+					{{if eq $data.comment_status "decrypted"}}
+						<td><div style="width: 100px; overflow: auto">{{$data.comment}}</div>
+					{{else}}
+						<td><div class="comment_{{$data.id}}"><input type="hidden" id="encrypt_comment_{{$data.id}}" value="{{$data.comment}}"><button class="btn" onclick="decrypt_comment_0({{$data.id}})">{{.Lang.decrypt}}</button></div>
+					{{end}}
+					<input type='text' class='form-control' style='width:100px; margin: 5px 0px' id='money_back_amount_{{$data.id}}'><button type='button' class='btn btn-outline btn-primary' onclick='money_back({{$data.id}})'>Money back</button></td>
+				{{else}}
+					<td></td>
+				{{end}}
+				</tr>
+			{{end}}
+			</table>
+
+	<div style="{{if eq .PendingTx 0}}display:block{{else}}display:none{{end}}">
+		<strong>{{.Lang.number_days_hold_back}}</strong><br>
+		<div class="form-inline"><input type="text" class="form-control" id="arbitration_days_refund" style="width: 100px; margin-right: 10px" value="{{.HoldBack.arbitration_days_refund}}"></div><br>
+		<strong>{{.Lang.hold_back_pct}}</strong><br>
+		<div class="form-inline"><input type="text" class="form-control" id="hold_back_pct" style="width: 100px; display: inline-block" value="{{.HoldBack.seller_hold_back_pct}}"></div>
+		<button type="button" class="btn btn-outline btn-primary" id="next" style="margin-top: 15px">{{.Lang.send_to_net}}</button>
+		<br><br>
+	</div>
+	<div id="pending" style="{{if eq .PendingTx 0}}display:none{{else}}display:block{{end}}">
+		<div class="alert alert-success">
+			{{.Lang.being_processed}}
+		</div>
+	</div>
+
+
+	{{if eq .SessRestricted 0}}
+	<strong>shop_callback_url</strong><br>
+	<div class="form-inline"><input type="text" class="form-control" id="shop_callback_url"
+									style="width: 200px; margin-right: 10px"
+									value="{{.ShopData.shop_callback_url}}"></div><br>
+	<strong>shop_secret_key [<a href="#" id="generate_token">generate</a>]</strong><br>
+	<div class="form-inline"><input type="text" class="form-control" id="shop_secret_key"
+									style="width: 200px; display: inline-block"
+									value="{{.ShopData.shop_secret_key}}"></div>
+	<button type="button" class="btn btn-outline btn-primary" id="save_shop_data"
+			style="margin-top: 15px">{{.Lang.save}}</button>
+	<br>
+	{{end}}
+
+	<div style=" max-width: 600px;" id="tx_history">
+
+		{{noescape .LastTxFormatted}}
+
+
+	</div>
+</div>
+</div>
+
+{{template "signatures".}}
+
+<script src="static/js/unixtime.js"></script>
+
+{{end}}

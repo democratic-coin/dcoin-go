@@ -1,0 +1,16 @@
+{{define "information"}}
+
+	<h1 class="page-header">{{.Lang.alert_messages_title}}</h1>
+	
+	<table class="table table-bordered" style="width:600px">
+	<thead><tr><th>ID</th><th>Text</th></tr></thead>
+	<tbody>
+	{{if .AlertMessages}}
+		{{range $k, $data := .AlertMessages}}
+			<tr><td>{{$data.id}}</td><td>{{$data.message}}</td></tr>
+		{{end}}
+	{{end}}
+	</tbody>
+	</table>
+
+{{end}}

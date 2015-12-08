@@ -1,0 +1,39 @@
+{{define "delCfFunding"}}
+<script>
+
+	$('#send_to_net').bind('click', function () {
+			$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'funding_id' : {{.DelId}},
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+			}, function (data) {
+				//alert(data);
+				dc_navigate ('walletsList', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			} );
+	} );
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div textarea").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+
+</script>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.del_cf_funding_title}}</h1>
+
+	{{template "alertSuccess".}}
+
+	{{ template "signatures". }}
+
+	<script>
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	</script>
+</div>
+
+{{end}}

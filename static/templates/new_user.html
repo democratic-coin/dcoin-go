@@ -1,0 +1,190 @@
+{{define "newUser"}}
+<script>
+	$('#new_user').bind('click', function () {
+
+		var bText = $(this).html();
+		console.log(bText);
+		$(this).html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+		$(this).prop('disabled', true);
+
+		$.post( 'ajax?controllerName=generateNewPrimaryKey', function (data) {
+			$("#div_new_user_0").css("display", "none");
+			{{if .ShowSignData}}$("#div_new_user_1").css("display", "block");{{end}}
+			$("#public_key").val( data.public_key );
+			$("#private_key").val( data.private_key );
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#public_key").val());
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+			$(this).html(bText);
+			$(this).prop('disabled', false);
+
+			}, 'json' );
+
+
+	} );
+
+		$('#next').bind('click', function () {
+			$("#div_new_user_1").css("display", "none");
+			$("#sign").css("display", "block");
+		} );
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'public_key' : $('#public_key').val(),
+						'private_key' : $('#private_key').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('newUser', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		} );
+
+		function get_img_refs (i, user_id, urls) {
+			if (typeof urls == 'undefined' )
+				return 0;
+			var image = new Image();
+			if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
+				console.log('TRY '+urls[i]+"/public/"+user_id+"_user_face.jpg"+"\ni="+i);
+				image.src = urls[i]+"/public/"+user_id+"_user_face.jpg";
+				image.onload = function(){
+					console.log('OK '+urls[i]);
+					image=null;
+					$('.img_'+user_id).css("background", 'url('+urls[i]+'/public/'+user_id+'_user_face.jpg)  50% 50%');
+					$('.img_'+user_id).css("background-size", "60px Auto");
+				};
+				// handle failure
+				image.onerror = function(){
+					image=null;
+					console.log('error '+urls[i]);
+					var bg = $('.img_'+user_id).css("background-image");
+					if (typeof bg == 'undefined' || bg.length<10)
+						get_img_refs (i+1, user_id, urls);
+				};
+				setTimeout
+				(
+						function()
+						{
+							if ( image!=null && (!image.complete || !image.naturalWidth) )
+							{
+								var bg = $('.img_'+user_id).css("background-image");
+								image = null;
+								console.log('error');
+								if (typeof bg == 'undefined' || bg.length<10)
+									get_img_refs (i+1, user_id, urls);
+							}
+						},
+						2000
+				);
+			}
+		}
+
+		$('#refreshTpl').bind('click', function () {
+			console.log("refreshTpl");
+			dc_navigate($('#tpl_name').val())
+		});
+
+</script>
+<style>
+	.ref .fa{margin-right: 5px;margin-left: 5px;}
+</style>
+
+<h1 class="page-header">{{.Lang.reg_users}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li class="active">{{.Lang.reg_users}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+
+<div id="div_new_user_0">
+	<button id="new_user" type="button" class="btn btn-outline btn-primary">new user</button><br><br>
+	{{if .MyRefs}}
+		<table class="table table-striped table-bordered table-hover" style="max-width:600px">
+		<thead>
+		<tr>
+			<th>User ID</th>
+			<th>{{.Lang.profit}}</th>
+			<th>{{.Lang.action}}</th>
+		</tr>
+		</thead>
+		{{range $refUserId, $data := .MyRefs}}
+			<tr>
+			{{if $data.Hosts}}
+				<td style='text-align:center;vertical-align:middle'><div class='img_{{$refUserId}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>user_id: {{$refUserId}}</td>
+			{{else}}
+				<td style='text-align:center;vertical-align:middle'>user_id: {{$refUserId}}</td>
+			{{end}}
+			<td style='vertical-align:middle'>
+			{{if $data.Amounts}}
+				{{range $currency_id, $amount := $data.Amounts}}
+					{{$amount}} d{{index $.CurrencyList $currency_id}}<br>
+				{{end}}
+			{{else}}
+				0
+			{{end}}
+			</td>
+			{{if not $data.Key}}
+				<td>{{$.Lang.key_has_been_changed}}</td>
+			{{else}}
+				<td style='font-size: 25px' class='ref'><a href='{{$data.KeyUrl}}.png' target='_blank'><i class='fa fa-download'></i></a> <a href='{{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-file-text-o'></i></a> <!--<a href='https://www.facebook.com/sharer/sharer.php?u={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-facebook-square'></i></a> <a href='https://twitter.com/home?status={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-twitter-square'></i></a> <a href='http://vkontakte.ru/share.php?url={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-vk'></i></a> <a href='mailto:?subject=Dcoin&amp;body={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-envelope-o'></i></a>--></td></tr>
+			{{end}}
+		{{end}}
+		</tbody>
+		</table>
+	{{end}}
+
+</div>
+
+<div id="div_new_user_1" style="display: none">
+		<textarea id="public_key" style="width: 700px; height: 300px; display: none" class="form-control"></textarea><br>
+		<textarea id="private_key" style="width: 730px; height: 300px" class="form-control"></textarea><br>
+		<button class="btn" id="next">{{.Lang.next}}</button>
+</div>
+
+{{template "signatures".}}
+
+<div class="clearfix"></div>
+{{noescape .LastTxFormatted}}
+<script src="static/js/unixtime.js"></script>
+
+{{if .GlobalRefs}}
+	<h3>{{.Lang.leaders_dcoin}}</h3>
+	<table class="table table-striped table-bordered table-hover" style="max-width:400px">
+	<thead>
+	<tr>
+		<th style="width:100px">Miner</th>
+		<th>{{.Lang.profit}}</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{range $refUserId, $data := .GlobalRefs}}
+		<tr><td style='text-align:center;vertical-align:middle'><div class='img_{{$refUserId}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>user_id: {{$refUserId}}</td>
+		<td style='vertical-align:middle'>
+		{{range $k, $refData := $data.Amounts}}
+			{{$refData.amount}} d{{index $.CurrencyList (strToInt64 $refData.currency_id)}}<br>
+		{{end}}
+		</td></tr>
+	{{end}}
+	</tbody>
+	</table>
+{{end}}
+
+<script>
+	{{range $userId, $hosts := .RefPhotos}}
+		var hosts = []
+		{{range $k, $host := $hosts}}
+			hosts.push({{$host}})
+		{{end}}
+		get_img_refs (0, {{$userId}}, hosts)
+	{{end}}
+</script>
+
+{{end}}

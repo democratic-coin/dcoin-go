@@ -1,0 +1,309 @@
+{{define "currencyExchange"}}
+<script>
+	$('#currency_ok').bind('click', function () {
+		dc_navigate ('currencyExchange', {'buy_currency_id': $('#buy_currency_id').val(), 'sell_currency_id': $('#sell_currency_id').val()} );
+	});
+
+	var sell_currency_id = 0;
+	var sell_rate = 0;
+	var sell_amount = 0;
+	var buy_currency_id = 0;
+	var commission = 0;
+
+	$('#buy_button').bind('click', function () {
+
+		$("#main").css("display", "none");
+		$("#confirm").css("display", "block");
+		$("#sign").css("display", "block");
+
+		var buy_price = Number($("#buy_price").val());
+		sell_currency_id = $("#sell_currency_id").val();
+		sell_rate = buy_price;
+		sell_rate = sell_rate.toFixed(10);
+		sell_amount = Number($("#buy_amount").val()) * buy_price;
+		sell_amount = sell_amount.toFixed(2);
+		buy_currency_id = $("#buy_currency_id").val();
+		commission = $("#buy_commission").val();
+
+		$("#confirm").html('sell_currency_id: '+sell_currency_id+'<br>'+'sell_rate: '+sell_rate+'<br>'+'sell_amount: '+sell_amount+'<br>'+'buy_currency_id: '+buy_currency_id+'<br>'+'commission: '+commission+'<br><br>');
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+sell_currency_id+','+sell_rate+','+sell_amount+','+buy_currency_id+','+commission);
+		doSign();
+		{{if .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	});
+
+
+
+	$('#sell_button').bind('click', function () {
+
+		$("#main").css("display", "none");
+		$("#confirm").css("display", "block");
+		$("#sign").css("display", "block");
+
+		var sell_price = Number($("#sell_price").val());
+		sell_currency_id = $("#buy_currency_id").val();
+		sell_rate = 1/sell_price;
+		sell_rate = sell_rate.toFixed(10);
+		sell_amount =  Number($("#sell_amount").val()) ;
+		sell_amount = sell_amount.toFixed(2);
+		buy_currency_id = $("#sell_currency_id").val();
+		commission = $("#sell_commission").val();
+
+		$("#confirm").html('sell_currency_id: '+sell_currency_id+'<br>'+'sell_rate: '+sell_rate+'<br>'+'sell_amount: '+sell_amount+'<br>'+'buy_currency_id: '+buy_currency_id+'<br>'+'commission: '+commission+'<br><br>');
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+sell_currency_id+','+sell_rate+','+sell_amount+','+buy_currency_id+','+commission);
+		doSign();
+		{{if .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	});
+
+
+	$('#buy_amount,#buy_price,#buy_commission').keyup(function(e) {
+		/*
+		 var buy_amount = Number($("#buy_amount").val());
+		 var buy_price = Number($("#buy_price").val());
+		 var buy_commission = Number($("#buy_commission").val());
+
+		 if ( buy_amount && buy_price && buy_commission>=0 ) {
+		 $("#buy_total").text( buy_amount * buy_price );
+		 }*/
+		calc_commission ('buy_amount', 'buy_price', 'buy_commission', 'sell_currency_id', 'buy_total');
+	});
+
+	function calc_commission (amount_id, price_id, commission_id, currency_id, total_id) {
+
+		var amount = $("#"+amount_id).val();
+		var price = $("#"+price_id).val();
+		var commission = $("#"+commission_id).val();
+
+		if (amount > 0) {
+			var currency_id = $("#"+currency_id).val();
+			if (currency_id>=1000)
+				currency_id=1000;
+
+			console.log("currency_commission");
+			if (typeof currency_commission[currency_id] !== "undefined" && typeof currency_commission[currency_id] !== "undefined") {
+				var commission_pct = Number(currency_commission[currency_id][0]);
+				var min_commission = Number(currency_commission[currency_id][1]);
+			} else {
+				var commission_pct = 0.1
+				var min_commission = 0.01
+			}
+			console.log(commission_pct + '/' + min_commission);
+			var amount_ = '';
+			amount_ = parseFloat(amount.replace(",", "."));
+			amount_ = amount_.toFixed(2);
+
+			if (amount.indexOf(",") != -1) {
+				$("#" + add + "amount").val(amount_);
+			}
+			amount = amount_;
+
+			var commission = amount * (commission_pct / 100);
+			commission = commission.toFixed(2);
+			if (commission < min_commission)
+				commission = min_commission;
+			commission = parseFloat(commission);
+			amount = parseFloat(amount);
+			commission = parseFloat(commission);
+			$("#"+commission_id).val(commission);
+		}
+		if ( amount && price && commission>=0 ) {
+			$("#"+total_id).text( amount * parseFloat(price) );
+		}
+	}
+
+	$('#sell_amount,#sell_price,#sell_commission').keyup(function(e) {
+		/*
+		 var sell_amount = Number($("#sell_amount").val());
+		 var sell_price = Number($("#sell_price").val());
+		 var sell_commission = Number($("#sell_commission").val());
+		 if ( sell_amount && sell_price && sell_commission>=0 ) {
+		 $("#sell_total").text( sell_amount * sell_price );
+		 }*/
+
+		calc_commission ('sell_amount', 'sell_price', 'sell_commission', 'buy_currency_id', 'sell_total');
+	});
+
+	var currency_commission = [];
+	{{range $currencyId, $commission := .ConfigCommission}}
+	currency_commission[{{$currencyId}}] = [];
+	currency_commission[{{$currencyId}}][0] = '{{index $commission 0}}';
+	currency_commission[{{$currencyId}}][1] = '{{index $commission 1}}';
+	{{end}}
+
+	$('#amount, #cf_amount, #currency_id').bind("keyup change", function(e) {
+
+		var amount = $("#"+add+"amount").val();
+
+	});
+
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'time' : '{{.TimeNow}}',
+			'user_id' : '{{.UserId}}',
+			'sell_currency_id' :  sell_currency_id,
+			'sell_rate' : sell_rate,
+			'amount' :  sell_amount,
+			'buy_currency_id' :  buy_currency_id,
+			'commission' :  commission,
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function(data) {
+			dc_navigate ('currencyExchange', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		});
+
+	} );
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control form-control-fix" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+</script>
+
+<style>
+	.form-control-fix{display: inline; width: 100px}
+	td{padding: 3px}
+</style>
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.currency_exchange}}</h1>
+	<ul class="nav nav-tabs" id="myTab">
+		<li><a href="#walletsList">{{.Lang.send_to_wallet}}</a></li>
+		<li class="active"><a href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+		<li><a href="#credits">{{.Lang.credits}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+	</ul>
+
+
+	<div id="main" style="padding-top: 10px">
+		<p>{{.Lang.forex_alert}}</p>
+		<div style="text-align: center; max-width: 700px">
+			<div style="padding-bottom: 10px; display: inline-block">{{.Lang.order_buy}}
+				<select id="buy_currency_id" style="width: 100px; display: inline-block" class="form-control" >
+					{{range $id, $name := .CurrencyListName}}
+						{{if eq $id $.BuyCurrencyId}}
+							<option value='{{$id}}' selected>d{{$name}}</option>
+						{{else}}
+							<option value='{{$id}}'>d{{$name}}</option>
+						{{end}}
+					{{end}}
+				</select> <a href="#currencyExchange/buy_currency_id={{.SellCurrencyId}}/sell_currency_id={{.BuyCurrencyId}}"><i class="fa  fa-exchange  fa-fw"></i></a> {{.Lang.order_sell}}
+				<select id="sell_currency_id" style="width: 100px; display: inline-block" class="form-control" >
+					{{range $id, $name := .CurrencyListName}}
+						{{if eq $id $.SellCurrencyId}}
+							<option value='{{$id}}' selected>d{{$name}}</option>
+						{{else}}
+							<option value='{{$id}}'>d{{$name}}</option>
+						{{end}}
+					{{end}}
+				</select>
+				<button class="btn" id="currency_ok">OK</button>
+			</div>
+			<div class="clearfix"></div>
+			<a href="#currencyExchange/all_currencies=1">{{.Lang.show_all}}</a>
+		</div>
+		<br>
+
+		<div style="float: left">
+			<table>
+				<caption><strong>{{.Lang.buy}} d{{.BuyCurrencyName}}</strong></caption>
+				<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_amount" class="input-mini form-control"></td></tr>
+				<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+				<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="buy_total">0</span> d{{.SellCurrencyName}}</td></tr>
+				<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="buy_commission" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+				<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .SellCurrencyId}} d{{.SellCurrencyName}}</td></tr>
+			</table>
+			<button class="btn" id="buy_button">{{.Lang.buy}} d{{.BuyCurrencyName}}</button>
+			<br><br>
+
+			<div style="width: 330px; max-height: 500px; overflow: auto;">
+				<table class="table" style="width: 330px"><caption>{{.Lang.sell_orders}}</caption>
+					<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
+					<tbody>
+					{{if .SellOrders}}
+						{{range $data := .SellOrders}}
+							<tr><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{mult $data.amount $data.sell_rate}}</td></tr>
+						{{end}}
+					{{end}}
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+		<div style="float: left">
+			<table>
+				<caption><strong>{{.Lang.sell}} d{{.BuyCurrencyName}}</strong></caption>
+				<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_amount" class="input-mini form-control"></td></tr>
+				<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+				<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="sell_total">0</span> d{{.SellCurrencyName}}</td></tr>
+				<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="sell_commission" class="input-mini form-control"> d{{.BuyCurrencyName}}</td></tr>
+				<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .BuyCurrencyId}} d{{.BuyCurrencyName}}</td></tr>
+			</table>
+			<button class="btn" id="sell_button">{{.Lang.sell}} d{{.BuyCurrencyName}}</button>
+			<br><br>
+
+			<div style="width: 330px; max-height: 500px; overflow: auto;">
+				<table class="table" style="width: 330px"><caption>{{.Lang.buy_orders}}</caption>
+					<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
+					<tbody>
+					{{if .BuyOrders}}
+						{{range $data := .BuyOrders}}
+							<tr><td>{{round (div 1 $data.sell_rate) 6}}</td><td>{{round (mult $data.amount $data.sell_rate) 2}}</td><td>{{$data.amount}}</td></tr>
+						{{end}}
+					{{end}}
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+		<div class="clearfix"></div>
+
+		{{noescape .LastTxFormatted}}
+
+
+		<h2>My orders</h2>
+		<table class="table" id="my_orders">
+			<thead><tr><th>Order id</th><th>Sell_currency_id</th><th>sell_rate</th><th>amount</th><th>buy_currency_id</th><th>commission</th><th>del</th></tr></thead>
+			<tbody>
+			{{if .MyOrders}}
+				{{range $data := .MyOrders}}
+					<tr><td>{{$data.id}}</td><td>{{$data.sell_currency_id}}</td><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{$data.buy_currency_id}}</td><td>{{$data.commission}}</td><td><a href='#' onclick="dc_navigate('currencyExchangeDelete', {'del_id':'{{$data.id}}'})">Del</a></td></tr>
+				{{end}}
+			{{end}}
+
+			</tbody>
+		</table>
+	</div>
+
+	<div id="confirm" style="display:none">
+
+	</div>
+
+	{{ template "signatures". }}
+</div>
+
+<style>
+	.stacktable { width: 100%; }
+	.st-head-row { padding-top: 1em;font-size: 2em; text-align: center }
+	.st-head-row.st-head-row-main { font-size: 1.5em; padding-top: 0; }
+	.st-key { width: 49%; text-align: right; padding-right: 1%; }
+	.st-val { width: 49%; padding-left: 1%; }
+
+	.stacktable.large-only { display: table; }
+	.stacktable.small-only { display: none; }
+
+	@media (max-width: 1000px) {
+		.stacktable.large-only { display: none; }
+		.stacktable.small-only { display: table; }
+	}
+</style>
+<script src="static/js/stacktable.js"></script>
+<script src="static/js/unixtime.js"></script>
+
+<script>
+	$( document ).ready(function() {
+		$('#my_orders').stacktable();
+	});
+</script>
+{{end}}

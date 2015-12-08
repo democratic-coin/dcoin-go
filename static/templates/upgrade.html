@@ -1,0 +1,46 @@
+{{define "upgrade"}}
+
+<h1 class="page-header">{{.Lang.upgrade_title}}</h1>
+<ol class="breadcrumb" style="position: relative;">
+	{{if not .Mobile}}<li><a href="#miningMenu">{{.Lang.mining}}</a></li>{{end}}
+	<li class="active">{{.Lang.upgrade_title}}</li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+{{if eq .Result "ok"}}
+	<div class="alert alert-success">{{noescape .Lang.upgrade_status_ok}}</div>
+{{end}}
+{{if eq .Result "bad"}}
+	<div class="alert alert-danger">{{noescape .Lang.upgrade_status_bad}}</div>
+{{end}}
+{{if or (eq .Result "nodes_pending") (eq .Result "users_pending")  (eq .Result "pending")}}
+	<div class="alert alert-info">{{noescape .Lang.upgrade_status_pending}}</div>
+{{end}}
+{{if eq .Result "bad_photos_hash"}}
+	<div class="alert alert-danger">{{.Lang.bad_photo}}{{.Host}}/public/{{.UserId}}_user_face.jpg and {{.Host}}/public/{{.UserId}}_user_profile.jpg<br><a type='button' class='btn btn-default' href='#upgradeResend'>{{noescape .Lang.send_repeated_request}}</a></div>
+{{end}}
+{{if eq .Result "resend"}}
+	<div class="alert alert-warning">{{noescape .Lang.error_send_repeated_request}}</div>
+{{end}}
+
+<br>
+
+{{if and (ne .Result "ok")  (ne .Result "pending")  (ne .Result "users_pending")  (ne .Result "nodes_pending")}}
+<button class="btn btn-success" onclick="dc_navigate('upgrade0')">{{.Lang.begin_upgrade}}</button>
+<p>{{.Lang.attempts_remaining}} {{.MinerVotesAttempt}}</p>
+<p>{{.Lang.purpose_of_inspections}}</p><br>
+{{end}}
+
+{{if .MyComments}}
+	<h3>{{.Lang.comment_from_miners}}</h3>
+	<table class="table table-bordered" style="width:600px">
+	<tbody>
+	{{range $data := .MyComments}}
+		<tr><td>{{$data.comment}}</td></tr>
+	{{end}}
+	</tbody>
+	</table>
+{{end}}
+
+{{end}}

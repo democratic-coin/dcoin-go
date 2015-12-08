@@ -1,0 +1,160 @@
+{{define "eMyFinance"}}
+<style>
+	.table_out td{padding: 3px 3px }
+</style>
+<script>
+
+	$('#m_amount').bind("keyup change", function(e) {
+
+		var amount = $("#m_amount").val();
+		if (amount > 0) {
+			amount_ = parseFloat(amount.replace(",", "."));
+			amount_ = amount_.toFixed(2);
+
+			$("#m_amount").val(amount_);
+		}
+	});
+
+	$('#ps_select').on('change', function() {
+		if ($(this).val() == 'ik') {
+			$("#ik_form").css("display", "block");
+			$("#pm_form").css("display", "none");
+			$("#payeer_form").css("display", "none");
+		}
+		else if ($(this).val() == 'pm') {
+			$("#ik_form").css("display", "none");
+			$("#pm_form").css("display", "block");
+			$("#payeer_form").css("display", "none");
+		}
+		else {
+			$("#ik_form").css("display", "none");
+			$("#pm_form").css("display", "none");
+			$("#payeer_form").css("display", "block");
+		}
+	});
+
+	function withdraw(currency_id, method) {
+
+		$.post( 'ajax?controllerName=EWithdraw', {
+			'currency_id': currency_id,
+			'amount': $('#amount-'+currency_id).val(),
+			'method': method,
+			'account': $('#account-'+currency_id).val(),
+			'code': $('#code-'+currency_id).val()
+		}, function(data) {
+			console.log(data);
+			if (data.error) {
+				$('#alerts-' + currency_id).html('<div class="alert alert-danger alert-dismissable" style="width:380px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + data.error + '</div>');
+			} else {
+				$('#alerts-' + currency_id).html('<div class="alert alert-success alert-dismissable" style="width:380px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + data.success + '</div>');
+			}
+				//navigate('my_finance',  {'status':'success'});
+		}, 'JSON');
+	}
+
+	function send_sms(currency_id) {
+		$.post( 'ajax/send_sms.php', {
+		}, function(data) {
+			console.log(data);
+			if (data.error)
+				$('#alerts-'+currency_id).html('<div class="alert alert-danger alert-dismissable" style="width:380px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+			else
+				$('#alerts-'+currency_id).html('<div class="alert alert-success alert-dismissable" style="width:380px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.success+'</div>');
+			//navigate('my_finance',  {'status':'success'});
+		}, 'JSON');
+	}
+
+	function calc_withdraw_amount(currency_id, commission) {
+
+		var commission = parseFloat(commission)/100
+		var amount = $("#amount-"+currency_id).val();
+		var amount_ = amount.replace(",", ".");
+		if (amount.indexOf(",")!=-1) {
+			$("#amount-"+currency_id).val(amount_);
+		}
+		amount = parseFloat(amount_);
+		var withdraw_amount = amount - amount*parseFloat(commission);
+		withdraw_amount = parseInt(withdraw_amount * 100)/100;
+		withdraw_amount = withdraw_amount.toFixed(2)-0;
+		$("#withdraw_amount-"+currency_id).val(withdraw_amount);
+	}
+</script>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{.Lang.finance}}</h1>
+	</div>
+
+		<div class="col-lg-12">
+
+					<div class="panel-group" id="accordion" style="max-width: 900px">
+
+						{{range $id, $data := .Currency}}
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<div style="float: left">{{index $data "name"}}<br>{{$.Lang.balance}}: {{index $data "amount"}} {{index $data "name"}}</a></div>
+
+									<div class="pull-right">
+										<button type="button" class="btn btn-success collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{index $data "name"}}">{{$.Lang.deposit}}</button>
+										<button type="button" class="btn btn-primary collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{index $data "name"}}2">{{$.Lang.withdraw}}</button>
+									</div>
+
+								</h4>
+								<div class="clearfix"></div>
+							</div>
+							<div style="height: 0px;" id="collapse{{index $data "name"}}" class="panel-collapse collapse">
+								<div class="panel-body">
+									{{noescape (index $data "input")}}
+								</div>
+							</div>
+							<div style="height: 0px;" id="collapse{{index $data "name"}}2" class="panel-collapse collapse">
+								<div class="panel-body">
+									{{noescape (index $data "output")}}
+								</div>
+							</div>
+						</div>
+						{{end}}
+				<!-- .panel-body -->
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{{.Lang.tx_history}}
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th>#</th>
+								<th>{{.Lang.type}}</th>
+								<th class="unixtime">{{.Lang.time}}</th>
+								<th>{{.Lang.method}}</th>
+								<th>{{.Lang.amount}}</th>
+								<th>{{.Lang.status}}</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{range $id, $data := .MyFinanceHistory}}
+								<tr><td>{{$data.Id}}</td><td>{{$data.Ftype}}</td><td class="unixtime">{{$data.AddTime}}</td><td>{{$data.Method}}</td><td>{{$data.Amount}}</td><td>{{noescape $data.Status}}</td></tr>
+							{{end}}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+</div>
+
+<script src="static/js/unixtime.js"></script>
+
+{{if .Collapse}}
+	<script>$("#collapse{{.Collapse}}").collapse();</script>
+{{end}}
+
+{{end}}

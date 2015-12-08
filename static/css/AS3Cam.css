@@ -1,0 +1,4 @@
+			.webcam-container {padding:0;margin:0}
+			.size640x480 { width:640px; height:480px;}
+			.webcam-container object {border:1px solid #000;}
+			.webcam-error {color:red;padding-top:10px;}

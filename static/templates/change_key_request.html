@@ -1,0 +1,42 @@
+{{define "changeKeyRequest"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main").css("display", "none");	$("#sign").css("display", "block");{{end}}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#to_user_id").val() );
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+
+		});
+
+		$('#send_to_net').bind('click', function () {
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'to_user_id' : $('#to_user_id').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('restoringAccess', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+
+		} );
+
+</script>
+
+<h1 class="page-header">{{.Lang.request_access_to_the_account}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+	<input type="text" id="to_user_id" class="form-control"><br>
+	<button id="save" class="btn btn-outline btn-primary">{{.Lang.send_to_net}}</button>
+</div>
+
+{{template "signatures".}}
+
+{{end}}

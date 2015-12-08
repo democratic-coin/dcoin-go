@@ -1,0 +1,117 @@
+{{define "changeArbitratorConditions"}}
+
+<script>
+	var	json_data = '';
+
+	$('#save').bind('click', function () {
+
+		var data = '';
+		$("tr", $("#conditions_div")).each(function() {
+
+			var id = $(this).attr('id');
+			if (typeof id != "undefined") {
+				if ( $('#check_'+id).is(":checked") ) {
+
+					var pct = $('#pct_'+id).val();
+					var pct0 = pct.split(".");
+					if (typeof(pct0[1])!=='undefined') {
+						if (pct0[1].length < 2)
+							var pct = $('#pct_' + id).val() + '0';
+					}
+					else {
+						var pct = $('#pct_' + id).val() + '.00';
+					}
+					data=data+'"'+id+'":';
+					data=data+'["'+$('#min_amount_'+id).val()+'",';
+					data=data+'"'+$('#max_amount_'+id).val()+'",';
+					data=data+'"'+$('#min_commission_'+id).val()+'",';
+					data=data+'"'+$('#max_commission_'+id).val()+'",';
+					data=data+'"'+pct+'"],';
+				}
+			}
+		} );
+		json_data = '{'+data.substr(0, data.length-1)+'}';
+		console.log(json_data);
+
+		$("#change_commission").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+json_data+','+$('#url').val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'conditions' : json_data,
+						'url' : $('#url').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('arbitrationArbitrator', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+
+		} );
+
+</script>
+<style>
+	.input-group-addon{width: 100px}
+	th{text-align: center;}
+</style>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.arbitration}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+		<li><a href="#arbitrationArbitrator">{{.Lang.i_arbitrator}}</a></li>
+		<li class="active">{{.Lang.my_conditions}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	{{template "alertSuccess".}}
+
+	<div id="change_commission" style="{{if eq .PendingTx 0}}display:block{{else}}display:none{{end}}">
+
+		<table class="table" style="width: 600px;" id="conditions_div">
+
+			<tr><th colspan="1" rowspan="2" style="vertical-align: middle;">{{.Lang.currency}}</th><th colspan="3" rowspan="1">{{.Lang.commission}}</th><th colspan="2" rowspan="1">{{.Lang.considered_transaction_amount}}</th></tr>
+
+			<tr><th>%</th><th>{{.Lang.min}}</th><th>{{.Lang.max}}</th><th>{{.Lang.min}}</th><th>{{.Lang.max}}</th></tr>
+
+			{{range $currency_id, $data := .Commission}}
+				{{$checked := ""}}
+				{{if index $.Conditions $currency_id}}{{$checked := "checked"}}{{end}}
+				<tr id='{{$currency_id}}'><td><input type='checkbox' style='display:inline-block' name='check' id='check_{{$currency_id}}' {{$checked}}> d{{index $.CurrencyList $currency_id}}</td>
+				<td><input id='pct_{{$currency_id}}' class='form-control' value='{{if index $.Conditions $currency_id 4}}{{index $.Conditions $currency_id 4}}{{else}}0.1{{end}}' type='text'></td>
+				<td><input id='min_commission_{{$currency_id}}' class='form-control' value='{{if index $.Conditions $currency_id 2}}{{index $.Conditions $currency_id 2}}{{else}}0.01{{end}}' type='text'></td>
+				<td><input id='max_commission_{{$currency_id}}' class='form-control' type='text' value='{{if index $.Conditions $currency_id 3}}{{index $.Conditions $currency_id 3}}{{else}}0{{end}}'></td>
+				<td><input id='min_amount_{{$currency_id}}' class='form-control' type='text' value='{{if index $.Conditions $currency_id 0}}{{index $.Conditions $currency_id 0}}{{else}}0.01{{end}}'></td>
+				<td><input id='max_amount_{{$currency_id}}' class='form-control' type='text' value='{{if index $.Conditions $currency_id 1}}{{index $.Conditions $currency_id 1}}{{else}}0{{end}}'></td>
+				</tr>
+			{{end}}
+
+		</table><br>
+		<strong>Url</strong><br>
+		<input id='url' class='form-control' type='text' value="0"><Br>
+
+		<button class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
+		<br><br>
+
+	</div>
+
+
+	<div id="pending" style="{{if eq .PendingTx 0}}display:none{{else}}display:block{{end}}">
+		<div class="alert alert-success">
+			{{.Lang.being_processed}}
+		</div>
+	</div>
+
+	{{template "signatures".}}
+
+</div>
+
+{{end}}

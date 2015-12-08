@@ -1,0 +1,38 @@
+{{define "arbitrationBuyer"}}
+
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.arbitration}}</h1>
+	{{template "alertSuccess".}}
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+		<li class="active">{{.Lang.i_buyer}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="main_data">
+
+		<h3>{{.Lang.my_purchases}}</h3>
+		<table class="table" style="max-width: 600px">
+			<tr><td>ID</td><td>{{.Lang.time}}</td><td>{{.Lang.amount}}</td><td>{{.Lang.seller}}</td><td>{{.Lang.money_back}}</td></tr>
+			{{range $data := .MyOrders}}
+				<tr>
+					<td>{{$data.id}}</td>
+					<td class='unixtime'>{{$data.time}}</td>
+					<td>{{$data.amount}}</td>
+					<td>{{$data.seller}}</td>
+					{{if eq $data.status "normal"}}
+						<td><a class="btn btn-danger" href="#" onclick="dc_navigate('moneyBackRequest', {'order_id':'{{$data.id}}'}); return false;">Moneyback</a></td>
+					{{else}}
+						<td>{{.Lang.request_was_sent}}</td>
+					{{end}}
+				</tr>
+			{{end}}
+		</table>
+	</div>
+
+</div>
+
+{{template "signatures".}}
+<script src="static/js/unixtime.js"></script>
+
+{{end}}

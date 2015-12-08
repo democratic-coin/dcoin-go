@@ -1,0 +1,84 @@
+{{define "changeGeolocation"}}
+
+<script src="static/js/index.js"></script>
+<script>
+	function next_step()
+	{
+		$("#geo").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#latitude").val()+','+$("#longitude").val()+','+$("#country").val() );
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		}
+
+		$('#send_to_net').bind('click', function () {
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'latitude' : $('#latitude').val(),
+				'longitude' : $('#longitude').val(),
+				'country' : $('#country').val(),
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function () {
+				dc_navigate ('changeGeolocation', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			} );
+		} );
+
+		$('#show_map').bind('click', function () {
+			map_init ({{.MyGeolocation.lat}}, {{.MyGeolocation.lon}}, 'map_canvas', true, true);
+		google.maps.event.trigger(map, 'resize');
+	});
+
+	$("#main_div select").addClass( "form-control" );
+	$("#main_div input").addClass( "form-control" );
+	$("#main_div button").addClass( "btn-outline btn-primary" );
+
+	$("#main_div input[type=text]").width( 200 );
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.geolocation_title}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.geolocation_title}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	{{template "alertSuccess".}}
+	<div id="geo">
+		<p>{{.Lang.location_alert}}</p>
+		<br>
+		<strong>Country</strong><br>
+		<select id='country' class="form-control" style="width:300px">
+			<option value='0'></option>
+			{{range $k, $country := .Countries}}
+				<option value='{{$k}}' {{if eq $k $.MyCountry}} selected {{end}}>{{$country}}</option>
+			{{end}}
+		</select>
+		<br>
+		<button type="button" class="btn btn-primary" id="show_map">Show map</button><br><br>
+
+		<div id="map_canvas" style="width: 640px; height: 480px; margin-bottom:20px; display:none"></div>
+		<input id="latitude" class="input" type="text" placeholder="latitude" value="{{.MyGeolocation.lat}}"><input id="longitude" class="input" type="text" placeholder="longitude" value="{{.MyGeolocation.lon}}">
+		<br>
+		<button class="btn" onclick="next_step()">{{.Lang.next}}</button>
+	</div>
+
+	<div id="new" style="display:none">
+		<label>{{.Lang.new_geolocation}}</label>
+		<div id="map_canvas" style="width: 640px; height: 480px;"></div>
+		<input id="latitude" type="text" placeholder="latitude" class="form-control">
+		<input id="longitude"  type="text" placeholder="longitude" class="form-control">
+		<br><br>
+		<button class="btn" onclick="next_step()">{{.Lang.next}}</button>
+
+	</div>
+
+	{{template "signatures".}}
+
+	<br><br><div class="alert alert-info">{{.Lang.limits}} {{.LimitsText}}</div>
+</div>
+
+{{end}}

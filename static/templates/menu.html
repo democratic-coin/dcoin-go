@@ -1,0 +1,313 @@
+{{define "menu"}}
+<script>
+	if (typeof intervalIdArray != "undefined") {
+		for (i=0; i<intervalIdArray.length; i++)
+			clearInterval(intervalIdArray[i]);
+	}
+	$('#start_daemons').bind('click', function () {
+		$.post( 'ajax/start_daemons.php', { } ,
+				function () {
+					load_menu();
+				});
+	});
+
+	$('#stop_daemons').bind('click', function () {
+		$.post( 'ajax/stop_daemons.php', { } ,
+				function () {
+					load_menu();
+				});
+	});
+
+	var urls = ['{{.FaceUrls}}'];
+	function get_img (i) {
+		console.log('get_img');
+		if (typeof urls == 'undefined')
+			return false;
+		var image = new Image();
+		if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
+			image.src = urls[i];
+			image.onload = function(){
+				$('#img_avatar').css("background", "url('"+urls[i]+"')  50% 50%");
+				$('#img_avatar').css("background-size", "100px Auto");
+			};
+			// handle failure
+			image.onerror = function(){
+				console.log('error'+urls[i]);
+				get_img (i+1);
+			};
+		}
+		else {
+			//$('#img_avatar').attr('src', '<?php echo $tpl['no_avatar']?>');
+			$('#img_avatar').css("background", "url('{{.NoAvatar}}') 0 0");
+		}
+	}
+
+	{{if .Avatar}}
+		$("#img_avatar").css("background", "url('{{.Avatar}}') 50% 50%");
+		$("#img_avatar").css("background-size", "100px Auto");
+	{{else}}
+		get_img(0);
+	{{end}}
+
+
+</script>
+<style>
+	#settings_menu_left{display: none}
+	#lng_menu_left{display: none}
+	@media (max-width: 768px) {
+		#settings_menu_left{display: block}
+		#lng_menu_left{display: block}
+		#settings_menu{display: none}
+		body{padding-top: 50px}
+	}
+
+	.dcoin-logo { background-image: url('static/img/logo.png'); width:182px; height: 40px; background-size:182px 40px}
+	@media (max-width: 600px) {
+		.dcoin-logo { background-image: url('static/img/logo-small.png'); width:42px; height: 40px; background-size:42px 40px}
+		#progress_status_text{display: none}
+	}
+	.flag_42{display:inline-block; background-image: url('static/img/us-ru.png'); background-position: 0px 0px; width: 22px; height: 16px}
+	.flag_1{display:inline-block; background-image: url('static/img/us-ru.png'); background-position: 0px 16px; width: 22px; height: 16px}
+
+	#last_block_id a:hover {background-color: inherit}
+</style>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+	<div class="navbar-header">
+		<button style="z-index: 99999;opacity: 1;" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#home" style="z-index: 99999; opacity: 1;display: block; padding-left: 0px;  padding-top: 6px; margin-left: 15px; margin-right: 5px"><div class="dcoin-logo"></div></a>
+		<div id="progress_bar" style="float: left;">
+		</div>
+	</div>
+	<!-- /.navbar-header -->
+
+
+	<ul class="nav navbar-top-links navbar-right" id="settings_menu">
+		{{if not .MyNotice.main_status_complete}}
+			<li id="last_block_id"><a href="#blockExplorer" id="block_id" style="color:#ff0000">{{.BlockId}}</a></li>
+		{{else}}
+			<li id="last_block_id"><a href="#blockExplorer" id="block_id" style="color:#428BCA">{{.BlockId}}</a></li>
+		{{end}}
+
+		{{if .Community}}
+			{{.DaemonsStatus}}
+		{{end}}
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				<i class="fa fa-cog fa-fw" style="font-size: 20px"></i>
+			</a>
+			<ul class="dropdown-menu">
+				{{if or .PoolAdmin (not .Community)}}
+				<li><a href="#changeNodeKey">{{.Lang.change_node_key}}</a></li>
+				{{end}}
+		{{if .PoolAdmin}}
+		<li><a href="#poolAdminControl">Pool admin</a></li>
+		<li><a href="#changeHost">{{.Lang.change_host_title}}</a></li>
+		{{end}}
+		{{if eq .Restricted 0}}<li><a href="#notifications">{{.Lang.sms_and_email_notifications}}</a></li>{{end}}
+		<li><a href="#changePrimaryKey">{{.Lang.change_master_key}}</a>
+		</li>
+		<li><a href="#restoringAccess">{{.Lang.restoring_access}}</a>
+		</li>
+		{{if eq .Restricted 0}}<li><a href="#interface">{{.Lang.interface}}</a></li>{{end}}
+		{{if .PoolAdmin}}<li><a href="#nodeConfigControl">{{.Lang.config_node}}</a></li>{{end}}
+		{{if .ExchangeEnable}}<li><a href="#exchangeAdmin">Exchange admin</a></li>{{end}}
+		<li class="divider"></li>
+		<li><a href="#" onclick="logout()"><i class="fa fa-sign-out fa-lg"></i> {{.Lang.logout}} (user_id: {{.UserId}})</a>
+		</li>
+		<!--<li><a href="#myModal"  data-toggle="modal" data-backdrop="static"><i class="fa fa-sign-in fa-lg"></i> Change key</a>
+        </li>-->
+	</ul>
+	<!-- /.dropdown-messages -->
+	</li>
+
+	<!-- /.dropdown -->
+
+	<li class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			<div class="flag_{{.LangInt}}"></div>
+		</a>
+		<ul class="dropdown-menu dropdown-user">
+			<li><a href="#home/lang=1" class="lng_1">English</a>
+			</li>
+			<li><a href="#home/lang=42" class="lng_42">Русский</a>
+			</li>
+		</ul>
+	</li>
+
+	<!-- /.dropdown -->
+	</ul>
+	<!-- /.navbar-top-links -->
+
+	<div class="navbar-default navbar-static-side" role="navigation">
+		<div id="menu-collapse"class="sidebar-collapse collapse" style="height: 0px">
+			<ul class="nav" id="side-menu">
+				{{if not .Mobile}}
+				<li class="sidebar-search">
+					<div class="text-center" style="width: 100px; height: 100px; margin:auto; border-radius: 50%" id="img_avatar"></div>
+					<div style="" class="text-center"><a href="#changeAvatar"><strong>{{.Name}}</strong></a></div>
+				</li>
+				{{end}}
+
+				{{if .Admin}}
+				<li>
+					<a href="#"><i class="fa  fa-key  fa-fw"></i> Admin<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li>
+							<a href="#adminVariables">Variables</a>
+						</li>
+					</ul>
+				</li>
+				{{end}}
+
+				<li>
+					<a href="#home"><i class="fa  fa-home  fa-fw"></i> Home</a>
+				</li>
+				<li>
+					<a href="#walletsList"><i class="fa   fa-credit-card   fa-fw"></i> {{.Lang.wallets}}</a>
+				</li>
+				<li>
+					<a href="#miningMenu"><i class="fa  fa-money  fa-fw"></i> {{.Lang.mining}} {{if not .MinerId}}<i class="fa fa-arrow-left"></i>{{end}}</a>
+				</li>
+				{{if .MinerId}}
+					<li><a href="#newUser"><i class="fa  fa-smile-o  fa-fw"></i> {{.Lang.my_referrals}}</a></li>
+				{{end}}
+				<li>
+					<a href="#"><i class="fa  fa-users  fa-fw"></i> CrowdFunding<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li>
+							<a href="#cfCatalog">{{.Lang.catalog}}</a>
+						</li>
+						<li>
+							<a href="#myCfProjects">{{.Lang.my_projects}}</a>
+						</li>
+					</ul>
+				</li>
+
+
+				<li>
+					<a href="#"><i class="fa  fa-info-circle -o fa-fw"></i> {{.Lang.information}}<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<!--<li>
+							<a href="#pct">{{.Lang.pct}}</a>
+						</li>
+						<li>
+							<a href="#reduction">{{.Lang.reduction}}</a>
+						</li>-->
+						<li>
+							<a href="#statisticVoting">{{.Lang.voting}}</a>
+						</li>
+						<li>
+							<a href="#statistic">{{.Lang.statistic}}</a>
+						</li>
+						<li>
+							<a href="#blockExplorer">Block explorer</a>
+						</li>
+						<li>
+							<a href="#information">{{.Lang.information}}</a>
+						</li>
+						<li>
+							<a href="#dbInfo">{{.Lang.db_info}}</a>
+						</li>
+
+					</ul>
+				</li>
+
+
+				<li>
+					<a href="#"><i class="fa  fa-life-ring  fa-fw"></i> Help<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li>
+							<a href="{{.Lang.faq_url}}" target="_blank">{{.Lang.faq}}</a>
+						</li>
+						<li>
+							<a href="{{.Lang.wiki_url}}" target="_blank">Wiki</a>
+						</li>
+						<li>
+							<a href="mailto: admin@dcoin.club">Support</a>
+						</li>
+						<li>
+							<a href="http://dcoinforum.org" target="_blank">Forum</a>
+						</li>
+						<!--<li>
+							<a href="#" onclick="dc_navigate('bug_reporting')">{{.Lang.bug_reporting}}</a>
+						</li>-->
+						<li>
+							<a href="#abuse">{{.Lang.complaints_miners}}</a>
+						</li>
+					</ul>
+				</li>
+
+				<li id="lng_menu_left">
+					<a href="#"><i class="fa  fa-globe fa-fw"></i> Language<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a href="#home/lang=1" class="lng_1">English</a>
+						</li>
+						<li><a href="#home/lang=42" class="lng_42">Русский</a>
+						</li>
+					</ul>
+				</li>
+				<li id="settings_menu_left">
+					<a href="#"><i class="fa fa-cog fa-fw"></i> Settings<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						{{if or .PoolAdmin (not .Community)}}
+							<li><a href="#changeNodeKey">{{.Lang.change_node_key}}</a></li>
+						{{end}}
+
+				{{if .PoolAdmin}}
+					<li><a href="#poolAdminControl">Pool admin</a></li>
+					<li><a href="#changeHost">change host</a></li>
+				{{end}}
+
+				{{if eq .Restricted 0}}<li><a href="#notifications">{{.Lang.sms_and_email_notifications}}</a></li>{{end}}
+				<li><a href="#changePrimaryKey">{{.Lang.change_master_key}}</a>
+				</li>
+				<li><a href="#restoringAccess">{{.Lang.restoring_access}}</a>
+				</li>
+				{{if eq .Restricted 0}}<li><a href="#interface">{{.Lang.interface}}</a></li>{{end}}
+				{{if or .PoolAdmin (not .Community)}}
+					<li><a href="#nodeConfigControl">{{.Lang.config_node}}</a></li>
+				{{end}}
+				{{if .ExchangeEnable}}<li><a href="#exchangeAdmin">Exchange admin</a></li>{{end}}
+				<li class="divider"></li>
+				<li><a href="#" onclick="logout()"><i class="fa fa-sign-out fa-lg"></i> {{.Lang.logout}} (user_id: {{.UserId}})</a>
+				</li>
+			</ul>
+			</li>
+
+
+			<div id="main-login">
+				<a href="#myModal" data-backdrop="static" data-toggle="modal" role="button" class="btn btn-danger  btn-block "><i class="fa fa-sign-in fa-lg"></i> Login</a>
+				<div style="margin: 2px 10px; font-size: 11px">{{.Lang.login_alert}}</div>
+			</div>
+			</ul>
+			<!-- /#side-menu -->
+		</div>
+		<!-- /.sidebar-collapse -->
+	</div>
+	<!-- /.navbar-static-side -->
+</nav>
+<script>
+	$( document ).ready(function() {
+		console.log($('#key').html().length);
+		if ($('#key').html().length>150){
+			$("#main-login").html('');
+		}
+		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+
+		console.log("window="+$(window).width());
+		if($(window).width() > 730) {
+			$('#menu-collapse').removeClass('collapse');
+		}else{
+			$('#menu-collapse').addClass('collapse');
+		}
+
+	});
+</script>
+{{ template "modal". }}
+
+{{end}}

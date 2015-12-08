@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dcoin Exchange</title>
+
+  <!-- Core CSS - Include with every page -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/font-awesome.css" rel="stylesheet">
+
+  <!-- Page-Level Plugin CSS - Tables -->
+  <!--<link href="/static/css/dataTables.bootstrap.css" rel="stylesheet">-->
+
+  <link href="/static/css/bootstrap-modal.css" rel="stylesheet">
+
+  <!-- SB Admin CSS - Include with every page -->
+  <link href="/static/css/sb-admin.css" rel="stylesheet">
+
+  <script language="javascript" type="text/javascript" src="/static/js/index.js"></script>
+
+
+  <script language="JavaScript" type="text/javascript" src="/static/js/md5.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/jsbn.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/jsbn2.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/rsa.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/rsa2.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/sha1.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/sha256.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/base64.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/rsapem-1.1.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/rsasign-1.2.min.js"></script>
+  <script language="JavaScript" type="text/javascript" src="/static/js/asn1hex-1.1.min.js"></script>
+
+
+  <script src="/static/js/sha256.js"></script>
+
+  <script type="text/javascript" src="/static/js/rijndael.js"></script>
+  <script type="text/javascript" src="/static/js/mcrypt.js"></script>
+
+
+  <script src="/static/js/index.js"></script>
+
+  <script src="/static/js/js.js"></script>
+
+  <script src="/static/js/aes.js"></script>
+  <script src="/static/js/enc-base64-min.js"></script>
+
+  <script src="/static/js/crypto-js-aes.js"></script>
+  <script src="/static/js/crypto-js-mode-ecb.js"></script>
+  <script src="/static/js/crypto-js-pad-iso10126.js"></script>
+
+  <script>
+
+    function doSign(type){
+      doSign_(type);
+    }
+    function navigate (page, parameters) {
+      $.post("content?controllerName="+page, { tpl_name: page, parameters: parameters },
+              function(data) {
+                $('#page-wrapper').html( data );
+              }, "html");
+
+      get_balance();
+    }
+
+    function get_balance() {
+      $.post( 'ajax?controllerName=EGetBalance', {}, function(data) {
+        if (data.html)
+          $('#your_balance').html(data.html);
+      }, 'JSON');
+    }
+
+    function logout () {
+      $.get("ajax?controllerName=ELogout",
+              function() {
+                window.location.href = "http://{{.EHost}}";
+              });
+    }
+  </script>
+  <style>
+    #page-wrapper {min-height: 600px; {{if not .UserId}} width:100%; margin-right: auto; margin-left: auto;border-right: 1px solid #E7E7E7;{{end}}}
+
+    {{if not .UserId}}
+    @media (min-width:1200px) {
+      #page-wrapper{
+        width:1170px
+      }
+    }
+    {{end}}
+  </style>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="/static/js/html5shiv.js"></script>
+  <script src="/static/js/respond.min.js"></script>
+  <![endif]-->
+
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+
+    <div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand particular-link" href="#" style="display: block; /* or inline-block; I think IE would respect it since a link is an inline-element */
+	                   background: url(/static/img/logo-small.png) center left no-repeat;
+	                   text-align: center;
+	                   background-size: 30px 30px;
+	                   padding-left: 40px; margin-left: 15px; margin-right: 50px" onclick="dc_navigate('EMain')">{{.EHost}}</a>
+      </div>
+
+      <div class="sidebar-collapse">
+        <!-- /.navbar-header -->
+
+        <ul class="nav navbar-top-links navbar-left" style="">
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EMain')">
+              <i class="fa  fa-exchange  fa-fw"></i> {{.Lang.trade}}</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'about'})">
+              <i class="fa fa-desktop"></i> {{.Lang.about_exchange}}</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'rules'})">
+              <i class="fa fa-file-text-o"></i> {{.Lang.rules}}</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'faq'})">
+              <i class="fa fa-question-circle"></i> {{.Lang.faq}}</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'contacts'})">
+              <i class="fa  fa-envelope-o   fa-fw"></i> {{.Lang.contacts}}</a>
+            </a>
+          </li>
+
+
+        </ul>
+
+
+        <ul class="nav navbar-top-links navbar-right">
+
+
+         {{if .UserId}}
+          <!-- /.dropdown-user -->
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+              <li><a><i class="fa  fa-user  fa-fw"></i> User ID: {{.UserId}}</a></li>
+              <!--<li><a href="#" onclick="dc_navigate('my_settings')"><i class="fa fa-gear fa-fw"></i> Settings</a></li>-->
+              <li class="divider"></li>
+              <li><a href="#"  onclick="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+              </li>
+            </ul>
+            <!-- /.dropdown-user -->
+          </li>
+          {{else}}
+
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSigninKeyModal">
+              <i class="fa fa-sign-in fa-fw"></i> Key</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSigninModal">
+              <i class="fa fa-sign-in fa-fw"></i> {{.Lang.sign_in}}</a>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSignupModal" >
+              <i class="fa  fa-pencil-square-o   fa-fw"></i> {{.Lang.sign_up}}</a>
+            </a>
+          </li>
+          {{end}}
+
+
+
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              Language <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+              <li><a href="#" onclick="dc_navigate('EMain', {'lang':'1'}); load_menu();"> English</a></li>
+              <li><a href="#" onclick="dc_navigate('EMain', {'lang':'42'}); load_menu();"> Русский</a></li>
+            </ul>
+          </li>
+          <!-- /.dropdown -->
+        </ul>
+
+
+        <!-- /.navbar-top-links -->
+      </div>
+    </div>
+
+    {{if .UserId}}
+    <div class="navbar-default navbar-static-side" role="navigation">
+      <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+          <li>
+            <a href="#" onclick="dc_navigate('eMyOrders')"><i class="fa  fa-bars fa-fw"></i> {{.Lang.orders}} <!--<span class="badge pull-right">1</span>--> </a>
+          </li>
+          <li>
+            <a href="#" onclick="dc_navigate('eMyHistory')"><i class="fa fa-history fa-fw"></i> {{.Lang.history_deals}}</a>
+          </li>
+          <li>
+            <a href="#" onclick="dc_navigate('eMyFinance')"><i class="fa fa-money fa-fw"></i> {{.Lang.finance}}</a>
+          </li>
+
+        </ul>
+
+
+        <div class="panel panel-success" style="margin: 15px">
+          <div class="panel-heading">
+            <i class="fa fa-money fa-fw"></i> {{.Lang.your_balance}}
+          </div>
+          <div class="panel-body" id="your_balance">
+            {{if .MyWallets}}
+              {{range $id, $data := .MyWallets}}
+                <strong>{{index $data "amount"}}</strong> {{index $data "currency_name"}}<br>
+              {{end}}
+            {{else}}
+              <strong>0</strong>
+            {{end}}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+   {{end}}
+    <!-- /.navbar-static-side -->
+  </nav>
+
+
+  <div id="page-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div id="dc_content"></div>
+
+
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+  </div>
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Core Scripts - Include with every page -->
+<script src="/static/js/jquery-1.10.2.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.metisMenu.js"></script>
+
+<!-- Page-Level Plugin Scripts - Tables -->
+<!--<script src="/static/js/jquery.dataTables.js"></script>
+<script src="/static/js/dataTables.bootstrap.js"></script>-->
+
+<!-- Page-Level Plugin Scripts - Flot -->
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/js/excanvas.min.js"></script><![endif]-->
+<!--<script language="javascript" type="text/javascript" src="/static/js/jquery.flot.js"></script>-->
+
+<script language="javascript" type="text/javascript" src="/static/js/plugins/modal/bootstrap-modal.js"></script>
+<script language="javascript" type="text/javascript" src="/static/js/plugins/modal/bootstrap-modalmanager.js"></script>
+
+<!-- SB Admin Scripts - Include with every page -->
+<script src="/static/js/sb-admin.js"></script>
+
+<!--
+<script src="/static/js/demo/flot-demo.js"></script>
+-->
+
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+
+
+  $(document).ready(function() {
+    console.log("dc_navigate");
+    dc_navigate('eMain');
+    console.log("dc_navigate ok");
+    $('#dataTables-example').dataTable();
+  });
+
+
+  $('#showSigninKeyModal').bind('click', function () {
+    $('#SigninKeyModal').modal('show');
+  });
+
+  $('#showSigninModal').bind('click', function () {
+    $('#SigninModal').modal('show');
+  });
+
+  $('#showSignupModal').bind('click', function () {
+    $('#SignupModal').modal('show');
+  });
+
+  function sign_up(){
+    $('#SignupModal').modal('show');
+  }
+
+  function SignupSubmit() {
+    $.post( 'ajax?controllerName=ESignUp', {
+      'email': $('#signup-email').val(),
+      'password': $('#signup-password').val()
+    }, function(data) {
+      if (data.error)
+        $('#signup-alert').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+      else {
+        $('#SignupModal').modal('hide');
+        window.location.href = "http://{{.EHost}}";
+      }
+    }, 'JSON');
+  }
+
+  function SigninSubmit() {
+    $.post( 'ajax?controllerName=ELogin', {
+      'email': $('#signin-email').val(),
+      'password': $('#signin-password').val()
+    }, function(data) {
+      if (data.error)
+        $('#signin-alert').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+      else {
+        $('#SigninModal').modal('hide');
+        window.location.href = "http://{{.EHost}}";
+      }
+    }, 'JSON');
+  }
+
+  function show_text_key () {
+    $("#modal_key").css("display", "block");
+    $("#key_div").css("display", "none");
+    $("#key_selector").html('<a href="#" onclick="show_file_key()">{{.Lang.from_file}}</a>');
+    return false;
+  }
+
+  function show_file_key () {
+    $("#modal_key").css("display", "none");
+    $("#key_div").css("display", "block");
+    $("#key_selector").html('<a href="#" onclick="show_text_key()">{{.Lang.text}}</a>');
+    return false;
+  }
+
+
+  function handleFileSelect2(evt) {
+    $('#key_file_name').html(this.value);
+    var f = evt.target.files[0];
+    handleFileSelect(f);
+  }
+
+  var handleFileSelect = function(f) {
+
+    $('#key_file_name').html(f.name);
+    var reader = new FileReader();
+    if (f.type.substr(0,5) =='image') {
+      reader.onload = (function(theFile) {
+        return function(e) {
+          console.log('img2key');
+          img2key(e.target.result, 'modal_key');
+        };
+      })(f);
+      reader.readAsDataURL(f);
+    }
+    else {
+      reader.onload = (function(theFile) {
+        return function(e) {
+          console.log(e.target.result);
+          $('#modal_key').val(e.target.result);
+        };
+      })(f);
+      reader.readAsText(f);
+    }
+  };
+
+  $( document ).ready(function() {
+    if (window.FileReader === undefined) {
+      $("#modal_key").css("display", "block");
+      $("#key_div").css("display", "none");
+      $("#key_selector").css("display", "none");
+    }
+    document.getElementById('upload_hidden').addEventListener('change', handleFileSelect2, false);
+  });
+
+
+  $('#key_div').on(
+          'dragover',
+          function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+  )
+  $('#key_div').on(
+          'dragenter',
+          function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+  )
+  $('#key_div').on(
+          'drop',
+          function(e){
+            if(e.originalEvent.dataTransfer){
+              if(e.originalEvent.dataTransfer.files.length) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleFileSelect(e.originalEvent.dataTransfer.files[0]);
+              }
+            }
+          }
+  );
+
+</script>
+<!-- Modal -->
+<div style="display: none;" class="modal fade" id="SigninModal" tabindex="-1" role="dialog" aria-labelledby="SigninModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="SigninModalLabel">{{.Lang.sign_in}}</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control" placeholder="E-mail" id="signin-email" type="email" autofocus>
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="Password" id="signin-password" type="password" value="">
+            </div>
+            <!--
+            <div class="checkbox">
+                <label>
+                    <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                </label>
+            </div>-->
+            <div id="signin-alert"></div>
+            <!-- Change this to a button or input when using this as a form -->
+            <a href="#" onclick="SigninSubmit()" class="btn btn-lg btn-success btn-block">{{.Lang.sign_in}}</a>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<!--Sign in Key Modal -->
+
+<div class="modal fade" id="SigninKeyModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">{{.Lang.login_title}}</h4>
+      </div>
+      <div class="modal-body">
+
+        <div id="modal_alert"></div>
+
+        <input type="hidden" id="incorrect_key_or_password" value="{{.Lang.incorrect_key_or_password}}">
+
+        <fieldset>
+          <span id="key_selector" style="float:right"><a href="#" onclick="show_text_key()">{{.Lang.text}}</a></span><div class="clearfix"></div>
+          <input multiple type="file" name="upload" id="upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
+          <div style="width:100%;  border:2px dashed black; display: flex;  height: 100px; padding: 15px 0px 15px 0px" id="key_div">
+            <div style="margin:auto; text-align:center; line-height:22px">
+              <p style="margin-bottom:0px"  id="key_file_name" onclick="document.getElementById('upload_hidden').click();"></p>
+              <button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('upload_hidden').click();">{{.Lang.select_key}}</button>
+              <p>{{.Lang.or_drag_and_drop_key}}</p>
+            </div>
+          </div>
+          <textarea rows="3" id="modal_key" class="form-control" style="display:none"></textarea><br>
+          <label>{{.Lang.key_password}}</label>
+          <input type="password" id="modal_password" class="form-control">
+        </fieldset>
+      </div>
+      <div class="modal-footer">
+        <button id="saveKeyAndLogin" type="button" class="btn btn-success  btn-lg btn-block" data-toggle="button">{{.Lang.login}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal SIGN UP-->
+<div style="display: none;" class="modal fade" id="SignupModal" tabindex="-1" role="dialog" aria-labelledby="SignupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="SignupModalLabel">{{.Lang.sign_up}}</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control" placeholder="E-mail" id="signup-email" type="email" autofocus>
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="Password" id="signup-password" type="password" value="">
+            </div>
+            <div id="signup-alert"></div>
+            <!-- Change this to a button or input when using this as a form -->
+            <a href="#" onclick="SignupSubmit()" class="btn btn-lg btn-success btn-block">{{.Lang.sign_up}}</a>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script language="JavaScript" type="text/javascript" src="/static/js/spin.js"></script>
+
+<script>
+  (function ($) {
+    $.fn.spin = function (opts, color) {
+      var presets = {
+        "tiny": {
+          lines: 8,
+          length: 2,
+          width: 2,
+          radius: 3
+        },
+        "small": {
+          lines: 8,
+          length: 4,
+          width: 3,
+          radius: 5
+        },
+        "large": {
+          lines: 10,
+          length: 8,
+          width: 4,
+          radius: 8
+        }
+      };
+      if (Spinner) {
+        return this.each(function () {
+          var $this = $(this),
+                  data = $this.data();
+
+          if (data.spinner) {
+            data.spinner.stop();
+            delete data.spinner;
+          }
+          if (opts !== false) {
+            if (typeof opts === "string") {
+              if (opts in presets) {
+                opts = presets[opts];
+              } else {
+                opts = {};
+              }
+              if (color) {
+                opts.color = color;
+              }
+            }
+            data.spinner = new Spinner($.extend({
+              color: $this.css('color')
+            }, opts)).spin(this);
+          }
+        });
+      } else {
+        throw "Spinner class not available.";
+      }
+    };
+  })(jQuery);
+
+  //$('#wrapper').spin();
+  $('#saveKeyAndLogin').bind('click', function () {
+    console.log("saveKeyAndLogin")
+    save_key();
+    $(this).html('Wait...');
+    $(this).addClass( "disabled" );
+    setTimeout(function() {
+      doSign('login');
+      $('#saveKeyAndLogin').html('{{.Lang.login}}');
+      $('#saveKeyAndLogin').removeClass( "disabled" )
+    }, 500);
+  });
+</script>
+<div style="display: none;">
+  <div id="key">key</div>
+  <div id="password">password</div>
+  <div id="setup_password">setup_password</div>
+  <div id="save_key">save_key</div>
+  <img  id="image_key">
+  <canvas  id="canvas_key"></canvas>
+  <input type="hidden" id="exchangeTemplate" value="1">
+  <input type="hidden" id="EHost" value="http://{{.EHost}}">
+</div>
+</body>
+
+</html>

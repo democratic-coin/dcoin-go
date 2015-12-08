@@ -1,0 +1,59 @@
+{{define "adminVariables"}}
+<script>
+
+	var json_data = '';
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'time' : '{{.TimeNow}}',
+			'user_id' : '{{.UserId}}',
+			'variables' : json_data,
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function (data) {
+			dc_navigate ('adminVariables', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		} );
+
+	} );
+
+	$('#save').bind('click', function () {
+
+		var data = '';
+		$("input[type=text]", $("#main")).each(function() {
+			var name = $(this).attr('name');
+			var value = $(this).val();
+			if (name=='sleep'){
+				value = value.replace(/"/gi, '\\"');
+			}
+			data=data+'"'+name+'":"'+value+'",';
+		} );
+		json_data = '{'+data.substr(0, data.length-1)+'}';
+
+		$("#data").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+json_data );
+		doSign();
+	} );
+
+</script>
+
+<h1 class="page-header">adminVariables</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+	<table>
+		{{range $name, $value := .Variables}}
+			<tr><td>{{$name}}</td><td><input name='{{$name}}' type='text' value='{{$value}}' style='width: 600px'></td></tr>
+		{{end}}
+	</table>
+	<button class="btn" id="save">save</button>
+</div>
+
+
+{{template "signatures".}}
+
+{{end}}

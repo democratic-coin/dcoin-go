@@ -1,0 +1,89 @@
+{{define "changeAvatar"}}
+<script>
+
+	{{if ne .Avatar "0"}}
+		$("#img_avatar").css("background", "url({{if not .Avatar}}static/img/noavatar.png{{else}}{{.Avatar}}{{end}}) 50% 50%");
+		$("#img_avatar").css("background-size", "100px Auto");
+	{{else}}
+		get_img(0);
+	{{end}}
+
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#name").val()+','+$("#avatar").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			if (/^[a-z0-9\-_\.\/\:]{1,47}(png|jpg)$/i.test($('#avatar').val())) {
+				$.post( 'ajax?controllerName=saveQueue', {
+							'type' : '{{.TxType}}',
+							'time' : '{{.TimeNow}}',
+							'user_id' : '{{.UserId}}',
+							'name' : $('#name').val(),
+							'avatar' : $('#avatar').val(),
+							'signature1': $('#signature1').val(),
+							'signature2': $('#signature2').val(),
+							'signature3': $('#signature3').val()
+						}, function (data) {
+							dc_navigate ('change_avatar', {'alert': '{{.Lang.sent_to_the_net}}'} );
+						}
+				);
+			}
+			else {
+				console.log('error');
+				$("#errors").html('<div class="alert alert-danger alert-dismissable" id="errors">Incorrect image url</div>');
+			}
+		});
+
+		check_key_and_show_modal();
+
+</script>
+
+<h1 class="page-header">{{.Lang.change_avatar_title}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main_data">
+
+	<div id="errors"></div>
+
+	<form class="form-horizontal">
+		<fieldset>
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="category_id">{{.Lang.name}}</label>
+				<div class="col-md-4">
+					<input maxlength="30"  class="form-control" type="text" id="name" value="{{.Name}}">
+					<span class="help-block">{{.Lang.only_english_letters}}</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="avatar">{{.Lang.avatar}}</label>
+				<div class="col-md-4">
+					<input maxlength="50" class="form-control" type="text" id="avatar" value="{{.Avatar}}">
+					<span class="help-block">{{.Lang.avatar_url_30}}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="singlebutton"></label>
+				<div class="col-md-4">
+					<button type="button" class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+
+	{{noescape .LastTxFormatted}}
+
+</div>
+
+{{template "signatures".}}
+
+<script src="static/js/unixtime.js"></script>
+
+{{end}}
