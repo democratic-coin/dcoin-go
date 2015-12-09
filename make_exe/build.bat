@@ -1,0 +1,1 @@
+go get -u github.com/c-darwin/dcoin-go && go install -ldflags "-H windowsgui" github.com/c-darwin/dcoin-go

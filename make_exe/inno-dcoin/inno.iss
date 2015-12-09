@@ -5,7 +5,7 @@
 #define MyAppVersion "1.0.1a1"
 #define MyAppPublisher "Dcoin"
 #define MyAppURL "http://dcoin.club/"
-#define MyAppExeName "start.bat"
+#define MyAppExeName "dcoin.exe"
 #define Uninstname "Uninstall"
 
 [Setup]

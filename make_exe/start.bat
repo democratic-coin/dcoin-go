@@ -1,1 +1,0 @@
-RunHiddenConsole.exe dcoin.exe
