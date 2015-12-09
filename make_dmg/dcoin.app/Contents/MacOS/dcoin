@@ -1,0 +1,3 @@
+#!/bin/bash
+./Applications/dcoin.app/Contents/MacOs/dcoinbin &
+quit
