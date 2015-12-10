@@ -118,39 +118,41 @@ BEGIN:
 			}
 			var vote int64
 			if len(intersectMyMiners) > 0 {
+				var downloadError bool
+				var faceHash, profileHash string
+				var faceFile, profileFile []byte
 				// копируем фото  к себе
 				profilePath := *utils.Dir + "/public/profile_" + user_id + ".jpg"
 				_, err = utils.DownloadToFile(host+"/public/"+user_id+"_user_profile.jpg", profilePath, 60, DaemonCh, AnswerDaemonCh, GoroutineName)
 				if err != nil {
-					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
-					continue BEGIN
+					log.Error("%s", utils.ErrInfo(err))
+					downloadError = true
 				}
 				facePath := *utils.Dir + "/public/face_" + user_id + ".jpg"
 				_, err = utils.DownloadToFile(host+"/public/"+user_id+"_user_face.jpg", facePath, 60, DaemonCh, AnswerDaemonCh, GoroutineName)
 				if err != nil {
-					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
-					continue BEGIN
+					log.Error("%s", utils.ErrInfo(err))
+					downloadError = true
 				}
-				// хэши скопированных фото
-				profileFile, err := ioutil.ReadFile(profilePath)
-				if err != nil {
-					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
-					continue BEGIN
+				if !downloadError {
+					// хэши скопированных фото
+					profileFile, err = ioutil.ReadFile(profilePath)
+					if err != nil {
+						rows.Close()
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+						continue BEGIN
+					}
+					profileHash = string(utils.DSha256(profileFile))
+					log.Info("%v", "profileHash", profileHash)
+					faceFile, err = ioutil.ReadFile(facePath)
+					if err != nil {
+						rows.Close()
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+						continue BEGIN
+					}
+					faceHash = string(utils.DSha256(faceFile))
+					log.Info("%v", "faceHash", faceHash)
 				}
-				profileHash := string(utils.DSha256(profileFile))
-				log.Info("%v", "profileHash", profileHash)
-				faceFile, err := ioutil.ReadFile(facePath)
-				if err != nil {
-					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
-					continue BEGIN
-				}
-				faceHash := string(utils.DSha256(faceFile))
-				log.Info("%v", "faceHash", faceHash)
-
 				// проверяем хэш. Если сходится, то голосуем за, если нет - против и размер не должен быть более 200 Kb.
 				if profileHash == row_profile_hash && faceHash == row_face_hash && len(profileFile) < 204800 && len(faceFile) < 204800 {
 					vote = 1
