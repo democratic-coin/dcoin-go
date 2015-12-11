@@ -118,6 +118,7 @@ $('#saveKeyAndLogin').bind('click', function () {
 								  {{if not .Mobile}}<p>{{.Lang.or_drag_and_drop_key}}</p>{{end}}
 								</div>
 							</div>
+						<textarea rows="3" id="modal_key" class="form-control" style="display:none"></textarea><br>
 						<label>{{.Lang.key_password}}</label>
 						<input type="password" id="modal_password" class="form-control">
 						{{if .SetupPassword}}

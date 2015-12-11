@@ -143,8 +143,6 @@ function save_key () {
     console.log("$('#wrapper').spin();");
     $('#modal_alert').html( "" );
     $('#key').text( $("#modal_key").val() );
-    console.log("modal_key", $("#modal_key").val());
-    console.log($('#key').text());
     $('#password').text( $("#modal_password").val() );
     $('#setup_password').text( $("#modal_setup_password").val() );
     if ($("#modal_save_key").is(':checked')) {

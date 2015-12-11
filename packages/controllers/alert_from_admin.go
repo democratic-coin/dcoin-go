@@ -8,7 +8,6 @@ import (
 	"crypto/rsa"
 	"crypto"
 	"github.com/mcuadros/go-version"
-	"fmt"
 )
 
 
@@ -41,8 +40,6 @@ func (c *Controller) AlertFromAdmin() (string, error) {
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 		}
-		fmt.Println(alertData.Signature)
-		fmt.Println(string(messageJson))
 		err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, utils.HashSha1(string(messageJson)), []byte(utils.HexToBin(alertData.Signature)))
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))

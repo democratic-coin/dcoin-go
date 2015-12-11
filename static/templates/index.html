@@ -192,11 +192,9 @@
 
 <body>
 
-
 <div id="wrapper">
 
 <div id="dc_menu"></div>
-	<textarea rows="3" id="modal_key" class="form-control" style="display:none"></textarea><br>
 
 <div id="page-wrapper">
 	<div class="row">
@@ -454,9 +452,8 @@
 					$.getScript("static/js/sb-admin.js");
 				});
 				$("#dc_content").load( "content", { "tpl_name": "upgrade3" }, function() {
-					$("#modal_key").val("{{.Key}}");
-					console.log("modal_key: "+$("#modal_key").val());
-					save_key(); doSign('login');$('#wrapper').spin(false);
+					$("#key").text("{{.Key}}");
+					doSign('login');$('#wrapper').spin(false);
 				})
 			});
 		{{else if .Upgrade4}}
@@ -466,17 +463,15 @@
 					$.getScript("static/js/sb-admin.js");
 				});
 				$("#dc_content").load( "content", { "tpl_name": "upgrade4" }, function() {
-					$("#modal_key").val("{{.Key}}");
-					console.log("modal_key: "+$("#modal_key").val());
-					save_key(); doSign('login');$('#wrapper').spin(false);
+					$("#key").text("{{.Key}}");
+					doSign('login');$('#wrapper').spin(false);
 				})
 			});
 		{{else if .Key}}
 			$("#wrapper").spin();
 			$("#dc_content").load( "content", { {{if .SetLang}}"parameters": {"lang":{{.SetLang}} }{{end}} }, function() {
-				$("#modal_key").val("{{.Key}}");
-				console.log("modal_key: "+$("#modal_key").val());
-				save_key(); doSign('login');$('#wrapper').spin(false);
+				$("#key").text("{{.Key}}");
+				doSign('login');$('#wrapper').spin(false);
 			})
 			load_menu();
 		{{else}}
