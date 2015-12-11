@@ -196,6 +196,7 @@
 <div id="wrapper">
 
 <div id="dc_menu"></div>
+	<textarea rows="3" id="modal_key" class="form-control" style="display:none"></textarea><br>
 
 <div id="page-wrapper">
 	<div class="row">
@@ -570,6 +571,14 @@
 	}
 
 	window.addEventListener("click", dcNav);
+	/*
+	document.addEventListener("mousedown", function(e) {
+		if(e.which === 1){
+			dcNav(e)
+			console.log(e); // you can inspect the click event
+			console.log(e.target.hash); // you can inspect the click event
+		}
+	});*/
 
 	window.addEventListener("hashchange", dcNavHash);
 
