@@ -191,7 +191,7 @@ func (c *Controller) MiningMenu() (string, error) {
 	lastTxFormatted := ""
 	tplName := ""
 	tplTitle := ""
-	log.Debug("result:", result)
+	log.Debug(">result:", result)
 	var nodePrivateKey string
 	if result == "null" {
 		tplName = "upgrade_0"
