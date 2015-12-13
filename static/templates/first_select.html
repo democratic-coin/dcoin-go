@@ -16,16 +16,14 @@
 
 	<label for="f1"><input type="radio" id="f1" name="first_select" value="anonim" style=" margin-right: 10px;display:inline-block;   vertical-align: middle;"><img src="static/img/anonim.png" width="150" style="display:inline-block;   vertical-align: middle;"></label>
 	<div style="margin-left: 10px;	display:inline-block;   vertical-align: middle; margin-bottom: 20px">
-		<strong>Анонимный</strong><br>
-		- Монеты можно купить/продать на бирже</div>
-
+		<strong>{{.Lang.anonymous}}</strong><br>
+		{{coins_exchange}}</div>
 	<div class="clearfix"></div>
 
 	<label for="f2"><input type="radio" id="f2" name="first_select" value="pers" style=" margin-right: 10px;display:inline-block;   vertical-align: middle;"><img src="static/img/pers.jpg" width="150" style="display:inline-block;   vertical-align: middle;"></label>
 	<div style="margin-left: 10px;	display:inline-block;   vertical-align: middle;">
-		<strong>Видео идентификация</strong><br>
-		- Монеты можно создавать из ничего<br>
-		- P2P покупка/продажа в 67 платежных системах
+		<strong>{{.Lang.video_identification}}</strong><br>
+		{{.Lang.video_identification_text}}
 	</div>
 
 	<div class="clearfix"></div>

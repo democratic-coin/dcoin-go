@@ -64,8 +64,12 @@ function user_webcam_navigate (page) {
         }
 }
 
-function load_menu() {
-    $( "#dc_menu" ).load( "ajax?controllerName=menu", { }, function() {
+function load_menu(lang) {
+    parametersJson = "";
+    if (typeof lang!='undefined') {
+        parametersJson: '{"lang":"1"}'
+    }
+    $( "#dc_menu" ).load( "ajax?controllerName=menu", { parameters: parametersJson }, function() {
        // $( "#dc_content" ).load( "content", { }, function() {
             $.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
                 $.getScript("static/js/sb-admin.js");

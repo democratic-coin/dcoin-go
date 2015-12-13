@@ -72,7 +72,10 @@ BEGIN:
 		// получим id майнеров, которые на нашем уровне
 		nodesIds := utils.GetOurLevelNodes(level, levelsRange)
 		if len(nodesIds) == 0 {
-			if d.dPrintSleep("len(nodesIds) == 0", d.sleepTime) {	break BEGIN }
+			log.Debug("len(nodesIds) == 0")
+			if d.dSleep(d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Debug("nodesIds: %v", nodesIds)

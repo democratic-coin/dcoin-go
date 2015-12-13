@@ -76,7 +76,10 @@ BEGIN:
 		log.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
 
 		if myMinerId == 0 {
-			if d.dPrintSleep(utils.ErrInfo(errors.New("myMinerId == 0 ")), d.sleepTime) {	break BEGIN }
+			log.Debug("myMinerId == 0")
+			if d.dSleep(d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 

@@ -78,7 +78,6 @@
 				<td class='unixtime'>{$data.time}}</td>
 				<td>{{$data.amount}}</td>
 				<td>{{$data.seller}}</td>
-				// возможно покупатель запросил манибек
 				{{if eq $data.status "refund"}}
 					{{if eq $data.comment_status "decrypted"}}
 						<td><div style="width: 100px; overflow: auto">{{$data.comment}}</div>

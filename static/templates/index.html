@@ -473,7 +473,7 @@
 				$("#key").text("{{.Key}}");
 				doSign('login');$('#wrapper').spin(false);
 			})
-			load_menu();
+			load_menu({{if .SetLang}}{{.SetLang}}{{end}});
 		{{else}}
 			$("#wrapper").spin();
 			$("#dc_content").load( "content", function() {$("#wrapper").spin(false);});
@@ -506,7 +506,11 @@
 
 		//console.log('dcNav start');
 
-		//console.log(e.target);
+		console.log("e", e);
+		console.log("e.buttons", e.buttons);
+		if (e.buttons==3 || e.buttons==2 || e.buttons==4) {
+			return
+		}
 		//var str = location.hash;
 		if (typeof e.target.hash=='undefined') {
 			window.addEventListener("hashchange", dcNavHash);
@@ -558,7 +562,7 @@
 			}*/
 
 			if (param_obj && typeof param_obj['lang']!='undefined') {
-				load_menu();
+				load_menu(param_obj['lang']);
 			}
 		}
 
@@ -611,5 +615,34 @@
 </div>
 
 <input type="hidden" id="mobileos" value="{{if .Mobile}}1{{else}}0{{end}}">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter34165395 = new Ya.Metrika({
+					id:34165395,
+					clickmap:true,
+					trackLinks:true,
+					accurateTrackBounce:true,
+					webvisor:true,
+					trackHash:true
+				});
+			} catch(e) { }
+		});
 
+		var n = d.getElementsByTagName("script")[0],
+				s = d.createElement("script"),
+				f = function () { n.parentNode.insertBefore(s, n); };
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+		if (w.opera == "[object Opera]") {
+			d.addEventListener("DOMContentLoaded", f, false);
+		} else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/34165395" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </body></html>

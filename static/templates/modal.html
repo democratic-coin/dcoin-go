@@ -150,9 +150,7 @@ $('#saveKeyAndLogin').bind('click', function () {
 				<h4 class="modal-title">{{.Lang.signup_title}}</h4>
 			</div>
 			<div style="margin: 15px" id="no_available_keys">
-				<p>Для регистрации в Dcoin нужен ключ, который ранее был запечатан в блокчейн.</p>
-				<p>К сожалению, все ключи, находящиеся в пабике заняты.</p>
-				<p>Вы можете попросить ключ на <a href="http://dcoinforum.org">форуме</a>.</p>
+				{{.Lang.need_key}}
 			</div>
 			<div style="margin: 15px" id="sign_up_in_pool">
 				<div id="available_key_alert"></div>

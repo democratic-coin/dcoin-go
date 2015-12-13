@@ -214,13 +214,13 @@
 
 		<div class="panel panel-success">
 			<div class="panel-heading">
-				Email уведомления
+				{{.Lang.email_notices}}
 			</div>
 			<div class="panel-body">
 				<style>
 					.simpleMailSpan{min-width: 80px; float: left; line-height: 33px;}
 				</style>
-				<p>Пожалуйста, зарегиструйте новый ящик в одном из сервисов: <a href="http://gmail.com" target="_blank">gmail.com</a>, <a href="http://yahoo.com" target="_blank">yahoo.com</a>, <a href="http://yandex.ru" target="_blank">yandex.ru</a>, <a href="http://mail.ru" target="_blank">mail.ru</a> и укажите данные в форме ниже. Это нужно т.к. у Dcoin нет собственного SMTP-сервера для рассылки уведомлений, поэтому письма будут приходить с указанного ниже Email на Ваш Email.</p>
+				<p>{{.Lang.please_register_a_new_mailbox}} <a href="http://gmail.com" target="_blank">gmail.com</a>, <a href="http://yahoo.com" target="_blank">yahoo.com</a>, <a href="http://yandex.ru" target="_blank">yandex.ru</a>, <a href="http://mail.ru" target="_blank">mail.ru</a> {{.Lang.data_form_no_smtp}}</p>
 				<!--<div class="form-inline" style="margin-bottom: 5px">
 					<span class="simpleMailSpan">Сервер</span>
 					<div class="form-group">
@@ -246,7 +246,7 @@
 					</div>
 				</div>
 				<div class="form-inline">
-					<span class="simpleMailSpan">Ваш Email</span>
+					<span class="simpleMailSpan">{{.Lang.your_email}}</span>
 					<div class="form-group">
 						<input type="text" id="simple_email" class="input-xlarge"  style="width: 170px" value="{{.Data.email}}">
 					</div>
@@ -260,10 +260,10 @@
 	<div class="clearfix"></div>
 	<div class="panel panel-success">
 		<div class="panel-heading">
-			Мобильные уведомления
+			{{.Lang.mobile_notices}}
 		</div>
 		<div class="panel-body">
-			{{if not .Mobile}}Мобильные уведомления доступны только в <a href="http://dcoin.club/ru/#start">IOS или Android версии Dcoin</a>{{else}}<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>{{end}}
+			{{if not .Mobile}}{{.Lang.mobile_notices_os}}{{else}}<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>{{end}}
 		</div>
 
 	</div>

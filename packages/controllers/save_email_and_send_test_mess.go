@@ -10,7 +10,7 @@ import (
 
 func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 
-	if !c.NodeAdmin || c.SessRestricted != 0 {
+	if c.SessRestricted != 0 {
 		return "", utils.ErrInfo(errors.New("Permission denied"))
 	}
 

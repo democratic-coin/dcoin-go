@@ -84,7 +84,7 @@ allTransactions, err := c.GetAll("SELECT hex(hash) as hex_hash, verified, used, 
 	}
 
 	// testblock
-	testblock, err := c.GetAll("SELECT hex(header_hash) as header_hash_hex, hex(mrkl_root) as mrkl_root_hex, * FROM testblock", 100);
+	testblock, err := c.GetAll("SELECT hex(header_hash) as header_hash_hex, hex(mrkl_root) as mrkl_root_hex, block_id, time, level, user_id, status, uniq, sent FROM testblock", 100);
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
