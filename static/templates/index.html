@@ -569,15 +569,16 @@
 		console.log('dcNav end');
 	}
 
-	window.addEventListener("click", dcNav);
-	/*
+	//window.addEventListener("click", dcNav);
+
 	document.addEventListener("mousedown", function(e) {
+		e.preventDefault();
 		if(e.which === 1){
-			dcNav(e)
-			console.log(e); // you can inspect the click event
-			console.log(e.target.hash); // you can inspect the click event
+			dcNav(e);
+			console.log("mousedown", e);
+			console.log(e.target.hash);
 		}
-	});*/
+	});
 
 	window.addEventListener("hashchange", dcNavHash);
 
