@@ -569,16 +569,117 @@
 		console.log('dcNav end');
 	}
 
-	//window.addEventListener("click", dcNav);
+	void function whichClickClosure( $ ){
+		var events     = {
+					1 : 'leftclick',
+					2 : 'middleclick',
+					3 : 'rightclick'
+				},
+		// List of interruption events for symbolic linking between custom and native events
+				interrupts = [
+					'preventDefault',
+					'stopPropagation',
+					'stopImmediatePropagation'
+				],
+		// A dummy empty event, used in custom interruption
+				emptyEvent = $.Event();
 
-	document.addEventListener("mousedown", function(e) {
+		function makeInterrupts( customEvent, ensuingEvent ){
+			var output = {};
+
+			$.each( interrupts, function makeCustomInterrupt( index, method ){
+				output[ method ] = function customInterrupt(){
+					emptyEvent[ method ].call( this );
+
+					$( customEvent.target ).one( ensuingEvent, function defferedInterrupt( ensuingEvent ){
+						ensuingEvent[ method ]();
+					} );
+				};
+			} );
+
+			return output;
+		}
+
+		// We need to capture all mousedowns
+		$( document ).on( 'mousedown', function mousedownFilter( mousedown ){
+			// Determine which event we're listening for
+			var eventType = events[ mousedown.which ];
+
+			// Discard anything we can't map
+			if( !eventType ){
+				return;
+			}
+
+			$( document ).one( 'mouseup', function mouseupFilter( mouseup ){
+				// The custom click event we'll fire
+				var eventObject  = {},
+				// The ensuing native event the event symbolizes
+						ensuingEvent = '';
+
+				// Only capture events on the same element
+				if( mousedown.target !== mouseup.target ){
+					return;
+				}
+
+				// Middleclicks only trigger on links
+				if( eventType === 'middleclick' && $( mouseup.target ).is( 'a' ) ){
+					return;
+				}
+
+				if( eventType === 'middleclick' || eventType === 'leftclick' ){
+					ensuingEvent = 'click';
+				}
+
+				// Rightclicks also fire off contextmenu
+				if( eventType === 'rightclick' ){
+					ensuingEvent = 'contextmenu';
+				}
+
+				// Extend the eventObject
+				$.extend(
+						// Including all the deeper stuff
+						true,
+						// ...
+						eventObject,
+						// Take all the properties of mouseup...
+						mouseup,
+						// With our type and timestamp...
+						$.Event( eventType )
+				);
+
+				// Add custom interrupts
+				$.extend(
+						true,
+						eventObject,
+						makeInterrupts( eventObject, ensuingEvent )
+				);
+
+				$( mouseup.target )
+					// Fire this event on the target
+						.trigger( eventObject )
+					// Also fire an 'anyclick' event (with all the same internals) for convenience
+						.trigger( $.extend( eventObject, { type : 'anyclick' } ) );
+			} );
+		} );
+	}( jQuery );
+
+	//window.addEventListener("click", dcNav);
+	$( document ).on( 'leftclick', function( e ){
+		dcNav(e);
+	} );
+	/*
+	var mouse_input = function (evt) {
+		evt.preventDefault();
+	}
+	document.addEventListener('mousedown', mouse_input, false);
+	/*document.addEventListener("mousedown", function(e) {
 		e.preventDefault();
-		if(e.which === 1){
+		console.log("mousedown", e);
+		if(e.which === 1 && (e.target=="A" || e.target=="a")) {
 			dcNav(e);
-			console.log("mousedown", e);
 			console.log(e.target.hash);
 		}
-	});
+	});*/
 
 	window.addEventListener("hashchange", dcNavHash);
 
