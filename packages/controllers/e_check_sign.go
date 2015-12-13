@@ -55,6 +55,9 @@ func (c *Controller) ECheckSign() (string, error) {
 		if err != nil {
 			return "{\"result\":0}", err
 		}
+		if len(publicKey_) == 0 {
+			return "{\"result\":0}", utils.ErrInfo("len(publicKey_) == 0")
+		}
 	} else {
 		userId_, err := c.GetUserIdByPublicKey(publicKey)
 		userId = utils.StrToInt64(userId_)
@@ -62,6 +65,9 @@ func (c *Controller) ECheckSign() (string, error) {
 		log.Debug("userId %d", userId)
 		if err != nil {
 			return "{\"result\":0}", err
+		}
+		if userId == 0 {
+			return "{\"result\":0}", utils.ErrInfo("userId == 0")
 		}
 	}
 
