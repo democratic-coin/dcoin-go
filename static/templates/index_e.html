@@ -614,7 +614,7 @@
   <input type="hidden" id="exchangeTemplate" value="1">
   <input type="hidden" id="EHost" value="http://{{.EHost}}">
 </div>
-{{if .AnalyticsDisabled ne "1"}}
+{{if ne .AnalyticsDisabled "1"}}
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
   (function (d, w, c) {
