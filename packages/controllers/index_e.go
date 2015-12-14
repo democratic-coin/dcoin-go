@@ -16,6 +16,7 @@ type indexE struct {
 	Nav       template.JS
 	UserId    int64
 	EHost string
+	AnalyticsDisabled string
 }
 
 func EStaticFile(w http.ResponseWriter, r *http.Request) {
@@ -78,6 +79,11 @@ func IndexE(w http.ResponseWriter, r *http.Request) {
 				eHost = match[1]+"/"+c.EConfig["catalog"]+"/"
 			}
 		}
+		analyticsDisabled, err := utils.DB.Single(`SELECT analytics_disabled FROM config`).String()
+		if err != nil {
+			log.Error("%v", err)
+		}
+
 		data, err := static.Asset("static/templates/index_e.html")
 		if err != nil {
 			w.Write([]byte(utils.ErrInfo(err).Error()))
@@ -92,7 +98,7 @@ func IndexE(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		b := new(bytes.Buffer)
-		err = t.Execute(b, &indexE{MyWallets: myWallets, Lang: c.Lang, UserId: c.SessUserId, EHost: eHost})
+		err = t.Execute(b, &indexE{MyWallets: myWallets, Lang: c.Lang, UserId: c.SessUserId, EHost: eHost, AnalyticsDisabled: analyticsDisabled})
 		if err != nil {
 			log.Error("%v", err)
 			w.Write([]byte(utils.ErrInfo(err).Error()))

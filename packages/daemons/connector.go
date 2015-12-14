@@ -63,6 +63,7 @@ func (d *daemon) chatConnector() {
 		if host == myTcpHost || utils.InSliceString(host, existsTcpHost) {
 			continue
 		}
+
 		go func(host string, userId int64) {
 
 			log.Debug("host: %v", host)

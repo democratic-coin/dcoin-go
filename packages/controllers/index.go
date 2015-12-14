@@ -23,6 +23,7 @@ type index struct {
 	Mobile      bool
 	ShowIOSMenu bool
 	ChatEnabled string
+	AnalyticsDisabled string
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +53,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	var key, myPrefix, status string
 	var communityUsers []int64
-	var chatEnabled string
+	var chatEnabled, analyticsDisabled string
 	if utils.DB != nil && utils.DB.DB != nil {
 		communityUsers, err = utils.DB.GetCommunityUsers()
 		if err != nil {
@@ -74,6 +75,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		chatEnabled, err = utils.DB.Single(`SELECT chat_enabled FROM config`).String()
+		if err != nil {
+			log.Error("%v", err)
+		}
+		analyticsDisabled, err = utils.DB.Single(`SELECT analytics_disabled FROM config`).String()
 		if err != nil {
 			log.Error("%v", err)
 		}
@@ -178,6 +183,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		IOS:     ios,
 		Android: android,
 		ChatEnabled: chatEnabled,
+		AnalyticsDisabled: analyticsDisabled,
 		Mobile:  mobile})
 	if err != nil {
 		log.Error("%v", err)

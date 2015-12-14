@@ -217,8 +217,6 @@ func ChatOutput(newTx chan bool) {
 		<-newTx
 		fmt.Println("ChatOutput newTx")
 
-		//log.Debug("ChatPoolConn %v", ChatPoolConn)
-
 		// смотрим, есть ли в табле неотправленные тр-ии
 		rows, err := DB.Query("SELECT hash, lang, room, receiver, sender, status, message, enc_message, sign_time, signature FROM chat WHERE sent = 0 ORDER BY id ASC")
 		if err != nil {

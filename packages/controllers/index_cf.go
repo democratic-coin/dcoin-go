@@ -14,6 +14,7 @@ type indexCf struct {
 	Lang   string
 	Nav    template.JS
 	CfLang map[string]string
+	AnalyticsDisabled string
 }
 
 func IndexCf(w http.ResponseWriter, r *http.Request) {
@@ -85,6 +86,11 @@ func IndexCf(w http.ResponseWriter, r *http.Request) {
 
 		lang := GetLang(w, r, c.Parameters)
 
+		analyticsDisabled, err := utils.DB.Single(`SELECT analytics_disabled FROM config`).String()
+		if err != nil {
+			log.Error("%v", err)
+		}
+
 		data, err := static.Asset("static/templates/index_cf.html")
 		t := template.New("template")
 		t, err = t.Parse(string(data))
@@ -92,7 +98,7 @@ func IndexCf(w http.ResponseWriter, r *http.Request) {
 			log.Error("%v", err)
 		}
 		b := new(bytes.Buffer)
-		t.Execute(b, &indexCf{CfUrl: cfUrl, Lang: utils.IntToStr(lang), Nav: template.JS(nav), CfLang: cfLang})
+		t.Execute(b, &indexCf{CfUrl: cfUrl, Lang: utils.IntToStr(lang), Nav: template.JS(nav), CfLang: cfLang, AnalyticsDisabled: analyticsDisabled})
 		w.Write(b.Bytes())
 	}
 }
