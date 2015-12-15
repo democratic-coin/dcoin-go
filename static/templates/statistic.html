@@ -92,10 +92,8 @@
 				<span class="help-block">{{.Lang.user_info_text}}</span>
 			</div>
 		</div>
-
 	</fieldset>
 </div>
-
 
 
 <h3>{{.Lang.general}}</h3>
@@ -130,8 +128,8 @@
 		<tr>
 			<td>{{$data.id}}</td>
 			<td>{{$data.time}}</td>
-			<td><a href='#' onclick='show_profile({{$data.from_user_id}});return false'>{{$data.from_user_id}}</a></td>
-			<td><a href='#' onclick='show_profile({{$data.to_user_id}});return false'>{{$data.to_user_id}}</a></td>
+			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
+			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}}</td>
 			<td>{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
 			<td>{{$data.amount}}</td>
 			{{if ne $data.del_block_id "0"}}
@@ -139,11 +137,22 @@
 			{{else}}
 				<td>{{$data.status}}</td>
 			{{end}}
-			</tr>
+		</tr>
 		{{end}}
 	{{end}}
 	</tbody>
 	</table>
+
+<script>
+	{{range $userId, $hosts := .RefPhotos}}
+	var hosts = []
+	{{range $k, $host := $hosts}}
+	hosts.push({{$host}})
+	{{end}}
+	get_img_refs (0, {{$userId}}, hosts)
+	{{end}}
+</script>
+
 	{{.Lang.uid_2_7}}
 
 <h3>{{.Lang.pct}}</h3>

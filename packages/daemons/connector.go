@@ -75,7 +75,7 @@ func (d *daemon) chatConnector() {
 			if len(match) != 0 {
 
 				log.Debug("myUserIdForChat %v", myUserIdForChat)
-				log.Debug("chat host: %v", match[1]+consts.CHAT_PORT)
+				log.Debug("chat host: %v", match[1]+":"+consts.CHAT_PORT)
 				chatHost := match[1]+":"+consts.CHAT_PORT
 				//chatHost := "192.168.150.30:8087"
 
@@ -104,6 +104,7 @@ func (d *daemon) chatConnector() {
 							return
 						}
 						fmt.Println("connector ChatInput", conn.RemoteAddr(), utils.Time())
+						log.Debug("connector ChatInput %s %v", conn.RemoteAddr(), utils.Time())
 						utils.ChatMutex.Lock()
 						utils.ChatInConnections[userId] = 1
 						utils.ChatMutex.Unlock()
@@ -131,6 +132,7 @@ func (d *daemon) chatConnector() {
 						}
 
 						fmt.Println("connector ADD", userId, conn2.RemoteAddr(), utils.Time())
+						log.Debug("connector ADD %v %s %v", userId, conn2.RemoteAddr(), utils.Time())
 						connChan := make(chan *utils.ChatData, 100)
 						utils.ChatMutex.Lock()
 						utils.ChatOutConnections[userId] = &utils.ChatOutConnectionsType{MessIds: []int64{}, ConnectionChan: connChan}
@@ -192,7 +194,7 @@ func Connector() {
 				utils.Sleep(1)
 				continue
 			}
-			if len(utils.ChatOutConnections) < 1 || len(utils.ChatInConnections) < 1 {
+			if len(utils.ChatOutConnections) < 5 || len(utils.ChatInConnections) < 5 {
 				go d.chatConnector()
 			}
 			utils.Sleep(30)

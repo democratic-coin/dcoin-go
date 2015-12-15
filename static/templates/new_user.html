@@ -46,44 +46,6 @@
 			);
 		} );
 
-		function get_img_refs (i, user_id, urls) {
-			if (typeof urls == 'undefined' )
-				return 0;
-			var image = new Image();
-			if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
-				console.log('TRY '+urls[i]+"/public/"+user_id+"_user_face.jpg"+"\ni="+i);
-				image.src = urls[i]+"/public/"+user_id+"_user_face.jpg";
-				image.onload = function(){
-					console.log('OK '+urls[i]);
-					image=null;
-					$('.img_'+user_id).css("background", 'url('+urls[i]+'/public/'+user_id+'_user_face.jpg)  50% 50%');
-					$('.img_'+user_id).css("background-size", "60px Auto");
-				};
-				// handle failure
-				image.onerror = function(){
-					image=null;
-					console.log('error '+urls[i]);
-					var bg = $('.img_'+user_id).css("background-image");
-					if (typeof bg == 'undefined' || bg.length<10)
-						get_img_refs (i+1, user_id, urls);
-				};
-				setTimeout
-				(
-						function()
-						{
-							if ( image!=null && (!image.complete || !image.naturalWidth) )
-							{
-								var bg = $('.img_'+user_id).css("background-image");
-								image = null;
-								console.log('error');
-								if (typeof bg == 'undefined' || bg.length<10)
-									get_img_refs (i+1, user_id, urls);
-							}
-						},
-						2000
-				);
-			}
-		}
 
 		$('#refreshTpl').bind('click', function () {
 			console.log("refreshTpl");
