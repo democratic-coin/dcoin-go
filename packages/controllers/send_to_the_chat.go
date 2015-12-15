@@ -33,19 +33,20 @@ func (c *Controller) SendToTheChat() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
+	var chatId int64
 	// на пуле сообщение сразу отобразится у всех
 	if status == 1 {
-		err = c.ExecSql(`INSERT INTO chat (hash, time, lang, room, receiver, sender, status, enc_message, message, sign_time, signature) VALUES ([hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, [hex])`, hash, utils.Time(), lang, room, receiver, sender, 2, message, decryptMessage, signTime, signature)
+		chatId, err = c.ExecSqlGetLastInsertId(`INSERT INTO chat (hash, time, lang, room, receiver, sender, status, enc_message, message, sign_time, signature) VALUES ([hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, [hex])`, "id", hash, utils.Time(), lang, room, receiver, sender, 2, message, decryptMessage, signTime, signature)
 
 	} else {
-		err = c.ExecSql(`INSERT INTO chat (hash, time, lang, room, receiver, sender, status, message, sign_time, signature) VALUES ([hex], ?, ?, ?, ?, ?, ?, ?, ?, [hex])`, hash, utils.Time(), lang, room, receiver, sender, status, message, signTime, signature)
+		chatId, err = c.ExecSqlGetLastInsertId(`INSERT INTO chat (hash, time, lang, room, receiver, sender, status, message, sign_time, signature) VALUES ([hex], ?, ?, ?, ?, ?, ?, ?, ?, [hex])`, "id", hash, utils.Time(), lang, room, receiver, sender, status, message, signTime, signature)
 	}
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
 	// даем команду рассыльщику, чтобы отправил всем хэш тр-ии сообщения
-	utils.ChatNewTx <- true
+	utils.ChatNewTx <- chatId
 
 	return utils.JsonAnswer("success", "success").String(), nil
 }

@@ -109,7 +109,7 @@ func (c *Controller) Statistic() (string, error) {
 			SELECT *
 			FROM cash_requests
 			ORDER BY id DESC
-			LIMIT 20`, 20)
+			LIMIT 5`, 5)
 	for i := 0; i < len(cashRequests); i++ {
 		if cashRequests[i]["del_block_id"] != "0" {
 			cashRequests[i]["status"] = "reduction closed"

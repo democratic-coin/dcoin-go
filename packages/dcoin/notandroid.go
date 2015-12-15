@@ -200,11 +200,12 @@ func tcpListener() {
 						// проверим, нет ли уже созданного канала для такого хоста
 						if _, ok := utils.ChatOutConnections[userId]; !ok {
 							fmt.Println("ADD", userId, conn.RemoteAddr(), utils.Time())
+							connChan := make(chan *utils.ChatData, 100)
 							utils.ChatMutex.Lock()
-							utils.ChatOutConnections[userId] = 1
+							utils.ChatOutConnections[userId] = &utils.ChatOutConnectionsType{MessIds: []int64{}, ConnectionChan: connChan}
 							utils.ChatMutex.Unlock()
 							fmt.Println("utils.ChatOutConnections", utils.ChatOutConnections)
-							utils.ChatTxDisseminator(conn, userId)
+							utils.ChatTxDisseminator(conn, userId, connChan)
 						} else {
 							fmt.Println("SKIP", userId, conn.RemoteAddr(), utils.Time())
 							conn.Close()

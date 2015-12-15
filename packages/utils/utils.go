@@ -2708,6 +2708,13 @@ func JoinInts(arr map[int]int, sep string) string {
 	}
 	return strings.Join(arrStr, sep)
 }
+func JoinInts64(arr map[int64]int, sep string) string {
+	var arrStr []string
+	for k, _ := range arr {
+		arrStr = append(arrStr, Int64ToStr(k))
+	}
+	return strings.Join(arrStr, sep)
+}
 
 func TimeLeft(sec int64, lang map[string]string) string {
 	result := ""

@@ -131,11 +131,12 @@ func (d *daemon) chatConnector() {
 						}
 
 						fmt.Println("connector ADD", userId, conn2.RemoteAddr(), utils.Time())
+						connChan := make(chan *utils.ChatData, 100)
 						utils.ChatMutex.Lock()
-						utils.ChatOutConnections[userId] = 1
+						utils.ChatOutConnections[userId] = &utils.ChatOutConnectionsType{MessIds: []int64{}, ConnectionChan: connChan}
 						utils.ChatMutex.Unlock()
 						fmt.Println("ChatOutConnections", utils.ChatOutConnections)
-						utils.ChatTxDisseminator(conn2, userId)
+						utils.ChatTxDisseminator(conn2, userId, connChan)
 					}
 				}
 			}
