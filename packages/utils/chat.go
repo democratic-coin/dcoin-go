@@ -241,6 +241,10 @@ func ChatOutput(newTx chan int64) {
 		fmt.Println("chat ids for send", ids)
 		log.Debug("%v", ids)
 
+		if len(ids) == 0 {
+			Sleep(10)
+			continue
+		}
 		// смотрим, есть ли в табле неотправленные тр-ии
 		rows, err := DB.Query("SELECT id, hash, lang, room, receiver, sender, status, message, enc_message, sign_time, signature FROM chat WHERE id IN ("+JoinInts64(ids, ",")+")")
 		if err != nil {
