@@ -48,6 +48,9 @@ func (c *Controller) ChangeHost() (string, error) {
 	if len(data["e_host"]) == 0 {
 		data["e_host"] = data2["e_host"]
 	}
+	if data["e_host"] == "" {
+		data["e_host"] = "0"
+	}
 
 	statusArray := map[string]string{"my_pending": c.Lang["local_pending"], "approved": c.Lang["status_approved"]}
 	data["host_status"] = statusArray[data["host_status"]]

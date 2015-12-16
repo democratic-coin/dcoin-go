@@ -204,17 +204,40 @@ func Start(dir string) {
 	// если есть OldFileName, значит работаем под именем tmp_dc и нужно перезапуститься под нормальным именем
 	log.Error("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
+
+		// вначале нужно обновить БД в зависимости от версии
+		dat, err := ioutil.ReadFile(*utils.Dir+"/dcoin.pid")
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+		}
+		var pidMap map[string]string
+		err = json.Unmarshal(dat, &pidMap)
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+		}
+
 		log.Debug("OldFileName %v", *utils.OldFileName)
 		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
 		if err != nil {
 			log.Debug("%v", os.Stderr)
 			log.Debug("%v", utils.ErrInfo(err))
 		}
-
-		err := utils.DB.Close()
+		// ждем подключения к БД
+		for {
+			if utils.DB == nil || utils.DB.DB == nil {
+				utils.Sleep(1)
+				continue
+			}
+		}
+		if len(pidMap["version"]) > 0 && utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5") {
+			err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
+			if err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
+		}
+		err = utils.DB.Close()
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
-			//panic(err)
 		}
 		fmt.Println("DB Closed")
 		err = os.Remove(*utils.Dir+"/dcoin.pid")
