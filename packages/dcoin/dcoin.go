@@ -228,6 +228,7 @@ func Start(dir string) {
 				utils.Sleep(1)
 				continue
 			}
+			break
 		}
 		if len(pidMap["version"]) > 0 && utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5") {
 			err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
