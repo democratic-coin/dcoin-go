@@ -7,6 +7,7 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
 	"text/template"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 var chatIds = make(map[int64][]int)
@@ -25,7 +26,7 @@ func (c *Controller) GetChatMessages() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		// удалим старое
-		err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId-100)
+		err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId-consts.CHAT_COUNT_MESSAGES)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -35,7 +36,7 @@ func (c *Controller) GetChatMessages() (string, error) {
 		ids = `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
 	}
 	var result string
-	chatData, err := c.GetAll(`SELECT * FROM chat WHERE room = ? AND lang = ?  `+ids+` ORDER BY id DESC LIMIT 100`, 100, room, lang)
+	chatData, err := c.GetAll(`SELECT * FROM chat WHERE room = ? AND lang = ?  `+ids+` ORDER BY id DESC LIMIT `+utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES), consts.CHAT_COUNT_MESSAGES, room, lang)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
