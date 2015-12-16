@@ -11,6 +11,7 @@ import (
 )
 
 var chatIds = make(map[int64][]int)
+var chatMinSignTime int64
 
 func (c *Controller) GetChatMessages() (string, error) {
 
@@ -21,22 +22,22 @@ func (c *Controller) GetChatMessages() (string, error) {
 
 	if first == "1" {
 		chatIds[c.SessUserId] = []int{}
-		maxId, err := c.Single(`SELECT max(id) FROM chat`).Int64()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		// удалим старое
-		err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId-consts.CHAT_COUNT_MESSAGES)
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
+	}
+	maxId, err := c.Single(`SELECT max(id) FROM chat`).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	// удалим старое
+	err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId-consts.CHAT_MAX_MESSAGES)
+	if err != nil {
+		return "", utils.ErrInfo(err)
 	}
 	ids := ""
 	if len(chatIds[c.SessUserId]) > 0 {
 		ids = `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
 	}
 	var result string
-	chatData, err := c.GetAll(`SELECT * FROM chat WHERE room = ? AND lang = ?  `+ids+` ORDER BY id DESC LIMIT `+utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES), consts.CHAT_COUNT_MESSAGES, room, lang)
+	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  `+ids+` ORDER BY sign_time DESC LIMIT `+utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES), consts.CHAT_COUNT_MESSAGES, chatMinSignTime, room, lang)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -114,6 +115,12 @@ func (c *Controller) GetChatMessages() (string, error) {
 		}
 		result += row
 		chatIds[c.SessUserId] = append(chatIds[c.SessUserId], utils.StrToInt(data["id"]))
+		if first == "1" {
+			if utils.StrToInt64(data["sign_time"]) < chatMinSignTime || chatMinSignTime == 0 {
+				chatMinSignTime = utils.StrToInt64(data["sign_time"])
+				log.Debug("chatMinSignTime", chatMinSignTime)
+			}
+		}
 	}
 
 	log.Debug("chat data: %v", result)

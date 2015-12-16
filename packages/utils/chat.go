@@ -44,6 +44,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		if err != nil {
 			fmt.Println("ChatInput ERROR", err, conn.RemoteAddr().String(), Time())
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
+			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
 		}
 		conn.SetReadDeadline(time.Time{})
@@ -74,6 +75,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		if len(addsql) == 0 {
 			fmt.Println("empty hashes")
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
+			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
 		}
 		addsql = addsql[:len(addsql)-1]
@@ -85,6 +87,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		if err != nil {
 			fmt.Println(ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
+			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
 		}
 		defer rows.Close()
@@ -94,6 +97,7 @@ func ChatInput(conn net.Conn, userId int64) {
 			if err != nil {
 				fmt.Println(ErrInfo(err))
 				safeDeleteFromChatMapIn(ChatInConnections, userId)
+				safeDeleteFromChatMap(ChatOutConnections, userId)
 				return
 			}
 			// отмечаем 0 то, что у нас уже есть
@@ -122,6 +126,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		if err != nil {
 			fmt.Println(ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
+			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
 		}
 		if !needTx {
@@ -129,11 +134,26 @@ func ChatInput(conn net.Conn, userId int64) {
 			continue
 		}
 
+		// время последнего сообщения
+		lastMessTime, err := DB.Single(`SELECT max(sign_time) FROM chat`).Int64()
+		fmt.Println("lastMessTime===", lastMessTime)
+		if err != nil {
+			log.Error("%v", ErrInfo(err))
+		}
+		if lastMessTime > Time(){
+			lastMessTime = Time()-1800
+		} else if lastMessTime == 0 {
+			lastMessTime = Time()-86400*7
+		} else {
+			lastMessTime = lastMessTime-1800
+		}
+
 		// получаем тр-ии, которых у нас нету
 		binaryData, err = TCPGetSizeAndData(conn, 10485760)
 		if err != nil {
 			fmt.Println(ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
+			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
 		}
 		var sendToChan int64
@@ -143,6 +163,7 @@ func ChatInput(conn net.Conn, userId int64) {
 			if int(length) > len(binaryData) {
 				fmt.Println("break length > len(binaryData)", length, len(binaryData))
 				safeDeleteFromChatMapIn(ChatInConnections, userId)
+				safeDeleteFromChatMap(ChatOutConnections, userId)
 				return
 			}
 			if length > 0 {
@@ -157,11 +178,21 @@ func ChatInput(conn net.Conn, userId int64) {
 				signTime := BinToDecBytesShift(&txData, 4)
 				signature := BinToHex(BytesShift(&txData, DecodeLength(&txData)))
 
+				// нам не нужны старые сообщения, которые мы могли уже удалить
+				// поэтому смотрим время последнего сообщения или нашего времени,
+				// вычитаем 30 минут и не берем всё что меньше
+				if signTime < lastMessTime {
+					continue
+				}
+				fmt.Println("signTime", signTime)
+				fmt.Println("lastMessTime", lastMessTime)
+
 				// проверяем даннные из тр-ий
 				err := DB.CheckChatMessage(string(message), sender, receiver, lang, room, status, signTime, signature)
 				if err != nil {
 					fmt.Println(ErrInfo(err))
 					safeDeleteFromChatMapIn(ChatInConnections, userId)
+					safeDeleteFromChatMap(ChatOutConnections, userId)
 					return
 				}
 
@@ -349,7 +380,7 @@ func ChatTxDisseminator(conn net.Conn, userId int64, connectionChan chan *ChatDa
 			Sleep(1)
 			continue
 		} else {
-			fmt.Println("data", data.Hashes, "TO->", conn.RemoteAddr().String(), Time())
+			fmt.Println("data", len(data.Hashes), "TO->", conn.RemoteAddr().String(), Time())
 			// шлем хэши
 			err := WriteSizeAndData(data.Hashes, conn)
 			if err != nil {

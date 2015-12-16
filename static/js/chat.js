@@ -94,7 +94,7 @@
 		}
 		$(document).ready(function() {
 
-			$.post('ajax?controllerName=getChatMessages&first=1&'+room+'&lang='+lang, {}, function (data) {
+			$.post('ajax?controllerName=getChatMessages&first=1&room='+room+'&lang='+lang, {}, function (data) {
 				if (typeof data.messages != "undefined" && data.messages != "") {
 					$('#chatMessages').append(data.messages);
 					scrollToBottom();
