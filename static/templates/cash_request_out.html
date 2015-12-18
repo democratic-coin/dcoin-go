@@ -23,7 +23,7 @@
 	$('#next').bind('click', function () {
 
 		var error_message='';
-		to_user_id = $("#to_user_id").text();
+		to_user_id = $("#to_user_id").val();
 		comment = $("#comment").val();
 		console.log('to_user_id='+to_user_id);
 
@@ -52,7 +52,7 @@
 				$("#wallets").css("display", "none");
 				$("#onmap").css("display", "none");
 				$("#sign").css("display", "block");
-				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').text()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
+				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').val()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
 				doSign();
 				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 				});
@@ -65,7 +65,7 @@
 				'type' : '{{.TxType}}',
 				'time' : '{{.TimeNow}}',
 				'user_id' : '{{.UserId}}',
-				'to_user_id' : $('#to_user_id').text(),
+				'to_user_id' : $('#to_user_id').val(),
 				'currency_id' : currency_id,
 				'amount' : $('#send_amount').val(),
 				'hash_code' : $('#hash_code').val(),
@@ -96,7 +96,7 @@
 	console.log(currency_data)
 	$('#show_map').bind('click', function () {
 
-		$("#amount,#total_amount,#total_amount_text,#to_user_id").text(0);
+		$("#amount,#total_amount,#total_amount_text,#to_user_id").val(0);
 
 		$("#new").css("display", "block");
 		$("#map_canvas_list").css("display", "none");
@@ -143,7 +143,7 @@
 				console.log('min='+min);
 				infowindow.setContent('User ID: '+user_id+'<input type="hidden" id="find_user_id" value="'+user_id+'"><br>min:<Br>'+min+'<br>max:'+amount);
 				infowindow.setContent('User ID: '+user_id+'<input type="hidden" id="find_user_id" value="'+user_id+'"><br>min:<Br>'+min+'<br>max:'+amount);
-				$("#to_user_id").text(user_id);
+				$("#to_user_id").val(user_id);
 				$('#send_amount').val(min);
 				$("#amount_due").text(min);
 				infowindow.setPosition(latlng);
@@ -227,7 +227,7 @@
 	<div id="wallets">
 		<h3>{{.Lang.send_request}}</h3>
 		<table style="max-width: 600px" class="table">
-			<tr><td>{{.Lang.to}}</td><td><span id="to_user_id"></span></td></tr>
+			<tr><td>{{.Lang.to}}</td><td><input type="text" id="to_user_id" class="input-mini"></span></td></tr>
 			<tr><td>{{.Lang.available}}</td><td><span id="available"></span><input id="currency_id" type="hidden"></td></tr>
 			<tr><td>{{.Lang.you_send}}</td><td><input type="text" id="send_amount" class="input-mini"> D<span id="currency_name"></span></td></tr>
 			<tr><td>{{.Lang.amount_due}}</td><td><span id="amount_due"></span> <span id="currency_name"></span></td></tr>

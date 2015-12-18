@@ -124,9 +124,9 @@
 								$('#chatMessages').append(data.messages);
 								scrollToBottom();
 								if (data.chatStatus == "bad") {
-									$('#chatTitle').html("Chat <span style='color:#ff0000'>*</span>")
+									$('#chatTitle').html("Chat <span style='color:#EA6153'><i class='fa fa-power-off'></i></span>")
 								} else {
-									$('#chatTitle').html("Chat <span style='color:#00ff00'>*</span>")
+									$('#chatTitle').html("Chat <span style='color:#37BC9B'><i class='fa fa-power-off'></i></span>")
 								}
 								//}
 							}, 'JSON');
@@ -151,6 +151,7 @@
 			$("#myChatMessage").css("display", "inline-block");
 			console.log("receiverId", receiverId)
 		}
+
 
 
 		function lock_unlock() {

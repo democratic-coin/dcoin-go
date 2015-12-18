@@ -422,9 +422,14 @@ func ChatTxDisseminator(conn net.Conn, userId int64, connectionChan chan *ChatDa
 			}
 		}
 
+		if ChatOutConnections[userId] == nil {
+			fmt.Println("ChatOutConnections[userId] == nil", userId)
+			log.Error("ChatOutConnections[userId] == nil", userId)
+			break
+		}
+
 		// добавляем ID сообщения, чтобы больше его не слать
 		ChatMutex.Lock()
-
 		var lastMessId int64
 		if len(ChatOutConnections[userId].MessIds)>0 {
 			lastMessId = ChatOutConnections[userId].MessIds[len(ChatOutConnections[userId].MessIds)-1]

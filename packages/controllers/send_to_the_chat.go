@@ -13,6 +13,7 @@ func (c *Controller) SendToTheChat() (string, error) {
 	receiver := utils.StrToInt64(c.r.FormValue("receiver"))
 	lang := utils.StrToInt64(c.r.FormValue("lang"))
 	room := utils.StrToInt64(c.r.FormValue("room"))
+	// chatEncrypted == 1
 	status := utils.StrToInt64(c.r.FormValue("status"))
 	signTime := utils.StrToInt64(c.r.FormValue("sign_time"))
 	signature := []byte(c.r.FormValue("signature"))

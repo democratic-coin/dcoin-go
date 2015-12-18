@@ -18,7 +18,7 @@ type changePromisedAmountPage struct {
 	CountSignArr     []int
 	LastTxFormatted  string
 	CurrencyList     map[int64]string
-	PromisedAmountId string
+	PromisedAmountId int64
 	Amount           string
 }
 
@@ -27,7 +27,7 @@ func (c *Controller) ChangePromisedAmount() (string, error) {
 	txType := "ChangePromisedAmount"
 	txTypeId := utils.TypeInt(txType)
 	timeNow := time.Now().Unix()
-	promisedAmountId := c.Parameters["promised_amount_id"]
+	promisedAmountId := int64(utils.StrToFloat64(c.Parameters["promised_amount_id"]))
 	amount := c.Parameters["amount"]
 
 	TemplateStr, err := makeTemplate("change_promised_amount", "changePromisedAmount", &changePromisedAmountPage{

@@ -2648,6 +2648,7 @@ func (db *DCDB) CheckChatMessage(message string, sender, receiver, lang, room, s
 	if signTime < 0 || signTime > 4294967295 {
 		return ErrInfoFmt("incorrect room")
 	}
+	// chatEncrypted == 1
 	if len(message) == 0 || ((status == 0 && len(message) > 1024) || (status == 1 && len(message) > 5120)) {
 		return ErrInfoFmt("incorrect message")
 	}

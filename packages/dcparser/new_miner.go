@@ -424,7 +424,7 @@ func (p *Parser) NewMinerRollback() error {
 		return err
 	}
 	if p.TxUserID == myUserId {
-		pub, err := p.Single("SELECT public_key SELECT public_key "+myPrefix+"my_node_keys WHERE block_id=?", p.BlockData.BlockId).String()
+		pub, err := p.Single("SELECT public_key "+myPrefix+"my_node_keys WHERE block_id=?", p.BlockData.BlockId).String()
 		if err != nil {
 			return err
 		}
