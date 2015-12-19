@@ -71,6 +71,8 @@ func (c *Controller) Assignments() (string, error) {
 		}
 	}
 
+	log.Debug("randArr %v", randArr)
+
 	var AssignType int64
 	if len(randArr) > 0 {
 		AssignType = randArr[utils.RandInt(0, len(randArr))]
@@ -100,7 +102,7 @@ func (c *Controller) Assignments() (string, error) {
 
 		userInfo, err = c.OneRow(`
 				SELECT miners_data.user_id,
-							 id as vote_id,
+							 votes_miners.id as vote_id,
 							 face_coords,
 							 profile_coords,
 							 video_type,
@@ -110,23 +112,20 @@ func (c *Controller) Assignments() (string, error) {
 							 miners_keepers,
 							 http_host
 				FROM votes_miners
-				LEFT JOIN miners_data
-						 ON miners_data.user_id = votes_miners.user_id
-				WHERE votes_end = 0 AND
-							 type = 'user_voting'
-				`).String()
+				LEFT JOIN miners_data ON miners_data.user_id = votes_miners.user_id
+				LEFT JOIN `+c.MyPrefix+`my_tasks ON `+c.MyPrefix+`my_tasks.id = votes_miners.id
+				WHERE 	votes_end = 0 AND
+						votes_miners.type = 'user_voting' AND
+						(`+c.MyPrefix+`my_tasks.time IS NULL OR (`+c.MyPrefix+`my_tasks.time < ? AND `+c.MyPrefix+`my_tasks.type  =  'miner'))
+				`, utils.Time()-consts.ASSIGN_TIME).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		// проверим, не голосовали ли мы за это в последние 30 минут
-		repeated, err := c.Single("SELECT id FROM "+c.MyPrefix+"my_tasks WHERE type  =  'miner' AND id  =  ? AND time > ?", userInfo["vote_id"], utils.Time()-consts.ASSIGN_TIME).Int64()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		if repeated > 0 {
+		if len(userInfo) == 0 {
 			tplName = "assignments"
 			break
 		}
+
 		examplePoints, err = c.GetPoints(c.Lang)
 		if err != nil {
 			return "", utils.ErrInfo(err)

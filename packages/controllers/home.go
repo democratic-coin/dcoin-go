@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 type homePage struct {
@@ -149,7 +150,7 @@ func (c *Controller) Home() (string, error) {
 	}
 
 	if c.SessRestricted == 0 {
-		count, err := c.Single("SELECT count(id) FROM "+c.MyPrefix+"my_tasks WHERE time > ?", time.Now().Unix()).Int64()
+		count, err := c.Single("SELECT count(id) FROM "+c.MyPrefix+"my_tasks WHERE time > ?", time.Now().Unix()-consts.ASSIGN_TIME).Int64()
 		if err != nil {
 			return "", err
 		}

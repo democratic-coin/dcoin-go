@@ -88,7 +88,7 @@
 	var map;
 
 	var currency_name;
-	var currency_id;
+	var currency_id = "72";
 	var payment_system;
 	var min;
 	var currency_data = '{ {{.JsonCurrencyWallets}} }';
@@ -179,6 +179,11 @@
 		$("#amount_due").text($('#send_amount').val());
 	});
 
+	$("#need_currency").change(function() {
+		currency_id = $("#need_currency :selected").val();
+		$("#currency_id").val(currency_id);
+	});
+
 	$("#main_div select").addClass( "form-control" );
 	$("#main_div input").addClass( "form-control" );
 	$("#main_div textarea").addClass( "form-control" );
@@ -228,7 +233,7 @@
 		<h3>{{.Lang.send_request}}</h3>
 		<table style="max-width: 600px" class="table">
 			<tr><td>{{.Lang.to}}</td><td><input type="text" id="to_user_id" class="input-mini"></span></td></tr>
-			<tr><td>{{.Lang.available}}</td><td><span id="available"></span><input id="currency_id" type="hidden"></td></tr>
+			<tr><td>{{.Lang.available}}</td><td><span id="available"></span><input id="currency_id" type="hidden" value="72"></td></tr>
 			<tr><td>{{.Lang.you_send}}</td><td><input type="text" id="send_amount" class="input-mini"> D<span id="currency_name"></span></td></tr>
 			<tr><td>{{.Lang.amount_due}}</td><td><span id="amount_due"></span> <span id="currency_name"></span></td></tr>
 		<tr><td>{{.Lang.you_contacts}}</td><td><textarea id="comment" maxlength="{{.MaxLength}}"></textarea><p id="counter"></p></td></tr>

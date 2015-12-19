@@ -168,7 +168,7 @@ func ChatInput(conn net.Conn, userId int64) {
 			}
 			if length > 0 {
 				txData := BytesShift(&binaryData, length)
-				fmt.Printf("txData %x\n", txData)
+				//fmt.Printf("txData %x\n", txData)
 				lang := BinToDecBytesShift(&txData, 1)
 				room := BinToDecBytesShift(&txData, 4)
 				receiver := BinToDecBytesShift(&txData, 4)

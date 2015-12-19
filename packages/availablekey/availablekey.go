@@ -58,16 +58,25 @@ func (a *AvailablekeyStruct) GetAvailableKey() (int64, string, error) {
 			return 0, "", utils.ErrInfo(errors.New("my_table not null"))
 		}
 	}
-	keysStr, err := utils.GetHttpTextAnswer("http://dcoin.club/keys")
-	if err != nil {
-		return 0, "", utils.ErrInfo(err)
-	}
-	//keysStr = strings.Replace(keysStr, "\n", "", -1)
-	r, _ := regexp.Compile("(?s)-----BEGIN RSA PRIVATE KEY-----(.*?)-----END RSA PRIVATE KEY-----")
-	keys := r.FindAllString(keysStr, -1)
-	for i := range keys {
-		j := rand.Intn(i + 1)
-		keys[i], keys[j] = keys[j], keys[i]
+
+	var keys []string
+	for i:=0; i<10; i++ {
+		keysStr, err := utils.GetHttpTextAnswer("http://dcoin.club/keys")
+		if err != nil {
+			return 0, "", utils.ErrInfo(err)
+		}
+		//keysStr = strings.Replace(keysStr, "\n", "", -1)
+		r, _ := regexp.Compile("(?s)-----BEGIN RSA PRIVATE KEY-----(.*?)-----END RSA PRIVATE KEY-----")
+		keys = r.FindAllString(keysStr, -1)
+		for i := range keys {
+			j := rand.Intn(i + 1)
+			keys[i], keys[j] = keys[j], keys[i]
+		}
+		if len(keys) > 0 {
+			break
+		} else {
+			utils.Sleep(5)
+		}
 	}
 
 	for _, key := range keys {
