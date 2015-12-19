@@ -9,7 +9,7 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/daemons"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/elazarl/go-bindata-assetfs"
+	"github.com/c-darwin/go-bindata-assetfs"
 	"github.com/op/go-logging"
 	_ "image/png"
 	//"io"
