@@ -4,7 +4,7 @@ package main
 
 import (
 	"github.com/c-darwin/dcoin-go/packages/dcoin"
-	"github.com/cratonica/trayhost"
+	"github.com/c-darwin/trayhost"
 	"runtime"
 
 )
