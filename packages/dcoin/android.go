@@ -23,6 +23,10 @@ func tcpListener() {
 
 }
 
+func tray() {
+
+}
+
 func signals(countDaemons int) {
 
 }

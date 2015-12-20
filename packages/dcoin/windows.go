@@ -50,3 +50,8 @@ func KillPid(pid string) error {
 	//fmt.Printf("taskkill /pid %s: %s\n", pid, rez)
 	return nil
 }
+
+
+func tray() {
+
+}

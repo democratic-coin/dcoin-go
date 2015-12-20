@@ -60,6 +60,11 @@ func StopHTTPServer() {
 	IosLog("StopHTTPServer 1")
 }
 
+
+func tray() {
+
+}
+
 func httpListener(ListenHttpHost, BrowserHttpHost string) {
 	go StartHTTPServer(ListenHttpHost)
 }

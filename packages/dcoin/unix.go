@@ -1,4 +1,4 @@
-// +build linux darwin freebsd
+// +build linux freebsd darwin
 // +build 386 amd64
 
 package dcoin
@@ -15,3 +15,4 @@ func KillPid(pid string) error {
 	}
 	return nil
 }
+
