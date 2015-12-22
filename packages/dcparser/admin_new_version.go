@@ -79,14 +79,13 @@ func (p *Parser) AdminNewVersion() error {
 }
 
 func (p *Parser) AdminNewVersionRollback() error {
-
-	return nil
-}
-
-func (p *Parser) AdminNewVersionRollbackFront() error {
 	err := p.ExecSql("DELETE FROM new_version WHERE version = ?", p.TxMaps.String["version"])
 	if err != nil {
 		return p.ErrInfo(err)
 	}
+	return nil
+}
+
+func (p *Parser) AdminNewVersionRollbackFront() error {
 	return nil
 }

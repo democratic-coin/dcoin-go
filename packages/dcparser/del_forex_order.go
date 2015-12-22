@@ -48,9 +48,9 @@ func (p *Parser) DelForexOrder() error {
 }
 
 func (p *Parser) DelForexOrderRollback() error {
-	return p.generalRollback("commission", p.TxUserID, "", false)
+	return p.ExecSql("UPDATE forex_orders SET del_block_id = 0 WHERE id = ?", p.TxMaps.Int64["order_id"])
 }
 
 func (p *Parser) DelForexOrderRollbackFront() error {
-	return p.ExecSql("UPDATE forex_orders SET del_block_id = 0 WHERE id = ?", p.TxMaps.Int64["order_id"])
+	return nil
 }

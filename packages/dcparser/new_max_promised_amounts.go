@@ -146,11 +146,6 @@ func (p *Parser) NewMaxPromisedAmounts() error {
 }
 
 func (p *Parser) NewMaxPromisedAmountsRollback() error {
-
-	return nil
-}
-
-func (p *Parser) NewMaxPromisedAmountsRollbackFront() error {
 	affect, err := p.ExecSqlGetAffect("DELETE FROM max_promised_amounts WHERE block_id = ?", p.BlockData.BlockId)
 	if err != nil {
 		return p.ErrInfo(err)
@@ -159,5 +154,9 @@ func (p *Parser) NewMaxPromisedAmountsRollbackFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
+	return nil
+}
+
+func (p *Parser) NewMaxPromisedAmountsRollbackFront() error {
 	return nil
 }
