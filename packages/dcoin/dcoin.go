@@ -436,11 +436,13 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if thrustWindowLoder!=nil {
 				thrustWindowLoder.Close()
 				thrustWindow := thrust.NewWindow(thrust.WindowOptions{
-					RootUrl: "http://localhost:8089",
+					RootUrl: BrowserHttpHost,
 					Size: commands.SizeHW{Width:1200, Height:600},
 				})
 				thrustWindow.Show()
 				thrustWindow.Focus()
+			} else {
+				openBrowser(BrowserHttpHost)
 			}
 		}
 	}()

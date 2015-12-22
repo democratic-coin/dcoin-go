@@ -263,7 +263,7 @@
 			{{.Lang.mobile_notices}}
 		</div>
 		<div class="panel-body">
-			{{if not .Mobile}}{{.Lang.mobile_notices_os}}{{else}}<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>{{end}}
+			{{if not .Mobile}}{{noescape .Lang.mobile_notices_os}}{{else}}<button type="submit" class="btn" id="send_test_mobile">{{.Lang.send_a_test_mobile_notification}}</button>{{end}}
 		</div>
 
 	</div>

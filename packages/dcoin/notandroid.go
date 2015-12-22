@@ -38,12 +38,12 @@ import (
 	"C"
 )
 
-func IosLog(text string) {
-}
-
 //export go_callback_int
 func go_callback_int() {
 	SigChan <- syscall.Signal(1)
+}
+
+func IosLog(text string) {
 }
 
 var SigChan chan os.Signal
