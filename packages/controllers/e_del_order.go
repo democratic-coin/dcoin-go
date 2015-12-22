@@ -20,7 +20,7 @@ func (c *Controller) EDelOrder() (string, error) {
 	sellCurrencyId := utils.StrToInt64(order["sell_currency_id"])
 	amount := utils.StrToFloat64(order["amount"])
 
-	amountAndCommission := utils.StrToFloat64(order["amount"]) / (1-c.ECommission/100)
+	amountAndCommission := utils.StrToFloat64(order["amount"]) / (1 - c.ECommission/100)
 	// косиссия биржи
 	commission := amountAndCommission - amount
 	err = userLock(c.SessUserId)

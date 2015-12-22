@@ -5,10 +5,10 @@ import (
 )
 
 type eMyOrdersPage struct {
-	Lang          map[string]string
-	CurrencyList  map[int64]string
-	UserId	int64
-	MyOrders []*EmyOrders
+	Lang         map[string]string
+	CurrencyList map[int64]string
+	UserId       int64
+	MyOrders     []*EmyOrders
 }
 
 func (c *Controller) EMyOrders() (string, error) {
@@ -16,7 +16,7 @@ func (c *Controller) EMyOrders() (string, error) {
 	var err error
 
 	if c.SessUserId == 0 {
-		return `<script language="javascript"> window.location.href = "`+c.EURL+`"</script>If you are not redirected automatically, follow the <a href="`+c.EURL+`">`+c.EURL+`</a>`, nil
+		return `<script language="javascript"> window.location.href = "` + c.EURL + `"</script>If you are not redirected automatically, follow the <a href="` + c.EURL + `">` + c.EURL + `</a>`, nil
 	}
 
 	currencyList, err := utils.EGetCurrencyList()
@@ -53,15 +53,15 @@ func (c *Controller) EMyOrders() (string, error) {
 		// определим тип ордера и пару
 		if myOrder.SellCurrencyId < 1000 {
 			myOrder.OrderType = "sell"
-			myOrder.SellRate = 1/myOrder.SellRate
-			myOrder.Total = myOrder.BeginAmount*myOrder.SellRate
+			myOrder.SellRate = 1 / myOrder.SellRate
+			myOrder.Total = myOrder.BeginAmount * myOrder.SellRate
 			myOrder.BeginAmount = myOrder.BeginAmount
-			myOrder.Pair = currencyList[myOrder.SellCurrencyId]+"/"+currencyList[myOrder.BuyCurrencyId]
+			myOrder.Pair = currencyList[myOrder.SellCurrencyId] + "/" + currencyList[myOrder.BuyCurrencyId]
 		} else {
 			myOrder.OrderType = "buy"
 			myOrder.Total = myOrder.BeginAmount
-			myOrder.Amount = myOrder.BeginAmount * (1/myOrder.SellRate)
-			myOrder.Pair = currencyList[myOrder.BuyCurrencyId]+"/"+currencyList[myOrder.SellCurrencyId]
+			myOrder.Amount = myOrder.BeginAmount * (1 / myOrder.SellRate)
+			myOrder.Pair = currencyList[myOrder.BuyCurrencyId] + "/" + currencyList[myOrder.SellCurrencyId]
 		}
 
 		myOrders = append(myOrders, myOrder)
@@ -69,8 +69,8 @@ func (c *Controller) EMyOrders() (string, error) {
 
 	TemplateStr, err := makeTemplate("e_my_orders", "eMyOrders", &eMyOrdersPage{
 		Lang:         c.Lang,
-		UserId: c.SessUserId,
-		MyOrders : myOrders,
+		UserId:       c.SessUserId,
+		MyOrders:     myOrders,
 		CurrencyList: currencyList})
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -80,6 +80,6 @@ func (c *Controller) EMyOrders() (string, error) {
 
 type EmyOrders struct {
 	Id, Time, EmptyTime, SellCurrencyId, BuyCurrencyId, DelTime int64
-	Amount, BeginAmount, SellRate, Total, OrderComplete float64
-	Status, OrderType, Pair string
+	Amount, BeginAmount, SellRate, Total, OrderComplete         float64
+	Status, OrderType, Pair                                     string
 }

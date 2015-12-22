@@ -16,8 +16,8 @@ type VotesExchangePage struct {
 	UserId       int64
 	Lang         map[string]string
 	CountSignArr []int
-	EOwner int64
-	Result int64
+	EOwner       int64
+	Result       int64
 }
 
 func (c *Controller) VotesExchange() (string, error) {
@@ -29,7 +29,7 @@ func (c *Controller) VotesExchange() (string, error) {
 	eOwner := utils.StrToInt64(c.Parameters["e_owner_id"])
 	result := utils.StrToInt64(c.Parameters["result"])
 
-	signData :=    fmt.Sprintf("%d,%d,%d,%d,%d", txTypeId, timeNow, c.SessUserId, eOwner, result)
+	signData := fmt.Sprintf("%d,%d,%d,%d,%d", txTypeId, timeNow, c.SessUserId, eOwner, result)
 	if eOwner == 0 {
 		signData = ""
 	}
@@ -42,8 +42,8 @@ func (c *Controller) VotesExchange() (string, error) {
 		TimeNow:      timeNow,
 		TxType:       txType,
 		TxTypeId:     txTypeId,
-		EOwner: eOwner,
-	Result:result,
+		EOwner:       eOwner,
+		Result:       result,
 		SignData:     signData})
 	if err != nil {
 		return "", utils.ErrInfo(err)

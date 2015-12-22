@@ -38,12 +38,12 @@ func (c *Controller) NewUser() (string, error) {
 	if c.SessRestricted == 0 {
 		join := c.MyPrefix + `my_new_users.user_id`
 		if c.ConfigIni["db_type"] == "sqlite" || c.ConfigIni["db_type"] == "postgresql" {
-			join = `"`+c.MyPrefix + `my_new_users".user_id`
+			join = `"` + c.MyPrefix + `my_new_users".user_id`
 		}
 		rows, err := c.Query(c.FormatQuery(`
 				SELECT users.user_id,	private_key,  log_id
 				FROM ` + c.MyPrefix + `my_new_users
-				LEFT JOIN users ON users.user_id = `+join+`
+				LEFT JOIN users ON users.user_id = ` + join + `
 				WHERE status = 'approved'
 				`))
 		if err != nil {

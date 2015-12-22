@@ -19,7 +19,6 @@ func TestblockDisseminator() {
 		}
 	}()
 
-
 	const GoroutineName = "TestblockDisseminator"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -58,13 +57,17 @@ BEGIN:
 
 		nodeConfig, err := d.GetNodeConfig()
 		if len(nodeConfig["local_gate_ip"]) != 0 {
-			if d.dPrintSleep("local_gate_ip", d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep("local_gate_ip", d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
 		_, _, _, _, level, levelsRange, err := d.TestBlock()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Debug("level: %v", level)
@@ -83,7 +86,9 @@ BEGIN:
 		// получим хосты майнеров, которые на нашем уровне
 		hosts_, err := d.GetList("SELECT tcp_host FROM miners_data WHERE miner_id IN (" + strings.Join(utils.SliceInt64ToString(nodesIds), `,`) + ")").String()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
@@ -99,14 +104,18 @@ BEGIN:
 		// шлем block_id, user_id, mrkl_root, signature
 		data, err := d.OneRow("SELECT block_id, time, user_id, mrkl_root, signature FROM testblock WHERE status  =  'active' AND sent=0").String()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		if len(data) > 0 {
 
 			err = d.ExecSql("UPDATE testblock SET sent=1")
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 

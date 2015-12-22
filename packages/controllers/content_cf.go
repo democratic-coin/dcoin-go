@@ -46,7 +46,6 @@ func ContentCf(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		tplName := r.FormValue("tpl_name")
 
-
 		c.Parameters, err = c.GetParameters()
 		log.Debug("parameters=", c.Parameters)
 

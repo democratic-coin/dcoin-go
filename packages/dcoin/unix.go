@@ -4,8 +4,8 @@
 package dcoin
 
 import (
-	"syscall"
 	"github.com/c-darwin/dcoin-go/packages/utils"
+	"syscall"
 )
 
 func KillPid(pid string) error {
@@ -15,4 +15,3 @@ func KillPid(pid string) error {
 	}
 	return nil
 }
-

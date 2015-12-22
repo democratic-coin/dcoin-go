@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"errors"
-	"strings"
-	"regexp"
 	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
+	"regexp"
+	"strings"
 )
 
 func (c *Controller) EGatePm() (string, error) {
@@ -14,9 +14,9 @@ func (c *Controller) EGatePm() (string, error) {
 
 	fmt.Println(c.r.Form)
 
-	sign := strings.ToUpper(string(utils.Md5(c.r.FormValue("PAYMENT_ID")+":"+c.r.FormValue("PAYEE_ACCOUNT")+":"+c.r.FormValue("PAYMENT_AMOUNT")+":"+c.r.FormValue("PAYMENT_UNITS")+":"+c.r.FormValue("PAYMENT_BATCH_NUM")+":"+c.r.FormValue("PAYER_ACCOUNT")+":"+strings.ToUpper(string(utils.Md5(c.EConfig["pm_s_key"])))+":"+c.r.FormValue("TIMESTAMPGMT"))))
+	sign := strings.ToUpper(string(utils.Md5(c.r.FormValue("PAYMENT_ID") + ":" + c.r.FormValue("PAYEE_ACCOUNT") + ":" + c.r.FormValue("PAYMENT_AMOUNT") + ":" + c.r.FormValue("PAYMENT_UNITS") + ":" + c.r.FormValue("PAYMENT_BATCH_NUM") + ":" + c.r.FormValue("PAYER_ACCOUNT") + ":" + strings.ToUpper(string(utils.Md5(c.EConfig["pm_s_key"]))) + ":" + c.r.FormValue("TIMESTAMPGMT"))))
 
-	txTime := utils.StrToInt64(c.r.FormValue("TIMESTAMPGMT"));
+	txTime := utils.StrToInt64(c.r.FormValue("TIMESTAMPGMT"))
 
 	if sign != c.r.FormValue("V2_HASH") {
 		return "", errors.New("Incorrect signature")
@@ -35,7 +35,7 @@ func (c *Controller) EGatePm() (string, error) {
 	pmId := utils.StrToInt64(c.r.FormValue("PAYMENT_BATCH_NUM"))
 	// проверим, не зачисляли ли мы уже это платеж
 	existsId, err := c.Single(`SELECT id FROM e_adding_funds_pm WHERE id = ?`, pmId).Int64()
-	if err!=nil {
+	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 	if existsId != 0 {
@@ -44,7 +44,7 @@ func (c *Controller) EGatePm() (string, error) {
 	paymentInfo := c.r.FormValue("PAYMENT_ID")
 
 	err = EPayment(paymentInfo, currencyId, txTime, amount, pmId, "pm", c.ECommission)
-	if err!=nil {
+	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
@@ -65,11 +65,11 @@ func EPayment(paymentInfo string, currencyId, txTime int64, amount float64, paym
 	var buyCurrencyId int64
 	if len(token) > 0 {
 		err := utils.DB.ExecSql(`UPDATE e_tokens SET status = 'paid' WHERE id = ?`, token)
-		if err!=nil {
+		if err != nil {
 			return utils.ErrInfo(err)
 		}
 		data, err := utils.DB.OneRow(`SELECT user_id, buy_currency_id FROM e_tokens WHERE id = ?`, token).Int64()
-		if err!=nil {
+		if err != nil {
 			return utils.ErrInfo(err)
 		}
 		userId = data["user_id"]
@@ -77,19 +77,19 @@ func EPayment(paymentInfo string, currencyId, txTime int64, amount float64, paym
 		buyCurrencyId = data["buy_currency_id"]
 	}
 	err := utils.DB.ExecSql(`INSERT INTO e_adding_funds_`+paymentSystem+` (id, user_id, currency_id, time, amount) VALUES (?, ?, ?, ?, ?)`, paymentId, userId, currencyId, txTime, amount)
-	if err!=nil {
+	if err != nil {
 		return utils.ErrInfo(err)
 	}
 	if userId > 0 {
 		err = utils.UpdEWallet(userId, currencyId, utils.Time(), amount, false)
-		if err!=nil {
+		if err != nil {
 			return utils.ErrInfo(err)
 		}
 
 		// автоматом создаем ордер, если это запрос через кошель Dcoin
 		if len(token) > 0 {
 			err = NewForexOrder(userId, amount, 1, currencyId, buyCurrencyId, "buy", eCommission)
-			if err!=nil {
+			if err != nil {
 				return utils.ErrInfo(err)
 			}
 		}

@@ -24,7 +24,6 @@ func TestblockIsReady() {
 		}
 	}()
 
-
 	const GoroutineName = "TestblockIsReady"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -59,18 +58,24 @@ BEGIN:
 
 		LocalGateIp, err := d.GetMyLocalGateIp()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		if len(LocalGateIp) > 0 {
-			if d.dPrintSleep(utils.ErrInfo(errors.New("len(LocalGateIp) > 0")), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(errors.New("len(LocalGateIp) > 0")), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
 		// сколько нужно спать
 		prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange, err := d.TestBlock()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
@@ -95,19 +100,25 @@ BEGIN:
 				break BEGIN
 			}
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
 			newHeadHash, err := d.Single("SELECT head_hash FROM info_block").String()
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 			d.dbUnlock()
 			newHeadHash = string(utils.BinToHex([]byte(newHeadHash)))
 			if newHeadHash != prevHeadHash {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			log.Info("%v", "i", i, "time", utils.Time())
@@ -135,39 +146,51 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		// за промежуток в main_unlock и main_lock мог прийти новый блок
 		prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange, err = d.TestBlock()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
 
 		// на всякий случай убедимся, что блок не изменился
 		if prevBlock.HeadHash != prevHeadHash {
-			if d.unlockPrintSleep(utils.ErrInfo(errors.New("prevBlock.HeadHash != prevHeadHash")), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(errors.New("prevBlock.HeadHash != prevHeadHash")), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
 		// составим блок. заголовок + тело + подпись
 		testBlockData, err := d.OneRow("SELECT * FROM testblock WHERE status  =  'active'").String()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(errors.New("prevBlock.HeadHash != prevHeadHash")), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(errors.New("prevBlock.HeadHash != prevHeadHash")), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Debug("testBlockData: %v", testBlockData)
 		if len(testBlockData) == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo(errors.New("null $testblock_data")), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(errors.New("null $testblock_data")), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		// получим транзакции
 		var testBlockDataTx []byte
 		transactionsTestBlock, err := d.GetList("SELECT data FROM transactions_testblock ORDER BY id ASC").String()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		for _, data := range transactionsTestBlock {
@@ -178,13 +201,17 @@ BEGIN:
 		// поэтому нужно проверять подпись блока из тестблока
 		prevBlockHash, err := d.Single("SELECT hash FROM info_block").Bytes()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		prevBlockHash = utils.BinToHex(prevBlockHash)
 		nodePublicKey, err := d.GetNodePublicKey(utils.StrToInt64(testBlockData["user_id"]))
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		forSign := fmt.Sprintf("0,%v,%s,%v,%v,%v,%s", testBlockData["block_id"], prevBlockHash, testBlockData["time"], testBlockData["user_id"], testBlockData["level"], utils.BinToHex([]byte(testBlockData["mrkl_root"])))
@@ -200,10 +227,14 @@ BEGIN:
 			p.RollbackTransactionsTestblock(true)
 			err = d.ExecSql("DELETE FROM testblock")
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		// БАГ
@@ -212,15 +243,21 @@ BEGIN:
 
 			err = p.RollbackTransactionsTestblock(true)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			err = d.ExecSql("DELETE FROM testblock")
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -248,19 +285,25 @@ BEGIN:
 		p.BinaryData = block
 		err = p.ParseDataFront()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		// и можно удалять данные о тестблоке, т.к. они перешел в нормальный блок
 		err = d.ExecSql("DELETE FROM transactions_testblock")
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		err = d.ExecSql("DELETE FROM testblock")
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 

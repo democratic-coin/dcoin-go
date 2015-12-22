@@ -20,7 +20,6 @@ func PctGenerator() {
 		}
 	}()
 
-
 	const GoroutineName = "PctGenerator"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -62,28 +61,38 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		blockId, err := d.GetBlockId()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if blockId == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		_, _, myMinerId, _, _, _, err := d.TestBlock()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		// а майнер ли я ?
 		if myMinerId == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		variables, err := d.GetAllVariables()
@@ -92,7 +101,9 @@ BEGIN:
 		// проверим, прошло ли 2 недели с момента последнего обновления pct
 		pctTime, err := d.Single("SELECT max(time) FROM pct").Int64()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if curTime-pctTime > variables.Int64["new_pct_period"] {
@@ -101,7 +112,9 @@ BEGIN:
 			pctVotes := make(map[int64]map[string]map[string]int64)
 			rows, err := d.Query("SELECT currency_id, pct, count(user_id) as votes FROM votes_miner_pct GROUP BY currency_id, pct ORDER BY currency_id, pct ASC")
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			for rows.Next() {
@@ -110,7 +123,9 @@ BEGIN:
 				err = rows.Scan(&currency_id, &pct, &votes)
 				if err != nil {
 					rows.Close()
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Info("%v", "newpctcurrency_id", currency_id, "pct", pct, "votes", votes)
@@ -127,7 +142,9 @@ BEGIN:
 			// берем все голоса user_pct
 			rows, err = d.Query("SELECT currency_id, pct, count(user_id) as votes FROM votes_user_pct GROUP BY currency_id, pct ORDER BY currency_id, pct ASC")
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			for rows.Next() {
@@ -136,7 +153,9 @@ BEGIN:
 				err = rows.Scan(&currency_id, &pct, &votes)
 				if err != nil {
 					rows.Close()
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Info("%v", "currency_id", currency_id, "pct", pct, "votes", votes)
@@ -205,7 +224,9 @@ BEGIN:
 				// берем все голоса
 				rows, err := d.Query("SELECT " + level + ", count(user_id) as votes FROM votes_referral GROUP BY " + level + " ORDER BY " + level + " ASC ")
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				for rows.Next() {
@@ -213,7 +234,9 @@ BEGIN:
 					err = rows.Scan(&level_, &votes)
 					if err != nil {
 						rows.Close()
-						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					votesReferral = append(votesReferral, map[int64]int64{level_: votes})
@@ -223,7 +246,9 @@ BEGIN:
 			}
 			jsonData, err := json.Marshal(newPct_)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -233,7 +258,9 @@ BEGIN:
 			binSign, err := d.GetBinSign(forSign, myUserId)
 			log.Debug("binSign = %x", binSign)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			data := utils.DecToBin(utils.TypeInt("NewPct"), 1)
@@ -244,7 +271,9 @@ BEGIN:
 
 			err = d.InsertReplaceTxInQueue(data)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -256,7 +285,9 @@ BEGIN:
 			p.DCDB = d.DCDB
 			err = p.TxParser(utils.HexToBin(utils.Md5(data)), data, true)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}

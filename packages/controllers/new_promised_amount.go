@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
+	"net"
 	"strings"
 	"time"
-	"net"
-	"fmt"
 )
 
 type newPromisedAmountPage struct {
@@ -28,9 +28,9 @@ type newPromisedAmountPage struct {
 	LimitsText         string
 	PaymentSystems     map[string]string
 	CountPs            []int
-	Mobile          bool
-	Mode string
-	IncNavigate string
+	Mobile             bool
+	Mode               string
+	IncNavigate        string
 }
 
 func (c *Controller) NewPromisedAmount() (string, error) {
@@ -87,7 +87,6 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 
 	countPs := []int{1, 2, 3, 4, 5}
 
-
 	tcpHostPort, err := c.Single(`SELECT tcp_host from miners_data WHERE user_id = ?`, c.SessUserId).String()
 	tcpHost, _, _ := net.SplitHostPort(tcpHostPort)
 	nodeIp, err := net.ResolveIPAddr("ip4", tcpHost)
@@ -116,15 +115,15 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 		SignData:           "",
 		ConfigCommission:   c.ConfigCommission,
 		Navigate:           navigate,
-		IncNavigate: c.Navigate,
+		IncNavigate:        c.Navigate,
 		CurrencyId:         currencyId,
 		CurrencyList:       currencyList,
 		CurrencyListName:   currencyListName,
 		MaxPromisedAmounts: maxPromisedAmounts,
 		LimitsText:         limitsText,
 		PaymentSystems:     paymentSystems,
-		Mobile:          utils.Mobile(),
-		Mode: mode,
+		Mobile:             utils.Mobile(),
+		Mode:               mode,
 		CountPs:            countPs})
 	if err != nil {
 		return "", utils.ErrInfo(err)

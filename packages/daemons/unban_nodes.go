@@ -4,7 +4,6 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
-
 func UnbanNodes() {
 	defer func() {
 		if r := recover(); r != nil {
@@ -41,7 +40,7 @@ BEGIN:
 
 		err = d.ExecSql("DELETE FROM nodes_ban")
 		if err != nil {
-			if (d.dPrintSleep(err, d.sleepTime)) {
+			if d.dPrintSleep(err, d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN

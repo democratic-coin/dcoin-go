@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"math"
 	"strings"
 	"time"
-	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 type homePage struct {
-	Community bool
+	Community             bool
 	Lang                  map[string]string
 	Title                 string
 	Msg                   string
@@ -42,10 +42,10 @@ type homePage struct {
 	Token                 string
 	Mobile                bool
 	MyChatName            string
-	ExchangeUrl 		  string
-	Miner bool
-	ChatEnabled string
-	TopExMap map[int64]*topEx
+	ExchangeUrl           string
+	Miner                 bool
+	ChatEnabled           string
+	TopExMap              map[int64]*topEx
 }
 
 type CurrencyPct struct {
@@ -223,13 +223,13 @@ func (c *Controller) Home() (string, error) {
 
 	// токен для запроса инфы с биржи
 	var token, exchangeUrl string
-	if c.SessRestricted==0 {
+	if c.SessRestricted == 0 {
 		tokenAndUrl, err := c.OneRow(`SELECT token, e_host FROM ` + c.MyPrefix + `my_tokens LEFT JOIN miners_data ON miners_data.user_id = e_owner_id ORDER BY time DESC LIMIT 1`).String()
 		if err != nil {
 			return "", err
 		}
-		token = tokenAndUrl["token"];
-		exchangeUrl = tokenAndUrl["e_host"];
+		token = tokenAndUrl["token"]
+		exchangeUrl = tokenAndUrl["e_host"]
 	}
 
 	myChatName := utils.Int64ToStr(c.SessUserId)
@@ -269,13 +269,13 @@ func (c *Controller) Home() (string, error) {
 		}
 		//if len(topExMap[user_id].Host) == 0 {
 		//	topExMap[user_id] = new(topEx)
-			if result == 0 {
-				topExMap[user_id].Vote1 = count
-			} else {
-				topExMap[user_id].Vote1 = count
-			}
-			topExMap[user_id].Host = string(e_host)
-			topExMap[user_id].UserId = user_id
+		if result == 0 {
+			topExMap[user_id].Vote1 = count
+		} else {
+			topExMap[user_id].Vote1 = count
+		}
+		topExMap[user_id].Host = string(e_host)
+		topExMap[user_id].UserId = user_id
 		//}
 	}
 
@@ -290,7 +290,7 @@ func (c *Controller) Home() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
-		Community: c.Community,
+		Community:             c.Community,
 		CountSignArr:          c.CountSignArr,
 		CountSign:             c.CountSign,
 		CalcTotal:             calcTotal,
@@ -320,21 +320,20 @@ func (c *Controller) Home() (string, error) {
 		MyChatName:            myChatName,
 		IOS:                   utils.IOS(),
 		Mobile:                utils.Mobile(),
-		TopExMap: topExMap,
-		ChatEnabled: c.NodeConfig["chat_enabled"],
-		Miner: miner,
+		TopExMap:              topExMap,
+		ChatEnabled:           c.NodeConfig["chat_enabled"],
+		Miner:                 miner,
 		Token:                 token,
-		ExchangeUrl : exchangeUrl})
+		ExchangeUrl:           exchangeUrl})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 	return TemplateStr, nil
 }
 
-
 type topEx struct {
-	Vote1 int64
-	Vote0 int64
-	Host string
+	Vote1  int64
+	Vote0  int64
+	Host   string
 	UserId int64
 }

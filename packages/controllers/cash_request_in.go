@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
-	"fmt"
 )
 
 type CashRequestInPage struct {
@@ -20,7 +20,7 @@ type CashRequestInPage struct {
 	CashRequestsStatus map[string]string
 	MyCashRequests     []map[string]string
 	ActualData         map[string]string
-	LastTxFormatted string
+	LastTxFormatted    string
 }
 
 func (c *Controller) CashRequestIn() (string, error) {
@@ -57,19 +57,19 @@ func (c *Controller) CashRequestIn() (string, error) {
 		ORDER BY cash_request_id DESC
 		LIMIT 1`, userId, utils.Time()-c.Variables.Int64["cash_request_time"]).String()
 	fmt.Println(`
-		SELECT `+c.MyPrefix+`my_cash_requests.cash_request_id,
-					 `+c.MyPrefix+`my_cash_requests.id,
-					 `+c.MyPrefix+`my_cash_requests.comment_status,
-					 `+c.MyPrefix+`my_cash_requests.comment,
+		SELECT ` + c.MyPrefix + `my_cash_requests.cash_request_id,
+					 ` + c.MyPrefix + `my_cash_requests.id,
+					 ` + c.MyPrefix + `my_cash_requests.comment_status,
+					 ` + c.MyPrefix + `my_cash_requests.comment,
 					 cash_requests.amount,
 					 cash_requests.currency_id,
 					 cash_requests.from_user_id,
 					 hex(cash_requests.hash_code) as hash_code
-		FROM `+c.MyPrefix+`my_cash_requests
-		LEFT JOIN cash_requests ON cash_requests.id = `+c.MyPrefix+`my_cash_requests.cash_request_id
-		WHERE cash_requests.to_user_id = `+utils.Int64ToStr(userId)+` AND
+		FROM ` + c.MyPrefix + `my_cash_requests
+		LEFT JOIN cash_requests ON cash_requests.id = ` + c.MyPrefix + `my_cash_requests.cash_request_id
+		WHERE cash_requests.to_user_id = ` + utils.Int64ToStr(userId) + ` AND
 					 cash_requests.status = 'pending' AND
-					 cash_requests.time > `+utils.Int64ToStr(utils.Time()-c.Variables.Int64["cash_request_time"])+` AND
+					 cash_requests.time > ` + utils.Int64ToStr(utils.Time()-c.Variables.Int64["cash_request_time"]) + ` AND
 					 cash_requests.del_block_id = 0 AND
 					 cash_requests.for_repaid_del_block_id = 0
 		ORDER BY cash_request_id DESC
@@ -99,7 +99,7 @@ func (c *Controller) CashRequestIn() (string, error) {
 		CurrencyList:       c.CurrencyList,
 		CashRequestsStatus: cashRequestsStatus,
 		MyCashRequests:     myCashRequests,
-		LastTxFormatted: lastTxFormatted,
+		LastTxFormatted:    lastTxFormatted,
 		ActualData:         actualData})
 	if err != nil {
 		return "", utils.ErrInfo(err)

@@ -22,7 +22,7 @@ type upgrade3Page struct {
 	UserFace        string
 	ExamplePoints   map[string]string
 	Mobile          bool
-	IOS          bool
+	IOS             bool
 }
 
 func (c *Controller) Upgrade3() (string, error) {
@@ -80,7 +80,7 @@ func (c *Controller) Upgrade3() (string, error) {
 		UserProfile:     userProfile,
 		UserFace:        userFace,
 		ExamplePoints:   examplePoints,
-		IOS:          	 utils.IOS(),
+		IOS:             utils.IOS(),
 		Mobile:          utils.Mobile()})
 	if err != nil {
 		return "", utils.ErrInfo(err)

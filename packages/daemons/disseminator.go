@@ -20,7 +20,6 @@ func Disseminator() {
 		}
 	}()
 
-
 	const GoroutineName = "Disseminator"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -62,7 +61,9 @@ BEGIN:
 					LEFT JOIN miners_data ON nodes_connection.user_id = miners_data.user_id
 					`, -1)
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 			if len(hosts) == 0 {
@@ -76,7 +77,9 @@ BEGIN:
 			// защищенный режим
 			nodeData, err = d.OneRow("SELECT node_public_key, tcp_host FROM miners_data WHERE user_id  =  ?", nodeConfig["static_node_user_id"]).String()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 			hosts = append(hosts, map[string]string{"host": nodeConfig["local_gate_ip"], "node_public_key": nodeData["node_public_key"], "user_id": nodeConfig["static_node_user_id"]})
@@ -84,12 +87,16 @@ BEGIN:
 
 		myUsersIds, err := d.GetMyUsersIds(false, false)
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		myMinersIds, err := d.GetMyMinersIds(myUsersIds)
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Debug("%v", myUsersIds)
@@ -106,7 +113,9 @@ BEGIN:
 							 user_id IN (`+strings.Join(utils.SliceInt64ToString(myUsersIds), ",")+`)
 				`, utils.TypeInt("ChangeNodeKey")).Int64()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}
@@ -125,7 +134,9 @@ BEGIN:
 			myMinerId := myMinersIds[r]
 			myUserId, err := d.Single("SELECT user_id FROM miners_data WHERE miner_id  =  ?", myMinerId).Int64()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -133,12 +144,16 @@ BEGIN:
 			// для теста ролбеков отключим на время
 			data, err := d.OneRow("SELECT block_id, hash, head_hash FROM info_block WHERE sent  =  0").Bytes()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			err = d.ExecSql("UPDATE info_block SET sent = 1")
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -155,7 +170,9 @@ BEGIN:
 				toBeSent = append(toBeSent, data["head_hash"]...)
 				err = d.ExecSql("UPDATE info_block SET sent = 1")
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			} else { // тр-ии без блока
@@ -167,7 +184,9 @@ BEGIN:
 			transactions, err := d.GetAll("SELECT hash, high_rate FROM transactions WHERE sent = 0 AND for_self_use = 0", -1)
 			if err != nil {
 				utils.WriteSelectiveLog(err)
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			// нет ни транзакций, ни блока для отправки...
@@ -184,14 +203,16 @@ BEGIN:
 				hexHash := utils.BinToHex([]byte(data["hash"]))
 				toBeSent = append(toBeSent, utils.DecToBin(utils.StrToInt64(data["high_rate"]), 1)...)
 				toBeSent = append(toBeSent, []byte(data["hash"])...)
-				utils.WriteSelectiveLog("UPDATE transactions SET sent = 1 WHERE hex(hash) = "+string(hexHash))
+				utils.WriteSelectiveLog("UPDATE transactions SET sent = 1 WHERE hex(hash) = " + string(hexHash))
 				affect, err := d.ExecSqlGetAffect("UPDATE transactions SET sent = 1 WHERE hex(hash) = ?", hexHash)
 				if err != nil {
 					utils.WriteSelectiveLog(err)
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			}
 
 			// отправляем блок и хэши тр-ий, если есть что отправлять
@@ -222,7 +243,9 @@ BEGIN:
 			rows, err := d.Query("SELECT hash, data FROM transactions WHERE sent  =  0")
 			if err != nil {
 				utils.WriteSelectiveLog(err)
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			for rows.Next() {
@@ -230,20 +253,24 @@ BEGIN:
 				err = rows.Scan(&hash, &data)
 				if err != nil {
 					rows.Close()
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Debug("hash %x", hash)
 				hashHex := utils.BinToHex(hash)
-				utils.WriteSelectiveLog("UPDATE transactions SET sent = 1 WHERE hex(hash) = "+string(hashHex))
-				affect,err := d.ExecSqlGetAffect("UPDATE transactions SET sent = 1 WHERE hex(hash) = ?", hashHex)
+				utils.WriteSelectiveLog("UPDATE transactions SET sent = 1 WHERE hex(hash) = " + string(hashHex))
+				affect, err := d.ExecSqlGetAffect("UPDATE transactions SET sent = 1 WHERE hex(hash) = ?", hashHex)
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					rows.Close()
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 				toBeSent = append(toBeSent, data...)
 			}
 			rows.Close()
@@ -419,7 +446,7 @@ func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key st
 			}
 			txHash = utils.BinToHex(txHash)
 			log.Debug("txHash %s", txHash)
-			utils.WriteSelectiveLog("SELECT data FROM transactions WHERE hex(hash) = "+string(txHash))
+			utils.WriteSelectiveLog("SELECT data FROM transactions WHERE hex(hash) = " + string(txHash))
 			tx, err := d.Single("SELECT data FROM transactions WHERE hex(hash) = ?", txHash).Bytes()
 			log.Debug("tx %x", tx)
 			if err != nil {
@@ -427,7 +454,7 @@ func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key st
 				log.Error("%v", utils.ErrInfo(err))
 				return
 			}
-			utils.WriteSelectiveLog("tx: "+string(utils.BinToHex(tx)))
+			utils.WriteSelectiveLog("tx: " + string(utils.BinToHex(tx)))
 			if len(tx) > 0 {
 				binaryTx = append(binaryTx, utils.EncodeLengthPlusData(tx)...)
 			}

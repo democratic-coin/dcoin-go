@@ -57,7 +57,7 @@ func (c *Controller) Notifications() (string, error) {
 		MyNotifications: myNotifications,
 		NodeAdmin:       c.NodeAdmin,
 		LangInt:         c.LangInt,
-		Mobile: utils.Mobile(),
+		Mobile:          utils.Mobile(),
 		Data:            data})
 	if err != nil {
 		return "", utils.ErrInfo(err)

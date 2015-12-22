@@ -9,6 +9,7 @@ import (
 	"io"
 	"regexp"
 )
+
 func (c *Controller) EImportData() (string, error) {
 
 	if !c.NodeAdmin || c.SessRestricted != 0 {
@@ -45,7 +46,7 @@ func (c *Controller) EImportData() (string, error) {
 
 		log.Debug("table %v", table)
 
-		_ = c.ExecSql(`DELETE FROM  `+table)
+		_ = c.ExecSql(`DELETE FROM  ` + table)
 
 		log.Debug(table)
 		var id bool
@@ -77,7 +78,7 @@ func (c *Controller) EImportData() (string, error) {
 			}
 		}
 		if id {
-			maxId, err := c.Single(`SELECT max(id) FROM `+table).Int64()
+			maxId, err := c.Single(`SELECT max(id) FROM ` + table).Int64()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}

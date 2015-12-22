@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"archive/zip"
 	"bytes"
 	"crypto"
 	"crypto/aes"
@@ -8,6 +9,7 @@ import (
 	crand "crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
+	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
@@ -19,9 +21,10 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/golang/freetype"
-	"net/mail"
+	"github.com/kardianos/osext"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/mcuadros/go-version"
 	"image"
 	"image/color"
 	"image/draw"
@@ -33,8 +36,10 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"net/mail"
 	"net/smtp"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -42,25 +47,19 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 	"sync"
-	"os/exec"
-	"github.com/kardianos/osext"
-	"archive/zip"
-	"github.com/mcuadros/go-version"
-	"crypto/tls"
+	"time"
 )
 
 type BlockData struct {
-	BlockId  int64
-	Time     int64
-	UserId   int64
-	Level    int64
+	BlockId       int64
+	Time          int64
+	UserId        int64
+	Level         int64
 	CurrentUserId int64
-	Sign     []byte
-	Hash     []byte
-	HeadHash []byte
-
+	Sign          []byte
+	Hash          []byte
+	HeadHash      []byte
 }
 
 type prevBlockType struct {
@@ -87,7 +86,6 @@ var eWallets = &sync.Mutex{}
 func init() {
 	flag.Parse()
 }
-
 
 func IOS() bool {
 	if (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64") && runtime.GOOS == "darwin" {
@@ -1361,10 +1359,10 @@ func SendSms(sms_http_get_request, text string) (string, error) {
 
 func sendMail(body, subj string, To string, mailData map[string]string) error {
 
-	smtpHostAndPort := mailData["smtp_server"]+":"+mailData["smtp_port"]
+	smtpHostAndPort := mailData["smtp_server"] + ":" + mailData["smtp_port"]
 
 	from := mail.Address{"", mailData["smtp_username"]}
-	to   := mail.Address{"", To}
+	to := mail.Address{"", To}
 
 	// Setup headers
 	headers := make(map[string]string)
@@ -1374,7 +1372,7 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 
 	// Setup message
 	message := ""
-	for k,v := range headers {
+	for k, v := range headers {
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 	message += "\r\n" + body
@@ -1382,9 +1380,9 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 	auth := smtp.PlainAuth("", mailData["smtp_username"], mailData["smtp_password"], mailData["smtp_server"])
 
 	// TLS config
-	tlsconfig := &tls.Config {
+	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName: mailData["smtp_server"],
+		ServerName:         mailData["smtp_server"],
 	}
 
 	// Here is the key, you need to call tls.Dial instead of smtp.Dial
@@ -1433,48 +1431,48 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 	c.Quit()
 
 	/*
-	if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
-		e := email.NewEmail()
-		e.From = "Dcoin <" + mailData["smtp_username"] + ">"
-		e.To = []string{To}
-		e.Subject = subject
-		e.HTML = []byte(`<table width="100%" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-                 <td style="font-family: 'helvetica neue', 'helvetica', 'arial', 'sans-serif'; font-size: 14px;">
-                          <table width="100%" bgcolor="f0f0f0" color="000000" cellspacing="0" cellpadding="0" border="0">
-                                   <tr>
-                                            <td>
-                                                     <table width="560" align="center" cellspacing="0" cellpadding="8" border="0">
-                                                     <tr>
-														<td><img src="http://dcoin.club/email/logo.png" alt="Dcoin" style="width: 280px; height: 62px; margin: 10px 0 15px;" />
-															<table width="100%" bgcolor="ffffff" style="border: 1px solid #eeeeee; margin-bottom: 10px; padding: 30px 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.07); line-height: 1.4;" cellspacing="0" cellpadding="0" border="0">
-															<tr>
-																<td>
-																<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td valign="middle" align="center" height="200" style="font-size: 20px; text-decoration: none; color: #111111;">` + message + `</td></tr></table>
-																</td>
-															</tr>
-															</table>
-														</td>
-                                                     </tr>
-                                                     <tr>
-														<td><p style="margin-bottom: 20px; text-align: center; font-size: 11px; color: #555555;">You can cut off the e-mail notifications here: '.$node_url.' -> Settings -> Sms and email notifications</p>
-														</td>
-                                                     </tr>
-													</table>
-                                            </td>
-                                   </tr>
-                          </table>
-                 </td>
-        </tr>
-</table>';`)
-		fmt.Println("smtp_server", mailData["smtp_server"]+":"+mailData["smtp_port"])
-		fmt.Println("PlainAuth", smtp.PlainAuth("", mailData["smtp_username"], mailData["smtp_password"], mailData["smtp_server"]+":"+mailData["smtp_port"]))
+		if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
+			e := email.NewEmail()
+			e.From = "Dcoin <" + mailData["smtp_username"] + ">"
+			e.To = []string{To}
+			e.Subject = subject
+			e.HTML = []byte(`<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	        <tr>
+	                 <td style="font-family: 'helvetica neue', 'helvetica', 'arial', 'sans-serif'; font-size: 14px;">
+	                          <table width="100%" bgcolor="f0f0f0" color="000000" cellspacing="0" cellpadding="0" border="0">
+	                                   <tr>
+	                                            <td>
+	                                                     <table width="560" align="center" cellspacing="0" cellpadding="8" border="0">
+	                                                     <tr>
+															<td><img src="http://dcoin.club/email/logo.png" alt="Dcoin" style="width: 280px; height: 62px; margin: 10px 0 15px;" />
+																<table width="100%" bgcolor="ffffff" style="border: 1px solid #eeeeee; margin-bottom: 10px; padding: 30px 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.07); line-height: 1.4;" cellspacing="0" cellpadding="0" border="0">
+																<tr>
+																	<td>
+																	<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td valign="middle" align="center" height="200" style="font-size: 20px; text-decoration: none; color: #111111;">` + message + `</td></tr></table>
+																	</td>
+																</tr>
+																</table>
+															</td>
+	                                                     </tr>
+	                                                     <tr>
+															<td><p style="margin-bottom: 20px; text-align: center; font-size: 11px; color: #555555;">You can cut off the e-mail notifications here: '.$node_url.' -> Settings -> Sms and email notifications</p>
+															</td>
+	                                                     </tr>
+														</table>
+	                                            </td>
+	                                   </tr>
+	                          </table>
+	                 </td>
+	        </tr>
+	</table>';`)
+			fmt.Println("smtp_server", mailData["smtp_server"]+":"+mailData["smtp_port"])
+			fmt.Println("PlainAuth", smtp.PlainAuth("", mailData["smtp_username"], mailData["smtp_password"], mailData["smtp_server"]+":"+mailData["smtp_port"]))
 
-		err := e.Send(mailData["smtp_server"]+":"+mailData["smtp_port"], smtp.PlainAuth("", mailData["smtp_username"], mailData["smtp_password"], mailData["smtp_server"]+":"+mailData["smtp_port"]))
-		if err != nil {
-			return ErrInfo(err)
-		}
-	}*/
+			err := e.Send(mailData["smtp_server"]+":"+mailData["smtp_port"], smtp.PlainAuth("", mailData["smtp_username"], mailData["smtp_password"], mailData["smtp_server"]+":"+mailData["smtp_port"]))
+			if err != nil {
+				return ErrInfo(err)
+			}
+		}*/
 	return nil
 }
 
@@ -3177,8 +3175,6 @@ func JsonAnswer(err interface{}, answType string) *jsonAnswer {
 	return &jsonAnswer{errors.New(string(result))}
 }
 
-
-
 func TCPGetSizeAndData(conn net.Conn, maxSize int64) ([]byte, error) {
 	// получаем размер данных
 	buf := make([]byte, 4)
@@ -3201,8 +3197,6 @@ func TCPGetSizeAndData(conn net.Conn, maxSize int64) ([]byte, error) {
 	return binaryData, nil
 }
 
-
-
 func ClearNullFloat64(number float64, n int) float64 {
 	return StrToFloat64(ClearNull(Float64ToStr(number), n))
 }
@@ -3214,7 +3208,7 @@ func ClearNull(str string, n int) string {
 	if ind != -1 {
 		end := n
 		if len(str[ind+1:]) > 1 {
-			end = n+1
+			end = n + 1
 		}
 		if n > 0 {
 			new = str[:ind] + "." + str[ind+1:ind+end]
@@ -3227,11 +3221,9 @@ func ClearNull(str string, n int) string {
 	return new
 }
 
-
 func EGetReductionLock() (int64, error) {
 	return DB.Single("SELECT time FROM e_reduction_lock").Int64()
 }
-
 
 func EUserAmountAndProfit(userId, currencyId int64) float64 {
 	var UserCurrencyId, UserLastUpdate int64
@@ -3260,11 +3252,10 @@ func EGetCurrencyList() (map[int64]string, error) {
 	return rez, nil
 }
 
-
 func UpdEWallet(userId, currencyId, lastUpdate int64, amount float64, newAmount bool) error {
 	eWallets.Lock()
 	exists, err := DB.Single(`SELECT user_id FROM e_wallets WHERE user_id = ? AND currency_id = ?`, userId, currencyId).Int64()
-	if err!=nil {
+	if err != nil {
 		eWallets.Unlock()
 		return ErrInfo(err)
 	}
@@ -3330,10 +3321,10 @@ func IPwoPort(ipport string) string {
 
 func DcoinUpd(url string) error {
 	_, err := DownloadToFile(url, *Dir+"/dc.zip", 3600, nil, nil, "upd")
-	if err!= nil {
+	if err != nil {
 		return ErrInfo(err)
 	}
-	zipfile := *Dir+"/dc.zip"
+	zipfile := *Dir + "/dc.zip"
 	fmt.Println(zipfile)
 	reader, err := zip.OpenReader(zipfile)
 	if err != nil {
@@ -3373,10 +3364,10 @@ func DcoinUpd(url string) error {
 	old := ""
 	if _, err := os.Stat(os.Args[0]); err == nil {
 		old = os.Args[0]
-	} else if _, err := os.Stat(folderPath+"/"+filepath.Base(os.Args[0])); err == nil {
-		old = folderPath+"/"+filepath.Base(os.Args[0])
+	} else if _, err := os.Stat(folderPath + "/" + filepath.Base(os.Args[0])); err == nil {
+		old = folderPath + "/" + filepath.Base(os.Args[0])
 	} else {
-		old = *Dir+"/"+filepath.Base(os.Args[0])
+		old = *Dir + "/" + filepath.Base(os.Args[0])
 	}
 	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir)
 	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir).Start()
@@ -3386,11 +3377,9 @@ func DcoinUpd(url string) error {
 	return nil
 }
 
-
-
 func GetUpdVerAndUrl(host string) (string, string, error) {
 
-	update, err := GetHttpTextAnswer(host+"/update.json")
+	update, err := GetHttpTextAnswer(host + "/update.json")
 	if len(update) > 0 {
 
 		//fmt.Println(update)
@@ -3431,6 +3420,6 @@ func GetUpdVerAndUrl(host string) (string, string, error) {
 }
 
 type updateType struct {
-	Message map[string]string
+	Message   map[string]string
 	Signature string
 }

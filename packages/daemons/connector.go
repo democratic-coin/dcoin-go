@@ -1,16 +1,16 @@
 package daemons
 
 import (
+	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"io/ioutil"
 	"net"
 	"os"
+	"regexp"
 	"strings"
 	"time"
-	"regexp"
-	"fmt"
 )
 
 var myUserIdForChat int64
@@ -44,12 +44,12 @@ func (d *daemon) chatConnector() {
 	// исключим хосты, к которым уже подключены
 	var uids string
 	for userId, _ := range utils.ChatOutConnections {
-		uids+=utils.Int64ToStr(userId)+","
+		uids += utils.Int64ToStr(userId) + ","
 	}
 	if len(uids) > 0 {
 		uids = uids[:len(uids)-1]
 	}
-	existsTcpHost, err := d.GetList(`SELECT tcp_host FROM miners_data WHERE user_id IN (`+uids+`)`).String()
+	existsTcpHost, err := d.GetList(`SELECT tcp_host FROM miners_data WHERE user_id IN (` + uids + `)`).String()
 	if err != nil {
 		log.Error("%v", err)
 	}
@@ -76,7 +76,7 @@ func (d *daemon) chatConnector() {
 
 				log.Debug("myUserIdForChat %v", myUserIdForChat)
 				log.Debug("chat host: %v", match[1]+":"+consts.CHAT_PORT)
-				chatHost := match[1]+":"+consts.CHAT_PORT
+				chatHost := match[1] + ":" + consts.CHAT_PORT
 				//chatHost := "192.168.150.30:8087"
 
 				// проверим, нет ли уже созданных каналов для такого хоста
@@ -165,7 +165,6 @@ func Connector() {
 		}
 	}
 
-
 	GoroutineName := "Connector"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -186,7 +185,6 @@ func Connector() {
 		return
 	}
 
-
 	// соединения для чата иногда отваливаются, поэтому в цикле мониторим состояние
 	go func() {
 		for {
@@ -201,7 +199,7 @@ func Connector() {
 		}
 	}()
 
-	BEGIN:
+BEGIN:
 	for {
 		log.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
@@ -254,7 +252,9 @@ func Connector() {
 		// в сингл-моде будет только $my_miners_ids[0]
 		myMinersIds, err := d.GetMyMinersIds(collective)
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Info("%v", myMinersIds)
@@ -301,7 +301,9 @@ func Connector() {
 				delMiners = append(delMiners, data["miner_id"])
 				err = d.ExecSql("DELETE FROM nodes_connection WHERE host = ? OR user_id = ?", data["host"], data["user_id"])
 				if err != nil {
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				continue
@@ -314,47 +316,47 @@ func Connector() {
 
 		log.Debug("hosts: %v", hosts)
 		/*
-		ch := make(chan *answerType)
-		for _, host := range hosts {
-			userId := utils.StrToInt64(host["user_id"])
-			go func(userId int64, host string) {
-				ch_ := make(chan *answerType, 1)
-				go func() {
-					log.Debug("host: %v / userId: %v", host, userId)
-					ch_ <- check(host, userId)
-				}()
-				select {
-				case reachable := <-ch_:
-					ch <- reachable
-				case <-time.After(consts.WAIT_CONFIRMED_NODES * time.Second):
-					ch <- &answerType{userId: userId, answer: 0}
-				}
-			}(userId, host["host"])
-		}
-
-		log.Debug("%v", "hosts", hosts)
-
-		var newHosts []map[string]string
-		var countOk int
-		// если нода не отвечает, то удалем её из таблы nodes_connection
-		for i := 0; i < len(hosts); i++ {
-			result := <-ch
-			if result.answer == 0 {
-				log.Info("delete %v", result.userId)
-				err = d.ExecSql("DELETE FROM nodes_connection WHERE user_id = ?", result.userId)
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
-				}
-				for _, data := range hosts {
-					if utils.StrToInt64(data["user_id"]) != result.userId {
-						newHosts = append(newHosts, data)
+			ch := make(chan *answerType)
+			for _, host := range hosts {
+				userId := utils.StrToInt64(host["user_id"])
+				go func(userId int64, host string) {
+					ch_ := make(chan *answerType, 1)
+					go func() {
+						log.Debug("host: %v / userId: %v", host, userId)
+						ch_ <- check(host, userId)
+					}()
+					select {
+					case reachable := <-ch_:
+						ch <- reachable
+					case <-time.After(consts.WAIT_CONFIRMED_NODES * time.Second):
+						ch <- &answerType{userId: userId, answer: 0}
 					}
-				}
-			} else {
-				countOk++
+				}(userId, host["host"])
 			}
-			log.Info("answer: %v", result)
-		}
+
+			log.Debug("%v", "hosts", hosts)
+
+			var newHosts []map[string]string
+			var countOk int
+			// если нода не отвечает, то удалем её из таблы nodes_connection
+			for i := 0; i < len(hosts); i++ {
+				result := <-ch
+				if result.answer == 0 {
+					log.Info("delete %v", result.userId)
+					err = d.ExecSql("DELETE FROM nodes_connection WHERE user_id = ?", result.userId)
+					if err != nil {
+						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					}
+					for _, data := range hosts {
+						if utils.StrToInt64(data["user_id"]) != result.userId {
+							newHosts = append(newHosts, data)
+						}
+					}
+				} else {
+					countOk++
+				}
+				log.Info("answer: %v", result)
+			}
 		*/
 		var countOk int
 		hosts = checkHosts(hosts, &countOk)
@@ -369,7 +371,9 @@ func Connector() {
 			need := maxHosts - len(hosts)
 			max, err := d.Single("SELECT max(miner_id) FROM miners").Int()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			i0 := 0
@@ -405,7 +409,9 @@ func Connector() {
 						FROM miners_data
 						WHERE miner_id IN (`+ids+`)`, "tcp_host", "user_id")
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				for host, userId := range minersHosts {
@@ -431,7 +437,6 @@ func Connector() {
 			}
 		}
 
-
 		hosts = checkHosts(newHostsForCheck, &countOk)
 		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
@@ -443,7 +448,9 @@ func Connector() {
 		if len(hosts) < 10 {
 			hostsData_, err := ioutil.ReadFile(*utils.Dir + "/nodes.inc")
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			hostsData := strings.Split(string(hostsData_), "\n")
@@ -476,17 +483,17 @@ func Connector() {
 					}
 				}
 				/*
-				err = d.ExecSql("DELETE FROM nodes_connection WHERE host = ?", host)
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
-					continue BEGIN
-				}
-				log.Debug(host)
-				/*err = d.ExecSql("INSERT INTO nodes_connection ( host, user_id ) VALUES ( ?, ? )", host, userId)
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
-					continue BEGIN
-				}*/
+					err = d.ExecSql("DELETE FROM nodes_connection WHERE host = ?", host)
+					if err != nil {
+						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						continue BEGIN
+					}
+					log.Debug(host)
+					/*err = d.ExecSql("INSERT INTO nodes_connection ( host, user_id ) VALUES ( ?, ? )", host, userId)
+					if err != nil {
+						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						continue BEGIN
+					}*/
 				newHostsForCheck = append(newHostsForCheck, map[string]string{"user_id": userId, "host": host})
 
 				nodesInc[host] = userId
@@ -503,12 +510,16 @@ func Connector() {
 		for _, host := range hosts {
 			err = d.ExecSql("DELETE FROM nodes_connection WHERE host = ?", host["host"])
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			err = d.ExecSql("INSERT INTO nodes_connection ( host, user_id ) VALUES ( ?, ? )", host["host"], host["user_id"])
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}
@@ -520,7 +531,9 @@ func Connector() {
 			nodesFile = nodesFile[:len(nodesFile)-1]
 			err := ioutil.WriteFile(*utils.Dir+"/nodes.inc", []byte(nodesFile), 0644)
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}
@@ -531,7 +544,6 @@ func Connector() {
 		} else {
 			sleepTime = d.sleepTime
 		}
-
 
 		if d.dSleep(sleepTime) {
 			break BEGIN
@@ -545,7 +557,7 @@ type answerType struct {
 	answer int64
 }
 
-func checkHosts(hosts []map[string]string, countOk *int) ([]map[string]string) {
+func checkHosts(hosts []map[string]string, countOk *int) []map[string]string {
 	ch := make(chan *answerType)
 	for _, host := range hosts {
 		userId := utils.StrToInt64(host["user_id"])

@@ -20,7 +20,6 @@ func MaxPromisedAmountGenerator() {
 		}
 	}()
 
-
 	const GoroutineName = "MaxPromisedAmountGenerator"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -62,28 +61,38 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		blockId, err := d.GetBlockId()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if blockId == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), 1) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), 1) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		_, _, myMinerId, _, _, _, err := d.TestBlock()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		// а майнер ли я ?
 		if myMinerId == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		variables, err := d.GetAllVariables()
@@ -91,17 +100,23 @@ BEGIN:
 
 		totalCountCurrencies, err := d.GetCountCurrencies()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		// проверим, прошло ли 2 недели с момента последнего обновления
 		pctTime, err := d.Single("SELECT max(time) FROM max_promised_amounts").Int64()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if curTime-pctTime <= variables.Int64["new_max_promised_amount"] {
-			if d.unlockPrintSleep(utils.ErrInfo("14 day error"), 1) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("14 day error"), 1) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -109,7 +124,9 @@ BEGIN:
 		maxPromisedAmountVotes := make(map[int64][]map[int64]int64)
 		rows, err := d.Query("SELECT currency_id, amount, count(user_id) as votes FROM votes_max_promised_amount GROUP BY currency_id, amount ORDER BY currency_id, amount ASC")
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		for rows.Next() {
@@ -117,7 +134,9 @@ BEGIN:
 			err = rows.Scan(&currency_id, &amount, &votes)
 			if err != nil {
 				rows.Close()
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			maxPromisedAmountVotes[currency_id] = append(maxPromisedAmountVotes[currency_id], map[int64]int64{amount: votes})
@@ -132,7 +151,9 @@ BEGIN:
 
 		jsonData, err := json.Marshal(NewMaxPromisedAmountsVotes)
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -141,7 +162,9 @@ BEGIN:
 		log.Debug("forSign = %v", forSign)
 		binSign, err := d.GetBinSign(forSign, myUserId)
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		data := utils.DecToBin(utils.TypeInt("NewMaxPromisedAmounts"), 1)
@@ -152,7 +175,9 @@ BEGIN:
 
 		err = d.InsertReplaceTxInQueue(data)
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -160,7 +185,9 @@ BEGIN:
 		p.DCDB = d.DCDB
 		err = p.TxParser(utils.HexToBin(utils.Md5(data)), data, true)
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 

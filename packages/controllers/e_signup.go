@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"errors"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) ESignUp() (string, error) {
@@ -23,14 +23,13 @@ func (c *Controller) ESignUp() (string, error) {
 	}
 
 	salt := utils.RandSeq(32)
-	passAndSalt := utils.DSha256(password+salt)
+	passAndSalt := utils.DSha256(password + salt)
 	userId, err := c.ExecSqlGetLastInsertId("INSERT INTO e_users ( email, password, ip, salt ) VALUES ( ?, ?, ?, ? )", "id", email, passAndSalt, c.r.RemoteAddr, salt)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
 	c.sess.Set("e_user_id", userId)
-
 
 	return utils.JsonAnswer("success", "success").String(), nil
 }

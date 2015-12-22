@@ -119,7 +119,7 @@ func (c *Controller) PoolAddUsers() (string, error) {
 			}
 		}
 		if id {
-			maxId, err := c.Single(`SELECT max(id) FROM `+table).Int64()
+			maxId, err := c.Single(`SELECT max(id) FROM ` + table).Int64()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}

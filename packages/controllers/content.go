@@ -204,7 +204,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Debug("dbInit", dbInit)
 
-	setupPassword:=c.NodeConfig["setup_password"]
+	setupPassword := c.NodeConfig["setup_password"]
 	match, _ := regexp.MatchString("^(installStep[0-9_]+)|(blockExplorer)$", tplName)
 	// CheckInputData - гарантирует, что tplName чист
 	if tplName != "" && utils.CheckInputData(tplName, "tpl_name") && (sessUserId > 0 || match) {
@@ -218,7 +218,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 		} else if status == "waiting_accept_new_key" {
 			tplName = "waitingAcceptNewKey"
 		}
-	} else if dbInit && installProgress == "complete" && !c.Community && sessUserId == 0 && status == "waiting_set_new_key" && setupPassword!="" {
+	} else if dbInit && installProgress == "complete" && !c.Community && sessUserId == 0 && status == "waiting_set_new_key" && setupPassword != "" {
 		tplName = "setupPassword"
 	} else if dbInit && installProgress == "complete" && sessUserId == 0 && status == "waiting_accept_new_key" {
 		tplName = "waitingAcceptNewKey"
@@ -350,7 +350,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Error("%v", err)
 			}
-			if data["first_select"] == 0 && data["miner_id"] == 0 && c.SessRestricted==0 {
+			if data["first_select"] == 0 && data["miner_id"] == 0 && c.SessRestricted == 0 {
 				tplName = "firstSelect"
 			}
 		}

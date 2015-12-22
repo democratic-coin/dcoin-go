@@ -30,7 +30,7 @@ type upgrade6Page struct {
 	Pools           template.JS
 	VideoHash       string
 	Mobile          bool
-	VideoUrlId string
+	VideoUrlId      string
 }
 
 func (c *Controller) Upgrade6() (string, error) {
@@ -163,7 +163,6 @@ func (c *Controller) Upgrade6() (string, error) {
 	}
 	poolsJs = poolsJs[:len(poolsJs)-1]
 
-
 	videoUrlId, err := c.Single("SELECT video_url_id FROM " + c.MyPrefix + "my_table").String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -190,7 +189,7 @@ func (c *Controller) Upgrade6() (string, error) {
 		NodePrivateKey:  nodePrivateKey,
 		Pools:           template.JS(poolsJs),
 		UserId:          c.SessUserId,
-		VideoUrlId: videoUrlId,
+		VideoUrlId:      videoUrlId,
 		Mobile:          utils.Mobile()})
 	if err != nil {
 		return "", utils.ErrInfo(err)

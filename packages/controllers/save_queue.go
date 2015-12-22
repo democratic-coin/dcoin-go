@@ -1085,7 +1085,7 @@ func (c *Controller) SaveQueue() (string, error) {
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
-			if c.Community && node_admin_access && allUsers=="1" {
+			if c.Community && node_admin_access && allUsers == "1" {
 				community, err = c.GetCommunityUsers()
 				if err != nil {
 					return "", utils.ErrInfo(err)
@@ -1335,10 +1335,10 @@ func (c *Controller) SaveQueue() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		var arbitratorEncText_ []string
-		for _, encText:=range arbitrator_enc_text {
+		for _, encText := range arbitrator_enc_text {
 			arbitratorEncText_ = append(arbitratorEncText_, encText)
 		}
-		for i:=0; i < 5; i++ {
+		for i := 0; i < 5; i++ {
 			if i < len(arbitrator_enc_text) {
 				if arbitratorEncText_[i] == "0" {
 					arbitratorEncText_[i] = "00"
@@ -1347,10 +1347,10 @@ func (c *Controller) SaveQueue() (string, error) {
 			}
 		}
 		/*
-		err := json.Unmarshal([]byte(c.r.PostFormValue("arbitrator_enc_text")), &arbitratorEncText)
-		if err != nil {
-			return fmt.Sprintf("%q", err), err
-		}*/
+			err := json.Unmarshal([]byte(c.r.PostFormValue("arbitrator_enc_text")), &arbitratorEncText)
+			if err != nil {
+				return fmt.Sprintf("%q", err), err
+			}*/
 
 		data = utils.DecToBin(txType, 1)
 		data = append(data, utils.DecToBin(txTime, 4)...)

@@ -6,19 +6,19 @@ import (
 )
 
 type creditsPage struct {
-	SignData     string
-	ShowSignData bool
-	TxType       string
-	TxTypeId     int64
-	TimeNow      int64
-	UserId       int64
-	Alert        string
-	Lang         map[string]string
-	CountSignArr []int
-	I_debtor     []*credit
-	I_creditor   []*credit
-	CurrencyList map[int64]string
-	CreditPart   float64
+	SignData        string
+	ShowSignData    bool
+	TxType          string
+	TxTypeId        int64
+	TimeNow         int64
+	UserId          int64
+	Alert           string
+	Lang            map[string]string
+	CountSignArr    []int
+	I_debtor        []*credit
+	I_creditor      []*credit
+	CurrencyList    map[int64]string
+	CreditPart      float64
 	LastTxFormatted string
 }
 
@@ -72,20 +72,20 @@ func (c *Controller) Credits() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("credits", "credits", &creditsPage{
-		Alert:        c.Alert,
-		Lang:         c.Lang,
-		CountSignArr: c.CountSignArr,
-		ShowSignData: c.ShowSignData,
-		UserId:       c.SessUserId,
-		TimeNow:      timeNow,
-		TxType:       txType,
-		TxTypeId:     txTypeId,
-		SignData:     "",
-		CurrencyList: c.CurrencyListCf,
-		CreditPart:   creditPart,
-		I_debtor:     I_debtor,
+		Alert:           c.Alert,
+		Lang:            c.Lang,
+		CountSignArr:    c.CountSignArr,
+		ShowSignData:    c.ShowSignData,
+		UserId:          c.SessUserId,
+		TimeNow:         timeNow,
+		TxType:          txType,
+		TxTypeId:        txTypeId,
+		SignData:        "",
+		CurrencyList:    c.CurrencyListCf,
+		CreditPart:      creditPart,
+		I_debtor:        I_debtor,
 		LastTxFormatted: lastTxFormatted,
-		I_creditor:   I_creditor})
+		I_creditor:      I_creditor})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

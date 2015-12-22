@@ -22,7 +22,7 @@ type StatisticPage struct {
 	CountUsers                 int64
 	CurrencyPct                map[int64]map[string]string
 	Reduction                  []map[string]string
-	RefPhotos       map[int64][]string
+	RefPhotos                  map[int64][]string
 }
 
 func (c *Controller) Statistic() (string, error) {
@@ -104,7 +104,6 @@ func (c *Controller) Statistic() (string, error) {
 			FROM wallets
 			WHERE amount > 0
 			GROUP BY  currency_id`, "currency_id", "count")
-
 
 	refPhotos := make(map[int64][]string)
 	// таблица обмена на наличные
@@ -211,7 +210,6 @@ func (c *Controller) Statistic() (string, error) {
 		reduction[i]["time"] = t.Format(c.TimeFormat)
 	}
 
-
 	TemplateStr, err := makeTemplate("statistic", "statistic", &StatisticPage{
 		Lang:                       c.Lang,
 		CurrencyList:               c.CurrencyListCf,
@@ -227,7 +225,7 @@ func (c *Controller) Statistic() (string, error) {
 		CountUsers:                 countUsers,
 		CurrencyPct:                currencyPct,
 		Reduction:                  reduction,
-		RefPhotos: refPhotos,
+		RefPhotos:                  refPhotos,
 		UserId:                     c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)

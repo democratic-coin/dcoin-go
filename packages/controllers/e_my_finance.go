@@ -1,25 +1,25 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
-	"strings"
-	"sort"
-	"time"
 	"encoding/base64"
+	"github.com/c-darwin/dcoin-go/packages/utils"
+	"sort"
+	"strings"
+	"time"
 )
 
 type eMyFinancePage struct {
-	Lang          map[string]string
-	CurrencyList  map[int64]string
-	UserId	int64
+	Lang             map[string]string
+	CurrencyList     map[int64]string
+	UserId           int64
 	MyFinanceHistory []*EmyFinanceType
-	Collapse string
-	Currency map[string]map[string]string
+	Collapse         string
+	Currency         map[string]map[string]string
 }
 
 type EmyFinanceType struct {
-	Ftype, Status, Method string
-	Amount, WdAmount float64
+	Ftype, Status, Method                        string
+	Amount, WdAmount                             float64
 	Id, CurrencyId, AddTime, CloseTime, OpenTime int64
 }
 
@@ -28,7 +28,7 @@ func (c *Controller) EMyFinance() (string, error) {
 	var err error
 
 	if c.SessUserId == 0 {
-		return `<script language="javascript"> window.location.href = "`+c.EURL+`"</script>If you are not redirected automatically, follow the <a href="`+c.EURL+`">`+c.EURL+`</a>`, nil
+		return `<script language="javascript"> window.location.href = "` + c.EURL + `"</script>If you are not redirected automatically, follow the <a href="` + c.EURL + `">` + c.EURL + `</a>`, nil
 	}
 
 	confirmations := c.EConfig["confirmations"]
@@ -66,41 +66,40 @@ func (c *Controller) EMyFinance() (string, error) {
 		currency[data["id"]]["amount"] = wallet["amount"]
 		currency[data["id"]]["name"] = data["name"]
 		if utils.StrToInt64(data["id"]) < 1000 { //DC
-			currency[data["id"]]["input"] = strings.Replace(c.Lang["dc_deposit_text"], "[dc_currency]", data["name"],  -1)
+			currency[data["id"]]["input"] = strings.Replace(c.Lang["dc_deposit_text"], "[dc_currency]", data["name"], -1)
 			currency[data["id"]]["input"] = strings.Replace(currency[data["id"]]["input"], "[account]", mainDcAccount, -1)
-			currency[data["id"]]["input"] = strings.Replace(currency[data["id"]]["input"], "[user_id]",utils.Int64ToStr(c.SessUserId),  -1)
-			currency[data["id"]]["input"] = strings.Replace(currency[data["id"]]["input"], "[confirmations]",  confirmations,-1)
+			currency[data["id"]]["input"] = strings.Replace(currency[data["id"]]["input"], "[user_id]", utils.Int64ToStr(c.SessUserId), -1)
+			currency[data["id"]]["input"] = strings.Replace(currency[data["id"]]["input"], "[confirmations]", confirmations, -1)
 		}
 
-		currency[data["id"]]["output"] = `<div class="pull-left"><h4>`+c.Lang["withdraw0"]+` `+data["name"]+`</h4>
+		currency[data["id"]]["output"] = `<div class="pull-left"><h4>` + c.Lang["withdraw0"] + ` ` + data["name"] + `</h4>
 			<table class="table_out">
 			<tbody>
 			<tr>
-			<td>`+c.Lang["your_dcoin_account"]+`:</td>
-			<td class="form-inline"><input id="account-`+data["id"]+`" class="form-control col-xs-3" type="text"></td>
+			<td>` + c.Lang["your_dcoin_account"] + `:</td>
+			<td class="form-inline"><input id="account-` + data["id"] + `" class="form-control col-xs-3" type="text"></td>
 			</tr>
 			<tr>
-			<td>`+c.Lang["amount_to_withdrawal"]+`:</td>
-			<td class="form-inline" style="line-height: 35px"><input id="amount-`+data["id"]+`" class="form-control col-xs-3" maxlength="15" type="text"  onkeyup="calc_withdraw_amount(`+data["id"]+`, '0.1')" onchange="calc_withdraw_amount(`+data["id"]+`, '0.1')" style="margin-right:5px"> `+data["name"]+`</td>
+			<td>` + c.Lang["amount_to_withdrawal"] + `:</td>
+			<td class="form-inline" style="line-height: 35px"><input id="amount-` + data["id"] + `" class="form-control col-xs-3" maxlength="15" type="text"  onkeyup="calc_withdraw_amount(` + data["id"] + `, '0.1')" onchange="calc_withdraw_amount(` + data["id"] + `, '0.1')" style="margin-right:5px"> ` + data["name"] + `</td>
 			</tr>
 			<tr>
-			<td>`+c.Lang["you_will_receive"]+`:</td>
-			<td class="form-inline" style="line-height: 35px"><input  disabled="" id="withdraw_amount-`+data["id"]+`" class="form-control col-xs-3" maxlength="15" type="text" style="margin-right:5px"> `+data["name"]+`</td>
+			<td>` + c.Lang["you_will_receive"] + `:</td>
+			<td class="form-inline" style="line-height: 35px"><input  disabled="" id="withdraw_amount-` + data["id"] + `" class="form-control col-xs-3" maxlength="15" type="text" style="margin-right:5px"> ` + data["name"] + `</td>
 			</tr>
-			</tbody></table><div id="alerts-`+data["id"]+`"></div><button class="btn btn-outline btn-primary" onclick="withdraw(`+data["id"]+`, 'Dcoin')">`+c.Lang["withdrawal"]+`</button>
+			</tbody></table><div id="alerts-` + data["id"] + `"></div><button class="btn btn-outline btn-primary" onclick="withdraw(` + data["id"] + `, 'Dcoin')">` + c.Lang["withdrawal"] + `</button>
 			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:400px">`
-		dcWithdrawText := strings.Replace(c.Lang["dc_withdraw_text"], "[min_amount]", "5",  -1)
-		dcWithdrawText = strings.Replace(dcWithdrawText, "[currency]", data["name"],  -1)
+		dcWithdrawText := strings.Replace(c.Lang["dc_withdraw_text"], "[min_amount]", "5", -1)
+		dcWithdrawText = strings.Replace(dcWithdrawText, "[currency]", data["name"], -1)
 		currency[data["id"]]["output"] += dcWithdrawText + `</div>`
 	}
-
 
 	if currency["1001"] == nil {
 		currency["1001"] = make(map[string]string)
 	}
 
 	currency["1001"]["name"] = "USD"
-	currency["1001"]["input"] = `<div class="pull-left"><h4>`+c.Lang["deposit0"]+` USD</h4>
+	currency["1001"]["input"] = `<div class="pull-left"><h4>` + c.Lang["deposit0"] + ` USD</h4>
 		<select id="ps_select" class="form-control">
 		  <option value="pm">Perfect Money</option>
 		  <option value="ik">Mobile, Yandex</option>
@@ -108,22 +107,22 @@ func (c *Controller) EMyFinance() (string, error) {
 		</select>
 			<div style="display:block" id="pm_form">
 				<form action="https://perfectmoney.is/api/step1.asp" method="POST">
-					<input type="hidden" name="PAYEE_ACCOUNT" value="`+c.EConfig["pm_id"]+`">
+					<input type="hidden" name="PAYEE_ACCOUNT" value="` + c.EConfig["pm_id"] + `">
 					<input type="hidden" name="PAYEE_NAME" value="Dcoin">
-					<input type="hidden" name="PAYMENT_ID" value="`+utils.Int64ToStr(c.SessUserId)+`">
+					<input type="hidden" name="PAYMENT_ID" value="` + utils.Int64ToStr(c.SessUserId) + `">
 					<input type="hidden" name="PAYMENT_UNITS" value="USD">
-					<input type="hidden" name="STATUS_URL" value="`+c.EURL+`ajax?controllerName=EGatePm">
-					<input type="hidden" name="PAYMENT_URL" value="`+c.EURL+`ajax?controllerName=ESuccess">
+					<input type="hidden" name="STATUS_URL" value="` + c.EURL + `ajax?controllerName=EGatePm">
+					<input type="hidden" name="PAYMENT_URL" value="` + c.EURL + `ajax?controllerName=ESuccess">
 					<input type="hidden" name="PAYMENT_URL_METHOD" value="LINK">
-					<input type="hidden" name="NOPAYMENT_URL" value="`+c.EURL+`ajax?controllerName=EFailure">
+					<input type="hidden" name="NOPAYMENT_URL" value="` + c.EURL + `ajax?controllerName=EFailure">
 					<input type="hidden" name="NOPAYMENT_URL_METHOD" value="LINK">
 					<input type="hidden" name="SUGGESTED_MEMO" value="Dcoins">
 					<input type="hidden" name="BAGGAGE_FIELDS" value="">
 					<table class="table_out">
 					<tbody>
 						<tr>
-						<td>`+c.Lang["amount_to_pay"]+`</td>
-						<td class="form-inline" style="line-height: 35px;"><input name="PAYMENT_AMOUNT" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="`+c.Lang["deposit"]+`" class="btn btn-outline btn-success" name="PAYMENT_METHOD"></td>
+						<td>` + c.Lang["amount_to_pay"] + `</td>
+						<td class="form-inline" style="line-height: 35px;"><input name="PAYMENT_AMOUNT" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="` + c.Lang["deposit"] + `" class="btn btn-outline btn-success" name="PAYMENT_METHOD"></td>
 						</tr>
 						<tr>
 					 </tbody>
@@ -132,18 +131,18 @@ func (c *Controller) EMyFinance() (string, error) {
 			</div>
 			<div style="display:none" id="ik_form">
 				<form id="payment" name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8">
-				    <input type="hidden" name="ik_co_id" value="`+c.EConfig["ik_id"]+`" />
+				    <input type="hidden" name="ik_co_id" value="` + c.EConfig["ik_id"] + `" />
 					<input type="hidden" name="ik_pm_no" value="ik_pm_no" />
 					<input type="hidden" name="ik_cur" value="USD" />
-					<input type="hidden" name="ik_ia_u" value="`+c.EURL+`ajax?controllerName=EGateIk" />
-					<input type="hidden" name="ik_suc_u" value=""`+c.EURL+`ajax?controllerName=ESuccess" />
-					<input type="hidden" name="ik_fal_u" value="`+c.EURL+`ajax?controllerName=EFailure" />
-					<input type="hidden" name="ik_desc" value="`+utils.Int64ToStr(c.SessUserId)+`" />
+					<input type="hidden" name="ik_ia_u" value="` + c.EURL + `ajax?controllerName=EGateIk" />
+					<input type="hidden" name="ik_suc_u" value=""` + c.EURL + `ajax?controllerName=ESuccess" />
+					<input type="hidden" name="ik_fal_u" value="` + c.EURL + `ajax?controllerName=EFailure" />
+					<input type="hidden" name="ik_desc" value="` + utils.Int64ToStr(c.SessUserId) + `" />
 				<table class="table_out">
 				<tbody>
 					<tr>
-					<td>`+c.Lang["amount_to_pay"]+`</td>
-					<td class="form-inline" style="line-height: 35px;"><input name="ik_am" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="`+c.Lang["deposit"]+`" class="btn btn-outline btn-success"></td>
+					<td>` + c.Lang["amount_to_pay"] + `</td>
+					<td class="form-inline" style="line-height: 35px;"><input name="ik_am" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="` + c.Lang["deposit"] + `" class="btn btn-outline btn-success"></td>
 					</tr>
 					<tr>
 				 </tbody>
@@ -166,16 +165,16 @@ func (c *Controller) EMyFinance() (string, error) {
 			</script>
 			<div style="display:none" id="payeer_form">
 				<form id="payeer_form_data" name="payment" method="post" action="https://payeer.com/merchant/" enctype="utf-8">
-				   	<input type="hidden" id="m_shop" name="m_shop" value="`+c.EConfig["payeer_id"]+`">
+				   	<input type="hidden" id="m_shop" name="m_shop" value="` + c.EConfig["payeer_id"] + `">
 					<input type="hidden" id="m_orderid" name="m_orderid" value="1234">
 					<input type="hidden" id="m_curr" name="m_curr" value="USD">
-					<input type="hidden" id="m_desc" name="m_desc" value="`+base64.StdEncoding.EncodeToString(utils.Int64ToByte(c.SessUserId))+`">
+					<input type="hidden" id="m_desc" name="m_desc" value="` + base64.StdEncoding.EncodeToString(utils.Int64ToByte(c.SessUserId)) + `">
 					<input type="hidden" id="m_sign" name="m_sign" value="">
 				<table class="table_out">
 				<tbody>
 					<tr>
-					<td>`+c.Lang["amount_to_pay"]+`</td>
-					<td class="form-inline" style="line-height: 35px;"><input id="m_amount" name="m_amount" class="form-control" type="text" style="margin-right:5px; width:120px"><input id="payeer_sign" type="button" value="`+c.Lang["deposit"]+`" class="btn btn-outline btn-success"></td>
+					<td>` + c.Lang["amount_to_pay"] + `</td>
+					<td class="form-inline" style="line-height: 35px;"><input id="m_amount" name="m_amount" class="form-control" type="text" style="margin-right:5px; width:120px"><input id="payeer_sign" type="button" value="` + c.Lang["deposit"] + `" class="btn btn-outline btn-success"></td>
 					</tr>
 					<tr>
 				 </tbody>
@@ -185,28 +184,27 @@ func (c *Controller) EMyFinance() (string, error) {
 
 			</div>`
 
-	currency["1001"]["output"] = `<div class="pull-left"><h4>`+c.Lang["withdraw0"]+` USD</h4>
+	currency["1001"]["output"] = `<div class="pull-left"><h4>` + c.Lang["withdraw0"] + ` USD</h4>
 		<table class="table_out">
 			<tbody>
 			<tr>
-			<td>`+c.Lang["withdrawal_on_the_purse"]+`:</td>
+			<td>` + c.Lang["withdrawal_on_the_purse"] + `:</td>
 			<td class="form-inline"><div class="form-group"><select class="form-control" style="width:300px"><option>Perfect Money [1.5%] [min 10 USD]</option></select></div></td>
 			</tr>
 			<tr>
-			<td>`+c.Lang["purse"]+`:</td>
+			<td>` + c.Lang["purse"] + `:</td>
 			<td class="form-inline" style="line-height: 35px;"><input id="account-1001" class="form-control" type="text" style="margin-right:5px; width:300px"></td>
 			</tr>
 			<tr>
-			<td>`+c.Lang["amount_to_withdrawal"]+`:</td>
+			<td>` + c.Lang["amount_to_withdrawal"] + `:</td>
 			<td class="form-inline" style="line-height: 35px;"><input id="amount-1001" class="form-control" type="text"  onkeyup="calc_withdraw_amount(1001, '1.5')" onchange="calc_withdraw_amount(1001, '1.5')" style="margin-right:5px; width:300px"></td>
 			</tr>
 			<tr>
-			<td>`+c.Lang["you_will_receive"]+`:</td>
+			<td>` + c.Lang["you_will_receive"] + `:</td>
 			<td class="form-inline" style="line-height: 35px"><input  disabled="" id="withdraw_amount-1001" class="form-control" type="text" style="margin-right:5px; width:300px"> </td>
 			</tr>
-			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1001, 'Perfect-money')">`+c.Lang["withdrawal"]+`</button>
-			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:350px">`+c.Lang["withdrawal_within_hours"]+`</div>`
-
+			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1001, 'Perfect-money')">` + c.Lang["withdrawal"] + `</button>
+			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:350px">` + c.Lang["withdrawal_within_hours"] + `</div>`
 
 	types := map[string]string{"withdraw": c.Lang["withdraw0"], "adding_funds": c.Lang["deposit0"]}
 
@@ -231,18 +229,17 @@ func (c *Controller) EMyFinance() (string, error) {
 		}
 		Finance.Ftype = types["withdraw"]
 		Finance.Amount = Finance.WdAmount
-		Finance.AddTime = Finance.OpenTime;
+		Finance.AddTime = Finance.OpenTime
 		if Finance.CloseTime == 0 {
 			Finance.Status = c.Lang["in_process"]
 		} else {
 			t := time.Unix(Finance.CloseTime, 0)
 			timeFormated := t.Format(c.TimeFormat)
-			Finance.Status = `<span class="text-success"><strong>`+c.Lang["ready"]+`</strong></span> (`+timeFormated+`)`
+			Finance.Status = `<span class="text-success"><strong>` + c.Lang["ready"] + `</strong></span> (` + timeFormated + `)`
 		}
-		Finance.Method = Finance.Method + ` (`+currencyList[Finance.CurrencyId]+`)`
+		Finance.Method = Finance.Method + ` (` + currencyList[Finance.CurrencyId] + `)`
 		myFinanceHistory_[Finance.OpenTime] = append(myFinanceHistory_[Finance.OpenTime], Finance)
 	}
-
 
 	// история ввода средств
 	rows, err = c.Query(c.FormatQuery(`
@@ -258,13 +255,13 @@ func (c *Controller) EMyFinance() (string, error) {
 	defer rows.Close()
 	for rows.Next() {
 		Finance := new(EmyFinanceType)
-		err = rows.Scan(&Finance.Id, &Finance.Amount,  &Finance.AddTime, &Finance.CurrencyId)
+		err = rows.Scan(&Finance.Id, &Finance.Amount, &Finance.AddTime, &Finance.CurrencyId)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
 		Finance.Ftype = types["adding_funds"]
-		Finance.Status = `<span class="text-success"><strong>`+c.Lang["ready"]+`</strong></span>`
-		Finance.Method = `Dcoin (`+currencyList[Finance.CurrencyId]+`)`
+		Finance.Status = `<span class="text-success"><strong>` + c.Lang["ready"] + `</strong></span>`
+		Finance.Method = `Dcoin (` + currencyList[Finance.CurrencyId] + `)`
 		myFinanceHistory_[Finance.AddTime] = append(myFinanceHistory_[Finance.AddTime], Finance)
 	}
 
@@ -287,11 +284,10 @@ func (c *Controller) EMyFinance() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		Finance.Ftype = types["adding_funds"]
-		Finance.Status = `<span class="text-success"><strong>`+c.Lang["ready"]+`</strong></span>`
-		Finance.Method = `Interkassa (`+currencyList[Finance.CurrencyId]+`)`
+		Finance.Status = `<span class="text-success"><strong>` + c.Lang["ready"] + `</strong></span>`
+		Finance.Method = `Interkassa (` + currencyList[Finance.CurrencyId] + `)`
 		myFinanceHistory_[Finance.AddTime] = append(myFinanceHistory_[Finance.AddTime], Finance)
 	}
-
 
 	// история ввода средств PM
 	rows, err = c.Query(c.FormatQuery(`
@@ -312,8 +308,8 @@ func (c *Controller) EMyFinance() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		Finance.Ftype = types["adding_funds"]
-		Finance.Status = `<span class="text-success"><strong>`+c.Lang["ready"]+`</strong></span>`
-		Finance.Method = `PerfectMoney (`+currencyList[Finance.CurrencyId]+`)`
+		Finance.Status = `<span class="text-success"><strong>` + c.Lang["ready"] + `</strong></span>`
+		Finance.Method = `PerfectMoney (` + currencyList[Finance.CurrencyId] + `)`
 		myFinanceHistory_[Finance.AddTime] = append(myFinanceHistory_[Finance.AddTime], Finance)
 	}
 
@@ -332,17 +328,15 @@ func (c *Controller) EMyFinance() (string, error) {
 	}
 	///home/z/go-projects/src/github.com/c-darwin/dcoin-go/packages/controllers/e_my_finance.go:275: cannot use myFinanceHistory_[k] (type []*EmyFinanceType) as type *EmyFinanceType in append
 
-
-
 	collapse := c.Parameters["collapse"]
 
-	TemplateStr, err := makeTemplate("e_my_finance", "eMyFinance", &eMyFinancePage {
-		Lang:         c.Lang,
-		UserId: c.SessUserId,
-		MyFinanceHistory : my_finance_history,
-		Collapse: collapse,
-		Currency: currency,
-		CurrencyList: currencyList})
+	TemplateStr, err := makeTemplate("e_my_finance", "eMyFinance", &eMyFinancePage{
+		Lang:             c.Lang,
+		UserId:           c.SessUserId,
+		MyFinanceHistory: my_finance_history,
+		Collapse:         collapse,
+		Currency:         currency,
+		CurrencyList:     currencyList})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

@@ -1,9 +1,9 @@
 package dcparser
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"database/sql"
 )
 
 func (p *Parser) ChangePromisedAmountInit() error {

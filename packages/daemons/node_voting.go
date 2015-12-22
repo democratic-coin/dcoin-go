@@ -21,7 +21,6 @@ func NodeVoting() {
 		}
 	}()
 
-
 	const GoroutineName = "NodeVoting"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -63,7 +62,9 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -86,7 +87,9 @@ BEGIN:
 							 type = 'node_voting'
 				`), utils.Time()-consts.CRON_CHECKED_TIME_SEC)
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if ok := rows.Next(); ok {
@@ -95,14 +98,16 @@ BEGIN:
 			err = rows.Scan(&user_id, &host, &row_face_hash, &row_profile_hash, &photo_block_id, &photo_max_miner_id, &miners_keepers, &vote_id, &miner_id)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
 			// проверим, не нужно нам выйти, т.к. обновилась версия софта
 			if CheckDaemonsRestart(GoroutineName) {
 				rows.Close()
-					utils.Sleep(1)
+				utils.Sleep(1)
 				break
 			}
 			minersIds := utils.GetMinersKeepers(photo_block_id, photo_max_miner_id, miners_keepers, true)
@@ -139,7 +144,9 @@ BEGIN:
 					profileFile, err = ioutil.ReadFile(profilePath)
 					if err != nil {
 						rows.Close()
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					profileHash = string(utils.DSha256(profileFile))
@@ -147,7 +154,9 @@ BEGIN:
 					faceFile, err = ioutil.ReadFile(facePath)
 					if err != nil {
 						rows.Close()
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					faceHash = string(utils.DSha256(faceFile))
@@ -169,7 +178,9 @@ BEGIN:
 					myUserId, err := d.Single("SELECT user_id FROM miners_data WHERE miner_id  =  ?", myMinerId).Int64()
 					if err != nil {
 						rows.Close()
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 
@@ -179,7 +190,9 @@ BEGIN:
 					binSign, err := d.GetBinSign(forSign, myUserId)
 					if err != nil {
 						rows.Close()
-						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					data := utils.DecToBin(utils.TypeInt("VotesNodeNewMiner"), 1)
@@ -192,7 +205,9 @@ BEGIN:
 					err = d.InsertReplaceTxInQueue(data)
 					if err != nil {
 						rows.Close()
-						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 
@@ -203,7 +218,9 @@ BEGIN:
 			err = d.ExecSql("UPDATE votes_miners SET cron_checked_time = ? WHERE id = ?", utils.Time(), vote_id)
 			if err != nil {
 				rows.Close()
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}

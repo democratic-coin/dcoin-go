@@ -1,12 +1,11 @@
 package dcparser
 
 import (
+	"errors"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"errors"
 )
-
 
 /**
 Обработка данных (блоков или транзакций), пришедших с гейта. Только проверка.
@@ -30,7 +29,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 
 		// проверим, есть ли такой тип тр-ий
 		if len(consts.TxTypes[p.dataType]) == 0 {
-			return p.ErrInfo("Incorrect tx type "+utils.IntToStr(p.dataType))
+			return p.ErrInfo("Incorrect tx type " + utils.IntToStr(p.dataType))
 		}
 
 		log.Debug("p.dataType %v", p.dataType)
@@ -206,4 +205,3 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 
 	return nil
 }
-

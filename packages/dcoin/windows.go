@@ -6,9 +6,9 @@ import (
 	//"os/exec"
 	//"fmt"
 	//"os"
+	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"os/exec"
-	"fmt"
 	"regexp"
 )
 
@@ -32,8 +32,8 @@ func KillPid(pid string) error {
 	if err!=nil {
 		return err
 	}*/
-	rez, err := exec.Command("tasklist","/fi", "PID eq "+pid).Output()
-	if err!=nil {
+	rez, err := exec.Command("tasklist", "/fi", "PID eq "+pid).Output()
+	if err != nil {
 		return err
 	}
 	if string(rez) == "" {
@@ -50,7 +50,6 @@ func KillPid(pid string) error {
 	//fmt.Printf("taskkill /pid %s: %s\n", pid, rez)
 	return nil
 }
-
 
 func tray() {
 

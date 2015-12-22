@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Parser) VotesExchangeInit() error {
-	fields := []map[string]string{{"e_owner_id": "int64"}, {"result": "int64"},  {"sign": "bytes"}}
+	fields := []map[string]string{{"e_owner_id": "int64"}, {"result": "int64"}, {"sign": "bytes"}}
 	err := p.GetTxMaps(fields)
 	if err != nil {
 		return p.ErrInfo(err)

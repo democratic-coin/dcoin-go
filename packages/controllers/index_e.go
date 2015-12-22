@@ -11,11 +11,11 @@ import (
 )
 
 type indexE struct {
-	MyWallets []map[string]string
-	Lang      map[string]string
-	Nav       template.JS
-	UserId    int64
-	EHost string
+	MyWallets         []map[string]string
+	Lang              map[string]string
+	Nav               template.JS
+	UserId            int64
+	EHost             string
 	AnalyticsDisabled string
 }
 
@@ -76,7 +76,7 @@ func IndexE(w http.ResponseWriter, r *http.Request) {
 			match := re.FindStringSubmatch(http_host)
 			if len(match) != 0 {
 				c.EConfig["catalog"] = strings.Replace(c.EConfig["catalog"], "/", "", -1)
-				eHost = match[1]+"/"+c.EConfig["catalog"]+"/"
+				eHost = match[1] + "/" + c.EConfig["catalog"] + "/"
 			}
 		}
 		analyticsDisabled, err := utils.DB.Single(`SELECT analytics_disabled FROM config`).String()
@@ -109,7 +109,7 @@ func IndexE(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c*Controller) getMyWallets() ([]map[string]string, error) {
+func (c *Controller) getMyWallets() ([]map[string]string, error) {
 	var myWallets []map[string]string
 	eCurrency, err := c.GetAll(`SELECT name as currency_name, id FROM e_currency ORDER BY sort_id ASC`, -1)
 	if err != nil {
@@ -126,7 +126,7 @@ func (c*Controller) getMyWallets() ([]map[string]string, error) {
 			if err != nil {
 				return myWallets, utils.ErrInfo(err)
 			}
-			myWallets = append(myWallets, map[string]string{"amount": utils.ClearNull(utils.Float64ToStr(amount + profit), 2), "currency_name": data["currency_name"], "last_update": wallet["last_update"]})
+			myWallets = append(myWallets, map[string]string{"amount": utils.ClearNull(utils.Float64ToStr(amount+profit), 2), "currency_name": data["currency_name"], "last_update": wallet["last_update"]})
 		}
 	}
 

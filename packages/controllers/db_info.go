@@ -1,28 +1,28 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 type DbInfoPage struct {
-	TimeNow               string
-	TimeNowInt               int64
-	NodesBan              []map[string]string
-	NodesConnection       []map[string]string
-	MainLock              []map[string]string
-	Variables             map[string]string
-	QueueTx               int64
-	TransactionsTestblock int64
-	Transactions          int64
-	Lang                  map[string]string
-	AllTransactions	[]map[string]string
-	AllQueueTx	[]map[string]string
-	TxTypes		map[int]string
-	Testblock []map[string]string
+	TimeNow                        string
+	TimeNowInt                     int64
+	NodesBan                       []map[string]string
+	NodesConnection                []map[string]string
+	MainLock                       []map[string]string
+	Variables                      map[string]string
+	QueueTx                        int64
+	TransactionsTestblock          int64
+	Transactions                   int64
+	Lang                           map[string]string
+	AllTransactions                []map[string]string
+	AllQueueTx                     []map[string]string
+	TxTypes                        map[int]string
+	Testblock                      []map[string]string
 	BlockGeneratorIsReadySleepTime int64
-	BlockGeneratorSleepTime int64
-	Version string
+	BlockGeneratorSleepTime        int64
+	Version                        string
 }
 
 func (c *Controller) DbInfo() (string, error) {
@@ -72,19 +72,19 @@ func (c *Controller) DbInfo() (string, error) {
 	}
 
 	// проверенные транзакции
-allTransactions, err := c.GetAll("SELECT hex(hash) as hex_hash, verified, used, high_rate, for_self_use, type, user_id, third_var, counter, sent   FROM transactions", 100);
+	allTransactions, err := c.GetAll("SELECT hex(hash) as hex_hash, verified, used, high_rate, for_self_use, type, user_id, third_var, counter, sent   FROM transactions", 100)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
 	// непроверенные транзакции
-	allQueueTx, err := c.GetAll("SELECT hex(hash) as hex_hash, high_rate FROM queue_tx", 100);
+	allQueueTx, err := c.GetAll("SELECT hex(hash) as hex_hash, high_rate FROM queue_tx", 100)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
 	// testblock
-	testblock, err := c.GetAll("SELECT hex(header_hash) as header_hash_hex, hex(mrkl_root) as mrkl_root_hex, block_id, time, level, user_id, status, uniq, sent FROM testblock", 100);
+	testblock, err := c.GetAll("SELECT hex(header_hash) as header_hash_hex, hex(mrkl_root) as mrkl_root_hex, block_id, time, level, user_id, status, uniq, sent FROM testblock", 100)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -109,7 +109,6 @@ allTransactions, err := c.GetAll("SELECT hex(hash) as hex_hash, verified, used, 
 		utils.SleepDiff(&sleep, diff)
 		blockGeneratorSleepTime = sleep
 
-
 		// is_ready
 		prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange, err := c.TestBlock()
 		if err != nil {
@@ -128,22 +127,22 @@ allTransactions, err := c.GetAll("SELECT hex(hash) as hex_hash, verified, used, 
 	}
 
 	TemplateStr, err := makeTemplate("db_info", "dbInfo", &DbInfoPage{
-		Lang:                  c.Lang,
-		TimeNow:               timeNow,
-		NodesBan:              nodesBan,
-		NodesConnection:       nodesConnection,
-		MainLock:              mainLock,
-		Variables:             variables,
-		QueueTx:               queueTx,
-		TransactionsTestblock: transactionsTestblock,
-		AllTransactions:       allTransactions,
-		AllQueueTx:       allQueueTx,
-		TxTypes				:  consts.TxTypes,
-		Transactions:          transactions,
-		Testblock:          testblock,
-		TimeNowInt: utils.Time(),
+		Lang:                           c.Lang,
+		TimeNow:                        timeNow,
+		NodesBan:                       nodesBan,
+		NodesConnection:                nodesConnection,
+		MainLock:                       mainLock,
+		Variables:                      variables,
+		QueueTx:                        queueTx,
+		TransactionsTestblock:          transactionsTestblock,
+		AllTransactions:                allTransactions,
+		AllQueueTx:                     allQueueTx,
+		TxTypes:                        consts.TxTypes,
+		Transactions:                   transactions,
+		Testblock:                      testblock,
+		TimeNowInt:                     utils.Time(),
 		BlockGeneratorIsReadySleepTime: blockGeneratorIsReadySleepTime,
-		Version: consts.VERSION,
+		Version:                 consts.VERSION,
 		BlockGeneratorSleepTime: blockGeneratorSleepTime})
 	if err != nil {
 		return "", utils.ErrInfo(err)

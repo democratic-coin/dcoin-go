@@ -28,7 +28,6 @@ func TestblockGenerator() {
 		}
 	}()
 
-
 	const GoroutineName = "TestblockGenerator"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -58,7 +57,6 @@ func TestblockGenerator() {
 BEGIN:
 	for {
 
-
 		log.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
@@ -72,13 +70,17 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		blockId, err := d.GetBlockId()
 		if err != nil {
-			if d.unlockPrintSleep(err, d.sleepTime)  {	break BEGIN }
+			if d.unlockPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		newBlockId := blockId + 1
@@ -171,7 +173,9 @@ BEGIN:
 				break BEGIN
 			}
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			log.Debug("i %v", i)
@@ -179,7 +183,9 @@ BEGIN:
 			var newHeadHash string
 			err = d.QueryRow(d.FormatQuery("SELECT hex(head_hash) FROM info_block")).Scan(&newHeadHash)
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			log.Debug("newHeadHash %v", newHeadHash)
@@ -208,7 +214,9 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -307,7 +315,9 @@ BEGIN:
 		// переведем тр-ии в `verified` = 1
 		err = p.AllTxParser()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
@@ -319,7 +329,9 @@ BEGIN:
 		rows, err := d.Query(d.FormatQuery("SELECT data, hex(hash), type, user_id, third_var FROM transactions WHERE used = 0 AND verified = 1"))
 		if err != nil {
 			utils.WriteSelectiveLog(err)
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		for rows.Next() {
@@ -331,10 +343,12 @@ BEGIN:
 			err = rows.Scan(&data, &hash, &txType, &txUserId, &thirdVar)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
-			utils.WriteSelectiveLog("hash: "+string(hash))
+			utils.WriteSelectiveLog("hash: " + string(hash))
 			log.Debug("data %v", data)
 			log.Debug("hash %v", hash)
 			transactionType := data[1:2]
@@ -352,7 +366,9 @@ BEGIN:
 			exists, err := d.Single("SELECT hash FROM transactions_testblock WHERE hex(hash) = ?", hashMd5).String()
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			if len(exists) == 0 {
@@ -360,7 +376,9 @@ BEGIN:
 					hashMd5, dataHex, txType, txUserId, thirdVar)
 				if err != nil {
 					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
@@ -398,12 +416,16 @@ BEGIN:
 			continue BEGIN
 		}
 		if got, want := block.Type, "RSA PRIVATE KEY"; got != want {
-			if d.dPrintSleep(fmt.Sprintf("unknown key type %v, want %v / %v ", got, want, utils.GetParent()), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(fmt.Sprintf("unknown key type %v, want %v / %v ", got, want, utils.GetParent()), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
-			if d.dPrintSleep(fmt.Sprintf("err %v %v", err, utils.GetParent()), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(fmt.Sprintf("err %v %v", err, utils.GetParent()), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		var forSign string
@@ -411,7 +433,9 @@ BEGIN:
 		log.Debug("forSign: %v", forSign)
 		bytes, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA1, utils.HashSha1(forSign))
 		if err != nil {
-			if d.dPrintSleep(fmt.Sprintf("err %v %v", err, utils.GetParent()), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(fmt.Sprintf("err %v %v", err, utils.GetParent()), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		signatureHex := fmt.Sprintf("%x", bytes)
@@ -420,14 +444,18 @@ BEGIN:
 		headerHash := utils.DSha256([]byte(fmt.Sprintf("%s,%s,%s", myUserId, newBlockId, prevHeadHash)))
 		err = d.ExecSql("DELETE FROM testblock WHERE block_id = ?", newBlockId)
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		err = d.ExecSql(`INSERT INTO testblock (block_id, time, level, user_id, header_hash, signature, mrkl_root) VALUES (?, ?, ?, ?, [hex], [hex], [hex])`,
 			newBlockId, Time, level, myUserId, string(headerHash), signatureHex, string(mrklRoot))
 		log.Debug("newBlockId: %v / Time: %v / level: %v / myUserId: %v / headerHash: %v / signatureHex: %v / mrklRoot: %v / ", newBlockId, Time, level, myUserId, string(headerHash), signatureHex, string(mrklRoot))
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -442,10 +470,12 @@ BEGIN:
 			affect, err := d.ExecSqlGetAffect("UPDATE transactions SET used=1 WHERE hash IN (" + usedTransactions + ")")
 			if err != nil {
 				utils.WriteSelectiveLog(err)
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
-			utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+			utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			// для теста удаляем, т.к. она уже есть в transactions_testblock
 			/*  $db->query( __FILE__, __LINE__,  __FUNCTION__,  __CLASS__, __METHOD__, "
 			DELETE FROM `".DB_PREFIX."transactions`

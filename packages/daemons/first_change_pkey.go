@@ -14,7 +14,6 @@ func FirstChangePkey() {
 		}
 	}()
 
-
 	const GoroutineName = "FirstChangePkey"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -47,7 +46,9 @@ BEGIN:
 
 		community, err := d.GetCommunityUsers()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		var uids []int64
@@ -56,7 +57,9 @@ BEGIN:
 		} else {
 			myuid, err := d.GetMyUserId("")
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			uids = append(uids, myuid)
@@ -69,7 +72,9 @@ BEGIN:
 			}
 			status, err = d.Single(`SELECT status FROM ` + myPrefix + `my_table`).String()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			log.Debug("status: %v / myPrefix: %v", status, myPrefix)
@@ -78,12 +83,16 @@ BEGIN:
 				// если ключ кто-то сменил
 				userPublicKey, err := d.GetUserPublicKey(uid)
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				myUserPublicKey, err := d.GetMyPublicKey(myPrefix)
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				if !bytes.Equal(myUserPublicKey, []byte(userPublicKey)) {
@@ -91,7 +100,9 @@ BEGIN:
 					// удаляем старый ключ
 					err = d.ExecSql(`DELETE FROM ` + myPrefix + `my_keys`)
 					if err != nil {
-						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(err, d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					// и user_id
@@ -101,13 +112,17 @@ BEGIN:
 					}
 					err = d.ExecSql(q)
 					if err != nil {
-						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(err, d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					if len(community) > 0 {
 						err = d.ExecSql(`DELETE FROM community WHERE user_id = ?`, uid)
 						if err != nil {
-							if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(err, d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					}
@@ -116,21 +131,27 @@ BEGIN:
 					availablekey.DCDB = d.DCDB
 					userId, _, err := availablekey.GetAvailableKey()
 					if err != nil {
-						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(err, d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					if userId > 0 {
 						if len(community) > 0 {
 							err = d.ExecSql(`INSERT INTO community (user_id) VALUES (?)`, userId)
 							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+								if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
 								continue BEGIN
 							}
 						}
 						// генерим и шлем новую тр-ию
 						err = d.SendTxChangePkey(userId)
 						if err != nil {
-							if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(err, d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					} else {
@@ -142,14 +163,18 @@ BEGIN:
 				// проверим, не прошла ли тр-ия и не сменился ли уже ключ
 				userPubKeyCount, err := d.Single(`SELECT count(*) FROM ` + myPrefix + `my_keys WHERE status='approved'`).Int64()
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Debug("userPubKey: %v", userPubKeyCount)
 				if userPubKeyCount > 1 {
 					err = d.ExecSql(`UPDATE ` + myPrefix + `my_table SET status='user'`)
 					if err != nil {
-						if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(err, d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					// также, если это пул, то надо удалить приватный ключ из базы данных, т.к. взлом пула будет означать угон всех акков
@@ -157,18 +182,24 @@ BEGIN:
 					if len(community) > 0 {
 						err = d.ExecSql(`DELETE private_key FROM ` + myPrefix + `my_keys`)
 						if err != nil {
-							if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(err, d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					}
 
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 
 				lastTx, err := d.GetLastTx(uid, utils.TypesToIds([]string{"ChangePrimaryKey"}), 1, "2006-02-01 15:04:05")
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Debug("lastTx: %v", lastTx)
@@ -177,7 +208,9 @@ BEGIN:
 						// генерим и шлем новую тр-ию
 						err = d.SendTxChangePkey(uid)
 						if err != nil {
-							if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(err, d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					}

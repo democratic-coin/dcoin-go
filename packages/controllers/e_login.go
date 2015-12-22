@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"errors"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) ELogin() (string, error) {
@@ -22,9 +22,8 @@ func (c *Controller) ELogin() (string, error) {
 		return "", errors.New(c.Lang["email_is_not_registered"])
 	}
 
-
 	// проверяем, верный ли пароль
-	passAndSalt := utils.Sha256(password+data["salt"])
+	passAndSalt := utils.Sha256(password + data["salt"])
 	userId, err := utils.DB.Single("SELECT id FROM e_users WHERE id  =  ? AND password  =  ?", data["id"], passAndSalt).Int64()
 	if err != nil {
 		return "", utils.ErrInfo(err)

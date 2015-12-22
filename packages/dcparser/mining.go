@@ -102,13 +102,11 @@ func (p *Parser) mining_(delMiningBlockId int64) error {
 	}
 	currencyId := utils.StrToInt64(data["currency_id"])
 
-
 	// возможно, что данный юзер имеет непогашенные cash_requests, значит новые TDC у него не растут, а просто обновляется tdc_amount_update
 	newTdc, err := p.getTdc(p.TxMaps.Int64["promised_amount_id"], p.TxUserID)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 
 	// логируем текущее значение по обещанным суммам
 	// tdc_and_profit - для del_promised_amount
@@ -122,7 +120,6 @@ func (p *Parser) mining_(delMiningBlockId int64) error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 
 	// 3 теперь начисляем DC, залогировав предыдущее значение
 	err = p.updateRecipientWallet(p.TxUserID, currencyId, p.TxMaps.Money["amount"], "from_mining_id", p.TxMaps.Int64["promised_amount_id"], "", "", true)
@@ -248,7 +245,6 @@ func (p *Parser) MiningRollback() error {
 		return p.ErrInfo(err)
 	}
 
-
 	// 5 реферальные
 	var usersWalletsRollback []int64
 	refData, err := p.OneRow("SELECT * FROM referral").Float64()
@@ -310,8 +306,6 @@ func (p *Parser) MiningRollback() error {
 		}
 	}
 
-
-
 	// 4 откатим комиссию системы
 	systemCommission := utils.Round(p.TxMaps.Money["amount"]*float64(float64(p.Variables.Int64["system_commission"])/100), 2)
 	log.Debug("systemCommission %v", systemCommission)
@@ -339,7 +333,6 @@ func (p *Parser) MiningRollback() error {
 
 	}
 
-
 	// возможно были списания по кредиту
 	err = p.loanPaymentsRollback(p.TxUserID, utils.StrToInt64(promisedAmountData["currency_id"]))
 	if err != nil {
@@ -351,7 +344,6 @@ func (p *Parser) MiningRollback() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 
 	// данные, которые восстановим в promised_amount
 	logData, err := p.OneRow("SELECT * FROM log_promised_amount WHERE log_id  =  ?", promisedAmountData["log_id"]).String()
@@ -375,13 +367,11 @@ func (p *Parser) MiningRollback() error {
 		return p.ErrInfo(err)
 	}
 
-
 	// 1 возможно нужно обновить таблицу points_status
 	err = p.pointsUpdateRollbackMain(p.TxUserID)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 
 	err = p.mydctxRollback()
 	if err != nil {

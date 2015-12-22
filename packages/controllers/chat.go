@@ -14,7 +14,7 @@ type chatPage struct {
 	Mobile       bool
 	MyChatName   string
 	UserId       int64
-	Community bool
+	Community    bool
 }
 
 func (c *Controller) Chat() (string, error) {
@@ -30,7 +30,7 @@ func (c *Controller) Chat() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("chat", "chat", &chatPage{
-		Community: c.Community,
+		Community:    c.Community,
 		CountSignArr: c.CountSignArr,
 		CountSign:    c.CountSign,
 		Lang:         c.Lang,

@@ -6,9 +6,9 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"html/template"
+	"math"
 	"net/http"
 	"runtime"
-	"math"
 	"strings"
 )
 
@@ -23,7 +23,7 @@ type updatingBlockchainStruct struct {
 	LastBlock      int64
 	BlockChainSize int64
 	Mobile         bool
-	AlertTime string
+	AlertTime      string
 }
 
 func (c *Controller) UpdatingBlockchain() (string, error) {

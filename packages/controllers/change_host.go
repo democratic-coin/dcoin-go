@@ -15,7 +15,7 @@ type changeHostPage struct {
 	Lang         map[string]string
 	UserId       int64
 	LimitsText   string
-	Community bool
+	Community    bool
 	TxType       string
 	TxTypeId     int64
 	TimeNow      int64
@@ -68,7 +68,7 @@ func (c *Controller) ChangeHost() (string, error) {
 		TxTypeId:     txTypeId,
 		LimitsText:   limitsText,
 		ShowSignData: c.ShowSignData,
-		Community: c.Community,
+		Community:    c.Community,
 		SignData:     "",
 		Lang:         c.Lang})
 	if err != nil {

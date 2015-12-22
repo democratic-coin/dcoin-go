@@ -3,26 +3,29 @@ package utils
 import (
 	"fmt"
 	"net"
-	"time"
 	"sync"
+	"time"
 )
+
 // сигнал горутине, которая мониторит таблу chat, что есть новые данные
 var ChatNewTx = make(chan int64, 1000)
+
 //var ChatJoinConn = make(chan net.Conn)
 //var ChatPoolConn []net.Conn
 //var ChatDelConn = make(chan net.Conn)
 
-var ChatMutex   = &sync.Mutex{}
+var ChatMutex = &sync.Mutex{}
 
 type ChatData struct {
-	Hashes []byte
-	HashesArr [][]byte
+	Hashes     []byte
+	HashesArr  [][]byte
 	LastMessId int64
 }
 type ChatOutConnectionsType struct {
-	MessIds	[]int64
+	MessIds        []int64
 	ConnectionChan chan *ChatData
 }
+
 //var ChatDataChan chan *ChatData = make(chan *ChatData, 1000)
 // исходящие соединения протоколируем тут для исключения создания повторных
 // исходящих соединений. []MessIds - id сообщений, которые отправили
@@ -82,8 +85,8 @@ func ChatInput(conn net.Conn, userId int64) {
 		fmt.Println("addsql", addsql)
 
 		// смотрим в табле chat, чего у нас уже есть
-		fmt.Println(`SELECT hash FROM chat WHERE hash IN (`+addsql+`)`)
-		rows, err := DB.Query(`SELECT hash FROM chat WHERE hash IN (`+addsql+`)`)
+		fmt.Println(`SELECT hash FROM chat WHERE hash IN (` + addsql + `)`)
+		rows, err := DB.Query(`SELECT hash FROM chat WHERE hash IN (` + addsql + `)`)
 		if err != nil {
 			fmt.Println(ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
@@ -140,12 +143,12 @@ func ChatInput(conn net.Conn, userId int64) {
 		if err != nil {
 			log.Error("%v", ErrInfo(err))
 		}
-		if lastMessTime > Time(){
-			lastMessTime = Time()-1800
+		if lastMessTime > Time() {
+			lastMessTime = Time() - 1800
 		} else if lastMessTime == 0 {
-			lastMessTime = Time()-86400*7
+			lastMessTime = Time() - 86400*7
 		} else {
-			lastMessTime = lastMessTime-1800
+			lastMessTime = lastMessTime - 1800
 		}
 
 		// получаем тр-ии, которых у нас нету
@@ -227,7 +230,6 @@ func ChatInput(conn net.Conn, userId int64) {
 	}
 }
 
-
 // каждый 30 сек шлет данные в канал, чтобы держать его живым
 func ChatOutputTesting() {
 	for {
@@ -259,11 +261,11 @@ func ChatOutput(newTx chan int64) {
 		ChatMutex.Lock()
 		for _, data := range ChatOutConnections {
 			var lastMessId int64
-			if len(data.MessIds)>0 {
+			if len(data.MessIds) > 0 {
 				lastMessId = data.MessIds[len(data.MessIds)-1]
 			}
 			if lastMessId < chatId {
-				for i:=lastMessId+1; i<=chatId; i++ {
+				for i := lastMessId + 1; i <= chatId; i++ {
 					ids[i] = 1
 				}
 			}
@@ -277,7 +279,7 @@ func ChatOutput(newTx chan int64) {
 			continue
 		}
 		// смотрим, есть ли в табле неотправленные тр-ии
-		rows, err := DB.Query("SELECT id, hash, lang, room, receiver, sender, status, message, enc_message, sign_time, signature FROM chat WHERE id IN ("+JoinInts64(ids, ",")+")")
+		rows, err := DB.Query("SELECT id, hash, lang, room, receiver, sender, status, message, enc_message, sign_time, signature FROM chat WHERE id IN (" + JoinInts64(ids, ",") + ")")
 		if err != nil {
 			fmt.Println(ErrInfo(err))
 		}
@@ -329,11 +331,11 @@ func ChatOutput(newTx chan int64) {
 		ChatMutex.Lock()
 		for _, data := range ChatOutConnections {
 			var lastMessId int64
-			if len(data.MessIds)>0 {
+			if len(data.MessIds) > 0 {
 				lastMessId = data.MessIds[len(data.MessIds)-1]
 			}
 			if lastMessId < chatId {
-				for i:=lastMessId+1; i<=chatId; i++ {
+				for i := lastMessId + 1; i <= chatId; i++ {
 					if message, ok := messages[i]; ok {
 						hashes = append(hashes, message[0]...)
 						hashesArr = append(hashesArr, message[1])
@@ -403,8 +405,8 @@ func ChatTxDisseminator(conn net.Conn, userId int64, connectionChan chan *ChatDa
 		fmt.Println("TCPGetSizeAndData ok")
 
 		var TxForSend []byte
-		for i := 0; i<len(hashesBin); i++ {
-			hashMark := hashesBin[i:i+1]
+		for i := 0; i < len(hashesBin); i++ {
+			hashMark := hashesBin[i : i+1]
 			if string(hashMark) == "1" {
 				TxForSend = append(TxForSend, EncodeLengthPlusData(data.HashesArr[i])...)
 			}
@@ -431,11 +433,11 @@ func ChatTxDisseminator(conn net.Conn, userId int64, connectionChan chan *ChatDa
 		// добавляем ID сообщения, чтобы больше его не слать
 		ChatMutex.Lock()
 		var lastMessId int64
-		if len(ChatOutConnections[userId].MessIds)>0 {
+		if len(ChatOutConnections[userId].MessIds) > 0 {
 			lastMessId = ChatOutConnections[userId].MessIds[len(ChatOutConnections[userId].MessIds)-1]
 		}
 		if lastMessId < data.LastMessId {
-			for i:=lastMessId+1; i<=data.LastMessId; i++ {
+			for i := lastMessId + 1; i <= data.LastMessId; i++ {
 				ChatOutConnections[userId].MessIds = append(ChatOutConnections[userId].MessIds, i)
 			}
 		}

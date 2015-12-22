@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/astaxie/beego/config"
@@ -18,8 +20,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-	"encoding/json"
-	"errors"
 )
 
 var log = logging.MustGetLogger("controllers")
@@ -63,8 +63,8 @@ type Controller struct {
 	MinerId          int64
 	Races            map[int64]string
 	EConfig          map[string]string
-	ECommission float64
-	EURL string
+	ECommission      float64
+	EURL             string
 }
 
 var (
@@ -197,13 +197,13 @@ func GetSessEUserId(sess session.SessionStore) int64 {
 	sessUserId := sess.Get("e_user_id")
 	log.Debug("sessUserId: %v", sessUserId)
 	switch sessUserId.(type) {
-		case int64:
+	case int64:
 		return sessUserId.(int64)
-		case int:
+	case int:
 		return int64(sessUserId.(int))
-		case string:
+	case string:
 		return utils.StrToInt64(sessUserId.(string))
-		default:
+	default:
 		return 0
 	}
 	return 0
@@ -212,13 +212,13 @@ func GetSessUserId(sess session.SessionStore) int64 {
 	sessUserId := sess.Get("user_id")
 	log.Debug("sessUserId: %v", sessUserId)
 	switch sessUserId.(type) {
-		case int64:
+	case int64:
 		return sessUserId.(int64)
-		case int:
+	case int:
 		return int64(sessUserId.(int))
-		case string:
+	case string:
 		return utils.StrToInt64(sessUserId.(string))
-		default:
+	default:
 		return 0
 	}
 	return 0
@@ -464,15 +464,11 @@ func (c *Controller) GetParameters() (map[string]string, error) {
 	return parameters, nil
 }
 
-
-
-
-
 func userLock(userId int64) error {
 	var affect int64
 	var err error
 	// даем время, чтобы lock освободился от другого запроса
-	for i:=0; i < 4; i++ {
+	for i := 0; i < 4; i++ {
 		affect, err = utils.DB.ExecSqlGetAffect(`UPDATE e_users SET lock = ? WHERE id = ? AND lock = 0`, utils.Time(), userId)
 		if affect > 0 {
 			break
@@ -485,22 +481,21 @@ func userLock(userId int64) error {
 	return err
 }
 
-
 func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCurrencyId int64, orderType string, eCommission float64) error {
 	log.Debug("userId: %v / amount: %v / sellRate: %v / sellCurrencyId: %v / buyCurrencyId: %v / orderType: %v ", userId, amount, sellRate, sellCurrencyId, buyCurrencyId, orderType)
 	curTime := utils.Time()
 	err := userLock(userId)
-	if err!=nil {
+	if err != nil {
 		return utils.ErrInfo(err)
 	}
-	commission := utils.StrToFloat64(utils.ClearNull(utils.Float64ToStr(amount * (eCommission/100)), 6))
-	newAmount := utils.StrToFloat64(utils.ClearNull(utils.Float64ToStr(amount - commission), 6))
+	commission := utils.StrToFloat64(utils.ClearNull(utils.Float64ToStr(amount*(eCommission/100)), 6))
+	newAmount := utils.StrToFloat64(utils.ClearNull(utils.Float64ToStr(amount-commission), 6))
 	if newAmount < commission {
 		commission = 0
 		newAmount = amount
 	}
 	log.Debug("newAmount: %v / commission: %v ", newAmount, commission)
-	if commission>0{
+	if commission > 0 {
 		userAmount := utils.EUserAmountAndProfit(1, sellCurrencyId)
 		newAmount_ := userAmount + commission
 		// наисляем комиссию системе
@@ -510,7 +505,7 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 		}
 		// и сразу вычитаем комиссию с кошелька юзера
 		userAmount = utils.EUserAmountAndProfit(userId, sellCurrencyId)
-		err = utils.DB.ExecSql("UPDATE e_wallets SET amount = ?, last_update = ? WHERE user_id = ? AND currency_id = ?",userAmount-commission, utils.Time(), userId, sellCurrencyId)
+		err = utils.DB.ExecSql("UPDATE e_wallets SET amount = ?, last_update = ? WHERE user_id = ? AND currency_id = ?", userAmount-commission, utils.Time(), userId, sellCurrencyId)
 		if err != nil {
 			return utils.ErrInfo(err)
 		}
@@ -560,7 +555,7 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 		// блокируем юзера, чей ордер взяли, кроме самого себя
 		if rowUserId != userId {
 			lockErr := userLock(rowUserId)
-			if lockErr!=nil {
+			if lockErr != nil {
 				log.Error("%v", utils.ErrInfo(err))
 				prevUserId = rowUserId
 				continue
@@ -568,7 +563,7 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 		}
 		if orderType == "buy" {
 			// удовлетворит ли данный ордер наш запрос целиком
-			if rowAmount>= totalBuyAmount {
+			if rowAmount >= totalBuyAmount {
 				debit = totalBuyAmount
 				log.Debug("order ENDED")
 			} else {
@@ -583,7 +578,7 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 			}
 		}
 		log.Debug("totalBuyAmount: %v / debit: %v", totalBuyAmount, debit)
-		if rowAmount - debit < 0.01 { // ордер опустошили
+		if rowAmount-debit < 0.01 { // ордер опустошили
 			err = utils.DB.ExecSql("UPDATE e_orders SET amount = 0, empty_time = ? WHERE id = ?", curTime, rowId)
 			if err != nil {
 				return utils.ErrInfo(err)
@@ -617,7 +612,7 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 		sellerSellAmount := debit
 
 		// сколько продавец получил buy_currency_id с продажи суммы $seller_sell_amount по его курсу
-		sellerBuyAmount := sellerSellAmount * (1/rowSellRate)
+		sellerBuyAmount := sellerSellAmount * (1 / rowSellRate)
 
 		// начисляем валюту, которую продавец получил (R)
 		userAmount := utils.EUserAmountAndProfit(rowUserId, rowBuyCurrencyId)
@@ -646,18 +641,18 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 		}
 
 		if orderType == "buy" {
-			totalBuyAmount-=rowAmount
+			totalBuyAmount -= rowAmount
 			if totalBuyAmount <= 0 {
 				userUnlock(rowUserId)
 				log.Debug("total_buy_amount == 0 break")
-				break; // проход по ордерам прекращаем, т.к. наш запрос удовлетворен
+				break // проход по ордерам прекращаем, т.к. наш запрос удовлетворен
 			}
 		} else {
-			totalSellAmount-=rowAmount/rowSellRate
+			totalSellAmount -= rowAmount / rowSellRate
 			if totalSellAmount <= 0 {
 				userUnlock(rowUserId)
 				log.Debug("total_sell_amount == 0 break")
-				break; // проход по ордерам прекращаем, т.к. наш запрос удовлетворен
+				break // проход по ордерам прекращаем, т.к. наш запрос удовлетворен
 			}
 		}
 		if rowUserId != userId {
@@ -696,10 +691,6 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 	return nil
 }
 
-
 func userUnlock(userId int64) {
 	utils.DB.ExecSql("UPDATE e_users SET lock = 0 WHERE id = ?", userId)
 }
-
-
-

@@ -255,7 +255,7 @@ func (p *Parser) GetBlocks(blockId int64, host string, userId int64, rollbackBlo
 			utils.WriteSelectiveLog(err)
 			return utils.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 		// откатываем по фронту все свежие тр-ии
 		parser.GoroutineName = goroutineName
 		parser.BinaryData = transactions
@@ -879,13 +879,13 @@ func (p *Parser) ParseDataRollbackFront(txTestblock bool) error {
 			return p.ErrInfo(err)
 		}
 		if txTestblock {
-			utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = "+string(p.TxHash))
+			utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(p.TxHash))
 			affect, err := p.ExecSqlGetAffect("UPDATE transactions SET verified = 0 WHERE hex(hash) = ?", p.TxHash)
 			if err != nil {
 				utils.WriteSelectiveLog(err)
 				return p.ErrInfo(err)
 			}
-			utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+			utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 		}
 		affected, err := p.ExecSqlGetAffect("DELETE FROM log_transactions WHERE hex(hash) = ?", p.TxHash)
 		log.Debug("DELETE FROM log_transactions WHERE hex(hash) = %s / affected = %d", p.TxHash, affected)
@@ -959,14 +959,13 @@ func (p *Parser) ParseDataRollback() error {
 			utils.BytesShiftReverse(&p.BinaryData, size_)
 			p.TxHash = utils.Md5(transactionBinaryData)
 
-
-			utils.WriteSelectiveLog("UPDATE transactions SET used=0, verified = 0 WHERE hex(hash) = "+string(p.TxHash))
+			utils.WriteSelectiveLog("UPDATE transactions SET used=0, verified = 0 WHERE hex(hash) = " + string(p.TxHash))
 			affect, err := p.ExecSqlGetAffect("UPDATE transactions SET used=0, verified = 0 WHERE hex(hash) = ?", p.TxHash)
 			if err != nil {
 				utils.WriteSelectiveLog(err)
 				return p.ErrInfo(err)
 			}
-			utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+			utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			affected, err := p.ExecSqlGetAffect("DELETE FROM log_transactions WHERE hex(hash) = ?", p.TxHash)
 			log.Debug("DELETE FROM log_transactions WHERE hex(hash) = %s / affected = %d", p.TxHash, affected)
 			if err != nil {
@@ -1106,13 +1105,13 @@ func (p *Parser) RollbackTransactions() error {
 		}
 		utils.WriteSelectiveLog(utils.BinToHex(hash))
 		blockBody = append(blockBody, utils.EncodeLengthPlusData(data)...)
-		utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = "+string(utils.BinToHex(hash)))
+		utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(utils.BinToHex(hash)))
 		affect, err := p.ExecSqlGetAffect("UPDATE transactions SET verified = 0 WHERE hex(hash) = ?", utils.BinToHex(hash))
 		if err != nil {
 			utils.WriteSelectiveLog(err)
 			return p.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 	}
 
 	// нужно откатить наши транзакции
@@ -1260,21 +1259,21 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 
 			// =================== ради эксперимента =========
 			if onlyFront {
-				utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = "+string(p.TxHash))
+				utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(p.TxHash))
 				affect, err := p.ExecSqlGetAffect("UPDATE transactions SET verified = 0 WHERE hex(hash) = ?", p.TxHash)
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					return utils.ErrInfo(err)
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			} else { // ====================================
-				utils.WriteSelectiveLog("UPDATE transactions SET used = 0 WHERE hex(hash) = "+string(p.TxHash))
+				utils.WriteSelectiveLog("UPDATE transactions SET used = 0 WHERE hex(hash) = " + string(p.TxHash))
 				affect, err := p.ExecSqlGetAffect("UPDATE transactions SET used = 0 WHERE hex(hash) = ?", p.TxHash)
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					return utils.ErrInfo(err)
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			}
 		}
 	}
@@ -1374,7 +1373,6 @@ func (p *Parser) InsertIntoBlockchain() error {
 	//mutex.Unlock()
 	return nil
 }
-
 
 func (p *Parser) UpdBlockInfo() {
 
@@ -1564,7 +1562,7 @@ func (p *Parser) rollbackAI(table string, num int64) error {
 	}
 	log.Debug("AiId: %s", AiId)
 	// если табла была очищена, то тут будет 0, поэтому нелья чистить таблы под нуль
-	current, err := p.Single("SELECT "+AiId+" FROM "+table+" ORDER BY "+AiId+" DESC LIMIT 1").Int64()
+	current, err := p.Single("SELECT " + AiId + " FROM " + table + " ORDER BY " + AiId + " DESC LIMIT 1").Int64()
 	if err != nil {
 		return utils.ErrInfo(err)
 	}
@@ -1616,7 +1614,6 @@ func (p *Parser) getMyMinersIds() (map[int]int, error) {
 	}
 	return myMinersIds, nil
 }
-
 
 func (p *Parser) generalCheckAdmin() error {
 	if !utils.CheckInputData(p.TxMap["user_id"], "int") {
@@ -3236,7 +3233,7 @@ func (p *Parser) RollbackIncompatibleTx(typesArr []string) error {
 	for _, txData := range transactions {
 
 		md5 := utils.Md5(txData)
-		utils.WriteSelectiveLog("md5: "+string(md5))
+		utils.WriteSelectiveLog("md5: " + string(md5))
 		// откатим фронтальные записи
 		p.BinaryData = utils.EncodeLengthPlusData([]byte(txData))
 		err = p.ParseDataRollback()
@@ -3245,13 +3242,13 @@ func (p *Parser) RollbackIncompatibleTx(typesArr []string) error {
 		}
 		// Удаляем уже записанные тр-ии.
 
-		utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = "+string(md5))
+		utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = " + string(md5))
 		affect, err := p.ExecSqlGetAffect("DELETE FROM transactions WHERE hex(hash) = ?", md5)
 		if err != nil {
 			utils.WriteSelectiveLog(err)
 			return utils.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 		/*
 			 * создает проблемы для tesblock_is_ready
 			err = p.ExecSql("DELETE FROM transactions_testblock WHERE hex(hash) = ?", md5)
@@ -3379,13 +3376,13 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 				p.BinaryData = utils.EncodeLengthPlusData([]byte(txData))
 				p.ParseDataRollback()
 				// Удаляем именно уже записанную тр-ию. При этом новая (CashRequestOut) тр-ия успешно обработается
-				utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = "+string(utils.Md5(txData)))
+				utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = " + string(utils.Md5(txData)))
 				affect, err := p.ExecSqlGetAffect("DELETE FROM transactions WHERE hex(hash) = ?", utils.Md5(txData))
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					fatalError = fmt.Sprintf("%s", err)
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 				/*
 					 * создает проблемы для tesblock_is_ready
 					err = p.ExecSql("DELETE FROM transactions_testblock WHERE hex(hash) = ?md5(?tx_data)?")
@@ -3669,13 +3666,13 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 					fatalError = fmt.Sprintf("%s", err)
 				}
 				// Удаляем именно уже записанную тр-ию. При этом новая (CashRequestIn) тр-ия успешно обработается
-				utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = "+string(utils.Md5(txData)))
+				utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = " + string(utils.Md5(txData)))
 				affect, err := p.ExecSqlGetAffect("DELETE FROM transactions WHERE hex(hash) = ?", utils.Md5(txData))
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					fatalError = fmt.Sprintf("%s", err)
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 				/*
 					 * создает проблемы для tesblock_is_ready
 					err = p.ExecSql("DELETE FROM transactions_testblock WHERE hex(hash) = ?", Md5(txData))
@@ -3835,21 +3832,21 @@ func (p *Parser) TxParser(hash, binaryTx []byte, myTx bool) error {
 			return utils.ErrInfo(err)
 		}
 	} else {
-		utils.WriteSelectiveLog("SELECT counter FROM transactions WHERE hex(hash) = "+string(hashHex))
+		utils.WriteSelectiveLog("SELECT counter FROM transactions WHERE hex(hash) = " + string(hashHex))
 		counter, err := p.Single("SELECT counter FROM transactions WHERE hex(hash) = ?", hashHex).Int64()
 		if err != nil {
 			utils.WriteSelectiveLog(err)
 			return utils.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("counter: "+utils.Int64ToStr(counter))
+		utils.WriteSelectiveLog("counter: " + utils.Int64ToStr(counter))
 		counter++
-		utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = "+string(hashHex))
+		utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = " + string(hashHex))
 		affect, err := p.ExecSqlGetAffect(`DELETE FROM transactions WHERE hex(hash) = ?`, hashHex)
 		if err != nil {
 			utils.WriteSelectiveLog(err)
 			return utils.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 
 		utils.WriteSelectiveLog("INSERT INTO transactions (hash, data, for_self_use, type, user_id, third_var, counter) VALUES ([hex], [hex], ?, ?, ?, ?, ?)")
 		err = p.ExecSql(`INSERT INTO transactions (hash, data, for_self_use, type, user_id, third_var, counter) VALUES ([hex], [hex], ?, ?, ?, ?, ?)`, hashHex, utils.BinToHex(binaryTx), forSelfUse, txType, userId, thirdVar, counter)
@@ -3875,13 +3872,13 @@ func (p *Parser) DeleteQueueTx(hashHex []byte) error {
 		return utils.ErrInfo(err)
 	}
 	// т.к. мы обрабатываем в queue_parser_tx тр-ии с verified=0, то после их обработки их нужно удалять.
-	utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = "+string(hashHex)+" AND verified=0 AND used = 0")
+	utils.WriteSelectiveLog("DELETE FROM transactions WHERE hex(hash) = " + string(hashHex) + " AND verified=0 AND used = 0")
 	affect, err := p.ExecSqlGetAffect("DELETE FROM transactions WHERE hex(hash) = ? AND verified=0 AND used = 0", hashHex)
 	if err != nil {
 		utils.WriteSelectiveLog(err)
 		return utils.ErrInfo(err)
 	}
-	utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+	utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 	return nil
 }
 

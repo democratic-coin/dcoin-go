@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"encoding/json"
 	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) DebugInfo() (string, error) {
@@ -25,5 +25,5 @@ func (c *Controller) DebugInfo() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	return consts.VERSION+"\n"+string(jsonMainLock)+"\n"+string(jsonNodesBan)+"\n", nil
+	return consts.VERSION + "\n" + string(jsonMainLock) + "\n" + string(jsonNodesBan) + "\n", nil
 }

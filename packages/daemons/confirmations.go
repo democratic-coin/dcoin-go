@@ -39,7 +39,7 @@ func Confirmations() {
 
 	var s int
 
-	BEGIN:
+BEGIN:
 	for {
 		// первые 2 минуты спим по 10 сек, чтобы блоки успели собраться
 		s++
@@ -79,7 +79,7 @@ func Confirmations() {
 			s = 0 // 2 минуты отчитываем с начала
 		}
 		if startBlockId == 0 {
-			startBlockId = LastBlockId-1
+			startBlockId = LastBlockId - 1
 		}
 		log.Debug("startBlockId: %d / LastBlockId: %d", startBlockId, LastBlockId)
 

@@ -1,6 +1,10 @@
 package dcoin
 
 import (
+	"github.com/c-darwin/go-thrust/thrust"
+	//"github.com/c-darwin/go-thrust/tutorials/provisioner"
+	"github.com/c-darwin/go-thrust/lib/commands"
+
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/session"
@@ -13,18 +17,19 @@ import (
 	"github.com/op/go-logging"
 	_ "image/png"
 	//"io"
+	"encoding/json"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"os"
 	"os/exec"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
-	"regexp"
-	"encoding/json"
-	"io/ioutil"
 	//"syscall"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
+	"github.com/c-darwin/go-thrust/lib/bindings/window"
 )
 
 var (
@@ -56,7 +61,7 @@ func Stop() {
 	IosLog("DCOIN Stop")
 }
 
-func Start(dir string) {
+func Start(dir string, thrustWindowLoder *window.Window) {
 
 	var err error
 	IosLog("start")
@@ -75,7 +80,6 @@ func Start(dir string) {
 	IosLog("dir:" + dir)
 	fmt.Println("utils.Dir", *utils.Dir)
 
-
 	fmt.Println("dcVersion:", consts.VERSION)
 	log.Debug("dcVersion: %v", consts.VERSION)
 
@@ -92,8 +96,8 @@ func Start(dir string) {
 	// убьем ранее запущенный Dcoin
 	if !utils.Mobile() {
 		fmt.Println("kill dcoin.pid")
-		if _, err := os.Stat(*utils.Dir+"/dcoin.pid"); err == nil {
-			dat, err := ioutil.ReadFile(*utils.Dir+"/dcoin.pid")
+		if _, err := os.Stat(*utils.Dir + "/dcoin.pid"); err == nil {
+			dat, err := ioutil.ReadFile(*utils.Dir + "/dcoin.pid")
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
@@ -114,9 +118,9 @@ func Start(dir string) {
 			if fmt.Sprintf("%s", err) != "null" {
 				fmt.Println(fmt.Sprintf("%s", err))
 				// даем 15 сек, чтобы завершиться предыдущему процессу
-				for i := 0; i<15; i++ {
+				for i := 0; i < 15; i++ {
 					log.Debug("waiting killer %d", i)
-					if _, err := os.Stat(*utils.Dir+"/dcoin.pid"); err == nil {
+					if _, err := os.Stat(*utils.Dir + "/dcoin.pid"); err == nil {
 						fmt.Println("waiting killer")
 						utils.Sleep(1)
 					} else { // если dcoin.pid нет, значит завершился
@@ -140,7 +144,6 @@ func Start(dir string) {
 			panic(err)
 		}
 	}
-
 
 	controllers.SessInit()
 	controllers.ConfigInit()
@@ -193,20 +196,18 @@ func Start(dir string) {
 		log.Error("%v", utils.ErrInfo(err))
 	}
 
-
 	log.Debug("logLevel: %v", logLevel)
 	backendLeveled.SetLevel(logLevel, "")
 	logging.SetBackend(backendLeveled)
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
-
 	// если есть OldFileName, значит работаем под именем tmp_dc и нужно перезапуститься под нормальным именем
 	log.Error("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
 
 		// вначале нужно обновить БД в зависимости от версии
-		dat, err := ioutil.ReadFile(*utils.Dir+"/dcoin.pid")
+		dat, err := ioutil.ReadFile(*utils.Dir + "/dcoin.pid")
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 		}
@@ -241,7 +242,7 @@ func Start(dir string) {
 			log.Error("%v", utils.ErrInfo(err))
 		}
 		fmt.Println("DB Closed")
-		err = os.Remove(*utils.Dir+"/dcoin.pid")
+		err = os.Remove(*utils.Dir + "/dcoin.pid")
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 		}
@@ -261,7 +262,7 @@ func Start(dir string) {
 		parser := new(dcparser.Parser)
 		parser.DCDB = utils.DB
 		err = parser.RollbackToBlockId(*utils.RollbackToBlockId)
-		if err!=nil {
+		if err != nil {
 			fmt.Println(err)
 			panic(err)
 		}
@@ -376,22 +377,21 @@ func Start(dir string) {
 					//panic(err)
 				}
 				fmt.Println("DB Closed")
-				err = os.Remove(*utils.Dir+"/dcoin.pid")
+				err = os.Remove(*utils.Dir + "/dcoin.pid")
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 					panic(err)
 				}
-				fmt.Println("removed "+*utils.Dir+"/dcoin.pid")
+				fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
 				os.Exit(1)
 			}
 			utils.Sleep(1)
 		}
 	}()
 
-
 	BrowserHttpHost := "http://localhost:8089"
 	HandleHttpHost := ""
-	ListenHttpHost := ":"+*utils.ListenHttpHost
+	ListenHttpHost := ":" + *utils.ListenHttpHost
 	go func() {
 		// уже прошли процесс инсталяции, где юзер указал БД и был перезапуск кошелька
 		if len(configIni["db_type"]) > 0 && !utils.Mobile() {
@@ -433,7 +433,15 @@ func Start(dir string) {
 
 		if *utils.Console == 0 && !utils.Mobile() {
 			utils.Sleep(1)
-			openBrowser(BrowserHttpHost)
+			if thrustWindowLoder!=nil {
+				thrustWindowLoder.Close()
+				thrustWindow := thrust.NewWindow(thrust.WindowOptions{
+					RootUrl: "http://localhost:8089",
+					Size: commands.SizeHW{Width:1200, Height:600},
+				})
+				thrustWindow.Show()
+				thrustWindow.Focus()
+			}
 		}
 	}()
 
@@ -511,7 +519,6 @@ func openBrowser(BrowserHttpHost string) {
 		log.Error("%v", err)
 	}
 }
-
 
 func GetHttpHost() (string, string, string) {
 	BrowserHttpHost := "http://localhost:8089"

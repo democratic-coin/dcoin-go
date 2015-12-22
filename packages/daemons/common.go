@@ -1,28 +1,28 @@
 package daemons
 
 import (
+	"errors"
 	"flag"
 	"github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"github.com/op/go-logging"
 	"os"
-	"errors"
 )
 
 var (
-	log             = logging.MustGetLogger("daemons")
-	DaemonCh        chan bool = make(chan bool, 100)
-	AnswerDaemonCh  chan string = make(chan string, 100)
+	log                           = logging.MustGetLogger("daemons")
+	DaemonCh        chan bool     = make(chan bool, 100)
+	AnswerDaemonCh  chan string   = make(chan string, 100)
 	MonitorDaemonCh chan []string = make(chan []string, 100)
 	configIni       map[string]string
 )
 
 type daemon struct {
 	*utils.DCDB
-	goRoutineName 	string
-	DaemonCh        chan bool
-	AnswerDaemonCh  chan string
-	sleepTime int
+	goRoutineName  string
+	DaemonCh       chan bool
+	AnswerDaemonCh chan string
+	sleepTime      int
 }
 
 func (d *daemon) dbLock() (error, bool) {
@@ -47,9 +47,9 @@ func (d *daemon) dSleep(sleep int) bool {
 func (d *daemon) dPrintSleep(err_ interface{}, sleep int) bool {
 	var err error
 	switch err_.(type) {
-		case string:
+	case string:
 		err = errors.New(err_.(string))
-		case error:
+	case error:
 		err = err_.(error)
 	}
 	log.Error("%v (%v)", err, utils.GetParent())

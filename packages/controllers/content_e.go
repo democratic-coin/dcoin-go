@@ -30,7 +30,6 @@ func ContentE(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		tplName := r.FormValue("page")
 
-
 		c.Parameters, err = c.GetParameters()
 		log.Debug("parameters=", c.Parameters)
 
@@ -62,7 +61,7 @@ func ContentE(w http.ResponseWriter, r *http.Request) {
 			eHost += c.EConfig["catalog"]
 			c.EURL = eHost
 		} else {
-			c.EURL = "http://"+c.EURL+"/"
+			c.EURL = "http://" + c.EURL + "/"
 		}
 		html := ""
 		if ok, _ := regexp.MatchString(`^(?i)EPages|emain|EMyOrders|EMyHistory|EMyFinance`, tplName); !ok {

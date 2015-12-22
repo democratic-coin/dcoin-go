@@ -164,7 +164,6 @@ func (c *Controller) Arbitration() (string, error) {
 	}
 	pendingTx := pendingTx_[txTypeId]
 
-
 	TemplateStr, err := makeTemplate("arbitration", "arbitration", &arbitrationPage{
 		Alert:                 c.Alert,
 		Lang:                  c.Lang,

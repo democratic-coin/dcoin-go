@@ -6,11 +6,11 @@ import (
 )
 
 type eMyHistoryPage struct {
-	Lang          map[string]string
-	CurrencyList  map[int64]string
-	Commission    string
-	UserId	int64
-	MyHistory []*EmyHistory
+	Lang         map[string]string
+	CurrencyList map[int64]string
+	Commission   string
+	UserId       int64
+	MyHistory    []*EmyHistory
 }
 
 func (c *Controller) EMyHistory() (string, error) {
@@ -18,7 +18,7 @@ func (c *Controller) EMyHistory() (string, error) {
 	var err error
 
 	if c.SessUserId == 0 {
-		return `<script language="javascript"> window.location.href = "`+c.EURL+`"</script>If you are not redirected automatically, follow the <a href="`+c.EURL+`">`+c.EURL+`</a>`, nil
+		return `<script language="javascript"> window.location.href = "` + c.EURL + `"</script>If you are not redirected automatically, follow the <a href="` + c.EURL + `">` + c.EURL + `</a>`, nil
 	}
 
 	currencyList, err := utils.EGetCurrencyList()
@@ -49,15 +49,15 @@ func (c *Controller) EMyHistory() (string, error) {
 		// определим тип ордера и пару
 		if myHist.SellCurrencyId < 1000 {
 			myHist.OrderType = "sell"
-			myHist.SellRate = 1/myHist.SellRate
-			myHist.Total = myHist.Amount*myHist.SellRate
+			myHist.SellRate = 1 / myHist.SellRate
+			myHist.Total = myHist.Amount * myHist.SellRate
 			myHist.Amount = myHist.Amount
-			myHist.Pair = currencyList[myHist.SellCurrencyId]+"/"+currencyList[myHist.BuyCurrencyId]
+			myHist.Pair = currencyList[myHist.SellCurrencyId] + "/" + currencyList[myHist.BuyCurrencyId]
 		} else {
 			myHist.OrderType = "buy"
 			myHist.Total = myHist.Amount
-			myHist.Amount = myHist.Amount * (1/myHist.SellRate)
-			myHist.Pair = currencyList[myHist.BuyCurrencyId]+"/"+currencyList[myHist.SellCurrencyId]
+			myHist.Amount = myHist.Amount * (1 / myHist.SellRate)
+			myHist.Pair = currencyList[myHist.BuyCurrencyId] + "/" + currencyList[myHist.SellCurrencyId]
 		}
 
 		myHistory = append(myHistory, myHist)
@@ -65,8 +65,8 @@ func (c *Controller) EMyHistory() (string, error) {
 
 	TemplateStr, err := makeTemplate("e_my_history", "eMyHistory", &eMyHistoryPage{
 		Lang:         c.Lang,
-		UserId: c.SessUserId,
-		MyHistory : myHistory,
+		UserId:       c.SessUserId,
+		MyHistory:    myHistory,
 		CurrencyList: currencyList})
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -76,6 +76,6 @@ func (c *Controller) EMyHistory() (string, error) {
 
 type EmyHistory struct {
 	Id, Time, SellCurrencyId, BuyCurrencyId int64
-	Amount, SellRate, Total float64
-	OrderType, Pair string
+	Amount, SellRate, Total                 float64
+	OrderType, Pair                         string
 }

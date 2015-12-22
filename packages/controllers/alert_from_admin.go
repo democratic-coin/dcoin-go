@@ -1,18 +1,17 @@
 package controllers
 
 import (
-	"errors"
-	"github.com/c-darwin/dcoin-go/packages/utils"
-	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"crypto/rsa"
 	"crypto"
+	"crypto/rsa"
+	"encoding/json"
+	"errors"
+	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 	"github.com/mcuadros/go-version"
 )
 
-
 type alertType struct {
-	Message map[string]string
+	Message   map[string]string
 	Signature string
 }
 

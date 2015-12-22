@@ -6,7 +6,6 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
-
 /**
  * Занесение данных из блока в БД
  * используется только в testblock_is_ready
@@ -28,7 +27,7 @@ func (p *Parser) ParseDataFront() error {
 			utils.WriteSelectiveLog(err)
 			return p.ErrInfo(err)
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 
 		// разбор блока
 		err = p.ParseBlock()
@@ -98,13 +97,13 @@ func (p *Parser) ParseDataFront() error {
 					return utils.ErrInfo(err_.(error))
 				}
 
-				utils.WriteSelectiveLog("UPDATE transactions SET used=1 WHERE hex(hash) = "+string(utils.Md5(transactionBinaryDataFull)))
+				utils.WriteSelectiveLog("UPDATE transactions SET used=1 WHERE hex(hash) = " + string(utils.Md5(transactionBinaryDataFull)))
 				affect, err := p.ExecSqlGetAffect("UPDATE transactions SET used=1 WHERE hex(hash) = ?", utils.Md5(transactionBinaryDataFull))
 				if err != nil {
 					utils.WriteSelectiveLog(err)
 					return utils.ErrInfo(err)
 				}
-				utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+				utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 
 				// даем юзеру понять, что его тр-ия попала в блок
 				err = p.ExecSql("UPDATE transactions_status SET block_id = ? WHERE hex(hash) = ?", p.BlockData.BlockId, utils.Md5(transactionBinaryDataFull))

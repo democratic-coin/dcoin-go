@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"encoding/json"
 	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 type DbInfoNodesPage struct {
-	Lang                  map[string]string
+	Lang      map[string]string
 	NodesData []map[string]string
-	Titles []string
+	Titles    []string
 }
 
 func (c *Controller) DbInfoNodes() (string, error) {
@@ -27,7 +27,7 @@ func (c *Controller) DbInfoNodes() (string, error) {
 	}
 	defer rows.Close()
 	var titles []string
-	var nodesData  []map[string]string
+	var nodesData []map[string]string
 	for rows.Next() {
 		var http_host string
 		err = rows.Scan(&http_host)
@@ -35,7 +35,7 @@ func (c *Controller) DbInfoNodes() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		fmt.Println(http_host)
-		jsonData, err := utils.GetHttpTextAnswer(http_host+"/ajax?controllerName=checkNode")
+		jsonData, err := utils.GetHttpTextAnswer(http_host + "/ajax?controllerName=checkNode")
 		if err != nil {
 			continue
 		}
@@ -55,8 +55,8 @@ func (c *Controller) DbInfoNodes() (string, error) {
 	fmt.Println("nodesData", nodesData)
 
 	TemplateStr, err := makeTemplate("db_info_nodes", "dbInfoNodes", &DbInfoNodesPage{
-		Lang:                  c.Lang,
-		Titles: titles,
+		Lang:      c.Lang,
+		Titles:    titles,
 		NodesData: nodesData})
 	if err != nil {
 		return "", utils.ErrInfo(err)

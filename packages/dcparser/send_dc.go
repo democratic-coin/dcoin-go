@@ -349,7 +349,6 @@ func (p *Parser) SendDcRollback() error {
 		}
 	}
 
-
 	// 5 обновим сумму на кошельке получателю
 	// возможно были списания по кредиту
 	err = p.loanPaymentsRollback(p.TxMaps.Int64["to_user_id"], p.TxMaps.Int64["currency_id"])
@@ -360,7 +359,6 @@ func (p *Parser) SendDcRollback() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 
 	// 4 обновим сумму на кошельке отправителя
 	err = p.generalRollback("wallets", p.TxMaps.Int64["from_user_id"], "AND currency_id = "+utils.Int64ToStr(p.TxMaps.Int64["currency_id"]), false)

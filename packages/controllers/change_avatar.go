@@ -39,7 +39,6 @@ func (c *Controller) ChangeAvatar() (string, error) {
 	avatar := data["avatar"]
 	name := data["name"]
 
-
 	TemplateStr, err := makeTemplate("change_avatar", "changeAvatar", &ChangeAvatarPage{
 		Alert:           c.Alert,
 		Lang:            c.Lang,

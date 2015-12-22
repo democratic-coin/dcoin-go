@@ -46,7 +46,7 @@ func main() {
 	}
 	fmt.Println("dir::", dir)
 
-	go dcoin.Start(dir)
+	go dcoin.Start(dir, nil)
 
 	app.Main(func(a app.App) {
 

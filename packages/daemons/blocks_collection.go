@@ -52,7 +52,9 @@ BEGIN:
 		log.Debug("0")
 		config, err := d.GetNodeConfig()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		log.Debug("1")
@@ -64,7 +66,9 @@ BEGIN:
 		}
 		if err != nil {
 			log.Debug("restart err %v", err)
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		log.Debug("2")
@@ -173,7 +177,9 @@ BEGIN:
 						//log.Debug("data %x\n", data)
 						blockId := utils.BinToDec(data[0:5])
 						if *utils.EndBlockId > 0 && blockId == *utils.EndBlockId {
-							if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(err, d.sleepTime) {
+								break BEGIN
+							}
 							file.Close()
 							continue BEGIN
 						}
@@ -196,13 +202,17 @@ BEGIN:
 							}
 							err = parser.ParseDataFull()
 							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+								if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
 								file.Close()
 								continue BEGIN
 							}
 							err = parser.InsertIntoBlockchain()
 							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+								if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
 								file.Close()
 								continue BEGIN
 							}
@@ -210,12 +220,16 @@ BEGIN:
 							// отметимся, чтобы не спровоцировать очистку таблиц
 							err = parser.UpdMainLock()
 							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+								if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
 								file.Close()
 								continue BEGIN
 							}
 							if CheckDaemonsRestart(GoroutineName) {
-								if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+								if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
 								file.Close()
 								continue BEGIN
 							}
@@ -236,7 +250,9 @@ BEGIN:
 
 				newBlock, err := static.Asset("static/1block.bin")
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				parser.BinaryData = newBlock
@@ -244,13 +260,17 @@ BEGIN:
 
 				err = parser.ParseDataFull()
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				err = parser.InsertIntoBlockchain()
 
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
@@ -271,7 +291,9 @@ BEGIN:
 
 		myConfig, err := d.OneRow("SELECT local_gate_ip, static_node_user_id FROM config").String()
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		var hosts []map[string]string
@@ -281,7 +303,9 @@ BEGIN:
 			hosts = append(hosts, map[string]string{"host": myConfig["local_gate_ip"], "user_id": myConfig["static_node_user_id"]})
 			nodeHost, err = d.Single("SELECT tcp_host FROM miners_data WHERE user_id  =  ?", myConfig["static_node_user_id"]).String()
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 			dataTypeMaxBlockId = 9
@@ -292,7 +316,9 @@ BEGIN:
 			// получим список нодов, с кем установлено рукопожатие
 			hosts, err = d.GetAll("SELECT * FROM nodes_connection", -1)
 			if err != nil {
-				if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(err, d.sleepTime) {
+					break BEGIN
+				}
 				continue
 			}
 			dataTypeMaxBlockId = 10
@@ -304,7 +330,9 @@ BEGIN:
 		log.Info("%v", hosts)
 
 		if len(hosts) == 0 {
-			if d.dPrintSleep(err, 1) {	break BEGIN }
+			if d.dPrintSleep(err, 1) {
+				break BEGIN
+			}
 			continue
 		}
 
@@ -318,21 +346,27 @@ BEGIN:
 			}
 			conn, err := utils.TcpConn(hosts[i]["host"])
 			if err != nil {
-				if d.dPrintSleep(err, 1) {	break BEGIN }
+				if d.dPrintSleep(err, 1) {
+					break BEGIN
+				}
 				continue
 			}
 			// шлем тип данных
 			_, err = conn.Write(utils.DecToBin(dataTypeMaxBlockId, 1))
 			if err != nil {
 				conn.Close()
-				if d.dPrintSleep(err, 1) {	break BEGIN }
+				if d.dPrintSleep(err, 1) {
+					break BEGIN
+				}
 				continue
 			}
 			if len(nodeHost) > 0 { // защищенный режим
 				err = utils.WriteSizeAndData([]byte(nodeHost), conn)
 				if err != nil {
 					conn.Close()
-					if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(err, d.sleepTime) {
+						break BEGIN
+					}
 					continue
 				}
 			}
@@ -341,7 +375,9 @@ BEGIN:
 			_, err = conn.Read(blockIdBin)
 			if err != nil {
 				conn.Close()
-				if d.dPrintSleep(err, 1) {	break BEGIN }
+				if d.dPrintSleep(err, 1) {
+					break BEGIN
+				}
 				continue
 			}
 			conn.Close()
@@ -364,18 +400,24 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		currentBlockId, err = d.Single("SELECT block_id FROM info_block").Int64()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 		log.Info("currentBlockId", currentBlockId, "maxBlockId", maxBlockId)
 		if maxBlockId <= currentBlockId {
-			if d.unlockPrintSleep(utils.ErrInfo(errors.New("maxBlockId <= currentBlockId")), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(errors.New("maxBlockId <= currentBlockId")), d.sleepTime) {
+				break BEGIN
+			}
 			continue
 		}
 
@@ -385,12 +427,16 @@ BEGIN:
 		for blockId := currentBlockId + 1; blockId < maxBlockId+1; blockId++ {
 			d.UpdMainLock()
 			if CheckDaemonsRestart(GoroutineName) {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				break BEGIN
 			}
 			variables, err := d.GetAllVariables()
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			// качаем тело блока с хоста maxBlockIdHost
@@ -401,7 +447,9 @@ BEGIN:
 				// для тестов убрал, потом вставить.
 				//nodes_ban ($db, $max_block_id_user_id, substr($binary_block, 0, 512)."\n".__FILE__.', '.__LINE__.', '. __FUNCTION__.', '.__CLASS__.', '. __METHOD__);
 				//p.NodesBan(maxBlockIdUserId, "len(binaryBlock) == 0")
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			binaryBlockFull := binaryBlock
@@ -413,20 +461,26 @@ BEGIN:
 			// если существуют глючная цепочка, тот тут мы её проигнорируем
 			badBlocks_, err := d.Single("SELECT bad_blocks FROM config").Bytes()
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			badBlocks := make(map[int64]string)
 			if len(badBlocks_) > 0 {
 				err = json.Unmarshal(badBlocks_, &badBlocks)
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
 			if badBlocks[blockData.BlockId] == string(utils.BinToHex(blockData.Sign)) {
 				d.NodesBan(maxBlockIdUserId, fmt.Sprintf("bad_block = %v => %v", blockData.BlockId, badBlocks[blockData.BlockId]))
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -434,14 +488,18 @@ BEGIN:
 			if currentBlockId > 1 {
 				if int64(len(binaryBlock)) > variables.Int64["max_block_size"] {
 					d.NodesBan(maxBlockIdUserId, fmt.Sprintf(`len(binaryBlock) > variables.Int64["max_block_size"]  %v > %v`, len(binaryBlock), variables.Int64["max_block_size"]))
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
 
 			if blockData.BlockId != blockId {
 				d.NodesBan(maxBlockIdUserId, fmt.Sprintf(`blockData.BlockId != blockId  %v > %v`, blockData.BlockId, blockId))
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -450,7 +508,9 @@ BEGIN:
 			if blockId > 1 {
 				prevBlockHash, err = d.Single("SELECT hash FROM block_chain WHERE id = ?", blockId-1).String()
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				prevBlockHash = string(utils.BinToHex([]byte(prevBlockHash)))
@@ -465,14 +525,18 @@ BEGIN:
 			mrklRoot, err := utils.GetMrklroot(binaryBlock, variables, first)
 			if err != nil {
 				d.NodesBan(maxBlockIdUserId, fmt.Sprintf(`%v`, err))
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
 			// публичный ключ того, кто этот блок сгенерил
 			nodePublicKey, err := d.GetNodePublicKey(blockData.UserId)
 			if err != nil {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -489,7 +553,9 @@ BEGIN:
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 				if blockId < 1 {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				// нужно привести данные в нашей БД в соответствие с данными у того, у кого качаем более свежий блок
@@ -498,7 +564,9 @@ BEGIN:
 				if err != nil {
 					log.Error("%v", err)
 					d.NodesBan(maxBlockIdUserId, fmt.Sprintf(`blockId: %v / %v`, blockId, err))
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 
@@ -512,7 +580,9 @@ BEGIN:
 				rows, err := d.Query("SELECT data FROM transactions WHERE verified = 1 AND used = 0")
 				if err != nil {
 					utils.WriteSelectiveLog(err)
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				for rows.Next() {
@@ -521,7 +591,9 @@ BEGIN:
 					utils.WriteSelectiveLog(utils.BinToHex(data))
 					if err != nil {
 						rows.Close()
-						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					transactions = append(transactions, utils.EncodeLengthPlusData(data)...)
@@ -533,10 +605,12 @@ BEGIN:
 					affect, err := d.ExecSqlGetAffect("UPDATE transactions SET verified = 0 WHERE verified = 1 AND used = 0")
 					if err != nil {
 						utils.WriteSelectiveLog(err)
-						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
-					utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+					utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 					// откатываем по фронту все свежие тр-ии
 					parser.BinaryData = transactions
 					err = parser.ParseDataRollbackFront(false)
@@ -548,12 +622,16 @@ BEGIN:
 
 				err = parser.RollbackTransactionsTestblock(true)
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				err = d.ExecSql("DELETE FROM testblock")
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
@@ -565,14 +643,18 @@ BEGIN:
 			if err == nil {
 				err = parser.InsertIntoBlockchain()
 				if err != nil {
-					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
 			// начинаем всё с начала уже с другими нодами. Но у нас уже могут быть новые блоки до $block_id, взятые от нода, которого с в итоге мы баним
 			if err != nil {
 				d.NodesBan(maxBlockIdUserId, fmt.Sprintf(`blockId: %v / %v`, blockId, err))
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}

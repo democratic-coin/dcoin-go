@@ -10,10 +10,10 @@ import (
 )
 
 type indexCf struct {
-	CfUrl  string
-	Lang   string
-	Nav    template.JS
-	CfLang map[string]string
+	CfUrl             string
+	Lang              string
+	Nav               template.JS
+	CfLang            map[string]string
 	AnalyticsDisabled string
 }
 

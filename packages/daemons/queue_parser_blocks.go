@@ -28,7 +28,6 @@ func QueueParserBlocks() {
 		}
 	}()
 
-
 	const GoroutineName = "QueueParserBlocks"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -64,22 +63,30 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		prevBlockData, err := d.OneRow("SELECT * FROM info_block").String()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		newBlockData, err := d.OneRow("SELECT * FROM queue_blocks").String()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if len(newBlockData) == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		newBlockData["head_hash_hex"] = string(utils.BinToHex(newBlockData["head_hash"]))
@@ -89,7 +96,9 @@ BEGIN:
 
 		variables, err := d.GetAllVariables()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -100,14 +109,18 @@ BEGIN:
 		// проверим, укладывается ли блок в лимит rollback_blocks_1
 		if utils.StrToInt64(newBlockData["block_id"]) > utils.StrToInt64(prevBlockData["block_id"])+variables.Int64["rollback_blocks_1"] {
 			d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
-			if d.unlockPrintSleep(utils.ErrInfo("rollback_blocks_1"), 1) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("rollback_blocks_1"), 1) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		// проверим не старый ли блок в очереди
 		if utils.StrToInt64(newBlockData["block_id"]) < utils.StrToInt64(prevBlockData["block_id"]) {
 			d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
-			if d.unlockPrintSleep(utils.ErrInfo("old block"), 1) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("old block"), 1) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -131,13 +144,17 @@ BEGIN:
 					// newBlockData["head_hash_hex"]) >= prevBlockData["head_hash_hex"]
 					if hash1.Cmp(hash2) >= 0 {
 						d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
-						if d.unlockPrintSleep(utils.ErrInfo("newBlockData hash_hex == prevBlockData hash_hex"), 1) {	break BEGIN }
+						if d.unlockPrintSleep(utils.ErrInfo("newBlockData hash_hex == prevBlockData hash_hex"), 1) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 				}
 			} else {
 				d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
-				if d.unlockPrintSleep(utils.ErrInfo("newBlockData head_hash_hex >  prevBlockData head_hash_hex"), 1) {	break BEGIN }
+				if d.unlockPrintSleep(utils.ErrInfo("newBlockData head_hash_hex >  prevBlockData head_hash_hex"), 1) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}
@@ -148,7 +165,9 @@ BEGIN:
 		host, err := d.Single("SELECT tcp_host FROM miners_data WHERE user_id  =  ?", newBlockData["user_id"]).String()
 		if err != nil {
 			d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		blockId := utils.StrToInt64(newBlockData["block_id"])
@@ -161,7 +180,9 @@ BEGIN:
 			log.Error("v", err)
 			d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
 			d.NodesBan(utils.StrToInt64(newBlockData["user_id"]), fmt.Sprintf("%v", err))
-			if d.unlockPrintSleep(utils.ErrInfo(err), 1) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), 1) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 

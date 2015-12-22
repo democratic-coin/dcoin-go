@@ -153,11 +153,11 @@ func (c *Controller) AlertMessage() (string, error) {
 		}
 
 		// возможно юзер новенький на пуле и у него разные нод-ключи
-		nodePublicKey, err :=c.GetNodePublicKey(c.SessUserId)
+		nodePublicKey, err := c.GetNodePublicKey(c.SessUserId)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		myNodePublicKey, err :=c.GetMyNodePublicKey(c.MyPrefix)
+		myNodePublicKey, err := c.GetMyNodePublicKey(c.MyPrefix)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}

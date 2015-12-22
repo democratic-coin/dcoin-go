@@ -5,9 +5,9 @@ import (
 )
 
 type ePages struct {
-	Lang          map[string]string
-	Title  string
-	Text    string
+	Lang  map[string]string
+	Title string
+	Text  string
 }
 
 func (c *Controller) EPages() (string, error) {
@@ -28,9 +28,9 @@ func (c *Controller) EPages() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("e_pages", "ePages", &ePages{
-		Lang :         c.Lang,
-		Title : title,
-		Text : text})
+		Lang:  c.Lang,
+		Title: title,
+		Text:  text})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

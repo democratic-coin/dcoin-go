@@ -2,30 +2,31 @@ package controllers
 
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"time"
-	"strings"
 	"sort"
+	"strings"
+	"time"
 )
 
 type eMainPage struct {
-	AlertMessages []map[string]string
-	Lang          map[string]string
-	CurrencyList  map[int64]string
-	Commission    string
-	Members       int64
-	SellMax       float64
-	BuyMin        float64
-	EOrdersSell []map[string]float64
-	EOrdersBuy []map[string]float64
-	UserId	int64
-	DcCurrency    string
-	Currency      string
-	DcCurrencyId  int64
-	CurrencyId    int64
-	TradeHistory []map[string]string
+	AlertMessages    []map[string]string
+	Lang             map[string]string
+	CurrencyList     map[int64]string
+	Commission       string
+	Members          int64
+	SellMax          float64
+	BuyMin           float64
+	EOrdersSell      []map[string]float64
+	EOrdersBuy       []map[string]float64
+	UserId           int64
+	DcCurrency       string
+	Currency         string
+	DcCurrencyId     int64
+	CurrencyId       int64
+	TradeHistory     []map[string]string
 	CurrencyListPair map[int64][]int64
-	CommissionText string
+	CommissionText   string
 }
+
 func (c *Controller) EMain() (string, error) {
 
 	var err error
@@ -125,7 +126,7 @@ func (c *Controller) EMain() (string, error) {
 			orders.Sell = make(map[float64]float64)
 		}
 		sellRate = utils.ClearNullFloat64(1/sellRate, 6)
-		orders.Sell[sellRate] = utils.ClearNullFloat64(orders.Sell[sellRate] + amount, 6)
+		orders.Sell[sellRate] = utils.ClearNullFloat64(orders.Sell[sellRate]+amount, 6)
 		if buyMin == 0 {
 			buyMin = sellRate
 		} else if sellRate < buyMin {
@@ -170,7 +171,7 @@ func (c *Controller) EMain() (string, error) {
 			orders.Buy = make(map[float64]float64)
 		}
 		sellRate = utils.ClearNullFloat64(sellRate, 6)
-		orders.Buy[sellRate] = utils.ClearNullFloat64(orders.Buy[sellRate] + amount*(1/sellRate), 6)
+		orders.Buy[sellRate] = utils.ClearNullFloat64(orders.Buy[sellRate]+amount*(1/sellRate), 6)
 		if sellMax == 0 {
 			sellMax = sellRate
 		} else if sellRate < sellMax {
@@ -189,8 +190,7 @@ func (c *Controller) EMain() (string, error) {
 
 	// комиссия
 	commission := c.EConfig["commission"]
-	commissionText := strings.Replace(c.Lang["commission_text"], "[commission]",  commission, -1)
-
+	commissionText := strings.Replace(c.Lang["commission_text"], "[commission]", commission, -1)
 
 	// кол-во юзеров
 	members, err := c.Single(`SELECT count(*) FROM e_users`).Int64()
@@ -199,22 +199,22 @@ func (c *Controller) EMain() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("e_main", "eMain", &eMainPage{
-		Lang:         c.Lang,
-		Commission:   commission,
-		Members:      members,
-		SellMax:      sellMax,
-		BuyMin:       buyMin,
-		EOrdersSell:       eOrdersSell,
+		Lang:             c.Lang,
+		Commission:       commission,
+		Members:          members,
+		SellMax:          sellMax,
+		BuyMin:           buyMin,
+		EOrdersSell:      eOrdersSell,
 		EOrdersBuy:       eOrdersBuy,
-		DcCurrency:   dcCurrency,
-		Currency:     currency,
-		DcCurrencyId: dcCurrencyId,
-		UserId:c.SessUserId,
-		TradeHistory: tradeHistory,
-		CurrencyId:   currencyId,
-		CommissionText: commissionText,
+		DcCurrency:       dcCurrency,
+		Currency:         currency,
+		DcCurrencyId:     dcCurrencyId,
+		UserId:           c.SessUserId,
+		TradeHistory:     tradeHistory,
+		CurrencyId:       currencyId,
+		CommissionText:   commissionText,
 		CurrencyListPair: currencyListPair,
-		CurrencyList: currencyList})
+		CurrencyList:     currencyList})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

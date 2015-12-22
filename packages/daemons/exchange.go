@@ -2,12 +2,12 @@ package daemons
 
 import (
 	//"fmt"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"encoding/pem"
-	"crypto/x509"
-	"crypto/rsa"
-	"crypto/rand"
 	"regexp"
 )
 
@@ -40,7 +40,6 @@ func Exchange() {
 		return
 	}
 
-
 BEGIN:
 	for {
 		log.Info(GoroutineName)
@@ -51,10 +50,11 @@ BEGIN:
 			break BEGIN
 		}
 
-
 		blockId, err := d.GetConfirmedBlockId()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -63,17 +63,21 @@ BEGIN:
 		if len(community) > 0 {
 			adminUserId, err := d.GetPoolAdminUserId()
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
-			myPrefix = utils.Int64ToStr(adminUserId)+"_"
+			myPrefix = utils.Int64ToStr(adminUserId) + "_"
 		} else {
 			myPrefix = ""
 		}
 
 		eConfig, err := d.GetMap(`SELECT * FROM e_config`, "name", "value")
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		confirmations := utils.StrToInt64(eConfig["confirmations"])
@@ -82,24 +86,29 @@ BEGIN:
 		// все валюты, с которыми работаем
 		currencyList, err := utils.EGetCurrencyList()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
-
 
 		// ++++++++++++ reduction ++++++++++++
 
 		// максимальный номер блока для процентов. Чтобы брать только новые
 		maxReductionBlock, err := d.Single(`SELECT max(block_id) FROM e_reduction`).Int64()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		// если есть свежая reduction, то нужно остановить торги
 		reduction, err := d.Single(`SELECT block_id FROM reduction WHERE block_id > ? and pct > 0`, maxReductionBlock).Int64()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if reduction > 0 {
@@ -113,7 +122,9 @@ BEGIN:
 		rows, err := d.Query(d.FormatQuery(`SELECT pct, currency_id, time, block_id FROM reduction WHERE block_id > ? AND
 	block_id < ?`), maxReductionBlock, blockId-confirmations)
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		for rows.Next() {
@@ -122,11 +133,13 @@ BEGIN:
 			err = rows.Scan(&pct, &currencyId, &rTime, &blockId)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			//	$k = (100-$row['pct'])/100;
-			k := (100-pct)/100
+			k := (100 - pct) / 100
 			// уменьшаем все средства на счетах
 			err = d.ExecSql(`UPDATE e_wallets SET amount = amount * ? WHERE currency_id = ?`, k, currencyId)
 
@@ -150,7 +163,9 @@ BEGIN:
 				)`, rTime, blockId, currencyId, pct)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}
@@ -166,7 +181,9 @@ BEGIN:
 		 * */
 		nodePrivateKey, err := d.GetNodePrivateKey(myPrefix)
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		/*
@@ -176,11 +193,15 @@ BEGIN:
 		// если всё остановлено из-за найденного блока с reduction, то входящие переводы не обрабатываем
 		reductionLock, err := utils.EGetReductionLock()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if reductionLock > 0 {
-			if d.dPrintSleep(utils.ErrInfo("reductionLock"), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo("reductionLock"), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -194,7 +215,9 @@ BEGIN:
 					  to_user_id = ?
 				ORDER BY id DESC`), blockId-confirmations, mainDcAccount)
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		for rows.Next() {
@@ -204,14 +227,18 @@ BEGIN:
 			err = rows.Scan(&amount, &id, &blockId, &typeId, &currencyId, &toUserId, &txTime, &comment, &commentStatus)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			// отметим exchange_checked=1, чтобы больше не брать эту тр-ию
 			err = d.ExecSql(`UPDATE my_dc_transactions SET exchange_checked = 1 WHERE id = ?`, id)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -219,7 +246,9 @@ BEGIN:
 			binaryData, err := d.Single(`SELECT data FROM block_chain WHERE id = ?`, blockId).Bytes()
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			p := new(dcparser.Parser)
@@ -238,7 +267,9 @@ BEGIN:
 				exists, err := d.Single(`SELECT id FROM e_adding_funds WHERE hex(tx_hash) = ?`, string(txMap["md5hash"])).Int64()
 				if err != nil {
 					rows.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				log.Debug("exists %d", exists)
@@ -246,7 +277,7 @@ BEGIN:
 					continue
 				}
 
-				log.Debug("user_id = %d / typeId = %d / currency_id = %d / currencyId = %d / amount = %f / amount = %f / comment = %s / comment = %s / to_user_id = %d / toUserId = %d ", utils.BytesToInt64(txMap["user_id"]), typeId, utils.BytesToInt64(txMap["currency_id"]), currencyId, utils.BytesToFloat64(txMap["amount"]), amount , string(utils.BinToHex(txMap["comment"])), comment, utils.BytesToInt64(txMap["to_user_id"]), toUserId)
+				log.Debug("user_id = %d / typeId = %d / currency_id = %d / currencyId = %d / amount = %f / amount = %f / comment = %s / comment = %s / to_user_id = %d / toUserId = %d ", utils.BytesToInt64(txMap["user_id"]), typeId, utils.BytesToInt64(txMap["currency_id"]), currencyId, utils.BytesToFloat64(txMap["amount"]), amount, string(utils.BinToHex(txMap["comment"])), comment, utils.BytesToInt64(txMap["to_user_id"]), toUserId)
 				// сравнение данных из таблы my_dc_transactions с тем, что в блоке
 				if utils.BytesToInt64(txMap["user_id"]) == typeId && utils.BytesToInt64(txMap["currency_id"]) == currencyId && utils.BytesToFloat64(txMap["amount"]) == amount && string(utils.BinToHex(txMap["comment"])) == comment && utils.BytesToInt64(txMap["to_user_id"]) == toUserId {
 
@@ -256,19 +287,25 @@ BEGIN:
 						block, _ := pem.Decode([]byte(nodePrivateKey))
 						if block == nil || block.Type != "RSA PRIVATE KEY" {
 							rows.Close()
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 						private_key, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 						if err != nil {
 							rows.Close()
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 						decryptedComment_, err := rsa.DecryptPKCS1v15(rand.Reader, private_key, utils.HexToBin(comment))
 						if err != nil {
 							rows.Close()
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 						decryptedComment = string(decryptedComment_)
@@ -276,7 +313,9 @@ BEGIN:
 						err = d.ExecSql("UPDATE "+myPrefix+"my_dc_transactions SET comment = ?, comment_status = 'decrypted' WHERE id = ?", decryptedComment, id)
 						if err != nil {
 							rows.Close()
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					}
@@ -293,7 +332,9 @@ BEGIN:
 					lastReduction, err := d.OneRow("SELECT block_id, pct FROM reduction WHERE currency_id  = ? ORDER BY block_id", currencyId).Int64()
 					if err != nil {
 						rows.Close()
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					if blockId <= lastReduction["block_id"] {
@@ -335,7 +376,9 @@ BEGIN:
 						)`, uid, currencyId, txTime, amount, string(txMap["md5hash"]))
 					if err != nil {
 						rows.Close()
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 				}
@@ -349,10 +392,12 @@ BEGIN:
 		// максимальный номер блока для процентов. Чтобы брать только новые
 		maxPctBlock, err := d.Single(`SELECT max(block_id) FROM e_user_pct`).Int64()
 
-		log.Debug(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < `+utils.Int64ToStr(blockId-confirmations)+` AND block_id > `+utils.Int64ToStr(maxPctBlock))
+		log.Debug(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < ` + utils.Int64ToStr(blockId-confirmations) + ` AND block_id > ` + utils.Int64ToStr(maxPctBlock))
 		rows, err = d.Query(d.FormatQuery(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < ? AND block_id > ?`), blockId-confirmations, maxPctBlock)
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		for rows.Next() {
@@ -361,7 +406,9 @@ BEGIN:
 			err = rows.Scan(&pTime, &blockId, &currencyId, &pct)
 			if err != nil {
 				rows.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {    break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			d.ExecSql(`

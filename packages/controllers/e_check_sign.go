@@ -3,7 +3,7 @@ package controllers
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"regexp"
-//	"fmt"
+	//	"fmt"
 )
 
 func (c *Controller) ECheckSign() (string, error) {
@@ -100,9 +100,9 @@ func (c *Controller) ECheckSign() (string, error) {
 			if err != nil {
 				return "{\"result\":0}", err
 			}
-			log.Debug(`{"result":"1", "token":"`+token+`"}`)
+			log.Debug(`{"result":"1", "token":"` + token + `"}`)
 
-			return `{"result":"1", "token":"`+token+`"}`, nil
+			return `{"result":"1", "token":"` + token + `"}`, nil
 		} else {
 			c.sess.Set("e_user_id", eUserId)
 			return `{"result":1}`, nil

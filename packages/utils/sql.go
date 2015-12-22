@@ -30,7 +30,7 @@ var DB *DCDB
 
 type DCDB struct {
 	*sql.DB
-	ConfigIni     map[string]string
+	ConfigIni map[string]string
 	//GoroutineName string
 }
 
@@ -89,7 +89,6 @@ func NewDbConnect(ConfigIni map[string]string) (*DCDB, error) {
 	return &DCDB{db, ConfigIni}, err
 }
 
-
 func (db *DCDB) GetConfigIni(name string) string {
 	return db.ConfigIni[name]
 }
@@ -108,7 +107,7 @@ func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string
 		if err != nil {
 			return ErrInfo(err)
 		}
-	/*} else if community {
+		/*} else if community {
 		// в пуле пробуем послать с смтп-ешника админа пула
 		prefix := Int64ToStr(poolAdminUserId) + "_"
 		mailData, err := db.OneRow("SELECT * FROM " + prefix + "my_table").String()
@@ -874,7 +873,6 @@ func (db *DCDB) GetTcpHost() string {
 	return ""
 }
 
-
 func (db *DCDB) GetQuotes() string {
 	dq := `"`
 	if db.ConfigIni["db_type"] == "mysql" {
@@ -1382,12 +1380,12 @@ func (db *DCDB) GetUserPublicKey(userId int64) (string, error) {
 }
 
 func (db *DCDB) GetMyPrivateKey(myPrefix string) (string, error) {
-	key, err :=  db.Single("SELECT private_key FROM " + myPrefix + "my_keys WHERE block_id = (SELECT max(block_id) FROM " + myPrefix + "my_keys)").String()
+	key, err := db.Single("SELECT private_key FROM " + myPrefix + "my_keys WHERE block_id = (SELECT max(block_id) FROM " + myPrefix + "my_keys)").String()
 	if err != nil {
 		return "", ErrInfo(err)
 	}
-	key = strings.Replace(key,"-----BEGIN RSA PRIVATE KEY-----","-----BEGIN RSA PRIVATE KEY-----\n",-1)
-	key = strings.Replace(key,"-----END RSA PRIVATE KEY-----","\n-----END RSA PRIVATE KEY-----",-1)
+	key = strings.Replace(key, "-----BEGIN RSA PRIVATE KEY-----", "-----BEGIN RSA PRIVATE KEY-----\n", -1)
+	key = strings.Replace(key, "-----END RSA PRIVATE KEY-----", "\n-----END RSA PRIVATE KEY-----", -1)
 	return key, nil
 }
 
@@ -1830,12 +1828,12 @@ func (db *DCDB) GetMyUsersIds(checkCommission, checkNodeKey bool) ([]int64, erro
 			if err != nil {
 				return usersIds, err
 			}
-            var commissionPoolMap map[string][]float64
+			var commissionPoolMap map[string][]float64
 			err = json.Unmarshal(commissionJson, &commissionPoolMap)
 			if err != nil {
 				return usersIds, err
 			}
-            rows2, err := db.Query("SELECT user_id, commission FROM commission WHERE user_id IN (" + strings.Join(SliceInt64ToString(usersIds), ",") + ")")
+			rows2, err := db.Query("SELECT user_id, commission FROM commission WHERE user_id IN (" + strings.Join(SliceInt64ToString(usersIds), ",") + ")")
 			if err != nil {
 				return usersIds, err
 			}
@@ -1853,7 +1851,7 @@ func (db *DCDB) GetMyUsersIds(checkCommission, checkNodeKey bool) ([]int64, erro
 					if err != nil {
 						return usersIds, err
 					}
-            					for currencyId, Commissions := range commissionUserMap {
+					for currencyId, Commissions := range commissionUserMap {
 						if len(commissionPoolMap[currencyId]) > 0 {
 							if Commissions[0] > commissionPoolMap[currencyId][0] || Commissions[1] > commissionPoolMap[currencyId][1] {
 								log.Debug("DelUserIdFromArray %v > %v || %v > %v / %v", Commissions[0], commissionPoolMap[currencyId][0], Commissions[1], commissionPoolMap[currencyId][1], uid)
@@ -2642,7 +2640,7 @@ func (db *DCDB) CheckChatMessage(message string, sender, receiver, lang, room, s
 	if room < 0 || room > 16777215 {
 		return ErrInfoFmt("incorrect room")
 	}
-	if status!=0 && status!=1 {
+	if status != 0 && status != 1 {
 		return ErrInfoFmt("incorrect status")
 	}
 	if signTime < 0 || signTime > 4294967295 {
@@ -2676,7 +2674,7 @@ func (db *DCDB) CheckChatMessage(message string, sender, receiver, lang, room, s
 	}
 
 	// проверяем подпись
-	forSign := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v", lang, room, receiver, sender, status,  message, signTime)
+	forSign := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v", lang, room, receiver, sender, status, message, signTime)
 	CheckSignResult, err := CheckSign([][]byte{publicKey}, forSign, HexToBin(signature), true)
 	if err != nil {
 		return ErrInfo(err)

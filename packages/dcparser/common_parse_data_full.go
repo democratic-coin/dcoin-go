@@ -38,14 +38,13 @@ func (p *Parser) ParseDataFull() error {
 		return utils.ErrInfo(err)
 	}
 
-
 	utils.WriteSelectiveLog("DELETE FROM transactions WHERE used = 1")
 	afect, err := p.ExecSqlGetAffect("DELETE FROM transactions WHERE used = 1")
 	if err != nil {
 		utils.WriteSelectiveLog(err)
 		return utils.ErrInfo(err)
 	}
-	utils.WriteSelectiveLog("afect: "+utils.Int64ToStr(afect))
+	utils.WriteSelectiveLog("afect: " + utils.Int64ToStr(afect))
 
 	txCounter := make(map[int64]int64)
 	p.fullTxBinaryData = p.BinaryData
@@ -79,7 +78,7 @@ func (p *Parser) ParseDataFull() error {
 				return utils.ErrInfo(err)
 			}
 
-			utils.WriteSelectiveLog("UPDATE transactions SET used=1 WHERE hex(hash) = "+string(utils.Md5(transactionBinaryDataFull)))
+			utils.WriteSelectiveLog("UPDATE transactions SET used=1 WHERE hex(hash) = " + string(utils.Md5(transactionBinaryDataFull)))
 			affect, err := p.ExecSqlGetAffect("UPDATE transactions SET used=1 WHERE hex(hash) = ?", utils.Md5(transactionBinaryDataFull))
 			if err != nil {
 				utils.WriteSelectiveLog(err)
@@ -87,7 +86,7 @@ func (p *Parser) ParseDataFull() error {
 				p.RollbackTo(txForRollbackTo, true, false)
 				return utils.ErrInfo(err)
 			}
-			utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+			utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			//log.Debug("transactionBinaryData", transactionBinaryData)
 			p.TxHash = utils.Md5(transactionBinaryData)
 			log.Debug("p.TxHash %s", p.TxHash)

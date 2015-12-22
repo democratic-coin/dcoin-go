@@ -3,6 +3,8 @@
 package dcoin
 
 import (
+	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/daemons"
 	"github.com/c-darwin/dcoin-go/packages/tcpserver"
 	"github.com/c-darwin/dcoin-go/packages/utils"
@@ -11,11 +13,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"regexp"
 	"syscall"
 	"time"
-	"regexp"
-	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 /*
@@ -251,12 +251,12 @@ func signals(countDaemons int) {
 				//panic(err)
 			}
 		}
-		err := os.Remove(*utils.Dir+"/dcoin.pid")
+		err := os.Remove(*utils.Dir + "/dcoin.pid")
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 			panic(err)
 		}
-		fmt.Println("removed "+*utils.Dir+"/dcoin.pid")
+		fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
 		os.Exit(1)
 	}()
 }

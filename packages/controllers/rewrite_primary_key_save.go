@@ -5,7 +5,6 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
-
 func (c *Controller) RewritePrimaryKeySave() (string, error) {
 
 	if !c.NodeAdmin || c.SessRestricted != 0 {

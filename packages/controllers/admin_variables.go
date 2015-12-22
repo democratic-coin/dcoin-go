@@ -5,7 +5,7 @@ import (
 )
 
 type adminVariablesPage struct {
-	Variables map[string]string
+	Variables    map[string]string
 	Alert        string
 	SignData     string
 	ShowSignData bool
@@ -26,7 +26,7 @@ func (c *Controller) AdminVariables() (string, error) {
 	variables, err := c.GetMap(`SELECT * FROM variables`, "name", "value")
 
 	TemplateStr, err := makeTemplate("admin_variables", "adminVariables", &adminVariablesPage{
-		Variables: variables,
+		Variables:    variables,
 		Alert:        c.Alert,
 		Lang:         c.Lang,
 		ShowSignData: c.ShowSignData,

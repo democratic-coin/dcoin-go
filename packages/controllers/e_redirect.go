@@ -1,18 +1,18 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
-	"errors"
 	"encoding/base64"
+	"errors"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 type ERedirectPage struct {
-	Lang           map[string]string
+	Lang    map[string]string
 	EConfig map[string]string
 	TokenId string
-	Amount string
-	EURL string
-	MDesc string
+	Amount  string
+	EURL    string
+	MDesc   string
 }
 
 func (c *Controller) ERedirect() (string, error) {
@@ -38,12 +38,12 @@ func (c *Controller) ERedirect() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("e_redirect", "eRedirect", &ERedirectPage{
-		Lang:           c.Lang,
-		EConfig : c.EConfig,
+		Lang:    c.Lang,
+		EConfig: c.EConfig,
 		TokenId: tokenId,
-		EURL: c.EURL,
-		MDesc:  base64.StdEncoding.EncodeToString([]byte("token-"+tokenId)),
-		Amount: amount})
+		EURL:    c.EURL,
+		MDesc:   base64.StdEncoding.EncodeToString([]byte("token-" + tokenId)),
+		Amount:  amount})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

@@ -4,10 +4,10 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/json"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
 	"text/template"
-	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 var chatIds = make(map[int64][]int)
@@ -41,7 +41,7 @@ func (c *Controller) GetChatMessages() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	for i:=len(chatData)-1; i>=0; i-- {
+	for i := len(chatData) - 1; i >= 0; i-- {
 		data := chatData[i]
 		status := data["status"]
 		message := data["message"]

@@ -46,14 +46,18 @@ BEGIN:
 
 		curBlockId, err := d.GetBlockId()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		// пишем свежие блоки в резервный блокчейн
 		endBlockId, err := utils.GetEndBlockId()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			// чтобы не стопориться тут, а дойти до пересборки БД
 			endBlockId = 4294967295
 		}
@@ -61,7 +65,9 @@ BEGIN:
 		if curBlockId-30 > endBlockId {
 			file, err := os.OpenFile(*utils.Dir+"/public/blockchain", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			rows, err := d.Query(d.FormatQuery(`
@@ -72,7 +78,9 @@ BEGIN:
 					`), endBlockId, curBlockId-30)
 			if err != nil {
 				file.Close()
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 
@@ -82,7 +90,9 @@ BEGIN:
 				if err != nil {
 					rows.Close()
 					file.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				blockData := append(utils.DecToBin(id, 5), utils.EncodeLengthPlusData(data)...)
@@ -91,13 +101,17 @@ BEGIN:
 				if _, err = file.Write(append(sizeAndData, utils.DecToBin(len(sizeAndData), 5)...)); err != nil {
 					rows.Close()
 					file.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				if err != nil {
 					rows.Close()
 					file.Close()
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 			}
@@ -107,19 +121,25 @@ BEGIN:
 
 		autoReload, err := d.Single("SELECT auto_reload FROM config").Int64()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		log.Debug("autoReload: %v", autoReload)
 		if autoReload < 60 {
-			if d.dPrintSleep(utils.ErrInfo("autoReload < 60"), d.sleepTime)  {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo("autoReload < 60"), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		// если main_lock висит более x минут, значит был какой-то сбой
 		mainLock, err := d.Single("SELECT lock_time FROM main_lock WHERE script_name NOT IN ('my_lock', 'cleaning_db')").Int64()
 		if err != nil {
-			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		var infoBlockRestart bool
@@ -127,7 +147,9 @@ BEGIN:
 		if mainLock == 0 || utils.Time()-autoReload < mainLock {
 			timeInfoBlock, err := d.Single(`SELECT time FROM info_block`).Int64()
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			if utils.Time()-timeInfoBlock > autoReload {
@@ -137,7 +159,9 @@ BEGIN:
 				}
 				newTimeInfoBlock, err := d.Single(`SELECT time FROM info_block`).Int64()
 				if err != nil {
-					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
 					continue BEGIN
 				}
 				// Если за 5 минут info_block тот же, значит обновление блокчейна не идет
@@ -152,17 +176,23 @@ BEGIN:
 			// на всякий случай пометим, что работаем
 			err = d.ExecSql("UPDATE main_lock SET script_name = 'cleaning_db'")
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			err = d.ExecSql("UPDATE config SET pool_tech_works = 1")
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			allTables, err := d.GetAllTables()
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 			for _, table := range allTables {
@@ -171,7 +201,9 @@ BEGIN:
 					log.Debug("DELETE FROM %s", table)
 					err = d.ExecSql("DELETE FROM " + table)
 					if err != nil {
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
 						continue BEGIN
 					}
 					if table == "cf_currency" {
@@ -181,13 +213,17 @@ BEGIN:
 							err = d.SetAI("cf_currency", 1000)
 						}
 						if err != nil {
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					} else if table == "admin" {
 						err = d.ExecSql("INSERT INTO admin (user_id) VALUES (1)")
 						if err != nil {
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+								break BEGIN
+							}
 							continue BEGIN
 						}
 					} else {
@@ -205,7 +241,9 @@ BEGIN:
 			}
 			err = d.ExecSql("DELETE FROM main_lock")
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
 				continue BEGIN
 			}
 		}

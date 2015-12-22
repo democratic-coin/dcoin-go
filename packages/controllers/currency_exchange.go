@@ -7,7 +7,7 @@ import (
 )
 
 type currencyExchangePage struct {
-	LastTxFormatted  string
+	LastTxFormatted      string
 	SignData             string
 	ShowSignData         bool
 	BuyCurrencyName      string
@@ -153,7 +153,7 @@ func (c *Controller) CurrencyExchange() (string, error) {
 	}
 
 	TemplateStr, err := makeTemplate("currency_exchange", "currencyExchange", &currencyExchangePage{
-		LastTxFormatted: lastTxFormatted,
+		LastTxFormatted:      lastTxFormatted,
 		Lang:                 c.Lang,
 		CountSignArr:         c.CountSignArr,
 		ShowSignData:         c.ShowSignData,

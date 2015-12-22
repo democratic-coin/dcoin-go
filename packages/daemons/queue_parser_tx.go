@@ -17,7 +17,6 @@ func QueueParserTx() {
 		}
 	}()
 
-
 	const GoroutineName = "QueueParserTx"
 	d := new(daemon)
 	d.DCDB = DbConnect(GoroutineName)
@@ -53,17 +52,23 @@ BEGIN:
 			break BEGIN
 		}
 		if err != nil {
-			if d.dPrintSleep(err, d.sleepTime) {	break BEGIN }
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
 		blockId, err := d.GetBlockId()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 		if blockId == 0 {
-			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo("blockId == 0"), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 
@@ -72,16 +77,20 @@ BEGIN:
 		affect, err := d.ExecSqlGetAffect("DELETE FROM transactions WHERE verified = 0 AND used = 0 AND counter > 10")
 		if err != nil {
 			utils.WriteSelectiveLog(err)
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
-		utils.WriteSelectiveLog("affect: "+utils.Int64ToStr(affect))
+		utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 
 		p := new(dcparser.Parser)
 		p.DCDB = d.DCDB
 		err = p.AllTxParser()
 		if err != nil {
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {	break BEGIN }
+			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
 			continue BEGIN
 		}
 

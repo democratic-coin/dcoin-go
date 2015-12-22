@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 	"regexp"
 	"strings"
 )
@@ -27,19 +27,19 @@ func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 
 	var smtp_server, smtp_port string
 	switch mailServer {
-	case "gmail.com"://+
+	case "gmail.com": //+
 		smtp_server = "smtp.gmail.com"
 		smtp_port = "465"
 	case "yahoo.com":
 		smtp_server = "smtp.mail.yahoo.com"
 		smtp_port = "465"
-	case "hotmail.com", "outlook.com", "live.com"://-
+	case "hotmail.com", "outlook.com", "live.com": //-
 		smtp_server = "smtp.live.com"
 		smtp_port = "465"
-	case "yandex.ru", "ya.ru", "yandex.com"://+
+	case "yandex.ru", "ya.ru", "yandex.com": //+
 		smtp_server = "smtp.yandex.ru"
 		smtp_port = "465"
-	case "mail.ru", "bk.ru", "inbox.ru", "list.ru"://+
+	case "mail.ru", "bk.ru", "inbox.ru", "list.ru": //+
 		smtp_server = "smtp.mail.ru"
 		smtp_port = "465"
 	}

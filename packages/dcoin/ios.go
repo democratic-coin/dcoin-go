@@ -60,7 +60,6 @@ func StopHTTPServer() {
 	IosLog("StopHTTPServer 1")
 }
 
-
 func tray() {
 
 }

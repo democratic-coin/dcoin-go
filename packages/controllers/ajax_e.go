@@ -70,7 +70,7 @@ func AjaxE(w http.ResponseWriter, r *http.Request) {
 		eHost += c.EConfig["catalog"]
 		c.EURL = eHost
 	} else {
-		c.EURL = "http://"+c.EURL+"/"
+		c.EURL = "http://" + c.EURL + "/"
 	}
 	c.ECommission = utils.StrToMoney(c.EConfig["commission"])
 	// валюты
@@ -96,4 +96,3 @@ func AjaxE(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(html))
 
 }
-

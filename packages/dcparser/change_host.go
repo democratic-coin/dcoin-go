@@ -11,10 +11,10 @@ func (p *Parser) ChangeHostInit() error {
 
 	if p.BlockData != nil && p.BlockData.BlockId < 250900 {
 		fields = []map[string]string{{"http_host": "string"}, {"sign": "bytes"}}
-	} else if (p.BlockData != nil && p.BlockData.BlockId < 261209) {
+	} else if p.BlockData != nil && p.BlockData.BlockId < 261209 {
 		fields = []map[string]string{{"http_host": "string"}, {"tcp_host": "string"}, {"sign": "bytes"}}
 	} else {
-		fields = []map[string]string{{"http_host": "string"}, {"tcp_host": "string"},{"e_host": "string"}, {"sign": "bytes"}}
+		fields = []map[string]string{{"http_host": "string"}, {"tcp_host": "string"}, {"e_host": "string"}, {"sign": "bytes"}}
 	}
 
 	err := p.GetTxMaps(fields)

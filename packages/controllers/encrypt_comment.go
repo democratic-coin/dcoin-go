@@ -27,7 +27,7 @@ func (c *Controller) EncryptComment() (string, error) {
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		for _, uid:=range toIdsMap {
+		for _, uid := range toIdsMap {
 			if utils.StrToInt64(uid) > 0 {
 				toIds = append(toIds, utils.StrToInt64(uid))
 			}
@@ -88,7 +88,7 @@ func (c *Controller) EncryptComment() (string, error) {
 		enc[utils.IntToStr(i)] = string(utils.BinToHex(enc_))
 	}
 	if len(enc) < 5 && len(enc) > 0 {
-		for i := len(enc); i < 5 ; i ++ {
+		for i := len(enc); i < 5; i++ {
 			enc[utils.IntToStr(i)] = "0"
 		}
 	}

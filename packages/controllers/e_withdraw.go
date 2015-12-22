@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
-	"fmt"
 	"errors"
+	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) EWithdraw() (string, error) {
@@ -52,7 +52,7 @@ func (c *Controller) EWithdraw() (string, error) {
 	} else if method == "Perfect-money" {
 		commission = utils.StrToFloat64(c.EConfig["pm_commission"])
 	}
-	wdAmount := utils.ClearNull(utils.Float64ToStr(amount * (1-commission/100)), 2)
+	wdAmount := utils.ClearNull(utils.Float64ToStr(amount*(1-commission/100)), 2)
 
 	err = c.ExecSql(`INSERT INTO e_withdraw (open_time, user_id, currency_id, account, amount, wd_amount, method) VALUES (?, ?, ?, ?, ?, ?, ?)`, curTime, c.SessUserId, currencyId, account, amount, wdAmount, method)
 	if err != nil {

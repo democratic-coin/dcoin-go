@@ -5,30 +5,30 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"html/template"
-	"strings"
 	"regexp"
+	"strings"
 )
 
 type menuPage struct {
-	MyModalIdName string
-	SetupPassword bool
-	Lang          map[string]string
-	LangInt       int64
-	PoolAdmin     bool
-	Community     bool
-	MinerId       int64
-	Name          string
-	UserId        int64
-	DaemonsStatus string
-	MyNotice      map[string]string
-	BlockId       int64
-	Avatar        string
-	NoAvatar      string
-	FaceUrls      string
-	Restricted    int64
-	Mobile        bool
+	MyModalIdName  string
+	SetupPassword  bool
+	Lang           map[string]string
+	LangInt        int64
+	PoolAdmin      bool
+	Community      bool
+	MinerId        int64
+	Name           string
+	UserId         int64
+	DaemonsStatus  string
+	MyNotice       map[string]string
+	BlockId        int64
+	Avatar         string
+	NoAvatar       string
+	FaceUrls       string
+	Restricted     int64
+	Mobile         bool
 	ExchangeEnable bool
-	Admin bool
+	Admin          bool
 }
 
 func (c *Controller) Menu() (string, error) {

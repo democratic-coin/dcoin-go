@@ -35,8 +35,8 @@ func (c *Controller) SendPromisedAmountToPool() (string, error) {
 	data = append(data, utils.DecToBin(currencyId, 1)...)
 	data = append(data, utils.EncodeLengthPlusData(filesSign)...)
 
-	if _, err := os.Stat(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_promised_amount_"+utils.Int64ToStr(currencyId)+".mp4"); err == nil {
-		file, err := ioutil.ReadFile(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_promised_amount_"+utils.Int64ToStr(currencyId)+".mp4")
+	if _, err := os.Stat(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_promised_amount_" + utils.Int64ToStr(currencyId) + ".mp4"); err == nil {
+		file, err := ioutil.ReadFile(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_promised_amount_" + utils.Int64ToStr(currencyId) + ".mp4")
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}

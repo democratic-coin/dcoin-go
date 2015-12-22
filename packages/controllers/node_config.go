@@ -20,9 +20,9 @@ type nodeConfigPage struct {
 	ConfigIni    string
 	UserId       int64
 	Lang         map[string]string
-	EConfig    map[string]string
+	EConfig      map[string]string
 	Users        []map[int64]map[string]string
-	ModeError string
+	ModeError    string
 }
 
 func (c *Controller) NodeConfigControl() (string, error) {
@@ -45,28 +45,28 @@ func (c *Controller) NodeConfigControl() (string, error) {
 	}
 
 	if _, ok := c.Parameters["save_e_config"]; ok {
-		err := c.ExecSql("DELETE FROM e_config");
+		err := c.ExecSql("DELETE FROM e_config")
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "enable", c.Parameters["e_enable"]);
+		err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "enable", c.Parameters["e_enable"])
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
 		if len(c.Parameters["e_domain"]) > 0 {
-			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "domain", c.Parameters["e_domain"]);
+			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "domain", c.Parameters["e_domain"])
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
 		} else {
-			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "catalog", c.Parameters["e_catalog"]);
+			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, "catalog", c.Parameters["e_catalog"])
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
 		}
 		params := []string{"commission", "ps", "pm_s_key", "ik_s_key", "payeer_s_key", "pm_id", "ik_id", "payeer_id", "static_file", "static_file_path", "main_dc_account", "dc_commission", "pm_commission"}
 		for _, data := range params {
-			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, data, c.Parameters["e_"+data]);
+			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, data, c.Parameters["e_"+data])
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -113,7 +113,6 @@ func (c *Controller) NodeConfigControl() (string, error) {
 					return "", utils.ErrInfo(err)
 				}
 
-
 				log.Debug("UPDATE config SET pool_admin_user_id = ?, pool_max_users = 100, commission = ?", myUserId, commission)
 				err = c.ExecSql("UPDATE config SET pool_admin_user_id = ?, pool_max_users = 100, commission = ?", myUserId, commission)
 				if err != nil {
@@ -131,7 +130,7 @@ func (c *Controller) NodeConfigControl() (string, error) {
 					if err != nil {
 						return "", utils.ErrInfo(err)
 					}
-					for i := 0; i< len(community); i++ {
+					for i := 0; i < len(community); i++ {
 						// тут дубль при инсерте, поэтому без обработки ошибок
 						c.ExecSql("INSERT INTO community (user_id) VALUES (?)", community[i])
 					}
@@ -192,9 +191,6 @@ func (c *Controller) NodeConfigControl() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-
-
-
 	eConfig, err := c.GetMap(`SELECT * FROM e_config`, "name", "value")
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -210,8 +206,8 @@ func (c *Controller) NodeConfigControl() (string, error) {
 		MyStatus:     myStatus,
 		MyMode:       myMode,
 		ConfigIni:    string(configIni),
-		EConfig: eConfig,
-		ModeError: modeError,
+		EConfig:      eConfig,
+		ModeError:    modeError,
 		CountSignArr: c.CountSignArr})
 	if err != nil {
 		return "", utils.ErrInfo(err)

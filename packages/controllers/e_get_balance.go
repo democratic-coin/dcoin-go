@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) EGetBalance() (string, error) {
@@ -14,7 +14,7 @@ func (c *Controller) EGetBalance() (string, error) {
 	}
 	html := ""
 	for _, data := range myWallets {
-		html+=fmt.Sprintf("<strong>%v</strong> %v<br>", data["amount"], data["currency_name"])
+		html += fmt.Sprintf("<strong>%v</strong> %v<br>", data["amount"], data["currency_name"])
 	}
 
 	return utils.JsonAnswer("html", html).String(), nil

@@ -12,17 +12,17 @@ import (
 )
 
 type index struct {
-	DbOk        bool
-	Lang        map[string]string
-	Key         string
-	SetLang     string
-	IOS         bool
-	Upgrade3    string
-	Upgrade4    string
-	Android     bool
-	Mobile      bool
-	ShowIOSMenu bool
-	ChatEnabled string
+	DbOk              bool
+	Lang              map[string]string
+	Key               string
+	SetLang           string
+	IOS               bool
+	Upgrade3          string
+	Upgrade4          string
+	Android           bool
+	Mobile            bool
+	ShowIOSMenu       bool
+	ChatEnabled       string
 	AnalyticsDisabled string
 }
 
@@ -180,11 +180,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		/*IOS: true,
 		Android: false,
 		Mobile: true})*/
-		IOS:     ios,
-		Android: android,
-		ChatEnabled: chatEnabled,
+		IOS:               ios,
+		Android:           android,
+		ChatEnabled:       chatEnabled,
 		AnalyticsDisabled: analyticsDisabled,
-		Mobile:  mobile})
+		Mobile:            mobile})
 	if err != nil {
 		log.Error("%v", err)
 	}

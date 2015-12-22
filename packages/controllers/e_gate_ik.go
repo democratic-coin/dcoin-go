@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"fmt"
-	"strings"
-	"sort"
-	"github.com/c-darwin/dcoin-go/packages/utils"
 	"encoding/base64"
 	"errors"
+	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/utils"
+	"sort"
+	"strings"
 )
 
 func (c *Controller) EGateIk() (string, error) {
@@ -15,7 +15,7 @@ func (c *Controller) EGateIk() (string, error) {
 	fmt.Println(c.r.Form)
 	var ikNames []string
 	for name, _ := range c.r.Form {
-		if name[:2] == "ik" && name!="ik_sign" {
+		if name[:2] == "ik" && name != "ik_sign" {
 			ikNames = append(ikNames, name)
 		}
 	}
@@ -48,7 +48,7 @@ func (c *Controller) EGateIk() (string, error) {
 	pmId := utils.StrToInt64(c.r.FormValue("ik_inv_id"))
 	// проверим, не зачисляли ли мы уже это платеж
 	existsId, err := c.Single(`SELECT id FROM e_adding_funds_ik WHERE id = ?`, pmId).Int64()
-	if err!=nil {
+	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 	if existsId != 0 {
@@ -58,7 +58,7 @@ func (c *Controller) EGateIk() (string, error) {
 
 	txTime := utils.Time()
 	err = EPayment(paymentInfo, currencyId, txTime, amount, pmId, "ik", c.ECommission)
-	if err!=nil {
+	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 

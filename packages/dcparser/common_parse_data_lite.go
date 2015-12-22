@@ -6,7 +6,6 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
-
 func (p *Parser) ParseDataLite() error {
 	p.dataPre()
 	if p.dataType != 0 { // парсим только блоки

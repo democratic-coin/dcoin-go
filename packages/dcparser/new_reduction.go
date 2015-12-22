@@ -1,10 +1,10 @@
 package dcparser
 
 import (
-	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/c-darwin/dcoin-go/packages/consts"
 	"encoding/json"
+	"fmt"
+	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func (p *Parser) NewReductionInit() error {
@@ -353,38 +353,38 @@ func (p *Parser) NewReductionRollback() error {
 				return p.ErrInfo(err)
 			}
 		}
-	/*
+		/*
 
-	Когда будет много данных, то для свежего отката будем использовать то, что закомменчено
+			Когда будет много данных, то для свежего отката будем использовать то, что закомменчено
 
-		// крауд-фандинг
-		err := p.ExecSql("UPDATE cf_funding SET amount = amount_backup, amount_backup = 0 WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		// форекс-ордеры
-		err = p.ExecSql("UPDATE forex_orders SET amount = amount_backup, amount_backup = 0 WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		err = p.ExecSql("UPDATE cash_requests SET del_block_id = 0 WHERE del_block_id = ?", p.BlockData.BlockId)
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		err = p.ExecSql("UPDATE promised_amount SET cash_request_out_time = cash_request_out_time_backup WHERE currency_id = ? AND cash_request_out_time > ?", p.TxMaps.Int64["currency_id"], (p.BlockData.Time - p.Variables.Int64["cash_request_time"]))
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		// после 87826 блока убрано  amount = amount_backup т.к. теряется смысл в reduction c type=promised_amount
-		err = p.ExecSql("UPDATE promised_amount SET tdc_amount = tdc_amount_backup WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		err = p.ExecSql("UPDATE wallets SET amount = amount_backup, amount_backup = 0 WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-*/
+				// крауд-фандинг
+				err := p.ExecSql("UPDATE cf_funding SET amount = amount_backup, amount_backup = 0 WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+				// форекс-ордеры
+				err = p.ExecSql("UPDATE forex_orders SET amount = amount_backup, amount_backup = 0 WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+				err = p.ExecSql("UPDATE cash_requests SET del_block_id = 0 WHERE del_block_id = ?", p.BlockData.BlockId)
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+				err = p.ExecSql("UPDATE promised_amount SET cash_request_out_time = cash_request_out_time_backup WHERE currency_id = ? AND cash_request_out_time > ?", p.TxMaps.Int64["currency_id"], (p.BlockData.Time - p.Variables.Int64["cash_request_time"]))
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+				// после 87826 блока убрано  amount = amount_backup т.к. теряется смысл в reduction c type=promised_amount
+				err = p.ExecSql("UPDATE promised_amount SET tdc_amount = tdc_amount_backup WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+				err = p.ExecSql("UPDATE wallets SET amount = amount_backup, amount_backup = 0 WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+				if err != nil {
+					return p.ErrInfo(err)
+				}
+		*/
 	}
 
 	affect, err := p.ExecSqlGetAffect("DELETE FROM reduction WHERE block_id = ?", p.BlockData.BlockId)
