@@ -11,7 +11,9 @@ func tray() {
 	go func() {
 		// Be sure to call this to link the tray icon to the target url
 		trayhost.SetUrl("http://localhost:8089")
-		trayhost.EnterLoop("Dcoin", iconData)
 	}()
+}
 
+func EnterLoop() {
+	trayhost.EnterLoop("Dcoin", iconData)
 }

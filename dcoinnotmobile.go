@@ -23,6 +23,8 @@ func main_loader_html(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, html)
 }
 func main() {
+	runtime.LockOSThread()
+
 	var thrustWindow *window.Window
 	thrust_shell := "thrust_shell"
 	if runtime.GOOS == "windows" {
@@ -48,5 +50,8 @@ func main() {
 	}
 	tray()
 
-	dcoin.Start("", thrustWindow)
+	go dcoin.Start("", thrustWindow)
+
+	EnterLoop()
+
 }
