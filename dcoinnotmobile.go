@@ -23,15 +23,17 @@ func main_loader_html(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, html)
 }
 func main() {
+
 	runtime.LockOSThread()
 
 	var thrustWindow *window.Window
 	thrust_shell := "thrust_shell"
 	if runtime.GOOS == "windows" {
 		thrust_shell = "thrust_shell.exe"
+	} else if runtime.GOOS == "darwin" {
+		thrust_shell = "ThrustShell.app/Contents/MacOS/ThrustShell"
 	}
-
-	if _, err := os.Stat(*utils.Dir+"/"+thrust_shell); err == nil && (winVer() >= 6|| winVer( )== 0) {
+	if _, err := os.Stat(*utils.Dir+"/"+thrust_shell); err == nil && (winVer() >= 6|| winVer() == 0) {
 		thrust.InitLogger()
 		thrust.Start()
 		thrustWindow = thrust.NewWindow(thrust.WindowOptions{
