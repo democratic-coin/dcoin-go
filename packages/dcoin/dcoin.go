@@ -437,7 +437,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				thrustWindowLoder.Close()
 				thrustWindow := thrust.NewWindow(thrust.WindowOptions{
 					RootUrl: BrowserHttpHost,
-					Size: commands.SizeHW{Width:1200, Height:600},
+					Size: commands.SizeHW{Width:1024, Height:600},
 				})
 				thrustWindow.Show()
 				thrustWindow.Focus()

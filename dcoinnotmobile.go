@@ -26,12 +26,15 @@ func main() {
 
 	runtime.LockOSThread()
 
+	var width uint = 800
+	var height uint = 600
 	var thrustWindow *window.Window
 	thrust_shell := "thrust_shell"
 	if runtime.GOOS == "windows" {
 		thrust_shell = "thrust_shell.exe"
 	} else if runtime.GOOS == "darwin" {
 		thrust_shell = "ThrustShell.app/Contents/MacOS/ThrustShell"
+		height = 578
 	}
 	if _, err := os.Stat(*utils.Dir+"/"+thrust_shell); err == nil && (winVer() >= 6|| winVer() == 0) {
 		thrust.InitLogger()
@@ -40,7 +43,7 @@ func main() {
 			RootUrl:  "http://localhost:8989/loader.html",
 			HasFrame: true,
 			Title : "Dcoin",
-			Size: commands.SizeHW{Width:800, Height:600},
+			Size: commands.SizeHW{Width:width, Height:height},
 		})
 		thrustWindow.Show()
 		thrustWindow.Focus()
