@@ -16,5 +16,5 @@ int w_ver() {
 import "C"
 
 func winVer() int {
-	return C.w_ver()
+	return int(C.w_ver())
 }
