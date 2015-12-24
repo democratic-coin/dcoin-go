@@ -383,6 +383,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 					panic(err)
 				}
 				fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
+				thrust.Exit()
 				os.Exit(1)
 			}
 			utils.Sleep(1)
