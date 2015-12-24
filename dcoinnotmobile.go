@@ -45,10 +45,12 @@ func main() {
 			Title : "Dcoin",
 			Size: commands.SizeHW{Width:width, Height:height},
 		})
-		thrust.NewEventHandler("closed", func(cr commands.EventResult) {
-			fmt.Println("Close Event Occured")
-			err = utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
-			fmt.Println(err)
+
+		thrust.NewEventHandler("*", func(cr commands.CommandResponse) {
+			fmt.Println(fmt.Sprintf("======Event(%s %d) - Signaled by Command (%s)", cr.TargetID, cr.Type))
+			if cr.TargetID > 1 && cr.Type == "closed" {
+				utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
+			}
 		})
 		thrustWindow.Show()
 		thrustWindow.Focus()
