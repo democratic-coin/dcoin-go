@@ -441,6 +441,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				})
 				thrustWindow.Show()
 				thrustWindow.Focus()
+
 			} else {
 				openBrowser(BrowserHttpHost)
 			}
