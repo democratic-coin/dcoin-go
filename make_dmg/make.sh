@@ -15,6 +15,6 @@ GOARCH=386  CGO_ENABLED=1  go build -o make_dmg/dcoin.app/Contents/MacOs/dcoinbi
 cd make_dmg
 zip -r dcoin_osx32.zip dcoin.app/Contents/MacOs/dcoinbin
 diskutil unmount dcoin
-mv dcoin.app/Contents/MacOS/ThrustShell .
+mv dcoin.app/Contents/MacOS/ThrustShell.app ThrustShell
 ./make_dmg.sh -b background.png -i logo-big.icns -s "480:540" -c 240:400:240:200 -n dcoin_osx32 "dcoin.app"
-mv ThrustShell dcoin.app/Contents/MacOS/
+mv ThrustShell dcoin.app/Contents/MacOS/ThrustShell.app
