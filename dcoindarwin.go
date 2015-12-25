@@ -4,7 +4,7 @@
 package main
 
 import (
-	"time"
+	//"time"
 )
 /*
 #cgo darwin CFLAGS: -DDARWIN -x objective-c
@@ -22,9 +22,10 @@ import "C"
 
 
 func tray() {
-	go C.show();
+	//C.show();
 }
 
 func enterLoop() {
-	time.Sleep(3600*24*90 * time.Second)
+	//time.Sleep(3600*24*90 * time.Second)
+	C.show();
 }
