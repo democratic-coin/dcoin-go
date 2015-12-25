@@ -53,7 +53,7 @@ func main() {
 					utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
 				} else {
 					thrust.Exit()
-					os.Exit(1)
+					os.Exit(0)
 				}
 			}
 		})
