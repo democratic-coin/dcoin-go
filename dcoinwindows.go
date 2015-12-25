@@ -2,6 +2,10 @@
 
 package main
 
+import (
+	"github.com/c-darwin/trayhost"
+)
+
 /*
 #include <windows.h>
 #include <stdio.h>
@@ -17,4 +21,15 @@ import "C"
 
 func winVer() int {
 	return int(C.w_ver())
+}
+
+func tray() {
+	go func() {
+		// Be sure to call this to link the tray icon to the target url
+		trayhost.SetUrl("http://localhost:8089")
+	}()
+}
+
+func enterLoop() {
+	trayhost.EnterLoop("Dcoin", iconData)
 }

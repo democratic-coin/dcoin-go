@@ -49,7 +49,12 @@ func main() {
 		thrust.NewEventHandler("*", func(cr commands.CommandResponse) {
 			fmt.Println(fmt.Sprintf("======Event(%s %d) - Signaled by Command (%s)", cr.TargetID, cr.Type))
 			if cr.TargetID > 1 && cr.Type == "closed" {
-				utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
+				if utils.DB != nil && utils.DB.DB != nil {
+					utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
+				} else {
+					thrust.Exit()
+					os.Exit(1)
+				}
 			}
 		})
 		thrustWindow.Show()
@@ -64,6 +69,6 @@ func main() {
 
 	go dcoin.Start("", thrustWindow)
 
-	EnterLoop()
+	enterLoop()
 
 }

@@ -10,6 +10,6 @@ func tray() {
 
 }
 
-func EnterLoop() {
+func enterLoop() {
 	time.Sleep(3600*24*90 * time.Second)
 }
