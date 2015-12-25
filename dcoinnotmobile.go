@@ -33,7 +33,7 @@ func main() {
 	if runtime.GOOS == "windows" {
 		thrust_shell = "thrust_shell.exe"
 	} else if runtime.GOOS == "darwin" {
-		thrust_shell = "ThrustShell.app/Contents/MacOS/ThrustShell"
+		thrust_shell = "ThrustShell"
 		height = 578
 	}
 	if _, err := os.Stat(*utils.Dir+"/"+thrust_shell); err == nil && (winVer() >= 6|| winVer() == 0) {
