@@ -1532,7 +1532,7 @@
 				<h5 title="{{replaceCurrency .Lang.home_promised_text_personal "dUSD"}}">USD</h5>
 			</div>
 			<div class="ibox-content">
-				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dUSD"}}">{{index .SumPromisedAmount "72"}}</h1>
+				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dUSD"}}">{{round (index .SumPromisedAmount "72", 2)}}</h1>
 			</div>
 		</div>
 	</div>
@@ -1542,7 +1542,7 @@
 				<h5 title="{{replaceCurrency .Lang.home_promised_text_personal "dEUR"}}">EUR</h5>
 			</div>
 			<div class="ibox-content">
-				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dEUR"}}">{{index .SumPromisedAmount "23"}}</h1>
+				<h1 class="no-margins" title="{{replaceCurrency .Lang.home_promised_text_personal "dEUR"}}">{{round (index .SumPromisedAmount "23", 2)}}</h1>
 			</div>
 		</div>
 	</div>
@@ -1552,7 +1552,7 @@
 				<h5   title="{{replaceCurrency .Lang.home_promised_text_personal "dRUB"}}">RUB</h5>
 			</div>
 			<div class="ibox-content">
-				<h1 class="no-margins"  title="{{replaceCurrency .Lang.home_promised_text_personal "dRUB"}}">{{index .SumPromisedAmount "58"}}</h1>
+				<h1 class="no-margins"  title="{{replaceCurrency .Lang.home_promised_text_personal "dRUB"}}">{{round (index .SumPromisedAmount "58", 2)}}</h1>
 			</div>
 		</div>
 	</div>

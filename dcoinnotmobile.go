@@ -29,14 +29,10 @@ func main() {
 	var width uint = 800
 	var height uint = 600
 	var thrustWindow *window.Window
-	thrust_shell := "thrust_shell"
-	if runtime.GOOS == "windows" {
-		thrust_shell = "thrust_shell.exe"
-	} else if runtime.GOOS == "darwin" {
-		thrust_shell = "ThrustShell"
+	if runtime.GOOS == "darwin" {
 		height = 578
 	}
-	if _, err := os.Stat(*utils.Dir+"/"+thrust_shell); err == nil && (winVer() >= 6|| winVer() == 0) {
+	if utils.Desktop() && (winVer() >= 6 || winVer() == 0) {
 		thrust.InitLogger()
 		thrust.Start()
 		thrustWindow = thrust.NewWindow(thrust.WindowOptions{

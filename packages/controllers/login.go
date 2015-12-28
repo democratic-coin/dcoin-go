@@ -15,6 +15,7 @@ type loginStruct struct {
 	SetupPassword bool
 	Community     bool
 	Mobile        bool
+	Desktop bool
 }
 
 func (c *Controller) Login() (string, error) {
@@ -70,6 +71,7 @@ func (c *Controller) Login() (string, error) {
 		PoolTechWorks: pool_tech_works,
 		SetupPassword: setupPassword,
 		Community:     c.Community,
+		Desktop: utils.Desktop(),
 		Mobile:        utils.Mobile()})
 	if err != nil {
 		return "", err

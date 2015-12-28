@@ -93,6 +93,18 @@ func IOS() bool {
 	}
 	return false
 }
+func Desktop() bool {
+	thrust_shell := "thrust_shell"
+	if runtime.GOOS == "windows" {
+		thrust_shell = "thrust_shell.exe"
+	} else if runtime.GOOS == "darwin" {
+		thrust_shell = "ThrustShell"
+	}
+	if _, err := os.Stat(*Dir+"/"+thrust_shell); err == nil {
+		return true
+	}
+	return false
+}
 func Mobile() bool {
 	if IOS() || runtime.GOOS == "android" {
 		return true

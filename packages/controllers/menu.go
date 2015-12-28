@@ -29,6 +29,7 @@ type menuPage struct {
 	Mobile         bool
 	ExchangeEnable bool
 	Admin          bool
+	Desktop bool
 }
 
 func (c *Controller) Menu() (string, error) {
@@ -148,7 +149,7 @@ func (c *Controller) Menu() (string, error) {
 	t := template.Must(template.New("template").Parse(string(data)))
 	t = template.Must(t.Parse(string(modal)))
 	b := new(bytes.Buffer)
-	err = t.ExecuteTemplate(b, "menu", &menuPage{Admin: admin, ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, MyModalIdName: "myModal", Lang: c.Lang, PoolAdmin: c.PoolAdmin, Community: c.Community, MinerId: minerId, Name: name, LangInt: c.LangInt, UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, FaceUrls: strings.Join(face_urls, ",")})
+	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, MyModalIdName: "myModal", Lang: c.Lang, PoolAdmin: c.PoolAdmin, Community: c.Community, MinerId: minerId, Name: name, LangInt: c.LangInt, UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, FaceUrls: strings.Join(face_urls, ",")})
 	if err != nil {
 		log.Error("%s", utils.ErrInfo(err))
 		return "", utils.ErrInfo(err)
