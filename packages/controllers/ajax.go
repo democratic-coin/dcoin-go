@@ -4,13 +4,14 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"net/http"
 	"regexp"
+	"fmt"
 )
 
 func Ajax(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("ajax Recovered", r)
-			panic(r)
+			fmt.Println("ajax Recovered", r)
 		}
 	}()
 	log.Debug("Ajax")
@@ -127,7 +128,7 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 		html = "Access denied 0"
 	} else {
 		pages := "DebugInfo|CheckSetupPassword|AcceptNewKeyStatus|availableKeys|CfCatalog|CfPagePreview|CfStart|Check_sign|CheckNode|GetBlock|GetMinerData|GetMinerDataMap|GetSellerData|Index|IndexCf|InstallStep0|InstallStep1|InstallStep2|Login|SynchronizationBlockchain|UpdatingBlockchain|Menu|SignUpInPool|SignLogin"
-		if utils.IOS() { // На IOS можно сгенерить ключ без сессии
+		if utils.Mobile() { // На IOS можно сгенерить ключ без сессии
 			pages += "|DcoinKey"
 		}
 		if ok, _ := regexp.MatchString(`^(?i)`+pages+`$`, controllerName); !ok && c.SessUserId <= 0 {

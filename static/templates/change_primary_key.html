@@ -241,11 +241,41 @@
 			);
 
 
-			$('#download').bind('click', function () {
+			/*$('#download').bind('click', function () {
 				$( "#goto_confirm_key" ).prop( "disabled", false );
 				$( "#goto_confirm_key" ).removeAttr("disabled");
-			});
+			});*/
+		$('#download').bind('click', function () {
+			$('#download').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+			$( "form#main_form" ).submit();
+			{{if or .IOS .Android}}
+			$( "#download_div" ).html("<strong>{{.Lang.key_stored_in_photos}}</strong>");
+			$( "#download_div" ).css("text-align", "center");
+			{{else}}
+			$( "#download_div" ).css("display", "none");
+			{{end}}
+			$( "#goto_confirm_key" ).css("display", "block");
+		});
+		$('#goto_confirm_key').bind('click', function () {
+			if (progress_pct_width<20) {
+				var new_pct = progress_pct_width + 7;
+				$('#progress_pct').width(new_pct * $('#progress_pct').parent().width() / 100);
+				$('#progress_pct').html(new_pct + '%');
+			}
 
+			$("#tx_history").css("display", "none");
+			$("#password_div").css("display", "none");
+			$("#confirm_key").css("display", "block");
+
+			$("#step0").attr('class', '');
+			$("#step1").attr('class', '');
+			$("#step2").attr('class', 'active');
+
+			if (mode=='enhanced_protection_mode') {
+				console.log('goto_step_3_or_sign');
+				$("#goto_step_3_or_sign").text('{{.Lang.next}}');
+			}
+		});
 
 			function step0() {
 				$("#mode_div").css("display", "block");
@@ -328,12 +358,13 @@
 
 <div id="password_div" style="display: none">
 	<div class="form-horizontal">
-		<form method="post" action="ajax?controllerName=dcoinKey" target="_blank">
+		<form id="main_form" method="{{if .Mobile}}get{{else}}post{{end}}" action="ajax" target="_blank">
 			<fieldset>
+				<input type="hidden" name="controllerName" value="dcoinKey">
 				<!-- Password input-->
 				<div class="form-group">
 					<label class="col-md-4 control-label"
-						   for="passwordinput">{{.Lang.password}}</label>
+						   for="new_password">{{.Lang.password}}</label>
 
 					<div class="col-md-4">
 						<input id="new_password" class="form-control input-md" name="password" type="password">
@@ -341,10 +372,11 @@
 					</div>
 				</div>
 
+			</fieldset>
+		</form>
 				<!-- Button -->
-				<div class="form-group">
-					<label class="col-md-4 control-label" for="singlebutton"></label>
-
+				<div class="form-group" id="download_div">
+					<label class="col-md-4 control-label" for="download"></label>
 					<div class="col-md-4">
 						<button id="download" class="btn btn-default"
 								type="submit">{{.Lang.download}}</button>
@@ -353,16 +385,12 @@
 
 				<!-- Button -->
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="singlebutton"></label>
-
+					<label class="col-md-4 control-label" for="goto_confirm_key"></label>
 					<div class="col-md-4">
-						<a id="goto_confirm_key" class="btn btn-primary"
-						   disabled="disabled">{{.Lang.next}}</a>
+						<a id="goto_confirm_key" class="btn btn-primary" style="display: none">{{.Lang.next}}</a>
 					</div>
 				</div>
 
-			</fieldset>
-		</form>
 	</div>
 
 </div>

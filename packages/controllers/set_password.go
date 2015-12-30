@@ -7,16 +7,14 @@ import (
 type setPasswordPage struct {
 	Lang map[string]string
 	IOS  bool
+	Android  bool
+	Mobile bool
 }
 
 func (c *Controller) SetPassword() (string, error) {
 
-	var ios bool
-	if utils.IOS() {
-		ios = true
-	}
 	TemplateStr, err := makeTemplate("set_password", "setPassword", &setPasswordPage{
-		Lang: c.Lang, IOS: ios})
+		Lang: c.Lang, IOS: utils.IOS(), Android: utils.Android(), Mobile: utils.Mobile()})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

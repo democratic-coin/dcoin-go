@@ -12,8 +12,7 @@ func main() {
         cmd := exec.Command(dir+"/dcoinbin")
         err := cmd.Run()
         if err != nil {
-                os.Exit(1)
-                fmt.Println("err=",err)
+            fmt.Println("err=",err)
+            os.Exit(1)
         }
 }
-

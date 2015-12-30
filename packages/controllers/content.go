@@ -8,13 +8,14 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"fmt"
 )
 
 func Content(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("Content Recovered", r)
-			panic(r)
+			fmt.Println("Content Recovered", r)
 		}
 	}()
 	var err error

@@ -51,6 +51,10 @@
 
 
 </script>
+<!--
+static/img/logo-2.png
+static/img/logo-small.png
+-->
 <style>
 	#settings_menu_left{display: none}
 	#lng_menu_left{display: none}
@@ -61,9 +65,9 @@
 		body{padding-top: 50px}
 	}
 
-	.dcoin-logo { background-image: url('static/img/logo-2.png'); width:182px; height: 40px; background-size:182px 40px}
+	.dcoin-logo { background-image: url(''); width:182px; height: 40px; background-size:182px 40px}
 	@media (max-width: 600px) {
-		.dcoin-logo { background-image: url('static/img/logo-small.png'); width:42px; height: 40px; background-size:42px 40px}
+		.dcoin-logo { background-image: url(''); width:42px; height: 40px; background-size:42px 40px}
 		#progress_status_text{display: none}
 	}
 	.flag_42{display:inline-block; background-image: url('static/img/us-ru.png'); background-position: 0px 0px; width: 22px; height: 16px}
@@ -176,7 +180,7 @@
 				{{if .MinerId}}
 					<li><a href="#newUser"><i class="fa  fa-smile-o  fa-fw"></i> {{.Lang.my_referrals}}</a></li>
 				{{end}}
-			<!--	<li>
+			-	<li>
 					<a href="#"><i class="fa  fa-users  fa-fw"></i> CrowdFunding<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
 						<li>
@@ -187,7 +191,7 @@
 						</li>
 					</ul>
 				</li>
--->
+
 
 				<li>
 					<a href="#"><i class="fa  fa-info-circle -o fa-fw"></i> {{.Lang.information}}<span class="fa arrow"></span></a>

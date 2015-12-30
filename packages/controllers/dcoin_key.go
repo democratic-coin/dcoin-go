@@ -12,13 +12,13 @@ func (c *Controller) DcoinKey() (string, error) {
 
 	var err error
 	c.r.ParseForm()
-	// на IOS запрос ключа идет без сессии из objective C (UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://127.0.0.1:8089/ajax?controllerName=dcoinKey&ios=1"]]];)
+	// на IOS/Android запрос ключа идет без сессии из objective C (UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://127.0.0.1:8089/ajax?controllerName=dcoinKey&ios=1"]]];)
 	local := false
 	// чтобы по локалке никто не украл приватный ключ
-	if ok, _ := regexp.MatchString(`^127\.0\.0\.1$`, c.r.RemoteAddr); ok {
+	if ok, _ := regexp.MatchString(`^(\:\:)|(127\.0\.0\.1)(:[0-9]+)?$`, c.r.RemoteAddr); ok {
 		local = true
 	}
-	if utils.IOS() && c.SessUserId == 0 && !local {
+	if utils.Mobile() && c.SessUserId == 0 && !local {
 		return "", utils.ErrInfo(errors.New("Not local request from " + c.r.RemoteAddr))
 	}
 	privKey := ""
@@ -57,7 +57,7 @@ func (c *Controller) DcoinKey() (string, error) {
 		ios = true
 	}
 
-	if ios {
+	if ios || utils.Android() {
 		buffer, err := utils.KeyToImg(privateKey, "", c.SessUserId, c.TimeFormat, param)
 		if err != nil {
 			return "", utils.ErrInfo(err)

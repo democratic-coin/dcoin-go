@@ -65,18 +65,18 @@
 	{{if not .GeolocationLat}}
 		var latitude = 39.94887
 		var longitude = -75.15005
-		geoFindMe()
+		//geoFindMe()
 	{{else}}
 		var latitude = {{.GeolocationLat}}
 		var longitude = {{.GeolocationLon}}
-		function initialize() {
+		/*function initialize() {
 			map_init (latitude, longitude, 'map_canvas', true, true)
 		}
 
 		$(document).ready(function() {
 			google.maps.event.addDomListener(window, 'load', initialize);
 			$(document).ajaxStop(initialize);
-		});
+		});*/
 
 	{{end}}
 	$('#latitude').val(latitude);

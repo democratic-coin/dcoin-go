@@ -8,6 +8,7 @@ import (
 
 func (c *Controller) SaveNotifications() (string, error) {
 
+
 	if c.SessRestricted != 0 {
 		return "", utils.ErrInfo(errors.New("Permission denied"))
 	}
@@ -28,7 +29,7 @@ func (c *Controller) SaveNotifications() (string, error) {
 					 sms =  ?,
 					 mobile = ?
 				WHERE name = ?
-				`, data[k]["email"].(float64), data[k]["sms"].(float64), data[k]["mobile"].(string), data[k]["name"].(string))
+				`, data[k]["email"].(float64), data[k]["sms"].(float64), data[k]["mobile"].(float64), data[k]["name"].(string))
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}

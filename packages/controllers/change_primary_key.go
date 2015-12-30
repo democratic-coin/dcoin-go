@@ -23,6 +23,9 @@ type changePrimaryKeyPage struct {
 	TxType            string
 	TxTypeId          int64
 	TimeNow           int64
+	IOS bool
+	Android bool
+	Mobile bool
 }
 
 func (c *Controller) ChangePrimaryKey() (string, error) {
@@ -79,6 +82,9 @@ func (c *Controller) ChangePrimaryKey() (string, error) {
 		StatusArray:       statusArray,
 		TimeNow:           timeNow,
 		TxType:            txType,
+		IOS: utils.IOS(),
+		Android: utils.Android(),
+		Mobile: utils.Mobile(),
 		TxTypeId:          txTypeId})
 	if err != nil {
 		return "", utils.ErrInfo(err)
