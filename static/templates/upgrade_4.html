@@ -10,7 +10,7 @@
 		$.post('ajax?controllerName=saveVideo', {'video_url' : video_url },
 				function(data) {
 					if (data.url != '') {
-
+						console.log('<iframe width=640 height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
 						//$('#video_url_src').attr('src') = $('#video_url').val();
 						$('#video_url_iframe').html('<iframe width=640 height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
 					}
@@ -200,8 +200,6 @@
 <br>
 
 <button class="btn btn-success" onclick="$('#save_youtube').trigger('click');map_navigate('upgrade5');">{{.SaveAndGotoStep}}</button>
-
-
 <div class="for-signature"></div>
-       
+
 {{end}}

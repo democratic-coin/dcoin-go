@@ -31,13 +31,14 @@
 
 	function geoFindMe(){
 
-		if(navigator.geolocation){
-			navigator.geolocation.getCurrentPosition(success, error, geo_options);
-		}else{
-			alert("Geolocation services are not supported by your web browser.");
+		//console.log("navigator.geolocation>>>>>>>>>",navigator.geolocation);
+		//if(navigator.geolocation){
+		//	navigator.geolocation.getCurrentPosition(success, error, geo_options);
+		//}else{
+		//	alert("Geolocation services are not supported by your web browser.");
 			map_init (latitude, longitude, 'map_canvas', true, true);
 			google.maps.event.trigger(map, 'resize');
-		}
+		//}
 
 		function success(position) {
 			latitude = position.coords.latitude;
@@ -65,18 +66,21 @@
 	{{if not .GeolocationLat}}
 		var latitude = 39.94887
 		var longitude = -75.15005
-		//geoFindMe()
+		geoFindMe()
 	{{else}}
 		var latitude = {{.GeolocationLat}}
 		var longitude = {{.GeolocationLon}}
-		/*function initialize() {
+		function initialize() {
 			map_init (latitude, longitude, 'map_canvas', true, true)
 		}
 
 		$(document).ready(function() {
-			google.maps.event.addDomListener(window, 'load', initialize);
-			$(document).ajaxStop(initialize);
-		});*/
+
+			map_init (latitude, longitude, 'map_canvas', true, true);
+			google.maps.event.trigger(map, 'resize');
+			/*google.maps.event.addDomListener(window, 'load', initialize);
+			$(document).ajaxStop(initialize);*/
+		});
 
 	{{end}}
 	$('#latitude').val(latitude);

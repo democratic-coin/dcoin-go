@@ -286,6 +286,7 @@
 	{
 		console.log($('#'+amount_id).text());
 		var amount_str = $('#'+amount_id).text();
+		console.log('dc_counter/amount_str='+amount_str);
 		var amount = parseFloat(amount_str);
 		console.log('dc_counter/'+amount_id+'/'+amount+'/'+pct);
 		var i=0;
@@ -427,111 +428,74 @@
 	var infoBubble;
 
 	function get_img_home (i, user_id, urls, lnglat, html, counters, pct_sec, start) {
+		console.log('urls='+urls);
 		console.log('html='+html);
 		console.log('counters='+counters);
 		console.log('pct_sec='+pct_sec);
 		console.log('start='+start);
 		if (typeof urls == 'undefined' || typeof urls[i] == 'undefined' )
 			return 0;
-		$.ajax({
-			url: urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg",
-			type: 'GET',
-			error:
-				function(){
-					console.log('==========error ' + urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg");
-					var bg = $('#img_' + user_id).css("background-image");
-					if (typeof bg == 'undefined' || bg.length < 10)
-						get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
-				},
-			success:
-				function(response) {
-					if (response=='ok') {
-						if (typeof urls[i] != 'undefined' && urls[i] != '' && urls[i] != '0') {
-							var image = new Image();
-							console.log('TRY ' + urls[i] + "/public/" + user_id + "_user_face.jpg" + "\ni=" + i);
-							image.src = urls[i] + "/public/" + user_id + "_user_face.jpg";
-							image.onload = function () {
-								console.log('OK ' + urls[i]);
-								image = null;
-								//$('#img_'+user_id).css("background", "url('"+urls[i]+"/public/"+user_id+"_user_face.jpg')  50% 50%");
-								//$('#img_'+user_id).css("background-size", "100px Auto");
-								//infowindow = new google.maps.InfoWindow();
-								//infowindow.setContent('<div id="infowin_content" style="width:190px; overflow:none"><div id="img_'+user_id+'" style="width:100px; height:100px; background:  url('+urls[i]+'/public/'+user_id+'_user_face.jpg)  50% 50%; background-size: 100px Auto; border-radius:50%"></div>'+html+'</div>');
+		var image = new Image();
+		image.src = urls[i]+"/public/"+user_id+"_user_face.jpg";
+		image.onload = function(){
+			console.log('OK '+urls[i]);
+			image=null;
+			infoBubble2 = new InfoBubble({
+				map: map,
+				content: '<div class="profile_main_div"><div class="profile_div"></div><div class="panel-img"><div id="img_' + user_id + '" style="width:80px; height:80px; background:  url(' + urls[i] + 'public/' + user_id + '_user_face.jpg)  50% 50%; background-size: 80px Auto; border-radius:50%"></div></div><div class="profile_text">' + html + '</div></div>',
+				position: new google.maps.LatLng(lnglat.lat, lnglat.lng),
+				shadowStyle: 1,
+				padding: 0,
+				backgroundColor: 'rgb(0,0,0,0)',
+				borderRadius: 4,
+				arrowSize: 10,
+				borderWidth: 1,
+				borderColor: '#ccc',
+				disableAutoPan: true,
+				hideCloseButton: false,
+				arrowPosition: 50,
+				backgroundClassName: 'phoney',
+				arrowStyle: 2
+			});
+			infoBubble2.open();
 
-								//infowindow.setPosition(lnglat);
-								//infowindow.open(map);
-
-								console.log('===============>lnglat');
-								console.log(lnglat);
-
-								infoBubble2 = new InfoBubble({
-									map: map,
-									content: '<div class="profile_main_div"><div class="profile_div"></div><div class="panel-img"><div id="img_' + user_id + '" style="width:80px; height:80px; background:  url(' + urls[i] + '/public/' + user_id + '_user_face.jpg)  50% 50%; background-size: 80px Auto; border-radius:50%"></div></div><div class="profile_text">' + html + '</div></div>',
-									position: new google.maps.LatLng(lnglat.lat, lnglat.lng),
-									shadowStyle: 1,
-									padding: 0,
-									backgroundColor: 'rgb(0,0,0,0)',
-									borderRadius: 4,
-									arrowSize: 10,
-									borderWidth: 1,
-									borderColor: '#ccc',
-									disableAutoPan: true,
-									hideCloseButton: false,
-									arrowPosition: 50,
-									backgroundClassName: 'phoney',
-									arrowStyle: 2
-								});
-								infoBubble2.open();
-
-								if (start == 1)
-									var lat = lnglat.lat + 3;
-								else
-									var lat = lnglat.lat;
-								var center = new google.maps.LatLng(lat, lnglat.lng);
-								map.panTo(center);
+			if (start == 1)
+				var lat = lnglat.lat + 3;
+			else
+				var lat = lnglat.lat;
+			var center = new google.maps.LatLng(lat, lnglat.lng);
+			map.panTo(center);
 
 
-								//console.log(i+'/'+user_id+'/'+urls);
-								$('#map_canvas').spin(false);
-								for (var k = 0; k < counters.length; k++) {
-									dc_counter(0, pct_sec, counters[k], 8);
-								}
-							};
-							// handle failure
-							image.onerror = function () {
-								image = null;
-								console.log('error ' + urls[i]);
-								var bg = $('#img_' + user_id).css("background-image");
-								if (typeof bg == 'undefined' || bg.length < 10)
-									get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
-							};
-							setTimeout
-							(
-								function () {
-									if (image != null && (!image.complete || !image.naturalWidth)) {
-										var bg = $('#img_' + user_id).css("background-image");
-										image = null;
-										console.log('error');
-										if (typeof bg == 'undefined' || bg.length < 10)
-											get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
-									}
-								},
-								2000
-							);
-						}
-						else {
-							$('#map_canvas').spin(false);
-						}
-					}
-					else {
-						console.log('response='+response+'==========error 2 ' + urls[i] + "/ajax/public_img.php?img=" + user_id + "_user_face.jpg");
+			//console.log(i+'/'+user_id+'/'+urls);
+			$('#map_canvas').spin(false);
+			for (var k = 0; k < counters.length; k++) {
+				dc_counter(0, pct_sec, counters[k], 8);
+			}
+		};
+		// handle failure
+		image.onerror = function(){
+			image=null;
+			console.log('error '+urls[i]);
+			var bg = $('#img_' + user_id).css("background-image");
+			if (typeof bg == 'undefined' || bg.length<10)
+				get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
+		};
+		setTimeout
+		(
+				function()
+				{
+					if ( image!=null && (!image.complete || !image.naturalWidth) )
+					{
 						var bg = $('#img_' + user_id).css("background-image");
-						if (typeof bg == 'undefined' || bg.length < 10)
+						image = null;
+						console.log('error');
+						if (typeof bg == 'undefined' || bg.length<10)
 							get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
 					}
 				},
-				timeout: 3000
-		});
+				2000
+		);
 	}
 
 
@@ -544,28 +508,37 @@
 		if(gMapsLoaded) return window.gMapsCallback();
 		var script_tag = document.createElement('script');
 		script_tag.setAttribute("type","text/javascript");
-		script_tag.setAttribute("src","http://maps.google.com/maps/api/js?sensor=false&callback=gMapsCallback");
+		script_tag.setAttribute("src","http://maps.google.com/maps/api/js?callback=gMapsCallback");
 		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
 	}
 
-/*	$(document).ready(function(){
+	$(document).ready(function(){
 		function initialize(){
 
 			console.log('-----------------------------------------------------------------------');
+			var mapOptions = {
+				zoom: 5,
+				scrollwheel: false,
+				center: new google.maps.LatLng(56.55258, 43.83508),
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				styles: [	{		featureType:'water',		stylers:[{color:'#46bcec'},{visibility:'on'}]	},{		featureType:'landscape',		stylers:[{color:'#f2f2f2'}]	},{		featureType:'road',		stylers:[{saturation:-100},{lightness:45}]	},{		featureType:'road.highway',		stylers:[{visibility:'simplified'}]	},{		featureType:'road.arterial',		elementType:'labels.icon',		stylers:[{visibility:'off'}]	},{		featureType:'administrative',		elementType:'labels.text.fill',		stylers:[{color:'#444444'}]	},{		featureType:'transit',		stylers:[{visibility:'off'}]	},{		featureType:'poi',		stylers:[{visibility:'off'}]	}]
+			};
+			map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 
 			$.get( 'ajax?controllerName=GetMinerDataMap', function (map_markers) {
 
+				console.log("map_markers", map_markers)
+
 				var markers = [];
-				var mapOptions = {
+				/*var mapOptions = {
 					zoom: 5,
 					scrollwheel: false,
 					center: new google.maps.LatLng(56.55258, 43.83508),
 					mapTypeId: google.maps.MapTypeId.ROADMAP,
 					styles: [	{		featureType:'water',		stylers:[{color:'#46bcec'},{visibility:'on'}]	},{		featureType:'landscape',		stylers:[{color:'#f2f2f2'}]	},{		featureType:'road',		stylers:[{saturation:-100},{lightness:45}]	},{		featureType:'road.highway',		stylers:[{visibility:'simplified'}]	},{		featureType:'road.arterial',		elementType:'labels.icon',		stylers:[{visibility:'off'}]	},{		featureType:'administrative',		elementType:'labels.text.fill',		stylers:[{color:'#444444'}]	},{		featureType:'transit',		stylers:[{visibility:'off'}]	},{		featureType:'poi',		stylers:[{visibility:'off'}]	}]
 				};
-				map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);
 
-
+				map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);*/
 
 
 				infowindow = new google.maps.InfoWindow();
@@ -580,7 +553,7 @@
 						}
 
 						$('#map_canvas').spin();
-						$.get( 'ajax?controllerName=GetMinerData?userId='+user_id, function (data) {
+						$.get( 'ajax?controllerName=GetMinerData&userId='+user_id, function (data) {
 							get_img_home (0, user_id, data.hosts, data.lnglat, data.html,  data.counters, data.pct_sec, 0);
 						}, "json" );
 
@@ -614,15 +587,16 @@
 				{{end}}
 
 
-			}, "json" );
+			}, "JSON" );
 
 		}
 
 		$(window).unbind( 'gMapsLoaded' );
 		$(window).bind('gMapsLoaded', initialize);
 		window.loadGoogleMaps();
-	});*/
+	});
 </script>
+
 
 
 <div id="generate" style="margin-top: 15px">
@@ -1160,7 +1134,12 @@
 	.col-xs-4{width:33.3333%; float:none}
 
 </style>
-
+<div style="clear: both"></div>
+	<h3 class="page-header" style="margin-top: 30px;margin-bottom: 0px;"
+		title="">{{.Lang.miners_on_the_map}}</h3>
+	<a href="#interface/show_map=0">Hide map</a></div>
+<div class="clearfix"></div>
+<div id="map_canvas" style="width: 100%; height:500px; display: block"></div>
 <div style="clear: both"></div>
 
 <h3 style="margin-top: 20px">{{.Lang.mining}}</h3>

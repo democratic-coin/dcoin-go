@@ -2718,6 +2718,14 @@ func JoinInts(arr map[int]int, sep string) string {
 	}
 	return strings.Join(arrStr, sep)
 }
+
+func JoinIntsK(arr map[int]int, sep string) string {
+	var arrStr []string
+	for k, _ := range arr {
+		arrStr = append(arrStr, IntToStr(k))
+	}
+	return strings.Join(arrStr, sep)
+}
 func JoinInts64(arr map[int64]int, sep string) string {
 	var arrStr []string
 	for k, _ := range arr {

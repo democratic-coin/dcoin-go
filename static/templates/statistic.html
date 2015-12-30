@@ -109,7 +109,7 @@
 				{{if or (ge $currencyId 1000) (eq $currencyId 1)}}
 					<td>{{$.Lang.impossible}}</td>
 				{{else}}
-					<td>{{index $.SumPromisedAmount (int64ToStr $currencyId)}}</td>
+					<td>{{round (index $.SumPromisedAmount (int64ToStr $currencyId)) 2}}</td>
 				{{end}}
 				<td>{{index $.PromisedAmountMiners (int64ToStr $currencyId)}}</td><td>{{index $.WalletsUsers (int64ToStr $currencyId)}}</td>
 			{{end}}

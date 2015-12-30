@@ -294,7 +294,7 @@ type asset struct {
 
 // static1blockBin reads file data from disk. It returns an error on failure.
 func static1blockBin() (*asset, error) {
-	path := "/dc/static/1block.bin"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/1block.bin"
 	name := "static/1block.bin"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -312,7 +312,7 @@ func static1blockBin() (*asset, error) {
 
 // staticCssAs3camCss reads file data from disk. It returns an error on failure.
 func staticCssAs3camCss() (*asset, error) {
-	path := "/dc/static/css/AS3Cam.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/AS3Cam.css"
 	name := "static/css/AS3Cam.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -330,7 +330,7 @@ func staticCssAs3camCss() (*asset, error) {
 
 // staticCssJcropGif reads file data from disk. It returns an error on failure.
 func staticCssJcropGif() (*asset, error) {
-	path := "/dc/static/css/Jcrop.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/Jcrop.gif"
 	name := "static/css/Jcrop.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -348,7 +348,7 @@ func staticCssJcropGif() (*asset, error) {
 
 // staticCssBootstrapModalCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapModalCss() (*asset, error) {
-	path := "/dc/static/css/bootstrap-modal.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/bootstrap-modal.css"
 	name := "static/css/bootstrap-modal.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -366,7 +366,7 @@ func staticCssBootstrapModalCss() (*asset, error) {
 
 // staticCssBootstrapResponsiveCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapResponsiveCss() (*asset, error) {
-	path := "/dc/static/css/bootstrap-responsive.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/bootstrap-responsive.css"
 	name := "static/css/bootstrap-responsive.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -384,7 +384,7 @@ func staticCssBootstrapResponsiveCss() (*asset, error) {
 
 // staticCssBootstrapCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapCss() (*asset, error) {
-	path := "/dc/static/css/bootstrap.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/bootstrap.css"
 	name := "static/css/bootstrap.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -402,7 +402,7 @@ func staticCssBootstrapCss() (*asset, error) {
 
 // staticCssBootstrapMinCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapMinCss() (*asset, error) {
-	path := "/dc/static/css/bootstrap.min.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/bootstrap.min.css"
 	name := "static/css/bootstrap.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -420,7 +420,7 @@ func staticCssBootstrapMinCss() (*asset, error) {
 
 // staticCssCfCss reads file data from disk. It returns an error on failure.
 func staticCssCfCss() (*asset, error) {
-	path := "/dc/static/css/cf.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/cf.css"
 	name := "static/css/cf.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -438,7 +438,7 @@ func staticCssCfCss() (*asset, error) {
 
 // staticCssCropperCss reads file data from disk. It returns an error on failure.
 func staticCssCropperCss() (*asset, error) {
-	path := "/dc/static/css/cropper.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/cropper.css"
 	name := "static/css/cropper.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -456,7 +456,7 @@ func staticCssCropperCss() (*asset, error) {
 
 // staticCssDatatablesBootstrapCss reads file data from disk. It returns an error on failure.
 func staticCssDatatablesBootstrapCss() (*asset, error) {
-	path := "/dc/static/css/dataTables.bootstrap.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/dataTables.bootstrap.css"
 	name := "static/css/dataTables.bootstrap.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -474,7 +474,7 @@ func staticCssDatatablesBootstrapCss() (*asset, error) {
 
 // staticCssFontAwesomeCss reads file data from disk. It returns an error on failure.
 func staticCssFontAwesomeCss() (*asset, error) {
-	path := "/dc/static/css/font-awesome.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/font-awesome.css"
 	name := "static/css/font-awesome.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -492,7 +492,7 @@ func staticCssFontAwesomeCss() (*asset, error) {
 
 // staticCssJqueryUiTimepickerAddonCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryUiTimepickerAddonCss() (*asset, error) {
-	path := "/dc/static/css/jquery-ui-timepicker-addon.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery-ui-timepicker-addon.css"
 	name := "static/css/jquery-ui-timepicker-addon.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -510,7 +510,7 @@ func staticCssJqueryUiTimepickerAddonCss() (*asset, error) {
 
 // staticCssJqueryUiCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryUiCss() (*asset, error) {
-	path := "/dc/static/css/jquery-ui.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery-ui.css"
 	name := "static/css/jquery-ui.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -528,7 +528,7 @@ func staticCssJqueryUiCss() (*asset, error) {
 
 // staticCssJqueryJcropCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryJcropCss() (*asset, error) {
-	path := "/dc/static/css/jquery.Jcrop.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery.Jcrop.css"
 	name := "static/css/jquery.Jcrop.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -546,7 +546,7 @@ func staticCssJqueryJcropCss() (*asset, error) {
 
 // staticCssJqueryJcropMinCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryJcropMinCss() (*asset, error) {
-	path := "/dc/static/css/jquery.Jcrop.min.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery.Jcrop.min.css"
 	name := "static/css/jquery.Jcrop.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -564,7 +564,7 @@ func staticCssJqueryJcropMinCss() (*asset, error) {
 
 // staticCssJqueryCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryCss() (*asset, error) {
-	path := "/dc/static/css/jquery.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery.css"
 	name := "static/css/jquery.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -582,7 +582,7 @@ func staticCssJqueryCss() (*asset, error) {
 
 // staticCssJqueryQtipMinCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryQtipMinCss() (*asset, error) {
-	path := "/dc/static/css/jquery.qtip.min.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/jquery.qtip.min.css"
 	name := "static/css/jquery.qtip.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -600,7 +600,7 @@ func staticCssJqueryQtipMinCss() (*asset, error) {
 
 // staticCssPluginsMetismenuMetismenuMinCss reads file data from disk. It returns an error on failure.
 func staticCssPluginsMetismenuMetismenuMinCss() (*asset, error) {
-	path := "/dc/static/css/plugins/metisMenu/metisMenu.min.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/plugins/metisMenu/metisMenu.min.css"
 	name := "static/css/plugins/metisMenu/metisMenu.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -618,7 +618,7 @@ func staticCssPluginsMetismenuMetismenuMinCss() (*asset, error) {
 
 // staticCssProgressCss reads file data from disk. It returns an error on failure.
 func staticCssProgressCss() (*asset, error) {
-	path := "/dc/static/css/progress.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/progress.css"
 	name := "static/css/progress.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -636,7 +636,7 @@ func staticCssProgressCss() (*asset, error) {
 
 // staticCssSbAdmin2Css reads file data from disk. It returns an error on failure.
 func staticCssSbAdmin2Css() (*asset, error) {
-	path := "/dc/static/css/sb-admin-2.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/sb-admin-2.css"
 	name := "static/css/sb-admin-2.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -654,7 +654,7 @@ func staticCssSbAdmin2Css() (*asset, error) {
 
 // staticCssSbAdminCss reads file data from disk. It returns an error on failure.
 func staticCssSbAdminCss() (*asset, error) {
-	path := "/dc/static/css/sb-admin.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/sb-admin.css"
 	name := "static/css/sb-admin.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -672,7 +672,7 @@ func staticCssSbAdminCss() (*asset, error) {
 
 // staticCssSocialButtonsCss reads file data from disk. It returns an error on failure.
 func staticCssSocialButtonsCss() (*asset, error) {
-	path := "/dc/static/css/social-buttons.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/social-buttons.css"
 	name := "static/css/social-buttons.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -690,7 +690,7 @@ func staticCssSocialButtonsCss() (*asset, error) {
 
 // staticCssTooltipsterShadowCss reads file data from disk. It returns an error on failure.
 func staticCssTooltipsterShadowCss() (*asset, error) {
-	path := "/dc/static/css/tooltipster-shadow.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/tooltipster-shadow.css"
 	name := "static/css/tooltipster-shadow.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -708,7 +708,7 @@ func staticCssTooltipsterShadowCss() (*asset, error) {
 
 // staticCssTooltipsterCss reads file data from disk. It returns an error on failure.
 func staticCssTooltipsterCss() (*asset, error) {
-	path := "/dc/static/css/tooltipster.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/tooltipster.css"
 	name := "static/css/tooltipster.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -726,7 +726,7 @@ func staticCssTooltipsterCss() (*asset, error) {
 
 // staticCssUpgradeCss reads file data from disk. It returns an error on failure.
 func staticCssUpgradeCss() (*asset, error) {
-	path := "/dc/static/css/upgrade.css"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/css/upgrade.css"
 	name := "static/css/upgrade.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -744,7 +744,7 @@ func staticCssUpgradeCss() (*asset, error) {
 
 // staticFontsFontawesomeOtf reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeOtf() (*asset, error) {
-	path := "/dc/static/fonts/FontAwesome.otf"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/FontAwesome.otf"
 	name := "static/fonts/FontAwesome.otf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -762,7 +762,7 @@ func staticFontsFontawesomeOtf() (*asset, error) {
 
 // staticFontsOpensansRegularTtf reads file data from disk. It returns an error on failure.
 func staticFontsOpensansRegularTtf() (*asset, error) {
-	path := "/dc/static/fonts/OpenSans-Regular.ttf"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/OpenSans-Regular.ttf"
 	name := "static/fonts/OpenSans-Regular.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -780,7 +780,7 @@ func staticFontsOpensansRegularTtf() (*asset, error) {
 
 // staticFontsFontawesomeWebfontEot reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontEot() (*asset, error) {
-	path := "/dc/static/fonts/fontawesome-webfont.eot"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/fontawesome-webfont.eot"
 	name := "static/fonts/fontawesome-webfont.eot"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -798,7 +798,7 @@ func staticFontsFontawesomeWebfontEot() (*asset, error) {
 
 // staticFontsFontawesomeWebfontSvg reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontSvg() (*asset, error) {
-	path := "/dc/static/fonts/fontawesome-webfont.svg"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/fontawesome-webfont.svg"
 	name := "static/fonts/fontawesome-webfont.svg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -816,7 +816,7 @@ func staticFontsFontawesomeWebfontSvg() (*asset, error) {
 
 // staticFontsFontawesomeWebfontTtf reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontTtf() (*asset, error) {
-	path := "/dc/static/fonts/fontawesome-webfont.ttf"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/fontawesome-webfont.ttf"
 	name := "static/fonts/fontawesome-webfont.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -834,7 +834,7 @@ func staticFontsFontawesomeWebfontTtf() (*asset, error) {
 
 // staticFontsFontawesomeWebfontWoff reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontWoff() (*asset, error) {
-	path := "/dc/static/fonts/fontawesome-webfont.woff"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/fontawesome-webfont.woff"
 	name := "static/fonts/fontawesome-webfont.woff"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -852,7 +852,7 @@ func staticFontsFontawesomeWebfontWoff() (*asset, error) {
 
 // staticFontsLuxisrTtf reads file data from disk. It returns an error on failure.
 func staticFontsLuxisrTtf() (*asset, error) {
-	path := "/dc/static/fonts/luxisr.ttf"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/fonts/luxisr.ttf"
 	name := "static/fonts/luxisr.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -870,7 +870,7 @@ func staticFontsLuxisrTtf() (*asset, error) {
 
 // staticImgDirectory reads file data from disk. It returns an error on failure.
 func staticImgDirectory() (*asset, error) {
-	path := "/dc/static/img/.directory"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/.directory"
 	name := "static/img/.directory"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -888,7 +888,7 @@ func staticImgDirectory() (*asset, error) {
 
 // staticImgAlertPng reads file data from disk. It returns an error on failure.
 func staticImgAlertPng() (*asset, error) {
-	path := "/dc/static/img/alert.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/alert.png"
 	name := "static/img/alert.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -906,7 +906,7 @@ func staticImgAlertPng() (*asset, error) {
 
 // staticImgAnonimPng reads file data from disk. It returns an error on failure.
 func staticImgAnonimPng() (*asset, error) {
-	path := "/dc/static/img/anonim.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/anonim.png"
 	name := "static/img/anonim.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -924,7 +924,7 @@ func staticImgAnonimPng() (*asset, error) {
 
 // staticImgBlankPng reads file data from disk. It returns an error on failure.
 func staticImgBlankPng() (*asset, error) {
-	path := "/dc/static/img/blank.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/blank.png"
 	name := "static/img/blank.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -942,7 +942,7 @@ func staticImgBlankPng() (*asset, error) {
 
 // staticImgCf_blurb_imgPng reads file data from disk. It returns an error on failure.
 func staticImgCf_blurb_imgPng() (*asset, error) {
-	path := "/dc/static/img/cf_blurb_img.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/cf_blurb_img.png"
 	name := "static/img/cf_blurb_img.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -960,7 +960,7 @@ func staticImgCf_blurb_imgPng() (*asset, error) {
 
 // staticImgFaceJpg reads file data from disk. It returns an error on failure.
 func staticImgFaceJpg() (*asset, error) {
-	path := "/dc/static/img/face.jpg"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/face.jpg"
 	name := "static/img/face.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -978,7 +978,7 @@ func staticImgFaceJpg() (*asset, error) {
 
 // staticImgGlyphiconsHalflingsPng reads file data from disk. It returns an error on failure.
 func staticImgGlyphiconsHalflingsPng() (*asset, error) {
-	path := "/dc/static/img/glyphicons-halflings.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/glyphicons-halflings.png"
 	name := "static/img/glyphicons-halflings.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -996,7 +996,7 @@ func staticImgGlyphiconsHalflingsPng() (*asset, error) {
 
 // staticImgK_bgPng reads file data from disk. It returns an error on failure.
 func staticImgK_bgPng() (*asset, error) {
-	path := "/dc/static/img/k_bg.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/k_bg.png"
 	name := "static/img/k_bg.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1014,7 +1014,7 @@ func staticImgK_bgPng() (*asset, error) {
 
 // staticImgK_bgPsd reads file data from disk. It returns an error on failure.
 func staticImgK_bgPsd() (*asset, error) {
-	path := "/dc/static/img/k_bg.psd"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/k_bg.psd"
 	name := "static/img/k_bg.psd"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1032,7 +1032,7 @@ func staticImgK_bgPsd() (*asset, error) {
 
 // staticImgK_bg_passPng reads file data from disk. It returns an error on failure.
 func staticImgK_bg_passPng() (*asset, error) {
-	path := "/dc/static/img/k_bg_pass.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/k_bg_pass.png"
 	name := "static/img/k_bg_pass.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1050,7 +1050,7 @@ func staticImgK_bg_passPng() (*asset, error) {
 
 // staticImgK_db_passPsd reads file data from disk. It returns an error on failure.
 func staticImgK_db_passPsd() (*asset, error) {
-	path := "/dc/static/img/k_db_pass.psd"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/k_db_pass.psd"
 	name := "static/img/k_db_pass.psd"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1068,7 +1068,7 @@ func staticImgK_db_passPsd() (*asset, error) {
 
 // staticImgLoadGif reads file data from disk. It returns an error on failure.
 func staticImgLoadGif() (*asset, error) {
-	path := "/dc/static/img/load.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/load.gif"
 	name := "static/img/load.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1086,7 +1086,7 @@ func staticImgLoadGif() (*asset, error) {
 
 // staticImgLogo2Png reads file data from disk. It returns an error on failure.
 func staticImgLogo2Png() (*asset, error) {
-	path := "/dc/static/img/logo-2.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/logo-2.png"
 	name := "static/img/logo-2.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1104,7 +1104,7 @@ func staticImgLogo2Png() (*asset, error) {
 
 // staticImgLogoSmallPng reads file data from disk. It returns an error on failure.
 func staticImgLogoSmallPng() (*asset, error) {
-	path := "/dc/static/img/logo-small.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/logo-small.png"
 	name := "static/img/logo-small.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1122,7 +1122,7 @@ func staticImgLogoSmallPng() (*asset, error) {
 
 // staticImgLogoPng reads file data from disk. It returns an error on failure.
 func staticImgLogoPng() (*asset, error) {
-	path := "/dc/static/img/logo.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/logo.png"
 	name := "static/img/logo.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1140,7 +1140,7 @@ func staticImgLogoPng() (*asset, error) {
 
 // staticImgMain_loaderGif reads file data from disk. It returns an error on failure.
 func staticImgMain_loaderGif() (*asset, error) {
-	path := "/dc/static/img/main_loader.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/main_loader.gif"
 	name := "static/img/main_loader.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1158,7 +1158,7 @@ func staticImgMain_loaderGif() (*asset, error) {
 
 // staticImgNoavatarPng reads file data from disk. It returns an error on failure.
 func staticImgNoavatarPng() (*asset, error) {
-	path := "/dc/static/img/noavatar.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/noavatar.png"
 	name := "static/img/noavatar.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1176,7 +1176,7 @@ func staticImgNoavatarPng() (*asset, error) {
 
 // staticImgPersJpg reads file data from disk. It returns an error on failure.
 func staticImgPersJpg() (*asset, error) {
-	path := "/dc/static/img/pers.jpg"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/pers.jpg"
 	name := "static/img/pers.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1194,7 +1194,7 @@ func staticImgPersJpg() (*asset, error) {
 
 // staticImgPhotoPng reads file data from disk. It returns an error on failure.
 func staticImgPhotoPng() (*asset, error) {
-	path := "/dc/static/img/photo.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/photo.png"
 	name := "static/img/photo.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1212,7 +1212,7 @@ func staticImgPhotoPng() (*asset, error) {
 
 // staticImgProfileJpg reads file data from disk. It returns an error on failure.
 func staticImgProfileJpg() (*asset, error) {
-	path := "/dc/static/img/profile.jpg"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/profile.jpg"
 	name := "static/img/profile.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1230,7 +1230,7 @@ func staticImgProfileJpg() (*asset, error) {
 
 // staticImgProgressGif reads file data from disk. It returns an error on failure.
 func staticImgProgressGif() (*asset, error) {
-	path := "/dc/static/img/progress.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/progress.gif"
 	name := "static/img/progress.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1248,7 +1248,7 @@ func staticImgProgressGif() (*asset, error) {
 
 // staticImgRaceGif reads file data from disk. It returns an error on failure.
 func staticImgRaceGif() (*asset, error) {
-	path := "/dc/static/img/race.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/race.gif"
 	name := "static/img/race.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1266,7 +1266,7 @@ func staticImgRaceGif() (*asset, error) {
 
 // staticImgRace_1Png reads file data from disk. It returns an error on failure.
 func staticImgRace_1Png() (*asset, error) {
-	path := "/dc/static/img/race_1.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/race_1.png"
 	name := "static/img/race_1.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1284,7 +1284,7 @@ func staticImgRace_1Png() (*asset, error) {
 
 // staticImgRace_2Png reads file data from disk. It returns an error on failure.
 func staticImgRace_2Png() (*asset, error) {
-	path := "/dc/static/img/race_2.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/race_2.png"
 	name := "static/img/race_2.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1302,7 +1302,7 @@ func staticImgRace_2Png() (*asset, error) {
 
 // staticImgRace_3Png reads file data from disk. It returns an error on failure.
 func staticImgRace_3Png() (*asset, error) {
-	path := "/dc/static/img/race_3.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/race_3.png"
 	name := "static/img/race_3.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1320,7 +1320,7 @@ func staticImgRace_3Png() (*asset, error) {
 
 // staticImgRollingGif reads file data from disk. It returns an error on failure.
 func staticImgRollingGif() (*asset, error) {
-	path := "/dc/static/img/rolling.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/rolling.gif"
 	name := "static/img/rolling.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1338,7 +1338,7 @@ func staticImgRollingGif() (*asset, error) {
 
 // staticImgSquaresGif reads file data from disk. It returns an error on failure.
 func staticImgSquaresGif() (*asset, error) {
-	path := "/dc/static/img/squares.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/squares.gif"
 	name := "static/img/squares.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1356,7 +1356,7 @@ func staticImgSquaresGif() (*asset, error) {
 
 // staticImgSquares2Gif reads file data from disk. It returns an error on failure.
 func staticImgSquares2Gif() (*asset, error) {
-	path := "/dc/static/img/squares2.gif"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/squares2.gif"
 	name := "static/img/squares2.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1374,7 +1374,7 @@ func staticImgSquares2Gif() (*asset, error) {
 
 // staticImgUsRuPng reads file data from disk. It returns an error on failure.
 func staticImgUsRuPng() (*asset, error) {
-	path := "/dc/static/img/us-ru.png"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/img/us-ru.png"
 	name := "static/img/us-ru.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1392,7 +1392,7 @@ func staticImgUsRuPng() (*asset, error) {
 
 // staticJsSerpentJs reads file data from disk. It returns an error on failure.
 func staticJsSerpentJs() (*asset, error) {
-	path := "/dc/static/js/Serpent.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/Serpent.js"
 	name := "static/js/Serpent.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1410,7 +1410,7 @@ func staticJsSerpentJs() (*asset, error) {
 
 // staticJsAesJs reads file data from disk. It returns an error on failure.
 func staticJsAesJs() (*asset, error) {
-	path := "/dc/static/js/aes.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/aes.js"
 	name := "static/js/aes.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1428,7 +1428,7 @@ func staticJsAesJs() (*asset, error) {
 
 // staticJsAsn1hex11Js reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex11Js() (*asset, error) {
-	path := "/dc/static/js/asn1hex-1.1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/asn1hex-1.1.js"
 	name := "static/js/asn1hex-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1446,7 +1446,7 @@ func staticJsAsn1hex11Js() (*asset, error) {
 
 // staticJsAsn1hex11MinJs reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex11MinJs() (*asset, error) {
-	path := "/dc/static/js/asn1hex-1.1.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/asn1hex-1.1.min.js"
 	name := "static/js/asn1hex-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1464,7 +1464,7 @@ func staticJsAsn1hex11MinJs() (*asset, error) {
 
 // staticJsAsn1hex1Js reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex1Js() (*asset, error) {
-	path := "/dc/static/js/asn1hex-1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/asn1hex-1.js"
 	name := "static/js/asn1hex-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1482,7 +1482,7 @@ func staticJsAsn1hex1Js() (*asset, error) {
 
 // staticJsBase64Js reads file data from disk. It returns an error on failure.
 func staticJsBase64Js() (*asset, error) {
-	path := "/dc/static/js/base64.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/base64.js"
 	name := "static/js/base64.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1500,7 +1500,7 @@ func staticJsBase64Js() (*asset, error) {
 
 // staticJsBootstrapAlertJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapAlertJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-alert.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-alert.js"
 	name := "static/js/bootstrap-alert.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1518,7 +1518,7 @@ func staticJsBootstrapAlertJs() (*asset, error) {
 
 // staticJsBootstrapButtonJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapButtonJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-button.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-button.js"
 	name := "static/js/bootstrap-button.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1536,7 +1536,7 @@ func staticJsBootstrapButtonJs() (*asset, error) {
 
 // staticJsBootstrapCarouselJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapCarouselJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-carousel.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-carousel.js"
 	name := "static/js/bootstrap-carousel.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1554,7 +1554,7 @@ func staticJsBootstrapCarouselJs() (*asset, error) {
 
 // staticJsBootstrapCollapseJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapCollapseJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-collapse.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-collapse.js"
 	name := "static/js/bootstrap-collapse.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1572,7 +1572,7 @@ func staticJsBootstrapCollapseJs() (*asset, error) {
 
 // staticJsBootstrapDropdownJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapDropdownJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-dropdown.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-dropdown.js"
 	name := "static/js/bootstrap-dropdown.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1590,7 +1590,7 @@ func staticJsBootstrapDropdownJs() (*asset, error) {
 
 // staticJsBootstrapModalJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapModalJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-modal.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-modal.js"
 	name := "static/js/bootstrap-modal.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1608,7 +1608,7 @@ func staticJsBootstrapModalJs() (*asset, error) {
 
 // staticJsBootstrapPopoverJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapPopoverJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-popover.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-popover.js"
 	name := "static/js/bootstrap-popover.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1626,7 +1626,7 @@ func staticJsBootstrapPopoverJs() (*asset, error) {
 
 // staticJsBootstrapScrollspyJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapScrollspyJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-scrollspy.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-scrollspy.js"
 	name := "static/js/bootstrap-scrollspy.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1644,7 +1644,7 @@ func staticJsBootstrapScrollspyJs() (*asset, error) {
 
 // staticJsBootstrapTabJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTabJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-tab.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-tab.js"
 	name := "static/js/bootstrap-tab.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1662,7 +1662,7 @@ func staticJsBootstrapTabJs() (*asset, error) {
 
 // staticJsBootstrapTooltipJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTooltipJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-tooltip.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-tooltip.js"
 	name := "static/js/bootstrap-tooltip.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1680,7 +1680,7 @@ func staticJsBootstrapTooltipJs() (*asset, error) {
 
 // staticJsBootstrapTransitionJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTransitionJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-transition.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-transition.js"
 	name := "static/js/bootstrap-transition.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1698,7 +1698,7 @@ func staticJsBootstrapTransitionJs() (*asset, error) {
 
 // staticJsBootstrapTypeaheadJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTypeaheadJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap-typeahead.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap-typeahead.js"
 	name := "static/js/bootstrap-typeahead.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1716,7 +1716,7 @@ func staticJsBootstrapTypeaheadJs() (*asset, error) {
 
 // staticJsBootstrapMinJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapMinJs() (*asset, error) {
-	path := "/dc/static/js/bootstrap.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/bootstrap.min.js"
 	name := "static/js/bootstrap.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1734,7 +1734,7 @@ func staticJsBootstrapMinJs() (*asset, error) {
 
 // staticJsChatJs reads file data from disk. It returns an error on failure.
 func staticJsChatJs() (*asset, error) {
-	path := "/dc/static/js/chat.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/chat.js"
 	name := "static/js/chat.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1752,7 +1752,7 @@ func staticJsChatJs() (*asset, error) {
 
 // staticJsCropperJs reads file data from disk. It returns an error on failure.
 func staticJsCropperJs() (*asset, error) {
-	path := "/dc/static/js/cropper.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/cropper.js"
 	name := "static/js/cropper.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1770,7 +1770,7 @@ func staticJsCropperJs() (*asset, error) {
 
 // staticJsCryptoJsAesJs reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsAesJs() (*asset, error) {
-	path := "/dc/static/js/crypto-js-aes.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/crypto-js-aes.js"
 	name := "static/js/crypto-js-aes.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1788,7 +1788,7 @@ func staticJsCryptoJsAesJs() (*asset, error) {
 
 // staticJsCryptoJsModeEcbJs reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsModeEcbJs() (*asset, error) {
-	path := "/dc/static/js/crypto-js-mode-ecb.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/crypto-js-mode-ecb.js"
 	name := "static/js/crypto-js-mode-ecb.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1806,7 +1806,7 @@ func staticJsCryptoJsModeEcbJs() (*asset, error) {
 
 // staticJsCryptoJsPadIso10126Js reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsPadIso10126Js() (*asset, error) {
-	path := "/dc/static/js/crypto-js-pad-iso10126.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/crypto-js-pad-iso10126.js"
 	name := "static/js/crypto-js-pad-iso10126.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1824,7 +1824,7 @@ func staticJsCryptoJsPadIso10126Js() (*asset, error) {
 
 // staticJsDatatablesBootstrapJs reads file data from disk. It returns an error on failure.
 func staticJsDatatablesBootstrapJs() (*asset, error) {
-	path := "/dc/static/js/dataTables.bootstrap.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/dataTables.bootstrap.js"
 	name := "static/js/dataTables.bootstrap.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1842,7 +1842,7 @@ func staticJsDatatablesBootstrapJs() (*asset, error) {
 
 // staticJsDemoFlotDemoJs reads file data from disk. It returns an error on failure.
 func staticJsDemoFlotDemoJs() (*asset, error) {
-	path := "/dc/static/js/demo/flot-demo.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/demo/flot-demo.js"
 	name := "static/js/demo/flot-demo.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1860,7 +1860,7 @@ func staticJsDemoFlotDemoJs() (*asset, error) {
 
 // staticJsEncBase64MinJs reads file data from disk. It returns an error on failure.
 func staticJsEncBase64MinJs() (*asset, error) {
-	path := "/dc/static/js/enc-base64-min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/enc-base64-min.js"
 	name := "static/js/enc-base64-min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1878,7 +1878,7 @@ func staticJsEncBase64MinJs() (*asset, error) {
 
 // staticJsHex2aJs reads file data from disk. It returns an error on failure.
 func staticJsHex2aJs() (*asset, error) {
-	path := "/dc/static/js/hex2a.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/hex2a.js"
 	name := "static/js/hex2a.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1896,7 +1896,7 @@ func staticJsHex2aJs() (*asset, error) {
 
 // staticJsHtml5shivJs reads file data from disk. It returns an error on failure.
 func staticJsHtml5shivJs() (*asset, error) {
-	path := "/dc/static/js/html5shiv.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/html5shiv.js"
 	name := "static/js/html5shiv.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1914,7 +1914,7 @@ func staticJsHtml5shivJs() (*asset, error) {
 
 // staticJsIndexJs reads file data from disk. It returns an error on failure.
 func staticJsIndexJs() (*asset, error) {
-	path := "/dc/static/js/index.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/index.js"
 	name := "static/js/index.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1932,7 +1932,7 @@ func staticJsIndexJs() (*asset, error) {
 
 // staticJsInfobubbleJs reads file data from disk. It returns an error on failure.
 func staticJsInfobubbleJs() (*asset, error) {
-	path := "/dc/static/js/infobubble.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/infobubble.js"
 	name := "static/js/infobubble.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1950,7 +1950,7 @@ func staticJsInfobubbleJs() (*asset, error) {
 
 // staticJsJquery1102Js reads file data from disk. It returns an error on failure.
 func staticJsJquery1102Js() (*asset, error) {
-	path := "/dc/static/js/jquery-1.10.2.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-1.10.2.js"
 	name := "static/js/jquery-1.10.2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1968,7 +1968,7 @@ func staticJsJquery1102Js() (*asset, error) {
 
 // staticJsJquery1110Js reads file data from disk. It returns an error on failure.
 func staticJsJquery1110Js() (*asset, error) {
-	path := "/dc/static/js/jquery-1.11.0.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-1.11.0.js"
 	name := "static/js/jquery-1.11.0.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1986,7 +1986,7 @@ func staticJsJquery1110Js() (*asset, error) {
 
 // staticJsJquery191MinJs reads file data from disk. It returns an error on failure.
 func staticJsJquery191MinJs() (*asset, error) {
-	path := "/dc/static/js/jquery-1.9.1.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-1.9.1.min.js"
 	name := "static/js/jquery-1.9.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2004,7 +2004,7 @@ func staticJsJquery191MinJs() (*asset, error) {
 
 // staticJsJqueryUiSlideraccessJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiSlideraccessJs() (*asset, error) {
-	path := "/dc/static/js/jquery-ui-sliderAccess.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-ui-sliderAccess.js"
 	name := "static/js/jquery-ui-sliderAccess.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2022,7 +2022,7 @@ func staticJsJqueryUiSlideraccessJs() (*asset, error) {
 
 // staticJsJqueryUiTimepickerAddonJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiTimepickerAddonJs() (*asset, error) {
-	path := "/dc/static/js/jquery-ui-timepicker-addon.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-ui-timepicker-addon.js"
 	name := "static/js/jquery-ui-timepicker-addon.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2040,7 +2040,7 @@ func staticJsJqueryUiTimepickerAddonJs() (*asset, error) {
 
 // staticJsJqueryUiMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiMinJs() (*asset, error) {
-	path := "/dc/static/js/jquery-ui.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery-ui.min.js"
 	name := "static/js/jquery-ui.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2058,7 +2058,7 @@ func staticJsJqueryUiMinJs() (*asset, error) {
 
 // staticJsJqueryJcropJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryJcropJs() (*asset, error) {
-	path := "/dc/static/js/jquery.Jcrop.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.Jcrop.js"
 	name := "static/js/jquery.Jcrop.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2076,7 +2076,7 @@ func staticJsJqueryJcropJs() (*asset, error) {
 
 // staticJsJqueryDatatablesJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryDatatablesJs() (*asset, error) {
-	path := "/dc/static/js/jquery.dataTables.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.dataTables.js"
 	name := "static/js/jquery.dataTables.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2094,7 +2094,7 @@ func staticJsJqueryDatatablesJs() (*asset, error) {
 
 // staticJsJqueryFlotJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryFlotJs() (*asset, error) {
-	path := "/dc/static/js/jquery.flot.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.flot.js"
 	name := "static/js/jquery.flot.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2112,7 +2112,7 @@ func staticJsJqueryFlotJs() (*asset, error) {
 
 // staticJsJqueryJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryJs() (*asset, error) {
-	path := "/dc/static/js/jquery.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.js"
 	name := "static/js/jquery.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2130,7 +2130,7 @@ func staticJsJqueryJs() (*asset, error) {
 
 // staticJsJqueryMetismenuJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryMetismenuJs() (*asset, error) {
-	path := "/dc/static/js/jquery.metisMenu.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.metisMenu.js"
 	name := "static/js/jquery.metisMenu.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2148,7 +2148,7 @@ func staticJsJqueryMetismenuJs() (*asset, error) {
 
 // staticJsJqueryMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryMinJs() (*asset, error) {
-	path := "/dc/static/js/jquery.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.min.js"
 	name := "static/js/jquery.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2166,7 +2166,7 @@ func staticJsJqueryMinJs() (*asset, error) {
 
 // staticJsJqueryQtipMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryQtipMinJs() (*asset, error) {
-	path := "/dc/static/js/jquery.qtip.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.qtip.min.js"
 	name := "static/js/jquery.qtip.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2184,7 +2184,7 @@ func staticJsJqueryQtipMinJs() (*asset, error) {
 
 // staticJsJqueryTooltipsterMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryTooltipsterMinJs() (*asset, error) {
-	path := "/dc/static/js/jquery.tooltipster.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.tooltipster.min.js"
 	name := "static/js/jquery.tooltipster.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2202,7 +2202,7 @@ func staticJsJqueryTooltipsterMinJs() (*asset, error) {
 
 // staticJsJqueryWebcamAs3Js reads file data from disk. It returns an error on failure.
 func staticJsJqueryWebcamAs3Js() (*asset, error) {
-	path := "/dc/static/js/jquery.webcam.as3.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery.webcam.as3.js"
 	name := "static/js/jquery.webcam.as3.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2220,7 +2220,7 @@ func staticJsJqueryWebcamAs3Js() (*asset, error) {
 
 // staticJsJquery_002Js reads file data from disk. It returns an error on failure.
 func staticJsJquery_002Js() (*asset, error) {
-	path := "/dc/static/js/jquery_002.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jquery_002.js"
 	name := "static/js/jquery_002.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2238,7 +2238,7 @@ func staticJsJquery_002Js() (*asset, error) {
 
 // staticJsJsJs reads file data from disk. It returns an error on failure.
 func staticJsJsJs() (*asset, error) {
-	path := "/dc/static/js/js.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/js.js"
 	name := "static/js/js.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2256,7 +2256,7 @@ func staticJsJsJs() (*asset, error) {
 
 // staticJsJsbnJs reads file data from disk. It returns an error on failure.
 func staticJsJsbnJs() (*asset, error) {
-	path := "/dc/static/js/jsbn.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jsbn.js"
 	name := "static/js/jsbn.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2274,7 +2274,7 @@ func staticJsJsbnJs() (*asset, error) {
 
 // staticJsJsbn2Js reads file data from disk. It returns an error on failure.
 func staticJsJsbn2Js() (*asset, error) {
-	path := "/dc/static/js/jsbn2.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/jsbn2.js"
 	name := "static/js/jsbn2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2292,7 +2292,7 @@ func staticJsJsbn2Js() (*asset, error) {
 
 // staticJsMarkerclustererJs reads file data from disk. It returns an error on failure.
 func staticJsMarkerclustererJs() (*asset, error) {
-	path := "/dc/static/js/markerclusterer.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/markerclusterer.js"
 	name := "static/js/markerclusterer.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2310,7 +2310,7 @@ func staticJsMarkerclustererJs() (*asset, error) {
 
 // staticJsMcryptJs reads file data from disk. It returns an error on failure.
 func staticJsMcryptJs() (*asset, error) {
-	path := "/dc/static/js/mcrypt.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/mcrypt.js"
 	name := "static/js/mcrypt.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2328,7 +2328,7 @@ func staticJsMcryptJs() (*asset, error) {
 
 // staticJsMd5Js reads file data from disk. It returns an error on failure.
 func staticJsMd5Js() (*asset, error) {
-	path := "/dc/static/js/md5.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/md5.js"
 	name := "static/js/md5.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2346,7 +2346,7 @@ func staticJsMd5Js() (*asset, error) {
 
 // staticJsPluginsFlotExcanvasMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotExcanvasMinJs() (*asset, error) {
-	path := "/dc/static/js/plugins/flot/excanvas.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/flot/excanvas.min.js"
 	name := "static/js/plugins/flot/excanvas.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2364,7 +2364,7 @@ func staticJsPluginsFlotExcanvasMinJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotJs() (*asset, error) {
-	path := "/dc/static/js/plugins/flot/jquery.flot.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/flot/jquery.flot.js"
 	name := "static/js/plugins/flot/jquery.flot.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2382,7 +2382,7 @@ func staticJsPluginsFlotJqueryFlotJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotPieJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotPieJs() (*asset, error) {
-	path := "/dc/static/js/plugins/flot/jquery.flot.pie.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/flot/jquery.flot.pie.js"
 	name := "static/js/plugins/flot/jquery.flot.pie.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2400,7 +2400,7 @@ func staticJsPluginsFlotJqueryFlotPieJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotResizeJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotResizeJs() (*asset, error) {
-	path := "/dc/static/js/plugins/flot/jquery.flot.resize.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/flot/jquery.flot.resize.js"
 	name := "static/js/plugins/flot/jquery.flot.resize.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2418,7 +2418,7 @@ func staticJsPluginsFlotJqueryFlotResizeJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotTooltipMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotTooltipMinJs() (*asset, error) {
-	path := "/dc/static/js/plugins/flot/jquery.flot.tooltip.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/flot/jquery.flot.tooltip.min.js"
 	name := "static/js/plugins/flot/jquery.flot.tooltip.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2436,7 +2436,7 @@ func staticJsPluginsFlotJqueryFlotTooltipMinJs() (*asset, error) {
 
 // staticJsPluginsMetismenuMetismenuMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsMetismenuMetismenuMinJs() (*asset, error) {
-	path := "/dc/static/js/plugins/metisMenu/metisMenu.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/metisMenu/metisMenu.min.js"
 	name := "static/js/plugins/metisMenu/metisMenu.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2454,7 +2454,7 @@ func staticJsPluginsMetismenuMetismenuMinJs() (*asset, error) {
 
 // staticJsPluginsModalBootstrapModalJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsModalBootstrapModalJs() (*asset, error) {
-	path := "/dc/static/js/plugins/modal/bootstrap-modal.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/modal/bootstrap-modal.js"
 	name := "static/js/plugins/modal/bootstrap-modal.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2472,7 +2472,7 @@ func staticJsPluginsModalBootstrapModalJs() (*asset, error) {
 
 // staticJsPluginsModalBootstrapModalmanagerJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsModalBootstrapModalmanagerJs() (*asset, error) {
-	path := "/dc/static/js/plugins/modal/bootstrap-modalmanager.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/plugins/modal/bootstrap-modalmanager.js"
 	name := "static/js/plugins/modal/bootstrap-modalmanager.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2490,7 +2490,7 @@ func staticJsPluginsModalBootstrapModalmanagerJs() (*asset, error) {
 
 // staticJsPrng4Js reads file data from disk. It returns an error on failure.
 func staticJsPrng4Js() (*asset, error) {
-	path := "/dc/static/js/prng4.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/prng4.js"
 	name := "static/js/prng4.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2508,7 +2508,7 @@ func staticJsPrng4Js() (*asset, error) {
 
 // staticJsRespondMinJs reads file data from disk. It returns an error on failure.
 func staticJsRespondMinJs() (*asset, error) {
-	path := "/dc/static/js/respond.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/respond.min.js"
 	name := "static/js/respond.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2526,7 +2526,7 @@ func staticJsRespondMinJs() (*asset, error) {
 
 // staticJsRijndaelJs reads file data from disk. It returns an error on failure.
 func staticJsRijndaelJs() (*asset, error) {
-	path := "/dc/static/js/rijndael.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rijndael.js"
 	name := "static/js/rijndael.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2544,7 +2544,7 @@ func staticJsRijndaelJs() (*asset, error) {
 
 // staticJsRipemd160Js reads file data from disk. It returns an error on failure.
 func staticJsRipemd160Js() (*asset, error) {
-	path := "/dc/static/js/ripemd160.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/ripemd160.js"
 	name := "static/js/ripemd160.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2562,7 +2562,7 @@ func staticJsRipemd160Js() (*asset, error) {
 
 // staticJsRngJs reads file data from disk. It returns an error on failure.
 func staticJsRngJs() (*asset, error) {
-	path := "/dc/static/js/rng.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rng.js"
 	name := "static/js/rng.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2580,7 +2580,7 @@ func staticJsRngJs() (*asset, error) {
 
 // staticJsRsaJs reads file data from disk. It returns an error on failure.
 func staticJsRsaJs() (*asset, error) {
-	path := "/dc/static/js/rsa.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsa.js"
 	name := "static/js/rsa.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2598,7 +2598,7 @@ func staticJsRsaJs() (*asset, error) {
 
 // staticJsRsa2Js reads file data from disk. It returns an error on failure.
 func staticJsRsa2Js() (*asset, error) {
-	path := "/dc/static/js/rsa2.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsa2.js"
 	name := "static/js/rsa2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2616,7 +2616,7 @@ func staticJsRsa2Js() (*asset, error) {
 
 // staticJsRsapem11Js reads file data from disk. It returns an error on failure.
 func staticJsRsapem11Js() (*asset, error) {
-	path := "/dc/static/js/rsapem-1.1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsapem-1.1.js"
 	name := "static/js/rsapem-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2634,7 +2634,7 @@ func staticJsRsapem11Js() (*asset, error) {
 
 // staticJsRsapem11MinJs reads file data from disk. It returns an error on failure.
 func staticJsRsapem11MinJs() (*asset, error) {
-	path := "/dc/static/js/rsapem-1.1.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsapem-1.1.min.js"
 	name := "static/js/rsapem-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2652,7 +2652,7 @@ func staticJsRsapem11MinJs() (*asset, error) {
 
 // staticJsRsapem1Js reads file data from disk. It returns an error on failure.
 func staticJsRsapem1Js() (*asset, error) {
-	path := "/dc/static/js/rsapem-1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsapem-1.js"
 	name := "static/js/rsapem-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2670,7 +2670,7 @@ func staticJsRsapem1Js() (*asset, error) {
 
 // staticJsRsasign12Js reads file data from disk. It returns an error on failure.
 func staticJsRsasign12Js() (*asset, error) {
-	path := "/dc/static/js/rsasign-1.2.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsasign-1.2.js"
 	name := "static/js/rsasign-1.2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2688,7 +2688,7 @@ func staticJsRsasign12Js() (*asset, error) {
 
 // staticJsRsasign12MinJs reads file data from disk. It returns an error on failure.
 func staticJsRsasign12MinJs() (*asset, error) {
-	path := "/dc/static/js/rsasign-1.2.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsasign-1.2.min.js"
 	name := "static/js/rsasign-1.2.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2706,7 +2706,7 @@ func staticJsRsasign12MinJs() (*asset, error) {
 
 // staticJsRsasign1Js reads file data from disk. It returns an error on failure.
 func staticJsRsasign1Js() (*asset, error) {
-	path := "/dc/static/js/rsasign-1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/rsasign-1.js"
 	name := "static/js/rsasign-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2724,7 +2724,7 @@ func staticJsRsasign1Js() (*asset, error) {
 
 // staticJsSas3camJs reads file data from disk. It returns an error on failure.
 func staticJsSas3camJs() (*asset, error) {
-	path := "/dc/static/js/sAS3Cam.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sAS3Cam.js"
 	name := "static/js/sAS3Cam.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2742,7 +2742,7 @@ func staticJsSas3camJs() (*asset, error) {
 
 // staticJsSbAdmin2Js reads file data from disk. It returns an error on failure.
 func staticJsSbAdmin2Js() (*asset, error) {
-	path := "/dc/static/js/sb-admin-2.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sb-admin-2.js"
 	name := "static/js/sb-admin-2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2760,7 +2760,7 @@ func staticJsSbAdmin2Js() (*asset, error) {
 
 // staticJsSbAdminJs reads file data from disk. It returns an error on failure.
 func staticJsSbAdminJs() (*asset, error) {
-	path := "/dc/static/js/sb-admin.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sb-admin.js"
 	name := "static/js/sb-admin.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2778,7 +2778,7 @@ func staticJsSbAdminJs() (*asset, error) {
 
 // staticJsSha1Js reads file data from disk. It returns an error on failure.
 func staticJsSha1Js() (*asset, error) {
-	path := "/dc/static/js/sha1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sha1.js"
 	name := "static/js/sha1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2796,7 +2796,7 @@ func staticJsSha1Js() (*asset, error) {
 
 // staticJsSha256Js reads file data from disk. It returns an error on failure.
 func staticJsSha256Js() (*asset, error) {
-	path := "/dc/static/js/sha256.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sha256.js"
 	name := "static/js/sha256.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2814,7 +2814,7 @@ func staticJsSha256Js() (*asset, error) {
 
 // staticJsSha512Js reads file data from disk. It returns an error on failure.
 func staticJsSha512Js() (*asset, error) {
-	path := "/dc/static/js/sha512.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/sha512.js"
 	name := "static/js/sha512.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2832,7 +2832,7 @@ func staticJsSha512Js() (*asset, error) {
 
 // staticJsSpinJs reads file data from disk. It returns an error on failure.
 func staticJsSpinJs() (*asset, error) {
-	path := "/dc/static/js/spin.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/spin.js"
 	name := "static/js/spin.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2850,7 +2850,7 @@ func staticJsSpinJs() (*asset, error) {
 
 // staticJsSpotsJs reads file data from disk. It returns an error on failure.
 func staticJsSpotsJs() (*asset, error) {
-	path := "/dc/static/js/spots.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/spots.js"
 	name := "static/js/spots.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2868,7 +2868,7 @@ func staticJsSpotsJs() (*asset, error) {
 
 // staticJsStacktableJs reads file data from disk. It returns an error on failure.
 func staticJsStacktableJs() (*asset, error) {
-	path := "/dc/static/js/stacktable.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/stacktable.js"
 	name := "static/js/stacktable.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2886,7 +2886,7 @@ func staticJsStacktableJs() (*asset, error) {
 
 // staticJsUnixtimeJs reads file data from disk. It returns an error on failure.
 func staticJsUnixtimeJs() (*asset, error) {
-	path := "/dc/static/js/unixtime.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/unixtime.js"
 	name := "static/js/unixtime.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2904,7 +2904,7 @@ func staticJsUnixtimeJs() (*asset, error) {
 
 // staticJsUploaderJs reads file data from disk. It returns an error on failure.
 func staticJsUploaderJs() (*asset, error) {
-	path := "/dc/static/js/uploader.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/uploader.js"
 	name := "static/js/uploader.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2922,7 +2922,7 @@ func staticJsUploaderJs() (*asset, error) {
 
 // staticJsWorkerJs reads file data from disk. It returns an error on failure.
 func staticJsWorkerJs() (*asset, error) {
-	path := "/dc/static/js/worker.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/worker.js"
 	name := "static/js/worker.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2940,7 +2940,7 @@ func staticJsWorkerJs() (*asset, error) {
 
 // staticJsX50911Js reads file data from disk. It returns an error on failure.
 func staticJsX50911Js() (*asset, error) {
-	path := "/dc/static/js/x509-1.1.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/x509-1.1.js"
 	name := "static/js/x509-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2958,7 +2958,7 @@ func staticJsX50911Js() (*asset, error) {
 
 // staticJsX50911MinJs reads file data from disk. It returns an error on failure.
 func staticJsX50911MinJs() (*asset, error) {
-	path := "/dc/static/js/x509-1.1.min.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/x509-1.1.min.js"
 	name := "static/js/x509-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2976,7 +2976,7 @@ func staticJsX50911MinJs() (*asset, error) {
 
 // staticJsYoutube_webcamJs reads file data from disk. It returns an error on failure.
 func staticJsYoutube_webcamJs() (*asset, error) {
-	path := "/dc/static/js/youtube_webcam.js"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/js/youtube_webcam.js"
 	name := "static/js/youtube_webcam.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2994,7 +2994,7 @@ func staticJsYoutube_webcamJs() (*asset, error) {
 
 // staticLang1Ini reads file data from disk. It returns an error on failure.
 func staticLang1Ini() (*asset, error) {
-	path := "/dc/static/lang/1.ini"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/lang/1.ini"
 	name := "static/lang/1.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3012,7 +3012,7 @@ func staticLang1Ini() (*asset, error) {
 
 // staticLang42Ini reads file data from disk. It returns an error on failure.
 func staticLang42Ini() (*asset, error) {
-	path := "/dc/static/lang/42.ini"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/lang/42.ini"
 	name := "static/lang/42.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3030,7 +3030,7 @@ func staticLang42Ini() (*asset, error) {
 
 // staticLangEnUsAllJson reads file data from disk. It returns an error on failure.
 func staticLangEnUsAllJson() (*asset, error) {
-	path := "/dc/static/lang/en-us.all.json"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/lang/en-us.all.json"
 	name := "static/lang/en-us.all.json"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3048,7 +3048,7 @@ func staticLangEnUsAllJson() (*asset, error) {
 
 // staticLangLocale_enUsIni reads file data from disk. It returns an error on failure.
 func staticLangLocale_enUsIni() (*asset, error) {
-	path := "/dc/static/lang/locale_en-US.ini"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/lang/locale_en-US.ini"
 	name := "static/lang/locale_en-US.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3066,7 +3066,7 @@ func staticLangLocale_enUsIni() (*asset, error) {
 
 // staticLangLocale_ruRuIni reads file data from disk. It returns an error on failure.
 func staticLangLocale_ruRuIni() (*asset, error) {
-	path := "/dc/static/lang/locale_ru-RU.ini"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/lang/locale_ru-RU.ini"
 	name := "static/lang/locale_ru-RU.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3084,7 +3084,7 @@ func staticLangLocale_ruRuIni() (*asset, error) {
 
 // staticNodesInc reads file data from disk. It returns an error on failure.
 func staticNodesInc() (*asset, error) {
-	path := "/dc/static/nodes.inc"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/nodes.inc"
 	name := "static/nodes.inc"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3102,7 +3102,7 @@ func staticNodesInc() (*asset, error) {
 
 // staticSwfSas3camSwf reads file data from disk. It returns an error on failure.
 func staticSwfSas3camSwf() (*asset, error) {
-	path := "/dc/static/swf/sAS3Cam.swf"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/swf/sAS3Cam.swf"
 	name := "static/swf/sAS3Cam.swf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3120,7 +3120,7 @@ func staticSwfSas3camSwf() (*asset, error) {
 
 // staticTemplatesDirectory reads file data from disk. It returns an error on failure.
 func staticTemplatesDirectory() (*asset, error) {
-	path := "/dc/static/templates/.directory"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/.directory"
 	name := "static/templates/.directory"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3138,7 +3138,7 @@ func staticTemplatesDirectory() (*asset, error) {
 
 // staticTemplatesAbuseHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAbuseHtml() (*asset, error) {
-	path := "/dc/static/templates/abuse.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/abuse.html"
 	name := "static/templates/abuse.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3156,7 +3156,7 @@ func staticTemplatesAbuseHtml() (*asset, error) {
 
 // staticTemplatesAdd_cf_project_dataHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAdd_cf_project_dataHtml() (*asset, error) {
-	path := "/dc/static/templates/add_cf_project_data.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/add_cf_project_data.html"
 	name := "static/templates/add_cf_project_data.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3174,7 +3174,7 @@ func staticTemplatesAdd_cf_project_dataHtml() (*asset, error) {
 
 // staticTemplatesAdmin_variablesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAdmin_variablesHtml() (*asset, error) {
-	path := "/dc/static/templates/admin_variables.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/admin_variables.html"
 	name := "static/templates/admin_variables.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3192,7 +3192,7 @@ func staticTemplatesAdmin_variablesHtml() (*asset, error) {
 
 // staticTemplatesAlert_successHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAlert_successHtml() (*asset, error) {
-	path := "/dc/static/templates/alert_success.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/alert_success.html"
 	name := "static/templates/alert_success.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3210,7 +3210,7 @@ func staticTemplatesAlert_successHtml() (*asset, error) {
 
 // staticTemplatesArbitrationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitrationHtml() (*asset, error) {
-	path := "/dc/static/templates/arbitration.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/arbitration.html"
 	name := "static/templates/arbitration.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3228,7 +3228,7 @@ func staticTemplatesArbitrationHtml() (*asset, error) {
 
 // staticTemplatesArbitration_arbitratorHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_arbitratorHtml() (*asset, error) {
-	path := "/dc/static/templates/arbitration_arbitrator.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/arbitration_arbitrator.html"
 	name := "static/templates/arbitration_arbitrator.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3246,7 +3246,7 @@ func staticTemplatesArbitration_arbitratorHtml() (*asset, error) {
 
 // staticTemplatesArbitration_buyerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_buyerHtml() (*asset, error) {
-	path := "/dc/static/templates/arbitration_buyer.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/arbitration_buyer.html"
 	name := "static/templates/arbitration_buyer.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3264,7 +3264,7 @@ func staticTemplatesArbitration_buyerHtml() (*asset, error) {
 
 // staticTemplatesArbitration_sellerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_sellerHtml() (*asset, error) {
-	path := "/dc/static/templates/arbitration_seller.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/arbitration_seller.html"
 	name := "static/templates/arbitration_seller.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3282,7 +3282,7 @@ func staticTemplatesArbitration_sellerHtml() (*asset, error) {
 
 // staticTemplatesAssignmentsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignmentsHtml() (*asset, error) {
-	path := "/dc/static/templates/assignments.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/assignments.html"
 	name := "static/templates/assignments.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3300,7 +3300,7 @@ func staticTemplatesAssignmentsHtml() (*asset, error) {
 
 // staticTemplatesAssignments_new_minerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignments_new_minerHtml() (*asset, error) {
-	path := "/dc/static/templates/assignments_new_miner.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/assignments_new_miner.html"
 	name := "static/templates/assignments_new_miner.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3318,7 +3318,7 @@ func staticTemplatesAssignments_new_minerHtml() (*asset, error) {
 
 // staticTemplatesAssignments_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignments_promised_amountHtml() (*asset, error) {
-	path := "/dc/static/templates/assignments_promised_amount.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/assignments_promised_amount.html"
 	name := "static/templates/assignments_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3336,7 +3336,7 @@ func staticTemplatesAssignments_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesAvailable_keysHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAvailable_keysHtml() (*asset, error) {
-	path := "/dc/static/templates/available_keys.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/available_keys.html"
 	name := "static/templates/available_keys.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3354,7 +3354,7 @@ func staticTemplatesAvailable_keysHtml() (*asset, error) {
 
 // staticTemplatesBlock_explorerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesBlock_explorerHtml() (*asset, error) {
-	path := "/dc/static/templates/block_explorer.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/block_explorer.html"
 	name := "static/templates/block_explorer.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3372,7 +3372,7 @@ func staticTemplatesBlock_explorerHtml() (*asset, error) {
 
 // staticTemplatesBug_reportingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesBug_reportingHtml() (*asset, error) {
-	path := "/dc/static/templates/bug_reporting.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/bug_reporting.html"
 	name := "static/templates/bug_reporting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3390,7 +3390,7 @@ func staticTemplatesBug_reportingHtml() (*asset, error) {
 
 // staticTemplatesCash_request_inHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCash_request_inHtml() (*asset, error) {
-	path := "/dc/static/templates/cash_request_in.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cash_request_in.html"
 	name := "static/templates/cash_request_in.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3408,7 +3408,7 @@ func staticTemplatesCash_request_inHtml() (*asset, error) {
 
 // staticTemplatesCash_request_outHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCash_request_outHtml() (*asset, error) {
-	path := "/dc/static/templates/cash_request_out.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cash_request_out.html"
 	name := "static/templates/cash_request_out.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3426,7 +3426,7 @@ func staticTemplatesCash_request_outHtml() (*asset, error) {
 
 // staticTemplatesCf_catalogHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_catalogHtml() (*asset, error) {
-	path := "/dc/static/templates/cf_catalog.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cf_catalog.html"
 	name := "static/templates/cf_catalog.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3444,7 +3444,7 @@ func staticTemplatesCf_catalogHtml() (*asset, error) {
 
 // staticTemplatesCf_page_previewHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_page_previewHtml() (*asset, error) {
-	path := "/dc/static/templates/cf_page_preview.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cf_page_preview.html"
 	name := "static/templates/cf_page_preview.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3462,7 +3462,7 @@ func staticTemplatesCf_page_previewHtml() (*asset, error) {
 
 // staticTemplatesCf_project_change_categoryHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_project_change_categoryHtml() (*asset, error) {
-	path := "/dc/static/templates/cf_project_change_category.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cf_project_change_category.html"
 	name := "static/templates/cf_project_change_category.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3480,7 +3480,7 @@ func staticTemplatesCf_project_change_categoryHtml() (*asset, error) {
 
 // staticTemplatesCf_startHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_startHtml() (*asset, error) {
-	path := "/dc/static/templates/cf_start.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/cf_start.html"
 	name := "static/templates/cf_start.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3498,7 +3498,7 @@ func staticTemplatesCf_startHtml() (*asset, error) {
 
 // staticTemplatesChange_arbitrator_conditionsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_arbitrator_conditionsHtml() (*asset, error) {
-	path := "/dc/static/templates/change_arbitrator_conditions.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_arbitrator_conditions.html"
 	name := "static/templates/change_arbitrator_conditions.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3516,7 +3516,7 @@ func staticTemplatesChange_arbitrator_conditionsHtml() (*asset, error) {
 
 // staticTemplatesChange_avatarHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_avatarHtml() (*asset, error) {
-	path := "/dc/static/templates/change_avatar.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_avatar.html"
 	name := "static/templates/change_avatar.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3534,7 +3534,7 @@ func staticTemplatesChange_avatarHtml() (*asset, error) {
 
 // staticTemplatesChange_commissionHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_commissionHtml() (*asset, error) {
-	path := "/dc/static/templates/change_commission.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_commission.html"
 	name := "static/templates/change_commission.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3552,7 +3552,7 @@ func staticTemplatesChange_commissionHtml() (*asset, error) {
 
 // staticTemplatesChange_country_raceHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_country_raceHtml() (*asset, error) {
-	path := "/dc/static/templates/change_country_race.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_country_race.html"
 	name := "static/templates/change_country_race.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3570,7 +3570,7 @@ func staticTemplatesChange_country_raceHtml() (*asset, error) {
 
 // staticTemplatesChange_creditorHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_creditorHtml() (*asset, error) {
-	path := "/dc/static/templates/change_creditor.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_creditor.html"
 	name := "static/templates/change_creditor.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3588,7 +3588,7 @@ func staticTemplatesChange_creditorHtml() (*asset, error) {
 
 // staticTemplatesChange_geolocationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_geolocationHtml() (*asset, error) {
-	path := "/dc/static/templates/change_geolocation.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_geolocation.html"
 	name := "static/templates/change_geolocation.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3606,7 +3606,7 @@ func staticTemplatesChange_geolocationHtml() (*asset, error) {
 
 // staticTemplatesChange_hostHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_hostHtml() (*asset, error) {
-	path := "/dc/static/templates/change_host.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_host.html"
 	name := "static/templates/change_host.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3624,7 +3624,7 @@ func staticTemplatesChange_hostHtml() (*asset, error) {
 
 // staticTemplatesChange_key_closeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_key_closeHtml() (*asset, error) {
-	path := "/dc/static/templates/change_key_close.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_key_close.html"
 	name := "static/templates/change_key_close.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3642,7 +3642,7 @@ func staticTemplatesChange_key_closeHtml() (*asset, error) {
 
 // staticTemplatesChange_key_requestHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_key_requestHtml() (*asset, error) {
-	path := "/dc/static/templates/change_key_request.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_key_request.html"
 	name := "static/templates/change_key_request.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3660,7 +3660,7 @@ func staticTemplatesChange_key_requestHtml() (*asset, error) {
 
 // staticTemplatesChange_money_back_timeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_money_back_timeHtml() (*asset, error) {
-	path := "/dc/static/templates/change_money_back_time.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_money_back_time.html"
 	name := "static/templates/change_money_back_time.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3678,7 +3678,7 @@ func staticTemplatesChange_money_back_timeHtml() (*asset, error) {
 
 // staticTemplatesChange_node_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_node_keyHtml() (*asset, error) {
-	path := "/dc/static/templates/change_node_key.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_node_key.html"
 	name := "static/templates/change_node_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3696,7 +3696,7 @@ func staticTemplatesChange_node_keyHtml() (*asset, error) {
 
 // staticTemplatesChange_primary_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_primary_keyHtml() (*asset, error) {
-	path := "/dc/static/templates/change_primary_key.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_primary_key.html"
 	name := "static/templates/change_primary_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3714,7 +3714,7 @@ func staticTemplatesChange_primary_keyHtml() (*asset, error) {
 
 // staticTemplatesChange_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_promised_amountHtml() (*asset, error) {
-	path := "/dc/static/templates/change_promised_amount.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/change_promised_amount.html"
 	name := "static/templates/change_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3732,7 +3732,7 @@ func staticTemplatesChange_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesChatHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChatHtml() (*asset, error) {
-	path := "/dc/static/templates/chat.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/chat.html"
 	name := "static/templates/chat.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3750,7 +3750,7 @@ func staticTemplatesChatHtml() (*asset, error) {
 
 // staticTemplatesCreditsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCreditsHtml() (*asset, error) {
-	path := "/dc/static/templates/credits.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/credits.html"
 	name := "static/templates/credits.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3768,7 +3768,7 @@ func staticTemplatesCreditsHtml() (*asset, error) {
 
 // staticTemplatesCurrency_exchangeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCurrency_exchangeHtml() (*asset, error) {
-	path := "/dc/static/templates/currency_exchange.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/currency_exchange.html"
 	name := "static/templates/currency_exchange.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3786,7 +3786,7 @@ func staticTemplatesCurrency_exchangeHtml() (*asset, error) {
 
 // staticTemplatesCurrency_exchange_deleteHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCurrency_exchange_deleteHtml() (*asset, error) {
-	path := "/dc/static/templates/currency_exchange_delete.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/currency_exchange_delete.html"
 	name := "static/templates/currency_exchange_delete.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3804,7 +3804,7 @@ func staticTemplatesCurrency_exchange_deleteHtml() (*asset, error) {
 
 // staticTemplatesDb_infoHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDb_infoHtml() (*asset, error) {
-	path := "/dc/static/templates/db_info.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/db_info.html"
 	name := "static/templates/db_info.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3822,7 +3822,7 @@ func staticTemplatesDb_infoHtml() (*asset, error) {
 
 // staticTemplatesDb_info_nodesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDb_info_nodesHtml() (*asset, error) {
-	path := "/dc/static/templates/db_info_nodes.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/db_info_nodes.html"
 	name := "static/templates/db_info_nodes.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3840,7 +3840,7 @@ func staticTemplatesDb_info_nodesHtml() (*asset, error) {
 
 // staticTemplatesDel_cf_fundingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_cf_fundingHtml() (*asset, error) {
-	path := "/dc/static/templates/del_cf_funding.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/del_cf_funding.html"
 	name := "static/templates/del_cf_funding.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3858,7 +3858,7 @@ func staticTemplatesDel_cf_fundingHtml() (*asset, error) {
 
 // staticTemplatesDel_cf_projectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_cf_projectHtml() (*asset, error) {
-	path := "/dc/static/templates/del_cf_project.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/del_cf_project.html"
 	name := "static/templates/del_cf_project.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3876,7 +3876,7 @@ func staticTemplatesDel_cf_projectHtml() (*asset, error) {
 
 // staticTemplatesDel_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_creditHtml() (*asset, error) {
-	path := "/dc/static/templates/del_credit.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/del_credit.html"
 	name := "static/templates/del_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3894,7 +3894,7 @@ func staticTemplatesDel_creditHtml() (*asset, error) {
 
 // staticTemplatesDel_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_promised_amountHtml() (*asset, error) {
-	path := "/dc/static/templates/del_promised_amount.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/del_promised_amount.html"
 	name := "static/templates/del_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3912,7 +3912,7 @@ func staticTemplatesDel_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesE_mainHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_mainHtml() (*asset, error) {
-	path := "/dc/static/templates/e_main.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_main.html"
 	name := "static/templates/e_main.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3930,7 +3930,7 @@ func staticTemplatesE_mainHtml() (*asset, error) {
 
 // staticTemplatesE_my_financeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_financeHtml() (*asset, error) {
-	path := "/dc/static/templates/e_my_finance.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_my_finance.html"
 	name := "static/templates/e_my_finance.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3948,7 +3948,7 @@ func staticTemplatesE_my_financeHtml() (*asset, error) {
 
 // staticTemplatesE_my_historyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_historyHtml() (*asset, error) {
-	path := "/dc/static/templates/e_my_history.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_my_history.html"
 	name := "static/templates/e_my_history.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3966,7 +3966,7 @@ func staticTemplatesE_my_historyHtml() (*asset, error) {
 
 // staticTemplatesE_my_ordersHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_ordersHtml() (*asset, error) {
-	path := "/dc/static/templates/e_my_orders.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_my_orders.html"
 	name := "static/templates/e_my_orders.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3984,7 +3984,7 @@ func staticTemplatesE_my_ordersHtml() (*asset, error) {
 
 // staticTemplatesE_pagesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_pagesHtml() (*asset, error) {
-	path := "/dc/static/templates/e_pages.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_pages.html"
 	name := "static/templates/e_pages.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4002,7 +4002,7 @@ func staticTemplatesE_pagesHtml() (*asset, error) {
 
 // staticTemplatesE_redirectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_redirectHtml() (*asset, error) {
-	path := "/dc/static/templates/e_redirect.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/e_redirect.html"
 	name := "static/templates/e_redirect.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4020,7 +4020,7 @@ func staticTemplatesE_redirectHtml() (*asset, error) {
 
 // staticTemplatesExchange_adminHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesExchange_adminHtml() (*asset, error) {
-	path := "/dc/static/templates/exchange_admin.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/exchange_admin.html"
 	name := "static/templates/exchange_admin.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4038,7 +4038,7 @@ func staticTemplatesExchange_adminHtml() (*asset, error) {
 
 // staticTemplatesFirst_selectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesFirst_selectHtml() (*asset, error) {
-	path := "/dc/static/templates/first_select.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/first_select.html"
 	name := "static/templates/first_select.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4056,7 +4056,7 @@ func staticTemplatesFirst_selectHtml() (*asset, error) {
 
 // staticTemplatesFor_repaid_fixHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesFor_repaid_fixHtml() (*asset, error) {
-	path := "/dc/static/templates/for_repaid_fix.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/for_repaid_fix.html"
 	name := "static/templates/for_repaid_fix.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4074,7 +4074,7 @@ func staticTemplatesFor_repaid_fixHtml() (*asset, error) {
 
 // staticTemplatesHolidays_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesHolidays_listHtml() (*asset, error) {
-	path := "/dc/static/templates/holidays_list.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/holidays_list.html"
 	name := "static/templates/holidays_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4092,7 +4092,7 @@ func staticTemplatesHolidays_listHtml() (*asset, error) {
 
 // staticTemplatesHomeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesHomeHtml() (*asset, error) {
-	path := "/dc/static/templates/home.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/home.html"
 	name := "static/templates/home.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4110,7 +4110,7 @@ func staticTemplatesHomeHtml() (*asset, error) {
 
 // staticTemplatesHome0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesHome0Html() (*asset, error) {
-	path := "/dc/static/templates/home0.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/home0.html"
 	name := "static/templates/home0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4128,7 +4128,7 @@ func staticTemplatesHome0Html() (*asset, error) {
 
 // staticTemplatesIndexHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndexHtml() (*asset, error) {
-	path := "/dc/static/templates/index.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/index.html"
 	name := "static/templates/index.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4146,7 +4146,7 @@ func staticTemplatesIndexHtml() (*asset, error) {
 
 // staticTemplatesIndex_cfHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndex_cfHtml() (*asset, error) {
-	path := "/dc/static/templates/index_cf.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/index_cf.html"
 	name := "static/templates/index_cf.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4164,7 +4164,7 @@ func staticTemplatesIndex_cfHtml() (*asset, error) {
 
 // staticTemplatesIndex_eHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndex_eHtml() (*asset, error) {
-	path := "/dc/static/templates/index_e.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/index_e.html"
 	name := "static/templates/index_e.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4182,7 +4182,7 @@ func staticTemplatesIndex_eHtml() (*asset, error) {
 
 // staticTemplatesInformationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesInformationHtml() (*asset, error) {
-	path := "/dc/static/templates/information.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/information.html"
 	name := "static/templates/information.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4200,7 +4200,7 @@ func staticTemplatesInformationHtml() (*asset, error) {
 
 // staticTemplatesInstall_step_0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesInstall_step_0Html() (*asset, error) {
-	path := "/dc/static/templates/install_step_0.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/install_step_0.html"
 	name := "static/templates/install_step_0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4218,7 +4218,7 @@ func staticTemplatesInstall_step_0Html() (*asset, error) {
 
 // staticTemplatesInstall_step_1Html reads file data from disk. It returns an error on failure.
 func staticTemplatesInstall_step_1Html() (*asset, error) {
-	path := "/dc/static/templates/install_step_1.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/install_step_1.html"
 	name := "static/templates/install_step_1.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4236,7 +4236,7 @@ func staticTemplatesInstall_step_1Html() (*asset, error) {
 
 // staticTemplatesInterfaceHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesInterfaceHtml() (*asset, error) {
-	path := "/dc/static/templates/interface.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/interface.html"
 	name := "static/templates/interface.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4254,7 +4254,7 @@ func staticTemplatesInterfaceHtml() (*asset, error) {
 
 // staticTemplatesLoginHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesLoginHtml() (*asset, error) {
-	path := "/dc/static/templates/login.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/login.html"
 	name := "static/templates/login.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4272,7 +4272,7 @@ func staticTemplatesLoginHtml() (*asset, error) {
 
 // staticTemplatesMenuHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMenuHtml() (*asset, error) {
-	path := "/dc/static/templates/menu.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/menu.html"
 	name := "static/templates/menu.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4290,7 +4290,7 @@ func staticTemplatesMenuHtml() (*asset, error) {
 
 // staticTemplatesMining_menuHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMining_menuHtml() (*asset, error) {
-	path := "/dc/static/templates/mining_menu.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/mining_menu.html"
 	name := "static/templates/mining_menu.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4308,7 +4308,7 @@ func staticTemplatesMining_menuHtml() (*asset, error) {
 
 // staticTemplatesMining_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMining_promised_amountHtml() (*asset, error) {
-	path := "/dc/static/templates/mining_promised_amount.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/mining_promised_amount.html"
 	name := "static/templates/mining_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4326,7 +4326,7 @@ func staticTemplatesMining_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesModalHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesModalHtml() (*asset, error) {
-	path := "/dc/static/templates/modal.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/modal.html"
 	name := "static/templates/modal.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4344,7 +4344,7 @@ func staticTemplatesModalHtml() (*asset, error) {
 
 // staticTemplatesMoney_backHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMoney_backHtml() (*asset, error) {
-	path := "/dc/static/templates/money_back.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/money_back.html"
 	name := "static/templates/money_back.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4362,7 +4362,7 @@ func staticTemplatesMoney_backHtml() (*asset, error) {
 
 // staticTemplatesMoney_back_requestHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMoney_back_requestHtml() (*asset, error) {
-	path := "/dc/static/templates/money_back_request.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/money_back_request.html"
 	name := "static/templates/money_back_request.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4380,7 +4380,7 @@ func staticTemplatesMoney_back_requestHtml() (*asset, error) {
 
 // staticTemplatesMy_cf_projectsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMy_cf_projectsHtml() (*asset, error) {
-	path := "/dc/static/templates/my_cf_projects.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/my_cf_projects.html"
 	name := "static/templates/my_cf_projects.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4398,7 +4398,7 @@ func staticTemplatesMy_cf_projectsHtml() (*asset, error) {
 
 // staticTemplatesNew_cf_projectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_cf_projectHtml() (*asset, error) {
-	path := "/dc/static/templates/new_cf_project.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/new_cf_project.html"
 	name := "static/templates/new_cf_project.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4416,7 +4416,7 @@ func staticTemplatesNew_cf_projectHtml() (*asset, error) {
 
 // staticTemplatesNew_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_creditHtml() (*asset, error) {
-	path := "/dc/static/templates/new_credit.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/new_credit.html"
 	name := "static/templates/new_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4434,7 +4434,7 @@ func staticTemplatesNew_creditHtml() (*asset, error) {
 
 // staticTemplatesNew_holidaysHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_holidaysHtml() (*asset, error) {
-	path := "/dc/static/templates/new_holidays.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/new_holidays.html"
 	name := "static/templates/new_holidays.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4452,7 +4452,7 @@ func staticTemplatesNew_holidaysHtml() (*asset, error) {
 
 // staticTemplatesNew_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_promised_amountHtml() (*asset, error) {
-	path := "/dc/static/templates/new_promised_amount.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/new_promised_amount.html"
 	name := "static/templates/new_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4470,7 +4470,7 @@ func staticTemplatesNew_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesNew_userHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_userHtml() (*asset, error) {
-	path := "/dc/static/templates/new_user.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/new_user.html"
 	name := "static/templates/new_user.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4488,7 +4488,7 @@ func staticTemplatesNew_userHtml() (*asset, error) {
 
 // staticTemplatesNode_configHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNode_configHtml() (*asset, error) {
-	path := "/dc/static/templates/node_config.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/node_config.html"
 	name := "static/templates/node_config.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4506,7 +4506,7 @@ func staticTemplatesNode_configHtml() (*asset, error) {
 
 // staticTemplatesNotificationsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNotificationsHtml() (*asset, error) {
-	path := "/dc/static/templates/notifications.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/notifications.html"
 	name := "static/templates/notifications.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4524,7 +4524,7 @@ func staticTemplatesNotificationsHtml() (*asset, error) {
 
 // staticTemplatesPointsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPointsHtml() (*asset, error) {
-	path := "/dc/static/templates/points.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/points.html"
 	name := "static/templates/points.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4542,7 +4542,7 @@ func staticTemplatesPointsHtml() (*asset, error) {
 
 // staticTemplatesPool_adminHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPool_adminHtml() (*asset, error) {
-	path := "/dc/static/templates/pool_admin.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/pool_admin.html"
 	name := "static/templates/pool_admin.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4560,7 +4560,7 @@ func staticTemplatesPool_adminHtml() (*asset, error) {
 
 // staticTemplatesPool_admin_loginHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPool_admin_loginHtml() (*asset, error) {
-	path := "/dc/static/templates/pool_admin_login.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/pool_admin_login.html"
 	name := "static/templates/pool_admin_login.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4578,7 +4578,7 @@ func staticTemplatesPool_admin_loginHtml() (*asset, error) {
 
 // staticTemplatesProgressHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesProgressHtml() (*asset, error) {
-	path := "/dc/static/templates/progress.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/progress.html"
 	name := "static/templates/progress.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4596,7 +4596,7 @@ func staticTemplatesProgressHtml() (*asset, error) {
 
 // staticTemplatesProgress_barHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesProgress_barHtml() (*asset, error) {
-	path := "/dc/static/templates/progress_bar.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/progress_bar.html"
 	name := "static/templates/progress_bar.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4614,7 +4614,7 @@ func staticTemplatesProgress_barHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_actualizationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_actualizationHtml() (*asset, error) {
-	path := "/dc/static/templates/promised_amount_actualization.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/promised_amount_actualization.html"
 	name := "static/templates/promised_amount_actualization.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4632,7 +4632,7 @@ func staticTemplatesPromised_amount_actualizationHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_listHtml() (*asset, error) {
-	path := "/dc/static/templates/promised_amount_list.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/promised_amount_list.html"
 	name := "static/templates/promised_amount_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4650,7 +4650,7 @@ func staticTemplatesPromised_amount_listHtml() (*asset, error) {
 
 // staticTemplatesRepayment_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRepayment_creditHtml() (*asset, error) {
-	path := "/dc/static/templates/repayment_credit.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/repayment_credit.html"
 	name := "static/templates/repayment_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4668,7 +4668,7 @@ func staticTemplatesRepayment_creditHtml() (*asset, error) {
 
 // staticTemplatesRestoring_accessHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRestoring_accessHtml() (*asset, error) {
-	path := "/dc/static/templates/restoring_access.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/restoring_access.html"
 	name := "static/templates/restoring_access.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4686,7 +4686,7 @@ func staticTemplatesRestoring_accessHtml() (*asset, error) {
 
 // staticTemplatesRewrite_primary_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRewrite_primary_keyHtml() (*asset, error) {
-	path := "/dc/static/templates/rewrite_primary_key.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/rewrite_primary_key.html"
 	name := "static/templates/rewrite_primary_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4704,7 +4704,7 @@ func staticTemplatesRewrite_primary_keyHtml() (*asset, error) {
 
 // staticTemplatesSet_passwordHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSet_passwordHtml() (*asset, error) {
-	path := "/dc/static/templates/set_password.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/set_password.html"
 	name := "static/templates/set_password.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4722,7 +4722,7 @@ func staticTemplatesSet_passwordHtml() (*asset, error) {
 
 // staticTemplatesSetup_passwordHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSetup_passwordHtml() (*asset, error) {
-	path := "/dc/static/templates/setup_password.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/setup_password.html"
 	name := "static/templates/setup_password.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4740,7 +4740,7 @@ func staticTemplatesSetup_passwordHtml() (*asset, error) {
 
 // staticTemplatesSign_up_in_the_poolHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSign_up_in_the_poolHtml() (*asset, error) {
-	path := "/dc/static/templates/sign_up_in_the_pool.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/sign_up_in_the_pool.html"
 	name := "static/templates/sign_up_in_the_pool.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4758,7 +4758,7 @@ func staticTemplatesSign_up_in_the_poolHtml() (*asset, error) {
 
 // staticTemplatesSignaturesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSignaturesHtml() (*asset, error) {
-	path := "/dc/static/templates/signatures.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/signatures.html"
 	name := "static/templates/signatures.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4776,7 +4776,7 @@ func staticTemplatesSignaturesHtml() (*asset, error) {
 
 // staticTemplatesStatisticHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesStatisticHtml() (*asset, error) {
-	path := "/dc/static/templates/statistic.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/statistic.html"
 	name := "static/templates/statistic.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4794,7 +4794,7 @@ func staticTemplatesStatisticHtml() (*asset, error) {
 
 // staticTemplatesStatistic_votingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesStatistic_votingHtml() (*asset, error) {
-	path := "/dc/static/templates/statistic_voting.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/statistic_voting.html"
 	name := "static/templates/statistic_voting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4812,7 +4812,7 @@ func staticTemplatesStatistic_votingHtml() (*asset, error) {
 
 // staticTemplatesUpdating_blockchainHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpdating_blockchainHtml() (*asset, error) {
-	path := "/dc/static/templates/updating_blockchain.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/updating_blockchain.html"
 	name := "static/templates/updating_blockchain.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4830,7 +4830,7 @@ func staticTemplatesUpdating_blockchainHtml() (*asset, error) {
 
 // staticTemplatesUpgradeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgradeHtml() (*asset, error) {
-	path := "/dc/static/templates/upgrade.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade.html"
 	name := "static/templates/upgrade.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4848,7 +4848,7 @@ func staticTemplatesUpgradeHtml() (*asset, error) {
 
 // staticTemplatesUpgrade_0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_0Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_0.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_0.html"
 	name := "static/templates/upgrade_0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4866,7 +4866,7 @@ func staticTemplatesUpgrade_0Html() (*asset, error) {
 
 // staticTemplatesUpgrade_1_and_2Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_1_and_2Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_1_and_2.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_1_and_2.html"
 	name := "static/templates/upgrade_1_and_2.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4884,7 +4884,7 @@ func staticTemplatesUpgrade_1_and_2Html() (*asset, error) {
 
 // staticTemplatesUpgrade_3Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_3Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_3.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_3.html"
 	name := "static/templates/upgrade_3.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4902,7 +4902,7 @@ func staticTemplatesUpgrade_3Html() (*asset, error) {
 
 // staticTemplatesUpgrade_4Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_4Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_4.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_4.html"
 	name := "static/templates/upgrade_4.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4920,7 +4920,7 @@ func staticTemplatesUpgrade_4Html() (*asset, error) {
 
 // staticTemplatesUpgrade_5Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_5Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_5.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_5.html"
 	name := "static/templates/upgrade_5.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4938,7 +4938,7 @@ func staticTemplatesUpgrade_5Html() (*asset, error) {
 
 // staticTemplatesUpgrade_6Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_6Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_6.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_6.html"
 	name := "static/templates/upgrade_6.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4956,7 +4956,7 @@ func staticTemplatesUpgrade_6Html() (*asset, error) {
 
 // staticTemplatesUpgrade_7Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_7Html() (*asset, error) {
-	path := "/dc/static/templates/upgrade_7.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_7.html"
 	name := "static/templates/upgrade_7.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4974,7 +4974,7 @@ func staticTemplatesUpgrade_7Html() (*asset, error) {
 
 // staticTemplatesUpgrade_resendHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_resendHtml() (*asset, error) {
-	path := "/dc/static/templates/upgrade_resend.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/upgrade_resend.html"
 	name := "static/templates/upgrade_resend.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4992,7 +4992,7 @@ func staticTemplatesUpgrade_resendHtml() (*asset, error) {
 
 // staticTemplatesVote_for_meHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVote_for_meHtml() (*asset, error) {
-	path := "/dc/static/templates/vote_for_me.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/vote_for_me.html"
 	name := "static/templates/vote_for_me.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5010,7 +5010,7 @@ func staticTemplatesVote_for_meHtml() (*asset, error) {
 
 // staticTemplatesVotes_exchangeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVotes_exchangeHtml() (*asset, error) {
-	path := "/dc/static/templates/votes_exchange.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/votes_exchange.html"
 	name := "static/templates/votes_exchange.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5028,7 +5028,7 @@ func staticTemplatesVotes_exchangeHtml() (*asset, error) {
 
 // staticTemplatesVotingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVotingHtml() (*asset, error) {
-	path := "/dc/static/templates/voting.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/voting.html"
 	name := "static/templates/voting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5046,7 +5046,7 @@ func staticTemplatesVotingHtml() (*asset, error) {
 
 // staticTemplatesWaiting_accept_new_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesWaiting_accept_new_keyHtml() (*asset, error) {
-	path := "/dc/static/templates/waiting_accept_new_key.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/waiting_accept_new_key.html"
 	name := "static/templates/waiting_accept_new_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5064,7 +5064,7 @@ func staticTemplatesWaiting_accept_new_keyHtml() (*asset, error) {
 
 // staticTemplatesWallets_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesWallets_listHtml() (*asset, error) {
-	path := "/dc/static/templates/wallets_list.html"
+	path := "/home/z/go-projects/src/github.com/c-darwin/dcoin-go/static/templates/wallets_list.html"
 	name := "static/templates/wallets_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {

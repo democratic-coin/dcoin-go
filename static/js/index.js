@@ -20,7 +20,7 @@ function dc_navigate (page, parameters) {
 function map_navigate (page) {
 
     $('#wrapper').spin();
-    //$.getScript("https://maps.googleapis.com/maps/api/js?sensor=false", function(){
+    $.getScript("https://maps.googleapis.com/maps/api/js?sensor=false", function(){
 
         $( "#dc_content" ).load( "content", { tpl_name: page }, function() {
             $('#wrapper').spin(false);
@@ -29,7 +29,7 @@ function map_navigate (page) {
                 $('.sidebar-collapse').collapse('toggle');
             }
         });
-   // });
+    });
 
 }
 

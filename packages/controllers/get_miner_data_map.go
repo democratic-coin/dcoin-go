@@ -6,7 +6,7 @@ import (
 
 func (c *Controller) GetMinerDataMap() (string, error) {
 
-	rows, err := c.Query(c.FormatQuery("SELECT user_id, latitude, longitude FROM miners_data WHERE status  =  'miner' AND user_id>7 AND user_id != 106"))
+	rows, err := c.Query(c.FormatQuery("SELECT user_id, latitude, longitude FROM miners_data WHERE status  =  'miner' AND user_id>7"))
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -21,7 +21,7 @@ func (c *Controller) GetMinerDataMap() (string, error) {
 		result += "{\"user_id\": " + user_id + ",\"longitude\": " + longitude + ", \"latitude\": " + latitude + "},"
 	}
 	if len(result) > 0 {
-		result = `{ "info": [` + result[:len(result)-1] + `}`
+		result = `{ "info": [` + result[:len(result)-1] + `]}`
 	}
 	c.w.Header().Set("Access-Control-Allow-Origin", "*")
 	return string(result), nil
