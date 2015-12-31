@@ -110,7 +110,7 @@ func (c *Controller) CfPagePreview() (string, error) {
 		blurbImg = data["blurb_img"]
 		headImg = data["head_img"]
 		descriptionImg = data["description_img"]
-		picture = data["blurb_img"]
+		picture = data["picture"]
 		videoType = data["video_type"]
 		videoUrlId = data["video_url_id"]
 		newsImg = data["news_img"]
