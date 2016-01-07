@@ -11,8 +11,8 @@ import (
 
 var (
 	log                           = logging.MustGetLogger("daemons")
-	DaemonCh        chan bool     = make(chan bool, 100)
-	AnswerDaemonCh  chan string   = make(chan string, 100)
+	/*DaemonCh        chan bool     = make(chan bool, 100)
+	AnswerDaemonCh  chan string   = make(chan string, 100)*/
 	MonitorDaemonCh chan []string = make(chan []string, 100)
 	configIni       map[string]string
 )
@@ -20,13 +20,15 @@ var (
 type daemon struct {
 	*utils.DCDB
 	goRoutineName  string
-	DaemonCh       chan bool
-	AnswerDaemonCh chan string
+	/*DaemonCh       chan bool
+	AnswerDaemonCh chan string*/
+	chBreaker chan bool
+	chAnswer chan string
 	sleepTime      int
 }
 
 func (d *daemon) dbLock() (error, bool) {
-	return d.DbLock(DaemonCh, AnswerDaemonCh, d.goRoutineName)
+	return d.DbLock(d.chBreaker, d.chAnswer, d.goRoutineName)
 }
 
 func (d *daemon) dbUnlock() error {
@@ -36,7 +38,7 @@ func (d *daemon) dbUnlock() error {
 
 func (d *daemon) dSleep(sleep int) bool {
 	for i := 0; i < sleep; i++ {
-		if CheckDaemonsRestart(d.goRoutineName) {
+		if CheckDaemonsRestart(d.chBreaker, d.chAnswer, d.goRoutineName) {
 			return true
 		}
 		utils.Sleep(1)
@@ -68,7 +70,7 @@ func (d *daemon) unlockPrintSleep(err error, sleep int) bool {
 		log.Error("%v", err)
 	}
 	for i := 0; i < sleep; i++ {
-		if CheckDaemonsRestart(d.goRoutineName) {
+		if CheckDaemonsRestart(d.chBreaker, d.chAnswer, d.goRoutineName) {
 			return true
 		}
 		utils.Sleep(1)
@@ -86,7 +88,7 @@ func (d *daemon) unlockPrintSleepInfo(err error, sleep int) bool {
 	}
 
 	for i := 0; i < sleep; i++ {
-		if CheckDaemonsRestart(d.goRoutineName) {
+		if CheckDaemonsRestart(d.chBreaker, d.chAnswer, d.goRoutineName) {
 			return true
 		}
 		utils.Sleep(1)
@@ -142,30 +144,28 @@ func init() {
 
 }
 
-func CheckDaemonsRestart(GoroutineName string) bool {
-	log.Debug("CheckDaemonsRestart %v %v", GoroutineName, utils.Caller(2))
+func CheckDaemonsRestart(chBreaker chan bool, chAnswer chan string, goRoutineName string) bool {
+	log.Debug("CheckDaemonsRestart %v %v", goRoutineName, utils.Caller(2))
 	select {
-	case <-DaemonCh:
-		log.Debug("DaemonCh true %v", GoroutineName)
-		AnswerDaemonCh <- GoroutineName
+	case <-chBreaker:
+		log.Debug("DaemonCh true %v", goRoutineName)
+		chAnswer <- goRoutineName
 		return true
 	default:
 	}
 	return false
 }
 
-func DbConnect(GoroutineName string) *utils.DCDB {
+func DbConnect(chBreaker chan bool, chAnswer chan string, goRoutineName string) *utils.DCDB {
 	for {
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, goRoutineName) {
 			return nil
 		}
 		if utils.DB == nil || utils.DB.DB == nil {
 			utils.Sleep(1)
 		} else {
-			//fmt.Println("utils.DB: ", utils.DB)
 			return utils.DB
 		}
 	}
-
 	return nil
 }

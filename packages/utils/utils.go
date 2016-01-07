@@ -69,7 +69,10 @@ type prevBlockType struct {
 	Time     int64
 	Level    int64
 }
-
+type DaemonsChans struct {
+	ChBreaker chan bool
+	ChAnswer chan string
+}
 var TestRollBack = flag.Int64("testRollBack", 0, "testRollBack")
 var Dir = flag.String("dir", GetCurrentDir(), "Dcoin directory")
 var OldFileName = flag.String("oldFileName", "", "")

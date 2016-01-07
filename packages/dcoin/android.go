@@ -4,6 +4,7 @@ package dcoin
 
 import (
 	"net/http"
+	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 
 func IosLog(text string) {
@@ -27,6 +28,6 @@ func tray() {
 
 }
 
-func signals(countDaemons int) {
+func signals(chans []*utils.DaemonsChans) {
 
 }

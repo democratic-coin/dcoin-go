@@ -14,7 +14,7 @@ import (
 Нужно чтобы следить за вилками
 */
 
-func Confirmations() {
+func Confirmations(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("daemon Recovered", r)
@@ -24,15 +24,17 @@ func Confirmations() {
 
 	const GoroutineName = "Confirmations"
 	d := new(daemon)
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
 	d.goRoutineName = GoroutineName
-	if !d.CheckInstall(DaemonCh, AnswerDaemonCh, GoroutineName) {
+	d.chAnswer = chAnswer
+	d.chBreaker = chBreaker
+	if !d.CheckInstall(chBreaker, chAnswer, GoroutineName) {
 		return
 	}
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -58,7 +60,7 @@ BEGIN:
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 
@@ -86,7 +88,7 @@ BEGIN:
 		for blockId := LastBlockId; blockId > startBlockId; blockId-- {
 
 			// проверим, не нужно ли нам выйти из цикла
-			if CheckDaemonsRestart(GoroutineName) {
+			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 				break BEGIN
 			}
 

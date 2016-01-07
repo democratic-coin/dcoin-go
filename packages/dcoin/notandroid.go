@@ -5,7 +5,6 @@ package dcoin
 import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/daemons"
 	"github.com/c-darwin/dcoin-go/packages/tcpserver"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	_ "github.com/mattn/go-sqlite3"
@@ -217,16 +216,21 @@ func tcpListener() {
 	}()
 }
 
-func signals(countDaemons int) {
+func signals(chans []*utils.DaemonsChans) {
 	SigChan = make(chan os.Signal, 1)
 	waitSig()
 	var Term os.Signal = syscall.SIGTERM
 	go func() {
 		signal.Notify(SigChan, os.Interrupt, os.Kill, Term)
 		<-SigChan
-		log.Debug("countDaemons %v", countDaemons)
-		fmt.Printf("countDaemons %v\n", countDaemons)
-		var findDoubleBug []string
+		for _, ch := range chans {
+			fmt.Println("ch.ChBreaker<-true")
+			ch.ChBreaker<-true
+		}
+		for _, ch := range chans {
+			fmt.Println(<-ch.ChAnswer)
+		}
+		/*var findDoubleBug []string
 		for i := 0; i < countDaemons; i++ {
 			daemons.DaemonCh <- true
 			log.Debug("daemons.DaemonCh <- true")
@@ -240,7 +244,7 @@ func signals(countDaemons int) {
 				countDaemons++
 			}
 			findDoubleBug = append(findDoubleBug, answer)
-		}
+		}*/
 		log.Debug("Daemons killed")
 		fmt.Println("Daemons killed")
 		if utils.DB != nil && utils.DB.DB != nil {

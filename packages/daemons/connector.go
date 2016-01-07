@@ -146,7 +146,7 @@ func (d *daemon) chatConnector() {
 	}
 }
 
-func Connector() {
+func Connector(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("daemon Recovered", r)
@@ -167,20 +167,22 @@ func Connector() {
 
 	GoroutineName := "Connector"
 	d := new(daemon)
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
 	d.goRoutineName = GoroutineName
+	d.chAnswer = chAnswer
+	d.chBreaker = chBreaker
 	if utils.Mobile() {
 		d.sleepTime = 600
 	} else {
 		d.sleepTime = 30
 	}
-	if !d.CheckInstall(DaemonCh, AnswerDaemonCh, GoroutineName) {
+	if !d.CheckInstall(chBreaker, chAnswer, GoroutineName) {
 		return
 	}
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -205,7 +207,7 @@ BEGIN:
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 
@@ -278,7 +280,7 @@ BEGIN:
 		for _, data := range nodesConnections {
 
 			// проверим, не нужно нам выйти, т.к. обновилась версия софта
-			if CheckDaemonsRestart(GoroutineName) {
+			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 				break BEGIN
 			}
 
@@ -362,7 +364,7 @@ BEGIN:
 		hosts = checkHosts(hosts, &countOk)
 		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 		// добьем недостающие хосты до $max_hosts
@@ -440,7 +442,7 @@ BEGIN:
 		hosts = checkHosts(newHostsForCheck, &countOk)
 		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 		log.Debug("%v", "hosts", hosts)
@@ -504,7 +506,7 @@ BEGIN:
 		hosts = checkHosts(newHostsForCheck, &countOk)
 		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 		for _, host := range hosts {

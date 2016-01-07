@@ -7,7 +7,7 @@ import (
 /*
 если табла была очищена, то в parser.rollbackAI будет 0, поэтому нелья чистить таблы под нуль
 */
-func Clear() {
+func Clear(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("daemon Recovered", r)
@@ -17,20 +17,22 @@ func Clear() {
 
 	const GoroutineName = "Clear"
 	d := new(daemon)
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
 	d.goRoutineName = GoroutineName
+	d.chAnswer = chAnswer
+	d.chBreaker = chBreaker
 	if utils.Mobile() {
 		d.sleepTime = 1800
 	} else {
 		d.sleepTime = 60
 	}
-	if !d.CheckInstall(DaemonCh, AnswerDaemonCh, GoroutineName) {
+	if !d.CheckInstall(chBreaker, chAnswer, GoroutineName) {
 		return
 	}
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -41,7 +43,7 @@ BEGIN:
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 

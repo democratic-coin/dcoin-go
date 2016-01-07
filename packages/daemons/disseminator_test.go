@@ -44,7 +44,7 @@ func TestDisseminator(t *testing.T) {
 	toBeSent = append(toBeSent, []byte(hash)...)
 	fmt.Printf("hash %x %v", hash, hash)
 	dataType := int64(1)
-	db := DbConnect(GoroutineName)
+	db := DbConnect(chBreaker, chAnswer, GoroutineName)
 	DisseminatorType1(host, userId, string(nodePublicKey), db, toBeSent, dataType)
 
 }

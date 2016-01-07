@@ -12,7 +12,7 @@ import (
 	"os"
 )
 
-func BlocksCollection() {
+func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error("daemon Recovered", r)
@@ -22,20 +22,22 @@ func BlocksCollection() {
 
 	const GoroutineName = "BlocksCollection"
 	d := new(daemon)
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
 	d.goRoutineName = GoroutineName
+	d.chAnswer = chAnswer
+	d.chBreaker = chBreaker
 	if utils.Mobile() {
 		d.sleepTime = 300
 	} else {
 		d.sleepTime = 60
 	}
-	if !d.CheckInstall(DaemonCh, AnswerDaemonCh, GoroutineName) {
+	if !d.CheckInstall(chBreaker, chAnswer, GoroutineName) {
 		return
 	}
-	d.DCDB = DbConnect(GoroutineName)
+	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -46,7 +48,7 @@ BEGIN:
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
-		if CheckDaemonsRestart(GoroutineName) {
+		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
 		log.Debug("0")
@@ -111,7 +113,7 @@ BEGIN:
 				// возможно сервер отдаст блокчейн не с первой попытки
 				var blockchainSize int64
 				for i := 0; i < 10; i++ {
-					blockchainSize, err = utils.DownloadToFile(blockchain_url, *utils.Dir+"/public/blockchain", 3600, DaemonCh, AnswerDaemonCh, GoroutineName)
+					blockchainSize, err = utils.DownloadToFile(blockchain_url, *utils.Dir+"/public/blockchain", 3600, chBreaker, chAnswer, GoroutineName)
 					if blockchainSize > consts.BLOCKCHAIN_SIZE {
 						break
 					}
@@ -162,7 +164,7 @@ BEGIN:
 
 				for {
 					// проверим, не нужно ли нам выйти из цикла
-					if CheckDaemonsRestart(GoroutineName) {
+					if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 						d.unlockPrintSleep(fmt.Errorf("DaemonsRestart"), 0)
 						break BEGIN
 					}
@@ -226,7 +228,7 @@ BEGIN:
 								file.Close()
 								continue BEGIN
 							}
-							if CheckDaemonsRestart(GoroutineName) {
+							if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
@@ -341,7 +343,7 @@ BEGIN:
 		var maxBlockIdUserId int64
 		// получим максимальный номер блока
 		for i := 0; i < len(hosts); i++ {
-			if CheckDaemonsRestart(GoroutineName) {
+			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 				break BEGIN
 			}
 			conn, err := utils.TcpConn(hosts[i]["host"])
@@ -387,7 +389,7 @@ BEGIN:
 				maxBlockIdHost = hosts[i]["host"]
 				maxBlockIdUserId = utils.StrToInt64(hosts[i]["user_id"])
 			}
-			if CheckDaemonsRestart(GoroutineName) {
+			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 				utils.Sleep(1)
 				break BEGIN
 			}
@@ -426,7 +428,7 @@ BEGIN:
 		// в цикле собираем блоки, пока не дойдем до максимального
 		for blockId := currentBlockId + 1; blockId < maxBlockId+1; blockId++ {
 			d.UpdMainLock()
-			if CheckDaemonsRestart(GoroutineName) {
+			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 					break BEGIN
 				}
