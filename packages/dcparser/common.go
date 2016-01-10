@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/op/go-logging"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
 	"io/ioutil"
 	"math"
 	"os"

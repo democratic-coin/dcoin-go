@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/op/go-logging"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
 	"net"
 	"runtime"
 	"sync"

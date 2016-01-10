@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/config"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/schema"
 	"github.com/c-darwin/dcoin-go/packages/utils"

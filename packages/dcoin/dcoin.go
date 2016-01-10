@@ -1,19 +1,19 @@
 package dcoin
 
 import (
-	"github.com/c-darwin/go-thrust/thrust"
-	//"github.com/c-darwin/go-thrust/tutorials/provisioner"
-	"github.com/c-darwin/go-thrust/lib/commands"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/thrust"
+	//"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/tutorials/provisioner"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
 	"fmt"
-	"github.com/astaxie/beego/config"
-	"github.com/astaxie/beego/session"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/controllers"
 	"github.com/c-darwin/dcoin-go/packages/daemons"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/c-darwin/go-bindata-assetfs"
-	"github.com/op/go-logging"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-bindata-assetfs"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
 	_ "image/png"
 	//"io"
 	"encoding/json"
@@ -28,7 +28,7 @@ import (
 	"time"
 	//"syscall"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
-	"github.com/c-darwin/go-thrust/lib/bindings/window"
+	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/bindings/window"
 	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
 )
 
@@ -233,12 +233,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 		if len(pidMap["version"]) > 0 {
 			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5")) {
+				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
 			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.0.1b2")) {
+				log.Debug("%v", "ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
