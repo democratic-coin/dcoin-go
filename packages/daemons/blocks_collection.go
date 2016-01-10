@@ -113,11 +113,16 @@ BEGIN:
 				// возможно сервер отдаст блокчейн не с первой попытки
 				var blockchainSize int64
 				for i := 0; i < 10; i++ {
+					log.Debug("blockchain_url: %s, i: %d", blockchain_url, i)
 					blockchainSize, err = utils.DownloadToFile(blockchain_url, *utils.Dir+"/public/blockchain", 3600, chBreaker, chAnswer, GoroutineName)
+					if err != nil {
+						log.Error("%v", utils.ErrInfo(err))
+					}
 					if blockchainSize > consts.BLOCKCHAIN_SIZE {
 						break
 					}
 				}
+				log.Debug("blockchain dw ok")
 				if err != nil || blockchainSize < consts.BLOCKCHAIN_SIZE {
 					if err != nil {
 						log.Error("%v", utils.ErrInfo(err))

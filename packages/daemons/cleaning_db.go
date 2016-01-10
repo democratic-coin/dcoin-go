@@ -3,7 +3,7 @@ package daemons
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"os"
-	"regexp"
+	"fmt"
 )
 
 func CleaningDb(chBreaker chan bool, chAnswer chan string) {
@@ -175,74 +175,12 @@ BEGIN:
 		log.Debug("mainLock: %v", mainLock)
 		log.Debug("utils.Time(): %v", utils.Time())
 		if (mainLock > 0 && utils.Time()-autoReload > mainLock) || infoBlockRestart {
-			// на всякий случай пометим, что работаем
-			err = d.ExecSql("UPDATE main_lock SET script_name = 'cleaning_db'")
+
+			// ClearDb - убивает демонов, чистит БД, а потом заново запускает демонов
+			// не забываем, что это тоже демон и он должен отчитаться о завершении
+			err = ClearDb(d.chAnswer, GoroutineName)
 			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-					break BEGIN
-				}
-				continue BEGIN
-			}
-			err = d.ExecSql("UPDATE config SET pool_tech_works = 1")
-			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-					break BEGIN
-				}
-				continue BEGIN
-			}
-			allTables, err := d.GetAllTables()
-			if err != nil {
-				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-					break BEGIN
-				}
-				continue BEGIN
-			}
-			for _, table := range allTables {
-				log.Debug("table: %s", table)
-				if ok, _ := regexp.MatchString(`^[0-9_]*my_|^e_|install|^config|daemons|payment_systems|community|cf_lang|main_lock`, table); !ok {
-					log.Debug("DELETE FROM %s", table)
-					err = d.ExecSql("DELETE FROM " + table)
-					if err != nil {
-						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-							break BEGIN
-						}
-						continue BEGIN
-					}
-					if table == "cf_currency" {
-						if d.ConfigIni["db_type"] == "sqlite" {
-							err = d.SetAI("cf_currency", 999)
-						} else {
-							err = d.SetAI("cf_currency", 1000)
-						}
-						if err != nil {
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-								break BEGIN
-							}
-							continue BEGIN
-						}
-					} else if table == "admin" {
-						err = d.ExecSql("INSERT INTO admin (user_id) VALUES (1)")
-						if err != nil {
-							if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-								break BEGIN
-							}
-							continue BEGIN
-						}
-					} else {
-						log.Debug("SET AI %s", table)
-						if d.ConfigIni["db_type"] == "sqlite" {
-							err = d.SetAI(table, 0)
-						} else {
-							err = d.SetAI(table, 1)
-						}
-						if err != nil {
-							log.Error("%v", err)
-						}
-					}
-				}
-			}
-			err = d.ExecSql("DELETE FROM main_lock")
-			if err != nil {
+				fmt.Println(utils.ErrInfo(err))
 				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 					break BEGIN
 				}

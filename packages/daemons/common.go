@@ -7,6 +7,10 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"github.com/op/go-logging"
 	"os"
+	"strings"
+	"regexp"
+	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
+	"fmt"
 )
 
 var (
@@ -167,5 +171,120 @@ func DbConnect(chBreaker chan bool, chAnswer chan string, goRoutineName string) 
 			return utils.DB
 		}
 	}
+	return nil
+}
+
+
+func StartDaemons() {
+	utils.DaemonsChans = nil
+	daemonsStart := map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "TestblockIsReady": TestblockIsReady, "TestblockGenerator": TestblockGenerator, "TestblockDisseminator": TestblockDisseminator, "Shop": Shop, "ReductionGenerator": ReductionGenerator, "QueueParserTx": QueueParserTx, "QueueParserTestblock": QueueParserTestblock, "QueueParserBlocks": QueueParserBlocks, "PctGenerator": PctGenerator, "Notifications": Notifications, "NodeVoting": NodeVoting, "MaxPromisedAmountGenerator": MaxPromisedAmountGenerator, "MaxOtherCurrenciesGenerator": MaxOtherCurrenciesGenerator, "ElectionsAdmin": ElectionsAdmin, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "CfProjects": CfProjects, "BlocksCollection": BlocksCollection, "Exchange": Exchange, "AutoUpdate": AutoUpdate}
+	if utils.Mobile() {
+		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "QueueParserTx": QueueParserTx, "Notifications": Notifications, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "BlocksCollection": BlocksCollection}
+	}
+	if *utils.TestRollBack == 1 {
+		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"BlocksCollection": BlocksCollection}
+	}
+
+	if len(configIni["daemons"]) > 0 && configIni["daemons"] != "null" {
+		daemonsConf := strings.Split(configIni["daemons"], ",")
+		for _, fns := range daemonsConf {
+			log.Debug("start daemon %s", fns)
+			fmt.Println("start daemon ", fns)
+			var chBreaker chan bool = make(chan bool, 1)
+			var chAnswer chan string = make(chan string, 1)
+			utils.DaemonsChans = append(utils.DaemonsChans, &utils.DaemonsChansType{ChBreaker: chBreaker, ChAnswer: chAnswer})
+			go daemonsStart[fns](chBreaker, chAnswer)
+		}
+	} else if configIni["daemons"] != "null" {
+		for dName, fns := range daemonsStart {
+			log.Debug("start daemon %s", dName)
+			fmt.Println("start daemon ", fns)
+			var chBreaker chan bool = make(chan bool, 1)
+			var chAnswer chan string = make(chan string, 1)
+			utils.DaemonsChans = append(utils.DaemonsChans, &utils.DaemonsChansType{ChBreaker: chBreaker, ChAnswer: chAnswer})
+			go fns(chBreaker, chAnswer)
+		}
+	}
+}
+
+
+func ClearDb(ChAnswer chan string, goroutineName string) error {
+
+	// остановим демонов, иначе будет паника, когда таблы обнулятся
+	fmt.Println("ClearDb() Stop_daemons from DB!")
+	for _, ch := range utils.DaemonsChans {
+		fmt.Println("ch.ChBreaker<-true")
+		ch.ChBreaker<-true
+	}
+	if len(goroutineName) > 0 {
+		ChAnswer<-goroutineName
+	}
+	for _, ch := range utils.DaemonsChans {
+		fmt.Println(<-ch.ChAnswer)
+	}
+
+	fmt.Println("ClearDb() Stop_daemons from DB OK")
+
+	// на всякий случай пометим, что работаем
+	err = utils.DB.ExecSql("UPDATE main_lock SET script_name = 'cleaning_db'")
+	if err != nil {
+		return utils.ErrInfo(err)
+	}
+	err = utils.DB.ExecSql("UPDATE config SET pool_tech_works = 1")
+	if err != nil {
+		return utils.ErrInfo(err)
+	}
+	allTables, err := utils.DB.GetAllTables()
+	if err != nil {
+		return utils.ErrInfo(err)
+	}
+	for _, table := range allTables {
+		log.Debug("table: %s", table)
+		if ok, _ := regexp.MatchString(`^[0-9_]*my_|^e_|install|^config|daemons|payment_systems|community|cf_lang|main_lock`, table); !ok {
+			log.Debug("DELETE FROM %s", table)
+			err = utils.DB.ExecSql("DELETE FROM " + table)
+			if err != nil {
+				return utils.ErrInfo(err)
+			}
+			if table == "cf_currency" {
+				if utils.DB.ConfigIni["db_type"] == "sqlite" {
+					err = utils.DB.SetAI("cf_currency", 999)
+				} else {
+					err = utils.DB.SetAI("cf_currency", 1000)
+				}
+				if err != nil {
+					return utils.ErrInfo(err)
+				}
+			} else if table == "admin" {
+				err = utils.DB.ExecSql("INSERT INTO admin (user_id) VALUES (1)")
+				if err != nil {
+					return utils.ErrInfo(err)
+				}
+			} else {
+				log.Debug("SET AI %s", table)
+				if utils.DB.ConfigIni["db_type"] == "sqlite" {
+					err = utils.DB.SetAI(table, 0)
+				} else {
+					err = utils.DB.SetAI(table, 1)
+				}
+				// только логируем, т.к. тут ошибка - это норм
+				if err != nil {
+					log.Error("%v", err)
+				}
+			}
+		}
+	}
+
+	err = utils.DB.ExecSql("DELETE FROM main_lock")
+	if err != nil {
+		return utils.ErrInfo(err)
+	}
+
+	// запустим демонов
+	StartDaemons()
+	stopdaemons.Signals()
+	utils.Sleep(1)
+	// мониторим сигнал из БД о том, что демонам надо завершаться
+	go stopdaemons.WaitStopTime()
 	return nil
 }

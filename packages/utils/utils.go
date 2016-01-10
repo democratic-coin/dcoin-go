@@ -69,23 +69,24 @@ type prevBlockType struct {
 	Time     int64
 	Level    int64
 }
-type DaemonsChans struct {
+type DaemonsChansType struct {
 	ChBreaker chan bool
 	ChAnswer chan string
 }
-var TestRollBack = flag.Int64("testRollBack", 0, "testRollBack")
-var Dir = flag.String("dir", GetCurrentDir(), "Dcoin directory")
-var OldFileName = flag.String("oldFileName", "", "")
-var LogLevel = flag.String("logLevel", "", "Dcoin LogLevel")
-var Console = flag.Int64("console", 0, "Start from console")
-var SqliteDbUrl string
-var StartBlockId = flag.Int64("startBlockId", 0, "Start block for blockCollection daemon")
-var EndBlockId = flag.Int64("endBlockId", 0, "End block for blockCollection daemon")
-var RollbackToBlockId = flag.Int64("rollbackToBlockId", 0, "Rollback to block_id")
-var ListenHttpHost = flag.String("listenHttpHost", "8089", "ListenHttpHost")
-
-var eWallets = &sync.Mutex{}
-
+var (
+	TestRollBack = flag.Int64("testRollBack", 0, "testRollBack")
+	Dir = flag.String("dir", GetCurrentDir(), "Dcoin directory")
+	OldFileName = flag.String("oldFileName", "", "")
+	LogLevel = flag.String("logLevel", "", "Dcoin LogLevel")
+	Console = flag.Int64("console", 0, "Start from console")
+	SqliteDbUrl string
+	StartBlockId = flag.Int64("startBlockId", 0, "Start block for blockCollection daemon")
+	EndBlockId = flag.Int64("endBlockId", 0, "End block for blockCollection daemon")
+	RollbackToBlockId = flag.Int64("rollbackToBlockId", 0, "Rollback to block_id")
+	ListenHttpHost = flag.String("listenHttpHost", "8089", "ListenHttpHost")
+	DaemonsChans []*DaemonsChansType
+	eWallets = &sync.Mutex{}
+)
 func init() {
 	flag.Parse()
 }
@@ -1646,6 +1647,7 @@ func DownloadToFile(url, file string, timeoutSec int64, DaemonCh chan bool, Answ
 		if len(data) == 0 {
 			break
 		}
+		log.Debug("read %s", url)
 	}
 	return offset, nil
 }
@@ -3441,6 +3443,7 @@ func GetUpdVerAndUrl(host string) (string, string, error) {
 	}
 	return "", "", nil
 }
+
 
 type updateType struct {
 	Message   map[string]string

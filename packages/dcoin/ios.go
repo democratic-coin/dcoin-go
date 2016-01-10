@@ -72,6 +72,6 @@ func tcpListener() {
 
 }
 
-func signals(chans []*utils.DaemonsChans) {
+func signals(chans []*utils.DaemonsChansType) {
 
 }

@@ -33,7 +33,6 @@ func main() {
 		height = 578
 	}
 	if utils.Desktop() && (winVer() >= 6 || winVer() == 0) {
-		thrust.InitLogger()
 		thrust.Start()
 		thrustWindow = thrust.NewWindow(thrust.WindowOptions{
 			RootUrl:  "http://localhost:8989/loader.html",
@@ -43,7 +42,7 @@ func main() {
 		})
 
 		thrust.NewEventHandler("*", func(cr commands.CommandResponse) {
-			fmt.Println(fmt.Sprintf("======Event(%s %d) - Signaled by Command (%s)", cr.TargetID, cr.Type))
+			//fmt.Println(fmt.Sprintf("======Event(%s %d) - Signaled by Command (%s)", cr.TargetID, cr.Type))
 			if cr.TargetID > 1 && cr.Type == "closed" {
 				if utils.DB != nil && utils.DB.DB != nil {
 					utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())

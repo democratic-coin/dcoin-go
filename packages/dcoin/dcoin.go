@@ -4,7 +4,6 @@ import (
 	"github.com/c-darwin/go-thrust/thrust"
 	//"github.com/c-darwin/go-thrust/tutorials/provisioner"
 	"github.com/c-darwin/go-thrust/lib/commands"
-
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/session"
@@ -30,6 +29,7 @@ import (
 	//"syscall"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/go-thrust/lib/bindings/window"
+	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
 )
 
 var (
@@ -231,10 +231,18 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-		if len(pidMap["version"]) > 0 && utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5") {
-			err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
-			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+		if len(pidMap["version"]) > 0 {
+			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5")) {
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
+			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.0.1b2")) {
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
 			}
 		}
 		err = utils.DB.Close()
@@ -283,38 +291,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	log.Debug("daemonsStart")
 	IosLog("daemonsStart")
-	var chans []*utils.DaemonsChans
-	daemonsStart := map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": daemons.UnbanNodes, "FirstChangePkey": daemons.FirstChangePkey, "TestblockIsReady": daemons.TestblockIsReady, "TestblockGenerator": daemons.TestblockGenerator, "TestblockDisseminator": daemons.TestblockDisseminator, "Shop": daemons.Shop, "ReductionGenerator": daemons.ReductionGenerator, "QueueParserTx": daemons.QueueParserTx, "QueueParserTestblock": daemons.QueueParserTestblock, "QueueParserBlocks": daemons.QueueParserBlocks, "PctGenerator": daemons.PctGenerator, "Notifications": daemons.Notifications, "NodeVoting": daemons.NodeVoting, "MaxPromisedAmountGenerator": daemons.MaxPromisedAmountGenerator, "MaxOtherCurrenciesGenerator": daemons.MaxOtherCurrenciesGenerator, "ElectionsAdmin": daemons.ElectionsAdmin, "Disseminator": daemons.Disseminator, "Confirmations": daemons.Confirmations, "Connector": daemons.Connector, "Clear": daemons.Clear, "CleaningDb": daemons.CleaningDb, "CfProjects": daemons.CfProjects, "BlocksCollection": daemons.BlocksCollection, "Exchange": daemons.Exchange, "AutoUpdate": daemons.AutoUpdate}
-	if utils.Mobile() {
-		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": daemons.UnbanNodes, "FirstChangePkey": daemons.FirstChangePkey, "QueueParserTx": daemons.QueueParserTx, "Notifications": daemons.Notifications, "Disseminator": daemons.Disseminator, "Confirmations": daemons.Confirmations, "Connector": daemons.Connector, "Clear": daemons.Clear, "CleaningDb": daemons.CleaningDb, "BlocksCollection": daemons.BlocksCollection}
-	}
-	if *utils.TestRollBack == 1 {
-		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"BlocksCollection": daemons.BlocksCollection}
-	}
 
-	//var daemonsChanMap []chan string
-
-	countDaemons := 0
-	if len(configIni["daemons"]) > 0 && configIni["daemons"] != "null" {
-		daemonsConf := strings.Split(configIni["daemons"], ",")
-		for _, fns := range daemonsConf {
-			log.Debug("start daemon %s", fns)
-			var chBreaker chan bool = make(chan bool, 1)
-			var chAnswer chan string = make(chan string, 1)
-			chans = append(chans, &utils.DaemonsChans{ChBreaker: chBreaker, ChAnswer: chAnswer})
-			go daemonsStart[fns](chBreaker, chAnswer)
-			countDaemons++
-		}
-	} else if configIni["daemons"] != "null" {
-		for dName, fns := range daemonsStart {
-			log.Debug("start daemon %s", dName)
-			var chBreaker chan bool = make(chan bool, 1)
-			var chAnswer chan string = make(chan string, 1)
-			chans = append(chans, &utils.DaemonsChans{ChBreaker: chBreaker, ChAnswer: chAnswer})
-			go fns(chBreaker, chAnswer)
-			countDaemons++
-		}
-	}
+	daemons.StartDaemons()
 
 	IosLog("MonitorDaemons")
 	// мониторинг демонов
@@ -329,80 +307,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}()
 
-	IosLog("signals")
 	// сигналы демонам для выхода
-	signals(chans)
+	IosLog("signals")
+	stopdaemons.Signals()
 
 	utils.Sleep(1)
 
-	IosLog("stop_daemons")
 	// мониторим сигнал из БД о том, что демонам надо завершаться
-	go func() {
-		var first bool
-		for {
-			if utils.DB == nil || utils.DB.DB == nil {
-				utils.Sleep(3)
-				continue
-			}
-			if !first {
-				err = utils.DB.ExecSql(`DELETE FROM stop_daemons`)
-				if err != nil {
-					IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				first = true
-			}
-			dExists, err := utils.DB.Single(`SELECT stop_time FROM stop_daemons`).Int64()
-			if err != nil {
-				IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-				log.Error("%v", utils.ErrInfo(err))
-			}
-			log.Debug("dExtit: %d", dExists)
-			if dExists > 0 {
-				fmt.Println("Stop_daemons from DB!")
-				log.Debug("countDaemons: %d", countDaemons)
-				fmt.Printf("countDaemons %v\n", countDaemons)
-				for _, ch := range chans {
-					fmt.Println("ch.ChBreaker<-true")
-					ch.ChBreaker<-true
-				}
-				for _, ch := range chans {
-					fmt.Println(<-ch.ChAnswer)
-				}
-				/*var findDoubleBug []string
-				for i := 0; i < countDaemons; i++ {
-					daemons.DaemonCh <- true
-					log.Debug("daemons.DaemonCh <- true")
-					answer := <-daemons.AnswerDaemonCh
-					log.Debug("answer: %v", answer)
-					if utils.InSliceString(answer, findDoubleBug) {
-						log.Error("findDoubleBug true %v", answer)
-						fmt.Println("findDoubleBug true", answer)
-						//panic("findDoubleBug true")
-						//daemons.DaemonCh <- true
-						countDaemons++
-					}
-					findDoubleBug = append(findDoubleBug, answer)
-				}*/
-				fmt.Println("Daemons killed")
-				err := utils.DB.Close()
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-					//panic(err)
-				}
-				fmt.Println("DB Closed")
-				err = os.Remove(*utils.Dir + "/dcoin.pid")
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-					panic(err)
-				}
-				fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
-				thrust.Exit()
-				os.Exit(1)
-			}
-			utils.Sleep(1)
-		}
-	}()
+	go stopdaemons.WaitStopTime()
 
 	BrowserHttpHost := "http://localhost:8089"
 	HandleHttpHost := ""
@@ -454,6 +366,17 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 					RootUrl: BrowserHttpHost,
 					Size: commands.SizeHW{Width:1024, Height:600},
 				})
+				thrustWindow.HandleEvent("*", func(cr commands.EventResult) {
+					fmt.Println("HandleEvent", cr)
+				})
+				thrustWindow.HandleRemote(func(er commands.EventResult, this *window.Window) {
+					fmt.Println("RemoteMessage Recieved:", er.Message.Payload)
+					openBrowser(er.Message.Payload)
+					// Keep in mind once we have the message, lets say its json of some new type we made,
+					// We can unmarshal it to that type.
+					// Same goes for the other way around.
+					this.SendRemoteMessage("boop")
+				})
 				thrustWindow.Show()
 				thrustWindow.Focus()
 			} else {
@@ -472,6 +395,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	utils.Sleep(3600 * 24 * 90)
 	log.Debug("EXIT")
 }
+
+
 
 func exhangeHttpListener(HandleHttpHost string) {
 

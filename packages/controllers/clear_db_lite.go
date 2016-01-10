@@ -11,8 +11,6 @@ func (c *Controller) ClearDbLite() (string, error) {
 		return "", utils.ErrInfo(errors.New("Permission denied"))
 	}
 
-	// остановим демонов, иначе будет паника, когда таблы обнулятся
-
 	utils.Mutex.Lock()
 	err := c.ExecSql(`DELETE FROM main_lock`)
 	if err != nil {

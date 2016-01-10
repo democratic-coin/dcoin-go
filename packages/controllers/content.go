@@ -333,13 +333,26 @@ func Content(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Error("%v", err)
 		}
-		if (string(utils.BinToHex(userPublicKey)) != sessPublicKey && len(myPrivateKey) == 0) || (len(myPrivateKey) > 0 && !bytes.Equal(myPublicKey, []byte(userPublicKey))) {
+		countUsers, err := c.Single(`SELECT count(*) FROM users`).Int64()
+		if err != nil {
+			log.Error("%v", err)
+		}
+		if (string(utils.BinToHex(userPublicKey)) != sessPublicKey && len(myPrivateKey) == 0) || (countUsers > 0 && len(myPrivateKey) > 0 && !bytes.Equal(myPublicKey, []byte(userPublicKey))) {
 			log.Debug("userPublicKey!=sessPublicKey %s!=%s / userId: %d", utils.BinToHex(userPublicKey), sessPublicKey, userId)
+			log.Debug("len(myPrivateKey) = %d  && %x!=%x", len(myPrivateKey), string(myPublicKey), userPublicKey)
 			sess.Delete("user_id")
 			sess.Delete("private_key")
 			sess.Delete("public_key")
-			w.Write([]byte("<script language=\"javascript\">window.location.href = \"/\"</script>If you are not redirected automatically, follow the <a href=\"/\">/</a>"))
-			return
+			log.Debug("window.location.href = /")
+			if len(userPublicKey) > 0 {
+				w.Write([]byte("<script language=\"javascript\">window.location.href = \"/\"</script>If you are not redirected automatically, follow the <a href=\"/\">/</a>"))
+				return
+			} else {
+				c.sess.Delete("user_id")
+				c.sess.Delete("public_key")
+				c.sess.Delete("private_key")
+			}
+
 		}
 
 		if tplName == "login" {
@@ -459,6 +472,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// если сессия обнулилась в процессе навигации по админке, то вместо login шлем на /, чтобы очистилось меню
 			if len(r.FormValue("tpl_name")) > 0 && tplName == "login" {
+				log.Debug("window.location.href = /")
 				w.Write([]byte("<script language=\"javascript\">window.location.href = \"/\"</script>If you are not redirected automatically, follow the <a href=\"/\">/</a>"))
 				return
 			}

@@ -403,6 +403,11 @@
 		</div>
 	</div>
 
+	{{if .RestartDb}}
+	<div class="alert alert-danger">
+		<strong>Error!</strong> <button id="reloadBlockchain" class="btn btn-danger">Reload blockchain</button>
+	</div>
+	{{end}}
 	<a hrep="#" id="debug">Debug</a>
 	<div id="debugDiv"></div>
 
@@ -412,13 +417,20 @@
 	<div id="check_time" style="margin-top: 50px">{{.AlertTime}}</div>
 	{{end}}
 
-	<div id="help" style="margin-top: 10px"><a href="mailto:darwin@dcoin.club">help</a></div>
+	<div id="help" style="margin-top: 10px"><a href="mailto:darwin@dcoin.club" onclick='THRUST.remote.send("mailto: darwin@dcoin.club")'>help</a></div>
 
 </div>
 <script>
+	$('#reloadBlockchain').bind('click', function () {
+		$('#reloadBlockchain').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+		$('#reloadBlockchain').prop('disabled', true);
+		$.get('ajax?controllerName=RestartDb', function (data) {
+			window.location.href = "/";
+		});
+	});
 	$('#debug').bind('click', function () {
 		$.get('ajax?controllerName=DebugInfo', function (data) {
-			console.log(data)
+			console.log(data);
 			$('#debugDiv').html("<textarea>"+data+"</textarea>")
 		});
 	});

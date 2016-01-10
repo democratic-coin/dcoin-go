@@ -24,12 +24,14 @@ type updatingBlockchainStruct struct {
 	BlockChainSize int64
 	Mobile         bool
 	AlertTime      string
+	RestartDb bool
 }
 
 func (c *Controller) UpdatingBlockchain() (string, error) {
 
 	var blockTime, blockId, blockMeter int64
 	var waitText, startDaemons, checkTime string
+	var restartDb bool
 
 	if c.dbInit {
 		ConfirmedBlockId, err := c.DCDB.GetConfirmedBlockId()
@@ -76,6 +78,10 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 				checkTime = c.Lang["check_time_nix"]
 			}
 			checkTime = c.Lang["check_time"] + checkTime
+			mainLock, err := c.Single(`SELECT lock_time from main_lock`).Int64()
+			if (mainLock > 0 && utils.Time()-300 > mainLock) {
+				restartDb = true
+			}
 		}
 
 		nodeConfig, err := c.GetNodeConfig()
@@ -126,6 +132,6 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	b := new(bytes.Buffer)
-	t.Execute(b, &updatingBlockchainStruct{Lang: c.Lang, WaitText: waitText, BlockId: blockId, BlockTime: blockTime, StartDaemons: startDaemons, BlockMeter: blockMeter, CheckTime: checkTime, LastBlock: consts.LAST_BLOCK, BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime})
+	t.Execute(b, &updatingBlockchainStruct{RestartDb: restartDb, Lang: c.Lang, WaitText: waitText, BlockId: blockId, BlockTime: blockTime, StartDaemons: startDaemons, BlockMeter: blockMeter, CheckTime: checkTime, LastBlock: consts.LAST_BLOCK, BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime})
 	return b.String(), nil
 }

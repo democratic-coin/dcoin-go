@@ -11,41 +11,13 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"os/signal"
 	"regexp"
-	"syscall"
 	"time"
 )
-
-/*
-#include <stdio.h>
-#include <signal.h>
-
-extern void go_callback_int();
-static inline void SigBreak_Handler(int n_signal){
-    printf("closed\n");
-	go_callback_int();
-}
-static inline void waitSig() {
-    #if (WIN32 || WIN64)
-    signal(SIGBREAK, &SigBreak_Handler);
-    signal(SIGINT, &SigBreak_Handler);
-    #endif
-}
-*/
-import (
-	"C"
-)
-
-//export go_callback_int
-func go_callback_int() {
-	SigChan <- syscall.Signal(1)
-}
 
 func IosLog(text string) {
 }
 
-var SigChan chan os.Signal
 
 func NewBoundListener(maxActive int, l net.Listener) net.Listener {
 	return &boundListener{l, make(chan bool, maxActive)}
@@ -77,9 +49,6 @@ func (l *boundConn) Close() error {
 	return err
 }
 
-func waitSig() {
-	C.waitSig()
-}
 
 func httpListener(ListenHttpHost, BrowserHttpHost string) {
 	l, err := net.Listen("tcp", ListenHttpHost)
@@ -213,54 +182,5 @@ func tcpListener() {
 				}
 			}(conn)
 		}
-	}()
-}
-
-func signals(chans []*utils.DaemonsChans) {
-	SigChan = make(chan os.Signal, 1)
-	waitSig()
-	var Term os.Signal = syscall.SIGTERM
-	go func() {
-		signal.Notify(SigChan, os.Interrupt, os.Kill, Term)
-		<-SigChan
-		for _, ch := range chans {
-			fmt.Println("ch.ChBreaker<-true")
-			ch.ChBreaker<-true
-		}
-		for _, ch := range chans {
-			fmt.Println(<-ch.ChAnswer)
-		}
-		/*var findDoubleBug []string
-		for i := 0; i < countDaemons; i++ {
-			daemons.DaemonCh <- true
-			log.Debug("daemons.DaemonCh <- true")
-			answer := <-daemons.AnswerDaemonCh
-			log.Debug("daemonsAnswer: %v", answer)
-			if utils.InSliceString(answer, findDoubleBug) {
-				log.Error("findDoubleBug true %v", answer)
-				fmt.Println("findDoubleBug true", answer)
-				//panic("findDoubleBug true")
-				//daemons.DaemonCh <- true
-				countDaemons++
-			}
-			findDoubleBug = append(findDoubleBug, answer)
-		}*/
-		log.Debug("Daemons killed")
-		fmt.Println("Daemons killed")
-		if utils.DB != nil && utils.DB.DB != nil {
-			err := utils.DB.Close()
-			fmt.Println("DB Closed")
-			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
-				//panic(err)
-			}
-		}
-		err := os.Remove(*utils.Dir + "/dcoin.pid")
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
-		}
-		fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
-		os.Exit(1)
 	}()
 }
