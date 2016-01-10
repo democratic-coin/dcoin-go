@@ -152,7 +152,7 @@ func (c *Controller) InstallStep1() (string, error) {
 		if len(setupPassword) > 0 {
 			setupPassword = string(utils.DSha256(setupPassword))
 		}
-		err = c.DCDB.ExecSql("INSERT INTO config (sqlite_db_url, first_load_blockchain, first_load_blockchain_url, setup_password, auto_reload, chat_enabled) VALUES (?, ?, ?, ?, ?)", sqliteDbUrl, firstLoad, url, setupPassword, 259200, 1)
+		err = c.DCDB.ExecSql("INSERT INTO config (sqlite_db_url, first_load_blockchain, first_load_blockchain_url, setup_password, auto_reload, chat_enabled) VALUES (?, ?, ?, ?, ?, ?)", sqliteDbUrl, firstLoad, url, setupPassword, 259200, 1)
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 			panic(err)
