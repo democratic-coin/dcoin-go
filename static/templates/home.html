@@ -1004,7 +1004,7 @@
 	</script>
 	<script src="/static/js/chat.js"></script>
 
-	{{if eq .ChatEnabled "1"}}
+	{{if and (eq .ChatEnabled "1") (not .Mobile)}}
 	<style>
 		#chat img{width: 50px; float: left; margin-right: 10px}
 		#chatLock { padding: 3px 7px; font-size: 20px; }
@@ -1136,12 +1136,14 @@
 
 </style>
 <div style="clear: both"></div>
+	{{if .ShowMap}}
 	<h3 class="page-header" style="margin-top: 30px;margin-bottom: 0px;"
 		title="">{{.Lang.miners_on_the_map}}</h3>
 	<a href="#interface/show_map=0">Hide map</a></div>
-<div class="clearfix"></div>
-<div id="map_canvas" style="width: 100%; height:500px; display: block"></div>
-<div style="clear: both"></div>
+	<div class="clearfix"></div>
+	<div id="map_canvas" style="width: 100%; height:500px; display: block"></div>
+	<div style="clear: both"></div>
+	{{end}}
 
 <h3 style="margin-top: 20px">{{.Lang.mining}}</h3>
 <div class="pct">

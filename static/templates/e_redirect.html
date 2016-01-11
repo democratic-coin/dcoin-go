@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <script src="static/js/jquery-1.11.0.js"></script>
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body style="margin: auto; display: table;">
-<div style="margin: auto; display: table-cell;">
+<body>
+<div id="wrapper" style="max-width: 300px; margin: auto; margin-top: 10px">
 <select id="ps_select" class="form-control">
   <option value="pm">Perfect Money</option>
   <option value="ik">Mobile</option>
   <option value="payeer">BTC</option>
 </select>
-<button id="next">Next</button>
+<button id="next" class="btn btn-default btn-block" style="margin-top: 5px">Next</button>
 <form action="https://perfectmoney.is/api/step1.asp" method="POST" id="pm">
   <input type="hidden" name="PAYEE_ACCOUNT" value="{{index .EConfig "pm_id"}}">
   <input type="hidden" name="PAYEE_NAME" value="Dcoin">
