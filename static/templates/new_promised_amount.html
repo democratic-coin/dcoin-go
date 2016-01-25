@@ -91,6 +91,11 @@
 								$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
 							}
 						}, "JSON").fail(function() { $('#add_promised_amount').prop('disabled', false); $('#add_promised_amount').html('Send'); });;
+				{{else}}
+					{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
+					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
+					doSign();
+					{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 				{{end}}
 			} else {
 					{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
