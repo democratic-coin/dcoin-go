@@ -1,0 +1,149 @@
+{{define "newAutoPayment"}}
+<script>
+
+	var to_id = '';
+
+	$('#send_to_net').bind('click', function () {
+
+			var amount = $('#amount').val();
+			var commission = $('#commission').val();
+			var comment = $('#comment').val();
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : {{.TxType}},
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'recipient' : to_id,
+				'currency_id' : $('#currency_id').val(),
+				'amount' : amount,
+				'period' : $('#period').val(),
+				'commission' : commission,
+				'comment' : $('#comment_encrypted').val(),
+				'comment_text' : comment,
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function (data) {
+				var qAlert = '{{.Lang.sent_to_the_net}}'
+				if (data.error != "null") {
+					qAlert = data.error
+				}
+				dc_navigate ('walletsList', {'alert': qAlert} );
+			}, 'JSON' );
+
+	} );
+
+
+	$('#next').bind('click', function () {
+
+			var recipient = $("#recipient").val();
+			to_id = recipient;
+			var currency_id = ','+$("#currency_id").val();
+			if (to_id) {
+
+				$.post( 'ajax?controllerName=encryptComment', {
+
+					'to_id' : to_id,
+					'type' : 'user',
+					'comment' :  $("#comment").val()
+
+				}, function (data) {
+
+					if ($("#comment").val()=='') {
+						data = '30';
+						$("#comment").val('0');
+					}
+					$("#comment_encrypted").val(data);
+
+					{{if .ShowSignData}}
+					$("#sign").css("display", "block"); $("#wallets").css("display", "none");
+					{{end}}
+
+					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + to_id + ',' + $('#amount').val() + ',' + $('#commission').val() + ',' + $("#currency_id").val() + ',' + $("#period").val() + ',' + data );
+					doSign();
+					{{if not .ShowSignData}}
+						$("#send_to_net").trigger("click");
+					{{end}}
+				});
+			}
+	});
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.auto_payment_creation}}</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#walletsList">{{.Lang.wallets}}</a></li>
+		<li><a href="#autoPayments">{{.Lang.auto_payments}}</a></li>
+		<li class="active">{{.Lang.auto_payment_creation}}</li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+	<div id="main_data">
+		<div id="enter_data">
+			<div class="form-horizontal">
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="amount">{{.Lang.amount}}</label>
+					<div class="col-md-4">
+						<div class="input-group">
+							<input style="min-width: 100px" id="amount" name="amount" class="form-control" type="text">
+							<div class="input-group-btn">
+								<select class="form-control" id="currency_id" style="min-width: 100px">
+									{{range $id, $name := .CurrencyList}}
+										{{if eq $id 72}}<option value='{{$id}}' selected>D{{$name}}</option>{{else}}<option value='{{$id}}'>D{{$name}}</option>{{end}}
+									{{end}}
+								</select>
+							</div>
+						</div>
+						<span class="help-block"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="commission">{{.Lang.commission}}</label>
+					<div class="col-md-4">
+						<input style="min-width: 100px" id="commission"  class="form-control" type="text">
+						<span class="help-block"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="period">{{.Lang.period}}</label>
+					<div class="col-md-4">
+						<input style="min-width: 100px" id="period" class="form-control" type="text">
+						<span class="help-block">Seconds</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="recipient">{{.Lang.recipient}}</label>
+					<div class="col-md-4">
+						<input style="min-width: 100px" id="recipient" class="form-control" type="text">
+						<span class="help-block"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="comment">{{.Lang.note}}</label>
+					<div class="col-md-4">
+						<input style="min-width: 100px" id="comment" class="form-control" type="text">
+						<span class="help-block"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="next"></label>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-outline btn-primary" id="next">{{.Lang.send_to_net}}</button>
+					</div>
+				</div>
+
+				<input type="hidden" id="comment_encrypted" value="">
+			</div>
+		</div>
+
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

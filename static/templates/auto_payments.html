@@ -1,0 +1,81 @@
+{{define "AutoPayments"}}
+<script>
+
+
+	$('#new_auto_payment').bind('click', function () {
+		dc_navigate('newAutoPayment');
+	});
+
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function (data) {
+					dc_navigate ('credits', {'alert': '{{.Lang.sent_to_the_net}}'} );
+				}
+		);
+	});
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.auto_payments}}</h1>
+	<ul class="nav nav-tabs" id="myTab">
+		<li><a href="#walletsList">{{.Lang.send_to_wallet}}</a></li>
+		<li><a href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+		<li><a href="#credits">{{.Lang.credits}}</a></li>
+		<li class="active"><a href="#autoPayments">{{.Lang.auto_payments}}</a></li>
+		<li><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+	</ul>
+
+	<div id="main_data">
+		{{template "alertSuccess".}}
+
+		<h3>{{.Lang.I_debtor}}</h3>
+		<table class="table" style="width:500px">
+			<tr>
+				<th>ID</th>
+				<th>Period</th>
+				<th class="unixtime">Last payment</th>
+				<th>Amount</th>
+				<th>Commission</th>
+				<th>Currency</th>
+				<th>Recipient</th>
+				<th>{{.Lang.delete}}</th>
+			</tr>
+			{{range .AutoPayments}}
+				<tr>
+					<td>{{.Id}}</td>
+					<td>{{.Period}}</td>
+					<td class="unixtime">{{.Time}}</td>
+					<td>{{.Amount}}</td>
+					<td>{{.Commission}}</td>
+					<td>D{{index $.CurrencyList .Currency_id}}</td>
+					<td>{{.Recipient}}</td>
+					<td><a class="btn btn-danger" href="#" onclick="dc_navigate('delCredit', {'credit_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
+				</tr>
+			{{end}}
+		</table>
+
+		<button type="button" class="btn btn-primary" id="new_auto_payment">{{.Lang.create_auto_payment}}</button>
+
+		<div style=" max-width: 600px;" id="tx_history">
+
+			{{noescape .LastTxFormatted}}
+
+
+		</div>
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+<script src="static/js/unixtime.js"></script>
+{{end}}

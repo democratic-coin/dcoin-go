@@ -3397,10 +3397,10 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 		// если новая тр-ия - это запрос на получение банкнот, то нужно проверить
 		// нет ли у отправителя запроса на отправку DC, т.к. после списания может не остаться средств
 		if txType == utils.TypeInt("CashRequestOut") {
-			p.ClearIncompatibleTxSqlSet([]string{"SendDc", "NewForexOrder", "CfSendDc"}, userId, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"SendDc", "NewForexOrder", "CfSendDc", "AutoPayment"}, userId, &waitError, "")
 		}
 		// и наоборот
-		if utils.InSliceInt64(txType, utils.TypesToIds([]string{"SendDc", "NewForexOrder", "CfSendDc"})) {
+		if utils.InSliceInt64(txType, utils.TypesToIds([]string{"SendDc", "NewForexOrder", "CfSendDc", "AutoPayment"})) {
 			p.ClearIncompatibleTxSqlSet([]string{"CashRequestOut"}, userId, &waitError, "")
 		}
 
@@ -3561,11 +3561,11 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 			p.RollbackIncompatibleTx([]string{"DelCfProject"})
 		}
 		// потом нужно сделать более тонко. но пока так. Если есть смена комиссии, то нельзя отправлять тр-ии, где указана комиссия
-		if utils.InSliceInt64(txType, utils.TypesToIds([]string{"CfSendDc", "SendDc", "NewForexOrder"})) {
+		if utils.InSliceInt64(txType, utils.TypesToIds([]string{"CfSendDc", "SendDc", "NewForexOrder", "AutoPayment"})) {
 			p.RollbackIncompatibleTx([]string{"ChangeCommission"})
 		}
 		if txType == utils.TypeInt("ChangeCommission") {
-			p.ClearIncompatibleTxSqlSet([]string{"CfSendDc", "SendDc", "NewForexOrder"}, 0, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"CfSendDc", "SendDc", "NewForexOrder", "AutoPayment"}, 0, &waitError, "")
 		}
 
 		// Если есть смена коммиссий арбитров, то нельзя делать перевод монет, т.к. там может быть указана комиссия арбитра
@@ -3763,12 +3763,12 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 
 		// если пришло new_pct, то нужно откатить следующие тр-ии
 		if txType == utils.TypeInt("NewPct") {
-			p.RollbackIncompatibleTx([]string{"NewReduction", "ChangeNodeKey", "NewMiner", "VotesPromisedAmount", "SendDc", "CashRequestIn", "Mining", "CfSendDc", "DelCfProject", "NewForexOrder", "del_forex_order", "for_repaid_fix", "actualization_promised_amounts", "DelCfFunding", "admin_unban_miners", "AdminBanMiners"})
+			p.RollbackIncompatibleTx([]string{"NewReduction", "ChangeNodeKey", "NewMiner", "VotesPromisedAmount", "SendDc", "CashRequestIn", "Mining", "CfSendDc", "DelCfProject", "NewForexOrder", "AutoPayment", "del_forex_order", "for_repaid_fix", "actualization_promised_amounts", "DelCfFunding", "admin_unban_miners", "AdminBanMiners"})
 		}
 
 		// если пришло NewReduction, то нужно откатить следующие тр-ии
 		if txType == utils.TypeInt("NewReduction") {
-			p.RollbackIncompatibleTx([]string{"NewPct", "ChangeNodeKey", "NewMiner", "VotesPromisedAmount", "SendDc", "CashRequestIn", "Mining", "CfSendDc", "DelCfProject", "NewForexOrder", "del_forex_order", "for_repaid_fix", "actualization_promised_amounts", "DelCfFunding", "admin_unban_miners", "AdminBanMiners"})
+			p.RollbackIncompatibleTx([]string{"NewPct", "ChangeNodeKey", "NewMiner", "VotesPromisedAmount", "SendDc", "CashRequestIn", "Mining", "CfSendDc", "DelCfProject", "NewForexOrder", "AutoPayment", "del_forex_order", "for_repaid_fix", "actualization_promised_amounts", "DelCfFunding", "admin_unban_miners", "AdminBanMiners"})
 		}
 
 		// временно запрещаем 2 тр-ии любого типа от одного юзера, а то затрахался уже.
