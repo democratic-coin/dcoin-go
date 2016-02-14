@@ -49,10 +49,10 @@
 		{{range $name, $value := .Variables}}
 			<tr><td>{{$name}}</td><td><input name='{{$name}}' type='text' value='{{$value}}' style='width: 600px'></td></tr>
 		{{end}}
+		<tr><td>max_pool_users</td><td><input name='max_pool_users' type='text' value='100' style='width: 600px'></td></tr>
 	</table>
 	<button class="btn" id="save">save</button>
 </div>
-
 
 {{template "signatures".}}
 

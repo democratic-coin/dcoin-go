@@ -250,8 +250,9 @@ func (c *Controller) SaveQueue() (string, error) {
 		videoType := []byte(c.r.FormValue("video_type"))
 		videoUrlId := []byte(c.r.FormValue("video_url_id"))
 		nodePublicKey := []byte(c.r.FormValue("node_public_key"))
+		poolUserId := []byte(c.r.FormValue("pool_user_id"))
 
-		if len(race) == 0 || len(country) == 0 || len(latitude) == 0 || len(longitude) == 0 || len(http_host) == 0 || len(tcp_host) == 0 || len(faceHash) == 0 || len(profileHash) == 0 || len(faceCoords) == 0 || len(profileCoords) == 0 || len(videoType) == 0 || len(videoUrlId) == 0 || len(nodePublicKey) == 0 {
+		if len(race) == 0 || len(country) == 0 || len(latitude) == 0 || len(longitude) == 0 || len(http_host) == 0 || len(tcp_host) == 0 || len(faceHash) == 0 || len(profileHash) == 0 || len(faceCoords) == 0 || len(profileCoords) == 0 || len(videoType) == 0 || len(videoUrlId) == 0 || len(nodePublicKey) == 0|| len(poolUserId) == 0 {
 			return "empty", nil
 		}
 		if string(videoType) == "null" || string(videoUrlId) == "null" {
@@ -276,6 +277,7 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.EncodeLengthPlusData(videoType)...)
 		data = append(data, utils.EncodeLengthPlusData(videoUrlId)...)
 		data = append(data, utils.EncodeLengthPlusData(nodePublicKey)...)
+		data = append(data, utils.EncodeLengthPlusData(poolUserId)...)
 		data = append(data, binSignatures...)
 
 		if c.SessRestricted == 0 {
@@ -1436,6 +1438,29 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("currency_id")))...)
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("period")))...)
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("comment")))...)
+		data = append(data, binSignatures...)
+
+	case "SwitchPool":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, binSignatures...)
+
+	case "DelUserFromPool":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("del_user_id")))...)
+		data = append(data, binSignatures...)
+
+	case "ChangePool":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("pool_user_id")))...)
 		data = append(data, binSignatures...)
 
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 type VotingPage struct {
@@ -29,6 +30,11 @@ type VotingPage struct {
 	WaitVoting                 map[int64]string
 	CurrencyList               map[int64]string
 	JsPct                      string
+	MaxPromisedAmountSelectBox map[int64]string
+	MinerPctSelectBox			map[int64]string
+	UserPctSelectBox			map[int64]string
+	MaxOtherCurrenciesSelectBox			map[int64]string
+
 }
 
 func (c *Controller) Voting() (string, error) {
@@ -45,6 +51,11 @@ func (c *Controller) Voting() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+
+	// ****************************************** убрать
+	c.Variables.Int64["min_miners_of_voting"] = 1;
+	// ****************************************** убрать
+
 	minerNewbie := ""
 	if regTime > utils.Time()-c.Variables.Int64["miner_newbie_time"] && c.SessUserId != 1 {
 		minerNewbie = strings.Replace(c.Lang["hold_time_wait2"], "[sec]", utils.TimeLeft(c.Variables.Int64["miner_newbie_time"]-(utils.Time()-regTime), c.Lang), -1)
@@ -109,12 +120,12 @@ func (c *Controller) Voting() (string, error) {
 			}
 
 			// получим наши предыдущие голоса
-			votesUserPct, err := c.Single("SELECT pct FROM votes_user_pct WHERE user_id  =  ? AND currency_id  =  ?", c.SessUserId, currency_id).Int64()
+			votesUserPct, err := c.Single("SELECT pct FROM votes_user_pct WHERE user_id  =  ? AND currency_id  =  ?", c.SessUserId, currency_id).String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
 
-			votesMinerPct, err := c.Single("SELECT pct FROM votes_miner_pct WHERE user_id  =  ? AND currency_id  =  ?", c.SessUserId, currency_id).Int64()
+			votesMinerPct, err := c.Single("SELECT pct FROM votes_miner_pct WHERE user_id  =  ? AND currency_id  =  ?", c.SessUserId, currency_id).String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -129,8 +140,8 @@ func (c *Controller) Voting() (string, error) {
 				return "", utils.ErrInfo(err)
 			}
 			promisedAmountCurrencyList[currency_id] = make(map[string]string)
-			promisedAmountCurrencyList[currency_id]["votes_user_pct"] = utils.Int64ToStr(votesUserPct)
-			promisedAmountCurrencyList[currency_id]["votes_miner_pct"] = utils.Int64ToStr(votesMinerPct)
+			promisedAmountCurrencyList[currency_id]["votes_user_pct"] = votesUserPct
+			promisedAmountCurrencyList[currency_id]["votes_miner_pct"] = votesMinerPct
 			promisedAmountCurrencyList[currency_id]["votes_max_other_currencies"] = utils.Int64ToStr(votesMaxOtherCurrencies)
 			promisedAmountCurrencyList[currency_id]["votes_max_promised_amount"] = utils.Int64ToStr(votesMaxPromisedAmount)
 			promisedAmountCurrencyList[currency_id]["name"] = name
@@ -170,6 +181,65 @@ func (c *Controller) Voting() (string, error) {
 
 	refs := []string{"first", "second", "third"}
 	refsNums := []int{0, 5, 10, 15, 20, 25, 30}
+	maxOtherCurrenciesCount:= []int{0, 1, 2, 3, 4}
+
+	maxPromisedAmountSelectBox := make(map[int64]string)
+	minerPctSelectBox := make(map[int64]string)
+	userPctSelectBox := make(map[int64]string)
+	maxOtherCurrenciesSelectBox := make(map[int64]string)
+	for currencyId, data := range promisedAmountCurrencyList {
+		selectBox:=""
+		for _, amount := range allMaxPromisedAmount {
+			sel := ""
+			if data["votes_max_promised_amount"] ==  utils.Int64ToStr(amount) {
+				sel = "selected"
+			}
+			color := ""
+			if amount<=consts.MaxGreen[currencyId] {
+				color = `style="background-color:#B1D253"`
+			} else if amount<=consts.MaxGreen[currencyId]*10 {
+				color = `style="background-color:#FFBA3F"`
+			} else {
+				color = `style="background-color:#EE3224"`
+			}
+			selectBox=selectBox+`<option `+sel+` `+color+`>`+utils.Int64ToStr(amount)+`</option>`
+		}
+		maxPromisedAmountSelectBox[currencyId] = selectBox
+
+		selectBox=""
+		for _, pctData := range allPct {
+			for y, sec := range pctData {
+				sel := ""
+				if data["votes_miner_pct"] == sec {
+					sel = "selected"
+				}
+				selectBox=selectBox+`<option `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
+			}
+		}
+		minerPctSelectBox[currencyId] = selectBox
+
+		selectBox=""
+		for _, pctData := range allPct {
+			for y, sec := range pctData {
+				sel := ""
+				if data["votes_user_pct"] == sec {
+					sel = "selected"
+				}
+				selectBox=selectBox+`<option `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
+			}
+		}
+		userPctSelectBox[currencyId] = selectBox
+
+		selectBox=""
+		for _, v := range maxOtherCurrenciesCount {
+			sel := ""
+			if data["votes_max_other_currencies"] == utils.IntToStr(v) {
+				sel = "selected"
+			}
+			selectBox=selectBox+`<option `+sel+`>`+utils.IntToStr(v)+`</option>`
+		}
+		maxOtherCurrenciesSelectBox[currencyId] = selectBox
+	}
 
 	TemplateStr, err := makeTemplate("voting", "voting", &VotingPage{
 		Alert:                      c.Alert,
@@ -193,6 +263,10 @@ func (c *Controller) Voting() (string, error) {
 		WaitVoting:                 waitVoting,
 		CurrencyList:               c.CurrencyList,
 		JsPct:                      jsPct,
+		MaxOtherCurrenciesSelectBox : maxOtherCurrenciesSelectBox,
+		MaxPromisedAmountSelectBox : maxPromisedAmountSelectBox,
+		MinerPctSelectBox : minerPctSelectBox,
+		UserPctSelectBox : userPctSelectBox,
 		Refs:                       refs})
 	if err != nil {
 		return "", utils.ErrInfo(err)

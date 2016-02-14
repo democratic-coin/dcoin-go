@@ -92,7 +92,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	}
 	log.Debug("votesData", votesData)
 	log.Debug("votesData[user_id]", votesData["user_id"])
-	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
+	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, pool_user_id log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
 	log.Debug("minersData", minersData)
 	// $votes_data['user_id'] - это юзер, за которого голосуют
 	if err != nil {
@@ -127,7 +127,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	minerData.adminUiserId, err = p.GetAdminUserId()
+	minerData.adminUserId, err = p.GetAdminUserId()
 	if err != nil {
 		return p.ErrInfo(err)
 	}
@@ -135,7 +135,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	minerData.votes0 = votes[0]
 	minerData.votes1 = votes[1]
 	minerData.minMinersKeepers = p.Variables.Int64["min_miners_keepers"]
-	log.Debug("minerData.adminUiserId %v", minerData.adminUiserId)
+	log.Debug("minerData.adminUserId %v", minerData.adminUserId)
 	log.Debug("minerData.myMinersIds %v", minerData.myMinersIds)
 	log.Debug("minerData.minersIds %v", minerData.minersIds)
 	log.Debug("minerData.votes0 %v", minerData.votes0)
@@ -172,6 +172,17 @@ func (p *Parser) VotesNodeNewMiner() error {
 			return p.ErrInfo(err)
 		}
 	} else if p.minersCheckMyMinerIdAndVotes0(minerData) {
+		
+		// уберем юзера, за которого голосуем из списка прилепленных к пулу
+		err = p.ExecSql(`UPDATE miners_data SET pool_count_users = pool_count_users - 1 WHERE user_id = ?`, minersData["pool_user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		err = p.ExecSql(`UPDATE miners_data SET pool_user_id = 0 WHERE user_id = ?`, votesData["user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		
 		// если набрано >5 голосов "против" и мы среди тех X майнеров, которые копировали фото к себе
 		// либо если набранное кол-во голосов = кол-ву майнеров (актуально в самом начале запуска проекта)
 		facePath := fmt.Sprintf(*utils.Dir+"/public/face_%v.jpg", votesData["user_id"])
@@ -236,7 +247,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 }
 
 type MinerData struct {
-	adminUiserId     int64
+	adminUserId     int64
 	myMinersIds      map[int]int
 	minersIds        map[int]int
 	votes0           int64
@@ -318,6 +329,17 @@ func (p *Parser) VotesNodeNewMinerRollback() error {
 			return p.ErrInfo(err)
 		}
 	} else if p.minersCheckMyMinerIdAndVotes0(minerData) {
+
+		// вернем юзера, за которого голосуем в список прилепленных к пулу
+		err = p.ExecSql(`UPDATE miners_data SET pool_count_users = pool_count_users + 1 WHERE user_id = ?`, minersData["pool_user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		err = p.ExecSql(`UPDATE miners_data SET pool_user_id = ? WHERE user_id = ?`, minersData["pool_user_id"], votesData["user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+
 		// если фото плохое и мы среди тех 10 майнеров, которые копировали (или нет) фото к себе,
 		// а затем переместили фото в корзину
 

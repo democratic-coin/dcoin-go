@@ -1,0 +1,56 @@
+{{define "delPoolUser"}}
+<script>
+	$('#save').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#del_user_id").val());
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'del_user_id' : $('#del_user_id').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('poolAdminControl', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		});
+
+</script>
+<div id="main_div">
+	<h1 class="page-header">Del pool user</h1>
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#poolAdminControl">pool admin</a></li>
+	</ol>
+
+	<div id="main_data">
+
+		<div class="form-horizontal">
+
+			<div class="form-group">
+				<label class="col-md-4 control-label" for="save">Confirm</label>
+				<div class="col-md-4">
+					<button type="button" class="btn btn-danger" id="save"><i class="fa fa-trash-o fa-lg"></i> {{.Lang.delete}}</button>
+				</div>
+			</div>
+
+		</div>
+
+		<input type="hidden" id="del_user_id" value="{{.DelUserId}}">
+
+
+	</div>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

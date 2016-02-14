@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"html/template"
 	"io/ioutil"
@@ -130,20 +129,11 @@ func (c *Controller) Upgrade6() (string, error) {
 		videoHash = string(utils.DSha256(file))
 	}
 
-	text, err := utils.GetHttpTextAnswer("http://dcoin.club/pools")
-	if err != nil {
-		return "", utils.ErrInfo(err)
-	}
-	var pools_ []string
-	err = json.Unmarshal([]byte(text), &pools_)
-	if err != nil {
-		return "", utils.ErrInfo(err)
-	}
-	log.Debug("pools: %v", pools_)
+
 	rows, err := c.Query(c.FormatQuery(`
 			SELECT user_id, http_host
 			FROM miners_data
-			WHERE user_id IN (` + strings.Join(pools_, ",") + `)`))
+			WHERE i_am_pool = 1 AND pool_count_users < ?`), c.Variables.Int64["max_pool_users"])
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

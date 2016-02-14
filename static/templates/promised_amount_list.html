@@ -62,7 +62,7 @@
 
 	{{if .PromisedAmountListAccepted}}
 		<table id="promised_amount_list" class="table" style="width:500px">
-		<thead><tr><th>ID</th><th>{{.Lang.status}}</th><th style='text-align: center'>{{.Lang.currency}}</th><th style='text-align: center'>{{.Lang.amount}}</th><th style='text-align: center'>{{.Lang.pct_year}}</th><th>DC</th><th style='text-align: center'>{{.Lang.in_wallet}}</th><th style='text-align:center'></th></tr></thead>
+		<thead><tr><th>ID</th><th>{{.Lang.status}}</th><th style='text-align: center'>{{.Lang.currency}}</th><th style='text-align: center'>{{.Lang.amount}}</th><th>DC</th><th style='text-align: center'>{{.Lang.in_wallet}}</th><th style='text-align:center'></th></tr></thead>
 		<tbody>
 		{{$js:=""}}
 		{{range  $data:= .PromisedAmountListAccepted}}
@@ -77,7 +77,6 @@
 			{{else}}
 				<td style='text-align: center'><input type='text' class='amount' id='amount-input-{{$data.Id}}' onkeyup="clear_amount('amount-input-{{$data.Id}}')" value='{{$data.Amount}}'><button onclick="change_amount_click({{$data.Id}})" class='btn' >{{$.Lang.change}}</button>(max: {{$data.MaxAmount}})</td>
 			{{end}}
-			<td style='text-align: center'>{{$data.Pct}}</td>
 			{{$color:="green"}}
 			{{if eq $data.CurrencyId 1}}{{$color:="#428BCA"}}{{end}}
 			<td id='currency_{{$data.CurrencyId}}_{{$data.Status}}' style='color: {{$color}}; font-weight: bold; font-size: 15px'>{{$data.Tdc}}</td>

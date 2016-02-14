@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"encoding/json"
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"io/ioutil"
 )
@@ -15,14 +13,12 @@ type nodeConfigPage struct {
 	CountSignArr []int
 	Config       map[string]string
 	WaitingList  []map[string]string
-	MyStatus     string
-	MyMode       string
 	ConfigIni    string
 	UserId       int64
 	Lang         map[string]string
 	EConfig      map[string]string
 	Users        []map[int64]map[string]string
-	ModeError    string
+	MyStatus     string
 }
 
 func (c *Controller) NodeConfigControl() (string, error) {
@@ -83,108 +79,7 @@ func (c *Controller) NodeConfigControl() (string, error) {
 	}
 	config["tcp_listening"] = tcp_listening
 
-	myMode := ""
-	modeError := ""
-	if _, ok := c.Parameters["switch_pool_mode"]; ok {
-		dq := c.GetQuotes()
-		log.Debug("c.Community", c.Community)
-		if !c.Community { // сингл-мод
 
-			myUserId, err := c.GetMyUserId("")
-			commission, err := c.Single("SELECT commission FROM commission WHERE user_id = ?", myUserId).String()
-			if err != nil {
-				return "", utils.ErrInfo(err)
-			}
-			// без комиссии не получится генерить блоки и пр., TestBlock() будет выдавать ошибку
-			if len(commission) == 0 {
-				modeError = "empty commission"
-				myMode = "Single"
-			} else {
-				// переключаемся в пул-мод
-				for _, table := range consts.MyTables {
-
-					err = c.ExecSql("ALTER TABLE " + dq + table + dq + " RENAME TO " + dq + utils.Int64ToStr(myUserId) + "_" + table + dq)
-					if err != nil {
-						return "", utils.ErrInfo(err)
-					}
-				}
-				err = c.ExecSql("INSERT INTO community (user_id) VALUES (?)", myUserId)
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-
-				log.Debug("UPDATE config SET pool_admin_user_id = ?, pool_max_users = 100, commission = ?", myUserId, commission)
-				err = c.ExecSql("UPDATE config SET pool_admin_user_id = ?, pool_max_users = 100, commission = ?", myUserId, commission)
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-
-				// восстановим тех, кто ранее был на пуле
-				backup_community, err := c.Single("SELECT data FROM backup_community").Bytes()
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-				if len(backup_community) > 0 {
-					var community []int
-					err = json.Unmarshal(backup_community, &community)
-					if err != nil {
-						return "", utils.ErrInfo(err)
-					}
-					for i := 0; i < len(community); i++ {
-						// тут дубль при инсерте, поэтому без обработки ошибок
-						c.ExecSql("INSERT INTO community (user_id) VALUES (?)", community[i])
-					}
-				}
-				myMode = "Pool"
-			}
-		} else {
-
-			// бэкап, чтобы при возврате пул-мода, можно было восстановить
-			communityUsers := c.CommunityUsers
-			jsonData, _ := json.Marshal(communityUsers)
-			backup_community, err := c.Single("SELECT data FROM backup_community").String()
-			if err != nil {
-				return "", utils.ErrInfo(err)
-			}
-			if len(backup_community) > 0 {
-				err := c.ExecSql("UPDATE backup_community SET data = ?", jsonData)
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-			} else {
-				err = c.ExecSql("INSERT INTO backup_community (data) VALUES (?)", jsonData)
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-			}
-			myUserId, err := c.GetPoolAdminUserId()
-			for _, table := range consts.MyTables {
-				err = c.ExecSql("ALTER TABLE " + dq + utils.Int64ToStr(myUserId) + "_" + table + dq + " RENAME TO " + dq + table + dq)
-				if err != nil {
-					return "", utils.ErrInfo(err)
-				}
-			}
-			err = c.ExecSql("DELETE FROM community")
-			if err != nil {
-				return "", utils.ErrInfo(err)
-			}
-			myMode = "Single"
-		}
-	}
-
-	scriptName, err := c.Single("SELECT script_name FROM main_lock").String()
-	if err != nil {
-		return "", utils.ErrInfo(err)
-	}
-	myStatus := "ON"
-	if scriptName == "my_lock" {
-		myStatus = "OFF"
-	}
-	if myMode == "" && c.Community {
-		myMode = "Pool"
-	} else if myMode == "" {
-		myMode = "Single"
-	}
 
 	configIni, err := ioutil.ReadFile(*utils.Dir + "/config.ini")
 	if err != nil {
@@ -195,7 +90,14 @@ func (c *Controller) NodeConfigControl() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	scriptName, err := c.Single("SELECT script_name FROM main_lock").String()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	myStatus := "ON"
+	if scriptName == "my_lock" {
+		myStatus = "OFF"
+	}
 	TemplateStr, err := makeTemplate("node_config", "nodeConfig", &nodeConfigPage{
 		Alert:        c.Alert,
 		Lang:         c.Lang,
@@ -203,11 +105,9 @@ func (c *Controller) NodeConfigControl() (string, error) {
 		SignData:     "",
 		Config:       config,
 		UserId:       c.SessUserId,
-		MyStatus:     myStatus,
-		MyMode:       myMode,
 		ConfigIni:    string(configIni),
 		EConfig:      eConfig,
-		ModeError:    modeError,
+		MyStatus:     myStatus,
 		CountSignArr: c.CountSignArr})
 	if err != nil {
 		return "", utils.ErrInfo(err)

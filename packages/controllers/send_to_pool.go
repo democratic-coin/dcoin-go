@@ -20,7 +20,7 @@ func (c *Controller) SendToPool() (string, error) {
 	poolUid := utils.StrToInt64(c.r.FormValue("poolUid"))
 	data_, err := c.OneRow(`SELECT tcp_host, http_host FROM miners_data WHERE user_id = ?`, poolUid).String()
 	tcpHost := data_["tcp_host"]
-	httpHost := data_["http_host"]
+	//httpHost := data_["http_host"]
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -88,7 +88,7 @@ func (c *Controller) SendToPool() (string, error) {
 	result := ""
 	if status == 1 {
 		result = utils.JsonAnswer("1", "success").String()
-		c.ExecSql(`UPDATE `+c.MyPrefix+`my_table SET tcp_host = ?, http_host = ?`, tcpHost, httpHost)
+		c.ExecSql(`UPDATE `+c.MyPrefix+`my_table SET pool_user_id = ?`, poolUid)
 	} else {
 		result = utils.JsonAnswer("error", "error").String()
 	}

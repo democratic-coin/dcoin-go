@@ -25,7 +25,16 @@ func (c *Controller) SaveHost() (string, error) {
 		return `{"error":"1"}`, nil
 	}
 
-	err := c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET http_host = ?, tcp_host = ?", http_host, tcp_host)
+	// проверим, не занял ли кто-то такой хост
+	exists, err := c.Single(`SELECT user_id FROM miners_data WHERE http_host = ? OR tcp_host = ?`, http_host, tcp_host).Int64()
+	if err != nil {
+		return `{"error":"1"}`, nil
+	}
+	if exists > 0 {
+		return `{"error":"1"}`, nil
+	}
+
+	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET http_host = ?, tcp_host = ?", http_host, tcp_host)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

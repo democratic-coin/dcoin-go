@@ -1095,7 +1095,7 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 		}
 	case "system_commission":
 		if ok, _ := regexp.MatchString(`^[0-9]{1,3}$`, data); ok {
-			if StrToInt(data) <= 15 {
+			if StrToInt(data) <= 15 && StrToInt(data) >=5 {
 				return true
 			}
 		}
@@ -2720,6 +2720,14 @@ func JoinInts(arr map[int]int, sep string) string {
 	var arrStr []string
 	for _, v := range arr {
 		arrStr = append(arrStr, IntToStr(v))
+	}
+	return strings.Join(arrStr, sep)
+}
+
+func JoinInt64Slice(arr []int64, sep string) string {
+	var arrStr []string
+	for _, v := range arr {
+		arrStr = append(arrStr, Int64ToStr(v))
 	}
 	return strings.Join(arrStr, sep)
 }

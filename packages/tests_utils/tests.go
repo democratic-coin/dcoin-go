@@ -103,12 +103,15 @@ func AllHashes(db *utils.DCDB) (map[string]string, error) {
 }
 
 func DbConn() *utils.DCDB {
-	configIni_, err := config.NewConfig("ini", "config.ini")
+	configIni_, err := config.NewConfig("ini", *utils.Dir+"/config.ini")
 	if err != nil {
 		fmt.Println(err)
 	}
 	configIni, err := configIni_.GetSection("default")
-	db := utils.DbConnect(configIni)
+	db, err := utils.NewDbConnect(configIni)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return db
 }
 

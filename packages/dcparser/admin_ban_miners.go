@@ -29,16 +29,8 @@ func (p *Parser) AdminBanMinersFront() error {
 		return p.ErrInfo(err)
 	}
 
-	// проверим, точно ли были жалобы на тех, кого банит админ
 	users_ids := strings.Split(p.TxMaps.String["users_ids"], ",")
 	for i := 0; i < len(users_ids); i++ {
-		num, err := p.Single("SELECT user_id FROM abuses WHERE user_id  =  ?, 'num_rows'", users_ids[i]).Int64()
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		if num == 0 {
-			return p.ErrInfo("no abuses")
-		}
 
 		// не разжалован ли уже майнер
 		status, err := p.Single("SELECT status FROM miners_data WHERE user_id  =  ?", users_ids[i]).String()

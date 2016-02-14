@@ -1,0 +1,50 @@
+{{define "changePool"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		$("#main").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#pool_user_id").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'pool_user_id' : $('#pool_user_id').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('changePool', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+
+		} );
+
+</script>
+
+<h1 class="page-header">{{.Lang.change_host_title}}</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+
+	<form>
+		<fieldset>
+			pool_user_id
+			<input class="form-control" type="text" placeholder="" id="pool_user_id"><br>
+			<button type="submit" class="btn" id="save">{{.Lang.next}}</button>
+		</fieldset>
+	</form>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

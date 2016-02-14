@@ -98,7 +98,7 @@
 
 <h3>{{.Lang.general}}</h3>
 <table class="table table-bordered" style="width:600px">
-<thead><tr><th>{{.Lang.currency}}</th><th>Coins</th><th>{{.Lang.promised_amounts}}</th><th>miners</th><th>users</th></tr></thead>
+<thead><tr><th>{{.Lang.currency}}</th><th>Coins</th><th>{{.Lang.promised_amounts}} ({{.Lang.reduction_text}})</th><th>miners</th><th>users</th></tr></thead>
 <tbody>
 	{{if .SumWallets}}
 		{{range $currencyId, $sumAmount := .SumWallets}}

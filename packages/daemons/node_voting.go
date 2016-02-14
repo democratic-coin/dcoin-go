@@ -74,6 +74,7 @@ BEGIN:
 		rows, err := d.Query(d.FormatQuery(`
 				SELECT miners_data.user_id,
 							 http_host as host,
+							 pool_user_id,
 							 face_hash,
 							 profile_hash,
 							 photo_block_id,
@@ -95,9 +96,9 @@ BEGIN:
 			continue BEGIN
 		}
 		if ok := rows.Next(); ok {
-			var vote_id, miner_id int64
-			var user_id, host, row_face_hash, row_profile_hash, photo_block_id, photo_max_miner_id, miners_keepers string
-			err = rows.Scan(&user_id, &host, &row_face_hash, &row_profile_hash, &photo_block_id, &photo_max_miner_id, &miners_keepers, &vote_id, &miner_id)
+			var vote_id, miner_id, pool_user_id int64
+			var user_id, host,row_face_hash, row_profile_hash, photo_block_id, photo_max_miner_id, miners_keepers string
+			err = rows.Scan(&user_id, &host, &pool_user_id, &row_face_hash, &row_profile_hash, &photo_block_id, &photo_max_miner_id, &miners_keepers, &vote_id, &miner_id)
 			if err != nil {
 				rows.Close()
 				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -128,6 +129,18 @@ BEGIN:
 				var downloadError bool
 				var faceHash, profileHash string
 				var faceFile, profileFile []byte
+
+				if pool_user_id > 0 {
+					host, err = d.Single(`SELECT http_host FROM miners_data WHERE user_id = ?`, pool_user_id).String()
+					if err != nil {
+						rows.Close()
+						if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+							break BEGIN
+						}
+						continue BEGIN
+					}
+				}
+
 				// копируем фото  к себе
 				profilePath := *utils.Dir + "/public/profile_" + user_id + ".jpg"
 				_, err = utils.DownloadToFile(host+"/public/"+user_id+"_user_profile.jpg", profilePath, 60, chBreaker, chAnswer, GoroutineName)

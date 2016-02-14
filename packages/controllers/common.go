@@ -394,6 +394,12 @@ func makeTemplate(html, name string, tData interface{}) (string, error) {
 		"int64ToStr": func(text int64) string {
 			return utils.Int64ToStr(text)
 		},
+		"intToStr": func(text int) string {
+			return utils.IntToStr(text)
+		},
+		"intToInt64": func(text int) int64 {
+			return int64(text)
+		},
 		"rand": func() int {
 			return utils.RandInt(0, 99999999)
 		},

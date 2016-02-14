@@ -165,41 +165,17 @@
 				{{range $currency_id, $data := .PromisedAmountCurrencyList}}
 					<tr><td>D{{$data.name}}<input type='hidden' name='currency_id' value='{{$currency_id}}'></td><td>
 					<select  style='width: 150px' name='miner_pct'>
-					{{range $pctY, $pctSec := $.AllPct}}
-						{{$sel:=""}}
-						{{if eq $data.votes_miner_pct $pctSec}}
-							{{$sel:="selected"}}
-						{{end}}
-						<option value='{{$pctSec}}' {{$sel}}>{{$pctY}}</option>
-					{{end}}
+					{{noescape (index $.MinerPctSelectBox $currency_id)}}
 					</select>
 					</td><td>
 					<select style='width: 150px' name='user_pct'>
-					{{range $pctY, $pctSec := $.AllPct}}
-						{{$sel:=""}}
-						{{if eq $data.votes_user_pct $pctSec}}
-							{{$sel:="selected"}}
-						{{end}}
-						<option value='{{$pctSec}}' {{$sel}}>{{$pctY}}</option>
-					{{end}}
+					{{noescape (index $.UserPctSelectBox $currency_id)}}
 					</select>
 					</td><td>
 					<select style='width: 150px' name='max_promised_amount'>
-					{{range $k, $amount := $.AllMaxPromisedAmount}}
-						{{$sel:=""}}
-						{{if eq $data.votes_max_promised_amount $amount}}
-							{{$sel:="selected"}}
-						{{end}}
-						<option {{$sel}}>{{$amount}}</option>
-					{{end}}
+					{{noescape (index $.MaxPromisedAmountSelectBox $currency_id)}}
 					</select></td><td><select style='width: 150px' name='max_other_currencies'>
-					{{range $i := .PromisedAmountCurrencyList}}
-						{{$sel:=""}}
-						{{if eq $data.votes_max_other_currencies $i}}
-							{{$sel:="selected"}}
-						{{end}}
-						<option {{$sel}}>{{$i}}</option>
-					{{end}}
+					{{noescape (index $.MaxOtherCurrenciesSelectBox $currency_id)}}
 					</select></td><td><select style='width: 150px' name='reduction'><option>0</option><option>10</option><option>25</option><option>50</option><option>90</option></select></td></tr>
 			{{end}}
 			</table>
@@ -216,12 +192,12 @@
 
 	{{if .PromisedAmountCurrencyList}}
 			{{if not .MinerNewbie}}
-				<h3>{{.Lang.refs}}</h1>
+				<h3>{{.Lang.refs}}</h3>
 				<table class="table" style="width: 200px"><tr><th>{{.Lang.ref_level}}</th><th>%</th><th></tr>
-					{{range $i, $v := .Refs}}
-						<tr><td>{{sum $i 1}}</td><td><select id='ref_{{$v}}'>
-						{{range $k, $v := .RefsNums}}
-							<option {{if eq $v  (index $.Referral $v)}} selected {{end}}>{$v}</option>
+					{{range $i, $v0 := .Refs}}
+						<tr><td>{{sum $i 1}}</td><td><select id='ref_{{$v0}}'>
+						{{range $k, $v := $.RefsNums}}
+							<option {{if eq $v  (index $.Referral $v0)}} selected {{end}}>{{$v}}</option>
 						{{end}}
 					{{end}}
 				</table>
@@ -229,7 +205,7 @@
 		<h3>{{.Lang.elections_admin}}</h3>
 		<div class='form-inline'>Admin user_id: <input type='text' class='form-control' style='width: 70px' id='admin' value='0'> {{.Lang.elections_admin_text}}</div>
 
-		{{if or .PromisedAmountCurrencyList not .MinerNewbie}}
+		{{if or .PromisedAmountCurrencyList (not .MinerNewbie)}}
 			<div class="control-group" style="margin-top:20px; margin-bottom:20px"><div class="controls"><button class="btn btn-outline btn-primary" type="button" id="next">{{.Lang.next}}</button></div></div>
 		{{end}}
 	{{end}}

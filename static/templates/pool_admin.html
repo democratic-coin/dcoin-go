@@ -14,6 +14,42 @@
 		dc_navigate ('poolAdminControl', {'pool_tech_works':pool_tech_works, 'pool_max_users':$('#pool_max_users').val(), 'commission':$('#commission').val() } );
 	} );
 
+	var modeText = '';
+
+	$('#single_mode').bind('click', function () {
+		switchPool();
+		modeText = 'Single';
+	});
+
+	$('#pool_mode').bind('click', function () {
+		switchPool();
+		modeText = 'Pool';
+	});
+
+	function switchPool() {
+		$("#sign").css("display", "block");
+		$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}}');
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	}
+
+	$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('poolAdminControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
+						load_menu();
+						$('#mode').text(modeText)
+					}
+			);
+	} );
+
 </script>
 
 <link rel="stylesheet" href="static/css/progress.css" type="text/css" />
@@ -23,6 +59,25 @@
 {{template "alertSuccess".}}
 
 <div id="new">
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Only for miners</strong>
+		</div>
+		<div class="panel-body">
+			<p>Добавить новый пул можно только когда существующие пулы будут заполнены более чем на 90%. Текущее заполнение: <strong>{{.CurrentFillingPool}}</strong></p>
+
+
+			{{if .ModeError}}<div class="alert alert-danger" id="mode_error">{{.ModeError}}</div>{{end}}
+			Mode: <span id="mode">{{.MyMode}}</span><br>
+			<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button>
+
+			{{template "signatures".}}
+		</div>
+	</div>
+
+	<br><br>
+
 
 	<div class="form-horizontal">
 		<fieldset>
@@ -78,9 +133,9 @@
 
 	<h3>Users</h3><table class='table' style='width: 500px'><thead><tr><th>user_id</th><th>miner_id</th><th>email</th><th>del</th></tr></thead>
 	{{range $id, $data_ := .Users}}
-	{{range $uid, $data := $data_}}
-		<tr><td><a onclick="dc_navigate('poolAdminLogin', {'userId': {{$uid}} })">{{$uid}}</a></td><td>{{$data.miner_id}}</td><td>{{$data.email}}</td><td><a class="btn btn-danger" href="#" onclick="dc_navigate('poolAdminControl', {'del_id':'{{$uid}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i> {{.Lang.delete}}</a></td></tr>
-	{{end}}
+		{{range $uid, $data := $data_}}
+			<tr><td><a onclick="dc_navigate('poolAdminLogin', {'userId': {{$uid}} })">{{$uid}}</a></td><td>{{$data.miner_id}}</td><td>{{$data.email}}</td><td><a class="btn btn-danger" href="#" onclick="dc_navigate('delPoolUser', {'del_user_id':'{{$uid}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i> {{.Lang.delete}}</a></td></tr>
+		{{end}}
 	{{end}}
 	</table>
 

@@ -47,17 +47,6 @@
 				});
 	});
 
-	$('#single_mode').bind('click', function () {
-			dc_navigate ('nodeConfigControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
-			load_menu();
-			$('#mode').text('Single');
-	});
-
-	$('#pool_mode').bind('click', function () {
-			dc_navigate ('nodeConfigControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
-			load_menu();
-			$('#mode').text('Pool');
-	});
 
 
 	$('#full').bind('click', function () {
@@ -140,12 +129,7 @@
 	</div>
 	<br><br>
 
-	<div>
-		{{if .ModeError}}<div class="alert alert-danger" id="mode_error">{{.ModeError}}</div>{{end}}
-		Mode: <span id="mode">{{.MyMode}}</span><br>
-		<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button>
-	</div>
-	<br><br>
+
 
 	<div>
 		<button class="btn" id="lite">Lite nulling</button><br><br>

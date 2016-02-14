@@ -160,7 +160,7 @@ func (db *DCDB) GetAllVariables() (*Variables, error) {
 	}
 	for _, v := range all {
 		switch v["name"] {
-		case "alert_error_time", "error_time", "promised_amount_points", "promised_amount_votes_0", "promised_amount_votes_1", "promised_amount_votes_period", "holidays_max", "limit_abuses", "limit_abuses_period", "limit_promised_amount", "limit_promised_amount_period", "limit_cash_requests_out", "limit_cash_requests_out_period", "limit_change_geolocation", "limit_change_geolocation_period", "limit_holidays", "limit_holidays_period", "limit_message_to_admin", "limit_message_to_admin_period", "limit_mining", "limit_mining_period", "limit_node_key", "limit_node_key_period", "limit_primary_key", "limit_primary_key_period", "limit_votes_miners", "limit_votes_miners_period", "limit_votes_complex", "limit_votes_complex_period", "limit_commission", "limit_commission_period", "limit_new_miner", "limit_new_miner_period", "limit_new_user", "limit_new_user_period", "max_block_size", "max_block_user_transactions", "max_day_votes", "max_tx_count", "max_tx_size", "max_user_transactions", "miners_keepers", "miner_points", "miner_votes_0", "miner_votes_1", "miner_votes_attempt", "miner_votes_period", "mining_votes_0", "mining_votes_1", "mining_votes_period", "min_miners_keepers", "node_voting", "node_voting_period", "rollback_blocks_1", "rollback_blocks_2", "limit_change_host", "limit_change_host_period", "min_miners_of_voting", "min_hold_time_promise_amount", "min_promised_amount", "points_update_time", "reduction_period", "new_pct_period", "new_max_promised_amount", "new_max_other_currencies", "cash_request_time", "limit_for_repaid_fix", "limit_for_repaid_fix_period", "miner_newbie_time", "system_commission":
+		case "max_pool_users", "alert_error_time", "error_time", "promised_amount_points", "promised_amount_votes_0", "promised_amount_votes_1", "promised_amount_votes_period", "holidays_max", "limit_abuses", "limit_abuses_period", "limit_promised_amount", "limit_promised_amount_period", "limit_cash_requests_out", "limit_cash_requests_out_period", "limit_change_geolocation", "limit_change_geolocation_period", "limit_holidays", "limit_holidays_period", "limit_message_to_admin", "limit_message_to_admin_period", "limit_mining", "limit_mining_period", "limit_node_key", "limit_node_key_period", "limit_primary_key", "limit_primary_key_period", "limit_votes_miners", "limit_votes_miners_period", "limit_votes_complex", "limit_votes_complex_period", "limit_commission", "limit_commission_period", "limit_new_miner", "limit_new_miner_period", "limit_new_user", "limit_new_user_period", "max_block_size", "max_block_user_transactions", "max_day_votes", "max_tx_count", "max_tx_size", "max_user_transactions", "miners_keepers", "miner_points", "miner_votes_0", "miner_votes_1", "miner_votes_attempt", "miner_votes_period", "mining_votes_0", "mining_votes_1", "mining_votes_period", "min_miners_keepers", "node_voting", "node_voting_period", "rollback_blocks_1", "rollback_blocks_2", "limit_change_host", "limit_change_host_period", "min_miners_of_voting", "min_hold_time_promise_amount", "min_promised_amount", "points_update_time", "reduction_period", "new_pct_period", "new_max_promised_amount", "new_max_other_currencies", "cash_request_time", "limit_for_repaid_fix", "limit_for_repaid_fix_period", "miner_newbie_time", "system_commission":
 			result.Int64[v["name"]] = StrToInt64(v["value"])
 		case "points_factor":
 			result.Float64[v["name"]] = StrToFloat64(v["value"])
@@ -967,12 +967,18 @@ func (db *DCDB) HashTableData(table, where, orderBy string) (string, error) {
 		db.ConfigIni["sql_log"] = "0"
 		logOff = true
 	}
-	q := ""
+
+	var err error
+	var hash string
 	switch db.ConfigIni["db_type"] {
 	case "sqlite":
-		q = "SELECT md5(CAST((array_agg(t.* " + orderBy + ")) AS text)) FROM \"" + table + "\" t " + where
+		//q = "SELECT md5(CAST((array_agg(t.* " + orderBy + ")) AS text)) FROM \"" + table + "\" t " + where
 	case "postgresql":
-		q = "SELECT md5(CAST((array_agg(t.* " + orderBy + ")) AS text)) FROM \"" + table + "\" t " + where
+		q := "SELECT md5(CAST((array_agg(t.* " + orderBy + ")) AS text)) FROM \"" + table + "\" t " + where
+		hash, err = db.Single(q).String()
+		if err != nil {
+			return "", ErrInfo(err, q)
+		}
 	case "mysql":
 		err := db.ExecSql("SET @@group_concat_max_len = 4294967295")
 		if err != nil {
@@ -986,8 +992,12 @@ func (db *DCDB) HashTableData(table, where, orderBy string) (string, error) {
 		columns = strings.Replace(columns, "`status_backup`,", "", -1)
 		columns = strings.Replace(columns, ",`cash_request_in_block_id`", "", -1)
 		columns = strings.Replace(columns, "`cash_request_in_block_id`,", "", -1)
-		q = "SELECT MD5(GROUP_CONCAT( CONCAT_WS( '#', `" + columns + "`)  " + orderBy + " )) FROM `" + table + "` " + where
+		q := "SELECT MD5(GROUP_CONCAT( CONCAT_WS( '#', `" + columns + "`)  " + orderBy + " )) FROM `" + table + "` " + where
 		log.Debug("%v", q)
+		hash, err = db.Single(q).String()
+		if err != nil {
+			return "", ErrInfo(err, q)
+		}
 	}
 	//fmt.Println(q)
 
@@ -1001,10 +1011,7 @@ func (db *DCDB) HashTableData(table, where, orderBy string) (string, error) {
 		columns = strings.Replace(columns, "cron_checked_time,", "", -1)
 		q="SELECT md5(CAST((array_agg("+columns+" "+orderBy+")) AS text)) FROM \""+table+"\" "+where
 	}*/
-	hash, err := db.Single(q).String()
-	if err != nil {
-		return "", ErrInfo(err, q)
-	}
+
 	if logOff {
 		db.ConfigIni["sql_log"] = "1"
 	}

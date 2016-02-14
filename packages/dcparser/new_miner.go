@@ -16,8 +16,10 @@ func (p *Parser) NewMinerInit() error {
 	var fields []map[string]string
 	if p.BlockData != nil && p.BlockData.BlockId < 250900 {
 		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"sign": "bytes"}}
-	} else {
+	} else if p.BlockData != nil && p.BlockData.BlockId < 280500 {
 		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"tcp_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"sign": "bytes"}}
+	} else {
+		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"tcp_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"pool_user_id": "int64"}, {"sign": "bytes"}}
 	}
 	err := p.GetTxMaps(fields)
 	if err != nil {
@@ -57,12 +59,17 @@ func (p *Parser) NewMinerFront() error {
 	if !utils.CheckInputData(p.TxMap["longitude"], "coordinate") {
 		return utils.ErrInfoFmt("longitude")
 	}
-	if !utils.CheckInputData(p.TxMap["http_host"], "http_host") {
+	if p.TxMaps.String["http_host"] != "0" && !utils.CheckInputData(p.TxMap["http_host"], "http_host") {
 		return utils.ErrInfoFmt("http_host")
 	}
 	if p.BlockData == nil || p.BlockData.BlockId > 250900 {
-		if !utils.CheckInputData(p.TxMap["tcp_host"], "tcp_host") {
+		if p.TxMaps.String["tcp_host"] != "0" && !utils.CheckInputData(p.TxMap["tcp_host"], "tcp_host") {
 			return utils.ErrInfoFmt("tcp_host")
+		}
+	}
+	if p.BlockData == nil || p.BlockData.BlockId > 280500 {
+		if p.TxMaps.String["pool_user_id"] != "0" && !utils.CheckInputData(p.TxMap["pool_user_id"], "int64") {
+			return utils.ErrInfoFmt("pool_user_id")
 		}
 	}
 	if !utils.CheckInputData_(p.TxMap["face_coords"], "coords", utils.IntToStr(len(exampleSpots.Face)-1)) {
@@ -86,6 +93,42 @@ func (p *Parser) NewMinerFront() error {
 	if !utils.CheckInputData(p.TxMap["node_public_key"], "public_key") {
 		return utils.ErrInfoFmt("node_public_key")
 	}
+
+	if (p.BlockData == nil || p.BlockData.BlockId > 280500) {
+		// проверим, не занял ли кто-то хосты
+		if p.TxMaps.String["http_host"]!="0" {
+			exists, err := p.Single(`SELECT user_id FROM miners_data WHERE http_host = ?`, p.TxMaps.String["http_host"]).Int64()
+			if err != nil {
+				return p.ErrInfo(err)
+			}
+			if exists > 0 {
+				return p.ErrInfo("host exists")
+			}
+		}
+		if p.TxMaps.String["tcp_host"]!="0" {
+			exists, err := p.Single(`SELECT user_id FROM miners_data WHERE tcp_host = ?`, p.TxMaps.String["tcp_host"]).Int64()
+			if err != nil {
+				return p.ErrInfo(err)
+			}
+			if exists > 0 {
+				return p.ErrInfo("host exists")
+			}
+		}
+		if (p.TxMaps.String["http_host"]!="0" || p.TxMaps.String["tcp_host"]!="0") && p.TxMaps.Int64["pool_user_id"] == 0 {
+			return p.ErrInfo("host and pool empty")
+		}
+		if p.TxMaps.Int64["pool_user_id"] > 0 {
+			// проверим, есть ли такой пул и есть ли места на выбранном пуле
+			iAmPool, err := p.Single(`SELECT i_am_pool FROM miners_data WHERE user_id = ? AND pool_count_users < ?`, p.TxMaps.Int64["pool_user_id"], p.Variables.Int64["max_pool_users"]).Int64()
+			if err != nil {
+				return p.ErrInfo(err)
+			}
+			if iAmPool == 0 {
+				return p.ErrInfo("incorrect pool_user_id")
+			}
+		}
+	}
+
 	forSign := ""
 	if p.BlockData != nil && p.BlockData.BlockId < 250900 {
 		forSign = fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", p.TxMap["type"], p.TxMap["time"], p.TxMap["user_id"], p.TxMap["race"], p.TxMap["country"], p.TxMap["latitude"], p.TxMap["longitude"], p.TxMap["http_host"], p.TxMap["face_hash"], p.TxMap["profile_hash"], p.TxMap["face_coords"], p.TxMap["profile_coords"], p.TxMap["video_type"], p.TxMap["video_url_id"], p.TxMap["node_public_key"])
@@ -398,6 +441,12 @@ func (p *Parser) NewMiner() error {
 			return p.ErrInfo(err)
 		}
 	}
+	if p.TxMaps.Int64["pool_user_id"] > 0 {
+		err = p.ExecSql(`UPDATE miners_data SET pool_count_users = pool_count_users + 1 WHERE user_id = ?`, p.TxMaps.Int64["pool_user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+	}
 	return nil
 }
 
@@ -433,6 +482,12 @@ func (p *Parser) NewMinerRollback() error {
 			if err != nil {
 				return err
 			}
+		}
+	}
+	if p.TxMaps.Int64["pool_user_id"] > 0 {
+		err = p.ExecSql(`UPDATE miners_data SET pool_count_users = pool_count_users - 1 WHERE user_id = ?`, p.TxMaps.Int64["pool_user_id"])
+		if err != nil {
+			return p.ErrInfo(err)
 		}
 	}
 	return nil
