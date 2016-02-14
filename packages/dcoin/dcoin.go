@@ -2,7 +2,7 @@ package dcoin
 
 import (
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/thrust"
-	//"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/tutorials/provisioner"
+//"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/tutorials/provisioner"
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
@@ -15,7 +15,7 @@ import (
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-bindata-assetfs"
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
 	_ "image/png"
-	//"io"
+//"io"
 	"encoding/json"
 	"io/ioutil"
 	"math/rand"
@@ -26,10 +26,11 @@ import (
 	"runtime"
 	"strings"
 	"time"
-	//"syscall"
+//"syscall"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/bindings/window"
 	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
+	"github.com/c-darwin/dcoin-go/packages/schema"
 )
 
 var (
@@ -177,7 +178,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	case "console":
 		backend = logging.NewLogBackend(os.Stderr, "", 0)
 	case "file_console":
-		//backend = logging.NewLogBackend(io.MultiWriter(f, os.Stderr), "", 0)
+	//backend = logging.NewLogBackend(io.MultiWriter(f, os.Stderr), "", 0)
 	default:
 		backend = logging.NewLogBackend(f, "", 0)
 	}
@@ -246,7 +247,106 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
+
+			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.1.0a1")) {
+				community, err := utils.DB.GetCommunityUsers()
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				if len(community) > 0 {
+					for i := 0; i < len(community); i++ {
+						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+						if err != nil {
+							log.Error("%v", utils.ErrInfo(err))
+						}
+					}
+				} else {
+					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+					if err != nil {
+						log.Error("%v", utils.ErrInfo(err))
+					}
+				}
+
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool tinyint(3) NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int(11)  NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "bigint(20) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint NOT NULL  default nextval('auto_payments_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "amount", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "commission", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "currency_id", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[4] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Когда был последний платеж. При создании авто-платежа пишется текущее время"}
+				s2[5] = map[string]string{"name": "period", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[6] = map[string]string{"name": "sender", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[7] = map[string]string{"name": "recipient", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[8] = map[string]string{"name": "comment", "mysql": "text CHARACTER SET utf8 NOT NULL DEFAULT ''", "sqlite": "text NOT NULL DEFAULT ''", "postgresql": "text NOT NULL DEFAULT ''", "comment": ""}
+				s2[9] = map[string]string{"name": "block_id", "mysql": "int(11)  unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)   NOT NULL DEFAULT '0'", "postgresql": "int   NOT NULL DEFAULT '0'", "comment": "Для отката новой записи об авто-платеже"}
+				s2[10] = map[string]string{"name": "del_block_id", "mysql": "int(11)  unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)   NOT NULL DEFAULT '0'", "postgresql": "int   NOT NULL DEFAULT '0'", "comment": "Чистим по крону старые данные раз в сутки. Удалять нельзя, т.к. нужно откатывать"}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["auto_payments"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+
+				s = make(schema.Recmap)
+				s1 = make(schema.Recmap)
+				s2 = make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["log_time_auto_payments"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+
+				s = make(schema.Recmap)
+				s1 = make(schema.Recmap)
+				s2 = make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["log_time_del_user_from_pool"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+			}
 		}
+
 		err = utils.DB.Close()
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
@@ -411,6 +511,16 @@ func exhangeHttpListener(HandleHttpHost string) {
 	//http.HandleFunc("e-tmp.com:8089/", controllers.IndexE)
 	//http.HandleFunc("e-tmp.com:8089/e/", controllers.IndexE)
 
+	config, err := utils.DB.GetNodeConfig()
+	if err != nil {
+		log.Error("%v", err)
+	}
+	fmt.Println("config", config)
+	if len(config["stat_host"]) > 0 {
+		//fmt.Println("stat_host", config["stat_host"])
+		http.HandleFunc(config["stat_host"]+"/", controllers.IndexStat)
+	}
+
 	if eConfig["enable"] == "1" {
 		if len(eConfig["domain"]) > 0 {
 			fmt.Println("E host", eConfig["domain"])
@@ -432,6 +542,8 @@ func exhangeHttpListener(HandleHttpHost string) {
 			}
 		}
 	}
+
+
 }
 
 // http://grokbase.com/t/gg/golang-nuts/12a9yhgr64/go-nuts-disable-directory-listing-with-http-fileserver#201210093cnylxyosmdfuf3wh5xqnwiut4

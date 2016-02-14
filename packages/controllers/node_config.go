@@ -29,7 +29,7 @@ func (c *Controller) NodeConfigControl() (string, error) {
 
 	log.Debug("c.Parameters", c.Parameters)
 	if _, ok := c.Parameters["save_config"]; ok {
-		err := c.ExecSql("UPDATE config SET in_connections_ip_limit = ?, in_connections = ?, out_connections = ?, cf_url = ?, pool_url = ?, pool_admin_user_id = ?, exchange_api_url = ?, auto_reload = ?, http_host = ?, chat_enabled = ?, analytics_disabled = ?, auto_update = ?, auto_update_url = ?", c.Parameters["in_connections_ip_limit"], c.Parameters["in_connections"], c.Parameters["out_connections"], c.Parameters["cf_url"], c.Parameters["pool_url"], c.Parameters["pool_admin_user_id"], c.Parameters["exchange_api_url"], c.Parameters["auto_reload"], c.Parameters["http_host"], c.Parameters["chat_enabled"], c.Parameters["analytics_disabled"], c.Parameters["auto_update"], c.Parameters["auto_update_url"])
+		err := c.ExecSql("UPDATE config SET in_connections_ip_limit = ?, in_connections = ?, out_connections = ?, cf_url = ?, pool_url = ?, pool_admin_user_id = ?, exchange_api_url = ?, auto_reload = ?, http_host = ?, chat_enabled = ?, analytics_disabled = ?, auto_update = ?, auto_update_url = ?, stat_host = ?", c.Parameters["in_connections_ip_limit"], c.Parameters["in_connections"], c.Parameters["out_connections"], c.Parameters["cf_url"], c.Parameters["pool_url"], c.Parameters["pool_admin_user_id"], c.Parameters["exchange_api_url"], c.Parameters["auto_reload"], c.Parameters["http_host"], c.Parameters["chat_enabled"], c.Parameters["analytics_disabled"], c.Parameters["auto_update"], c.Parameters["auto_update_url"], c.Parameters["stat_host"])
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}

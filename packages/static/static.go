@@ -60,6 +60,7 @@
 // static/img/rolling.gif
 // static/img/squares.gif
 // static/img/squares2.gif
+// static/img/stat.png
 // static/img/us-ru.png
 // static/js/Serpent.js
 // static/js/aes.js
@@ -1362,6 +1363,24 @@ func staticImgSquaresGif() (*asset, error) {
 func staticImgSquares2Gif() (*asset, error) {
 	path := "/dc/static/img/squares2.gif"
 	name := "static/img/squares2.gif"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImgStatPng reads file data from disk. It returns an error on failure.
+func staticImgStatPng() (*asset, error) {
+	path := "/dc/static/img/stat.png"
+	name := "static/img/stat.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -5268,6 +5287,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/img/rolling.gif": staticImgRollingGif,
 	"static/img/squares.gif": staticImgSquaresGif,
 	"static/img/squares2.gif": staticImgSquares2Gif,
+	"static/img/stat.png": staticImgStatPng,
 	"static/img/us-ru.png": staticImgUsRuPng,
 	"static/js/Serpent.js": staticJsSerpentJs,
 	"static/js/aes.js": staticJsAesJs,
@@ -5649,6 +5669,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"squares.gif": &bintree{staticImgSquaresGif, map[string]*bintree{
 			}},
 			"squares2.gif": &bintree{staticImgSquares2Gif, map[string]*bintree{
+			}},
+			"stat.png": &bintree{staticImgStatPng, map[string]*bintree{
 			}},
 			"us-ru.png": &bintree{staticImgUsRuPng, map[string]*bintree{
 			}},

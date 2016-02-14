@@ -18,6 +18,7 @@
 				'auto_update_url' : $('#auto_update_url').val(),
 				'chat_enabled' : $('#chat_enabled').val(),
 				'analytics_disabled' : $('#analytics_disabled').val(),
+				'stat_host' : $('#stat_host').val(),
 				'config_ini' : $('#config_ini').val()
 			});
 
@@ -111,6 +112,8 @@
 		<input id="chat_enabled" class="input" type="text" value="{{.Config.chat_enabled}}">
 		<label>Disable analytics</label>
 		<input id="analytics_disabled" class="input" type="text" value="{{.Config.analytics_disabled}}">
+		<label>Stat host</label>
+		<input id="stat_host" class="input" type="text" value="{{.Config.stat_host}}">
 		<br>
 
 		<textarea style="width: 300px; height: 150px" id="config_ini">{{.ConfigIni}}</textarea>
