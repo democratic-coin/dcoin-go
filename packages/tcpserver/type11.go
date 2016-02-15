@@ -20,7 +20,7 @@ func (t *TcpServer) Type11() {
 	}
 	size := utils.BinToDec(buf)
 	log.Debug("size: %d", size)
-	if size < 32<<20 {
+	if size < 64<<20 {
 		// сами данные
 		log.Debug("read data")
 		binaryData := make([]byte, size)
