@@ -77,6 +77,9 @@ func (p *Parser) NewPromisedAmountFront() error {
 		return p.ErrInfo("amount")
 	}
 
+	// пока нет хотя бы 1000 майнеров по этой валюте, нельзя добавлять обещанную сумму не из зеленой зоны
+
+
 	// возьмем id всех добавленных валют
 	existsCurrencies, err := p.GetList("SELECT currency_id FROM promised_amount WHERE user_id  =  ? AND del_block_id  =  0 AND del_mining_block_id  =  0 GROUP BY currency_id", p.TxMaps.Int64["user_id"]).Int64()
 	if err != nil {
