@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Parser) ChangePoolInit() error {
-	fields := []map[string]string{{"pool_user_id": "string"}, {"sign": "bytes"}}
+	fields := []map[string]string{{"pool_user_id": "int64"}, {"sign": "bytes"}}
 	err := p.GetTxMaps(fields)
 	if err != nil {
 		return p.ErrInfo(err)
