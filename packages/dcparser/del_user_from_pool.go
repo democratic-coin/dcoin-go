@@ -58,7 +58,8 @@ func (p *Parser) DelUserFromPoolFront() error {
 }
 
 func (p *Parser) DelUserFromPool() error {
-	err := p.ExecSql(`UPDATE miners_data SET pool_user_id = 0 WHERE user_id = ?`, p.TxMaps.Int64["del_user_id"])
+
+	err := p.selectiveLoggingAndUpd([]string{"pool_user_id"}, []interface{}{0}, "miners_data", []string{"user_id"}, []string{utils.Int64ToStr(p.TxMaps.Int64["del_user_id"])})
 	if err != nil {
 		return p.ErrInfo(err)
 	}
@@ -66,7 +67,8 @@ func (p *Parser) DelUserFromPool() error {
 }
 
 func (p *Parser) DelUserFromPoolRollback() error {
-	err := p.ExecSql(`UPDATE miners_data SET pool_user_id = 0 WHERE user_id = ?`, p.TxUserID, p.TxMaps.Int64["del_user_id"])
+
+	err := p.selectiveRollback([]string{"pool_user_id"}, "miners_data", "user_id="+utils.Int64ToStr(p.TxMaps.Int64["del_user_id"]), false)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
