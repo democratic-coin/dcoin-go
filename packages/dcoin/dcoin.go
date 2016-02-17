@@ -204,7 +204,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	// если есть OldFileName, значит работаем под именем tmp_dc и нужно перезапуститься под нормальным именем
-	log.Error("OldFileName %v", *utils.OldFileName)
+	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
 
 		// вначале нужно обновить БД в зависимости от версии
@@ -232,6 +232,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
+		log.Debug("pidMap[version] %v", pidMap["version"])
 		if len(pidMap["version"]) > 0 {
 			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
@@ -248,7 +249,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.1.0a1")) {
+			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.1.0a6")) {
+				log.Debug("< 2.1.0a1")
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
@@ -261,12 +263,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 						}
 					}
 				} else {
+					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
 					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
 					if err != nil {
 						log.Error("%v", utils.ErrInfo(err))
 					}
 				}
 
+				log.Debug(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
@@ -294,6 +298,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 				schema_ := &schema.SchemaStruct{}
 				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
 
 				s := make(schema.Recmap)
 				s1 := make(schema.Recmap)
