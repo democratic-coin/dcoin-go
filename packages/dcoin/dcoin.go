@@ -132,19 +132,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}
 
-	// сохраним текущий pid и версию
-	if !utils.Mobile() {
-		pid := os.Getpid()
-		PidAndVer, err := json.Marshal(map[string]string{"pid": utils.IntToStr(pid), "version": consts.VERSION})
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		err = ioutil.WriteFile(*utils.Dir+"/dcoin.pid", PidAndVer, 0644)
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
-		}
-	}
+
 
 	controllers.SessInit()
 	controllers.ConfigInit()
@@ -371,6 +359,22 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		log.Debug("OldFileName %v", *utils.OldFileName)
 		os.Exit(1)
 	}
+
+	// сохраним текущий pid и версию
+	if !utils.Mobile() {
+		pid := os.Getpid()
+		PidAndVer, err := json.Marshal(map[string]string{"pid": utils.IntToStr(pid), "version": consts.VERSION})
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+		}
+		err = ioutil.WriteFile(*utils.Dir+"/dcoin.pid", PidAndVer, 0644)
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+			panic(err)
+		}
+	}
+
+
 	// откат БД до указанного блока
 	if *utils.RollbackToBlockId > 0 {
 		utils.DB, err = utils.NewDbConnect(configIni)
