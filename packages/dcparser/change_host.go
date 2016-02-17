@@ -49,7 +49,7 @@ func (p *Parser) ChangeHostFront() error {
 		return p.ErrInfo(err)
 	}
 
-	if p.BlockData == nil || p.BlockData.BlockId > 280500 {
+	if p.BlockData == nil || p.BlockData.BlockId > 281500 {
 		// проверим, не занял ли кто-то хосты
 		exists, err := p.Single(`SELECT user_id FROM miners_data WHERE http_host = ? OR tcp_host = ? OR e_host = ?`, p.TxMaps.String["http_host"], p.TxMaps.String["tcp_host"], p.TxMaps.String["e_host"]).Int64()
 		if err != nil {
