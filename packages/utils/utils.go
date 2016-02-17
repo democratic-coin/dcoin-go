@@ -1117,6 +1117,17 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 				return true
 			}
 		}
+	case "avatar":
+		regex := `https?\:\/\/`        // SCHEME
+		regex += `[\w-.]*\.[a-z]{2,4}` // Host or IP
+		regex += `(\:[0-9]{2,5})?`     // Port
+		regex += `(\/[\w_-]+)*\/?`     // Path
+		regex += `\.(png|jpg)`         // Img
+		if ok, _ := regexp.MatchString(`^`+regex+`$`, data); ok {
+			if len(data) < 100 {
+				return true
+			}
+		}
 	case "img_url":
 		regex := `https?\:\/\/`        // SCHEME
 		regex += `[\w-.]*\.[a-z]{2,4}` // Host or IP
