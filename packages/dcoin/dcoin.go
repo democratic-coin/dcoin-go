@@ -225,22 +225,21 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a9")) {
-				log.Debug("< 2.1.0a8")
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a13")) {
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 				if len(community) > 0 {
 					for i := 0; i < len(community); i++ {
-						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 						if err != nil {
 							log.Error("%v", utils.ErrInfo(err))
 						}
 					}
 				} else {
-					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
-					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
+					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 					if err != nil {
 						log.Error("%v", utils.ErrInfo(err))
 					}
@@ -251,19 +250,19 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool tinyint(3) NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool int NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int  NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int  NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
