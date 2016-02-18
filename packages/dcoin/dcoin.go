@@ -195,17 +195,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
 
-		// вначале нужно обновить БД в зависимости от версии
-		dat, err := ioutil.ReadFile(*utils.Dir + "/dcoin.pid")
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		var pidMap map[string]string
-		err = json.Unmarshal(dat, &pidMap)
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-
 		log.Debug("OldFileName %v", *utils.OldFileName)
 		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
 		if err != nil {
@@ -220,16 +209,16 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-		log.Debug("pidMap[version] %v", pidMap["version"])
-		if len(pidMap["version"]) > 0 {
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5")) {
+		log.Debug("*utils.OldFileName %v", *utils.OldVersion)
+		if len(*utils.OldVersion) > 0 {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.0.1b2")) {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.0.1b2")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
 				if err != nil {
@@ -237,8 +226,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.1.0a6")) {
-				log.Debug("< 2.1.0a1")
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a8")) {
+				log.Debug("< 2.1.0a8")
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
