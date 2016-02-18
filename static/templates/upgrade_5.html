@@ -132,6 +132,8 @@
 	<div id="map_canvas" style="margin-bottom:20px; display:none"></div>
 	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
 	<br>
+
+    <button class="btn btn-info" id="geo" onclick="geoFindMe()">My location</button>
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
 
 </div>
