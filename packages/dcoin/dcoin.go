@@ -195,7 +195,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
 
-		log.Debug("OldFileName %v", *utils.OldFileName)
 		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
 		if err != nil {
 			log.Debug("%v", os.Stderr)
@@ -209,7 +208,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-		log.Debug("*utils.OldFileName %v", *utils.OldVersion)
+		log.Debug("*utils.OldVersion %v", *utils.OldVersion)
 		if len(*utils.OldVersion) > 0 {
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
@@ -226,7 +225,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a8")) {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a9")) {
 				log.Debug("< 2.1.0a8")
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {

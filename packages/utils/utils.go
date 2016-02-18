@@ -3414,7 +3414,7 @@ func DcoinUpd(url string) error {
 	} else {
 		old = *Dir + "/" + filepath.Base(os.Args[0])
 	}
-	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir)
+	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
 	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
 	if err != nil {
 		return ErrInfo(err)
