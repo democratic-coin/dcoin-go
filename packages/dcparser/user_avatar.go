@@ -28,7 +28,7 @@ func (p *Parser) UserAvatarFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	if !utils.CheckInputData(p.TxMaps.String["avatar"], "img_url") && p.TxMaps.String["avatar"] != "0" {
+	if !utils.CheckInputData(p.TxMaps.String["avatar"], "avatar") && p.TxMaps.String["avatar"] != "0" {
 		return fmt.Errorf("incorrect avatar")
 	}
 

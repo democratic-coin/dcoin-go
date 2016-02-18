@@ -132,19 +132,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}
 
-	// сохраним текущий pid и версию
-	if !utils.Mobile() {
-		pid := os.Getpid()
-		PidAndVer, err := json.Marshal(map[string]string{"pid": utils.IntToStr(pid), "version": consts.VERSION})
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		err = ioutil.WriteFile(*utils.Dir+"/dcoin.pid", PidAndVer, 0644)
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
-		}
-	}
+
 
 	controllers.SessInit()
 	controllers.ConfigInit()
@@ -204,21 +192,9 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	// если есть OldFileName, значит работаем под именем tmp_dc и нужно перезапуститься под нормальным именем
-	log.Error("OldFileName %v", *utils.OldFileName)
+	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" {
 
-		// вначале нужно обновить БД в зависимости от версии
-		dat, err := ioutil.ReadFile(*utils.Dir + "/dcoin.pid")
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		var pidMap map[string]string
-		err = json.Unmarshal(dat, &pidMap)
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-
-		log.Debug("OldFileName %v", *utils.OldFileName)
 		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
 		if err != nil {
 			log.Debug("%v", os.Stderr)
@@ -232,15 +208,16 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-		if len(pidMap["version"]) > 0 {
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("1.0.2b5")) {
+		log.Debug("*utils.OldVersion %v", *utils.OldVersion)
+		if len(*utils.OldVersion) > 0 {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.0.1b2")) {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.0.1b2")) {
 				log.Debug("%v", "ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
 				if err != nil {
@@ -248,42 +225,44 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			if (utils.VersionOrdinal(pidMap["version"]) < utils.VersionOrdinal("2.1.0a1")) {
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a13")) {
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 				if len(community) > 0 {
 					for i := 0; i < len(community); i++ {
-						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 						if err != nil {
 							log.Error("%v", utils.ErrInfo(err))
 						}
 					}
 				} else {
-					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int(11) NOT NULL DEFAULT '0'`)
+					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
+					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 					if err != nil {
 						log.Error("%v", utils.ErrInfo(err))
 					}
 				}
 
+				log.Debug(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool tinyint(3) NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool int NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int  NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int  NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
-				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int(11)  NOT NULL DEFAULT '0'`)
+				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
@@ -294,6 +273,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 				schema_ := &schema.SchemaStruct{}
 				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
 
 				s := make(schema.Recmap)
 				s1 := make(schema.Recmap)
@@ -366,6 +346,22 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		log.Debug("OldFileName %v", *utils.OldFileName)
 		os.Exit(1)
 	}
+
+	// сохраним текущий pid и версию
+	if !utils.Mobile() {
+		pid := os.Getpid()
+		PidAndVer, err := json.Marshal(map[string]string{"pid": utils.IntToStr(pid), "version": consts.VERSION})
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+		}
+		err = ioutil.WriteFile(*utils.Dir+"/dcoin.pid", PidAndVer, 0644)
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+			panic(err)
+		}
+	}
+
+
 	// откат БД до указанного блока
 	if *utils.RollbackToBlockId > 0 {
 		utils.DB, err = utils.NewDbConnect(configIni)
