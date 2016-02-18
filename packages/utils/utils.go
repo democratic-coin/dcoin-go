@@ -74,6 +74,7 @@ type DaemonsChansType struct {
 	ChAnswer chan string
 }
 var (
+	OldVersion = flag.String("oldVersion", "", "")
 	TestRollBack = flag.Int64("testRollBack", 0, "testRollBack")
 	Dir = flag.String("dir", GetCurrentDir(), "Dcoin directory")
 	OldFileName = flag.String("oldFileName", "", "")
@@ -1114,6 +1115,17 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 	case "reduction_type":
 		if ok, _ := regexp.MatchString(`^(manual|promised_amount)$`, data); ok {
 			if StrToInt(data) <= 30 {
+				return true
+			}
+		}
+	case "avatar":
+		regex := `https?\:\/\/`        // SCHEME
+		regex += `[\w-.]*\.[a-z]{2,4}` // Host or IP
+		regex += `(\:[0-9]{2,5})?`     // Port
+		regex += `(\/[\w_-]+)*\/?`     // Path
+		regex += `\.(png|jpg)`         // Img
+		if ok, _ := regexp.MatchString(`^`+regex+`$`, data); ok {
+			if len(data) < 100 {
 				return true
 			}
 		}
@@ -3402,8 +3414,8 @@ func DcoinUpd(url string) error {
 	} else {
 		old = *Dir + "/" + filepath.Base(os.Args[0])
 	}
-	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir)
-	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir).Start()
+	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
+	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
 	if err != nil {
 		return ErrInfo(err)
 	}

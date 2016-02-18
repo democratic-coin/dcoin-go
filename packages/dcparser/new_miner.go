@@ -16,7 +16,7 @@ func (p *Parser) NewMinerInit() error {
 	var fields []map[string]string
 	if p.BlockData != nil && p.BlockData.BlockId < 250900 {
 		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"sign": "bytes"}}
-	} else if p.BlockData != nil && p.BlockData.BlockId < 280500 {
+	} else if p.BlockData != nil && p.BlockData.BlockId < 281500 {
 		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"tcp_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"sign": "bytes"}}
 	} else {
 		fields = []map[string]string{{"race": "int64"}, {"country": "int64"}, {"latitude": "float64"}, {"longitude": "float64"}, {"http_host": "string"}, {"tcp_host": "string"}, {"face_coords": "string"}, {"profile_coords": "string"}, {"face_hash": "string"}, {"profile_hash": "string"}, {"video_type": "string"}, {"video_url_id": "string"}, {"node_public_key": "bytes"}, {"pool_user_id": "int64"}, {"sign": "bytes"}}
@@ -67,7 +67,7 @@ func (p *Parser) NewMinerFront() error {
 			return utils.ErrInfoFmt("tcp_host")
 		}
 	}
-	if p.BlockData == nil || p.BlockData.BlockId > 280500 {
+	if p.BlockData == nil || p.BlockData.BlockId > 281500 {
 		if p.TxMaps.String["pool_user_id"] != "0" && !utils.CheckInputData(p.TxMap["pool_user_id"], "int64") {
 			return utils.ErrInfoFmt("pool_user_id")
 		}
@@ -94,7 +94,7 @@ func (p *Parser) NewMinerFront() error {
 		return utils.ErrInfoFmt("node_public_key")
 	}
 
-	if (p.BlockData == nil || p.BlockData.BlockId > 280500) {
+	if (p.BlockData == nil || p.BlockData.BlockId > 281500) {
 		// проверим, не занял ли кто-то хосты
 		if p.TxMaps.String["http_host"]!="0" {
 			exists, err := p.Single(`SELECT user_id FROM miners_data WHERE http_host = ?`, p.TxMaps.String["http_host"]).Int64()
