@@ -39,7 +39,9 @@
                 alert("Unable to retrieve your location")
             }
         }
-        getLocation()
+        {{ if .Mobile }}
+        getLocation();
+        {{ end }}
 
 		function success(position) {
 			latitude = position.coords.latitude;
@@ -58,6 +60,8 @@
 	}
 
 	{{ if not .GeolocationLat }}
+        var latitude = 43.0;
+        var longitude = -74.0;
 		geoFindMe();
 	{{ else }}
 		var latitude = {{ .GeolocationLat }}
