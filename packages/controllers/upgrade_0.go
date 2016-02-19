@@ -4,8 +4,6 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
-	"github.com/c-darwin/dcoin-go/packages/geolocation"
-	"fmt"
 )
 
 type upgrade0Page struct {
@@ -23,14 +21,6 @@ type upgrade0Page struct {
 	Mobile          bool
 }
 
-func init() {
-	loc, err := geolocation.CLLocation()
-	if err != nil {
-		fmt.Println("CLLocatin threw an error,", err.Error())
-	}
-
-	fmt.Printf("%+v\n", loc)
-}
 
 func (c *Controller) Upgrade0() (string, error) {
 
