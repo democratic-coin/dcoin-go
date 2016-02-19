@@ -30,21 +30,23 @@
 <script>
 
 	function geoFindMe(){
-
-		//console.log("navigator.geolocation>>>>>>>>>",navigator.geolocation);
-		//if(navigator.geolocation){
-		//	navigator.geolocation.getCurrentPosition(success, error, geo_options);
-		//}else{
-		//	alert("Geolocation services are not supported by your web browser.");
-			map_init (latitude, longitude, 'map_canvas', true, true);
-			google.maps.event.trigger(map, 'resize');
-		//}
+        map_init (latitude, longitude, 'map_canvas', true, true);
+        google.maps.event.trigger(map, 'resize');
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error)
+            } else {
+                alert("Unable to retrieve your location")
+            }
+        }
+        {{ if .Mobile }}
+        getLocation();
+        {{ end }}
 
 		function success(position) {
 			latitude = position.coords.latitude;
 			longitude = position.coords.longitude;
-			var altitude = position.coords.altitude;
-			var accuracy = position.coords.accuracy;
+
 			console.log('success: '+latitude+','+longitude);
 			$('#latitude').val(latitude);
 			$('#longitude').val(longitude);
@@ -54,22 +56,16 @@
 
 		function error(error) {
 			alert("Unable to retrieve your location due to "+error.code + " : " + error.message);
-		};
-
-		var geo_options = {
-			enableHighAccuracy: true,
-			maximumAge : 30000,
-			timeout : 27000
-		};
+		}
 	}
 
-	{{if not .GeolocationLat}}
-		var latitude = 39.94887
-		var longitude = -75.15005
-		geoFindMe()
-	{{else}}
-		var latitude = {{.GeolocationLat}}
-		var longitude = {{.GeolocationLon}}
+	{{ if not .GeolocationLat }}
+        var latitude = 43.0;
+        var longitude = -74.0;
+		geoFindMe();
+	{{ else }}
+		var latitude = {{ .GeolocationLat }}
+		var longitude = {{ .GeolocationLon }}
 		function initialize() {
 			map_init (latitude, longitude, 'map_canvas', true, true)
 		}
@@ -82,7 +78,7 @@
 			$(document).ajaxStop(initialize);*/
 		});
 
-	{{end}}
+	{{ end }}
 	$('#latitude').val(latitude);
 	$('#longitude').val(longitude);
 

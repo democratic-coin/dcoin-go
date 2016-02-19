@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"strings"
+	"github.com/c-darwin/dcoin-go/packages/geolocation"
+	"fmt"
 )
 
 type upgrade5Page struct {
@@ -22,6 +24,16 @@ func (c *Controller) Upgrade5() (string, error) {
 
 	geolocationLat := ""
 	geolocationLon := ""
+
+	if !utils.Mobile() {
+		if coord, err := geolocation.GetLocation(); err == nil {
+			geolocationLat = fmt.Sprintf("%.6f", coord.Latitude)
+			geolocationLon = fmt.Sprintf("%.6f", coord.Longitude)
+
+			fmt.Printf("lat: %s\nlng: %s", geolocationLat, geolocationLon)
+		}
+	}
+
 	geolocation, err := c.Single("SELECT geolocation FROM " + c.MyPrefix + "my_table").String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
