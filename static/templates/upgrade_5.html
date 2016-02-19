@@ -57,7 +57,7 @@
 		}
 	}
 
-	{{ if not .GeolocationLat }}
+	{{ if not .GeolocationLat and not .Mobile }}
 		geoFindMe();
 	{{ else }}
 		var latitude = {{ .GeolocationLat }}
