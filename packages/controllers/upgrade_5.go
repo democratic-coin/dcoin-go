@@ -25,23 +25,19 @@ var (
 	geolocationLon string
 )
 
-func init() {
-	if runtime.GOOS == "darwin" && !utils.IOS(){
+func (c *Controller) Upgrade5() (string, error) {
+
+	log.Debug("Upgrade5")
+
+	if !utils.Mobile() {
+		if runtime.GOOS == "darwin" && !utils.IOS(){
 			if coord, err := geolocation.CLLocation(); err == nil {
 				geolocationLat = fmt.Sprintf("%.6f", coord.Latitude)
 				geolocationLon = fmt.Sprintf("%.6f", coord.Longitude)
 				fmt.Printf("darwin lat: %s\nlng: %s", geolocationLat, geolocationLon)
 			}
 
-		}
-}
-
-func (c *Controller) Upgrade5() (string, error) {
-
-	log.Debug("Upgrade5")
-
-	if !utils.Mobile() {
-
+		} else
 		if coord, err := geolocation.GetLocation(); err == nil && runtime.GOOS != "darwin" {
 			geolocationLat = fmt.Sprintf("%.6f", coord.Latitude)
 			geolocationLon = fmt.Sprintf("%.6f", coord.Longitude)
