@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"fmt"
 	"encoding/json"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 type Location struct {
@@ -20,7 +21,7 @@ type coordinates struct {
 
 func GetLocation() (*coordinates, error) {
 	var buf bytes.Buffer
-	resp, err := http.Post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBLZlUPgd9uhX05OrsFU68yJOZFrYhZe84", "json", &buf)
+	resp, err := http.Post("https://www.googleapis.com/geolocation/v1/geolocate?key=" + consts.GOOGLE_API_KEY, "json", &buf)
 	if err != nil {
 		panic(err)
 	}
