@@ -133,7 +133,9 @@
 	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
 	<br>
 
+    if {{ not .Mobile }}
     <button class="btn btn-info" id="geo" onclick="geoFindMe()">My location</button>
+    {{ end }}
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
 
 </div>
