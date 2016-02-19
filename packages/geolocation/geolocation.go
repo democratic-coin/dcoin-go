@@ -9,7 +9,7 @@ import (
 )
 
 type Location struct {
-	Coordinates coordinates `json:"location"`
+	Coordinates *coordinates `json:"location"`
 	Accuracy    float32 `json:"accuracy"`
 }
 
