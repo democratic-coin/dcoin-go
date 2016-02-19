@@ -24,3 +24,4 @@ faraday:
     zip -r dcoin_osx64.zip Dcoin.app/Contents/MacOS/dcoinbin
     ./make_dmg.sh -b background.png -i logo-big.icns -s "480:540" -c 240:400:240:200 -n dcoin_osx64 "Dcoin.app"
     cd ../
+    git stash
