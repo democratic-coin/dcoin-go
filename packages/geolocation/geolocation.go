@@ -6,10 +6,11 @@ import (
 	"io/ioutil"
 	"fmt"
 	"encoding/json"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 )
 
 type Location struct {
-	Coordinates coordinates `json:"location"`
+	Coordinates *coordinates `json:"location"`
 	Accuracy    float32 `json:"accuracy"`
 }
 
@@ -20,7 +21,7 @@ type coordinates struct {
 
 func GetLocation() (*coordinates, error) {
 	var buf bytes.Buffer
-	resp, err := http.Post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBLZlUPgd9uhX05OrsFU68yJOZFrYhZe84", "json", &buf)
+	resp, err := http.Post("https://www.googleapis.com/geolocation/v1/geolocate?key=" + consts.GOOGLE_API_KEY, "json", &buf)
 	if err != nil {
 		panic(err)
 	}
@@ -31,16 +32,17 @@ func GetLocation() (*coordinates, error) {
 		fmt.Println("Cannot read body:", err.Error())
 	}
 
-	pos, err := parseResponse(body)
+	loc, err := parseResponse(body)
 	if err != nil {
 		fmt.Println("Cannot parse:", err.Error())
 		return nil, err
 	}
-	return pos, nil
+
+	return loc.Coordinates, nil
 }
 
-func parseResponse(b []byte) (*coordinates, error) {
-	var pos *coordinates
+func parseResponse(b []byte) (*Location, error) {
+	var pos *Location
 	if err := json.Unmarshal(b, &pos); err != nil {
 		return nil, err
 	}
