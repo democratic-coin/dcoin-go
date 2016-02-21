@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"github.com/c-darwin/dcoin-go/packages/consts"
+	"runtime"
 )
 
 type Location struct {
@@ -20,6 +21,22 @@ type coordinates struct {
 }
 
 func GetLocation() (*coordinates, error) {
+	var err error
+	if runtime.GOOS == "darwin" {
+		if coord, err := CLLocation(); err == nil {
+			return coord, nil
+		}
+
+	} else
+	if coord, err := getLocation(); err == nil && runtime.GOOS != "darwin" {
+		return coord, nil
+	}
+
+	return nil, err
+}
+
+
+func getLocation() (*coordinates, error) {
 	var buf bytes.Buffer
 	resp, err := http.Post("https://www.googleapis.com/geolocation/v1/geolocate?key=" + consts.GOOGLE_API_KEY, "json", &buf)
 	if err != nil {
