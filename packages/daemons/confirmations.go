@@ -183,7 +183,7 @@ func checkConf(host string, blockId int64) string {
 	conn, err := net.DialTCP("tcp", nil, tcpAddr)*/
 	conn, err := net.DialTimeout("tcp", host, 5*time.Second)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		log.Debug("%v", utils.ErrInfo(err))
 		return "0"
 	}
 	defer conn.Close()

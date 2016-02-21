@@ -58,7 +58,10 @@ func (d *daemon) dPrintSleep(err_ interface{}, sleep int) bool {
 	case error:
 		err = err_.(error)
 	}
-	log.Error("%v (%v)", err, utils.GetParent())
+
+	if err!=nil {
+		log.Error("%v (%v)", err, utils.GetParent())
+	}
 	if d.dSleep(sleep) {
 		return true
 	}
