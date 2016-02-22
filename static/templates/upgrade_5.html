@@ -25,7 +25,7 @@
 		//document.getElementById("show_map").click();
 	});
 </script>
-<script src="static/js/index.js"></script>
+<script src="/static/js/index.js"></script>
 
 <script>
 
@@ -39,8 +39,9 @@
                 alert("Unable to retrieve your location")
             }
         }
+
         {{ if .Mobile }}
-        getLocation();
+            getLocation();
         {{ end }}
 
 		function success(position) {
@@ -58,6 +59,7 @@
 			alert("Unable to retrieve your location due to "+error.code + " : " + error.message);
 		}
 	}
+
 
 	{{ if not .GeolocationLat }}
         var latitude = 43.0;
@@ -136,6 +138,10 @@
 	<div id="map_canvas" style="margin-bottom:20px; display:none"></div>
 	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
 	<br>
+
+    {{ if not .Mobile }}
+    <button class="btn btn-info" id="geo" onclick="geoFindMe()">My location</button>
+    {{ end }}
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
 
 </div>
