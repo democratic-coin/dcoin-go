@@ -35,7 +35,8 @@ import java.net.URLConnection;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.nio.ByteBuffer;
-import org.apache.http.util.ByteArrayBuffer;
+//import org.apache.http.util.ByteArrayBuffer;
+import java.io.ByteArrayOutputStream;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.os.Build;
@@ -102,20 +103,39 @@ public class XWalkActivity extends Activity {
 						* Define InputStreams to read from the URLConnection.
 						*/
 						InputStream is = ucon.getInputStream();
-						BufferedInputStream bis = new BufferedInputStream(is);
-
 					   /*
 						* Read bytes to the Buffer until there is nothing more to read(-1).
 						*/
-						ByteArrayBuffer baf = new ByteArrayBuffer(5000);
+						//API 23
+						BufferedInputStream bis = new BufferedInputStream(is);
+						ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+						//We create an array of bytes
+						byte[] data = new byte[5000];
 						int current = 0;
-						while ((current = bis.read()) != -1) {
-							baf.append((byte) current);
+
+						while((current = bis.read(data,0,data.length)) != -1){
+							buffer.write(data,0,current);
 						}
 
+
+						       ////
+//
+//
+//						ByteArrayBuffer baf = new ByteArrayBuffer(5000);
+//						int current = 0;
+//						while ((current = bis.read()) != -1) {
+//							baf.append((byte) current);
+//						}
+
            				/* Convert the Bytes read to a String. */
+//						FileOutputStream fos = new FileOutputStream(file);
+//						fos.write(baf.toByteArray());
+//						fos.flush();
+//						fos.close();
+
+						//API 23
 						FileOutputStream fos = new FileOutputStream(file);
-						fos.write(baf.toByteArray());
+						fos.write(buffer.toByteArray());
 						fos.flush();
 						fos.close();
 
