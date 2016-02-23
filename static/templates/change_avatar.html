@@ -19,7 +19,7 @@
 
 		$('#send_to_net').bind('click', function () {
 
-			if (/^[a-z0-9\-_\.\/\:]{1,47}(png|jpg)$/i.test($('#avatar').val())) {
+			if (/^[a-z0-9\-_\.\/\:\(\)]{1,100}(png|jpg)$/i.test($('#avatar').val())) {
 				$.post( 'ajax?controllerName=saveQueue', {
 							'type' : '{{.TxType}}',
 							'time' : '{{.TimeNow}}',
