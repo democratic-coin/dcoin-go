@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"github.com/c-darwin/dcoin-go/packages/consts"
-	"runtime"
+	//"runtime"
 )
 
 type Location struct {
@@ -22,7 +22,7 @@ type coordinates struct {
 
 func GetLocation() (*coordinates, error) {
 	var err error
-	if runtime.GOOS == "darwin" {
+	/*if runtime.GOOS == "darwin" {
 		if coord, err := CLLocation(); err == nil {
 			return coord, nil
 		}
@@ -31,7 +31,7 @@ func GetLocation() (*coordinates, error) {
 	if coord, err := getLocation(); err == nil && runtime.GOOS != "darwin" {
 		return coord, nil
 	}
-
+*/
 	return nil, err
 }
 
