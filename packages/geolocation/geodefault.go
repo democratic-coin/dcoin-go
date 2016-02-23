@@ -1,5 +1,5 @@
-// +build 386 amd64 linux
-// +build !darwin !arm !arm64
+// +build !darwin
+// +build 386 amd64 !arm !arm64
 
 package geolocation
 
