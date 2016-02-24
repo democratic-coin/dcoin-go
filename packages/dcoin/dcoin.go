@@ -369,9 +369,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	}
 
 
+
 	// откат БД до указанного блока
 	if *utils.RollbackToBlockId > 0 {
 		utils.DB, err = utils.NewDbConnect(configIni)
+
 		parser := new(dcparser.Parser)
 		parser.DCDB = utils.DB
 		err = parser.RollbackToBlockId(*utils.RollbackToBlockId)
@@ -380,6 +382,24 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			panic(err)
 		}
 		fmt.Print("complete")
+		// получим стату по всем таблам
+		allTable, err := utils.DB.GetAllTables()
+		if err != nil {
+			fmt.Println(err)
+			panic(err)
+		}
+
+		startData := map[string]int64 {"my_table": 1, "admin": 1, "cf_lang": 66, "block_chain": 1, "currency": 77, "info_block": 1, "log_transactions": 1, "main_lock": 1, "miners": 1, "miners_data": 1, "pct": 77, "max_promised_amounts": 77, "queue_tx": 9999999, "spots_compatibility": 1, "users": 1, "variables": 71, "install": 1, "payment_systems": 76, "config": 1, "e_currency": 5, "e_currency_pair": 4}
+		for _, table := range allTable {
+			count, err := utils.DB.Single(`SELECT count(*) FROM `+table).Int64()
+			if err != nil {
+				fmt.Println(err)
+				panic(err)
+			}
+			if count > 0 && count > startData[table] {
+				fmt.Println(table, count)
+			}
+		}
 		os.Exit(0)
 	}
 

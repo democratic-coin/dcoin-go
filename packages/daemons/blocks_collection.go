@@ -61,6 +61,19 @@ BEGIN:
 		}
 		log.Debug("1")
 
+		// удалим то, что мешает
+		if *utils.StartBlockId > 0 {
+			del := []string{"queue_tx", "my_notifications", "main_lock"}
+			for _, table := range del {
+				err := utils.DB.ExecSql(`DELETE FROM `+table)
+				fmt.Println(`DELETE FROM `+table)
+				if err != nil {
+					fmt.Println(err)
+					panic(err)
+				}
+			}
+		}
+
 		err, restart := d.dbLock()
 		if restart {
 			log.Debug("restart true")
@@ -92,6 +105,9 @@ BEGIN:
 		    currentBlockId = 0
 		    cur = true
 		}*/
+
+
+
 		parser := new(dcparser.Parser)
 		parser.DCDB = d.DCDB
 		parser.GoroutineName = GoroutineName

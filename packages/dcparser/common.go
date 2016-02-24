@@ -701,8 +701,8 @@ func (p *Parser) CheckBlockHeader() error {
 	log.Debug("p.PrevBlock.BlockId", p.PrevBlock.BlockId)
 	// для локальных тестов
 	if p.PrevBlock.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			p.PrevBlock.BlockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			p.PrevBlock.BlockId = *utils.StartBlockId
 		}
 	}
 
@@ -1342,8 +1342,8 @@ func (p *Parser) InsertIntoBlockchain() error {
 	//var mutex = &sync.Mutex{}
 	// для локальных тестов
 	if p.BlockData.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			p.BlockData.BlockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			p.BlockData.BlockId = *utils.StartBlockId
 		}
 	}
 
@@ -1382,8 +1382,8 @@ func (p *Parser) UpdBlockInfo() {
 	blockId := p.BlockData.BlockId
 	// для локальных тестов
 	if p.BlockData.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			blockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			blockId = *utils.StartBlockId
 		}
 	}
 	headHashData := fmt.Sprintf("%d,%d,%s", p.BlockData.UserId, blockId, p.PrevBlock.HeadHash)
