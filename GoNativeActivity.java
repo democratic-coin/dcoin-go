@@ -52,7 +52,7 @@ public class GoNativeActivity extends NativeActivity {
 		builder.setContentText(text);
 		builder.setSmallIcon(R.drawable.icon);
 		builder.setContentIntent(pIntent);
-		builder.setContentText(Long.toString(System.currentTimeMillis()));
+		builder.setContentText("Dcoin is running");
 
   		builder.build();
 
