@@ -59,8 +59,10 @@ func (p *Parser) AdminVariablesFront() error {
 			}
 			i++
 		case "system_commission":
-			if !utils.CheckInputData(value, "system_commission") {
-				return p.ErrInfo(fmt.Errorf(errorText, name))
+			if  p.BlockData == nil || (p.BlockData != nil && p.BlockData.BlockId > 281647) {
+				if !utils.CheckInputData(value, "system_commission") {
+					return p.ErrInfo(fmt.Errorf(errorText, name))
+				}
 			}
 			i++
 		case "sleep":

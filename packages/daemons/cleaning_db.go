@@ -159,7 +159,7 @@ BEGIN:
 				if d.dSleep(300) {
 					break BEGIN
 				}
-				newTimeInfoBlock, err := d.Single(`SELECT time FROM info_block`).Int64()
+				newTimeInfoBlock, err := d.OneRow(`SELECT block_id, time FROM info_block`).Int64()
 				if err != nil {
 					if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 						break BEGIN
@@ -167,8 +167,9 @@ BEGIN:
 					continue BEGIN
 				}
 				// Если за 5 минут info_block тот же, значит обновление блокчейна не идет
-				if newTimeInfoBlock == timeInfoBlock {
+				if newTimeInfoBlock["time"] == timeInfoBlock {
 					infoBlockRestart = true
+					log.Error("infoBlockRestart %d / %d", newTimeInfoBlock["block_id"], newTimeInfoBlock["time"])
 				}
 			}
 		}

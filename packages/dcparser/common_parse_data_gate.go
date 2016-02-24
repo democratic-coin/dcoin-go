@@ -24,6 +24,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 	transactionBinaryData := p.BinaryData
 	var transactionBinaryDataFull []byte
 
+	log.Debug("p.dataType: %d", p.dataType)
 	// если это транзакции (type>0), а не блок (type==0)
 	if p.dataType > 0 {
 
@@ -32,7 +33,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 			return p.ErrInfo("Incorrect tx type " + utils.IntToStr(p.dataType))
 		}
 
-		log.Debug("p.dataType %v", p.dataType)
+		log.Debug("p.dataType: %d", p.dataType)
 		transactionBinaryData = append(utils.DecToBin(int64(p.dataType), 1), transactionBinaryData...)
 		transactionBinaryDataFull = transactionBinaryData
 
@@ -45,6 +46,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		p.TxHash = utils.Md5(transactionBinaryData)
 
 		// преобразуем бинарные данные транзакции в массив
+		log.Debug("transactionBinaryData: %x", transactionBinaryData)
 		p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 		if err != nil {
 			return p.ErrInfo(err)

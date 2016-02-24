@@ -146,7 +146,7 @@ BEGIN:
 				continue BEGIN
 			}
 			for _, data := range transactionsTestblock {
-				myTestBlockBody = append(myTestBlockBody, []byte(data["data"])...)
+				myTestBlockBody = append(myTestBlockBody, utils.EncodeLengthPlusData([]byte(data["data"]))...)
 			}
 
 			if len(myTestBlockBody) > 0 {

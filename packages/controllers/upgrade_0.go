@@ -21,6 +21,7 @@ type upgrade0Page struct {
 	Mobile          bool
 }
 
+
 func (c *Controller) Upgrade0() (string, error) {
 
 	log.Debug("first_select: %v", c.Parameters["first_select"])

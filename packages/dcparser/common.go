@@ -1285,8 +1285,8 @@ func (p *Parser) ParseTransaction(transactionBinaryData *[]byte) ([][]byte, erro
 	var returnSlice [][]byte
 	var transSlice [][]byte
 	var merkleSlice [][]byte
-	log.Debug("transactionBinaryData: %x", transactionBinaryData)
-	log.Debug("transactionBinaryData: %s", transactionBinaryData)
+	log.Debug("transactionBinaryData: %x", *transactionBinaryData)
+	log.Debug("transactionBinaryData: %s", *transactionBinaryData)
 
 	if len(*transactionBinaryData) > 0 {
 

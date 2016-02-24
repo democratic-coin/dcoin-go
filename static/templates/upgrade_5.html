@@ -25,26 +25,29 @@
 		//document.getElementById("show_map").click();
 	});
 </script>
-<script src="static/js/index.js"></script>
+<script src="/static/js/index.js"></script>
 
 <script>
 
 	function geoFindMe(){
+        map_init (latitude, longitude, 'map_canvas', true, true);
+        google.maps.event.trigger(map, 'resize');
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error)
+            } else {
+                alert("Unable to retrieve your location")
+            }
+        }
 
-		//console.log("navigator.geolocation>>>>>>>>>",navigator.geolocation);
-		//if(navigator.geolocation){
-		//	navigator.geolocation.getCurrentPosition(success, error, geo_options);
-		//}else{
-		//	alert("Geolocation services are not supported by your web browser.");
-			map_init (latitude, longitude, 'map_canvas', true, true);
-			google.maps.event.trigger(map, 'resize');
-		//}
+        {{ if .Mobile }}
+            getLocation();
+        {{ end }}
 
 		function success(position) {
 			latitude = position.coords.latitude;
 			longitude = position.coords.longitude;
-			var altitude = position.coords.altitude;
-			var accuracy = position.coords.accuracy;
+
 			console.log('success: '+latitude+','+longitude);
 			$('#latitude').val(latitude);
 			$('#longitude').val(longitude);
@@ -54,22 +57,17 @@
 
 		function error(error) {
 			alert("Unable to retrieve your location due to "+error.code + " : " + error.message);
-		};
-
-		var geo_options = {
-			enableHighAccuracy: true,
-			maximumAge : 30000,
-			timeout : 27000
-		};
+		}
 	}
 
-	{{if not .GeolocationLat}}
-		var latitude = 39.94887
-		var longitude = -75.15005
-		geoFindMe()
-	{{else}}
-		var latitude = {{.GeolocationLat}}
-		var longitude = {{.GeolocationLon}}
+
+	{{ if not .GeolocationLat }}
+        var latitude = 43.0;
+        var longitude = -74.0;
+		geoFindMe();
+	{{ else }}
+		var latitude = {{ .GeolocationLat }}
+		var longitude = {{ .GeolocationLon }}
 		function initialize() {
 			map_init (latitude, longitude, 'map_canvas', true, true)
 		}
@@ -82,7 +80,7 @@
 			$(document).ajaxStop(initialize);*/
 		});
 
-	{{end}}
+	{{ end }}
 	$('#latitude').val(latitude);
 	$('#longitude').val(longitude);
 
@@ -140,6 +138,10 @@
 	<div id="map_canvas" style="margin-bottom:20px; display:none"></div>
 	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
 	<br>
+
+    {{ if not .Mobile }}
+    <button class="btn btn-info" id="geo" onclick="geoFindMe()">My location</button>
+    {{ end }}
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
 
 </div>
