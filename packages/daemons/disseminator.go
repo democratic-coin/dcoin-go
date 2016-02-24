@@ -306,7 +306,7 @@ BEGIN:
 						}
 
 						// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
-						_, err = conn.Write(utils.DecToBin(dataType, 1))
+						_, err = conn.Write(utils.DecToBin(dataType, 2))
 						if err != nil {
 							log.Error("%v", utils.ErrInfo(err))
 							return
@@ -388,7 +388,7 @@ func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key st
 	}
 
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
-	n, err := conn.Write(utils.DecToBin(dataType, 1))
+	n, err := conn.Write(utils.DecToBin(dataType, 2))
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
 		return

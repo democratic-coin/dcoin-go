@@ -63,7 +63,7 @@ func (t *TcpServer) HandleTcpRequest() {
 	}
 
 	// тип данных
-	buf := make([]byte, 1)
+	buf := make([]byte, 2)
 	_, err = t.Conn.Read(buf)
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))

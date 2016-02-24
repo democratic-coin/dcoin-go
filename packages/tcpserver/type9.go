@@ -45,7 +45,7 @@ func (t *TcpServer) Type9() {
 		}
 		defer conn2.Close()
 		// шлем тип данных
-		_, err = conn2.Write(utils.DecToBin(10, 1))
+		_, err = conn2.Write(utils.DecToBin(10, 2))
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 			return

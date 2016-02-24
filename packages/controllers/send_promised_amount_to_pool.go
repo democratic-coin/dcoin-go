@@ -44,7 +44,7 @@ func (c *Controller) SendPromisedAmountToPool() (string, error) {
 	}
 
 	// тип данных
-	_, err = conn.Write(utils.DecToBin(12, 1))
+	_, err = conn.Write(utils.DecToBin(12, 2))
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

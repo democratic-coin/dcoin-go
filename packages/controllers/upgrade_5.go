@@ -5,7 +5,7 @@ import (
 	"strings"
 	"github.com/c-darwin/dcoin-go/packages/geolocation"
 	"fmt"
-	"runtime"
+	//"runtime"
 )
 
 type upgrade5Page struct {

@@ -138,7 +138,7 @@ BEGIN:
 					defer conn.Close()
 
 					// вначале шлем тип данных
-					_, err = conn.Write(utils.DecToBin(6, 1))
+					_, err = conn.Write(utils.DecToBin(6, 2))
 					if err != nil {
 						log.Error("%v", utils.ErrInfo(err))
 						return

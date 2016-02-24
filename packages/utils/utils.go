@@ -3145,7 +3145,7 @@ func GetBlockBody(host string, blockId int64, dataTypeBlockBody int64, nodeHost 
 
 	log.Debug("dataTypeBlockBody: %v", dataTypeBlockBody)
 	// шлем тип данных
-	_, err = conn.Write(DecToBin(dataTypeBlockBody, 1))
+	_, err = conn.Write(DecToBin(dataTypeBlockBody, 2))
 	if err != nil {
 		return nil, ErrInfo(err)
 	}

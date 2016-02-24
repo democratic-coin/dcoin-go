@@ -192,7 +192,7 @@ func checkConf(host string, blockId int64) string {
 	conn.SetWriteDeadline(time.Now().Add(consts.WRITE_TIMEOUT * time.Second))
 
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
-	_, err = conn.Write(utils.DecToBin(4, 1))
+	_, err = conn.Write(utils.DecToBin(4, 2))
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
 		return "0"

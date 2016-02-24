@@ -359,7 +359,7 @@ BEGIN:
 				continue
 			}
 			// шлем тип данных
-			_, err = conn.Write(utils.DecToBin(dataTypeMaxBlockId, 1))
+			_, err = conn.Write(utils.DecToBin(dataTypeMaxBlockId, 2))
 			if err != nil {
 				conn.Close()
 				if d.dPrintSleep(err, 1) {

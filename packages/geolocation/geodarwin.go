@@ -1,4 +1,6 @@
 // +build darwin
+// +build !arm !arm64
+
 package geolocation
 
 /*
@@ -100,7 +102,7 @@ func goString(s *C.char) string {
 	return C.GoString(s)
 }
 
-func CLLocation() (*coordinates, error) {
+func getLocation() (*coordinates, error) {
 	str := goString(C.getLocation())
 	sCoords := strings.Split(str, ", ")
 	if len(sCoords) != 2 {

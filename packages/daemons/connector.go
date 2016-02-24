@@ -627,7 +627,7 @@ func check(host string, userId int64) *answerType {
 	conn.SetWriteDeadline(time.Now().Add(consts.WRITE_TIMEOUT * time.Second))
 
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
-	_, err = conn.Write(utils.DecToBin(5, 1))
+	_, err = conn.Write(utils.DecToBin(5, 2))
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
 		return &answerType{userId: userId, answer: 0}
