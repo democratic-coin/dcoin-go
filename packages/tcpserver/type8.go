@@ -40,7 +40,7 @@ func (t *TcpServer) Type8() {
 		}
 		defer conn2.Close()
 		// шлем тип данных
-		_, err = conn2.Write(utils.DecToBin(7, 1))
+		_, err = conn2.Write(utils.DecToBin(7, 2))
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
 			return

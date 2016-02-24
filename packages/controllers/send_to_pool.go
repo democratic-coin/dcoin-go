@@ -60,7 +60,7 @@ func (c *Controller) SendToPool() (string, error) {
 	}
 
 	// тип данных
-	_, err = conn.Write(utils.DecToBin(11, 1))
+	_, err = conn.Write(utils.DecToBin(11, 2))
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
