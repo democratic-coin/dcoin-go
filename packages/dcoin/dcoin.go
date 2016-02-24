@@ -46,17 +46,17 @@ func Stop() {
 	var err error
 	utils.DB, err = utils.NewDbConnect(configIni)
 	log.Debug("DCOIN Stop : %v", utils.DB)
-	IosLog("utils.DB:" + fmt.Sprintf("%v", utils.DB))
+	IosLog("utils.DB:" + fmt.Sprintf(utils.DB))
 	if err != nil {
 		IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 		//panic(err)
 		//os.Exit(1)
 	}
 	err = utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
 	if err != nil {
 		IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 	}
 	log.Debug("DCOIN Stop")
 	IosLog("DCOIN Stop")
@@ -89,7 +89,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	configIni_, err := config.NewConfig("ini", *utils.Dir+"/config.ini")
 	if err != nil {
 		IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 	} else {
 		configIni, err = configIni_.GetSection("default")
 	}
@@ -100,12 +100,12 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		if _, err := os.Stat(*utils.Dir + "/dcoin.pid"); err == nil {
 			dat, err := ioutil.ReadFile(*utils.Dir + "/dcoin.pid")
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err))
 			}
 			var pidMap map[string]string
 			err = json.Unmarshal(dat, &pidMap)
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err))
 			}
 			fmt.Println("old PID ("+*utils.Dir+"/dcoin.pid"+"):", pidMap["pid"])
 
@@ -114,8 +114,9 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			err = KillPid(pidMap["pid"])
 			if nil != err {
 				fmt.Println(err)
-				log.Error("KillPid %v", utils.ErrInfo(err))
+				log.Error("KillPid ", utils.ErrInfo(err))
 			}
+
 			if fmt.Sprintf("%s", err) != "null" {
 				fmt.Println(fmt.Sprintf("%s", err))
 				// даем 15 сек, чтобы завершиться предыдущему процессу
@@ -140,12 +141,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	go func() {
 		utils.DB, err = utils.NewDbConnect(configIni)
-		log.Debug("%v", utils.DB)
-		IosLog("utils.DB:" + fmt.Sprintf("%v", utils.DB))
+		log.Debug(utils.DB)
+		IosLog("utils.DB:" + fmt.Sprintf(utils.DB))
 		if err != nil {
 			IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
+			log.Error(utils.ErrInfo(err))
 			os.Exit(1)
 		}
 	}()
@@ -153,12 +153,12 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	f, err := os.OpenFile(*utils.Dir+"/dclog.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0777)
 	if err != nil {
 		IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
-		log.Error("%v", utils.ErrInfo(err))
-		panic(err)
+		log.Error(utils.ErrInfo(err))
 		os.Exit(1)
 	}
+
 	defer f.Close()
-	IosLog("configIni:" + fmt.Sprintf("%v", configIni))
+	IosLog("configIni:" + fmt.Sprintf(configIni))
 	var backend *logging.LogBackend
 	switch configIni["log_output"] {
 	case "file":
@@ -182,7 +182,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	logLevel, err := logging.LogLevel(logLevel_)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 	}
 
 	log.Debug("logLevel: %v", logLevel)
@@ -197,8 +197,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
 		if err != nil {
-			log.Debug("%v", os.Stderr)
-			log.Debug("%v", utils.ErrInfo(err))
+			log.Debug(os.Stderr)
+			log.Debug(utils.ErrInfo(err))
 		}
 		// ждем подключения к БД
 		for {
@@ -211,64 +211,64 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		log.Debug("*utils.OldVersion %v", *utils.OldVersion)
 		if len(*utils.OldVersion) > 0 {
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
-				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
+				log.Debug("ALTER TABLE config ADD COLUMN analytics_disabled smallint")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 			}
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.0.1b2")) {
-				log.Debug("%v", "ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
+				log.Debug("ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 			}
 
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a13")) {
 				community, err := utils.DB.GetCommunityUsers()
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				if len(community) > 0 {
 					for i := 0; i < len(community); i++ {
 						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							log.Error(utils.ErrInfo(err))
 						}
 					}
 				} else {
 					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						log.Error(utils.ErrInfo(err))
 					}
 				}
 
 				log.Debug(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool int NOT NULL DEFAULT '0'`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int  NOT NULL DEFAULT '0'`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int  NOT NULL DEFAULT '0'`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 
 				schema_ := &schema.SchemaStruct{}
@@ -329,26 +329,26 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a16")) {
 				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
 				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
+					log.Error(utils.ErrInfo(err))
 				}
 			}
 		}
 
 		err = utils.DB.Close()
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err))
 		}
 		fmt.Println("DB Closed")
 		err = os.Remove(*utils.Dir + "/dcoin.pid")
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err))
 		}
 
 		log.Debug("dc.tmp %v", *utils.Dir+`/dc.tmp`)
 		err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 		if err != nil {
-			log.Debug("%v", os.Stderr)
-			log.Debug("%v", utils.ErrInfo(err))
+			log.Debug(os.Stderr)
+			log.Debug(utils.ErrInfo(err))
 		}
 		log.Debug("OldFileName %v", *utils.OldFileName)
 		os.Exit(1)
@@ -359,11 +359,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		pid := os.Getpid()
 		PidAndVer, err := json.Marshal(map[string]string{"pid": utils.IntToStr(pid), "version": consts.VERSION})
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err))
 		}
 		err = ioutil.WriteFile(*utils.Dir+"/dcoin.pid", PidAndVer, 0644)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err))
 			panic(err)
 		}
 	}
@@ -388,8 +388,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	if _, err := os.Stat(*utils.Dir + "/public"); os.IsNotExist(err) {
 		err = os.Mkdir(*utils.Dir+"/public", 0755)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
+			log.Error(utils.ErrInfo(err))
 			os.Exit(1)
 		}
 	}
@@ -507,7 +506,7 @@ func exhangeHttpListener(HandleHttpHost string) {
 
 	eConfig, err := utils.DB.GetMap(`SELECT * FROM e_config`, "name", "value")
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err)
 	}
 	fmt.Println("eConfig", eConfig)
 
@@ -516,7 +515,7 @@ func exhangeHttpListener(HandleHttpHost string) {
 
 	config, err := utils.DB.GetNodeConfig()
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err)
 	}
 	fmt.Println("config", config)
 	if len(config["stat_host"]) > 0 {
@@ -575,7 +574,7 @@ func openBrowser(BrowserHttpHost string) {
 		err = fmt.Errorf("unsupported platform")
 	}
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err)
 	}
 }
 
@@ -587,21 +586,21 @@ func GetHttpHost() (string, string, string) {
 	community, err := utils.DB.GetCommunityUsers()
 	log.Debug("community:%v", community)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 		return BrowserHttpHost, HandleHttpHost, ListenHttpHost
 	}
 	//myPrefix := ""
 	//if len(community) > 0 {
 	//myUserId, err := db.GetPoolAdminUserId()
 	//	if err!=nil {
-	//		log.Error("%v", ErrInfo(err))
+	//		log.Error(ErrInfo(err))
 	//		return BrowserHttpHost, HandleHttpHost, ListenHttpHost
 	//	}
 	//myPrefix = Int64ToStr(myUserId)+"_"
 	//}
 	httpHost, err := utils.DB.Single("SELECT http_host FROM config").String()
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err))
 		return BrowserHttpHost, HandleHttpHost, ListenHttpHost
 	}
 	if len(httpHost) > 0 {

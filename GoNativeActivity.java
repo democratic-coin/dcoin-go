@@ -47,7 +47,7 @@ public class GoNativeActivity extends NativeActivity {
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 		stackBuilder.addParentStack(MainActivity.class);
 
-		builder.setAutoCancel(false);
+		builder.setAutoCancel(true);
 		builder.setContentTitle(title);
 		builder.setContentText(text);
 		builder.setSmallIcon(R.drawable.icon);
