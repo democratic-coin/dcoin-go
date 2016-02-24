@@ -325,6 +325,13 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				schema_.S = s
 				schema_.PrintSchema()
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a16")) {
+				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
 		}
 
 		err = utils.DB.Close()
