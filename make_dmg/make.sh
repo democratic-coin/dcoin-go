@@ -1,10 +1,4 @@
 diskutil unmount Dcoin
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-go get -u github.com/jteeuwen/go-bindata/...
-rm packages/static/static.go
-git stash
-go get -u github.com/c-darwin/dcoin-go
 $GOPATH/bin/go-bindata -o="packages/static/static.go" -pkg="static" static/...
 GOARCH=amd64  CGO_ENABLED=1  go build -o make_dmg/Dcoin.app/Contents/MacOS/dcoinbin
 cd make_dmg
