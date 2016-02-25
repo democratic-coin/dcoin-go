@@ -53,12 +53,12 @@ func (l *boundConn) Close() error {
 func httpListener(ListenHttpHost, BrowserHttpHost string) {
 	l, err := net.Listen("tcp", ListenHttpHost)
 	if err != nil {
-		log.Error(err)
+		log.Error(err.Error())
 		// Если это повторный запуск и он не из консоли, то открываем окно браузера, т.к. скорее всего юзер тыкнул по иконке
 		if *utils.Console == 0 {
 			openBrowser(BrowserHttpHost)
 		}
-		log.Error(utils.ErrInfo(err))
+		log.Error(utils.ErrInfo(err).Error())
 		os.Exit(1)
 	}
 
@@ -134,7 +134,7 @@ func tcpListener() {
 				buf := make([]byte, 4)
 				_, err := conn.Read(buf)
 				if err != nil {
-					log.Debug(err)
+					log.Debug(err.Error())
 					return
 				}
 				// получим user_id в первых 4-х байтах
@@ -144,7 +144,7 @@ func tcpListener() {
 				buf = make([]byte, 1)
 				_, err = conn.Read(buf)
 				if err != nil {
-					log.Debug(err)
+					log.Debug(err.Error())
 					return
 				}
 				chType := utils.BinToDec(buf)
