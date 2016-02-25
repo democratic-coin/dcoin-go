@@ -381,7 +381,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			fmt.Println(err)
 			panic(err)
 		}
-		fmt.Print("complete")
+		fmt.Println("complete")
 		// получим стату по всем таблам
 		allTable, err := utils.DB.GetAllTables()
 		if err != nil {
@@ -399,6 +399,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if count > 0 && count > startData[table] {
 				fmt.Println(table, count)
 			}
+			fmt.Println(table, "ok")
 		}
 		os.Exit(0)
 	}
