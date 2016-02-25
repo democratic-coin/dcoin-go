@@ -397,9 +397,10 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				panic(err)
 			}
 			if count > 0 && count > startData[table] {
-				fmt.Println(table, count)
+				fmt.Println(">>ALERT<<", table, count)
+			} else {
+				fmt.Println(table, "ok")
 			}
-			fmt.Println(table, "ok")
 		}
 		os.Exit(0)
 	}
