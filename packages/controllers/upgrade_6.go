@@ -151,8 +151,9 @@ func (c *Controller) Upgrade6() (string, error) {
 	for userId, httpHost := range pools {
 		poolsJs = poolsJs + "[" + userId + ",'" + httpHost + "'],"
 	}
-	poolsJs = poolsJs[:len(poolsJs)-1]
-
+	if len(poolsJs) > 0 {
+		poolsJs = poolsJs[:len(poolsJs)-1]
+	}
 	videoUrlId, err := c.Single("SELECT video_url_id FROM " + c.MyPrefix + "my_table").String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
