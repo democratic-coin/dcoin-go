@@ -63,14 +63,14 @@ func Signals() {
 			err := utils.DB.Close()
 			fmt.Println("DB Closed")
 			if err != nil {
-				log.Error(utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err).Error())
 				//panic(err)
 			}
 		}
 
 		err := os.Remove(*utils.Dir + "/dcoin.pid")
 		if err != nil {
-			log.Error(utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err).Error())
 			panic(err)
 		}
 		fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
