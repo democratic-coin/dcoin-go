@@ -8,9 +8,9 @@ package truetype
 import (
 	"image"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/raster"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/font"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/github.com/golang/freetype/raster"
+	"src/golang.org/x/image/font"
+	"src/golang.org/x/image/math/fixed"
 )
 
 func powerOf2(i int) bool {

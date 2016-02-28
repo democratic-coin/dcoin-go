@@ -14,7 +14,7 @@
 
 // Usage:
 // import(
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+//   "src/github.com/astaxie/beego/config"
 // )
 //
 //  cnf, err := config.NewConfig("ini", "config.conf")

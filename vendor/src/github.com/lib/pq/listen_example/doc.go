@@ -22,7 +22,7 @@ mechanism to avoid polling the database while waiting for more work to arrive.
         "fmt"
         "time"
 
-        "github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq"
+        "src/github.com/lib/pq"
     )
 
     func doWork(db *sql.DB, work int64) {

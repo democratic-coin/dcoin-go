@@ -12,7 +12,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/golang.org/x/image/math/fixed"
 )
 
 const (

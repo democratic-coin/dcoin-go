@@ -18,7 +18,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+	"src/github.com/astaxie/beego/config"
 )
 
 //xml parse should incluce in <config></config> tags

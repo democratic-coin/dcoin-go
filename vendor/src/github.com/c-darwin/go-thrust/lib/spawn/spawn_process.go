@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	. "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/common"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/connection"
+	. "src/github.com/c-darwin/go-thrust/lib/common"
+	"src/github.com/c-darwin/go-thrust/lib/connection"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 

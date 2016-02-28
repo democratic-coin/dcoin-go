@@ -14,9 +14,9 @@
 
 // package mysql for session provider
 //
-// depends on github.com/c-darwin/dcoin-go/vendor/src/github.com/go-sql-driver/mysql:
+// depends on src/github.com/go-sql-driver/mysql:
 //
-// go install github.com/c-darwin/dcoin-go/vendor/src/github.com/go-sql-driver/mysql
+// go install src/github.com/go-sql-driver/mysql
 //
 // mysql session support need create table as sql:
 //	CREATE TABLE `session` (
@@ -28,8 +28,8 @@
 //
 // Usage:
 // import(
-//   _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session/mysql"
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
+//   _ "src/github.com/astaxie/beego/session/mysql"
+//   "src/github.com/astaxie/beego/session"
 // )
 //
 //	func init() {

@@ -5,7 +5,7 @@
 // Package plan9font implements font faces for the Plan 9 font and subfont file
 // formats. These formats are described at
 // http://plan9.bell-labs.com/magic/man2html/6/font
-package plan9font // import "github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/font/plan9font"
+package plan9font // import "src/golang.org/x/image/font/plan9font"
 
 // TODO: have a subface use an *image.Alpha instead of plan9Image implementing
 // the image.Image interface? The image/draw code has a fast path for
@@ -21,8 +21,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/font"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/golang.org/x/image/font"
+	"src/golang.org/x/image/math/fixed"
 )
 
 // fontchar describes one character glyph in a subfont.

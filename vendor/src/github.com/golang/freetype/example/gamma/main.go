@@ -5,7 +5,7 @@
 
 // +build ignore
 //
-// This build tag means that "go install github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/..."
+// This build tag means that "go install src/github.com/golang/freetype/..."
 // doesn't install this example program. Use "go run main.go" to run it.
 
 package main
@@ -19,8 +19,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/raster"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/github.com/golang/freetype/raster"
+	"src/golang.org/x/image/math/fixed"
 )
 
 func p(x, y int) fixed.Point26_6 {

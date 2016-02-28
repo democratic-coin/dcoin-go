@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+	"src/github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"io"

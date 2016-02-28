@@ -393,6 +393,11 @@ func (p *Parser) NewReductionRollback() error {
 	}
 	p.rollbackAI("reduction", affect)
 
+	err = p.ExecSql("DELETE FROM reduction_backup WHERE block_id = ?", p.BlockData.BlockId)
+	if err != nil {
+		return p.ErrInfo(err)
+	}
+
 	return nil
 }
 

@@ -11,7 +11,7 @@ import (
 	"os"
 	"os/exec"
 
-	_ "github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq"
+	_ "src/github.com/lib/pq"
 )
 
 func main() {

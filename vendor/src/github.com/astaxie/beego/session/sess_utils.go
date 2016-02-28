@@ -29,7 +29,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/utils"
+	"src/github.com/astaxie/beego/utils"
 )
 
 func init() {

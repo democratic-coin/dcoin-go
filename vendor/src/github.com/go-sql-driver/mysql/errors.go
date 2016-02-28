@@ -22,7 +22,7 @@ var (
 	ErrInvalidConn       = errors.New("Invalid Connection")
 	ErrMalformPkt        = errors.New("Malformed Packet")
 	ErrNoTLS             = errors.New("TLS encryption requested but server does not support TLS")
-	ErrOldPassword       = errors.New("This user requires old password authentication. If you still want to use it, please add 'allowOldPasswords=1' to your DSN. See also https://github.com/c-darwin/dcoin-go/vendor/src/github.com/go-sql-driver/mysql/wiki/old_passwords")
+	ErrOldPassword       = errors.New("This user requires old password authentication. If you still want to use it, please add 'allowOldPasswords=1' to your DSN. See also https://src/github.com/go-sql-driver/mysql/wiki/old_passwords")
 	ErrCleartextPassword = errors.New("This user requires clear text authentication. If you still want to use it, please add 'allowCleartextPasswords=1' to your DSN.")
 	ErrUnknownPlugin     = errors.New("The authentication plugin is not supported.")
 	ErrOldProtocol       = errors.New("MySQL-Server does not support required Protocol 41+")

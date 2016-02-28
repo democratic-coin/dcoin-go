@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-sqlite3"
+	"src/github.com/mattn/go-sqlite3"
 	"log"
 	"os"
 )

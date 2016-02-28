@@ -14,9 +14,9 @@
 
 // package postgresql for session provider
 //
-// depends on github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq:
+// depends on src/github.com/lib/pq:
 //
-// go install github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq
+// go install src/github.com/lib/pq
 //
 //
 // needs this table in your database:
@@ -38,8 +38,8 @@
 //
 // Usage:
 // import(
-//   _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session/postgresql"
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
+//   _ "src/github.com/astaxie/beego/session/postgresql"
+//   "src/github.com/astaxie/beego/session"
 // )
 //
 //	func init() {

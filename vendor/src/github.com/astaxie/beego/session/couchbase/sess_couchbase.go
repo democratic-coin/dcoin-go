@@ -20,8 +20,8 @@
 //
 // Usage:
 // import(
-//   _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session/couchbase"
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
+//   _ "src/github.com/astaxie/beego/session/couchbase"
+//   "src/github.com/astaxie/beego/session"
 // )
 //
 //	func init() {

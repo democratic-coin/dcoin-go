@@ -1,6 +1,6 @@
 package menu
 
-import "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
+import "src/github.com/c-darwin/go-thrust/lib/commands"
 
 type ChildCommand struct {
 	Command *commands.Command

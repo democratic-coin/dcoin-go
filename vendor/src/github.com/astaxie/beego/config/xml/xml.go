@@ -20,8 +20,8 @@
 //
 // Usage:
 // import(
-//   _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config/xml"
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+//   _ "src/github.com/astaxie/beego/config/xml"
+//   "src/github.com/astaxie/beego/config"
 // )
 //
 //  cnf, err := config.NewConfig("xml", "config.xml")
@@ -41,7 +41,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+	"src/github.com/astaxie/beego/config"
 	"github.com/beego/x2j"
 )
 

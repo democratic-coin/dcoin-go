@@ -11,8 +11,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
-	. "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/common"
+	"src/github.com/c-darwin/go-thrust/lib/commands"
+	. "src/github.com/c-darwin/go-thrust/lib/common"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
+	"src/github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("example")

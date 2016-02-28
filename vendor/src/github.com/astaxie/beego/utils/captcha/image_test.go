@@ -17,7 +17,7 @@ package captcha
 import (
 	"testing"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/utils"
+	"src/github.com/astaxie/beego/utils"
 )
 
 type byteCounter struct {

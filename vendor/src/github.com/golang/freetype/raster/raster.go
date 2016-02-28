@@ -13,12 +13,12 @@
 // the Freetype "smooth" module, and the Anti-Grain Geometry library. A
 // description of the area/coverage algorithm is at
 // http://projects.tuxee.net/cl-vectors/section-the-cl-aa-algorithm
-package raster // import "github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/raster"
+package raster // import "src/github.com/golang/freetype/raster"
 
 import (
 	"strconv"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/golang.org/x/image/math/fixed"
 )
 
 // A cell is part of a linked list (for a given yi co-ordinate) of accumulated
