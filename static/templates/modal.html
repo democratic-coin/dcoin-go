@@ -92,6 +92,14 @@ $('#saveKeyAndLogin').bind('click', function () {
 	}, 500);
 });
 
+$(document).keypress(function(e){
+	if(e.keyCode == 13){
+		if ($("#modal_password, #modal_setup_password").is(":focus")) {
+			$("#saveKeyAndLogin").click();
+		}
+	}
+});
+
 </script>
 
 <div class="modal fade" id="{{.MyModalIdName}}">
