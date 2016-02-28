@@ -20,8 +20,8 @@
 //
 // Usage:
 // import(
-//   _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config/yaml"
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+//   _ "src/github.com/astaxie/beego/config/yaml"
+//   "src/github.com/astaxie/beego/config"
 // )
 //
 //  cnf, err := config.NewConfig("yaml", "config.yaml")
@@ -42,7 +42,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/config"
+	"src/github.com/astaxie/beego/config"
 	"github.com/beego/goyaml2"
 )
 

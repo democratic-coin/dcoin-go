@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/c-darwin/dcoin-go/packages/schema"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
+	"src/github.com/op/go-logging"
 	"math/rand"
 	"regexp"
 )

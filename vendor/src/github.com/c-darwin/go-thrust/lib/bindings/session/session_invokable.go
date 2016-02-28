@@ -1,6 +1,6 @@
 package session
 
-import "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
+import "src/github.com/c-darwin/go-thrust/lib/commands"
 
 /*
 Methods prefixed with Invoke are methods that can be called by ThrustCore, this differs to our

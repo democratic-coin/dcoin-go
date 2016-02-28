@@ -8,7 +8,7 @@
 /**
 
 Simple go Application to get Terminal Size. So Many Implementations do not support windows but `ts` has full windows support.
-Run `go get github.com/c-darwin/dcoin-go/vendor/src/github.com/olekukonko/ts` to download and install
+Run `go get src/github.com/olekukonko/ts` to download and install
 
 Installation
 
@@ -20,7 +20,7 @@ Example
 
 	import (
 		"fmt"
-		"github.com/c-darwin/dcoin-go/vendor/src/github.com/olekukonko/ts"
+		"src/github.com/olekukonko/ts"
 	)
 
 	func main() {

@@ -9,7 +9,7 @@ import (
 	"image/draw"
 	"image/png"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype"
+	"src/github.com/golang/freetype"
 	"regexp"
 )
 

@@ -40,8 +40,7 @@ Filename: taskkill.exe; Parameters: "/im dcoin.exe";
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-;Source: "C:\dcoin-setup\start.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\go-projects\bin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\exe_prepare\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

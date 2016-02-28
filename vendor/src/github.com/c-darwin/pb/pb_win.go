@@ -3,7 +3,7 @@
 package pb
 
 import (
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/olekukonko/ts"
+	"src/github.com/olekukonko/ts"
 	"os"
 )
 

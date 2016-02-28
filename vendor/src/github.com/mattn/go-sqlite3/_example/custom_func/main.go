@@ -7,7 +7,7 @@ import (
 	"math"
 	"math/rand"
 
-	sqlite "github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-sqlite3"
+	sqlite "src/github.com/mattn/go-sqlite3"
 )
 
 // Computes x^y

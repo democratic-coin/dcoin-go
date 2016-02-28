@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-sqlite3/sqlite3_test"
+	"src/github.com/mattn/go-sqlite3/sqlite3_test"
 )
 
 func TempFilename(t *testing.T) string {

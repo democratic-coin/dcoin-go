@@ -7,13 +7,13 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/bindings/session"
-	. "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/commands"
-	. "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/common"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/connection"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/dispatcher"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/events"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/spawn"
+	"src/github.com/c-darwin/go-thrust/lib/bindings/session"
+	. "src/github.com/c-darwin/go-thrust/lib/commands"
+	. "src/github.com/c-darwin/go-thrust/lib/common"
+	"src/github.com/c-darwin/go-thrust/lib/connection"
+	"src/github.com/c-darwin/go-thrust/lib/dispatcher"
+	"src/github.com/c-darwin/go-thrust/lib/events"
+	"src/github.com/c-darwin/go-thrust/lib/spawn"
 )
 
 type Window struct {

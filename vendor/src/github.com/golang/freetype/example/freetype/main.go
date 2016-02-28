@@ -5,7 +5,7 @@
 
 // +build ignore
 //
-// This build tag means that "go install github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/..."
+// This build tag means that "go install src/github.com/golang/freetype/..."
 // doesn't install this example program. Use "go run main.go" to run it.
 
 package main
@@ -22,8 +22,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/font"
+	"src/github.com/golang/freetype"
+	"src/golang.org/x/image/font"
 )
 
 var (

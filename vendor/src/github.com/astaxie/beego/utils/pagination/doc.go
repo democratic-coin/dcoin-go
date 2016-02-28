@@ -9,7 +9,7 @@ In your beego.Controller:
 
  package controllers
 
- import "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/utils/pagination"
+ import "src/github.com/astaxie/beego/utils/pagination"
 
  type PostsController struct {
    beego.Controller

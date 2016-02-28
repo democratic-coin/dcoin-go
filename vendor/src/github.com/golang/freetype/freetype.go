@@ -6,17 +6,17 @@
 // The freetype package provides a convenient API to draw text onto an image.
 // Use the freetype/raster and freetype/truetype packages for lower level
 // control over rasterization and TrueType parsing.
-package freetype // import "github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype"
+package freetype // import "src/github.com/golang/freetype"
 
 import (
 	"errors"
 	"image"
 	"image/draw"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/raster"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/truetype"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/font"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/github.com/golang/freetype/raster"
+	"src/github.com/golang/freetype/truetype"
+	"src/golang.org/x/image/font"
+	"src/golang.org/x/image/math/fixed"
 )
 
 // These constants determine the size of the glyph cache. The cache is keyed

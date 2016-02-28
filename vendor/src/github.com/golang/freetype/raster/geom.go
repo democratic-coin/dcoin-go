@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/golang.org/x/image/math/fixed"
 )
 
 // maxAbs returns the maximum of abs(a) and abs(b).

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/fatih/color"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-colorable"
+	"src/github.com/mattn/go-colorable"
 )
 
 func Test_IncrementAddsOne(t *testing.T) {

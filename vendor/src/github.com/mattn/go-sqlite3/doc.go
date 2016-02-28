@@ -5,7 +5,7 @@ This works as driver for database/sql.
 
 Installation
 
-    go get github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-sqlite3
+    go get src/github.com/mattn/go-sqlite3
 
 Supported Types
 

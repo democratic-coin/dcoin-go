@@ -9,11 +9,11 @@
 // The driver should be used via the database/sql package:
 //
 //  import "database/sql"
-//  import _ "github.com/c-darwin/dcoin-go/vendor/src/github.com/go-sql-driver/mysql"
+//  import _ "src/github.com/go-sql-driver/mysql"
 //
 //  db, err := sql.Open("mysql", "user:password@/dbname")
 //
-// See https://github.com/c-darwin/dcoin-go/vendor/src/github.com/go-sql-driver/mysql#usage for details
+// See https://src/github.com/go-sql-driver/mysql#usage for details
 package mysql
 
 import (

@@ -5,7 +5,7 @@
 
 // +build ignore
 //
-// This build tag means that "go install github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/..."
+// This build tag means that "go install src/github.com/golang/freetype/..."
 // doesn't install this example program. Use "go run main.go" to run it.
 
 // This program visualizes the quadratic approximation to the circle, used to
@@ -26,8 +26,8 @@ import (
 	"math"
 	"os"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/golang/freetype/raster"
-	"github.com/c-darwin/dcoin-go/vendor/src/golang.org/x/image/math/fixed"
+	"src/github.com/golang/freetype/raster"
+	"src/golang.org/x/image/math/fixed"
 )
 
 // pDot returns the dot product p·q.

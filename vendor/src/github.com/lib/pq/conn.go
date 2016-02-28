@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq/oid"
+	"src/github.com/lib/pq/oid"
 )
 
 // Common error types

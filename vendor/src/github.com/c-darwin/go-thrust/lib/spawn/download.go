@@ -3,14 +3,14 @@ package spawn
 import (
 	"errors"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/pb"
+	"src/github.com/c-darwin/pb"
 	"io"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
-	. "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/common"
+	. "src/github.com/c-darwin/go-thrust/lib/common"
 )
 
 func downloadFromUrl(url, filepath, version string) (fileName string, err error) {

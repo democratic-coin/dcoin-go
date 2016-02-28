@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq/oid"
+	"src/github.com/lib/pq/oid"
 )
 
 var (

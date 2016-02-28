@@ -1,6 +1,6 @@
 package menu
 
-import . "github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/lib/common"
+import . "src/github.com/c-darwin/go-thrust/lib/common"
 
 type MenuItem struct {
 	CommandID uint   `json:"command_id,omitempty"`

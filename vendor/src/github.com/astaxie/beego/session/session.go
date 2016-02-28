@@ -16,7 +16,7 @@
 //
 // Usage:
 // import(
-//   "github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
+//   "src/github.com/astaxie/beego/session"
 // )
 //
 //	func init() {
