@@ -32,7 +32,7 @@ func (p *Parser) ParseDataLite() error {
 			transactionBinaryData := utils.BytesShift(&p.BinaryData, transactionSize)
 			transactionBinaryDataFull := transactionBinaryData
 
-			p.TxHash = utils.Md5(transactionBinaryData)
+			p.TxHash = string(utils.Md5(transactionBinaryData))
 			p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 
 			MethodName := consts.TxTypes[utils.BytesToInt(p.TxSlice[1])]

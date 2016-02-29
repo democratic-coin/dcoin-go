@@ -7,7 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"fmt"
-	"src/github.com/astaxie/beego/config"
+	"github.com/astaxie/beego/config"
 )
 
 

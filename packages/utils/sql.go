@@ -11,9 +11,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
-	_ "src/github.com/go-sql-driver/mysql"
-	_ "src/github.com/lib/pq"
-	"src/github.com/op/go-logging"
+	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+	"github.com/op/go-logging"
 	"math"
 	"path/filepath"
 	"regexp"
@@ -1620,7 +1620,7 @@ func (db *DCDB) FormatQuery(q string) string {
 		}
 	}
 
-	//log.Debug("%v", newQ)
+	log.Debug("%v", newQ)
 	return newQ
 }
 

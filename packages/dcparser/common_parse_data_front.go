@@ -54,7 +54,7 @@ func (p *Parser) ParseDataFront() error {
 				transactionBinaryData := utils.BytesShift(&p.BinaryData, transactionSize)
 				transactionBinaryDataFull := transactionBinaryData
 
-				p.TxHash = utils.Md5(transactionBinaryData)
+				p.TxHash = string(utils.Md5(transactionBinaryData))
 				log.Debug("p.TxHash", p.TxHash)
 				p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 				log.Debug("p.TxSlice", p.TxSlice)

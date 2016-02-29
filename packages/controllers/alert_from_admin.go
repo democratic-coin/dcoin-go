@@ -7,7 +7,7 @@ import (
 	"errors"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"src/github.com/mcuadros/go-version"
+	"github.com/mcuadros/go-version"
 )
 
 type alertType struct {

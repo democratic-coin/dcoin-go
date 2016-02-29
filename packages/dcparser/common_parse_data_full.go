@@ -88,7 +88,7 @@ func (p *Parser) ParseDataFull() error {
 			}
 			utils.WriteSelectiveLog("affect: " + utils.Int64ToStr(affect))
 			//log.Debug("transactionBinaryData", transactionBinaryData)
-			p.TxHash = utils.Md5(transactionBinaryData)
+			p.TxHash = string(utils.Md5(transactionBinaryData))
 			log.Debug("p.TxHash %s", p.TxHash)
 			p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 			log.Debug("p.TxSlice %v", p.TxSlice)

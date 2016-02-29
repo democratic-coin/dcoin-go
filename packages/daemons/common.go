@@ -3,9 +3,9 @@ package daemons
 import (
 	"errors"
 	"flag"
-	"src/github.com/astaxie/beego/config"
+	"github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"src/github.com/op/go-logging"
+	"github.com/op/go-logging"
 	"os"
 	"strings"
 	"regexp"
