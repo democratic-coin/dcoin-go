@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"src/github.com/astaxie/beego/config"
+	"github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 )
 

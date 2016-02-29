@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"src/github.com/astaxie/beego/config"
+	"github.com/astaxie/beego/config"
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"net/http"
 	"os"

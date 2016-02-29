@@ -3,7 +3,7 @@ package schema
 import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"src/github.com/op/go-logging"
+	"github.com/op/go-logging"
 	"regexp"
 	"strings"
 )

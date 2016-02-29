@@ -8,7 +8,7 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	_ "src/github.com/lib/pq"
+	_ "github.com/lib/pq"
 	"os"
 )
 

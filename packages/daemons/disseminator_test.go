@@ -3,7 +3,7 @@ package daemons
 import (
 	"testing"
 	//"github.com/c-darwin/dcoin-go/packages/utils"
-	//"src/github.com/astaxie/beego/config"
+	//"github.com/astaxie/beego/config"
 	"fmt"
 	"os"
 	"path/filepath"

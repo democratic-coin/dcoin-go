@@ -19,6 +19,8 @@ type homePage struct {
 	PoolAdmin             bool
 	UserId                int64
 	CashRequests          int64
+	LastCashRequests	  []map[string]string
+	RefPhotos 			  map[int64][]string
 	ShowMap               bool
 	BlockId               int64
 	ConfirmedBlockId      int64
@@ -289,6 +291,50 @@ func (c *Controller) Home() (string, error) {
 		miner = true
 	}
 
+	refPhotos := make(map[int64][]string)
+
+	// таблица обмена на наличные
+	lastCashRequests, err := c.GetAll(`
+			SELECT *
+			FROM cash_requests
+			ORDER BY id DESC
+			LIMIT 5`, 5)
+	for i := 0; i < len(lastCashRequests); i++ {
+		if lastCashRequests[i]["del_block_id"] != "0" {
+			lastCashRequests[i]["status"] = "reduction closed"
+		} else if utils.Time()-utils.StrToInt64(lastCashRequests[i]["time"]) > c.Variables.Int64["cash_request_time"] && lastCashRequests[i]["status"] != "approved" {
+			lastCashRequests[i]["status"] = "rejected"
+		}
+		t := time.Unix(utils.StrToInt64(lastCashRequests[i]["time"]), 0)
+		lastCashRequests[i]["time"] = t.Format(c.TimeFormat)
+
+		// ### from_user_id для фоток
+		data, err := c.OneRow("SELECT * FROM miners_data WHERE user_id  =  ?", lastCashRequests[i]["from_user_id"]).String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		// получим ID майнеров, у которых лежат фото нужного нам юзера
+		minersIds := utils.GetMinersKeepers(data["photo_block_id"], data["photo_max_miner_id"], data["miners_keepers"], true)
+		hosts, err := c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		refPhotos[utils.StrToInt64(lastCashRequests[i]["from_user_id"])] = hosts
+
+		// ### to_user_id для фоток
+		data, err = c.OneRow("SELECT * FROM miners_data WHERE user_id  =  ?", lastCashRequests[i]["to_user_id"]).String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		// получим ID майнеров, у которых лежат фото нужного нам юзера
+		minersIds = utils.GetMinersKeepers(data["photo_block_id"], data["photo_max_miner_id"], data["miners_keepers"], true)
+		hosts, err = c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		refPhotos[utils.StrToInt64(lastCashRequests[i]["to_user_id"])] = hosts
+	}
+
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		Community:             c.Community,
 		CountSignArr:          c.CountSignArr,
@@ -307,6 +353,7 @@ func (c *Controller) Home() (string, error) {
 		CurrencyList:          currencyList,
 		ConfirmedBlockId:      confirmedBlockId,
 		CashRequests:          cashRequests,
+		LastCashRequests: lastCashRequests,
 		ShowMap:               showMap,
 		BlockId:               blockId,
 		UserId:                c.SessUserId,
@@ -321,6 +368,8 @@ func (c *Controller) Home() (string, error) {
 		IOS:                   utils.IOS(),
 		Mobile:                utils.Mobile(),
 		TopExMap:              topExMap,
+		RefPhotos:                  refPhotos,
+
 		ChatEnabled:           c.NodeConfig["chat_enabled"],
 		Miner:                 miner,
 		Token:                 token,
