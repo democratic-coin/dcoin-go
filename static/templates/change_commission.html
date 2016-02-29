@@ -43,6 +43,11 @@
 					'signature3': $('#signature3').val()
 				}, function (data) {
 					dc_navigate ('{{.Navigate}}', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					$("#change_commission").hide(0, function(){
+						setTimeout(function(){
+							dc_navigate ('{{.Navigate}}', {'skip_commission': 1} );
+						}, 500)
+					});
 				}
 		);
 
