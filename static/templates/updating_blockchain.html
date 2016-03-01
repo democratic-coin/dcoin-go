@@ -1,11 +1,30 @@
 <style>
-	body{padding-top: 30px}
+	body{padding-top: 30px; padding-bottom:30px;}
 	#page-wrapper{
 		margin: 0px 10% 0px 10%;
 		border: 1px solid #E7E7E7;
+		width:80%;
+		height:100%;
+	}
+	#page-wrapper .row {
+		display:table;
+		width:100%;
+		height:100%;
+		margin-left:0px;
+		margin-right:0px;
+	}
+	#page-wrapper .row .col-lg-12 {
+		display:table-row;
+		float:none;
+		height:100%;
+		vertical-align:middle;
 	}
 	#wrapper{height: 100%;}
 	#dc_content{
+		display:table-cell;
+		width:100%;
+		height:100%;
+		text-align:center;
 		vertical-align: middle;
 	}
 	#dc_menu{display: none}
@@ -164,8 +183,8 @@
 	}
 
 	.example-hole .ui-spinner {
-		width: 225px;
-		height: 225px;
+		width: 226px;
+		height: 226px;
 		background: #ddd;
 	}
 
@@ -401,6 +420,7 @@
 		<div class="meter1">
 			<span style="width: {{.BlockMeter}}%; height: 20px; color: #fff" id="meter">{{.BlockMeter}}%</span>
 		</div>
+		<div class="meter_wait" style="padding-bottom:20px;">{{.Lang.meter_wait}}</div>
 	</div>
 
 	{{if .RestartDb}}
