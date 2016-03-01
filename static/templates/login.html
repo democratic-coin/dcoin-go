@@ -97,31 +97,51 @@
 				});
 	});*/
 
+function js_checkemail( email, strict)
+{
+ if ( !strict ) email = email.replace(/^\s+|\s+$/g, '');
+ return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(email);
+}
+
 	function availableKeys() {
+		{{if .Community}}var email = $('#sign_up_in_pool_email').val();
+			if ( email == '' || !js_checkemail( email, true )) {
+				alert('Email is incorrect!');
+		    	return false;
+		}
+		{{end}}
 		$('#wrapper').spin();
 		$('#sign_up_in_pool_send').prop('disabled', true);
 		$('#login_div').css('display', 'none');
 		$('#loading_div').css('display', 'table');
+		
+		/*
 		$.post('ajax?controllerName=availableKeys', { {{if .Community}}'email': $('#sign_up_in_pool_email').val(){{end}} }, function(data) {
-			$('#wrapper').spin(false);
-			if (data.success) {
-				$('#signUpModal').modal('hide');
-				$('.modal-backdrop').remove();
-				$('.modal-backdrop').css('display', 'none');
-				dc_navigate ('setPassword', '');
-			} else if (data.error && data.error == "no_available_keys") {
-				$('#login_div').css('display', 'table');
-				$('#loading_div').css('display', 'none');
-				$('#no_available_keys').css('display', 'block');
-				$('#sign_up_in_pool').css('display', 'none');
-				$('#signUpModal').modal({ backdrop: 'static' });
-			} else if (data.error) {
-				$('#signUpModal').modal('hide');
-				$('.modal-backdrop').remove();
-				$('.modal-backdrop').css('display', 'none');
-				$('#available_key_alert').html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+data.error+'</p></div>');
-			}
-		}, "JSON");
+-			$('#wrapper').spin(false);
+-			if (data.success) {
+-				$('#signUpModal').modal('hide');
+-				$('.modal-backdrop').remove();
+-				$('.modal-backdrop').css('display', 'none');
+-				dc_navigate ('setPassword', '');
+-			} else if (data.error && data.error == "no_available_keys") {
+-				$('#login_div').css('display', 'table');
+-				$('#loading_div').css('display', 'none');
+-				$('#no_available_keys').css('display', 'block');
+-				$('#sign_up_in_pool').css('display', 'none');
+-				$('#signUpModal').modal({ backdrop: 'static' });
+-			} else if (data.error) {
+-				$('#signUpModal').modal('hide');
+-				$('.modal-backdrop').remove();
+-				$('.modal-backdrop').css('display', 'none');
+-				$('#available_key_alert').html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+data.error+'</p></div>');
+-			}
+-		}, "JSON");
+		*/
+		$('#wrapper').spin(false);
+		$('#signUpModal').modal('hide');
+		$('.modal-backdrop').remove();
+		$('.modal-backdrop').css('display', 'none');
+		dc_navigate('setPasswordNew', {{if .Community}}{'email': email}{{else}}''{{end}});
 	}
 
 	function signUpModalFns() {
