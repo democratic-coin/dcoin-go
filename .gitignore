@@ -68,7 +68,8 @@ _cgo_gotypes.go
 _cgo_export.*
 
 _testmain.go
-
+.git*
+*.ffs_db
 *.exe
 *.test
 *.prof
