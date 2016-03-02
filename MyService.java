@@ -6,6 +6,8 @@ import android.app.Service ;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.lang.System;
 import java.net.Socket;
 import android.os.SystemClock;
 import java.net.HttpURLConnection;
@@ -82,16 +84,29 @@ public class MyService extends Service  {
         }*/
     }
 
-
+    @SuppressWarnings("deprecation")
     void sendNotif() {
 
         Log.d("JavaGo", "MyService sendNotif");
-        Notification notif = new Notification(R.drawable.icon, "Dcoin", System.currentTimeMillis());
+//        Notification notif = new Notification(R.drawable.icon, "Dcoin", System.currentTimeMillis());
+        Notification.Builder builder = new Notification.Builder(this);
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        notif.setLatestEventInfo(this, "Dcoin", "Running", pIntent);
+        builder.setAutoCancel(false);
+        builder.setContentTitle("Dcoin");
+        builder.setSmallIcon(R.drawable.icon);
+        builder.setContentIntent(pIntent);
+        builder.setOngoing(true);
+        builder.setContentText(Long.toString(System.currentTimeMillis()));
+
+//        builder.setNumber(System.currentTimeMillis());
+        builder.build();
+
+        Notification notif = builder.getNotification();
+
+//        notif.setLatestEventInfo(this, "Dcoin", "Running", pIntent);
 
         startForeground(1, notif);
 

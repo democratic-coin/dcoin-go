@@ -20,13 +20,13 @@ func WaitStopTime() {
 		if !first {
 			err := utils.DB.ExecSql(`DELETE FROM stop_daemons`)
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err).Error())
 			}
 			first = true
 		}
 		dExists, err := utils.DB.Single(`SELECT stop_time FROM stop_daemons`).Int64()
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			log.Error(utils.ErrInfo(err).Error())
 		}
 		log.Debug("dExtit: %d", dExists)
 		if dExists > 0 {
@@ -41,12 +41,12 @@ func WaitStopTime() {
 			fmt.Println("Daemons killed")
 			err := utils.DB.Close()
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err).Error())
 			}
 			fmt.Println("DB Closed")
 			err = os.Remove(*utils.Dir + "/dcoin.pid")
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				log.Error(utils.ErrInfo(err).Error())
 				panic(err)
 			}
 			fmt.Println("removed " + *utils.Dir + "/dcoin.pid")

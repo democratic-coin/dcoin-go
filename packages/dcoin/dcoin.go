@@ -145,7 +145,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		if err != nil {
 			IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
 			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
 			os.Exit(1)
 		}
 	}()
@@ -154,7 +153,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	if err != nil {
 		IosLog("err:" + fmt.Sprintf("%s", utils.ErrInfo(err)))
 		log.Error("%v", utils.ErrInfo(err))
-		panic(err)
 		os.Exit(1)
 	}
 	defer f.Close()
@@ -389,7 +387,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		err = os.Mkdir(*utils.Dir+"/public", 0755)
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
 			os.Exit(1)
 		}
 	}
