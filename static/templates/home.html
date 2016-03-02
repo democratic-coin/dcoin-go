@@ -1150,8 +1150,8 @@
 <table class="table table-bordered" style="width:600px">
 	<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>from_user_id</th><th>to_user_id</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
 	<tbody>
-	{{if .CashRequests}}
-	{{range $k, $data := .CashRequests}}
+	{{if .LastCashRequests}}
+	{{range $k, $data := .LastCashRequests}}
 	<tr>
 		<td>{{$data.id}}</td>
 		<td>{{$data.time}}</td>
