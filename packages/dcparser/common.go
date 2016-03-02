@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
+	"github.com/op/go-logging"
 	"io/ioutil"
 	"math"
 	"os"
@@ -66,7 +66,7 @@ type Parser struct {
 	CurrentBlockId   int64
 	fullTxBinaryData []byte
 	halfRollback     bool // уже не актуально, т.к. нет ни одной половинной фронт-проверки
-	TxHash           []byte
+	TxHash           string
 	TxSlice          [][]byte
 	MerkleRoot       []byte
 	GoroutineName    string
@@ -701,8 +701,8 @@ func (p *Parser) CheckBlockHeader() error {
 	log.Debug("p.PrevBlock.BlockId", p.PrevBlock.BlockId)
 	// для локальных тестов
 	if p.PrevBlock.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			p.PrevBlock.BlockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			p.PrevBlock.BlockId = *utils.StartBlockId
 		}
 	}
 
@@ -865,7 +865,7 @@ func (p *Parser) ParseDataRollbackFront(txTestblock bool) error {
 		size_ := len(utils.EncodeLength(sizesSlice[i]))
 		// удалим размер
 		utils.BytesShiftReverse(&p.BinaryData, size_)
-		p.TxHash = utils.Md5(transactionBinaryData)
+		p.TxHash = string(utils.Md5(transactionBinaryData))
 
 		var err error
 		p.Variables, err = p.GetAllVariables()
@@ -957,7 +957,7 @@ func (p *Parser) ParseDataRollback() error {
 			size_ := len(utils.EncodeLength(sizesSlice[i]))
 			// удалим размер
 			utils.BytesShiftReverse(&p.BinaryData, size_)
-			p.TxHash = utils.Md5(transactionBinaryData)
+			p.TxHash = string(utils.Md5(transactionBinaryData))
 
 			utils.WriteSelectiveLog("UPDATE transactions SET used=0, verified = 0 WHERE hex(hash) = " + string(p.TxHash))
 			affect, err := p.ExecSqlGetAffect("UPDATE transactions SET used=0, verified = 0 WHERE hex(hash) = ?", p.TxHash)
@@ -1211,7 +1211,7 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 			size_ := len(utils.EncodeLength(sizesSlice[i]))
 			// удалим размер
 			utils.BytesShiftReverse(&binaryData, size_)
-			p.TxHash = utils.Md5(transactionBinaryData)
+			p.TxHash = string(utils.Md5(transactionBinaryData))
 			p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 			if err != nil {
 				return utils.ErrInfo(err)
@@ -1342,8 +1342,8 @@ func (p *Parser) InsertIntoBlockchain() error {
 	//var mutex = &sync.Mutex{}
 	// для локальных тестов
 	if p.BlockData.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			p.BlockData.BlockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			p.BlockData.BlockId = *utils.StartBlockId
 		}
 	}
 
@@ -1382,8 +1382,8 @@ func (p *Parser) UpdBlockInfo() {
 	blockId := p.BlockData.BlockId
 	// для локальных тестов
 	if p.BlockData.BlockId == 1 {
-		if p.GetConfigIni("start_block_id") != "" {
-			blockId = utils.StrToInt64(p.GetConfigIni("start_block_id"))
+		if *utils.StartBlockId != 0 {
+			blockId = *utils.StartBlockId
 		}
 	}
 	headHashData := fmt.Sprintf("%d,%d,%s", p.BlockData.UserId, blockId, p.PrevBlock.HeadHash)
@@ -2584,7 +2584,7 @@ func (p*Parser) FormatQuery(q string) string {
 func (p *Parser) loanPaymentsRollback(userId, currencyId int64) error {
 	// было `amount` > 0  в WHERE, из-за чего были проблемы с откатами, т.к. amount может быть равно 0, если кредит был погашен этой тр-ей
 	//newQuery, newArgs := utils.FormatQueryArgs("SELECT id, to_user_id FROM credits WHERE from_user_id = ? AND currency_id = ? AND tx_block_id = ? AND hex(tx_hash) = ? AND del_block_id = 0 ORDER BY time DESC", p.ConfigIni["db_type"], []interface{}{userId, currencyId, p.BlockData.BlockId, p.TxHash}...)
-	log.Debug("loanPaymentsRollback %v / %v / %v / %v", userId, currencyId, p.BlockData.BlockId, p.TxHash)
+	log.Debug("loanPaymentsRollback %v / %v / %v / %s", userId, currencyId, p.BlockData.BlockId, string(p.TxHash))
 	rows, err := p.Query(p.FormatQuery(`
 		SELECT id, to_user_id
 		FROM credits
@@ -2601,7 +2601,7 @@ func (p *Parser) loanPaymentsRollback(userId, currencyId int64) error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		log.Debug("loanPaymentsRollback %v / %v", id, to_user_id)
+		log.Debug("loanPaymentsRollback row %v / %v", id, to_user_id)
 		err := p.selectiveRollback([]string{"amount", "tx_hash", "tx_block_id"}, "credits", "id="+id, false)
 		if err != nil {
 			return p.ErrInfo(err)

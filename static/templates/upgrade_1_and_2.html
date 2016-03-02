@@ -284,11 +284,15 @@
 			}
 		}
 		else {
-			{{if and (eq .NextStep "3") .IOS}}
+			var msg = '<div id="msg_upload_2_photo" class="alert alert-danger alert-dismissable">{{.Lang.upload_2_photo}}</a></div>'
+			$(msg).insertBefore("#photo_select_method");
+			
+			return false;
+			/*{{if and (eq .NextStep "3") .IOS}}
 				document.getElementById("gotoupgrade3").click();
 			{{else}}
 				user_photo_navigate('upgrade{{.NextStep}}');
-			{{end}}
+			{{end}}*/
 		}
 
 	});

@@ -15,14 +15,12 @@ type StatisticPage struct {
 	SumPromisedAmount          map[string]string
 	PromisedAmountMiners       map[string]string
 	WalletsUsers               map[string]string
-	CashRequests               []map[string]string
 	UserInfoWallets            []utils.DCAmounts
 	Credits                    map[string]string
 	PromisedAmountListAccepted []utils.PromisedAmounts
 	CountUsers                 int64
 	CurrencyPct                map[int64]map[string]string
 	Reduction                  []map[string]string
-	RefPhotos                  map[int64][]string
 }
 
 func (c *Controller) Statistic() (string, error) {
@@ -105,48 +103,7 @@ func (c *Controller) Statistic() (string, error) {
 			WHERE amount > 0
 			GROUP BY  currency_id`, "currency_id", "count")
 
-	refPhotos := make(map[int64][]string)
-	// таблица обмена на наличные
-	cashRequests, err := c.GetAll(`
-			SELECT *
-			FROM cash_requests
-			ORDER BY id DESC
-			LIMIT 5`, 5)
-	for i := 0; i < len(cashRequests); i++ {
-		if cashRequests[i]["del_block_id"] != "0" {
-			cashRequests[i]["status"] = "reduction closed"
-		} else if utils.Time()-utils.StrToInt64(cashRequests[i]["time"]) > c.Variables.Int64["cash_request_time"] && cashRequests[i]["status"] != "approved" {
-			cashRequests[i]["status"] = "rejected"
-		}
-		t := time.Unix(utils.StrToInt64(cashRequests[i]["time"]), 0)
-		cashRequests[i]["time"] = t.Format(c.TimeFormat)
 
-		// ### from_user_id для фоток
-		data, err := c.OneRow("SELECT * FROM miners_data WHERE user_id  =  ?", cashRequests[i]["from_user_id"]).String()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		// получим ID майнеров, у которых лежат фото нужного нам юзера
-		minersIds := utils.GetMinersKeepers(data["photo_block_id"], data["photo_max_miner_id"], data["miners_keepers"], true)
-		hosts, err := c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		refPhotos[utils.StrToInt64(cashRequests[i]["from_user_id"])] = hosts
-
-		// ### to_user_id для фоток
-		data, err = c.OneRow("SELECT * FROM miners_data WHERE user_id  =  ?", cashRequests[i]["to_user_id"]).String()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		// получим ID майнеров, у которых лежат фото нужного нам юзера
-		minersIds = utils.GetMinersKeepers(data["photo_block_id"], data["photo_max_miner_id"], data["miners_keepers"], true)
-		hosts, err = c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		refPhotos[utils.StrToInt64(cashRequests[i]["to_user_id"])] = hosts
-	}
 
 	var userInfoWallets []utils.DCAmounts
 	var promisedAmountListAccepted []utils.PromisedAmounts
@@ -218,14 +175,12 @@ func (c *Controller) Statistic() (string, error) {
 		SumPromisedAmount:          sumPromisedAmount,
 		PromisedAmountMiners:       promisedAmountMiners,
 		WalletsUsers:               walletsUsers,
-		CashRequests:               cashRequests,
 		UserInfoWallets:            userInfoWallets,
 		Credits:                    credits,
 		PromisedAmountListAccepted: promisedAmountListAccepted,
 		CountUsers:                 countUsers,
 		CurrencyPct:                currencyPct,
 		Reduction:                  reduction,
-		RefPhotos:                  refPhotos,
 		UserId:                     c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)

@@ -4,7 +4,7 @@ echo "######## extract resources.arsc ########"
 unzip unsigned.apk -d apk
 cp -f apk/resources.arsc .
 cp -rf apk/res/* res/
-rm -rf apk unsigned.apk
+#rm -rf apk unsigned.apk
 
 echo "######## generate R.java ########"
 aapt package -v -f -J /home/z/go-projects/src/github.com/c-darwin/dcoin-go/ -S /home/z/go-projects/src/github.com/c-darwin/dcoin-go/res_raw/ -M /home/z/go-projects/src/github.com/c-darwin/dcoin-go/AndroidManifest.xml -I /home/z/android-sdk-linux/platforms/android-22/android.jar

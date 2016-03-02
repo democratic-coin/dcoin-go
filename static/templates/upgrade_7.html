@@ -57,12 +57,14 @@
 			});
 		}
 		else {
+			$('#send_to_net').prop('disabled', false);
+			$('#send_to_net').html('{{.Lang.send_to_net}}');
 			$('#errors').html('<div class="alert alert-danger">{{.Lang.do_not_check_the_agreement}}</div>');
 		}
 	} );
 
 	$("#main_div textarea").addClass( "form-control" );
-		
+
 </script>
 
 <div id="main_div">

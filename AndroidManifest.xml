@@ -19,7 +19,7 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 
-	<application android:hardwareAccelerated="true" android:icon="@drawable/icon" android:label="Dcoin" android:debuggable="true" android:theme="@android:style/Theme.NoTitleBar">
+	<application android:hardwareAccelerated="true" android:icon="@drawable/icon" android:label="Dcoin" android:theme="@android:style/Theme.NoTitleBar">
 
 	  
         <activity android:name="org.golang.app.GoNativeActivity"
@@ -40,7 +40,7 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name="org.golang.app.XWalkActivity">
+		<activity android:name="org.golang.app.WViewActivity">
 
 			<intent-filter>
 				<action android:name="android.intent.action.GET_CONTENT" />

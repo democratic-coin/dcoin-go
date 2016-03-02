@@ -29,7 +29,7 @@ public class MyService extends Service  {
         Runnable r = new Runnable() {
             public void run() {
                 SystemClock.sleep(500);
-                Intent i = new Intent(MyService.this, XWalkActivity.class);
+                Intent i = new Intent(MyService.this, WViewActivity.class);
                 i.addFlags(i.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }

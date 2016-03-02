@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	_ "github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq"
+	_ "github.com/lib/pq"
 	"strconv"
 	"time"
 )

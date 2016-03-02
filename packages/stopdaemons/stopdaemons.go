@@ -3,8 +3,8 @@ package stopdaemons
 import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/c-darwin/go-thrust/thrust"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/op/go-logging"
+	"github.com/c-darwin/go-thrust/thrust"
+	"github.com/op/go-logging"
 	"os"
 )
 
