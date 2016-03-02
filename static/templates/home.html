@@ -81,6 +81,9 @@
 	.page-header{margin-top: 10px}
 	{{if not .Mobile}}#dc_content{margin-top:30px}{{end}}
 </style>
+
+<h1 class="page-header" {{if not .Mobile}}style="display: none"{{end}}>Home</h1>
+
 <link href="static/css/cf.css" rel="stylesheet">
 <script>
 
@@ -872,7 +875,7 @@
 
 	</script>
 	<div style="clear: both"></div>
-
+<!--
 <div style="display: inline-table" class="col-sm-6">
 	<div id="ex_alert"></div>
 
@@ -950,6 +953,7 @@
 		<button class="btn btn-outline btn-primary" id="refreshEx" style="display: none"><i class="fa fa-refresh"></i></button>
 	</div>
 </div>
+-->
 
 <div style="display: none" id="exOrders" class="col-sm-6">
 
@@ -1137,7 +1141,7 @@
 </style>
 <div style="clear: both"></div>
 	{{if .ShowMap}}
-	<h3 class="page-header" style="margin-top: 30px;margin-bottom: 0px;"
+	<h3 style="margin-top: 30px;margin-bottom: 0px;"
 		title="">{{.Lang.miners_on_the_map}}</h3>
 	<a href="#interface/show_map=0">Hide map</a></div>
 	<div class="clearfix"></div>
@@ -1150,8 +1154,8 @@
 <table class="table table-bordered" style="width:600px">
 	<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>from_user_id</th><th>to_user_id</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
 	<tbody>
-	{{if .CashRequests}}
-	{{range $k, $data := .CashRequests}}
+	{{if .LastCashRequests}}
+	{{range $k, $data := .LastCashRequests}}
 	<tr>
 		<td>{{$data.id}}</td>
 		<td>{{$data.time}}</td>
