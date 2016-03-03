@@ -3,6 +3,7 @@ package dcparser
 import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/c-darwin/dcoin-go/packages/consts"
 	"strings"
 )
 
@@ -70,14 +71,19 @@ func (p *Parser) NewPromisedAmountFront() error {
 		return p.ErrInfo(err)
 	}
 
+	// пока нет хотя бы 1000 майнеров по этой валюте, нельзя добавлять обещанную сумму не из зеленой зоны
+	countMiners, err := p.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", p.TxMaps.Int64["currency_id"]).Int64()
+	if countMiners < 1000 && (p.BlockData == nil || p.BlockData.BlockId > 283749) {
+
+		newMaxPromisedAmount = consts.MaxGreen[p.TxMaps.Int64["currency_id"]]
+	}
+
 	// т.к. можно перевести из mining в repaid, где нет лимитов, и так проделать много раз, то
 	// нужно жестко лимитировать ОБЩУЮ сумму по всем promised_amount данной валюты
 	repaidAmount, err := p.GetRepaidAmount(p.TxMaps.Int64["currency_id"], p.TxUserID)
 	if p.TxMaps.Money["amount"]+repaidAmount > float64(newMaxPromisedAmount) {
 		return p.ErrInfo("amount")
 	}
-
-	// пока нет хотя бы 1000 майнеров по этой валюте, нельзя добавлять обещанную сумму не из зеленой зоны
 
 
 	// возьмем id всех добавленных валют
@@ -98,7 +104,7 @@ func (p *Parser) NewPromisedAmountFront() error {
 
 		// можно ли новую валюту иметь с таким кол-вом валют как у нас
 		if len(existsCurrencies) > newMaxOtherCurrencies {
-			return p.ErrInfo("max_other_currencies")
+			return p.ErrInfo(fmt.Sprintf("max_other_currencies (%d > %d)", len(existsCurrencies), newMaxOtherCurrencies))
 		}
 
 		// проверим, можно ли к существующим валютам добавить новую
