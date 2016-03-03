@@ -43,7 +43,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 			return p.ErrInfo(err)
 		}
 
-		p.TxHash = utils.Md5(transactionBinaryData)
+		p.TxHash = string(utils.Md5(transactionBinaryData))
 
 		// преобразуем бинарные данные транзакции в массив
 		log.Debug("transactionBinaryData: %x", transactionBinaryData)
@@ -114,7 +114,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 					return p.ErrInfo(err)
 				}
 
-				p.TxHash = utils.Md5(transactionBinaryData)
+				p.TxHash = string(utils.Md5(transactionBinaryData))
 				p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 				log.Debug("p.TxSlice %s", p.TxSlice)
 				if err != nil {

@@ -119,39 +119,8 @@
 </tbody>
 </table>
 
-	<h3>{{.Lang.statistic_cash_requests}}</h3>
-<table class="table table-bordered" style="width:600px">
-	<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>from_user_id</th><th>to_user_id</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
-	<tbody>
-	{{if .CashRequests}}
-		{{range $k, $data := .CashRequests}}
-		<tr>
-			<td>{{$data.id}}</td>
-			<td>{{$data.time}}</td>
-			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
-			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}}</td>
-			<td>{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
-			<td>{{$data.amount}}</td>
-			{{if ne $data.del_block_id "0"}}
-				<td title='{{.Lang.reduction_closed}}'>{{$data.status}}</td>
-			{{else}}
-				<td>{{$data.status}}</td>
-			{{end}}
-		</tr>
-		{{end}}
-	{{end}}
-	</tbody>
-	</table>
 
-<script>
-	{{range $userId, $hosts := .RefPhotos}}
-	var hosts = []
-	{{range $k, $host := $hosts}}
-	hosts.push({{$host}})
-	{{end}}
-	get_img_refs (0, {{$userId}}, hosts)
-	{{end}}
-</script>
+
 
 <h3>{{.Lang.pct}}</h3>
 

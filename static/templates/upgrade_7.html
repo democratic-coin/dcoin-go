@@ -27,20 +27,20 @@
 				'type': '{{.TxType}}',
 				'time': '{{.TimeNow}}',
 				'user_id': '{{.UserId}}',
-				'race': '{{.Data.race}}',
-				'country': '{{.Data.country}}',
+				'race': '{{.MyTable.race}}',
+				'country': '{{.MyTable.country}}',
 				'latitude': '{{.Latitude}}',
 				'longitude': '{{.Longitude}}',
-				'http_host': '{{.Data.http_host}}',
-				'tcp_host': '{{.Data.tcp_host}}',
+				'http_host': '{{.MyTable.http_host}}',
+				'tcp_host': '{{.MyTable.tcp_host}}',
 				'face_hash': '{{.FaceHash}}',
 				'profile_hash': '{{.ProfileHash}}',
-				'face_coords': '{{.Data.face_coords}}',
-				'profile_coords': '{{.Data.profile_coords}}',
-				'video_type': '{{.Data.video_type}}',
-				'video_url_id': '{{.Data.video_url_id}}',
+				'face_coords': '{{.MyTable.face_coords}}',
+				'profile_coords': '{{.MyTable.profile_coords}}',
+				'video_type': '{{.MyTable.video_type}}',
+				'video_url_id': '{{.MyTable.video_url_id}}',
 				'node_public_key': '{{.NodePublicKey}}',
-				'pool_user_id': '{{.Data.pool_user_id}}',
+				'pool_user_id': '{{.MyTable.pool_user_id}}',
 				'signature1': $('#signature1').val(),
 				'signature2': $('#signature2').val(),
 				'signature3': $('#signature3').val()
@@ -57,12 +57,14 @@
 			});
 		}
 		else {
+			$('#send_to_net').prop('disabled', false);
+			$('#send_to_net').html('{{.Lang.send_to_net}}');
 			$('#errors').html('<div class="alert alert-danger">{{.Lang.do_not_check_the_agreement}}</div>');
 		}
 	} );
 
 	$("#main_div textarea").addClass( "form-control" );
-		
+
 </script>
 
 <div id="main_div">
@@ -84,19 +86,19 @@
 
 	<div id="main_data">
 
-		{{if eq .Data.race "0"}}
+		{{if eq .MyTable.race "0"}}
 			<div class='alert alert-danger'>{{.Lang.empty_race}}</div></div>
-		{{else if eq .Data.country "0"}}
+		{{else if eq .MyTable.country "0"}}
 			<div class='alert alert-danger'>{{.Lang.empty_country}}</div></div>
 		{{else if eq .FaceHash ""}}
 			<div class='alert alert-danger'>{{.Lang.empty_photo}}</div></div>
 		{{else if eq .ProfileHash ""}}
 			<div class='alert alert-danger'>{{.Lang.empty_photo2}}</div></div>
-		{{else if or (eq .Data.face_coords "") (eq .Data.profile_coords "")}}
+		{{else if or (eq .MyTable.face_coords "") (eq .MyTable.profile_coords "")}}
 			<div class='alert alert-danger'>{{.Lang.empty_points}}</div></div>
-		{{else if and (or (eq .Data.video_url_id "null") (eq .Data.video_type "null")) .NoExistsMp4}}
+		{{else if and (or (eq .MyTable.video_url_id "null") (eq .MyTable.video_type "null")) .NoExistsMp4}}
 			<div class='alert alert-danger'>{{.Lang.empty_video}}</div></div>
-		{{else if or (eq .Data.http_host "") (eq .Data.tcp_host "")}}
+		{{else if or (eq .MyTable.http_host "") (eq .MyTable.tcp_host "")}}
 			<div class='alert alert-danger'>{{.Lang.empty_node}}</div></div>
 		{{else if or (eq .Latitude "0") (eq .Longitude "0")}}
 			<div class='alert alert-danger'>{{.Lang.empty_geolocation}}</div></div>

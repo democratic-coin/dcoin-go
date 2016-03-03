@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"tests_utils"
+	"github.com/c-darwin/dcoin-go/packages/tests_utils"
 )
 
 func main() {

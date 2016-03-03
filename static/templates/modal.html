@@ -92,6 +92,14 @@ $('#saveKeyAndLogin').bind('click', function () {
 	}, 500);
 });
 
+$(document).keypress(function(e){
+	if(e.keyCode == 13){
+		if ($("#modal_password, #modal_setup_password").is(":focus")) {
+			$("#saveKeyAndLogin").click();
+		}
+	}
+});
+
 </script>
 
 <div class="modal fade" id="{{.MyModalIdName}}">
@@ -110,11 +118,13 @@ $('#saveKeyAndLogin').bind('click', function () {
 
 					<fieldset>
 						<span id="key_selector" style="float:right"><a href="#" onclick="show_text_key()">{{.Lang.text}}</a></span><div class="clearfix"></div>
-							<input multiple type="file" name="upload" id="upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
 							<div style="width:100%;  border:2px dashed black; display: flex;  height: 100px; padding: 15px 0px 15px 0px" id="key_div">
 								<div style="margin:auto; text-align:center; line-height:22px">
 								 <p style="margin-bottom:0px"  id="key_file_name" onclick="document.getElementById('upload_hidden').click();"></p>
-								  <button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('upload_hidden').click();">{{.Lang.select_key}}</button>
+								  <div id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('upload_hidden').click();" type="button">
+								  	{{.Lang.select_key}}
+									<input type="file" name="upload" id="upload_hidden" style="position: absolute; visibility:hidden;" />
+								  </div>
 								  {{if not .Mobile}}<p>{{.Lang.or_drag_and_drop_key}}</p>{{end}}
 								</div>
 							</div>

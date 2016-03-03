@@ -562,7 +562,9 @@
 			}*/
 
 			if (param_obj && typeof param_obj['lang']!='undefined') {
-				load_menu(param_obj['lang']);
+				setTimeout(function(){
+					load_menu(param_obj['lang']);
+				}, 500)
 			}
 		}
 
