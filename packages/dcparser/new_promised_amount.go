@@ -73,7 +73,8 @@ func (p *Parser) NewPromisedAmountFront() error {
 
 	// пока нет хотя бы 1000 майнеров по этой валюте, нельзя добавлять обещанную сумму не из зеленой зоны
 	countMiners, err := p.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", p.TxMaps.Int64["currency_id"]).Int64()
-	if countMiners < 1000 {
+
+	if countMiners < 1000 && (p.BlockData == nil || p.BlockData.BlockId > 283749) {
 		newMaxPromisedAmount = consts.MaxGreen[p.TxMaps.Int64["currency_id"]]
 	}
 
