@@ -47,22 +47,22 @@
 					$('#del_webm_ogg').css("display", "none");
 				});
 	});
-	$( "#from_webcam_show" ).click(function() {
+/*	$( "#from_webcam_show" ).click(function() {
 		$("#from_webcam").css("display", "block");
 		$("#from_file").css("display", "none");
 		$("#from_youtube").css("display", "none");
 		return false;
-	});
+	});*/
 	$( "#from_file_show" ).click(function() {
 		$("#from_file").css("display", "block");
-		$("#from_webcam").css("display", "none");
+//		$("#from_webcam").css("display", "none");
 		$("#from_youtube").css("display", "none");
 		return false;
 	});
 	$( "#from_youtube_show" ).click(function() {
 		$("#from_youtube").css("display", "block");
 		$("#from_file").css("display", "none");
-		$("#from_webcam").css("display", "none");
+//		$("#from_webcam").css("display", "none");
 		return false;
 	});
 
@@ -92,22 +92,14 @@
 			height: 218px;
 		}
 	}
-
-	{{if .Mobile}}
-		#selectType {
-			display: none;
-		}
 		#from_file {
 			display: block;
-		}
-		#from_webcam {
-			display: none;
 		}
 		#from_youtube {
 			display: none;
 		}
-	{{else}}
-		#from_file {
+	{{if .Mobile}}
+		#selectType {
 			display: none;
 		}
 	{{end}}
@@ -137,17 +129,17 @@
 {{noescape .Lang.upload_face_video_rules}}
 {{noescape .Lang.upload_face_video_rules2}}
 
-<p id="selectType"><a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} <a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
-<div id="from_webcam">
+<p id="selectType"><!--a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} --><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
+<!--div id="from_webcam">
 
 	<div id="widget"></div>
-	<div id="player">{{if .VideoUrl}}<iframe width=640 height=480  src='{{.VideoUrl}}' frameborder=0 allowfullscreen></iframe>{{end}}</div>
+	<div id="player">{if .VideoUrl}<iframe width=640 height=480  src='{.VideoUrl}' frameborder=0 allowfullscreen></iframe>{end}</div>
 	<div id="refresh_youtube_div" style="display: none"><a href="#" id="refresh_youtube"><i class="fa fa-refresh fa-fw" style="font-size: 30px"></i></a></div>
 
 	<script src="static/js/youtube_webcam.js"></script>
-</div>
+</div-->
 
-<div id="from_youtube" style="display: none">
+<div id="from_youtube">
 
 	<table class="table table-bordered">
 		<tr><td>
