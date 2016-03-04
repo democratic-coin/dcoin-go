@@ -120,9 +120,9 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	controllerName := r.FormValue("controllerName")
 	log.Debug("controllerName=", controllerName)
-	if (controllerName != "dcoinKey" ) {
+//	if (controllerName != "dcoinKey" ) {
 		w.Header().Set("Content-type", "text/html")
-	}
+//	}
 	html := ""
 
 	//w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -149,7 +149,7 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if (controllerName != "dcoinKey" ) {
+//	if (controllerName != "dcoinKey" ) {
 		w.Write([]byte(html))
-	}
+//	}
 }
