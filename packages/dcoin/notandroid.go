@@ -53,20 +53,19 @@ func (l *boundConn) Close() error {
 func httpListener(ListenHttpHost, BrowserHttpHost string) {
 	l, err := net.Listen("tcp", ListenHttpHost)
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err.Error())
 		// Если это повторный запуск и он не из консоли, то открываем окно браузера, т.к. скорее всего юзер тыкнул по иконке
 		if *utils.Console == 0 {
 			openBrowser(BrowserHttpHost)
 		}
-		log.Error("%v", utils.ErrInfo(err))
-		panic(err)
+		log.Error(utils.ErrInfo(err).Error())
 		os.Exit(1)
 	}
 
 	go func() {
 		err = http.Serve(NewBoundListener(100, l), http.TimeoutHandler(http.DefaultServeMux, time.Duration(600*time.Second), "Your request has timed out"))
 		if err != nil {
-			log.Error("Error listening: %v (%v)", err, ListenHttpHost)
+			log.Error("Error listening:", err, ListenHttpHost)
 			panic(err)
 			//os.Exit(1)
 		}
@@ -92,7 +91,7 @@ func tcpListener() {
 		// включаем листинг TCP-сервером и обработку входящих запросов
 		l, err := net.Listen("tcp", tcpHost)
 		if err != nil {
-			log.Error("Error listening: %v", err)
+			log.Error("Error listening:", err)
 			panic(err)
 			//os.Exit(1)
 		}
@@ -101,7 +100,7 @@ func tcpListener() {
 			for {
 				conn, err := l.Accept()
 				if err != nil {
-					log.Error("Error accepting: %v", err)
+					log.Error("Error accepting:", err)
 					utils.Sleep(1)
 					//panic(err)
 					//os.Exit(1)
@@ -121,7 +120,7 @@ func tcpListener() {
 	go func() {
 		listener, err := net.Listen("tcp", ":"+consts.CHAT_PORT)
 		if err != nil {
-			log.Error("Error listening: %v", err)
+			log.Error("Error listening:", err)
 			panic(err)
 		}
 		defer listener.Close()
@@ -135,7 +134,7 @@ func tcpListener() {
 				buf := make([]byte, 4)
 				_, err := conn.Read(buf)
 				if err != nil {
-					log.Debug("%v", err)
+					log.Debug(err.Error())
 					return
 				}
 				// получим user_id в первых 4-х байтах
@@ -145,7 +144,7 @@ func tcpListener() {
 				buf = make([]byte, 1)
 				_, err = conn.Read(buf)
 				if err != nil {
-					log.Debug("%v", err)
+					log.Debug(err.Error())
 					return
 				}
 				chType := utils.BinToDec(buf)
