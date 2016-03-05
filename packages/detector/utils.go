@@ -11,13 +11,15 @@ import (
 )
 
 const (
-	BASE_URL = "http://apius.faceplusplus.com/v2/detection/detect"
+	BASE_URL = "http://apius.faceplusplus.com/v2"
+	DETECT = "/detection/detect"
+	COMPARE = "/recognition/compare"
 	API_KEY = "6ee56f855de7aaf3890bc2a20e006b7a"
 	API_SECRET = "xvieJyM1i_aQ4J1oudxcsCdHenviBI_P"
 )
 
-func GetURL() *url.URL {
-	base, _ := url.Parse(BASE_URL)
+func GetURL(path string) *url.URL {
+	base, _ := url.Parse(BASE_URL + path)
 	params := url.Values{}
 	params.Add("api_key", API_KEY)
 	params.Add("api_secret", API_SECRET)
