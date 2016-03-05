@@ -37,16 +37,29 @@ type Attribute struct {
 }
 
 type Position struct {
-	Center struct {
-		X, Y float64
-	}
-	EyeLeft struct {X, Y float64 } `json:"eye_left"`
-	EyeRight struct {X, Y float64 } `json:"eye_right"`
-	Height    float64
-	MouthLeft struct {X, Y float64 } `json:"mouth_left"`
-	MouthRight struct {X, Y float64 } `json:"mouth_right"`
-	Nose struct {
-		X, Y float64
-	}
-	Width float64
+	Center Point `json:"center"`
+	EyeLeft Point `json:"eye_left"`
+	EyeRight Point `json:"eye_right"`
+	Height    float64 `json:"height"`
+	MouthLeft Point `json:"mouth_left"`
+	MouthRight Point `json:"mouth_right"`
+	Nose Point `json:"nose"`
+	Width float64 `json:"width"`
+}
+
+type Point struct  {
+	X, Y float64
+}
+
+type Similarity struct {
+	Attr Components `json:"component_similarity"`
+	SessionID  string  `json:"session_id"`
+	Similarity float64 `json:"similarity"`
+}
+
+type Components struct {
+	Eye     float64 `json:"eye"`
+	Eyebrow float64 `json:"eyebrow"`
+	Mouth   float64 `json:"mouth"`
+	Nose    float64 `json:"nose"`
 }

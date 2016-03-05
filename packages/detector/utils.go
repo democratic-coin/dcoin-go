@@ -2,13 +2,12 @@ package detector
 
 import (
 	"net/url"
-	"log"
 	"net/http"
 	"bytes"
 	"mime/multipart"
 	"os"
 	"io"
-	"encoding/json"
+	"errors"
 )
 
 const (
@@ -17,6 +16,46 @@ const (
 	API_SECRET = "xvieJyM1i_aQ4J1oudxcsCdHenviBI_P"
 )
 
+func GetURL() *url.URL {
+	base, _ := url.Parse(BASE_URL)
+	params := url.Values{}
+	params.Add("api_key", API_KEY)
+	params.Add("api_secret", API_SECRET)
+	base.RawQuery = params.Encode()
+
+	return base
+}
+
+func POSTtRequest(url, file string) (*http.Request, error) {
+
+	req, err := formRequest(url, file)
+	if err != nil {
+		return req, err
+	}
+
+	return req, err
+}
+
+func GETRequest(url string) (*http.Request, error) {
+	req, err := http.NewRequest("GET", url, nil)
+
+	return req, err
+}
+
+func Send(req *http.Request) (*http.Response, error) {
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check the response
+	if res.StatusCode != http.StatusOK {
+		err = errors.New(res.Status)
+	}
+
+	return res, err
+}
 
 func formRequest(url, file string) (*http.Request, error) {
 	var buf bytes.Buffer
@@ -48,45 +87,4 @@ func formRequest(url, file string) (*http.Request, error) {
 	return req, err
 }
 
-func request(url, file string) (string, error) {
 
-	req, err := formRequest(url, file)
-	if err != nil {
-		return "", err
-	}
-
-	client := &http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-
-	// Check the response
-	if res.StatusCode != http.StatusOK {
-		log.Fatalf("bad status: %s\n", res.Status)
-	}
-
-	var data Data
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&data)
-	if err != nil {
-		return "", err
-	}
-
-	return data.Face[0].Attr.Race.Value, err
-}
-
-func Detect(path string) (string, error) {
-	base, _ := url.Parse(BASE_URL)
-	params := url.Values{}
-	params.Add("api_key", API_KEY)
-	params.Add("api_secret", API_SECRET)
-	base.RawQuery = params.Encode()
-
-	race, err := request(base.String(), path)
-	if err != nil {
-		return "", err
-	}
-
-	return race, err
-}
