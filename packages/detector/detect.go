@@ -3,13 +3,14 @@ package detector
 import (
 	"encoding/json"
 	"log"
+	"errors"
 )
 
 
 func Race(path string) (string, error) {
 	base := GetURL(DETECT)
 
-	req, err := POSTtRequest(base.String(), path)
+	req, err := POSTRequest(base.String(), path)
 	if err != nil {
 		return "", err
 	}
@@ -24,6 +25,10 @@ func Race(path string) (string, error) {
 	err = decoder.Decode(&data)
 	if err != nil {
 		return "", err
+	}
+
+	if len(data.Face) < 1 {
+		return "", errors.New("UNKNOWN")
 	}
 
 	return data.Face[0].Attr.Race.Value, err

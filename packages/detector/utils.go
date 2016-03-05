@@ -28,7 +28,7 @@ func GetURL(path string) *url.URL {
 	return base
 }
 
-func POSTtRequest(url, file string) (*http.Request, error) {
+func POSTRequest(url, file string) (*http.Request, error) {
 
 	req, err := formRequest(url, file)
 	if err != nil {
