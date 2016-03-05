@@ -92,7 +92,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	}
 	log.Debug("votesData", votesData)
 	log.Debug("votesData[user_id]", votesData["user_id"])
-	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, pool_user_id log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
+	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, pool_user_id, log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
 	log.Debug("minersData", minersData)
 	// $votes_data['user_id'] - это юзер, за которого голосуют
 	if err != nil {

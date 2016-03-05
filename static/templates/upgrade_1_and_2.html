@@ -171,6 +171,7 @@
 					crop_img ('#{{.PhotoType}}_photo');
 					first_load = false;
 					$('#wrapper').spin(false);
+					$("#msg_upload_2_photo").remove();
 				}
 			};
 		})(f);
@@ -284,10 +285,19 @@
 			}
 		}
 		else {
-			{{if and (eq .NextStep "3") .IOS}}
-				document.getElementById("gotoupgrade3").click();
+			{{if not .Photo}}
+				var msg = '<div id="msg_upload_2_photo" class="alert alert-danger alert-dismissable">{{.Lang.upload_2_photo}}</a></div>'
+				if (!$("#msg_upload_2_photo").length) {
+					$(msg).insertBefore("#photo_select_method");
+				}
+				$(window).scrollTop(0, 0);
+				return false;
 			{{else}}
-				user_photo_navigate('upgrade{{.NextStep}}');
+				{{if and (eq .NextStep "3") .IOS}}
+					document.getElementById("gotoupgrade3").click();
+				{{else}}
+					user_photo_navigate('upgrade{{.NextStep}}');
+				{{end}}
 			{{end}}
 		}
 

@@ -7,7 +7,7 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/consts"
 	"github.com/c-darwin/dcoin-go/packages/tcpserver"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	_ "github.com/c-darwin/dcoin-go/vendor/src/github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 	"net"
 	"net/http"
 	"os"

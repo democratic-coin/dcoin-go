@@ -8,7 +8,7 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/dcoin-go/packages/static"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	_ "github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq"
+	_ "github.com/lib/pq"
 	"os"
 )
 
@@ -200,7 +200,7 @@ BEGIN:
 						//log.Debug("data %x\n", data)
 						blockId := utils.BinToDec(data[0:5])
 						if *utils.EndBlockId > 0 && blockId == *utils.EndBlockId {
-							if d.dPrintSleep(err, d.sleepTime) {
+							if d.dPrintSleep(err, 3600) {
 								break BEGIN
 							}
 							file.Close()
