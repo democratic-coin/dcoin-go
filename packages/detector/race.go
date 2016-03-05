@@ -18,54 +18,6 @@ const (
 )
 
 
-
-type Data struct {
-	Face []Face
-
-	ImgHeight int `json:"img_height"`
-	ImgID     string `json:"img_id"`
-	ImgWidth  int `json:"img_width"`
-	SessionID string `json:"session_id"`
-	URL       string `json:"url"`
-}
-
-type Face struct {
-	FaceID    string `json:"face_id"`
-	Attribute struct {
-		Age struct {
-			Range int
-			Value int
-		}
-		Gender struct {
-			Confidence float64
-			Value      string
-		}
-		Race struct {
-			Confidence float64
-			Value      string
-		}
-		Smiling struct {
-			Value float64
-		}
-	}
-
-	Position struct {
-		Center struct {
-			X, Y float64
-		}
-		EyeLeft struct {X, Y float64 } `json:"eye_left"`
-		EyeRight struct {X, Y float64 } `json:"eye_right"`
-		Height    float64
-		MouthLeft struct {X, Y float64 } `json:"mouth_left"`
-		MouthRight struct {X, Y float64 } `json:"mouth_right"`
-		Nose struct {
-			X, Y float64
-		}
-		Width float64
-	}
-	Tag string
-}
-
 func formRequest(url, file string) (*http.Request, error) {
 	var buf bytes.Buffer
 	nWriter := multipart.NewWriter(&buf)
@@ -121,7 +73,7 @@ func request(url, file string) (string, error) {
 		return "", err
 	}
 
-	return data.Face[0].Attribute.Race.Value, err
+	return data.Face[0].Attr.Race.Value, err
 }
 
 func Detect(path string) (string, error) {
