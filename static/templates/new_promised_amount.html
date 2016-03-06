@@ -138,29 +138,39 @@
 		$( "#currency_id" ).change(function () {
 			$( "#currency_id option:selected" ).each(function() {
 				currency_id = $(this).val(); 
-				$("#add_promised_amount").prop('disabled', max_promised_amounts[currency_id] == 0);
 				$("#max_promised_amount").text( max_promised_amounts[currency_id] ) ;
 				$("#promised_amount_currency_name").text( currency_name[currency_id] ) ;
 				$("#promised_amount_currency_full_name").text( $(this).text() ) ;
+				$("#amount").val("");
 			});
 		})
 				.change();
 
-		$('#amount').keyup(function(e) {
-			var amount = $("#amount").val();
-			if ( max_promised_amounts[currency_id] < amount ){
-				$("#add_promised_amount").prop('disabled', true);
-				$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>{{.Lang.error_promised_amount_greater_tnan_max}}</div>');
-			} else {
-				$("#add_promised_amount").prop('disabled', false);
-				$('#errors').html('');
+		$('#amount').bind('keydown', function(e) {
+			// Allow: backspace, delete, tab, escape, enter and .
+			if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+				 // Allow: Ctrl+A, Command+A
+				(e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+				 // Allow: home, end, left, right, down, up
+				(e.keyCode >= 35 && e.keyCode <= 40)) {
+					 // let it happen, don't do anything
+					 return;
 			}
-			
-			
-			$("#promised_amount").text( amount ) ;
-			$("#promised_amount2").text( amount ) ;
+			// Ensure that it is a number and stop the keypress
+			if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+				e.preventDefault();
+			}
+			setTimeout(function(){
+				var amount = Number($("#amount").val());
+				var amount_max = Number(max_promised_amounts[currency_id]);
+				if (amount >= amount_max) {
+					$("#amount").val(amount_max);
+					$("#promised_amount").text( amount ) ;
+					$("#promised_amount2").text( amount ) ;
+				}
+			}, 0)
 		})
-
+		
 		$('#video_mp4').change(function () {
 			send_video('video_mp4', 'video_mp4_progress', 'promised_amount-'+currency_id, {{.UserId}});
 			//$("#source_mp4").attr('src', 'public/promised_amount_'+currency_id+'.mp4');

@@ -224,7 +224,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 	} else if dbInit && installProgress == "complete" && sessUserId == 0 && status == "waiting_accept_new_key" {
 		tplName = "waitingAcceptNewKey"
 	} else if dbInit && installProgress == "complete" {
-		if tplName != "setPasswordNew" {
+		if tplName != "setPassword" {
 			tplName = "login"
 		}
 	} else {
@@ -421,7 +421,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			tplName = "chat"
 		}
 
-		if dbInit && tplName != "updatingBlockchain" && tplName != "setPasswordNew" && tplName != "setPassword" && tplName != "waitingAcceptNewKey" {
+		if dbInit && tplName != "updatingBlockchain" && tplName != "setPassword" && tplName != "waitingAcceptNewKey" {
 			html, err := CallController(c, "AlertMessage")
 			if err != nil {
 				log.Error("%v", err)
@@ -466,7 +466,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			}
 			w.Write([]byte(html))
 		}
-	} else if tplName == "setPasswordNew" {
+	} else if tplName == "setPassword" {
 		html, err := CallController(c, tplName)
 		if err != nil {
 			log.Error("%v", err)

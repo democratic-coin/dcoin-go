@@ -79,62 +79,84 @@ public class WViewActivity extends Activity {
 
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
-				Log.d("JavaGo", url);
+				Log.d("JavaGo: ", url);
+
 				final Pattern p = Pattern.compile("dcoinKey&password=(.*)$");
 				final Matcher m = p.matcher(url);
 				if (m.find()) {
 					try {
-						//File root = android.os.Environment.getExternalStorageDirectory();
-						File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-						Log.d("JavaGo", "dir " + dir);
+						Thread thread = new Thread(new Runnable(){
+							@Override
+							public void run() {
+								try {
+										//File root = android.os.Environment.getExternalStorageDirectory();
+										File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+										Log.d("JavaGo", "dir " + dir);
 
-						URL keyUrl = new URL("http://127.0.0.1:8089/ajax?controllerName=dcoinKey"); //you can write here any link
-						File file = new File(dir, "dcoin-key.png");
+										URL keyUrl = new URL("http://127.0.0.1:8089/ajax?controllerName=dcoinKey"); //you can write here any link
+										//URL keyUrl = new URL("http://yandex.ru/"); //you can write here any link
+										File file = new File(dir, "dcoin-key.png");
 
-						long startTime = System.currentTimeMillis();
-						Log.d("JavaGo", "download begining");
-						Log.d("JavaGo", "download keyUrl:" + keyUrl);
+										long startTime = System.currentTimeMillis();
+										Log.d("JavaGo", "download begining");
+										Log.d("JavaGo", "download keyUrl:" + keyUrl);
 
-           				/* Open a connection to that URL. */
-						URLConnection ucon = keyUrl.openConnection();
+										/* Open a connection to that URL. */
+										URLConnection ucon = keyUrl.openConnection();
 
-					   	/*
-						* Define InputStreams to read from the URLConnection.
-						*/
-						InputStream is = ucon.getInputStream();
-						BufferedInputStream bis = new BufferedInputStream(is);
+										Log.d("JavaGo", "0");
+										/*
+										* Define InputStreams to read from the URLConnection.
+										*/
+										InputStream is = ucon.getInputStream();
 
-					   /*
-						* Read bytes to the Buffer until there is nothing more to read(-1).
-						*/
-						ByteArrayBuffer baf = new ByteArrayBuffer(5000);
-						int current = 0;
-						while ((current = bis.read()) != -1) {
-							baf.append((byte) current);
-						}
+										Log.d("JavaGo", "01");
 
-           				/* Convert the Bytes read to a String. */
-						FileOutputStream fos = new FileOutputStream(file);
-						fos.write(baf.toByteArray());
-						fos.flush();
-						fos.close();
+										BufferedInputStream bis = new BufferedInputStream(is);
 
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-							Intent mediaScanIntent = new Intent(
-									Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-							Uri contentUri = Uri.fromFile(file);
-							mediaScanIntent.setData(contentUri);
-							WViewActivity.this.sendBroadcast(mediaScanIntent);
-						} else {
-							sendBroadcast(new Intent(
-									Intent.ACTION_MEDIA_MOUNTED,
-									Uri.parse("file://"
-											+ Environment.getExternalStorageDirectory())));
-						}
+										Log.d("JavaGo", "1");
+									   /*
+										* Read bytes to the Buffer until there is nothing more to read(-1).
+										*/
+										ByteArrayBuffer baf = new ByteArrayBuffer(5000);
+										int current = 0;
+										while ((current = bis.read()) != -1) {
+											baf.append((byte) current);
+										}
+
+										Log.d("JavaGo", "2");
+										/* Convert the Bytes read to a String. */
+										FileOutputStream fos = new FileOutputStream(file);
+										fos.write(baf.toByteArray());
+										fos.flush();
+										fos.close();
+
+										Log.d("JavaGo", "3");
+										if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+											Intent mediaScanIntent = new Intent(
+													Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+											Uri contentUri = Uri.fromFile(file);
+											mediaScanIntent.setData(contentUri);
+											WViewActivity.this.sendBroadcast(mediaScanIntent);
+										} else {
+											sendBroadcast(new Intent(
+													Intent.ACTION_MEDIA_MOUNTED,
+													Uri.parse("file://"
+															+ Environment.getExternalStorageDirectory())));
+										}
+
+										Log.d("JavaGo", "4");
+								} catch (Exception e) {
+									Log.e("JavaGo error 0", e.toString());
+									e.printStackTrace();
+								}
+							}
+						});
+						thread.start();
 
 
 					} catch (Exception e) {
-						Log.e("JavaGo", e.toString());
+						Log.e("JavaGo error", e.toString());
 						e.printStackTrace();
 					}
 				}
