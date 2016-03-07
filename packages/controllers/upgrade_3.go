@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
-
+	l "log"
 	"os"
 	"strings"
+	"github.com/c-darwin/dcoin-go/packages/detector"
 )
 
 type upgrade3Page struct {
@@ -32,6 +33,18 @@ func (c *Controller) Upgrade3() (string, error) {
 	userProfile := *utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_profile.jpg"
 	userFace := *utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_face.jpg"
 
+	r, err := detector.Race(userFace)
+	if err != nil {
+		l.Println(err)
+	}
+
+	l.Println("Race detected:", r)
+	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET race = ?", r)
+	if err != nil {
+		l.Println(err)
+	}
+
+
 	if _, err := os.Stat(userProfile); os.IsNotExist(err) {
 		userProfile = ""
 	} else {
@@ -45,6 +58,7 @@ func (c *Controller) Upgrade3() (string, error) {
 
 	log.Debug("userProfile: %s", userProfile)
 	log.Debug("userFace: %s", userFace)
+
 
 	// текущий набор точек для шаблонов
 	examplePoints, err := c.GetPoints(c.Lang)
@@ -85,5 +99,7 @@ func (c *Controller) Upgrade3() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+
+
 	return TemplateStr, nil
 }

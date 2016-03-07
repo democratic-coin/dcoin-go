@@ -7,31 +7,42 @@ import (
 )
 
 
-func Race(path string) (string, error) {
-	base := GetURL(DETECT)
+func Race(path string) (int, error) {
+	raceInt := 2
 
+	base := GetURL(DETECT)
 	req, err := POSTRequest(base.String(), path)
 	if err != nil {
-		return "", err
+		return raceInt, err
 	}
 
 	res, err := Send(req)
 	if err != nil {
-		return "", err
+		return raceInt, err
 	}
 
 	var data Data
 	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(&data)
 	if err != nil {
-		return "", err
+		return raceInt, err
 	}
 
 	if len(data.Face) < 1 {
-		return "", errors.New("UNKNOWN")
+		return raceInt, errors.New("UNKNOWN race")
 	}
 
-	return data.Face[0].Attr.Race.Value, err
+
+	switch data.Face[0].Attr.Race.Value {
+	case "Asian":
+		raceInt = 1
+	case "Black":
+		raceInt = 3
+	default:
+		raceInt = 2
+	}
+
+	return raceInt, err
 }
 
 func DetectSimilarity(faceId1, faceId2 string) (float64, error) {
