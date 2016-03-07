@@ -15,8 +15,7 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	log.Debug("Ajax")
-
-//	w.Header().Set("Content-type", "text/html")
+	w.Header().Set("Content-type", "text/html")
 
 	sess, err := globalSessions.SessionStart(w, r)
 	if err != nil {
@@ -97,7 +96,7 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 		c.TimeFormat = "2006-01-02 15:04:05"
 	} else {
 		c.TimeFormat = "2006-02-01 15:04:05"
-	} 
+	}
 
 	if dbInit {
 		myNotice, err := c.GetMyNoticeData(sessRestricted, sessUserId, c.MyPrefix, globalLangReadOnly[lang])
@@ -120,9 +119,7 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	controllerName := r.FormValue("controllerName")
 	log.Debug("controllerName=", controllerName)
-	if (controllerName != "dcoinKey" ) {
-		w.Header().Set("Content-type", "text/html")
-	}
+
 	html := ""
 
 	//w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -149,7 +146,6 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if (controllerName != "dcoinKey" ) {
-		w.Write([]byte(html))
-	}
+	w.Write([]byte(html))
+
 }

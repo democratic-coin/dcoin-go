@@ -38,10 +38,17 @@ func (p *Parser) SwitchPoolFront() error {
 		return p.ErrInfo(err)
 	}
 	if iAmPool == 0 {
-		// проверим лимиты, т.к. хотим стать пулом
-		poolUsers, err := p.Single(`SELECT sum(pool_count_users) / sum(i_am_pool) FROM miners_data`).Float64()
+		sumIAmPool, err := p.Single(`SELECT sum(i_am_pool) FROM miners_data`).Int64()
 		if err != nil {
 			return p.ErrInfo(err)
+		}
+		var poolUsers float64
+		if sumIAmPool > 0 {
+			// проверим лимиты, т.к. хотим стать пулом
+			poolUsers, err = p.Single(`SELECT sum(pool_count_users) / sum(i_am_pool) FROM miners_data`).Float64()
+			if err != nil {
+				return p.ErrInfo(err)
+			}
 		}
 		//current := poolUsers["pool_count_users"]/poolUsers["count"]
 		max_pool_users := float64(float64(p.Variables.Int64["max_pool_users"])*0.9)
