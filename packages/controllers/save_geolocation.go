@@ -28,7 +28,7 @@ func (c *Controller) SaveGeolocation() (string, error) {
 
 			}
 			if len(resp.Results) > 0 {
-				country := resp.Results[0].Address[0].LongName
+				country := resp.GetCountryName()
 				l.Println("Country name:", country)
 				for i, v := range consts.Countries {
 					if v == country {

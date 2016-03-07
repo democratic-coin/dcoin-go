@@ -25,7 +25,7 @@ func GetLocation() (*coordinates, error) {
 func GetInfo(lat, lng float64) (*APIResponse, error) {
 	slat := fmt.Sprintf("%.5f", lat)
 	slng := fmt.Sprintf("%.5f", lng)
-	url := "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + slat + "," + slng + "&sensor=false&components=country"
+	url := "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + slat + "," + slng + "&components=country"
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -52,3 +52,4 @@ func GetInfo(lat, lng float64) (*APIResponse, error) {
 	}
 	return response, nil
 }
+

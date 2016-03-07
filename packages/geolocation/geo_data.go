@@ -1,5 +1,9 @@
 package geolocation
 
+import (
+	"strings"
+)
+
 type APIResponse struct {
 	Results []Results `json:"results"`
 	Status string `json:"status"`
@@ -35,4 +39,14 @@ type Geometry struct {
 		Northeast Coordinates `json:"northeast"`
 		Southwest Coordinates `json:"southwest"`
 	} `json:"viewport"`
+}
+
+func (resp *APIResponse) GetCountryName() string {
+	for _, v := range resp.Results[0].Address {
+		if strings.Contains(v.Types[0], "country") {
+			return v.LongName
+		}
+	}
+
+	return ""
 }
