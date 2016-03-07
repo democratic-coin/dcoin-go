@@ -25,6 +25,7 @@ type updatingBlockchainStruct struct {
 	Mobile         bool
 	AlertTime      string
 	RestartDb bool
+	SleepTime int64
 }
 
 func (c *Controller) UpdatingBlockchain() (string, error) {
@@ -123,6 +124,12 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 		alertTime = strings.Replace(c.Lang["alert_time"], "[sec]", utils.Int64ToStr(diff), -1)
 	}
 
+	sleepTime := int64(500)
+	community, err := c.GetCommunityUsers()
+	if len(community) > 0 {
+		sleepTime = 5000
+	}
+
 	funcMap := template.FuncMap{
 		"noescape": func(s string) template.HTML {
 			return template.HTML(s)
@@ -135,6 +142,6 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	b := new(bytes.Buffer)
-	t.Execute(b, &updatingBlockchainStruct{RestartDb: restartDb, Lang: c.Lang, WaitText: waitText, BlockId: blockId, BlockTime: blockTime, StartDaemons: startDaemons, BlockMeter: blockMeter, CheckTime: checkTime, LastBlock: consts.LAST_BLOCK, BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime})
+	t.Execute(b, &updatingBlockchainStruct{SleepTime: sleepTime, RestartDb: restartDb, Lang: c.Lang, WaitText: waitText, BlockId: blockId, BlockTime: blockTime, StartDaemons: startDaemons, BlockMeter: blockMeter, CheckTime: checkTime, LastBlock: consts.LAST_BLOCK, BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime})
 	return b.String(), nil
 }
