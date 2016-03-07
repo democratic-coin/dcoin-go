@@ -32,6 +32,7 @@ func (c *Controller) SaveGeolocation() (string, error) {
 				l.Println("Country name:", country)
 				for i, v := range consts.Countries {
 					if v == country {
+						l.Println("Country id:", i)
 						err := c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET country = ?", i)
 						if err != nil {
 							return "", utils.ErrInfo(err)
