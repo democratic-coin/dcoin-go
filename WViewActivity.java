@@ -44,6 +44,8 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
+
 
 public class WViewActivity extends Activity {
 
@@ -79,7 +81,7 @@ public class WViewActivity extends Activity {
 
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
-				Log.d("JavaGo: ", url);
+				Log.d("JavaGoWV: ", url);
 
 				final Pattern p = Pattern.compile("dcoinKey&password=(.*)$");
 				final Matcher m = p.matcher(url);
@@ -91,30 +93,30 @@ public class WViewActivity extends Activity {
 								try {
 										//File root = android.os.Environment.getExternalStorageDirectory();
 										File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-										Log.d("JavaGo", "dir " + dir);
+										Log.d("JavaGoWV", "dir " + dir);
 
 										URL keyUrl = new URL("http://127.0.0.1:8089/ajax?controllerName=dcoinKey"); //you can write here any link
 										//URL keyUrl = new URL("http://yandex.ru/"); //you can write here any link
 										File file = new File(dir, "dcoin-key.png");
 
 										long startTime = System.currentTimeMillis();
-										Log.d("JavaGo", "download begining");
-										Log.d("JavaGo", "download keyUrl:" + keyUrl);
+										Log.d("JavaGoWV", "download begining");
+										Log.d("JavaGoWV", "download keyUrl:" + keyUrl);
 
 										/* Open a connection to that URL. */
 										URLConnection ucon = keyUrl.openConnection();
 
-										Log.d("JavaGo", "0");
+										Log.d("JavaGoWV", "0");
 										/*
 										* Define InputStreams to read from the URLConnection.
 										*/
 										InputStream is = ucon.getInputStream();
 
-										Log.d("JavaGo", "01");
+										Log.d("JavaGoWV", "01");
 
 										BufferedInputStream bis = new BufferedInputStream(is);
 
-										Log.d("JavaGo", "1");
+										Log.d("JavaGoWV", "1");
 									   /*
 										* Read bytes to the Buffer until there is nothing more to read(-1).
 										*/
@@ -124,14 +126,14 @@ public class WViewActivity extends Activity {
 											baf.append((byte) current);
 										}
 
-										Log.d("JavaGo", "2");
+										Log.d("JavaGoWV", "2");
 										/* Convert the Bytes read to a String. */
 										FileOutputStream fos = new FileOutputStream(file);
 										fos.write(baf.toByteArray());
 										fos.flush();
 										fos.close();
 
-										Log.d("JavaGo", "3");
+										Log.d("JavaGoWV", "3");
 										if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 											Intent mediaScanIntent = new Intent(
 													Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -145,9 +147,9 @@ public class WViewActivity extends Activity {
 															+ Environment.getExternalStorageDirectory())));
 										}
 
-										Log.d("JavaGo", "4");
+										Log.d("JavaGoWV", "4");
 								} catch (Exception e) {
-									Log.e("JavaGo error 0", e.toString());
+									Log.e("JavaGoWV error 0", e.toString());
 									e.printStackTrace();
 								}
 							}
@@ -156,7 +158,7 @@ public class WViewActivity extends Activity {
 
 
 					} catch (Exception e) {
-						Log.e("JavaGo error", e.toString());
+						Log.e("JavaGoWV error", e.toString());
 						e.printStackTrace();
 					}
 				}
@@ -165,7 +167,7 @@ public class WViewActivity extends Activity {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-				Log.e("JavaGo", "shouldOverrideUrlLoading " + url);
+				Log.e("JavaGoWV", "shouldOverrideUrlLoading " + url);
 
 				if (url.endsWith(".mp4")) {
 					Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -178,12 +180,16 @@ public class WViewActivity extends Activity {
 
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				Log.d("JavaGo", "failed: " + failingUrl + ", error code: " + errorCode + " [" + description + "]");
+				Log.d("JavaGoWV", "failed: " + failingUrl + ", error code: " + errorCode + " [" + description + "]");
 			}
 		});
-		if (MyService.DcoinStarted(8089)) {
+
+		SystemClock.sleep(1500);
+		//if (MyService.DcoinStarted(8089)) {
 			webView.loadUrl("http://localhost:8089/");
-		}
+		//}
+
+
 
 	}
 
@@ -252,7 +258,7 @@ public class WViewActivity extends Activity {
 		@Override
 		public boolean onConsoleMessage(ConsoleMessage cm)
 		{
-			Log.d("JavaGo", String.format("%s @ %d: %s",
+			Log.d("JavaGoWV", String.format("%s @ %d: %s",
 					cm.message(), cm.lineNumber(), cm.sourceId()));
 			return true;
 		}
@@ -429,6 +435,9 @@ public class WViewActivity extends Activity {
 			mCaughtActivityNotFoundException = false;
 		}
 		void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+
+			Log.d("JavaGoWV", "openFileChooser ValueCallback");
+
 			final String imageMimeType = "image/*";
 			final String videoMimeType = "video/*";
 			final String audioMimeType = "audio/*";
@@ -451,6 +460,8 @@ public class WViewActivity extends Activity {
 			if (capture.length() > 0) {
 				mediaSource = capture;
 			}
+
+			Log.d("JavaGoWV", "openFileChooser 1 ");
 			if (capture.equals(mediaSourceValueFileSystem)) {
 				// To maintain backwards compatibility with the previous implementation
 				// of the media capture API, if the value of the 'capture' attribute is
@@ -466,10 +477,12 @@ public class WViewActivity extends Activity {
 					}
 				}
 			}
+			Log.d("JavaGoWV", "openFileChooser 2 ");
 			//Ensure it is not still set from a previous upload.
 			mCameraFilePath = null;
 			if (mimeType.equals(imageMimeType)) {
 				if (mediaSource.equals(mediaSourceValueCamera)) {
+					Log.d("JavaGoWV", "001");
 					// Specified 'image/*' and requested the camera, so go ahead and launch the
 					// camera directly.
 					startActivity(createCameraIntent());
@@ -478,6 +491,7 @@ public class WViewActivity extends Activity {
 					// Specified just 'image/*', capture=filesystem, or an invalid capture parameter.
 					// In all these cases we show a traditional picker filetered on accept type
 					// so launch an intent for both the Camera and image/* OPENABLE.
+					Log.d("JavaGoWV", "chooser 4");
 					Intent chooser = createChooserIntent(createCameraIntent());
 					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(imageMimeType));
 					startActivity(chooser);
@@ -493,6 +507,7 @@ public class WViewActivity extends Activity {
 					// Specified just 'video/*', capture=filesystem or an invalid capture parameter.
 					// In all these cases we show an intent for the traditional file picker, filtered
 					// on accept type so launch an intent for both camcorder and video/* OPENABLE.
+					Log.d("JavaGoWV", "chooser 3");
 					Intent chooser = createChooserIntent(createCamcorderIntent());
 					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(videoMimeType));
 					startActivity(chooser);
@@ -508,6 +523,7 @@ public class WViewActivity extends Activity {
 					// Specified just 'audio/*',  capture=filesystem of an invalid capture parameter.
 					// In all these cases so go ahead and launch an intent for both the sound
 					// recorder and audio/* OPENABLE.
+					Log.d("JavaGoWV", "chooser 2");
 					Intent chooser = createChooserIntent(createSoundRecorderIntent());
 					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(audioMimeType));
 					startActivity(chooser);
@@ -516,12 +532,12 @@ public class WViewActivity extends Activity {
 			}
 			// No special handling based on the accept type was necessary, so trigger the default
 			// file upload chooser.
-			Log.d("JavaGo", "createDefaultOpenableIntent");
+			Log.d("JavaGoWV", "createDefaultOpenableIntent");
 /*
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
 					+ "/Android/data/org.golang.app/files/");
-			Log.d("JavaGo", "path ="+Environment.getExternalStorageDirectory().getPath() + "/Android/data/org.golang.app/files/");
+			Log.d("JavaGoWV", "path ="+Environment.getExternalStorageDirectory().getPath() + "/Android/data/org.golang.app/files/");
 			intent.setDataAndType(uri, "**");
 			//startActivity(Intent.createChooser(intent, "Open folder"));*/
 			startActivity(createDefaultOpenableIntent());
@@ -553,17 +569,21 @@ public class WViewActivity extends Activity {
 			Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
 					+ "/download/");
 			i.setDataAndType(uri, "*/*");
+			Log.d("JavaGoWV", "chooser 0");
 			Intent chooser = createChooserIntent(createCameraIntent(), createCamcorderIntent(),
 					createSoundRecorderIntent());
 			chooser.putExtra(Intent.EXTRA_INTENT, i);
 			return chooser;
 		}
 		private Intent createChooserIntent(Intent... intents) {
+
+			Log.d("JavaGoWV", "createChooserIntent");
 			Intent chooser = new Intent(Intent.ACTION_CHOOSER);
 			chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents);
 			chooser.putExtra(Intent.EXTRA_TITLE,
 					mController.getActivity().getResources()
 							.getString(R.string.choose_upload));
+			Log.d("JavaGoWV", "return chooser");
 			return chooser;
 		}
 		private Intent createOpenableIntent(String type) {
