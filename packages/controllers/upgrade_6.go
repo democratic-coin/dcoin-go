@@ -159,8 +159,8 @@ func (c *Controller) Upgrade6() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "8", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(6)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "7", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(5)
 
 	TemplateStr, err := makeTemplate("upgrade_6", "upgrade6", &upgrade6Page{
 		Alert:           c.Alert,

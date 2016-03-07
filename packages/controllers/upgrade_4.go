@@ -39,8 +39,8 @@ func (c *Controller) Upgrade4() (string, error) {
 		videoUrl = "http://www.youku.com/embed/" + data["video_url_id"]
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "6", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(4)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "5", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(3)
 
 	var userVideoMp4 string
 	path := *utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_video.mp4"
