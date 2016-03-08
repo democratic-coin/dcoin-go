@@ -101,7 +101,7 @@ func (p *Parser) SwitchPool() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		logId, err := p.ExecSqlGetLastInsertId(`INSERT INTO log_miners_data (backup_pool_users, prev_log_id) VALUES (?, ?)`, string(jsonData), minersData["log_id"])
+		logId, err := p.ExecSqlGetLastInsertId(`INSERT INTO log_miners_data (backup_pool_users, prev_log_id) VALUES (?, ?)`, "log_id", string(jsonData), minersData["log_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
