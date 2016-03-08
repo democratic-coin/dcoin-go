@@ -92,7 +92,7 @@ func (p *Parser) SwitchPool() error {
 		}
 	} else {
 		// выключаем режим пула
-		users, err := p.GetList(`SELECT pool_user_id miners_data WHERE user_id = ?`, p.TxUserID).Int64()
+		users, err := p.GetList(`SELECT pool_user_id FROM miners_data WHERE user_id = ?`, p.TxUserID).Int64()
 		if err != nil {
 			return p.ErrInfo(err)
 		}
