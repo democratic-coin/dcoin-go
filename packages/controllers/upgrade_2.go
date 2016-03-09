@@ -39,8 +39,8 @@ func (c *Controller) Upgrade2() (string, error) {
 	photoType := "profile"
 	photo := userProfile
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "4", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(2)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "3", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(1)
 
 	TemplateStr, err := makeTemplate("upgrade_1_and_2", "upgrade1And2", &upgrade1Page{
 		Alert:           c.Alert,

@@ -9,6 +9,7 @@ import (
 
 /**
 Обработка данных (блоков или транзакций), пришедших с гейта. Только проверка.
+Processing data (blocks or transactions) gotten from a gate. Just checking.
 */
 func (p *Parser) ParseDataGate(onlyTx bool) error {
 
@@ -26,9 +27,11 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 
 	log.Debug("p.dataType: %d", p.dataType)
 	// если это транзакции (type>0), а не блок (type==0)
+	// if it's transactions, but block
 	if p.dataType > 0 {
 
 		// проверим, есть ли такой тип тр-ий
+		// check if the transaction's type exist
 		if len(consts.TxTypes[p.dataType]) == 0 {
 			return p.ErrInfo("Incorrect tx type " + utils.IntToStr(p.dataType))
 		}
@@ -38,6 +41,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		transactionBinaryDataFull = transactionBinaryData
 
 		// нет ли хэша этой тр-ии у нас в БД?
+		// Does the transaction's hash exist?
 		err = p.CheckLogTx(transactionBinaryDataFull)
 		if err != nil {
 			return p.ErrInfo(err)
@@ -46,6 +50,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		p.TxHash = string(utils.Md5(transactionBinaryData))
 
 		// преобразуем бинарные данные транзакции в массив
+		// transforming binary data of the transaction to an array
 		log.Debug("transactionBinaryData: %x", transactionBinaryData)
 		p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 		if err != nil {
@@ -60,6 +65,10 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		// у нода может быть просто не настроено время.
 		// время транзакции используется только для борьбы с атаками вчерашними транзакциями.
 		// А т.к. мы храним хэши в log_transaction за 36 часов, то боятся нечего.
+
+		// Time of transaction can be slightly longer than time of a node.
+		// A node can use wrong time
+		// Time of a transaction used only for fighting off attacks of yesterday transactions
 		curTime := utils.Time()
 		if utils.BytesToInt64(p.TxSlice[2])-consts.MAX_TX_FORW > curTime || utils.BytesToInt64(p.TxSlice[2]) < curTime-consts.MAX_TX_BACK {
 			return p.ErrInfo(errors.New("incorrect tx time"))
@@ -71,11 +80,13 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 	}
 
 	// если это блок
+	// if it's a block
 	if p.dataType == 0 {
 
 		txCounter := make(map[int64]int64)
 
 		// если есть $only_tx=true, то значит идет восстановление уже проверенного блока и заголовок не требуется
+		// if $only_tx=true, there is a recovery of already checked block and no need in a header
 		if !onlyTx {
 			err = p.ParseBlock()
 			if err != nil {
@@ -91,6 +102,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		log.Debug("onlyTx", onlyTx)
 
 		// если в ходе проверки тр-ий возникает ошибка, то вызываем откатчик всех занесенных тр-ий. Эта переменная для него
+		// if an error occur during the checking, call 'rollbacker' for all written transactions. This is a variable for it.
 		p.fullTxBinaryData = p.BinaryData
 		var txForRollbackTo []byte
 		if len(p.BinaryData) > 0 {
@@ -101,13 +113,16 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 				}
 
 				// отчекрыжим одну транзакцию от списка транзакций
+				// get rid of one transaction from the list
 				transactionBinaryData := utils.BytesShift(&p.BinaryData, transactionSize)
 				transactionBinaryDataFull = transactionBinaryData
 
 				// добавляем взятую тр-ию в набор тр-ий для RollbackTo, в котором пойдем в обратном порядке
+				// add taken transaction to a set of transactions for RollbackTo. There we will go in opposite direction
 				txForRollbackTo = append(txForRollbackTo, utils.EncodeLengthPlusData(transactionBinaryData)...)
 
 				// нет ли хэша этой тр-ии у нас в БД?
+				// Is there a hash of the transaction in DB?
 				err = p.CheckLogTx(transactionBinaryDataFull)
 				if err != nil {
 					p.RollbackTo(txForRollbackTo, true, false)
@@ -124,6 +139,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 
 				var userId int64
 				// txSlice[3] могут подсунуть пустой
+				// txSlice[3] can be empty
 				if len(p.TxSlice) > 3 {
 					if !utils.CheckInputData(p.TxSlice[3], "int64") {
 						return utils.ErrInfo(fmt.Errorf("empty user_id"))
@@ -135,15 +151,18 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 				}
 
 				// считаем по каждому юзеру, сколько в блоке от него транзакций
+				// count how many user's transactions in the block
 				txCounter[userId]++
 
 				// чтобы 1 юзер не смог прислать дос-блок размером в 10гб, который заполнит своими же транзакциями
+				// for not letting to send a DOS-block (for instance 10 GB, which fill out all transactions by itself)
 				if txCounter[userId] > p.Variables.Int64["max_block_user_transactions"] {
 					p.RollbackTo(txForRollbackTo, true, false)
 					return utils.ErrInfo(fmt.Errorf("max_block_user_transactions"))
 				}
 
 				// проверим, есть ли такой тип тр-ий
+				// check if there is such a type of transactions
 				_, ok := consts.TxTypes[utils.BytesToInt(p.TxSlice[1])]
 				if !ok {
 					return utils.ErrInfo(fmt.Errorf("nonexistent type"))
@@ -152,6 +171,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 				p.TxMap = map[string][]byte{}
 
 				// для статы
+				// for statistics
 				p.TxIds = append(p.TxIds, string(p.TxSlice[1]))
 
 				MethodName := consts.TxTypes[utils.BytesToInt(p.TxSlice[1])]
@@ -172,6 +192,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 				}
 
 				// пишем хэш тр-ии в лог
+				// write the hash of the transaction to logs
 				err = p.InsertInLogTx(transactionBinaryDataFull, utils.BytesToInt64(p.TxMap["time"]))
 				if err != nil {
 					return utils.ErrInfo(err)
@@ -185,6 +206,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 	} else {
 
 		// Оперативные транзакции
+		// Operative transactions
 		MethodName := consts.TxTypes[p.dataType]
 		log.Debug("MethodName", MethodName+"Init")
 		err_ := utils.CallMethod(p, MethodName+"Init")
@@ -199,6 +221,7 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		}
 
 		// пишем хэш тр-ии в лог
+		// write the hash of the transaction to logs
 		err = p.InsertInLogTx(transactionBinaryDataFull, utils.BytesToInt64(p.TxMap["time"]))
 		if err != nil {
 			return utils.ErrInfo(err)

@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
-
+	l "log"
 	"os"
 	"strings"
+	"github.com/c-darwin/dcoin-go/packages/detector"
+	"fmt"
 )
 
 type upgrade3Page struct {
@@ -32,6 +34,20 @@ func (c *Controller) Upgrade3() (string, error) {
 	userProfile := *utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_profile.jpg"
 	userFace := *utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_face.jpg"
 
+	r, err := detector.Race(userFace)
+	if err != nil {
+		l.Println(err)
+	}
+
+	fmt.Println("race", r)
+
+	l.Println("Race detected:", r)
+	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET race = ?", r)
+	if err != nil {
+		l.Println(err)
+	}
+
+
 	if _, err := os.Stat(userProfile); os.IsNotExist(err) {
 		userProfile = ""
 	} else {
@@ -45,6 +61,7 @@ func (c *Controller) Upgrade3() (string, error) {
 
 	log.Debug("userProfile: %s", userProfile)
 	log.Debug("userFace: %s", userFace)
+
 
 	// текущий набор точек для шаблонов
 	examplePoints, err := c.GetPoints(c.Lang)
@@ -64,8 +81,8 @@ func (c *Controller) Upgrade3() (string, error) {
 		profileCoords = data["profile_coords"]
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "5", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(3)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "4", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(2)
 
 	TemplateStr, err := makeTemplate("upgrade_3", "upgrade3", &upgrade3Page{
 		Alert:           c.Alert,
@@ -85,5 +102,7 @@ func (c *Controller) Upgrade3() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+
+
 	return TemplateStr, nil
 }

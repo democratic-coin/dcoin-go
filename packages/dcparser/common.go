@@ -2766,6 +2766,7 @@ func (p *Parser) selectiveRollback(fields []string, table string, where string, 
 /**
  *
 Вычисляем, какой получится профит от суммы $amount
+Calculate profit for $amount
 $pct_array = array(
 	1394308460=>array('user'=>0.05, 'miner'=>0.10),
 	1394308470=>array('user'=>0.06, 'miner'=>0.11),
@@ -2786,8 +2787,13 @@ $pct_array = array(
 	1394308490=>5000
 	);
  * $repaid_amount, $holidays_array, $points_status_array, $max_promised_amount_array нужны только для обещанных сумм. у погашенных нет $repaid_amount, $holidays_array, $max_promised_amount_array
+ 											* needed only for promised_amount. Amortized doesn't have
+
  * $repaid_amount нужен чтобы узнать, не будет ли превышения макс. допустимой суммы. считаем amount mining+repaid
+ 		* needed for calculation if sum exceeded. Calculated as amount = mining + repaid
+
  * $currency_id - для иднетификации WOC
+ 		* needed for identification WOC
  * */
 
 func (p *Parser) calcNodeCommission(amount float64, nodeCommission [3]float64) float64 {

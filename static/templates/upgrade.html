@@ -27,7 +27,7 @@
 <br>
 
 {{if and (ne .Result "ok")  (ne .Result "pending")  (ne .Result "users_pending")}}
-<button class="btn btn-success" onclick="dc_navigate('upgrade0')">{{.Lang.begin_upgrade}}</button>
+<button class="btn btn-success" onclick="dc_navigate('upgrade1')">{{.Lang.begin_upgrade}}</button>
 <p>{{.Lang.attempts_remaining}} {{.MinerVotesAttempt}}</p>
 <p>{{.Lang.purpose_of_inspections}}</p><br>
 {{end}}
