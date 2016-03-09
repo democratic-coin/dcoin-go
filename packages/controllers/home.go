@@ -48,6 +48,8 @@ type homePage struct {
 	Miner                 bool
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
+	Chart					[]map[string]string
+	DCTarget int64
 }
 
 type CurrencyPct struct {
@@ -335,7 +337,18 @@ func (c *Controller) Home() (string, error) {
 		refPhotos[utils.StrToInt64(lastCashRequests[i]["to_user_id"])] = hosts
 	}
 
+	//var chart [][2]string
+	// график обещанные суммы/монеты
+	chart, err := c.GetAll(`
+			SELECT month, day, dc, promised_amount
+			FROM stats
+			LIMIT 7`, 7)
+
+	DCTarget := consts.DCTarget[72]
+
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
+		DCTarget: DCTarget,
+		Chart: 					chart,
 		Community:             c.Community,
 		CountSignArr:          c.CountSignArr,
 		CountSign:             c.CountSign,
