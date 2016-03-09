@@ -1191,7 +1191,7 @@
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable([
 			['Date', 'Promised amounts', 'DC'],
-			{{range $k, $data := .Charts}}
+			{{range $k, $data := .Chart}}
 			['{{$data.month}}/{{$data.day}}', {{$data.promised_amount}}, {{$data.dc}}],
 			{{end}}
 		]);
