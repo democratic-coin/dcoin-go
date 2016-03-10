@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/c-darwin/dcoin-go/packages/utils"
-	"regexp"
-	"strings"
+//	"regexp"
+//	"strings"
 )
 
 func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
@@ -16,7 +16,13 @@ func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 
 	c.r.ParseForm()
 
-	mailServer := ""
+	err := c.ExecSql(`UPDATE `+c.MyPrefix+`my_table	SET  email = ?`, c.r.FormValue("email"))
+	if err != nil {
+		return fmt.Sprintf(`{"error":"%s"}`, err), nil
+	}
+
+
+/*	mailServer := ""
 	re := regexp.MustCompile(`(?i)^[0-9a-z\-\_\.@]+(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|live\.com|yandex\.ru|yandex\.com|ya\.ru|mail\.ru|bk\.ru|inbox\.ru|list\.ru)$`)
 	match := re.FindStringSubmatch(c.r.FormValue("smtp_username"))
 	if len(match) > 0 {
@@ -65,7 +71,7 @@ func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 	err = c.SendMail("Test", "Test", mailData["email"], mailData, c.Community, c.PoolAdminUserId)
 	if err != nil {
 		return fmt.Sprintf(`{"error":"%s"}`, err), nil
-	}
+	}*/
 	return `{"success":"success"}`, nil
 
 }

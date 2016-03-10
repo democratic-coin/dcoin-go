@@ -1183,6 +1183,7 @@
 	{{end}}
 </script>
 
+
 {{if .Chart}}
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
@@ -1201,15 +1202,19 @@
 				legend: { position: 'bottom' }
 			};
 
-			var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+		var options = {
+			title: 'dUSD/USD',
+			curveType: 'function',
+			legend: { position: 'bottom' }
+		};
 
-			chart.draw(data, options);
-		}
-	</script>
-	<div id="curve_chart" style="width: 900px; height: 500px"></div>
-	<p>Target: {{.DCTarget}} dUSD</p>
-{{end}}
+		var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
+		chart.draw(data, options);
+	}
+</script>
+<div id="curve_chart" style="width: 900px; height: 500px"></div>
+<p>Target: {{.DCTarget}}</p>
 
 <script>
 	var currency_list = [];

@@ -41,7 +41,6 @@ BEGIN:
 			break BEGIN
 		}
 
-
 		curTime, err := d.Single(`SELECT time FROM info_block`).Int64()
 		if utils.Time() - curTime > 86400 {
 			// идет сбор БД из блокчейна
@@ -50,6 +49,7 @@ BEGIN:
 			d.sleepTime = 86400
 		}
 		t := time.Unix(curTime, 0)
+
 		variables, err := d.GetAllVariables()
 		if err != nil {
 			if d.dPrintSleep(err, d.sleepTime) {
