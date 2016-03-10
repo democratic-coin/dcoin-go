@@ -48,7 +48,7 @@ type homePage struct {
 	Miner                 bool
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
-	Chart					[]map[string]string
+	Chart					string
 	DCTarget int64
 }
 
@@ -337,12 +337,19 @@ func (c *Controller) Home() (string, error) {
 		refPhotos[utils.StrToInt64(lastCashRequests[i]["to_user_id"])] = hosts
 	}
 
-	//var chart [][2]string
+	var chart string
 	// график обещанные суммы/монеты
-	chart, err := c.GetAll(`
+	chartData, err := c.GetAll(`
 			SELECT month, day, dc, promised_amount
 			FROM stats
+			WHERE currency_id=72
 			LIMIT 7`, 7)
+	for _, data := range chartData {
+		chart += `['`+data["month"]+`/`+data["day"]+`', `+utils.ClearNull(data["promised_amount"], 0)+`, `+utils.ClearNull(data["dc"], 0)+`],`
+	}
+	if len(chart) > 0 {
+		chart = chart[:len(chart)-1]
+	}
 
 	DCTarget := consts.DCTarget[72]
 
