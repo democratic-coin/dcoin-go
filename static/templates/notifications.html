@@ -97,13 +97,23 @@
 		 */
 	/*});*/
 
-	$('#save_email_and_send_test').bind('click', function () {
+function js_checkemail( email, strict)
+{
+ if ( !strict ) email = email.replace(/^\s+|\s+$/g, '');
+ return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(email);
+}
 
+	$('#save_email_and_send_test').bind('click', function () {
+		var email = $('#simple_email').val();
+		if (!js_checkemail( email, true )) {
+			alert('Incorrect email');
+			return;
+		}
 		$("#html_errors").html("");
 		$.post( 'ajax?controllerName=saveEmailAndSendTestMess', {
-					'email' : $('#simple_email').val(),
-					'smtp_username' :  $('#simple_username').val(),
-					'smtp_password' :  $('#simple_password').val()
+					'email' : email
+//					'smtp_username' :  $('#simple_username').val(),
+//					'smtp_password' :  $('#simple_password').val()
 				} ,
 				function (data) {
 					if (typeof data.error != "undefined") {
@@ -220,7 +230,8 @@
 				<style>
 					.simpleMailSpan{min-width: 80px; float: left; line-height: 33px;}
 				</style>
-				<p>{{.Lang.please_register_a_new_mailbox}} <a href="http://gmail.com" target="_blank">gmail.com</a>, <a href="http://yahoo.com" target="_blank">yahoo.com</a>, <a href="http://yandex.ru" target="_blank">yandex.ru</a>, <a href="http://mail.ru" target="_blank">mail.ru</a> {{.Lang.data_form_no_smtp}}</p>
+				<p>{{.Lang.please_enter_email}}</p>
+				<!--p>{{.Lang.please_register_a_new_mailbox}} <a href="http://gmail.com" target="_blank">gmail.com</a>, <a href="http://yahoo.com" target="_blank">yahoo.com</a>, <a href="http://yandex.ru" target="_blank">yandex.ru</a>, <a href="http://mail.ru" target="_blank">mail.ru</a> {{.Lang.data_form_no_smtp}}</p-->
 				<!--<div class="form-inline" style="margin-bottom: 5px">
 					<span class="simpleMailSpan">Сервер</span>
 					<div class="form-group">
@@ -233,7 +244,7 @@
 						</select>
 					</div>
 				</div>-->
-				<div class="form-inline" style="margin-bottom: 5px">
+				<!--div class="form-inline" style="margin-bottom: 5px">
 					<span class="simpleMailSpan">Email</span>
 					<div class="form-group">
 						<input type="text" id="simple_username" class="input-xlarge"  style="width: 170px" value="{{.Data.smtp_username}}">
@@ -244,7 +255,7 @@
 					<div class="form-group">
 						<input type="password" id="simple_password" class="input-xlarge"  style="width: 170px" value="{{.Data.smtp_password}}">
 					</div>
-				</div>
+				</div-->
 				<div class="form-inline">
 					<span class="simpleMailSpan">{{.Lang.your_email}}</span>
 					<div class="form-group">
