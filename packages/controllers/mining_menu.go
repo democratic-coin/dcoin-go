@@ -138,7 +138,8 @@ func (c *Controller) MiningMenu() (string, error) {
 		} else {
 
 			// установлены ли уведомления
-			smtpUserName, err := c.Single("SELECT smtp_username FROM " + c.MyPrefix + "my_table").String()
+//			smtpUserName, err := c.Single("SELECT smtp_username FROM " + c.MyPrefix + "my_table").String()
+			smtpUserName, err := c.Single("SELECT email FROM " + c.MyPrefix + "my_table").String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
