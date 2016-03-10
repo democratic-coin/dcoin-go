@@ -40,8 +40,16 @@ BEGIN:
 		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
-		// Get the current time.
-		t := time.Now()
+
+
+		curTime, err := d.Single(`SELECT time FROM info_block`).Int64()
+		if utils.Time() - curTime > 86400 {
+			// идет сбор БД из блокчейна
+			d.sleepTime = 60
+		} else {
+			d.sleepTime = 86400
+		}
+		t := time.Unix(curTime, 0)
 		variables, err := d.GetAllVariables()
 		if err != nil {
 			if d.dPrintSleep(err, d.sleepTime) {
@@ -56,6 +64,7 @@ BEGIN:
 			}
 			continue BEGIN
 		}
+
 		for currencyId, _ := range CurrencyList {
 			sumPromisedAmount, err := d.Single(`
 				SELECT sum(amount) as sum_amount
