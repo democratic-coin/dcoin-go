@@ -13,7 +13,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.widget.Toast;
 import android.app.TaskStackBuilder;
-import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 import android.view.KeyCharacterMap;
 
 public class GoNativeActivity extends NativeActivity {
@@ -38,26 +38,32 @@ public class GoNativeActivity extends NativeActivity {
 
 	  Log.d("JavaGo", "GoNativeActivity notif");
 
-  	  Intent intent = new Intent("org.golang.app.MainActivity");	    
+  	  Intent intent = new Intent("org.golang.app.MainActivity");
+		      /////
+		Notification.Builder builder = new Notification.Builder(this);
 
-	  NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-	  mBuilder.setSmallIcon(R.drawable.icon);
-	  mBuilder.setContentTitle(title);
-	  mBuilder.setContentText(text);
-	          
-	  Intent resultIntent = new Intent(this, MainActivity.class);
-	  TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-	  stackBuilder.addParentStack(MainActivity.class);
+		Intent resultIntent = new Intent(this, MainActivity.class);
+		PendingIntent pIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		stackBuilder.addParentStack(MainActivity.class);
 
-	  // Adds the Intent that starts the Activity to the top of the stack
-	  stackBuilder.addNextIntent(resultIntent);
-	  PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-	  mBuilder.setContentIntent(resultPendingIntent);
+		builder.setAutoCancel(true);
+		builder.setContentTitle(title);
+		builder.setContentText(text);
+		builder.setSmallIcon(R.drawable.icon);
+		builder.setContentIntent(pIntent);
+		builder.setContentText("Dcoin is running");
+
+  		builder.build();
+
+		Notification notif = builder.getNotification();
+		////
+
 
 	  NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     
 	  // notificationID allows you to update the notification later on.
-	  mNotificationManager.notify(2, mBuilder.build());
+	  mNotificationManager.notify(2, notif);
 
     }    
 

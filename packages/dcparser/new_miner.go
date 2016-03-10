@@ -132,9 +132,10 @@ func (p *Parser) NewMinerFront() error {
 	forSign := ""
 	if p.BlockData != nil && p.BlockData.BlockId < 250900 {
 		forSign = fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", p.TxMap["type"], p.TxMap["time"], p.TxMap["user_id"], p.TxMap["race"], p.TxMap["country"], p.TxMap["latitude"], p.TxMap["longitude"], p.TxMap["http_host"], p.TxMap["face_hash"], p.TxMap["profile_hash"], p.TxMap["face_coords"], p.TxMap["profile_coords"], p.TxMap["video_type"], p.TxMap["video_url_id"], p.TxMap["node_public_key"])
-	} else {
+	} else if p.BlockData != nil && p.BlockData.BlockId < 281500 {
 		forSign = fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", p.TxMap["type"], p.TxMap["time"], p.TxMap["user_id"], p.TxMap["race"], p.TxMap["country"], p.TxMap["latitude"], p.TxMap["longitude"], p.TxMap["http_host"], p.TxMap["tcp_host"], p.TxMap["face_hash"], p.TxMap["profile_hash"], p.TxMap["face_coords"], p.TxMap["profile_coords"], p.TxMap["video_type"], p.TxMap["video_url_id"], p.TxMap["node_public_key"])
-
+	} else {
+		forSign = fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", p.TxMap["type"], p.TxMap["time"], p.TxMap["user_id"], p.TxMap["race"], p.TxMap["country"], p.TxMap["latitude"], p.TxMap["longitude"], p.TxMap["http_host"], p.TxMap["tcp_host"], p.TxMap["face_hash"], p.TxMap["profile_hash"], p.TxMap["face_coords"], p.TxMap["profile_coords"], p.TxMap["video_type"], p.TxMap["video_url_id"], p.TxMap["node_public_key"], p.TxMap["pool_user_id"])
 	}
 	CheckSignResult, err := utils.CheckSign(p.PublicKeys, forSign, p.TxMap["sign"], false)
 	if err != nil {
@@ -373,11 +374,12 @@ func (p *Parser) NewMiner() error {
 					latitude,
 					longitude,
 					country,
+					pool_user_id,
 					block_id,
 					prev_log_id
 				) VALUES (
-					?, ?, ?, [hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-				) `, "log_id", logData["user_id"], logData["miner_id"], logData["status"], logData["node_public_key"], logData["face_hash"], logData["profile_hash"], logData["photo_block_id"], logData["photo_max_miner_id"], logData["miners_keepers"], logData["face_coords"], logData["profile_coords"], logData["video_type"], logData["video_url_id"], logData["http_host"], logData["tcp_host"], logData["latitude"], logData["longitude"], logData["country"], p.BlockData.BlockId, logData["log_id"])
+					?, ?, ?, [hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+				) `, "log_id", logData["user_id"], logData["miner_id"], logData["status"], logData["node_public_key"], logData["face_hash"], logData["profile_hash"], logData["photo_block_id"], logData["photo_max_miner_id"], logData["miners_keepers"], logData["face_coords"], logData["profile_coords"], logData["video_type"], logData["video_url_id"], logData["http_host"], logData["tcp_host"], logData["latitude"], logData["longitude"], logData["country"], p.TxMaps.Int64["pool_user_id"], p.BlockData.BlockId, logData["log_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -400,8 +402,9 @@ func (p *Parser) NewMiner() error {
 					country = ?,
 					http_host = ?,
 					tcp_host = ?,
+					pool_user_id = ?,
 					log_id = ?
-				WHERE user_id = ?`, p.TxMap["node_public_key"], p.TxMaps.String["face_hash"], p.TxMaps.String["profile_hash"], p.BlockData.BlockId, maxMinerId, p.Variables.Int64["miners_keepers"], p.TxMaps.String["face_coords"], p.TxMaps.String["profile_coords"], p.TxMaps.String["video_type"], p.TxMaps.String["video_url_id"], p.TxMaps.Float64["latitude"], p.TxMaps.Float64["longitude"], p.TxMaps.Int64["country"], p.TxMaps.String["http_host"], tcpHost, logId, p.TxUserID)
+				WHERE user_id = ?`, p.TxMap["node_public_key"], p.TxMaps.String["face_hash"], p.TxMaps.String["profile_hash"], p.BlockData.BlockId, maxMinerId, p.Variables.Int64["miners_keepers"], p.TxMaps.String["face_coords"], p.TxMaps.String["profile_coords"], p.TxMaps.String["video_type"], p.TxMaps.String["video_url_id"], p.TxMaps.Float64["latitude"], p.TxMaps.Float64["longitude"], p.TxMaps.Int64["country"], p.TxMaps.String["http_host"], tcpHost, p.TxMaps.Int64["pool_user_id"], logId, p.TxUserID)
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -423,9 +426,10 @@ func (p *Parser) NewMiner() error {
 					longitude,
 					country,
 					http_host,
-					tcp_host
-			) VALUES (?, [hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			p.TxUserID, p.TxMap["node_public_key"], p.TxMaps.String["face_hash"], p.TxMaps.String["profile_hash"], p.BlockData.BlockId, maxMinerId, p.Variables.Int64["miners_keepers"], p.TxMaps.String["face_coords"], p.TxMaps.String["profile_coords"], p.TxMaps.String["video_type"], p.TxMaps.String["video_url_id"], p.TxMaps.Float64["latitude"], p.TxMaps.Float64["longitude"], p.TxMaps.Int64["country"], p.TxMaps.String["http_host"], tcpHost)
+					tcp_host,
+					pool_user_id
+			) VALUES (?, [hex], ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			p.TxUserID, p.TxMap["node_public_key"], p.TxMaps.String["face_hash"], p.TxMaps.String["profile_hash"], p.BlockData.BlockId, maxMinerId, p.Variables.Int64["miners_keepers"], p.TxMaps.String["face_coords"], p.TxMaps.String["profile_coords"], p.TxMaps.String["video_type"], p.TxMaps.String["video_url_id"], p.TxMaps.Float64["latitude"], p.TxMaps.Float64["longitude"], p.TxMaps.Int64["country"], p.TxMaps.String["http_host"], tcpHost, p.TxMaps.Int64["pool_user_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}

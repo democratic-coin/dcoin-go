@@ -224,7 +224,9 @@ func Content(w http.ResponseWriter, r *http.Request) {
 	} else if dbInit && installProgress == "complete" && sessUserId == 0 && status == "waiting_accept_new_key" {
 		tplName = "waitingAcceptNewKey"
 	} else if dbInit && installProgress == "complete" {
-		tplName = "login"
+		if tplName != "setPassword" {
+			tplName = "login"
+		}
 	} else {
 		tplName = "installStep0" // самый первый запуск
 	}
@@ -464,6 +466,12 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			}
 			w.Write([]byte(html))
 		}
+	} else if tplName == "setPassword" {
+		html, err := CallController(c, tplName)
+		if err != nil {
+			log.Error("%v", err)
+		}
+		w.Write([]byte(html))
 	} else if len(tplName) > 0 {
 		log.Debug("tplName", tplName)
 		html := ""

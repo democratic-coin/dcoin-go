@@ -138,7 +138,6 @@
 		$( "#currency_id" ).change(function () {
 			$( "#currency_id option:selected" ).each(function() {
 				currency_id = $(this).val(); 
-				//$("#add_promised_amount").prop('disabled', max_promised_amounts[currency_id] == 0);
 				$("#max_promised_amount").text( max_promised_amounts[currency_id] ) ;
 				$("#promised_amount_currency_name").text( currency_name[currency_id] ) ;
 				$("#promised_amount_currency_full_name").text( $(this).text() ) ;

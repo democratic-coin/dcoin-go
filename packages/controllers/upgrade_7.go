@@ -52,10 +52,10 @@ func (c *Controller) Upgrade7() (string, error) {
 		myTable["video_type"] = "null"
 	}
 	if len(myTable["http_host"]) == 0 {
-		myTable["video_type"] = "0"
+		myTable["http_host"] = "0"
 	}
 	if len(myTable["tcp_host"]) == 0 {
-		myTable["video_type"] = "0"
+		myTable["tcp_host"] = "0"
 	}
 	var profileHash, faceHash string
 
@@ -99,14 +99,17 @@ func (c *Controller) Upgrade7() (string, error) {
 		nodePublicKey = string(utils.BinToHex([]byte(nodePublicKey)))
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "9", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(7)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "8", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(6)
 
 	var noExistsMp4 bool
 	if _, err := os.Stat(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_video.mp4"); os.IsNotExist(err) {
 		noExistsMp4 = true
 	}
 
+	if myTable["pool_user_id"] != "0" {
+		myTable["http_host"], myTable["tcp_host"] = "0", "0";
+	}
 	TemplateStr, err := makeTemplate("upgrade_7", "upgrade7", &upgrade7Page{
 		Alert:           c.Alert,
 		Lang:            c.Lang,
@@ -125,7 +128,6 @@ func (c *Controller) Upgrade7() (string, error) {
 		NodePublicKey:   nodePublicKey,
 		ProfileHash:     profileHash,
 		FaceHash:        faceHash,
-		Data:            myTable,
 		MyTable:         myTable,
 		Mobile:          utils.Mobile()})
 	if err != nil {

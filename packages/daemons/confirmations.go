@@ -10,6 +10,8 @@ import (
 )
 
 /*
+Getting amount of nodes, which has the same hash as we do
+Using it for watching for forks
 Получаем кол-во нодов, у которых такой же хэш последнего блока как и у нас
 Нужно чтобы следить за вилками
 */

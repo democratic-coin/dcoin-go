@@ -6,10 +6,12 @@ import (
 	"github.com/c-darwin/dcoin-go/packages/utils"
 	"regexp"
 	"strings"
+	"fmt"
 )
 
 func (c *Controller) DcoinKey() (string, error) {
 
+	fmt.Println("DcoinKey")
 	var err error
 	c.r.ParseForm()
 	// на IOS/Android запрос ключа идет без сессии из objective C (UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://127.0.0.1:8089/ajax?controllerName=dcoinKey&ios=1"]]];)
@@ -17,6 +19,7 @@ func (c *Controller) DcoinKey() (string, error) {
 	// чтобы по локалке никто не украл приватный ключ
 	if ok, _ := regexp.MatchString(`^(\:\:)|(127\.0\.0\.1)(:[0-9]+)?$`, c.r.RemoteAddr); ok {
 		local = true
+		fmt.Println("local = true")
 	}
 	if utils.Mobile() && c.SessUserId == 0 && !local {
 		return "", utils.ErrInfo(errors.New("Not local request from " + c.r.RemoteAddr))
@@ -58,6 +61,8 @@ func (c *Controller) DcoinKey() (string, error) {
 	}
 
 	if ios || utils.Android() {
+
+		fmt.Println("DcoinKey image/png")
 		buffer, err := utils.KeyToImg(privateKey, "", c.SessUserId, c.TimeFormat, param)
 		if err != nil {
 			return "", utils.ErrInfo(err)
@@ -76,6 +81,7 @@ func (c *Controller) DcoinKey() (string, error) {
 			return "", utils.ErrInfo(errors.New("unable to write text"))
 		}
 	}
+	fmt.Println("DcoinKey ok")
 
 	return "", nil
 }

@@ -16,6 +16,8 @@ import (
 
 /*
 Задержки во времени генерации из-за main_lock во время sleep
+
+Delays during generation because of main_lock currently sleep
 */
 
 var err error

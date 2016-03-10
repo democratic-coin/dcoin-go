@@ -138,7 +138,8 @@ func (c *Controller) MiningMenu() (string, error) {
 		} else {
 
 			// установлены ли уведомления
-			smtpUserName, err := c.Single("SELECT smtp_username FROM " + c.MyPrefix + "my_table").String()
+//			smtpUserName, err := c.Single("SELECT smtp_username FROM " + c.MyPrefix + "my_table").String()
+			smtpUserName, err := c.Single("SELECT email FROM " + c.MyPrefix + "my_table").String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -194,9 +195,9 @@ func (c *Controller) MiningMenu() (string, error) {
 	log.Debug(">result:", result)
 	var nodePrivateKey string
 	if result == "null" {
-		tplName = "upgrade_0"
-		tplTitle = "upgrade0"
-		return c.Upgrade0()
+		tplName = "upgrade_1"
+		tplTitle = "upgrade1"
+		return c.Upgrade1()
 	} else if result == "need_email" {
 		tplName = "sign_up_in_the_pool"
 		tplTitle = "signUpInThePool"
