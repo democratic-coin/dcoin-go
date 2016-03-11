@@ -79,6 +79,10 @@
 </script>
 
 	<script src="static/js/jquery.qtip.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		google.charts.load('current', {'packages': ['corechart']});
+	</script>
 
 	<link type="text/css" rel="stylesheet" href="static/css/jquery.qtip.min.css" />
 
@@ -719,7 +723,7 @@
 </div>
 
 <input type="hidden" id="mobileos" value="{{if .Mobile}}1{{else}}0{{end}}">
-{{if .AnalyticsDisabled "1000000"}}
+{{if eq .AnalyticsDisabled "0"}}
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 	(function (d, w, c) {
