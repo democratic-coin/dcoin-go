@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"fmt"
 	"encoding/json"
+	"errors"
 	"github.com/democratic-coin/dcoin-go/packages/consts"
 )
 
@@ -29,6 +30,10 @@ func getLocation() (*coordinates, error) {
 	if err != nil {
 		fmt.Println("Cannot parse:", err.Error())
 		return nil, err
+	}
+	
+	if loc.Coordinates == nil {
+		return nil, errors.New("Couldn't get user's location")
 	}
 
 	return loc.Coordinates, nil
