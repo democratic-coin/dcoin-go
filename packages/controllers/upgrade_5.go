@@ -30,7 +30,10 @@ func (c *Controller) Upgrade5() (string, error) {
 	log.Debug("Upgrade5")
 
 	if !utils.Mobile() {
-		if coord, err := geolocation.GetLocation(); err == nil {
+		if coord, err := geolocation.GetLocation(); err != nil {
+			geolocationLat = "0.0"
+			geolocationLon = "0.0"
+		} else {
 			geolocationLat = fmt.Sprintf("%.6f", coord.Latitude)
 			geolocationLon = fmt.Sprintf("%.6f", coord.Longitude)
 
