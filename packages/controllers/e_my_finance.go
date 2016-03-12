@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/base64"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"sort"
 	"strings"
 	"time"
@@ -326,7 +326,7 @@ func (c *Controller) EMyFinance() (string, error) {
 			my_finance_history = append(my_finance_history, data)
 		}
 	}
-	///home/z/go-projects/src/github.com/c-darwin/dcoin-go/packages/controllers/e_my_finance.go:275: cannot use myFinanceHistory_[k] (type []*EmyFinanceType) as type *EmyFinanceType in append
+	///home/z/go-projects/src/github.com/democratic-coin/dcoin-go/packages/controllers/e_my_finance.go:275: cannot use myFinanceHistory_[k] (type []*EmyFinanceType) as type *EmyFinanceType in append
 
 	collapse := c.Parameters["collapse"]
 

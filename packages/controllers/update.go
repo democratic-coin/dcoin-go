@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
 )
 

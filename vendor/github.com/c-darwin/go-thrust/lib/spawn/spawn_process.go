@@ -10,7 +10,7 @@ import (
 	"runtime"
 	. "github.com/c-darwin/go-thrust/lib/common"
 	"github.com/c-darwin/go-thrust/lib/connection"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 const (

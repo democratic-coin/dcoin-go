@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"fmt"
 	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 )
 
 func getLocation() (*coordinates, error) {

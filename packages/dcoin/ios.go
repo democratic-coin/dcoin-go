@@ -17,7 +17,7 @@ logNS(char* text) {
 import "C"
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/c-darwin/stoppableListener"
 	"net"
 	"net/http"

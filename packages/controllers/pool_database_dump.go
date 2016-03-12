@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 
 	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"regexp"
 	"time"
 )

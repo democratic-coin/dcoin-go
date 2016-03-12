@@ -1,8 +1,8 @@
 package daemons
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/dcparser"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/dcparser"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 /*
