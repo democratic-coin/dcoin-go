@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"math"
 	"strings"
 	"time"
@@ -48,6 +48,8 @@ type homePage struct {
 	Miner                 bool
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
+	Chart					string
+	DCTarget int64
 }
 
 type CurrencyPct struct {
@@ -335,7 +337,25 @@ func (c *Controller) Home() (string, error) {
 		refPhotos[utils.StrToInt64(lastCashRequests[i]["to_user_id"])] = hosts
 	}
 
+	var chart string
+	// график обещанные суммы/монеты
+	chartData, err := c.GetAll(`
+			SELECT month, day, dc, promised_amount
+			FROM stats
+			WHERE currency_id=72
+			LIMIT 7`, 7)
+	for _, data := range chartData {
+		chart += `['`+data["month"]+`/`+data["day"]+`', `+utils.ClearNull(data["promised_amount"], 0)+`, `+utils.ClearNull(data["dc"], 0)+`],`
+	}
+	if len(chart) > 0 {
+		chart = chart[:len(chart)-1]
+	}
+
+	DCTarget := consts.DCTarget[72]
+
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
+		DCTarget: DCTarget,
+		Chart: 					chart,
 		Community:             c.Community,
 		CountSignArr:          c.CountSignArr,
 		CountSign:             c.CountSign,

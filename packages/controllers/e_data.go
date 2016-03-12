@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) EData() (string, error) {

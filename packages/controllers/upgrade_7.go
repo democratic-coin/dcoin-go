@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 
 	"fmt"
 	"io/ioutil"
@@ -99,8 +99,8 @@ func (c *Controller) Upgrade7() (string, error) {
 		nodePublicKey = string(utils.BinToHex([]byte(nodePublicKey)))
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "9", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(7)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "8", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(6)
 
 	var noExistsMp4 bool
 	if _, err := os.Stat(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_video.mp4"); os.IsNotExist(err) {

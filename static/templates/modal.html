@@ -123,7 +123,7 @@ $(document).keypress(function(e){
 								 <p style="margin-bottom:0px"  id="key_file_name" onclick="document.getElementById('upload_hidden').click();"></p>
 								  <div id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('upload_hidden').click();" type="button">
 								  	{{.Lang.select_key}}
-									<input type="file" name="upload" id="upload_hidden" style="position: absolute; visibility:hidden;" />
+									<input type="file" accept="image/*,text/*" name="upload" id="upload_hidden" style="position: absolute; visibility:hidden;" />
 								  </div>
 								  {{if not .Mobile}}<p>{{.Lang.or_drag_and_drop_key}}</p>{{end}}
 								</div>

@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	l "log"
 	"os"
 	"strings"
-	"github.com/c-darwin/dcoin-go/packages/detector"
+	"github.com/democratic-coin/dcoin-go/packages/detector"
+	"fmt"
 )
 
 type upgrade3Page struct {
@@ -37,6 +38,8 @@ func (c *Controller) Upgrade3() (string, error) {
 	if err != nil {
 		l.Println(err)
 	}
+
+	fmt.Println("race", r)
 
 	l.Println("Race detected:", r)
 	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET race = ?", r)
@@ -78,8 +81,8 @@ func (c *Controller) Upgrade3() (string, error) {
 		profileCoords = data["profile_coords"]
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "5", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(3)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "4", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(2)
 
 	TemplateStr, err := makeTemplate("upgrade_3", "upgrade3", &upgrade3Page{
 		Alert:           c.Alert,

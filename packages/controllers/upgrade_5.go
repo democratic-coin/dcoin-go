@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
-	"github.com/c-darwin/dcoin-go/packages/geolocation"
+	"github.com/democratic-coin/dcoin-go/packages/geolocation"
 	"fmt"
 	//"runtime"
 )
@@ -50,8 +50,8 @@ func (c *Controller) Upgrade5() (string, error) {
 		}
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "7", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(5)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "6", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(4)
 
 	TemplateStr, err := makeTemplate("upgrade_5", "upgrade5", &upgrade5Page{
 		Alert:           c.Alert,

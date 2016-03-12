@@ -2,7 +2,7 @@ package dcparser
 
 import (
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	//"log"
 	"encoding/json"
 	//"regexp"
@@ -12,7 +12,7 @@ import (
 	//"time"
 	//"strings"
 	//"bytes"
-	//"github.com/c-darwin/dcoin-go/packages/consts"
+	//"github.com/democratic-coin/dcoin-go/packages/consts"
 	//"math"
 	//"database/sql"
 	"strings"

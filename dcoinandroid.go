@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/dcoin"
+	"github.com/democratic-coin/dcoin-go/packages/dcoin"
 	"image"
 	"log"
 	"time"
@@ -19,7 +19,7 @@ import (
 	"github.com/c-darwin/mobile/get_files_dir"
 	"fmt"
 	"runtime"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 /*

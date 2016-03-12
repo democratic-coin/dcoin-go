@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/session"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/controllers"
-	"github.com/c-darwin/dcoin-go/packages/daemons"
-	"github.com/c-darwin/dcoin-go/packages/static"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/controllers"
+	"github.com/democratic-coin/dcoin-go/packages/daemons"
+	"github.com/democratic-coin/dcoin-go/packages/static"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/c-darwin/go-bindata-assetfs"
 	"github.com/op/go-logging"
 	_ "image/png"
@@ -27,10 +27,10 @@ import (
 	"strings"
 	"time"
 //"syscall"
-	"github.com/c-darwin/dcoin-go/packages/dcparser"
+	"github.com/democratic-coin/dcoin-go/packages/dcparser"
 	"github.com/c-darwin/go-thrust/lib/bindings/window"
-	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
-	"github.com/c-darwin/dcoin-go/packages/schema"
+	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
+	"github.com/democratic-coin/dcoin-go/packages/schema"
 )
 
 var (
@@ -329,6 +329,28 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				if err != nil {
 					log.Error("%v", utils.ErrInfo(err))
 				}
+			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a23")) {
+
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[1] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "year", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "currency_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[4] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[5] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"day", "month", "year", "currency_id"}
+				s1["comment"] = ""
+				s["stats"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
 			}
 		}
 

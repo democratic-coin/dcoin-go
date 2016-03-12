@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 
 	"os"
 	"strings"
@@ -46,8 +46,8 @@ func (c *Controller) Upgrade1() (string, error) {
 	photoType := "face"
 	photo := userFace
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "3", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(1)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "2", -1)
+	upgradeMenu := utils.MakeUpgradeMenu(0)
 
 	TemplateStr, err := makeTemplate("upgrade_1_and_2", "upgrade1And2", &upgrade1Page{
 		Alert:           c.Alert,

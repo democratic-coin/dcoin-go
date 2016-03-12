@@ -18,8 +18,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/static"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/static"
 	"github.com/golang/freetype"
 	"github.com/kardianos/osext"
 	_ "github.com/lib/pq"
@@ -3012,7 +3012,7 @@ func GetNetworkTime() (*time.Time, error) {
 
 func MakeUpgradeMenu(cur int) string {
 	result := ""
-	for i := 0; i <= 7; i++ {
+	for i := 0; i <= 6; i++ {
 		active := ""
 		if i <= cur {
 			active = `complete`
@@ -3023,7 +3023,7 @@ func MakeUpgradeMenu(cur int) string {
 			<div class="col-md-1 bs-wizard-step ` + active + `">
 				<div class="text-center bs-wizard-stepnum">` + IntToStr(i+1) + `</div>
 				<div class="progress"><div class="progress-bar"></div></div>
-				<a href="#upgrade` + IntToStr(i) + `" class="bs-wizard-dot"></a>
+				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
 			</div>`
 	}
 	return result

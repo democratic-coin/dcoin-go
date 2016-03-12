@@ -4,12 +4,12 @@ import (
 	"errors"
 	"flag"
 	"github.com/astaxie/beego/config"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/op/go-logging"
 	"os"
 	"strings"
 	"regexp"
-	"github.com/c-darwin/dcoin-go/packages/stopdaemons"
+	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"fmt"
 )
 
@@ -180,7 +180,7 @@ func DbConnect(chBreaker chan bool, chAnswer chan string, goRoutineName string) 
 
 func StartDaemons() {
 	utils.DaemonsChans = nil
-	daemonsStart := map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "TestblockIsReady": TestblockIsReady, "TestblockGenerator": TestblockGenerator, "TestblockDisseminator": TestblockDisseminator, "Shop": Shop, "ReductionGenerator": ReductionGenerator, "QueueParserTx": QueueParserTx, "QueueParserTestblock": QueueParserTestblock, "QueueParserBlocks": QueueParserBlocks, "PctGenerator": PctGenerator, "Notifications": Notifications, "NodeVoting": NodeVoting, "MaxPromisedAmountGenerator": MaxPromisedAmountGenerator, "MaxOtherCurrenciesGenerator": MaxOtherCurrenciesGenerator, "ElectionsAdmin": ElectionsAdmin, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "CfProjects": CfProjects, "BlocksCollection": BlocksCollection, "Exchange": Exchange, "AutoUpdate": AutoUpdate, "AutoPayments": AutoPayments}
+	daemonsStart := map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "TestblockIsReady": TestblockIsReady, "TestblockGenerator": TestblockGenerator, "TestblockDisseminator": TestblockDisseminator, "Shop": Shop, "ReductionGenerator": ReductionGenerator, "QueueParserTx": QueueParserTx, "QueueParserTestblock": QueueParserTestblock, "QueueParserBlocks": QueueParserBlocks, "PctGenerator": PctGenerator, "Notifications": Notifications, "NodeVoting": NodeVoting, "MaxPromisedAmountGenerator": MaxPromisedAmountGenerator, "MaxOtherCurrenciesGenerator": MaxOtherCurrenciesGenerator, "ElectionsAdmin": ElectionsAdmin, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "CfProjects": CfProjects, "BlocksCollection": BlocksCollection, "Exchange": Exchange, "AutoUpdate": AutoUpdate, "AutoPayments": AutoPayments, "Stats": Stats}
 	if utils.Mobile() {
 		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "QueueParserTx": QueueParserTx, "Notifications": Notifications, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "BlocksCollection": BlocksCollection, "AutoPayments": AutoPayments}
 	}

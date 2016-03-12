@@ -2,7 +2,7 @@ package consts
 
 
 // текущая версия
-const VERSION = "2.1.0a21"
+const VERSION = "2.1.0a23"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -347,4 +347,11 @@ var MaxGreen = map[int64]int64{
 	75:2000000,
 	76:20000,
 	77:1000,
+}
+
+
+var DCTarget = map[int64]int64{
+	72:3000000000000,
+	58:16000000000000,
+	23:3000000000000,
 }

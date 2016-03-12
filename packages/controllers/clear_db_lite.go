@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) ClearDbLite() (string, error) {

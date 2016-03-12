@@ -2,7 +2,7 @@ package daemons
 
 import (
 	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func CfProjects(chBreaker chan bool, chAnswer chan string) {

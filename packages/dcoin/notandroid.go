@@ -4,9 +4,9 @@ package dcoin
 
 import (
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/tcpserver"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/tcpserver"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	_ "github.com/mattn/go-sqlite3"
 	"net"
 	"net/http"

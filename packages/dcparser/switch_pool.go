@@ -2,7 +2,7 @@ package dcparser
 
 import (
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"encoding/json"
 )
 
@@ -92,7 +92,7 @@ func (p *Parser) SwitchPool() error {
 		}
 	} else {
 		// выключаем режим пула
-		users, err := p.GetList(`SELECT pool_user_id miners_data WHERE user_id = ?`, p.TxUserID).Int64()
+		users, err := p.GetList(`SELECT pool_user_id FROM miners_data WHERE user_id = ?`, p.TxUserID).Int64()
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -101,7 +101,8 @@ func (p *Parser) SwitchPool() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		logId, err := p.ExecSqlGetLastInsertId(`INSERT INTO log_miners_data (backup_pool_users, prev_log_id) VALUES (?, ?)`, string(jsonData), minersData["log_id"])
+		logId, err := p.ExecSqlGetLastInsertId(`INSERT INTO log_miners_data (backup_pool_users, prev_log_id) VALUES (?, ?)`, 
+												"log_id", string(jsonData), minersData["log_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}

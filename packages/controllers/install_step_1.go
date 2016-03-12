@@ -3,9 +3,9 @@ package controllers
 import (
 	"fmt"
 	"github.com/astaxie/beego/config"
-	"github.com/c-darwin/dcoin-go/packages/consts"
-	"github.com/c-darwin/dcoin-go/packages/schema"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/schema"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"io/ioutil"
 	"os"
 )
