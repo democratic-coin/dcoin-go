@@ -37,6 +37,7 @@ func (c *Controller) SaveGeolocation() (string, error) {
 						if err != nil {
 							return "", utils.ErrInfo(err)
 						}
+						break
 					}
 				}
 			}
