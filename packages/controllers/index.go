@@ -3,8 +3,8 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/c-darwin/dcoin-go/packages/static"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/static"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"html/template"
 	"net/http"
 	"regexp"

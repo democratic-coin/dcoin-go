@@ -2,8 +2,8 @@ package daemons
 
 import (
 	"bytes"
-	"github.com/c-darwin/dcoin-go/packages/availablekey"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/availablekey"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func FirstChangePkey(chBreaker chan bool, chAnswer chan string) {

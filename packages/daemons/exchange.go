@@ -6,8 +6,8 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
-	"github.com/c-darwin/dcoin-go/packages/dcparser"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/dcparser"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"regexp"
 )
 

@@ -10,7 +10,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"github.com/op/go-logging"

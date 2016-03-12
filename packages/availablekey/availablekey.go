@@ -2,8 +2,8 @@ package availablekey
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/schema"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/schema"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/op/go-logging"
 	"math/rand"
 	"regexp"

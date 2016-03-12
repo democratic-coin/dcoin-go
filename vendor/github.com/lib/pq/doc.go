@@ -204,7 +204,7 @@ for more information).  Note that the channel name will be truncated to 63
 bytes by the PostgreSQL server.
 
 You can find a complete, working example of Listener usage at
-http://godoc.org/github.com/c-darwin/dcoin-go/vendor/src/github.com/lib/pq/listen_example.
+http://godoc.org/github.com/democratic-coin/dcoin-go/vendor/src/github.com/lib/pq/listen_example.
 
 */
 package pq
