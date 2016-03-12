@@ -108,6 +108,7 @@ func getLocation() (*coordinates, error) {
 	if len(sCoords) != 2 {
 		return nil, errors.New("Wrong coordinates")
 	}
+
 	fmt.Println("Calling CLLocation()")
 	lat, _ := strconv.ParseFloat(sCoords[0], 64)
 	lng, _ := strconv.ParseFloat(sCoords[1], 64)
