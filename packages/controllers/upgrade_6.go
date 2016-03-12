@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"html/template"
 	"io/ioutil"
 	"net"

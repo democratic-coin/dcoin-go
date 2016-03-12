@@ -38,7 +38,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
+	"github.com/democratic-coin/dcoin-go/vendor/src/github.com/astaxie/beego/session"
 
 	"github.com/garyburd/redigo/redis"
 )

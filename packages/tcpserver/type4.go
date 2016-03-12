@@ -1,7 +1,7 @@
 package tcpserver
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func (t *TcpServer) Type4() {

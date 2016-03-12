@@ -3,15 +3,15 @@
 package main
 
 import (
-	"github.com/c-darwin/dcoin-go/packages/dcoin"
+	"github.com/democratic-coin/dcoin-go/packages/dcoin"
 	"github.com/c-darwin/go-thrust/thrust"
 	"github.com/c-darwin/go-thrust/lib/commands"
-	"github.com/c-darwin/dcoin-go/packages/static"
+	"github.com/democratic-coin/dcoin-go/packages/static"
 	"fmt"
 	"net/http"
 	"github.com/c-darwin/go-thrust/lib/bindings/window"
 	"os"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"runtime"
 )
 func main_loader(w http.ResponseWriter, r *http.Request) {
