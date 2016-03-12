@@ -2,13 +2,13 @@ package daemons
 
 import (
 	"testing"
-	//"github.com/c-darwin/dcoin-go/packages/utils"
+	//"github.com/democratic-coin/dcoin-go/packages/utils"
 	//"github.com/astaxie/beego/config"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func TestDisseminator(t *testing.T) {
@@ -24,7 +24,7 @@ func TestDisseminator(t *testing.T) {
 	}
 	fmt.Println(dir)
 
-	/*configIni_, err := config.NewConfig("ini", "/home/z/IdeaProjects/src/github.com/c-darwin/dcoin-go/config.ini")
+	/*configIni_, err := config.NewConfig("ini", "/home/z/IdeaProjects/src/github.com/democratic-coin/dcoin-go/config.ini")
 	if err != nil {
 		t.Error("%v", utils.ErrInfo(err))
 	}

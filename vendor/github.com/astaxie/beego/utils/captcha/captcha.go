@@ -64,10 +64,10 @@ import (
 	"path"
 	"strings"
 
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/cache"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/context"
-	"github.com/c-darwin/dcoin-go/vendor/src/github.com/astaxie/beego/utils"
+	"github.com/democratic-coin/dcoin-go/vendor/src/github.com/astaxie/beego"
+	"github.com/democratic-coin/dcoin-go/vendor/src/github.com/astaxie/beego/cache"
+	"github.com/democratic-coin/dcoin-go/vendor/src/github.com/astaxie/beego/context"
+	"github.com/democratic-coin/dcoin-go/vendor/src/github.com/astaxie/beego/utils"
 )
 
 var (

@@ -3,7 +3,7 @@ package controllers
 import (
 	"errors"
 	"github.com/astaxie/beego/config"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) ClearDb() (string, error) {

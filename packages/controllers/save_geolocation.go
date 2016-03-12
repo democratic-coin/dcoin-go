@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"errors"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
-	geo "github.com/c-darwin/dcoin-go/packages/geolocation"
+	geo "github.com/democratic-coin/dcoin-go/packages/geolocation"
 	l "log"
-	"github.com/c-darwin/dcoin-go/packages/consts"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 )
 
 func (c *Controller) SaveGeolocation() (string, error) {

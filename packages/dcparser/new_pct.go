@@ -3,7 +3,7 @@ package dcparser
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/c-darwin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 // Эту транзакцию имеет право генерить только нод, который генерит данный блок
