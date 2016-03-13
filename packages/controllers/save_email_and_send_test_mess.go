@@ -30,7 +30,7 @@ func SendEmail( cmd, email, user_id, text, subject string ) error {
 	values.Set("subject", subject )
 	values.Set("text", text )
 	
-	req, err := http.NewRequest("POST", `http://email.dcoin.club/` + cmd, 
+	req, err := http.NewRequest("POST", `http://email.dcoin.club:8200/` + cmd, 
 	                          strings.NewReader(values.Encode()))
 	if err != nil {
 		return err
