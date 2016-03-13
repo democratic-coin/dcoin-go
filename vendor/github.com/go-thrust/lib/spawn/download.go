@@ -3,7 +3,7 @@ package spawn
 import (
 	"errors"
 	"fmt"
-	"github.com/c-darwin/pb"
+	"github.com/pb"
 	"io"
 	"net/http"
 	"os"
