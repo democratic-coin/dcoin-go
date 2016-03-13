@@ -120,7 +120,7 @@ function js_checkemail( email, strict)
 						$("#html_errors").html('<div class="alert alert-danger alert-dismissable" style="margin-top: 30px"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><div>'+data.error+'</div></div>');
 						$("#html_errors").css("display", "block");
 					} else {
-						dc_navigate('notifications', {'alert': '{{.Lang.saved}}'});
+						dc_navigate('miningMenu', {'alert': '{{.Lang.saved}}'});
 					}
 				}, 'JSON');
 	});
