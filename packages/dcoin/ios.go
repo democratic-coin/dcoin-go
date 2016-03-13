@@ -18,7 +18,7 @@ import "C"
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"github.com/c-darwin/stoppableListener"
+	"github.com/stoppableListener"
 	"net"
 	"net/http"
 )

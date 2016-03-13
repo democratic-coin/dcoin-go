@@ -4,12 +4,12 @@ package main
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/dcoin"
-	"github.com/c-darwin/go-thrust/thrust"
-	"github.com/c-darwin/go-thrust/lib/commands"
+	"github.com/go-thrust/thrust"
+	"github.com/go-thrust/lib/commands"
 	"github.com/democratic-coin/dcoin-go/packages/static"
 	"fmt"
 	"net/http"
-	"github.com/c-darwin/go-thrust/lib/bindings/window"
+	"github.com/go-thrust/lib/bindings/window"
 	"os"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"runtime"

@@ -1,9 +1,9 @@
 package dcoin
 
 import (
-	"github.com/c-darwin/go-thrust/thrust"
-//"github.com/c-darwin/go-thrust/tutorials/provisioner"
-	"github.com/c-darwin/go-thrust/lib/commands"
+	"github.com/go-thrust/thrust"
+//"github.com/go-thrust/tutorials/provisioner"
+	"github.com/go-thrust/lib/commands"
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/session"
@@ -12,7 +12,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/daemons"
 	"github.com/democratic-coin/dcoin-go/packages/static"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"github.com/c-darwin/go-bindata-assetfs"
+	"github.com/go-bindata-assetfs"
 	"github.com/op/go-logging"
 	_ "image/png"
 //"io"
@@ -28,7 +28,7 @@ import (
 	"time"
 //"syscall"
 	"github.com/democratic-coin/dcoin-go/packages/dcparser"
-	"github.com/c-darwin/go-thrust/lib/bindings/window"
+	"github.com/go-thrust/lib/bindings/window"
 	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"github.com/democratic-coin/dcoin-go/packages/schema"
 )
