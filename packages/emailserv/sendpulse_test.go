@@ -1,5 +1,5 @@
 // sendpulse_test
-package email
+package main
 
 import (
 	"fmt"
