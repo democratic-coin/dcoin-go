@@ -120,9 +120,13 @@
 	<br>
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
 {{else if eq .HostType "findPool"}}
-	{{.Lang.enter_your_email}}<br>
-	<input class="form-control" style="width:300px" type="text" id="email" value=""><br>
-	<button class="btn btn-success" id="findPool">{{.Lang.next}}</button>
+	{{if not .Pools}}
+		Sorry, no free pools
+	{{else}}
+		{{.Lang.enter_your_email}}<br>
+		<input class="form-control" style="width:300px" type="text" id="email" value=""><br>
+		<button class="btn btn-success" id="findPool">{{.Lang.next}}</button>
+	{{end}}
 {{end}}
 
 <input type="hidden" id="node_private_key" value="{{.NodePrivateKey}}">

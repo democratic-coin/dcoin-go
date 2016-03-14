@@ -95,7 +95,7 @@ public class WViewActivity extends Activity {
 										File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 										Log.d("JavaGoWV", "dir " + dir);
 
-										URL keyUrl = new URL("http://127.0.0.1:8089/ajax?controllerName=dcoinKey"); //you can write here any link
+										URL keyUrl = new URL("http://127.0.0.1:8089/ajax?controllerName=dcoinKey&first=1"); //you can write here any link
 										//URL keyUrl = new URL("http://yandex.ru/"); //you can write here any link
 										File file = new File(dir, "dcoin-key.png");
 

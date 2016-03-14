@@ -43,7 +43,11 @@
 						'signature2': $('#signature2').val(),
 						'signature3': $('#signature3').val()
 					}, function (data) {
-						dc_navigate ('poolAdminControl', {'alert': 'complete', 'switch_pool_mode' : 1} );
+						if($("#isLocalSelected").is(':checked')) {
+							dc_navigate('poolAdminControl', {'alert': 'complete', 'switch_pool_mode': 1});
+						} else {
+							dc_navigate('poolAdminControl', {'alert': 'complete'});
+						}
 						load_menu();
 						$('#mode').text(modeText)
 					}
@@ -70,7 +74,8 @@
 
 			{{if .ModeError}}<div class="alert alert-danger" id="mode_error">{{.ModeError}}</div>{{end}}
 			Mode: <span id="mode">{{.MyMode}}</span><br>
-			<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button>
+
+			<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button> Local: <input type="checkbox" id="isLocalSelected" checked="checked">
 
 			{{template "signatures".}}
 		</div>
