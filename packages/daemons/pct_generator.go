@@ -15,7 +15,7 @@ import (
 func PctGenerator(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -44,13 +44,13 @@ func PctGenerator(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -130,7 +130,7 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Info("%v", "newpctcurrency_id", currency_id, "pct", pct, "votes", votes)
+				logger.Info("%v", "newpctcurrency_id", currency_id, "pct", pct, "votes", votes)
 				if len(pctVotes[currency_id]) == 0 {
 					pctVotes[currency_id] = make(map[string]map[string]int64)
 				}
@@ -160,7 +160,7 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Info("%v", "currency_id", currency_id, "pct", pct, "votes", votes)
+				logger.Info("%v", "currency_id", currency_id, "pct", pct, "votes", votes)
 				if len(pctVotes[currency_id]) == 0 {
 					pctVotes[currency_id] = make(map[string]map[string]int64)
 				}
@@ -176,15 +176,15 @@ BEGIN:
 			var userMaxKey int64
 			PctArray := utils.GetPctArray()
 
-			log.Info("%v", "pctVotes", pctVotes)
+			logger.Info("%v", "pctVotes", pctVotes)
 			for currencyId, data := range pctVotes {
 
 				currencyIdStr := utils.Int64ToStr(currencyId)
 				// определяем % для майнеров
 				pctArr := utils.MakePctArray(data["miner_pct"])
-				log.Info("%v", "pctArrminer_pct", pctArr, currencyId)
+				logger.Info("%v", "pctArrminer_pct", pctArr, currencyId)
 				key := utils.GetMaxVote(pctArr, 0, 390, 100)
-				log.Info("%v", "key", key)
+				logger.Info("%v", "key", key)
 				if len(newPct["currency"][currencyIdStr]) == 0 {
 					newPct["currency"][currencyIdStr] = make(map[string]string)
 				}
@@ -192,27 +192,27 @@ BEGIN:
 
 				// определяем % для юзеров
 				pctArr = utils.MakePctArray(data["user_pct"])
-				log.Info("%v", "pctArruser_pct", pctArr, currencyId)
+				logger.Info("%v", "pctArruser_pct", pctArr, currencyId)
 
-				log.Info("%v", "newPct", newPct)
+				logger.Info("%v", "newPct", newPct)
 				pctY := utils.ArraySearch(newPct["currency"][currencyIdStr]["miner_pct"], PctArray)
-				log.Info("%v", "newPct[currency][currencyIdStr][miner_pct]", newPct["currency"][currencyIdStr]["miner_pct"])
-				log.Info("%v", "PctArray", PctArray)
-				log.Info("%v", "miner_pct $pct_y=", pctY)
+				logger.Info("%v", "newPct[currency][currencyIdStr][miner_pct]", newPct["currency"][currencyIdStr]["miner_pct"])
+				logger.Info("%v", "PctArray", PctArray)
+				logger.Info("%v", "miner_pct $pct_y=", pctY)
 				maxUserPctY := utils.Round(utils.StrToFloat64(pctY)/2, 2)
 				userMaxKey = utils.FindUserPct(int(maxUserPctY))
-				log.Info("%v", "maxUserPctY", maxUserPctY, "userMaxKey", userMaxKey, "currencyIdStr", currencyIdStr)
+				logger.Info("%v", "maxUserPctY", maxUserPctY, "userMaxKey", userMaxKey, "currencyIdStr", currencyIdStr)
 				// отрезаем лишнее, т.к. поиск идет ровно до макимального возможного, т.е. до miner_pct/2
 				pctArr = utils.DelUserPct(pctArr, userMaxKey)
-				log.Info("%v", "pctArr", pctArr)
+				logger.Info("%v", "pctArr", pctArr)
 
 				key = utils.GetMaxVote(pctArr, 0, userMaxKey, 100)
-				log.Info("%v", "data[user_pct]", data["user_pct"])
-				log.Info("%v", "pctArr", pctArr)
-				log.Info("%v", "userMaxKey", userMaxKey)
-				log.Info("%v", "key", key)
+				logger.Info("%v", "data[user_pct]", data["user_pct"])
+				logger.Info("%v", "pctArr", pctArr)
+				logger.Info("%v", "userMaxKey", userMaxKey)
+				logger.Info("%v", "key", key)
 				newPct["currency"][currencyIdStr]["user_pct"] = utils.GetPctValue(key)
-				log.Info("%v", "user_pct", newPct["currency"][currencyIdStr]["user_pct"])
+				logger.Info("%v", "user_pct", newPct["currency"][currencyIdStr]["user_pct"])
 			}
 
 			newPct_ := new(newPctType)
@@ -256,9 +256,9 @@ BEGIN:
 
 			_, myUserId, _, _, _, _, err := d.TestBlock()
 			forSign := fmt.Sprintf("%v,%v,%v,%s", utils.TypeInt("NewPct"), curTime, myUserId, jsonData)
-			log.Debug("forSign = %v", forSign)
+			logger.Debug("forSign = %v", forSign)
 			binSign, err := d.GetBinSign(forSign, myUserId)
-			log.Debug("binSign = %x", binSign)
+			logger.Debug("binSign = %x", binSign)
 			if err != nil {
 				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 					break BEGIN
@@ -299,7 +299,7 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }
 
 type newPctType struct {

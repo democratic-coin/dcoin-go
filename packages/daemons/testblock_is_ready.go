@@ -19,7 +19,7 @@ import (
 func TestblockIsReady(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -44,13 +44,13 @@ func TestblockIsReady(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -80,10 +80,10 @@ BEGIN:
 			}
 			continue
 		}
-		log.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
+		logger.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
 
 		if myMinerId == 0 {
-			log.Debug("myMinerId == 0")
+			logger.Debug("myMinerId == 0")
 			if d.dSleep(d.sleepTime) {
 				break BEGIN
 			}
@@ -123,7 +123,7 @@ BEGIN:
 				}
 				continue BEGIN
 			}
-			log.Info("%v", "i", i, "time", utils.Time())
+			logger.Info("%v", "i", i, "time", utils.Time())
 			if utils.Time()-startSleep > sleep {
 				break
 			}
@@ -161,7 +161,7 @@ BEGIN:
 			}
 			continue
 		}
-		log.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
+		logger.Info("%v", prevBlock, myUserId, myMinerId, currentUserId, level, levelsRange)
 
 		// на всякий случай убедимся, что блок не изменился
 		if prevBlock.HeadHash != prevHeadHash {
@@ -179,7 +179,7 @@ BEGIN:
 			}
 			continue
 		}
-		log.Debug("testBlockData: %v", testBlockData)
+		logger.Debug("testBlockData: %v", testBlockData)
 		if len(testBlockData) == 0 {
 			if d.unlockPrintSleep(utils.ErrInfo(errors.New("null $testblock_data")), d.sleepTime) {
 				break BEGIN
@@ -217,15 +217,15 @@ BEGIN:
 			continue BEGIN
 		}
 		forSign := fmt.Sprintf("0,%v,%s,%v,%v,%v,%s", testBlockData["block_id"], prevBlockHash, testBlockData["time"], testBlockData["user_id"], testBlockData["level"], utils.BinToHex([]byte(testBlockData["mrkl_root"])))
-		log.Debug("forSign %v", forSign)
-		log.Debug("signature %x", testBlockData["signature"])
+		logger.Debug("forSign %v", forSign)
+		logger.Debug("signature %x", testBlockData["signature"])
 
 		p := new(dcparser.Parser)
 		p.DCDB = d.DCDB
 		// проверяем подпись
 		_, err = utils.CheckSign([][]byte{nodePublicKey}, forSign, []byte(testBlockData["signature"]), true)
 		if err != nil {
-			log.Error("incorrect signature %v")
+			logger.Error("incorrect signature %v")
 			p.RollbackTransactionsTestblock(true)
 			err = d.ExecSql("DELETE FROM testblock")
 			if err != nil {
@@ -241,7 +241,7 @@ BEGIN:
 		}
 		// БАГ
 		if utils.StrToInt64(testBlockData["block_id"]) == prevBlock.BlockId {
-			log.Error("testBlockData block_id =  prevBlock.BlockId (%v=%v)", testBlockData["block_id"], prevBlock.BlockId)
+			logger.Error("testBlockData block_id =  prevBlock.BlockId (%v=%v)", testBlockData["block_id"], prevBlock.BlockId)
 
 			err = p.RollbackTransactionsTestblock(true)
 			if err != nil {
@@ -281,7 +281,7 @@ BEGIN:
 
 		// сам блок
 		block := append(blockHeader, testBlockDataTx...)
-		log.Debug("block %x", block)
+		logger.Debug("block %x", block)
 
 		// теперь нужно разнести блок по таблицам и после этого мы будем его слать всем нодам скриптом disseminator.php
 		p.BinaryData = block
@@ -318,5 +318,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

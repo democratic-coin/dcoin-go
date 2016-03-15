@@ -7,7 +7,7 @@ import (
 func UnbanNodes(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -32,7 +32,7 @@ func UnbanNodes(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -52,5 +52,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

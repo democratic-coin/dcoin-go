@@ -15,7 +15,7 @@ func Exchange(chBreaker chan bool, chAnswer chan string) {
 
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -44,7 +44,7 @@ func Exchange(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -116,7 +116,7 @@ BEGIN:
 		if reduction > 0 {
 			err = d.ExecSql(`INSERT INTO e_reduction_lock (time) VALUES (?)`, utils.Time())
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				logger.Error("%v", utils.ErrInfo(err))
 			}
 		}
 
@@ -262,7 +262,7 @@ BEGIN:
 				if utils.BytesToInt64(txMap["type"]) != utils.TypeInt("SendDc") {
 					continue
 				}
-				log.Debug("md5hash %s", txMap["md5hash"])
+				logger.Debug("md5hash %s", txMap["md5hash"])
 
 				// если что-то случится с таблой my_dc_transactions, то все ввода на биржу будут зачислены по новой
 				// поэтому нужно проверять e_adding_funds
@@ -274,12 +274,12 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Debug("exists %d", exists)
+				logger.Debug("exists %d", exists)
 				if exists != 0 {
 					continue
 				}
 
-				log.Debug("user_id = %d / typeId = %d / currency_id = %d / currencyId = %d / amount = %f / amount = %f / comment = %s / comment = %s / to_user_id = %d / toUserId = %d ", utils.BytesToInt64(txMap["user_id"]), typeId, utils.BytesToInt64(txMap["currency_id"]), currencyId, utils.BytesToFloat64(txMap["amount"]), amount, string(utils.BinToHex(txMap["comment"])), comment, utils.BytesToInt64(txMap["to_user_id"]), toUserId)
+				logger.Debug("user_id = %d / typeId = %d / currency_id = %d / currencyId = %d / amount = %f / amount = %f / comment = %s / comment = %s / to_user_id = %d / toUserId = %d ", utils.BytesToInt64(txMap["user_id"]), typeId, utils.BytesToInt64(txMap["currency_id"]), currencyId, utils.BytesToFloat64(txMap["amount"]), amount, string(utils.BinToHex(txMap["comment"])), comment, utils.BytesToInt64(txMap["to_user_id"]), toUserId)
 				// сравнение данных из таблы my_dc_transactions с тем, что в блоке
 				if utils.BytesToInt64(txMap["user_id"]) == typeId && utils.BytesToInt64(txMap["currency_id"]) == currencyId && utils.BytesToFloat64(txMap["amount"]) == amount && string(utils.BinToHex(txMap["comment"])) == comment && utils.BytesToInt64(txMap["to_user_id"]) == toUserId {
 
@@ -324,7 +324,7 @@ BEGIN:
 
 					// возможно юзер сделал перевод в той валюте, которая у нас на бирже еще не торгуется
 					if len(currencyList[currencyId]) == 0 {
-						log.Error("currencyId %d not trading", currencyId)
+						logger.Error("currencyId %d not trading", currencyId)
 						continue
 					}
 
@@ -349,10 +349,10 @@ BEGIN:
 					r, _ := regexp.Compile(`(?i)\s*#\s*([0-9]+)\s*`)
 					user := r.FindStringSubmatch(decryptedComment)
 					if len(user) == 0 {
-						log.Error("len(user) == 0")
+						logger.Error("len(user) == 0")
 						continue
 					}
-					log.Debug("user %s", user[1])
+					logger.Debug("user %s", user[1])
 					// user_id с биржевой таблы
 					uid := utils.StrToInt64(user[1])
 					userAmountAndProfit := utils.EUserAmountAndProfit(uid, currencyId)
@@ -394,7 +394,7 @@ BEGIN:
 		// максимальный номер блока для процентов. Чтобы брать только новые
 		maxPctBlock, err := d.Single(`SELECT max(block_id) FROM e_user_pct`).Int64()
 
-		log.Debug(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < ` + utils.Int64ToStr(blockId-confirmations) + ` AND block_id > ` + utils.Int64ToStr(maxPctBlock))
+		logger.Debug(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < ` + utils.Int64ToStr(blockId-confirmations) + ` AND block_id > ` + utils.Int64ToStr(maxPctBlock))
 		rows, err = d.Query(d.FormatQuery(`SELECT time, block_id, currency_id, user FROM pct WHERE  block_id < ? AND block_id > ?`), blockId-confirmations, maxPctBlock)
 		if err != nil {
 			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -433,5 +433,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

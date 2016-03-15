@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	log                           = logging.MustGetLogger("daemons")
+	logger = logging.MustGetLogger("daemons")
 	/*DaemonCh        chan bool     = make(chan bool, 100)
 	AnswerDaemonCh  chan string   = make(chan string, 100)*/
 	MonitorDaemonCh chan []string = make(chan []string, 100)
@@ -36,7 +36,7 @@ func (d *daemon) dbLock() (error, bool) {
 }
 
 func (d *daemon) dbUnlock() error {
-	log.Debug("dbUnlock %v", utils.Caller(1))
+	logger.Debug("dbUnlock %v", utils.Caller(1))
 	return d.DbUnlock(d.goRoutineName)
 }
 
@@ -60,7 +60,7 @@ func (d *daemon) dPrintSleep(err_ interface{}, sleep int) bool {
 	}
 
 	if err!=nil {
-		log.Error("%v (%v)", err, utils.GetParent())
+		logger.Error("%v (%v)", err, utils.GetParent())
 	}
 	if d.dSleep(sleep) {
 		return true
@@ -70,11 +70,11 @@ func (d *daemon) dPrintSleep(err_ interface{}, sleep int) bool {
 
 func (d *daemon) unlockPrintSleep(err error, sleep int) bool {
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 	err = d.DbUnlock(d.goRoutineName)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 	for i := 0; i < sleep; i++ {
 		if CheckDaemonsRestart(d.chBreaker, d.chAnswer, d.goRoutineName) {
@@ -87,11 +87,11 @@ func (d *daemon) unlockPrintSleep(err error, sleep int) bool {
 
 func (d *daemon) unlockPrintSleepInfo(err error, sleep int) bool {
 	if err != nil {
-		log.Debug("%v", err)
+		logger.Debug("%v", err)
 	}
 	err = d.DbUnlock(d.goRoutineName)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 
 	for i := 0; i < sleep; i++ {
@@ -125,18 +125,18 @@ func ConfigInit() {
 	// мониторим config.ini на наличие изменений
 	go func() {
 		for {
-			log.Debug("ConfigInit monitor")
+			logger.Debug("ConfigInit monitor")
 			if _, err := os.Stat(*utils.Dir + "/config.ini"); os.IsNotExist(err) {
 				utils.Sleep(1)
 				continue
 			}
 			configIni_, err := config.NewConfig("ini", *utils.Dir+"/config.ini")
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				logger.Error("%v", utils.ErrInfo(err))
 			}
 			configIni, err = configIni_.GetSection("default")
 			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
+				logger.Error("%v", utils.ErrInfo(err))
 			}
 			if len(configIni["db_type"]) > 0 {
 				break
@@ -152,10 +152,10 @@ func init() {
 }
 
 func CheckDaemonsRestart(chBreaker chan bool, chAnswer chan string, goRoutineName string) bool {
-	log.Debug("CheckDaemonsRestart %v %v", goRoutineName, utils.Caller(2))
+	logger.Debug("CheckDaemonsRestart %v %v", goRoutineName, utils.Caller(2))
 	select {
 	case <-chBreaker:
-		log.Debug("DaemonCh true %v", goRoutineName)
+		logger.Debug("DaemonCh true %v", goRoutineName)
 		chAnswer <- goRoutineName
 		return true
 	default:
@@ -191,7 +191,7 @@ func StartDaemons() {
 	if len(configIni["daemons"]) > 0 && configIni["daemons"] != "null" {
 		daemonsConf := strings.Split(configIni["daemons"], ",")
 		for _, fns := range daemonsConf {
-			log.Debug("start daemon %s", fns)
+			logger.Debug("start daemon %s", fns)
 			fmt.Println("start daemon ", fns)
 			var chBreaker chan bool = make(chan bool, 1)
 			var chAnswer chan string = make(chan string, 1)
@@ -200,7 +200,7 @@ func StartDaemons() {
 		}
 	} else if configIni["daemons"] != "null" {
 		for dName, fns := range daemonsStart {
-			log.Debug("start daemon %s", dName)
+			logger.Debug("start daemon %s", dName)
 			fmt.Println("start daemon ", fns)
 			var chBreaker chan bool = make(chan bool, 1)
 			var chAnswer chan string = make(chan string, 1)
@@ -242,9 +242,9 @@ func ClearDb(ChAnswer chan string, goroutineName string) error {
 		return utils.ErrInfo(err)
 	}
 	for _, table := range allTables {
-		log.Debug("table: %s", table)
+		logger.Debug("table: %s", table)
 		if ok, _ := regexp.MatchString(`^[0-9_]*my_|^e_|install|^config|daemons|payment_systems|community|cf_lang|main_lock`, table); !ok {
-			log.Debug("DELETE FROM %s", table)
+			logger.Debug("DELETE FROM %s", table)
 			err = utils.DB.ExecSql("DELETE FROM " + table)
 			if err != nil {
 				return utils.ErrInfo(err)
@@ -264,7 +264,7 @@ func ClearDb(ChAnswer chan string, goroutineName string) error {
 					return utils.ErrInfo(err)
 				}
 			} else {
-				log.Debug("SET AI %s", table)
+				logger.Debug("SET AI %s", table)
 				if utils.DB.ConfigIni["db_type"] == "sqlite" {
 					err = utils.DB.SetAI(table, 0)
 				} else {
@@ -272,7 +272,7 @@ func ClearDb(ChAnswer chan string, goroutineName string) error {
 				}
 				// только логируем, т.к. тут ошибка - это норм
 				if err != nil {
-					log.Error("%v", err)
+					logger.Error("%v", err)
 				}
 			}
 		}

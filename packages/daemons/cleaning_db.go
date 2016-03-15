@@ -9,7 +9,7 @@ import (
 func CleaningDb(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -38,7 +38,7 @@ func CleaningDb(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -63,7 +63,7 @@ BEGIN:
 			// чтобы не стопориться тут, а дойти до пересборки БД
 			endBlockId = 4294967295
 		}
-		log.Debug("curBlockId: %v / endBlockId: %v", curBlockId, endBlockId)
+		logger.Debug("curBlockId: %v / endBlockId: %v", curBlockId, endBlockId)
 		if curBlockId-30 > endBlockId {
 			file, err := os.OpenFile(*utils.Dir+"/public/blockchain", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 			if err != nil {
@@ -128,7 +128,7 @@ BEGIN:
 			}
 			continue BEGIN
 		}
-		log.Debug("autoReload: %v", autoReload)
+		logger.Debug("autoReload: %v", autoReload)
 		if autoReload < 60 {
 			if d.dPrintSleep(utils.ErrInfo("autoReload < 60"), d.sleepTime) {
 				break BEGIN
@@ -169,12 +169,12 @@ BEGIN:
 				// Если за 5 минут info_block тот же, значит обновление блокчейна не идет
 				if newTimeInfoBlock["time"] == timeInfoBlock {
 					infoBlockRestart = true
-					log.Error("infoBlockRestart %d / %d", newTimeInfoBlock["block_id"], newTimeInfoBlock["time"])
+					logger.Error("infoBlockRestart %d / %d", newTimeInfoBlock["block_id"], newTimeInfoBlock["time"])
 				}
 			}
 		}
-		log.Debug("mainLock: %v", mainLock)
-		log.Debug("utils.Time(): %v", utils.Time())
+		logger.Debug("mainLock: %v", mainLock)
+		logger.Debug("utils.Time(): %v", utils.Time())
 		if (mainLock > 0 && utils.Time()-autoReload > mainLock) || infoBlockRestart {
 
 			// ClearDb - убивает демонов, чистит БД, а потом заново запускает демонов
@@ -193,5 +193,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

@@ -16,10 +16,10 @@ import (
 var myUserIdForChat int64
 
 func (d *daemon) chatConnector() {
-	log.Debug("start chatConnector")
+	logger.Debug("start chatConnector")
 	maxMinerId, err := d.Single("SELECT max(miner_id) FROM miners_data").Int64()
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 	if maxMinerId == 0 {
 		maxMinerId = 1
@@ -32,12 +32,12 @@ func (d *daemon) chatConnector() {
 	}
 	hosts, err := d.GetAll(q, consts.COUNT_CHAT_NODES)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 	// исключим себя
 	myTcpHost, err := d.Single(`SELECT tcp_host FROM miners_data WHERE user_id = ?`, myUserIdForChat).String()
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 	fmt.Println("myTcpHost:", myTcpHost)
 
@@ -51,10 +51,10 @@ func (d *daemon) chatConnector() {
 	}
 	existsTcpHost, err := d.GetList(`SELECT tcp_host FROM miners_data WHERE user_id IN (` + uids + `)`).String()
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 	}
 
-	log.Debug("hosts: %v", hosts)
+	logger.Debug("hosts: %v", hosts)
 	for _, data := range hosts {
 
 		host := data["tcp_host"]
@@ -66,16 +66,16 @@ func (d *daemon) chatConnector() {
 
 		go func(host string, userId int64) {
 
-			log.Debug("host: %v", host)
-			log.Debug("userId: %d", userId)
+			logger.Debug("host: %v", host)
+			logger.Debug("userId: %d", userId)
 			re := regexp.MustCompile(`(.*?):[0-9]+$`)
 			match := re.FindStringSubmatch(host)
-			log.Debug("match: %v", match)
+			logger.Debug("match: %v", match)
 
 			if len(match) != 0 {
 
-				log.Debug("myUserIdForChat %v", myUserIdForChat)
-				log.Debug("chat host: %v", match[1]+":"+consts.CHAT_PORT)
+				logger.Debug("myUserIdForChat %v", myUserIdForChat)
+				logger.Debug("chat host: %v", match[1]+":"+consts.CHAT_PORT)
 				chatHost := match[1] + ":" + consts.CHAT_PORT
 				//chatHost := "192.168.150.30:8087"
 
@@ -85,26 +85,26 @@ func (d *daemon) chatConnector() {
 					// канал для приема тр-ий чата
 					conn, err := net.DialTimeout("tcp", chatHost, 5*time.Second)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					} else {
-						log.Debug(conn.RemoteAddr().String(), conn)
+						logger.Debug(conn.RemoteAddr().String(), conn)
 						myUid := utils.DecToBin(myUserIdForChat, 4)
-						log.Debug("myUid %x", myUid)
+						logger.Debug("myUid %x", myUid)
 						n, err := conn.Write(myUid)
-						log.Debug("n: %d", n)
+						logger.Debug("n: %d", n)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						n, err = conn.Write(utils.DecToBin(1, 1))
-						log.Debug("n: %d", n)
+						logger.Debug("n: %d", n)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						fmt.Println("connector ChatInput", conn.RemoteAddr(), utils.Time())
-						log.Debug("connector ChatInput %s %v", conn.RemoteAddr(), utils.Time())
+						logger.Debug("connector ChatInput %s %v", conn.RemoteAddr(), utils.Time())
 						utils.ChatMutex.Lock()
 						utils.ChatInConnections[userId] = 1
 						utils.ChatMutex.Unlock()
@@ -114,25 +114,25 @@ func (d *daemon) chatConnector() {
 					// канал для отправки тр-ий чата
 					conn2, err := net.DialTimeout("tcp", chatHost, 5*time.Second)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					} else {
-						log.Debug(conn2.RemoteAddr().String(), conn2)
+						logger.Debug(conn2.RemoteAddr().String(), conn2)
 						n, err := conn2.Write(utils.DecToBin(myUserIdForChat, 4))
-						log.Debug("n: %d", n)
+						logger.Debug("n: %d", n)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						n, err = conn2.Write(utils.DecToBin(0, 1))
-						log.Debug("n: %d", n)
+						logger.Debug("n: %d", n)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
 						fmt.Println("connector ADD", userId, conn2.RemoteAddr(), utils.Time())
-						log.Debug("connector ADD %v %s %v", userId, conn2.RemoteAddr(), utils.Time())
+						logger.Debug("connector ADD %v %s %v", userId, conn2.RemoteAddr(), utils.Time())
 						connChan := make(chan *utils.ChatData, 100)
 						utils.ChatMutex.Lock()
 						utils.ChatOutConnections[userId] = &utils.ChatOutConnectionsType{MessIds: []int64{}, ConnectionChan: connChan}
@@ -149,7 +149,7 @@ func (d *daemon) chatConnector() {
 func Connector(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -157,11 +157,11 @@ func Connector(chBreaker chan bool, chAnswer chan string) {
 	if _, err := os.Stat(*utils.Dir + "/nodes.inc"); os.IsNotExist(err) {
 		data, err := static.Asset("static/nodes.inc")
 		if err != nil {
-			log.Error("%v", err)
+			logger.Error("%v", err)
 		}
 		err = ioutil.WriteFile(*utils.Dir+"/nodes.inc", []byte(data), 0644)
 		if err != nil {
-			log.Error("%v", err)
+			logger.Error("%v", err)
 		}
 	}
 
@@ -203,7 +203,7 @@ func Connector(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -228,17 +228,17 @@ BEGIN:
 		if utils.StrToInt64(nodeConfig["out_connections"]) > 0 {
 			maxHosts = utils.StrToInt(nodeConfig["out_connections"])
 		}
-		log.Info("%v", maxHosts)
+		logger.Info("%v", maxHosts)
 
 		collective, err := d.GetCommunityUsers()
 		if err != nil {
-			log.Error("%v", err)
+			logger.Error("%v", err)
 			return
 		}
 		if len(collective) == 0 {
 			myUserId, err := d.GetMyUserId("")
 			if err != nil {
-				log.Error("%v", err)
+				logger.Error("%v", err)
 				return
 			}
 			collective = append(collective, myUserId)
@@ -246,7 +246,7 @@ BEGIN:
 		} else {
 			myUserIdForChat, err = d.Single(`SELECT pool_admin_user_id FROM config`).Int64()
 			if err != nil {
-				log.Error("%v", err)
+				logger.Error("%v", err)
 				return
 			}
 		}
@@ -259,13 +259,13 @@ BEGIN:
 			}
 			continue
 		}
-		log.Info("%v", myMinersIds)
+		logger.Info("%v", myMinersIds)
 		nodesBan, err := d.GetMap(`
 				SELECT tcp_host, ban_start
 				FROM nodes_ban
 				LEFT JOIN miners_data ON miners_data.user_id = nodes_ban.user_id
 				`, "tcp_host", "ban_start")
-		log.Info("%v", nodesBan)
+		logger.Info("%v", nodesBan)
 		nodesConnections, err := d.GetAll(`
 				SELECT nodes_connection.host,
 							 nodes_connection.user_id,
@@ -276,7 +276,7 @@ BEGIN:
 				LEFT JOIN miners_data ON miners_data.user_id = nodes_connection.user_id
 				`, -1)
 		//fmt.Println("nodesConnections", nodesConnections)
-		log.Debug("nodesConnections: %v", nodesConnections)
+		logger.Debug("nodesConnections: %v", nodesConnections)
 		for _, data := range nodesConnections {
 
 			// проверим, не нужно нам выйти, т.к. обновилась версия софта
@@ -316,7 +316,7 @@ BEGIN:
 			nodeCount++
 		}
 
-		log.Debug("hosts: %v", hosts)
+		logger.Debug("hosts: %v", hosts)
 		/*
 			ch := make(chan *answerType)
 			for _, host := range hosts {
@@ -362,7 +362,7 @@ BEGIN:
 		*/
 		var countOk int
 		hosts = checkHosts(hosts, &countOk)
-		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
+		logger.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
 		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
@@ -390,7 +390,7 @@ BEGIN:
 					break
 				}
 			}
-			log.Info("%v", "idArray", idArray)
+			logger.Info("%v", "idArray", idArray)
 			// удалим себя
 			for _, id := range myMinersIds {
 				delete(idArray, int(id))
@@ -399,7 +399,7 @@ BEGIN:
 			for _, id := range delMiners {
 				delete(idArray, utils.StrToInt(id))
 			}
-			log.Info("%v", "idArray", idArray)
+			logger.Info("%v", "idArray", idArray)
 			ids := ""
 			if len(idArray) > 0 {
 				for id, _ := range idArray {
@@ -440,12 +440,12 @@ BEGIN:
 		}
 
 		hosts = checkHosts(newHostsForCheck, &countOk)
-		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
+		logger.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
 		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
 		}
-		log.Debug("%v", "hosts", hosts)
+		logger.Debug("%v", "hosts", hosts)
 		// если хосты не набрались из miner_data, то берем из файла
 		if len(hosts) < 10 {
 			hostsData_, err := ioutil.ReadFile(*utils.Dir + "/nodes.inc")
@@ -456,16 +456,16 @@ BEGIN:
 				continue BEGIN
 			}
 			hostsData := strings.Split(string(hostsData_), "\n")
-			log.Debug("%v", "hostsData_", hostsData_)
-			log.Debug("%v", "hostsData", hostsData)
+			logger.Debug("%v", "hostsData_", hostsData_)
+			logger.Debug("%v", "hostsData", hostsData)
 			max := 0
-			log.Debug("maxHosts: %v", maxHosts)
+			logger.Debug("maxHosts: %v", maxHosts)
 			if len(hosts) > maxHosts-1 {
 				max = maxHosts
 			} else {
 				max = len(hostsData)
 			}
-			log.Debug("max: %v", max)
+			logger.Debug("max: %v", max)
 			for i := 0; i < max; i++ {
 				r := utils.RandInt(0, max)
 				if len(hostsData) <= r {
@@ -504,7 +504,7 @@ BEGIN:
 		}
 
 		hosts = checkHosts(newHostsForCheck, &countOk)
-		log.Debug("countOk: %d / hosts: %v", countOk, hosts)
+		logger.Debug("countOk: %d / hosts: %v", countOk, hosts)
 		// проверим, не нужно нам выйти, т.к. обновилась версия софта
 		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
 			break BEGIN
@@ -551,7 +551,7 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }
 
 type answerType struct {
@@ -566,7 +566,7 @@ func checkHosts(hosts []map[string]string, countOk *int) []map[string]string {
 		go func(userId int64, host string) {
 			ch_ := make(chan *answerType, 1)
 			go func() {
-				log.Debug("host: %v / userId: %v", host, userId)
+				logger.Debug("host: %v / userId: %v", host, userId)
 				ch_ <- check(host, userId)
 			}()
 			select {
@@ -578,16 +578,16 @@ func checkHosts(hosts []map[string]string, countOk *int) []map[string]string {
 		}(userId, host["host"])
 	}
 
-	log.Debug("%v", "hosts", hosts)
+	logger.Debug("%v", "hosts", hosts)
 	var newHosts []map[string]string
 	// если нода не отвечает, то удалем её из таблы nodes_connection
 	for i := 0; i < len(hosts); i++ {
 		result := <-ch
 		if result.answer == 0 {
-			log.Info("delete %v", result.userId)
+			logger.Info("delete %v", result.userId)
 			err = utils.DB.ExecSql("DELETE FROM nodes_connection WHERE user_id = ?", result.userId)
 			if err != nil {
-				log.Error("%v", err)
+				logger.Error("%v", err)
 			}
 			/*for _, data := range hosts {
 				if utils.StrToInt64(data["user_id"]) != result.userId {
@@ -602,7 +602,7 @@ func checkHosts(hosts []map[string]string, countOk *int) []map[string]string {
 			}
 			*countOk++
 		}
-		log.Info("answer: %v", result)
+		logger.Info("answer: %v", result)
 	}
 	return newHosts
 }
@@ -618,7 +618,7 @@ func check(host string, userId int64) *answerType {
 	conn, err := net.DialTimeout("tcp", host, 5*time.Second)
 
 	if err != nil {
-		log.Debug("%v", utils.ErrInfo(err))
+		logger.Debug("%v", utils.ErrInfo(err))
 		return &answerType{userId: userId, answer: 0}
 	}
 	defer conn.Close()
@@ -629,14 +629,14 @@ func check(host string, userId int64) *answerType {
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
 	_, err = conn.Write(utils.DecToBin(5, 2))
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return &answerType{userId: userId, answer: 0}
 	}
 
 	// в 5-и байтах пишем userID, чтобы проверить, верный ли у него нодовский ключ, т.к. иначе ему нельзя слать зашифрованные данные
 	_, err = conn.Write(utils.DecToBin(userId, 5))
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return &answerType{userId: userId, answer: 0}
 	}
 
@@ -645,7 +645,7 @@ func check(host string, userId int64) *answerType {
 
 	_, err = conn.Read(answer)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return &answerType{userId: userId, answer: 0}
 	}
 
@@ -653,6 +653,6 @@ func check(host string, userId int64) *answerType {
 	if utils.BinToDec(answer) == 1 {
 
 	}
-	log.Debug("host: %v / answer: %v / userId: %v", host, answer, userId)
+	logger.Debug("host: %v / answer: %v / userId: %v", host, answer, userId)
 	return &answerType{userId: userId, answer: utils.BinToDec(answer)}
 }
