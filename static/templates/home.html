@@ -1190,7 +1190,7 @@
 
 		function drawChart() {
 			var data = google.visualization.arrayToDataTable([
-				['Date', 'Promised amounts', 'DC'],
+				['Date', 'Promised amounts', 'dUSD'],
 				{{js .Chart}}
 			]);
 
@@ -1212,7 +1212,8 @@
 	}
 </script>
 <div id="curve_chart" style="width: 900px; height: 500px"></div>
-<p>Target: {{.DCTarget}}</p>
+<p><a href="static/img/reduction.png" target="_blank">About graphic</a></p>
+<p>Target: {{.DCTarget}} dUSD</p>
 {{end}}
 
 <script>
