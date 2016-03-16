@@ -125,9 +125,14 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 	}
 
 	sleepTime := int64(500)
-	community, err := c.GetCommunityUsers()
-	if len(community) > 0 {
-		sleepTime = 5000
+	if c.dbInit {
+		community, err := c.GetCommunityUsers()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		if len(community) > 0 {
+			sleepTime = 5000
+		}
 	}
 
 	funcMap := template.FuncMap{
