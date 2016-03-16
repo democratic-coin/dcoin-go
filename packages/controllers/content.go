@@ -9,13 +9,14 @@ import (
 	"os"
 	"regexp"
 	"fmt"
+	"runtime/debug"
 )
 
 func Content(w http.ResponseWriter, r *http.Request) {
 	defer func() {
-		if r := recover(); r != nil {
-			log.Error("Content Recovered", r)
-			fmt.Println("Content Recovered", r)
+		if e := recover(); e != nil {
+			log.Error("Content Recovered", fmt.Sprintf("%s: %s", e, debug.Stack()))
+			fmt.Println("Content Recovered", fmt.Sprintf("%s: %s", e, debug.Stack()))
 		}
 	}()
 	var err error
