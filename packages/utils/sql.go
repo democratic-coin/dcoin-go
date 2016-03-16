@@ -1644,6 +1644,7 @@ type PromisedAmounts struct {
 	Tdc                float64
 	TdcAmount          float64
 	Status             string
+	InProcess          bool
 }
 
 func (db *DCDB) GetPromisedAmounts(userId, cash_request_time int64) (int64, []PromisedAmounts, map[int]DCAmounts, error) {
@@ -1740,7 +1741,7 @@ func (db *DCDB) GetPromisedAmounts(userId, cash_request_time int64) (int64, []Pr
 		pct_sec := pct
 		pct = Round((math.Pow(1+pct, 3600*24*365)-1)*100, 2)
 		// тут accepted значит просто попало в блок
-		promisedAmountListAccepted = append(promisedAmountListAccepted, PromisedAmounts{Id: id, Pct: pct, PctSec: pct_sec, CurrencyId: currency_id, Amount: amount, MaxAmount: maxAmount, MaxOtherCurrencies: maxOtherCurrencies, StatusText: status_text, Tdc: tdc, TdcAmount: tdc_amount, Status: status})
+		promisedAmountListAccepted = append(promisedAmountListAccepted, PromisedAmounts{Id: id, Pct: pct, PctSec: pct_sec, CurrencyId: currency_id, Amount: amount, MaxAmount: maxAmount, MaxOtherCurrencies: maxOtherCurrencies, StatusText: status_text, Tdc: tdc, TdcAmount: tdc_amount, Status: status, InProcess: false})
 		// для вывода на главную общей инфы
 		promisedAmountListGen[int(currency_id)] = DCAmounts{Tdc: tdc, Amount: amount, PctSec: pct_sec, CurrencyId: (currency_id)}
 	}

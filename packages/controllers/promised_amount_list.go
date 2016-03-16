@@ -45,7 +45,27 @@ func (c *Controller) PromisedAmountList() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	for _, tx := range last_tx {
+		if utils.StrToInt64( tx[`block_id`] ) == 0 {
+			IDB:
+			for _, idb := range []string{`queue_tx`,`transactions`}{
+				data, err := c.Single(`SELECT data FROM `+ idb +` WHERE hex(hash)=?`, utils.BinToHex([]byte(tx["hash"])) ).Bytes(); 
+				if len( data ) > 0 {
+					data2 := data[5:]			
+					length := utils.DecodeLength(&data2)
+					utils.BytesShift(&data2, length)
+					length = utils.DecodeLength(&data2)
+					idPromise := utils.StrToInt64( string(utils.BytesShift(&data2, length)))
+					for i, ipromise := range promisedAmountListAccepted {
+						if ipromise.Id == idPromise {
+							promisedAmountListAccepted[i].InProcess = true
+							break IDB
+						}
+					}
+				}
+			}
+		}
+	}
 	TemplateStr, err := makeTemplate("promised_amount_list", "promisedAmountList", &promisedAmountListPage{
 		Alert:                        c.Alert,
 		Lang:                         c.Lang,
