@@ -3230,6 +3230,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s1["fields"] = s2
 	s1["UNIQ"] = []string{"day", "month", "year", "currency_id"}
 	s1["PRIMARY"] = []string{"id"}
+	s1["AI"] = "id"
 	s1["comment"] = ""
 	s["stats"] = s1
 	schema.S = s

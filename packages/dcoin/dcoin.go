@@ -346,6 +346,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				s2[4] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 				s2[5] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 				s1["fields"] = s2
+				s1["AI"] = "id"
 				s1["PRIMARY"] = []string{"day", "month", "year", "currency_id"}
 				s1["comment"] = ""
 				s["stats"] = s1
