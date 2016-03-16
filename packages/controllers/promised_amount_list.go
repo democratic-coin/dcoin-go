@@ -50,7 +50,7 @@ func (c *Controller) PromisedAmountList() (string, error) {
 			IDB:
 			for _, idb := range []string{`queue_tx`,`transactions`}{
 				data, err := c.Single(`SELECT data FROM `+ idb +` WHERE hex(hash)=?`, utils.BinToHex([]byte(tx["hash"])) ).Bytes(); 
-				if len( data ) > 0 {
+				if err==nil && len( data ) > 0 {
 					data2 := data[5:]			
 					length := utils.DecodeLength(&data2)
 					utils.BytesShift(&data2, length)
