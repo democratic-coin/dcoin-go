@@ -4,12 +4,22 @@
 		for (i=0; i<intervalIdArray.length; i++)
 			clearInterval(intervalIdArray[i]);
 	}
+	function disable_amount(id){
+		$("#amount"+id + " input").attr("disabled", true );
+		$("#amount"+id + " .btn").hide();
+	}
 	function mining_click(id){
 		console.log($('#repaid-input-'+id).val());
+		disable_amount(id);
 		dc_navigate('miningPromisedAmount',  {'promised_amount_id':id, 'amount':$('#repaid-input-'+id).val()});
 	}
 	function change_amount_click(id){
+		disable_amount(id);
 		dc_navigate('changePromisedAmount',  {'promised_amount_id':id, 'amount':$('#amount-input-'+id).val()});
+	}
+	function delete_amount_click(id){
+		disable_amount(id);
+		dc_navigate('delPromisedAmount', {'del_id': id })
 	}
 
 	function clear_amount (id) {
@@ -68,21 +78,21 @@
 		{{range  $data:= .PromisedAmountListAccepted}}
 			{{$to_wallet:=0}}
 			{{if gt $data.Tdc 0.01}}{{$to_wallet := minus $data.Tdc 0.01}}{{end}}
-			<tr>
+			<tr id="amount{{$data.Id}}">
 			<td>{{$data.Id}}</td>
 			<td>{{$data.StatusText}}</td>
 			<td style='text-align: center'>{{index $.CurrencyList $data.CurrencyId}}</td>
 			{{if or (eq $data.CurrencyId 1) (eq $data.Status "repaid")}}
 				<td style='text-align: center'>{{$data.Amount}}</td>
 			{{else}}
-				<td style='text-align: center'><input type='text' class='amount' id='amount-input-{{$data.Id}}' onkeyup="clear_amount('amount-input-{{$data.Id}}')" value='{{$data.Amount}}'><button onclick="change_amount_click({{$data.Id}})" class='btn' >{{$.Lang.change}}</button>(max: {{$data.MaxAmount}})</td>
+				<td style='text-align: center'><input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='amount' id='amount-input-{{$data.Id}}' onkeyup="clear_amount('amount-input-{{$data.Id}}')" value='{{$data.Amount}}'><button {{if $data.InProcess}}style="display:none;"{{end}} onclick="change_amount_click({{$data.Id}})" class='btn' >{{$.Lang.change}}</button>(max: {{$data.MaxAmount}})</td>
 			{{end}}
 			{{$color:="green"}}
 			{{if eq $data.CurrencyId 1}}{{$color:="#428BCA"}}{{end}}
 			<td id='currency_{{$data.CurrencyId}}_{{$data.Status}}' style='color: {{$color}}; font-weight: bold; font-size: 15px'>{{$data.Tdc}}</td>
-			<td style='text-align: center'><input type='text' class='input-mini' id='repaid-input-{{$data.Id}}' onkeyup="clear_amount('repaid-input-{{$data.Id}}')" value='{{$to_wallet}}'><button  onclick="mining_click({{$data.Id}})" class='btn put_in_the_wallet' >{{$.Lang.put_in_the_wallet}}</button></td>
+			<td style='text-align: center'><input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='input-mini' id='repaid-input-{{$data.Id}}' onkeyup="clear_amount('repaid-input-{{$data.Id}}')" value='{{$to_wallet}}'><button  {{if $data.InProcess}}style="display:none;"{{end}} onclick="mining_click({{$data.Id}})" class='btn put_in_the_wallet' >{{$.Lang.put_in_the_wallet}}</button></td>
 			{{if gt $data.CurrencyId 1}}
-				<td><a class="btn btn-outline btn-danger" href="#" onclick="dc_navigate('delPromisedAmount', {'del_id':'{{$data.Id}}'})"><i class="fa fa-trash-o fa-lg"></i> {{$.Lang.delete}}</a></td>
+				<td><a class="btn btn-outline btn-danger" {{if $data.InProcess}}style="display:none;"{{end}} href="#" onclick="delete_amount_click('{{$data.Id}}')"><i class="fa fa-trash-o fa-lg"></i> {{$.Lang.delete}}</a></td>
 			{{else}}
 				<td></td>
 			{{end}}
