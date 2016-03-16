@@ -15,6 +15,8 @@ import (
 const GoroutineName = "BlocksCollection"
 var d = new(daemon)
 var parser = new(dcparser.Parser)
+var breaker chan bool
+var answer chan string
 
 
 func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
@@ -24,9 +26,10 @@ func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 			panic(r)
 		}
 	}()
+	breaker = chBreaker
+	answer = chAnswer
 
-
-	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
+	d.DCDB = DbConnect(breaker, answer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -38,10 +41,10 @@ func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 	} else {
 		d.sleepTime = 60
 	}
-	if !d.CheckInstall(chBreaker, chAnswer, GoroutineName) {
+	if !d.CheckInstall(breaker, answer, GoroutineName) {
 		return
 	}
-	d.DCDB = DbConnect(chBreaker, chAnswer, GoroutineName)
+	d.DCDB = DbConnect(breaker, answer, GoroutineName)
 	if d.DCDB == nil {
 		return
 	}
@@ -52,7 +55,7 @@ BEGIN:
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
-		if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+		if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 			continue
 		}
 		logger.Debug("0")
@@ -125,7 +128,7 @@ BEGIN:
 				var blockchainSize int64
 				for i := 0; i < 10; i++ {
 					logger.Debug("blockchain_url: %s, i: %d", blockchain_url, i)
-					blockchainSize, err = utils.DownloadToFile(blockchain_url, *utils.Dir+"/public/blockchain", 3600, chBreaker, chAnswer, GoroutineName)
+					blockchainSize, err = utils.DownloadToFile(blockchain_url, *utils.Dir+"/public/blockchain", 3600, breaker, answer, GoroutineName)
 					if err != nil {
 						logger.Error("%v", utils.ErrInfo(err))
 					}
@@ -180,7 +183,7 @@ BEGIN:
 
 				for {
 					// проверим, не нужно ли нам выйти из цикла
-					if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+					if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 						d.unlockPrintSleep(fmt.Errorf("DaemonsRestart"), 0)
 						break BEGIN
 					}
@@ -244,7 +247,7 @@ BEGIN:
 								file.Close()
 								continue BEGIN
 							}
-							if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+							if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
@@ -348,7 +351,7 @@ BEGIN:
 		var maxBlockIdUserId int64
 		// получим максимальный номер блока
 		for i := 0; i < len(hosts); i++ {
-			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+			if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 				break BEGIN
 			}
 			conn, err := utils.TcpConn(hosts[i]["host"])
@@ -394,7 +397,7 @@ BEGIN:
 				maxBlockIdHost = hosts[i]["host"]
 				maxBlockIdUserId = utils.StrToInt64(hosts[i]["user_id"])
 			}
-			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+			if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 				utils.Sleep(1)
 				break BEGIN
 			}
@@ -443,12 +446,10 @@ BEGIN:
 
 func collectBlocks(current, max, blockBody, userId int64, host, nodeHost string) error {
 	// в цикле собираем блоки, пока не дойдем до максимального
-	chBreaker := make(chan bool)
-	chAnswer := make(chan string)
 	err := errors.New("Couldn't collect blocks")
 	for blockId := current + 1; blockId <= max; blockId++ {
 			d.UpdMainLock()
-			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
+			if CheckDaemonsRestart(breaker, answer, GoroutineName) {
 				d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime)
 				return err
 			}
