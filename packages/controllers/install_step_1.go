@@ -272,8 +272,6 @@ func (c *Controller) InstallStep1() (string, error) {
 		err = c.DCDB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))
-			panic(err)
-			os.Exit(1)
 		}
 
 	}()
