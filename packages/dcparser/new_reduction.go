@@ -301,6 +301,7 @@ func (p *Parser) NewReductionRollback() error {
 		}
 
 		// форекс-ордеры
+		data = nil
 		err = json.Unmarshal(jsonData["forex_orders"], &data)
 		if err != nil {
 			return p.ErrInfo(err)
@@ -319,6 +320,7 @@ func (p *Parser) NewReductionRollback() error {
 		}
 
 		// promised_amount cash_request_out_time
+		data = nil
 		err = json.Unmarshal(jsonData["promised_amount_cash_request_out_time"], &data)
 		if err != nil {
 			return p.ErrInfo(err)
@@ -331,6 +333,7 @@ func (p *Parser) NewReductionRollback() error {
 		}
 
 		// promised_amount tdc_amount
+		data = nil
 		err = json.Unmarshal(jsonData["promised_amount_tdc_amount"], &data)
 		if err != nil {
 			return p.ErrInfo(err)
@@ -343,6 +346,7 @@ func (p *Parser) NewReductionRollback() error {
 		}
 
 		// wallets
+		data = nil
 		err = json.Unmarshal(jsonData["wallets"], &data)
 		if err != nil {
 			return p.ErrInfo(err)

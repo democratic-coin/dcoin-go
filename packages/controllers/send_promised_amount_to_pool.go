@@ -17,9 +17,16 @@ func (c *Controller) SendPromisedAmountToPool() (string, error) {
 
 	filesSign := c.r.FormValue("filesSign")
 	currencyId := utils.StrToInt64(c.r.FormValue("currencyId"))
-	tcpHost, err := c.Single(`SELECT tcp_host FROM miners_data WHERE user_id = ?`, c.SessUserId).String()
+	miners_data, err := c.OneRow(`SELECT tcp_host, pool_user_id FROM miners_data WHERE user_id = ?`, c.SessUserId).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
+	}
+	tcpHost := miners_data["tcp_host"]
+	if miners_data["pool_user_id"] != "0" {
+		tcpHost, err = c.Single(`SELECT tcp_host FROM miners_data WHERE user_id = ?`, miners_data["pool_user_id"]).String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
 	}
 	conn, err := net.DialTimeout("tcp", tcpHost, 5*time.Second)
 	if err != nil {
