@@ -10,6 +10,9 @@
 html, body {
 	min-width:320px;
 }
+a, button, .btn {
+	outline:none !important;
+}
 
 @import "pages/home";
 
