@@ -268,6 +268,14 @@ func (c *Controller) InstallStep1() (string, error) {
 			os.Exit(1)
 		}
 
+
+		err = c.DCDB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+			panic(err)
+			os.Exit(1)
+		}
+
 	}()
 
 	utils.Sleep(3) // даем время обновиться config.ini, чтобы в content выдался не installStep0, а updatingBlockchain
