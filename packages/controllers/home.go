@@ -345,8 +345,8 @@ func (c *Controller) Home() (string, error) {
 			WHERE currency_id = 72
 			ORDER BY id DESC
 			LIMIT 7`, 7)
-	for _, data := range chartData {
-		chart += `['`+data["month"]+`/`+data["day"]+`', `+utils.ClearNull(data["promised_amount"], 0)+`, `+utils.ClearNull(data["dc"], 0)+`],`
+	for i:=len(chartData)-1; i>=0; i-- {
+		chart += `['`+chartData[i]["month"]+`/`+chartData[i]["day"]+`', `+utils.ClearNull(chartData[i]["promised_amount"], 0)+`, `+utils.ClearNull(chartData[i]["dc"], 0)+`],`
 	}
 	if len(chart) > 0 {
 		chart = chart[:len(chart)-1]

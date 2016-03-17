@@ -159,6 +159,9 @@
 // static/lang/locale_en-US.ini
 // static/lang/locale_ru-RU.ini
 // static/nodes.inc
+// static/sass/addons/_mixins.scss
+// static/sass/pages/_home.scss
+// static/sass/style.scss
 // static/swf/sAS3Cam.swf
 // static/templates/.directory
 // static/templates/abuse.html
@@ -3162,6 +3165,60 @@ func staticNodesInc() (*asset, error) {
 	return a, err
 }
 
+// staticSassAddons_mixinsScss reads file data from disk. It returns an error on failure.
+func staticSassAddons_mixinsScss() (*asset, error) {
+	path := "static/sass/addons/_mixins.scss"
+	name := "static/sass/addons/_mixins.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassPages_homeScss reads file data from disk. It returns an error on failure.
+func staticSassPages_homeScss() (*asset, error) {
+	path := "static/sass/pages/_home.scss"
+	name := "static/sass/pages/_home.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassStyleScss reads file data from disk. It returns an error on failure.
+func staticSassStyleScss() (*asset, error) {
+	path := "static/sass/style.scss"
+	name := "static/sass/style.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSwfSas3camSwf reads file data from disk. It returns an error on failure.
 func staticSwfSas3camSwf() (*asset, error) {
 	path := "static/swf/sAS3Cam.swf"
@@ -5443,6 +5500,9 @@ var _bindata = map[string]func() (*asset, error){
 	"static/lang/locale_en-US.ini": staticLangLocale_enUsIni,
 	"static/lang/locale_ru-RU.ini": staticLangLocale_ruRuIni,
 	"static/nodes.inc": staticNodesInc,
+	"static/sass/addons/_mixins.scss": staticSassAddons_mixinsScss,
+	"static/sass/pages/_home.scss": staticSassPages_homeScss,
+	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
 	"static/templates/.directory": staticTemplatesDirectory,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
@@ -5942,6 +6002,18 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			}},
 		}},
 		"nodes.inc": &bintree{staticNodesInc, map[string]*bintree{
+		}},
+		"sass": &bintree{nil, map[string]*bintree{
+			"addons": &bintree{nil, map[string]*bintree{
+				"_mixins.scss": &bintree{staticSassAddons_mixinsScss, map[string]*bintree{
+				}},
+			}},
+			"pages": &bintree{nil, map[string]*bintree{
+				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{
+				}},
+			}},
+			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{
+			}},
 		}},
 		"swf": &bintree{nil, map[string]*bintree{
 			"sAS3Cam.swf": &bintree{staticSwfSas3camSwf, map[string]*bintree{
