@@ -22,6 +22,7 @@
 // static/css/sb-admin-2.css
 // static/css/sb-admin.css
 // static/css/social-buttons.css
+// static/css/style.css
 // static/css/tooltipster-shadow.css
 // static/css/tooltipster.css
 // static/css/upgrade.css
@@ -681,6 +682,24 @@ func staticCssSbAdminCss() (*asset, error) {
 func staticCssSocialButtonsCss() (*asset, error) {
 	path := "static/css/social-buttons.css"
 	name := "static/css/social-buttons.css"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticCssStyleCss reads file data from disk. It returns an error on failure.
+func staticCssStyleCss() (*asset, error) {
+	path := "static/css/style.css"
+	name := "static/css/style.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -5287,6 +5306,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/css/sb-admin-2.css": staticCssSbAdmin2Css,
 	"static/css/sb-admin.css": staticCssSbAdminCss,
 	"static/css/social-buttons.css": staticCssSocialButtonsCss,
+	"static/css/style.css": staticCssStyleCss,
 	"static/css/tooltipster-shadow.css": staticCssTooltipsterShadowCss,
 	"static/css/tooltipster.css": staticCssTooltipsterCss,
 	"static/css/upgrade.css": staticCssUpgradeCss,
@@ -5629,6 +5649,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"sb-admin.css": &bintree{staticCssSbAdminCss, map[string]*bintree{
 			}},
 			"social-buttons.css": &bintree{staticCssSocialButtonsCss, map[string]*bintree{
+			}},
+			"style.css": &bintree{staticCssStyleCss, map[string]*bintree{
 			}},
 			"tooltipster-shadow.css": &bintree{staticCssTooltipsterShadowCss, map[string]*bintree{
 			}},
