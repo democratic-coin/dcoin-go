@@ -342,7 +342,8 @@ func (c *Controller) Home() (string, error) {
 	chartData, err := c.GetAll(`
 			SELECT month, day, dc, promised_amount
 			FROM stats
-			WHERE currency_id=72
+			WHERE currency_id = 72
+			ORDER BY id DESC
 			LIMIT 7`, 7)
 	for _, data := range chartData {
 		chart += `['`+data["month"]+`/`+data["day"]+`', `+utils.ClearNull(data["promised_amount"], 0)+`, `+utils.ClearNull(data["dc"], 0)+`],`

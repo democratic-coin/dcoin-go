@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/c-darwin/trayhost"
+	"github.com/trayhost"
 )
 
 /*

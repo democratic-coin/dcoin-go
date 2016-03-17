@@ -49,12 +49,12 @@ func (p *Parser) SwitchPoolFront() error {
 			if err != nil {
 				return p.ErrInfo(err)
 			}
-		}
-		//current := poolUsers["pool_count_users"]/poolUsers["count"]
-		max_pool_users := float64(float64(p.Variables.Int64["max_pool_users"])*0.9)
-		// если существующие пулы заняты менее чем на 90%, то новые пулы нам не нужны
-		if poolUsers < max_pool_users {
-			return p.ErrInfo(fmt.Sprintf("%v < %v", poolUsers, max_pool_users))
+			//current := poolUsers["pool_count_users"]/poolUsers["count"]
+			max_pool_users := float64(float64(p.Variables.Int64["max_pool_users"])*0.9)
+			// если существующие пулы заняты менее чем на 90%, то новые пулы нам не нужны
+			if poolUsers < max_pool_users {
+				return p.ErrInfo(fmt.Sprintf("%v < %v", poolUsers, max_pool_users))
+			}
 		}
 	}
 
