@@ -1,4 +1,5 @@
 {{ define "home" }}
+<div class="dc_home">
 
 <!--<link rel="stylesheet" type="text/css" href="static/css/tooltipster.css" />
 <link rel="stylesheet" type="text/css" href="static/css/tooltipster-shadow.css" />
@@ -1005,6 +1006,14 @@
 
 	<script>
 		var userId = {{.UserId}}
+		$(document).keypress(function(e){
+			if(e.keyCode == 13){
+				if ($("#myChatMessage").is(":focus")) {
+					$("#myChatMessage").val("");
+					$("#sendToChat").click();
+				}
+			}
+		});
 	</script>
 	<script src="/static/js/chat.js"></script>
 
@@ -1023,11 +1032,13 @@
 			</tbody>
 			</table>
 		</div>
-		<input type="hidden" id="chatUserIdReceiver" value="0">
-		{{if not .Community}}<button class="btn btn-default"  onclick="lock_unlock(); return false" id="chatLock" style="display: inline-block; margin: 5px; width: 40px"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
-		<span id="selectReceiver" style="display: none;vertical-align: middle;">Please, select receiver</span>
-		<input type="text" class="form-control" id="myChatMessage" style="display: inline-block;vertical-align: middle; width: 200px" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
-		<button class="btn btn-primary" id="sendToChat" style="display: inline-block">Send</button>
+		<div class="chat_control">
+			<input type="hidden" id="chatUserIdReceiver" value="0">
+			{{if not .Community}}<button id="chatLock" class="btn btn-default"  onclick="lock_unlock(); return false"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
+			<span id="selectReceiver">Please, select receiver</span>
+			<input id="myChatMessage" type="text" class="form-control" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
+			<button id="sendToChat" class="btn btn-primary">Send</button>
+		</div>
 	</div>
 	{{end}}
 
@@ -1141,7 +1152,7 @@
 </style>
 <div style="clear: both"></div>
 	{{if .ShowMap}}
-	<h3 style="margin-top: 30px;margin-bottom: 0px;"
+	<h3 style="margin-bottom: 0px;"
 		title="">{{.Lang.miners_on_the_map}}</h3>
 	<a href="#interface/show_map=0">Hide map</a></div>
 	<div class="clearfix"></div>
@@ -1151,28 +1162,30 @@
 
 
 <h3>{{.Lang.statistic_cash_requests}}</h3>
-<table class="table table-bordered" style="width:600px">
-	<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>from_user_id</th><th>to_user_id</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
-	<tbody>
-	{{if .LastCashRequests}}
-	{{range $k, $data := .LastCashRequests}}
-	<tr>
-		<td>{{$data.id}}</td>
-		<td>{{$data.time}}</td>
-		<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
-		<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}}</td>
-		<td>{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
-		<td>{{$data.amount}}</td>
-		{{if ne $data.del_block_id "0"}}
-		<td title='{{.Lang.reduction_closed}}'>{{$data.status}}</td>
-		{{else}}
-		<td>{{$data.status}}</td>
+<div class="dc_home__coins_exchange">
+	<table class="table table-bordered">
+		<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>{{.Lang.from_user_id}}</th><th>{{.Lang.to_user_id}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
+		<tbody>
+		{{if .LastCashRequests}}
+		{{range $k, $data := .LastCashRequests}}
+		<tr>
+			<td align="center"><strong>{{$data.id}}</strong></td>
+			<td>{{$data.time}}</td>
+			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
+			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}} </td>
+			<td align="center">{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
+			<td align="center">{{$data.amount}}</td>
+			{{if ne $data.del_block_id "0"}}
+			<td title='{{.Lang.reduction_closed}}'>{{$data.status}}</td>
+			{{else}}
+			<td>{{$data.status}}<br>{{if eq $data.status "rejected"}}(user holded){{end}}</td>
+			{{end}}
+		</tr>
 		{{end}}
-	</tr>
-	{{end}}
-	{{end}}
-	</tbody>
-</table>
+		{{end}}
+		</tbody>
+	</table>
+</div>
 <script>
 	{{range $userId, $hosts := .RefPhotos}}
 	var hosts = []
@@ -1185,20 +1198,14 @@
 
 
 {{if .Chart}}
-	<script type="text/javascript">
-		google.charts.setOnLoadCallback(drawChart);
+<script type="text/javascript">
+	google.charts.setOnLoadCallback(drawChart);
 
-		function drawChart() {
-			var data = google.visualization.arrayToDataTable([
-				['Date', 'Promised amounts', 'dUSD'],
-				{{js .Chart}}
-			]);
-
-			var options = {
-				title: 'dUSD/USD',
-				curveType: 'function',
-				legend: { position: 'bottom' }
-			};
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable([
+			['Date', 'Promised amounts', 'dUSD'],
+			{{js .Chart}}
+		]);
 
 		var options = {
 			title: 'dUSD/USD',
@@ -1207,11 +1214,21 @@
 		};
 
 		var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
 		chart.draw(data, options);
 	}
+	
+	$(window).resize(function() {
+		if(this.resizeTO) clearTimeout(this.resizeTO);
+		this.resizeTO = setTimeout(function() {
+			$(this).trigger('resizeEnd');
+		}, 500);
+	});
+	
+	$(window).on('resizeEnd', function() {
+		drawChart();
+	});
 </script>
-<div id="curve_chart" style="width: 900px; height: 500px"></div>
+<div id="curve_chart"></div>
 <p><a href="static/img/reduction.png" target="_blank">About graphic</a></p>
 <p>Target: {{.DCTarget}} dUSD</p>
 {{end}}
