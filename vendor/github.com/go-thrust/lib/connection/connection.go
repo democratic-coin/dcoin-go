@@ -63,13 +63,13 @@ func InitializeThreads() {
 
 	go func() {
 		fmt.Println("Registering signals")
-		p := []os.Signal{syscall.SIGINT}
+		p := []os.Signal{os.Interrupt, syscall.SIGINT, syscall.SIGTERM, os.Kill}
 		c := make(chan os.Signal, len(p))
 		signal.Notify(c, p...)
 
 		for s := range c {
 			fmt.Println("Getting signal ", s)
-			if s == os.Interrupt || s == os.Kill {
+			if s == os.Interrupt || s == os.Kill || s == syscall.SIGTERM {
 				fmt.Println("Finishing clean up quiting")
 				CleanExit()
 				return
