@@ -2,6 +2,10 @@
 package main
 
 import (
+	"crypto"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
@@ -14,8 +18,8 @@ import (
 	"path/filepath"
 	//	"regexp"
 	//	"net/url"
-	//	"time"
 	"strings"
+	"time"
 )
 
 const (
@@ -32,11 +36,6 @@ type Settings struct {
 	FromEmail string `json:"from_email"`
 }
 
-type Answer struct {
-	Success bool   `json:"success"`
-	Error   string `json:"error"`
-}
-
 var (
 	GSettings Settings
 	GDB       *utils.DCDB
@@ -44,86 +43,115 @@ var (
 )
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
-	answer := Answer{false, ``}
-	cmd := r.URL.Path[1:]
-	switch cmd {
-	case `setemail`:
-		if r.Method != `POST` {
-			answer.Error = fmt.Sprintf(`Wrong method %s`, r.Method)
-		} else {
-			r.ParseForm()
-			email := r.FormValue(`email`)
-			userid := r.FormValue(`user_id`)
-			text := r.FormValue(`text`)
-			subject := r.FormValue(`subject`)
 
-			//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
-			//	if !re.MatchString( email ) {
-			if !utils.ValidateEmail(email) {
-				answer.Error = fmt.Sprintf(`Incorrect email %s`, email)
-				break
-			}
-			id, _ := utils.DB.Single(`SELECT user_id from users where user_id=?`, userid).String()
-			if id != userid {
-				answer.Error = fmt.Sprintf(`Incorrect user_id %s`, userid)
-				break
-			}
-			remoteAddr := r.RemoteAddr
-			var ip string
-			if ip = r.Header.Get(XRealIP); len(ip) > 6 {
-				remoteAddr = ip
-			} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
-				remoteAddr = ip
-			}
-			if strings.Contains(remoteAddr, ":") {
-				remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
-			}
-			var ipval uint32
-			log.Println(`IP`, r.RemoteAddr, remoteAddr, ip)
-			if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
-				ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
-					(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
-			}
-			err := GDB.ExecSql(`INSERT INTO users ( user_id, email, verified, code, uptime, ip ) 
-				VALUES ( ?, ?, 0, 0, datetime('now'), ? )`,
-				userid, email, ipval)
-			if err != nil {
-				answer.Error = fmt.Sprintf(`Command error %v`, err)
-				break
-			}
-			if strings.Index(text, `<`) >= 0 || strings.Index(subject, `<`) >= 0 {
-				text = ``
-				answer.Error = fmt.Sprintf(`HTML spam`)
-			}
-			if len(text) > 0 && len(subject) > 0 {
-				err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
-					[]*Email{
-						&Email{``, email}})
-				if err != nil {
-					answer.Error = fmt.Sprintf(`Send %v`, err)
-				} else {
-					log.Println(`Sent test email`, email)
-				}
+	answer := utils.Answer{false, ``}
 
-			}
-			if len(answer.Error) == 0 {
-				answer.Success = true
-			} else {
-				log.Println(`Error`, answer.Error)
-			}
-		}
+	result := func(msg string) {
 
-	default:
-		answer.Error = fmt.Sprintf(`Unknown command %s`, cmd)
-	}
-	ret, err := json.Marshal(answer)
-	if err != nil {
-		ret = []byte(`{"success": false,
+		answer.Error = msg
+		ret, err := json.Marshal(answer)
+		if err != nil {
+			ret = []byte(`{"success": false,
 "error":"Unknown error"}`)
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		//	w.WriteHeader(200)
+		w.Write(ret)
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	//	w.WriteHeader(200)
-	w.Write(ret)
+
+	if len(r.URL.Path[1:]) > 0 || r.Method != `POST` {
+		result(`Wrong method or path`)
+		return
+	}
+	var (
+		jsonEmail utils.JsonEmail
+		err       error
+		publicKey string
+	)
+	r.ParseForm()
+	data := r.FormValue(`data`)
+	sign := r.FormValue(`sign`)
+	if err = json.Unmarshal([]byte(data), &jsonEmail); err != nil ||
+		jsonEmail.UserId == 0 || jsonEmail.Cmd == 0 {
+		result(`Incorrect data`)
+		return
+	}
+	//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
+	//	if !re.MatchString( email ) {
+	if !utils.ValidateEmail(jsonEmail.Email) {
+		result(`Incorrect email`)
+		return
+	}
+
+	if publicKey, err = utils.DB.GetUserPublicKey(jsonEmail.UserId); err != nil {
+		pubVal := r.FormValue(`public`)
+		if jsonEmail.Cmd == utils.ECMD_TEST && len(pubVal) > 0 {
+			public, _ := base64.StdEncoding.DecodeString(pubVal)
+			publicKey = string(public)
+		} else {
+			result(`Incorrect user_id or public_key`)
+			return
+		}
+	}
+	fmt.Println(jsonEmail)
+	signature, _ := base64.StdEncoding.DecodeString(sign)
+	var re interface{}
+	if re, err = x509.ParsePKIXPublicKey([]byte(publicKey)); err != nil {
+		result(err.Error())
+		return
+	}
+	if err = rsa.VerifyPKCS1v15(re.(*rsa.PublicKey), crypto.SHA1, utils.HashSha1(data),
+		signature); err != nil {
+		result(err.Error())
+		return
+	}
+	remoteAddr := r.RemoteAddr
+	var ip string
+	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
+		remoteAddr = ip
+	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
+		remoteAddr = ip
+	}
+	if strings.Contains(remoteAddr, ":") {
+		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
+	}
+	var ipval uint32
+	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
+		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
+			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
+	}
+	fmt.Println(ipval)
+	/*			err := GDB.ExecSql(`INSERT INTO users ( user_id, email, verified, code, uptime, ip )
+					VALUES ( ?, ?, 0, 0, datetime('now'), ? )`,
+					userid, email, ipval)
+				if err != nil {
+					answer.Error = fmt.Sprintf(`Command error %v`, err)
+					break
+				}
+				if strings.Index(text, `<`) >= 0 || strings.Index(subject, `<`) >= 0 {
+					text = ``
+					answer.Error = fmt.Sprintf(`HTML spam`)
+				}
+				if len(text) > 0 && len(subject) > 0 {
+					err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
+						[]*Email{
+							&Email{``, email}})
+					if err != nil {
+						answer.Error = fmt.Sprintf(`Send %v`, err)
+					} else {
+						log.Println(`Sent test email`, email)
+					}
+
+				}
+				if len(answer.Error) == 0 {
+					answer.Success = true
+				} else {
+					log.Println(`Error`, answer.Error)
+				}
+	*/
+	answer.Success = true
+
+	result(``)
 }
 
 /*func Send() {
@@ -159,6 +187,11 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 	}
     fmt.Println( answer )
 }*/
+
+func Send() {
+	time.Sleep(5 * time.Second)
+	fmt.Println("Result", utils.SendEmail(`test@mail.ru`, 3, utils.ECMD_TEST, nil /*&map[string]string{}*/))
+}
 
 func main() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -227,7 +260,7 @@ func main() {
 	GEmail = NewEmailClient(GSettings.ApiId, GSettings.ApiSecret,
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
-	//	go Send()
+	go Send()
 
 	http.HandleFunc("/", emailHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
