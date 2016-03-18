@@ -409,6 +409,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				schema_.S = s
 				schema_.PrintSchema()
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a4")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE migration_history ADD COLUMN test_migration int NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
 		}
 
 
