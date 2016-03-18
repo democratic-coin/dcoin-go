@@ -174,7 +174,7 @@ func (c *Controller) EMain() (string, error) {
 		orders.Buy[sellRate] = utils.ClearNullFloat64(orders.Buy[sellRate]+amount*(1/sellRate), 6)
 		if sellMax == 0 {
 			sellMax = sellRate
-		} else if sellRate < sellMax {
+		} else if sellRate > sellMax {
 			sellMax = sellRate
 		}
 	}
