@@ -20,10 +20,10 @@
 					}, function (data) {
 						chatMessage = data.success;
 						decryptChatMessage = $('#myChatMessage').val();
-						sendToTheChat()
+						sendToTheChat();
 					}, 'JSON');
 				} else {
-					sendToTheChat()
+					sendToTheChat();
 				}
 			}, 500);
 
@@ -73,6 +73,7 @@
 					}, function (data) {
 						$('#sendToChat').prop('disabled', false);
 						$('#sendToChat').html('Send');
+						$("#myChatMessage").val("");
 					});
 				}
 			};
