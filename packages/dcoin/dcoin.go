@@ -408,7 +408,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				s["migration_history"] = s1
 				schema_.S = s
 				schema_.PrintSchema()
-
 			}
 
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a4")) {
@@ -419,7 +418,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
-			err = c.DCDB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
