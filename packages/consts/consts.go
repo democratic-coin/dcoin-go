@@ -2,7 +2,7 @@ package consts
 
 
 // текущая версия
-const VERSION = "2.2.3a4"
+const VERSION = "2.2.3a5"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
