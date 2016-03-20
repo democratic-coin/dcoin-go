@@ -3,7 +3,7 @@
 
 <p>Version: {{.Version}}</p>
 <p>Time: {{.TimeNow}} ({{.TimeNowInt}})</p>
-
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>nodes_ban</caption>
 <thead><tr><th>host</th><th>user_id</th><th>ban_start</th><th>info</th></tr></thead>
 <tbody>
@@ -12,20 +12,22 @@
 {{end}}
 </tbody>
 </table>
+</div>
 
-
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>nodes_connection</caption>
-<thead><tr><th>host</th><th>user_id</th></thead>
+<thead><tr><th>host</th><th>user_id</th></tr></thead>
 <tbody>
 {{range $k, $data := .NodesConnection}}
 <tr><td>{{$data.host}}</td><td>{{$data.user_id}}</td></tr>
 {{end}}
 </tbody>
 </table>
+</div>
 
-
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>main_lock</caption>
-<thead><tr><th>lock_time</th><th>script_name</th></thead>
+<thead><tr><th>lock_time</th><th>script_name</th></tr></thead>
 <tbody>
 {{if .MainLock}}
 	{{range $k, $data := .MainLock}}
@@ -34,12 +36,14 @@
 {{end}}
 </tbody>
 </table>
+</div>
 
 <p>BlockGeneratorSleepTime: {{.BlockGeneratorSleepTime}}</p>
 <p>BlockGeneratorIsReadySleepTime: {{.BlockGeneratorIsReadySleepTime}}</p>
 
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>testblock</caption>
-	<thead><tr><th>block_id</th><th>time</th><th>level</th><th>user_id</th><th>header_hash_hex</th><th>mrkl_root_hex</th><th>status</th><th>sent</th></thead>
+	<thead><tr><th>block_id</th><th>time</th><th>level</th><th>user_id</th><th>header_hash_hex</th><th>mrkl_root_hex</th><th>status</th><th>sent</th></tr></thead>
 	<tbody>
 	{{if .Testblock}}
 		{{range $k, $data := .Testblock}}
@@ -48,9 +52,11 @@
 	{{end}}
 	</tbody>
 </table>
+</div>
 
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>transactions</caption>
-	<thead><tr><th>hash</th><th>verified</th><th>used</th><th>high_rate</th><th>for_self_use</th><th>type</th><th>user_id</th><th>third_var</th><th>counter</th><th>sent</th></thead>
+	<thead><tr><th>hash</th><th>verified</th><th>used</th><th>high_rate</th><th>for_self_use</th><th>type</th><th>user_id</th><th>third_var</th><th>counter</th><th>sent</th></tr></thead>
 	<tbody>
 	{{if .AllTransactions}}
 	{{range $k, $data := .AllTransactions}}
@@ -59,9 +65,11 @@
 	{{end}}
 	</tbody>
 </table>
+</div>
 
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>QueueTx</caption>
-	<thead><tr><th>hash</th><th>high_rate</th></thead>
+	<thead><tr><th>hash</th><th>high_rate</th></tr></thead>
 	<tbody>
 	{{if .AllQueueTx}}
 	{{range $k, $data := .AllQueueTx}}
@@ -70,26 +78,29 @@
 	{{end}}
 	</tbody>
 </table>
+</div>
 
-
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>other</caption>
-<thead><tr><th>name</th><th>value</th></thead>
+<thead><tr><th>name</th><th>value</th></tr></thead>
 <tbody>
 <tr><td>queue_tx</td><td>{{.QueueTx}}</td></tr>
 <tr><td>transactions_testblock</td><td>{{.TransactionsTestblock}}</td></tr>
 <tr><td>transactions</td><td>{{.Transactions}}</td></tr>
 </tbody>
 </table>
+</div>
 
-
+<div class="table_fix">
 <table class="table table-bordered" style="width:600px"><caption>variables</caption>
-<thead><tr><th>name</th><th>value</th><!--<th>description</th>--></thead>
+<thead><tr><th>name</th><th>value</th><!--<th>description</th>--></tr></thead>
 <tbody>
 {{range $name, $value := .Variables}}
 <tr><td>{{$name}}</td><td>{{$value}}</td><!--<td>".@lng['variables_'.$name]."</td>--></tr>
 {{end}}
 </tbody>
 </table>
+</div>
 
 
 <button onclick="dc_navigate('dbInfoNodes')">check nodes</button>
