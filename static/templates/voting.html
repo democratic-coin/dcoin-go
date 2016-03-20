@@ -153,32 +153,34 @@
 	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
 
 	{{template "alertSuccess".}}
-
+	
 	<div id="voting">
 		{{if .MinerNewbie}}
 			{{.MinerNewbie}}
 		{{else if .PromisedAmountCurrencyList}}
 				<h3>{{.Lang.currency_properties}}</h3>
+				<div class="table_fix">
 				<div style="width: 600px">{{.Lang.voting_message}}</div>
 				<table class="table" style="width: 500px">
-				<tr><th>{{.Lang.currency}}</th><th>{{.Lang.voting_miner_pct}}</th><th>{{.Lang.voting_user_pct}}</th><th>{{.Lang.voting_max_promised_amount}}</th><th>{{.Lang.voting_max_other_currencies}}</th><th>{{.Lang.voting_reduction}}</th></tr>
-				{{range $currency_id, $data := .PromisedAmountCurrencyList}}
-					<tr><td>D{{$data.name}}<input type='hidden' name='currency_id' value='{{$currency_id}}'></td><td>
-					<select  style='width: 150px' name='miner_pct'>
-					{{noescape (index $.MinerPctSelectBox $currency_id)}}
-					</select>
-					</td><td>
-					<select style='width: 150px' name='user_pct'>
-					{{noescape (index $.UserPctSelectBox $currency_id)}}
-					</select>
-					</td><td>
-					<select style='width: 150px' name='max_promised_amount'>
-					{{noescape (index $.MaxPromisedAmountSelectBox $currency_id)}}
-					</select></td><td><select style='width: 150px' name='max_other_currencies'>
-					{{noescape (index $.MaxOtherCurrenciesSelectBox $currency_id)}}
-					</select></td><td><select style='width: 150px' name='reduction'><option>0</option><option>10</option><option>25</option><option>50</option><option>90</option></select></td></tr>
-			{{end}}
-			</table>
+					<tr><th>{{.Lang.currency}}</th><th>{{.Lang.voting_miner_pct}}</th><th>{{.Lang.voting_user_pct}}</th><th>{{.Lang.voting_max_promised_amount}}</th><th>{{.Lang.voting_max_other_currencies}}</th><th>{{.Lang.voting_reduction}}</th></tr>
+					{{range $currency_id, $data := .PromisedAmountCurrencyList}}
+						<tr><td valign="top">D{{$data.name}}<input type='hidden' name='currency_id' value='{{$currency_id}}'></td><td valign="top">
+						<select  style='width: 150px' name='miner_pct'>
+						{{noescape (index $.MinerPctSelectBox $currency_id)}}
+						</select>
+						</td><td valign="top">
+						<select style='width: 150px' name='user_pct'>
+						{{noescape (index $.UserPctSelectBox $currency_id)}}
+						</select>
+						</td><td valign="top">
+						<select style='width: 150px' name='max_promised_amount'>
+						{{noescape (index $.MaxPromisedAmountSelectBox $currency_id)}}
+						</select></td><td valign="top"><select style='width: 150px' name='max_other_currencies'>
+						{{noescape (index $.MaxOtherCurrenciesSelectBox $currency_id)}}
+						</select></td><td valign="top"><select style='width: 150px' name='reduction'><option>0</option><option>10</option><option>25</option><option>50</option><option>90</option></select></td></tr>
+				{{end}}
+				</table>
+				</div>
 
 		{{else if .WaitVoting}}
 			<table class="table" style="width: 500px"><tr><th>{{.Lang.currency}}</th><th>Text</th><th></tr>
