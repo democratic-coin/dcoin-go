@@ -107,6 +107,7 @@
 			<a type="button" class="btn btn-primary" href="#arbitrationArbitrator">{{.Lang.i_arbitrator}}</a><br>{{if .Arbitrator}}{{.Lang.you_arbitrator}}{{end}}
 		</div>
 		<div class="clearfix"></div>
+		<div class="table_fix">
 		<table class="table" style="max-width: 700px; margin-top: 20px">
 			<caption><strong>{{.Lang.top_10_arbitrators}}</strong></caption>
 			<tr>
@@ -131,8 +132,11 @@
 			</tr>
 			{{end}}
 		</table>
-
+		</div>
+		
+		<div class="table_fix">
 		{{noescape .LastTxFormatted}}
+		</div>
 
 	</div>
 
