@@ -4,53 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"net/http"
-	"time"
-	"net/url"
 //	"regexp"
-	"strings"
-	"encoding/json"
-	"io/ioutil"
 )
-
-
-type Answer struct {
-	Success bool `json:"success"`
-	Error   string `json:"error"`
-}
-
-func SendEmail( cmd, email, user_id, text, subject string ) error {
-	Client := &http.Client{
-			Transport: http.DefaultTransport,
-			Timeout:   20 * time.Second,
-		}
-	values := url.Values{}
-	values.Set("email", email )
-	values.Set("user_id", user_id )
-	values.Set("subject", subject )
-	values.Set("text", text )
-	
-	req, err := http.NewRequest("POST", `http://email.dcoin.club:8200/` + cmd, 
-	                          strings.NewReader(values.Encode()))
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	res, e := Client.Do(req)
-	if e != nil {
-		return e
-	}
-
-	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
-
-	var answer Answer
-	err = json.Unmarshal( body, &answer )
-	if err != nil {
-		return err
-	}
-    return nil
-}
 
 func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 
@@ -68,7 +23,9 @@ func (c *Controller) SaveEmailAndSendTestMess() (string, error) {
 	if err != nil {
 		return fmt.Sprintf(`{"error":"%s"}`, err), nil
 	}
-	SendEmail( `setemail`, mailData["email"], mailData["user_id"], "Test", "Test" )
+	if err = utils.SendEmail( mailData["email"], utils.StrToInt64(mailData["user_id"]), utils.ECMD_NEW, nil ); err != nil {
+		return fmt.Sprintf(`{"error":"%s"}`, err), nil
+	}
 
 /*	mailServer := ""
 	re := regexp.MustCompile(`(?i)^[0-9a-z\-\_\.@]+(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|live\.com|yandex\.ru|yandex\.com|ya\.ru|mail\.ru|bk\.ru|inbox\.ru|list\.ru)$`)
