@@ -19,8 +19,8 @@ func (c *Controller) SendTestEmail() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	err = c.SendMail("Test", "Test", mailData["email"], mailData, c.Community, c.PoolAdminUserId)
-	if err != nil {
+//	err = c.SendMail("Test", "Test", mailData["email"], mailData, c.Community, c.PoolAdminUserId)
+	if err = utils.SendEmail( mailData["email"], utils.StrToInt64(mailData["user_id"]), utils.ECMD_TEST, nil ); err != nil {
 		return fmt.Sprintf(`{"error":"%s"}`, err), nil
 	}
 
