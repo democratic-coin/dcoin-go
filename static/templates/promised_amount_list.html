@@ -71,6 +71,7 @@
 	{{template "alertSuccess".}}
 
 	{{if .PromisedAmountListAccepted}}
+	<div class="table_fix">
 		<table id="promised_amount_list" class="table" style="width:500px">
 		<thead><tr><th>ID</th><th>{{.Lang.status}}</th><th style='text-align: center'>{{.Lang.currency}}</th><th style='text-align: center'>{{.Lang.amount}}</th><th>DC</th><th style='text-align: center'>{{.Lang.in_wallet}}</th><th style='text-align:center'></th></tr></thead>
 		<tbody>
@@ -103,12 +104,14 @@
 		{{end}}
 		</tbody>
 		</table>
-
+	</div>
 	{{end}}
 
 	<a href="#newPromisedAmount" type="button" class="btn btn-outline btn-primary">{{.Lang.add_note}}</a>
-
-	{{noescape .LastTxFormatted}}
+	
+	<div class="table_fix">
+		{{noescape .LastTxFormatted}}
+	</div>
 
 	{{if .ActualizationPromisedAmounts}}
 		<button  onclick="dc_navigate('promisedAmountActualization')" class="btn">{{.Lang.actualize_promised_amounts}}</button>

@@ -86,7 +86,7 @@
 
 		<button class="btn" id="save">{{.Lang.send_to_net}}</button> <button  class="btn" id="skip">{{.Lang.skip}}</button><br><br>
 		<a href="#" id="show_list">{{.Lang.change}}</a>
-
+		<div class="table_fix">
 		<table class="table" style="width: 500px; display: none" id="commission_div">
 			<tr><th>{{.Lang.currency}}</th><th style="text-align: center">%</th><th style="text-align: center">{{.Lang.min}}</th><th style="text-align: center">{{.Lang.max}}</th></tr>
 			{{range $currencyId, $data := .Commission}}
@@ -96,7 +96,7 @@
 				<td><input class='form-control' type='text' name='max' value="{{index $data 2}}"></td></tr>
 			{{end}}
 		</table>
-
+		</div>
 	</div>
 
 	{{template "signatures".}}
