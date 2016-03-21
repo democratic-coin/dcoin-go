@@ -1,0 +1,161 @@
+$white: #ffffff;
+$blue: #428bca;
+$gray: #dddddd;
+
+/* New user page
+----------------------------------------- */
+.dc_new_user {
+	h3 {
+		margin-top:50px;
+	}
+	.col-sm-6 {
+		padding-left:0px;
+		padding-right:0px;
+	}
+	&__referals {
+		.table {
+			border:0px;
+			border-top:1px solid $blue;
+			box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+			margin-top:10px;
+			margin-bottom:10px;
+			th {
+				background-color:$blue;
+				border:1px solid $blue;
+				border-right:1px solid $white;
+				border-bottom:0px;
+				color:$white;
+				text-align:center;
+				white-space:nowrap;
+				&:last-child {
+					border-right:1px solid $blue;
+				}
+			}
+			tr {
+				&:nth-of-type(2n+1) {
+					td {
+						background-color:lighten($gray, 10%);
+					}
+				}
+				&:hover {
+					td {
+						background-color:lighten($blue, 45%);
+					}
+				}
+				td {
+					border-top:0px;
+					text-align:center;
+				}
+			}
+		}
+	}
+	&__leaders_dcoin {
+		.table {
+			border:0px;
+			border-top:1px solid $blue;
+			box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+			margin-top:10px;
+			margin-bottom:10px;
+			th {
+				background-color:$blue;
+				border:1px solid $blue;
+				border-right:1px solid $white;
+				border-bottom:0px;
+				color:$white;
+				text-align:center;
+				white-space:nowrap;
+				&:last-child {
+					border-right:1px solid $blue;
+					text-align:left;
+				}
+			}
+			tr {
+				&:nth-of-type(2n+1) {
+					td {
+						background-color:lighten($gray, 10%);
+					}
+				}
+				&:hover {
+					td {
+						background-color:lighten($blue, 45%);
+					}
+				}
+				td {
+					border-top:0px;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
