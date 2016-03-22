@@ -49,6 +49,7 @@
 		{{template "alertSuccess".}}
 
 		<h3>{{.Lang.I_creditor}}</h3>
+		<div class="table_fix">
 		<table class="table" style="width:600px">
 				<tr><th>{{.Lang.time}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.currency}}</th><th>User_ID</th><th style='text-align: center'>{{.Lang.action}}</th></tr>
 			{{range .I_creditor}}
@@ -77,6 +78,7 @@
 				</tr>
 			{{end}}
 		</table>
+		</div>
 
 		<button type="button" class="btn btn-primary" id="new_credit">{{.Lang.create_credit}}</button>
 
