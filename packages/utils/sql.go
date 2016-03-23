@@ -1305,7 +1305,7 @@ func (db *DCDB) GetBalances(userId int64) ([]DCAmounts, error) {
 		if err != nil {
 			return result, err
 		}
-		amount += forexOrdersAmount
+		amount -= forexOrdersAmount
 		pctSec, err := db.Single("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC", currency_id).Float64()
 		if err != nil {
 			return result, err
