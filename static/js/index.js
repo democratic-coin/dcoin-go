@@ -9,6 +9,9 @@ function dc_navigate (page, parameters) {
             $("#wrapper").spin(false);
             //console.log('$("#wrapper").spin(false)');
             $('#dc_content').html( data );
+			if (parameters["lang"]) {
+				load_menu();
+			}
             window.scrollTo(0,0);
             if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
                $('.sidebar-collapse').collapse('toggle');
