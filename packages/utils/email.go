@@ -17,27 +17,27 @@ import (
 )
 
 const (
-//	EMAIL_SERVER = `http://localhost:8090`
+	//	EMAIL_SERVER = `http://localhost:8090`
 	EMAIL_SERVER = `http://email.dcoin.club:8200`
 )
 
 const (
 	ECMD_UNKNOWN = iota
-	 ECMD_NEW     // Привязка email к пользователю, должно отправляться при подключении уведомлений
-	              // Отправляет тестовое сообщение
-	ECMD_TEST     // Отправить тестовое сообщение
-	ECMD_ADMINMSG // Сообщение от администратора
-	ECMD_CASHREQ  // Уведомление incoming_cash_requests
-	ECMD_CHANGESTAT  // Уведомление change_in_status
-	ECMD_DCCAME      // Уведомление dc_came_from
-	ECMD_DCSENT      // Уведомление dc_sent
-	ECMD_UPDPRIMARY  // Уведомление update_primary_key
-	ECMD_UPDEMAIL  // Уведомление update_email
-	ECMD_UPDSMS    // Уведомление update_sms_request
-	ECMD_VOTERES   // Уведомление voting_results
-	ECMD_VOTETIME  // Уведомление voting_time
-	ECMD_NEWVER    // Уведомление new_version
-	ECMD_NODETIME  // Уведомление node_time
+	ECMD_NEW     // Привязка email к пользователю, должно отправляться при подключении уведомлений
+	// Отправляет тестовое сообщение
+	ECMD_TEST       // Отправить тестовое сообщение
+	ECMD_ADMINMSG   // Сообщение от администратора
+	ECMD_CASHREQ    // Уведомление incoming_cash_requests
+	ECMD_CHANGESTAT // Уведомление change_in_status
+	ECMD_DCCAME     // Уведомление dc_came_from
+	ECMD_DCSENT     // Уведомление dc_sent
+	ECMD_UPDPRIMARY // Уведомление update_primary_key
+	ECMD_UPDEMAIL   // Уведомление update_email
+	ECMD_UPDSMS     // Уведомление update_sms_request
+	ECMD_VOTERES    // Уведомление voting_results
+	ECMD_VOTETIME   // Уведомление voting_time
+	ECMD_NEWVER     // Уведомление new_version
+	ECMD_NODETIME   // Уведомление node_time
 )
 
 type Answer struct {
@@ -111,7 +111,6 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	if err = json.Unmarshal(body, &answer); err != nil {
 		return
 	}
-	fmt.Println(`Answer`, answer)
 	if !answer.Success {
 		return fmt.Errorf(answer.Error)
 	}

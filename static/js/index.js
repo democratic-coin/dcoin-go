@@ -9,7 +9,7 @@ function dc_navigate (page, parameters) {
             $("#wrapper").spin(false);
             //console.log('$("#wrapper").spin(false)');
             $('#dc_content').html( data );
-			if (parameters["lang"]) {
+			if ( parameters && parameters.hasOwnProperty("lang")) {
 				load_menu();
 			}
             window.scrollTo(0,0);
@@ -760,4 +760,37 @@ function get_img_refs (i, user_id, urls) {
             2000
         );
     }
+}
+
+function check_form( callback ) {
+	var tocheck = {"list": []};
+	$(".checkform").remove();
+	$(".form-control[check]").each( function(){
+		item = $(this);
+		var id = item.attr('id');
+		if ( item.is(':visible')) {
+			var name = $("label[for='"+ id +"']").html();
+			if ( typeof name === "undefined" )
+				name = '';
+			tocheck.list.push( { action: item.attr('check'), id: id,
+			                   value: item.val(), label: name } );
+   		}
+	});
+	if ( tocheck.list.length > 0 ) {
+		$.post( 'ajaxjson?controllerName=CheckForm', { tocheck: JSON.stringify( tocheck ) }, function( data ) {
+			if (data.result || !data.success) {
+				if ( callback ) {
+					callback( data );
+				}
+			}
+			else {
+				data.data = JSON.parse( data.data );
+				for (i=0; i<data.data.warnings.length; i++ ) {
+					var item = data.data.warnings[i];
+					$("#"+item.id).before( '<div class="checkform alert alert-danger alert-dismissable" style="margin-top: 5px">' +
+					item.text + '</div>' );
+				}
+			}
+		})
+	}
 }
