@@ -1,478 +1,480 @@
 {{define "newPromisedAmount"}}
-<script>
-	$(document).ready(function() {
-		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
-	});
-</script>
-<script src="static/js/uploader.js"></script>
-<script src="static/js/js.js"></script>
-
-<link rel="stylesheet" href="static/css/progress.css" type="text/css" />
-<script>
-	var max_promised_amounts = new Array();
-	{{range $id, $maxPromisedAmount := .MaxPromisedAmounts}}
-		max_promised_amounts[{{$id}}] = {{$maxPromisedAmount}};
-	{{end}}
-	var currency_name = new Array();
-	{{range $id, $currencyName := .CurrencyListName}}
-		currency_name[{{$id}}] = {{$currencyName}};
-	{{end}}
-
-	var video_url_id = '';
-	var video_type = '';
-	var payment_systems_ids = '';
-	var ytType = 'promised_amount';
-
-	$('#add_promised_amount').bind('click', function () {
-
-		console.log(video_url_id);
-		video_url_id = $("#video_url_id").val();
-
-		if (video_url_id=='') {
-			if ($("#video_url").val()) {
-				var re = /watch\?v=([0-9A-Za-z_-]+)/i;
-				var res = re.exec($("#video_url").val());
-				if (res != null && typeof res[1] != 'undefined')
-					video_url_id = res[1];
-				if (!video_url_id) {
-					var re = /youtu\.be\/([0-9A-Za-z_-]+)/i
+<div class="new_promised_amount">
+	<script>
+		$(document).ready(function() {
+			$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
+		});
+	</script>
+	<script src="static/js/uploader.js"></script>
+	<script src="static/js/js.js"></script>
+	
+	<link rel="stylesheet" href="static/css/progress.css" type="text/css" />
+	<script>
+		var max_promised_amounts = new Array();
+		{{range $id, $maxPromisedAmount := .MaxPromisedAmounts}}
+			max_promised_amounts[{{$id}}] = {{$maxPromisedAmount}};
+		{{end}}
+		var currency_name = new Array();
+		{{range $id, $currencyName := .CurrencyListName}}
+			currency_name[{{$id}}] = {{$currencyName}};
+		{{end}}
+	
+		var video_url_id = '';
+		var video_type = '';
+		var payment_systems_ids = '';
+		var ytType = 'promised_amount';
+	
+		$('#add_promised_amount').bind('click', function () {
+	
+			console.log(video_url_id);
+			video_url_id = $("#video_url_id").val();
+	
+			if (video_url_id=='') {
+				if ($("#video_url").val()) {
+					var re = /watch\?v=([0-9A-Za-z_-]+)/i;
 					var res = re.exec($("#video_url").val());
 					if (res != null && typeof res[1] != 'undefined')
 						video_url_id = res[1];
+					if (!video_url_id) {
+						var re = /youtu\.be\/([0-9A-Za-z_-]+)/i
+						var res = re.exec($("#video_url").val());
+						if (res != null && typeof res[1] != 'undefined')
+							video_url_id = res[1];
+					}
+					console.log(video_url_id);
 				}
-				console.log(video_url_id);
 			}
-		}
-
-		if (!$('#amount').val() || $('#amount').val()=='0') {
-			$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>{{.Lang.invalid_amount}}</div>');
-		}
-		else {
-			if (!video_url_id) {
-				video_url_id='null';
-				video_type='null';
+	
+			if (!$('#amount').val() || $('#amount').val()=='0') {
+				$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>{{.Lang.invalid_amount}}</div>');
 			}
 			else {
-				video_type = 'youtube';
-			}
-
-
-			var ps_id;
-			for (i = 1; i < 6; i++) {
-				ps_id = $('#ps' + i).val();
-				if (ps_id > 0) {
-					payment_systems_ids = payment_systems_ids + ps_id + ',';
+				if (!video_url_id) {
+					video_url_id='null';
+					video_type='null';
 				}
-			}
-			if (payment_systems_ids.length > 1)
-				payment_systems_ids = payment_systems_ids.substr(0, payment_systems_ids.length - 1);
-			else
-				payment_systems_ids = '0';
-
-			if (video_url_id == 'null') {
-				{{if eq .Mode "pool"}}
-				$('#add_promised_amount').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
-				$('#add_promised_amount').prop('disabled', true);
-				$('#errors').html('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Sending data to the pool</div>');
-				$("#for-signature").val($('#video_hash').val());
-				doSign("sign");
-				$.post( 'ajax?controllerName=SendPromisedAmountToPool', { 'filesSign' : $('#signature1').val(), 'currencyId' : $('#currency_id').val() },
-						function (data) {
-							$('#add_promised_amount').prop('disabled', false);
-							$('#add_promised_amount').html('Send');
-							if (data.success == "1") {
-								$('#errors').html('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Complete</div>');
-								{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
-
-								$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
-								doSign();
-								{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-							} else {
-								$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
-							}
-						}, "JSON").fail(function() { $('#add_promised_amount').prop('disabled', false); $('#add_promised_amount').html('Send'); });;
-				{{else}}
-					{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
-					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
-					doSign();
-					{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-				{{end}}
-			} else {
-					{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
-
-					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
-					doSign();
-					{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-
+				else {
+					video_type = 'youtube';
 				}
-
-			}
-
-		});
-
-		$('#send_to_net').bind('click', function () {
-
-			$.post( 'ajax?controllerName=saveQueue', {
-				'type' : '{{.TxType}}',
-				'time' : '{{.TimeNow}}',
-				'user_id' : '{{.UserId}}',
-				'currency_id' :  $('#currency_id').val(),
-				'amount' :  $('#amount').val(),
-				'video_type' :  video_type,
-				'video_url_id' :  video_url_id,
-				'payment_systems_ids' :  payment_systems_ids,
-				'signature1': $('#signature1').val(),
-				'signature2': $('#signature2').val(),
-				'signature3': $('#signature3').val()
-			}, function(data) {
-				//alert(data);
-				dc_navigate ('{{.Navigate}}', {'alert': '{{.Lang.promised_amount_add_wait_24h}}'} );
-			});
-		});
-
-		$('#skip').bind('click', function () {
-			dc_navigate ('{{.Navigate}}', {'skip_promised_amount': 1} );
-		});
-
-		var currency_id;
-		$( "#currency_id" ).change(function () {
-			$( "#currency_id option:selected" ).each(function() {
-				currency_id = $(this).val(); 
-				$("#max_promised_amount").text( max_promised_amounts[currency_id] ) ;
-				$("#promised_amount_currency_name").text( currency_name[currency_id] ) ;
-				$("#promised_amount_currency_full_name").text( $(this).text() ) ;
-				$("#amount").val("");
-			});
-		})
-				.change();
-
-		$('#amount').bind('keydown', function(e) {
-			// Allow: backspace, delete, tab, escape, enter and .
-			if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
-				 // Allow: Ctrl+A, Command+A
-				(e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
-				 // Allow: home, end, left, right, down, up
-				(e.keyCode >= 35 && e.keyCode <= 40)) {
-					 // let it happen, don't do anything
-					 return;
-			}
-			// Ensure that it is a number and stop the keypress
-			if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-				e.preventDefault();
-			}
-			setTimeout(function(){
-				var amount = Number($("#amount").val());
-				var amount_max = Number(max_promised_amounts[currency_id]);
-				if (amount >= amount_max) {
-					$("#amount").val(amount_max);
-					$("#promised_amount").text( amount ) ;
-					$("#promised_amount2").text( amount ) ;
+	
+	
+				var ps_id;
+				for (i = 1; i < 6; i++) {
+					ps_id = $('#ps' + i).val();
+					if (ps_id > 0) {
+						payment_systems_ids = payment_systems_ids + ps_id + ',';
+					}
 				}
-			}, 0)
-		})
-		
-		$('#video_mp4').change(function () {
-			send_video('video_mp4', 'video_mp4_progress', 'promised_amount-'+currency_id, {{.UserId}});
-			//$("#source_mp4").attr('src', 'public/promised_amount_'+currency_id+'.mp4');
-		})
-
-		/*$('#video_webm_ogg').change(function () {
-			send_video('video_webm_ogg', 'video_webm_ogg_progress', 'promised_amount-'+currency_id, {{.UserId}});
-			//$("#source_webm").attr('src', 'public/promised_amount_'+currency_id+'.webm');
-			//$("#source_ogg").attr('src', 'public/promised_amount_'+currency_id+'.ogg');
-		})*/
-
-
-		/*delete window['YT'];
-		delete window['YTConfig'];
-
-		var YT = {loading: 0,loaded: 0};
-		var YTConfig = {'host': 'http://www.youtube.com'};
-		YT.loading = 1;(function(){var l = [];YT.ready = function(f) {if (YT.loaded) {f();} else {l.push(f);}};window.onYTReady = function() {YT.loaded = 1;for (var i = 0; i < l.length; i++) {try {l[i]();} catch (e) {}}};YT.setConfig = function(c) {for (var k in c) {if (c.hasOwnProperty(k)) {YTConfig[k] = c[k];}}};var a = document.createElement('script');a.id = 'www-widgetapi-script';a.src = 'https:' + '//s.ytimg.com/yts/jsbin/www-widgetapi-vfleeBgRM/www-widgetapi.js';a.async = true;var b = document.getElementsByTagName('script')[0];b.parentNode.insertBefore(a, b);})();
-
-		// 3. Define global variables for the widget and the player.
-		// The function loads the widget after the JavaScript code has
-		// downloaded and defines event handlers for callback notifications
-		// related to the widget.
-		var widget;
-		var player;
-		function onYouTubeIframeAPIReady() {
-			widget = new YT.UploadWidget('widget', {
-				width: 500,
-				events: {
-					'onUploadSuccess': onUploadSuccess,
-					'onProcessingComplete': onProcessingComplete
-				}
-			});
-		}
-
-		// 4. This function is called when a video has been successfully uploaded.
-		function onUploadSuccess(event) {
-			//alert('Video ID ' + event.data.videoId + ' was uploaded and is currently being processed. Please wait.');
-			player = new YT.Player('player', {
-				height: 390,
-				width: 640,
-				videoId: event.data.videoId,
-				events: {}
-			});
-			alert('Video ID ' + event.data.videoId + ' was uploaded and is currently being processed. Please wait.');
-			video_url_id = event.data.videoId;
-			console.log("onUploadSuccess video_url_id", video_url_id);
-			console.log("onUploadSuccess event.data", event.data);
-			console.log("onUploadSuccess event", event);
-
-			$("#refresh_youtube_div").css("display", "block");
-
-		}
-
-		// 5. This function is called when a video has been successfully processed.
-		function onProcessingComplete(event) {
-			console.log("onProcessingComplete", event);
-
-		}*/
-
-
-		$( "#from_webcam_show" ).click(function() {
-			$("#from_webcam").css("display", "block");
-			$("#from_file").css("display", "none");
-			return false;
-		});
-
-		$( "#from_file_show" ).click(function() {
-			$("#from_file").css("display", "block");
-			$("#from_webcam").css("display", "none");
-			return false;
-		});
-
-		$( "#refresh_youtube" ).click(function() {
-			var iframe = document.getElementById('player');
-			iframe.src = iframe.src;
-			console.log('player');
-			return false;
-		});
-
-		$("#main_div select").addClass( "form-control" );
-		$("#main_div input").addClass( "form-control" );
-		$("#main_div button").addClass( "btn-outline btn-primary" );
-		$("#main_div textarea").width( 500 );
-
-		$('#del_mp4').bind('click', function () {
-			$.post('ajax?controllerName=deleteVideo', {'type' : 'mp4' },
-					function(data) {
-						$('#video_mp4_ok').css("display", "none");
-						$('#del_mp4').css("display", "none");
-					});
-		});
-
-		$('#del_webm_ogg').bind('click', function () {
-			$.post('ajax?controllerName=deleteVideo', {'type' : 'webm_ogg' },
-					function(data) {
-						$('#video_webm_ogg_ok').css("display", "none");
-						$('#del_webm_ogg').css("display", "none");
-					});
-		});
-		$( "#from_webcam_show" ).click(function() {
-			$("#from_webcam").css("display", "block");
-			$("#from_file").css("display", "none");
-			$("#from_youtube").css("display", "none");
-			return false;
-		});
-		$( "#from_file_show" ).click(function() {
-			$("#from_file").css("display", "block");
-			$("#from_webcam").css("display", "none");
-			$("#from_youtube").css("display", "none");
-			return false;
-		});
-		$( "#from_youtube_show" ).click(function() {
-			$("#from_youtube").css("display", "block");
-			$("#from_file").css("display", "none");
-			$("#from_webcam").css("display", "none");
-			return false;
-		});
-
-		$( "#refresh_youtube" ).click(function() {
-			var iframe = document.getElementById('player');
-			iframe.src = iframe.src;
-			console.log('player');
-			return false;
-		});
-
-</script>
-
-<style>
-	.videosize {
-		width: 640px;
-		height: 480px;
-	}
-
-	@media (max-width: 800px) {
-		.videosize{
-			width: 500px;
-			height: 375px;
-		}
-	}
-	@media (max-width: 640px) {
-		.videosize{
-			width: 291px;
-			height: 218px;
-		}
-	}
-
-	{{if .Mobile}}
-	#selectType {
-		display: none;
-	}
-	#from_file {
-		display: block;
-	}
-	#from_webcam {
-		display: none;
-	}
-	#from_youtube {
-		display: none;
-	}
-	{{else}}
-	#from_file {
-		display: none;
-	}
-	{{end}}
-</style>
-
-<div id="main_div">
-	<h1 class="page-header">{{.Lang.promised_amount_add_title}}</h1>
-	<ol class="breadcrumb" style="position: relative;">
-		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
-		<li><a href="#promisedAmountList">{{.Lang.promised_amount_title}}</a></li>
-		<li class="active">{{.Lang.promised_amount_add_title}}</li>
-	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
-
-	{{template "alertSuccess".}}
-
-	<div id="add" class="form-inline">
-
-		<label>{{.Lang.currency}}</label>
-		<select id="currency_id" style="width: 150px">
-			{{$selected := ""}}
-			{{range $id, $data := .CurrencyList}}
-				{{if eq $id $.CurrencyId}}{{$selected := "selected"}}{{end}}
-				<option value='{{$id}}' {{$selected}}>{{$data.full_name}}</option>
-			{{end}}
-		</select>
-		<label style="margin-left: 10px">{{.Lang.amount}}</label>
-		<input id="amount" class="input-mini" type="text" style="width: 70px;"> max: <span id="max_promised_amount"></span>
-		<br>
-		<p style="margin-top: 20px">{{.Lang.promised_amount_payment_systems}}</p>
-
-		{{range $i := .CountPs}}
-			<select id="ps{{$i}}" style="width:100px">
-			<option value="0">----</option>
-				{{range $id, $name := $.PaymentSystems}}
-					{{if and (ne $id "57") (ne $id "44")}}
-						<option value='{{$id}}'>{{$name}}</option>
+				if (payment_systems_ids.length > 1)
+					payment_systems_ids = payment_systems_ids.substr(0, payment_systems_ids.length - 1);
+				else
+					payment_systems_ids = '0';
+	
+				if (video_url_id == 'null') {
+					{{if eq .Mode "pool"}}
+					$('#add_promised_amount').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+					$('#add_promised_amount').prop('disabled', true);
+					$('#errors').html('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Sending data to the pool</div>');
+					$("#for-signature").val($('#video_hash').val());
+					doSign("sign");
+					$.post( 'ajax?controllerName=SendPromisedAmountToPool', { 'filesSign' : $('#signature1').val(), 'currencyId' : $('#currency_id').val() },
+							function (data) {
+								$('#add_promised_amount').prop('disabled', false);
+								$('#add_promised_amount').html('Send');
+								if (data.success == "1") {
+									$('#errors').html('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Complete</div>');
+									{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
+	
+									$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
+									doSign();
+									{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+								} else {
+									$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+data.error+'</div>');
+								}
+							}, "JSON").fail(function() { $('#add_promised_amount').prop('disabled', false); $('#add_promised_amount').html('Send'); });;
+					{{else}}
+						{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
+						$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
+						doSign();
+						{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 					{{end}}
+				} else {
+						{{if .ShowSignData}}$("#add").css("display", "none"); $("#sign").css("display", "block");{{end}}
+	
+						$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + $("#currency_id").val() + ',' + $("#amount").val() + ',' + video_type + ',' + video_url_id + ',' + payment_systems_ids);
+						doSign();
+						{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	
+					}
+	
+				}
+	
+			});
+	
+			$('#send_to_net').bind('click', function () {
+	
+				$.post( 'ajax?controllerName=saveQueue', {
+					'type' : '{{.TxType}}',
+					'time' : '{{.TimeNow}}',
+					'user_id' : '{{.UserId}}',
+					'currency_id' :  $('#currency_id').val(),
+					'amount' :  $('#amount').val(),
+					'video_type' :  video_type,
+					'video_url_id' :  video_url_id,
+					'payment_systems_ids' :  payment_systems_ids,
+					'signature1': $('#signature1').val(),
+					'signature2': $('#signature2').val(),
+					'signature3': $('#signature3').val()
+				}, function(data) {
+					//alert(data);
+					dc_navigate ('{{.Navigate}}', {'alert': '{{.Lang.promised_amount_add_wait_24h}}'} );
+				});
+			});
+	
+			$('#skip').bind('click', function () {
+				dc_navigate ('{{.Navigate}}', {'skip_promised_amount': 1} );
+			});
+	
+			var currency_id;
+			$( "#currency_id" ).change(function () {
+				$( "#currency_id option:selected" ).each(function() {
+					currency_id = $(this).val(); 
+					$("#max_promised_amount").text( max_promised_amounts[currency_id] ) ;
+					$("#promised_amount_currency_name").text( currency_name[currency_id] ) ;
+					$("#promised_amount_currency_full_name").text( $(this).text() ) ;
+					$("#amount").val("");
+				});
+			})
+					.change();
+	
+			$('#amount').bind('keydown', function(e) {
+				// Allow: backspace, delete, tab, escape, enter and .
+				if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+					 // Allow: Ctrl+A, Command+A
+					(e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+					 // Allow: home, end, left, right, down, up
+					(e.keyCode >= 35 && e.keyCode <= 40)) {
+						 // let it happen, don't do anything
+						 return;
+				}
+				// Ensure that it is a number and stop the keypress
+				if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+					e.preventDefault();
+				}
+				setTimeout(function(){
+					var amount = Number($("#amount").val());
+					var amount_max = Number(max_promised_amounts[currency_id]);
+					if (amount >= amount_max) {
+						$("#amount").val(amount_max);
+						$("#promised_amount").text( amount ) ;
+						$("#promised_amount2").text( amount ) ;
+					}
+				}, 0)
+			})
+			
+			$('#video_mp4').change(function () {
+				send_video('video_mp4', 'video_mp4_progress', 'promised_amount-'+currency_id, {{.UserId}});
+				//$("#source_mp4").attr('src', 'public/promised_amount_'+currency_id+'.mp4');
+			})
+	
+			/*$('#video_webm_ogg').change(function () {
+				send_video('video_webm_ogg', 'video_webm_ogg_progress', 'promised_amount-'+currency_id, {{.UserId}});
+				//$("#source_webm").attr('src', 'public/promised_amount_'+currency_id+'.webm');
+				//$("#source_ogg").attr('src', 'public/promised_amount_'+currency_id+'.ogg');
+			})*/
+	
+	
+			/*delete window['YT'];
+			delete window['YTConfig'];
+	
+			var YT = {loading: 0,loaded: 0};
+			var YTConfig = {'host': 'http://www.youtube.com'};
+			YT.loading = 1;(function(){var l = [];YT.ready = function(f) {if (YT.loaded) {f();} else {l.push(f);}};window.onYTReady = function() {YT.loaded = 1;for (var i = 0; i < l.length; i++) {try {l[i]();} catch (e) {}}};YT.setConfig = function(c) {for (var k in c) {if (c.hasOwnProperty(k)) {YTConfig[k] = c[k];}}};var a = document.createElement('script');a.id = 'www-widgetapi-script';a.src = 'https:' + '//s.ytimg.com/yts/jsbin/www-widgetapi-vfleeBgRM/www-widgetapi.js';a.async = true;var b = document.getElementsByTagName('script')[0];b.parentNode.insertBefore(a, b);})();
+	
+			// 3. Define global variables for the widget and the player.
+			// The function loads the widget after the JavaScript code has
+			// downloaded and defines event handlers for callback notifications
+			// related to the widget.
+			var widget;
+			var player;
+			function onYouTubeIframeAPIReady() {
+				widget = new YT.UploadWidget('widget', {
+					width: 500,
+					events: {
+						'onUploadSuccess': onUploadSuccess,
+						'onProcessingComplete': onProcessingComplete
+					}
+				});
+			}
+	
+			// 4. This function is called when a video has been successfully uploaded.
+			function onUploadSuccess(event) {
+				//alert('Video ID ' + event.data.videoId + ' was uploaded and is currently being processed. Please wait.');
+				player = new YT.Player('player', {
+					height: 390,
+					width: 640,
+					videoId: event.data.videoId,
+					events: {}
+				});
+				alert('Video ID ' + event.data.videoId + ' was uploaded and is currently being processed. Please wait.');
+				video_url_id = event.data.videoId;
+				console.log("onUploadSuccess video_url_id", video_url_id);
+				console.log("onUploadSuccess event.data", event.data);
+				console.log("onUploadSuccess event", event);
+	
+				$("#refresh_youtube_div").css("display", "block");
+	
+			}
+	
+			// 5. This function is called when a video has been successfully processed.
+			function onProcessingComplete(event) {
+				console.log("onProcessingComplete", event);
+	
+			}*/
+	
+	
+			$( "#from_webcam_show" ).click(function() {
+				$("#from_webcam").css("display", "block");
+				$("#from_file").css("display", "none");
+				return false;
+			});
+	
+			$( "#from_file_show" ).click(function() {
+				$("#from_file").css("display", "block");
+				$("#from_webcam").css("display", "none");
+				return false;
+			});
+	
+			$( "#refresh_youtube" ).click(function() {
+				var iframe = document.getElementById('player');
+				iframe.src = iframe.src;
+				console.log('player');
+				return false;
+			});
+	
+			$("#main_div select").addClass( "form-control" );
+			$("#main_div input").addClass( "form-control" );
+			$("#main_div button").addClass( "btn-outline btn-primary" );
+			$("#main_div textarea").width( 500 );
+	
+			$('#del_mp4').bind('click', function () {
+				$.post('ajax?controllerName=deleteVideo', {'type' : 'mp4' },
+						function(data) {
+							$('#video_mp4_ok').css("display", "none");
+							$('#del_mp4').css("display", "none");
+						});
+			});
+	
+			$('#del_webm_ogg').bind('click', function () {
+				$.post('ajax?controllerName=deleteVideo', {'type' : 'webm_ogg' },
+						function(data) {
+							$('#video_webm_ogg_ok').css("display", "none");
+							$('#del_webm_ogg').css("display", "none");
+						});
+			});
+			$( "#from_webcam_show" ).click(function() {
+				$("#from_webcam").css("display", "block");
+				$("#from_file").css("display", "none");
+				$("#from_youtube").css("display", "none");
+				return false;
+			});
+			$( "#from_file_show" ).click(function() {
+				$("#from_file").css("display", "block");
+				$("#from_webcam").css("display", "none");
+				$("#from_youtube").css("display", "none");
+				return false;
+			});
+			$( "#from_youtube_show" ).click(function() {
+				$("#from_youtube").css("display", "block");
+				$("#from_file").css("display", "none");
+				$("#from_webcam").css("display", "none");
+				return false;
+			});
+	
+			$( "#refresh_youtube" ).click(function() {
+				var iframe = document.getElementById('player');
+				iframe.src = iframe.src;
+				console.log('player');
+				return false;
+			});
+	
+	</script>
+	
+	<style>
+		.videosize {
+			width: 640px;
+			height: 480px;
+		}
+	
+		@media (max-width: 800px) {
+			.videosize{
+				width: 500px;
+				height: 375px;
+			}
+		}
+		@media (max-width: 640px) {
+			.videosize{
+				width: 291px;
+				height: 218px;
+			}
+		}
+	
+		{{if .Mobile}}
+		#selectType {
+			display: none;
+		}
+		#from_file {
+			display: block;
+		}
+		#from_webcam {
+			display: none;
+		}
+		#from_youtube {
+			display: none;
+		}
+		{{else}}
+		#from_file {
+			display: none;
+		}
+		{{end}}
+	</style>
+	
+	<div id="main_div">
+		<h1 class="page-header">{{.Lang.promised_amount_add_title}}</h1>
+		<ol class="breadcrumb" style="position: relative;">
+			<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+			<li><a href="#promisedAmountList">{{.Lang.promised_amount_title}}</a></li>
+			<li class="active">{{.Lang.promised_amount_add_title}}</li>
+		<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+	
+		{{template "alertSuccess".}}
+	
+		<div id="add" class="form-inline">
+	
+			<label>{{.Lang.currency}}</label>
+			<select id="currency_id" style="width: 150px">
+				{{$selected := ""}}
+				{{range $id, $data := .CurrencyList}}
+					{{if eq $id $.CurrencyId}}{{$selected := "selected"}}{{end}}
+					<option value='{{$id}}' {{$selected}}>{{$data.full_name}}</option>
 				{{end}}
 			</select>
-		{{end}}
-
-		<br>
-
-		<p style="margin-top: 20px">{{.Lang.promised_amount_add_video_text}}</p>
-
-		<p id="selectType"><a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} <a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
-
-
-		<div id="from_webcam">
-
-			<div id="widget"></div>
-			<div id="player"></div>
-			<div id="refresh_youtube_div" style="display: none"><a href="#" id="refresh_youtube"><i class="fa fa-refresh fa-fw" style="font-size: 30px"></i></a></div>
-
-			<script src="static/js/youtube_webcam.js"></script>
-		</div>
-
-		<div id="from_youtube" style="display: none">
-
-			<table class="table table-bordered">
-				<tr><td>
-					<span class="btn btn-file"><input id="video_url" type="text"></span>
-					<br>Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU<br>
-					<div id="video_url_iframe"></div>
-				</td></tr>
-			</table>
-
-		</div>
-
-		<div id="from_file">
-			<fieldset id="from_file_form">
-				<input accept="video/mov,video/mp4"  capture="camera" type="file" name="upload" id="video_mp4" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
-				<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
-					<div style="margin:auto; text-align:center; line-height:22px">
-						<p style="margin-bottom:0px" onclick="document.getElementById('video_mp4').click();"></p>
-						<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('video_mp4').click();"><i class="fa fa-camera"></i> Select video</button>
-						{{if not .Mobile}}<p>or drag and drop file</p>{{end}}
-					</div>
-				</div>
-			</fieldset>
-			<div class="clearfix" style="margin-top: 20px"></div>
-			<div id="video_mp4_progress" class="my_progress">0%</div><br>
-			<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
-			<button id="del_mp4" style="display: none">Delete</button>
-			<div id="video" style="display: none">
-				<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
-
+			<label style="margin-left: 10px">{{.Lang.amount}}</label>
+			<input id="amount" class="input-mini" type="text" style="width: 70px;"> max: <span id="max_promised_amount"></span>
+			<br>
+			<p style="margin-top: 20px">{{.Lang.promised_amount_payment_systems}}</p>
+	
+			{{range $i := .CountPs}}
+				<select id="ps{{$i}}" style="width:100px">
+				<option value="0">----</option>
+					{{range $id, $name := $.PaymentSystems}}
+						{{if and (ne $id "57") (ne $id "44")}}
+							<option value='{{$id}}'>{{$name}}</option>
+						{{end}}
+					{{end}}
+				</select>
+			{{end}}
+	
+			<br>
+	
+			<p style="margin-top: 20px">{{.Lang.promised_amount_add_video_text}}</p>
+	
+			<p id="selectType"><a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} <a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
+	
+	
+			<div id="from_webcam">
+	
+				<div id="widget"></div>
+				<div id="player"></div>
+				<div id="refresh_youtube_div" style="display: none"><a href="#" id="refresh_youtube"><i class="fa fa-refresh fa-fw" style="font-size: 30px"></i></a></div>
+	
+				<script src="static/js/youtube_webcam.js"></script>
 			</div>
+	
+			<div id="from_youtube" style="display: none">
+	
+				<table class="table table-bordered">
+					<tr><td>
+						<span class="btn btn-file"><input id="video_url" type="text"></span>
+						<br>Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU<br>
+						<div id="video_url_iframe"></div>
+					</td></tr>
+				</table>
+	
+			</div>
+	
+			<div id="from_file">
+				<fieldset id="from_file_form">
+					<input accept="video/mov,video/mp4"  capture="camera" type="file" name="upload" id="video_mp4" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
+					<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
+						<div style="margin:auto; text-align:center; line-height:22px">
+							<p style="margin-bottom:0px" onclick="document.getElementById('video_mp4').click();"></p>
+							<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('video_mp4').click();"><i class="fa fa-camera"></i> Select video</button>
+							{{if not .Mobile}}<p>or drag and drop file</p>{{end}}
+						</div>
+					</div>
+				</fieldset>
+				<div class="clearfix" style="margin-top: 20px"></div>
+				<div id="video_mp4_progress" class="my_progress">0%</div><br>
+				<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
+				<button id="del_mp4" style="display: none">Delete</button>
+				<div id="video" style="display: none">
+					<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
+	
+				</div>
+			</div>
+			<!--
+			<div id="from_file" style="display: none">
+				<table class="table table-bordered">
+					<tr><td>
+						<span class="btn btn-file"><input id="video_url" type="text" style="width:500px"></span>
+						<br>Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU<br>
+	
+					</td></tr>
+	
+					<tr><td>
+						{{index .Lang "2_video_file"}}:<br>
+	
+						<table><tr><td>
+	
+							mp4:<input type="file" id="video_mp4" name="file" accept="video/mp4" />
+							<div id="video_mp4_progress" class="my_progress">0%</div><br>
+							<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
+							<button id="del_mp4" style="display: none">Delete</button>
+	
+						</td><td>
+	
+							WebM or Ogg: <input type="file" id="video_webm_ogg" name="file" accept="video/webm, video/ogg"/>
+							<div id="video_webm_ogg_progress" class="my_progress" >0%</div>
+							<div id="video_webm_ogg_ok" class="alert alert-success" style="display: none"></div>
+							<button id="del_webm_ogg" style="display: none">Delete</button>
+	
+						</td></tr></table>
+	
+	
+	
+						<br>
+					<div id="video" style="display: none"><video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="468" data-setup="{}"><source  src="" id="source_mp4" type='video/mp4' /><source  src="" id="source_webm" type='video/webm' /><source src="" id="source_ogg" type='video/ogg' /></video></div
+	
+					</td></tr>
+	
+				</table>
+			</div>-->
+	
+	
+			<div class="alert alert-info" style="margin-top: 30px"><strong>{{.Lang.limits}}</strong>  {{.LimitsText}}</div>
+	
+			<div id="errors"></div>
+			<button class="btn" id="add_promised_amount">{{.Lang.send_to_net}}</button> {{if eq .IncNavigate "miningMenu"}} <button  class="btn" id="skip">{{.Lang.skip}}</button>{{end}}<br><br>
+	
+	
+			<input type="hidden" id="video_hash">
+			<input type="hidden" id="video_url_id">
+	
 		</div>
-		<!--
-		<div id="from_file" style="display: none">
-			<table class="table table-bordered">
-				<tr><td>
-					<span class="btn btn-file"><input id="video_url" type="text" style="width:500px"></span>
-					<br>Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU<br>
-
-				</td></tr>
-
-				<tr><td>
-					{{index .Lang "2_video_file"}}:<br>
-
-					<table><tr><td>
-
-						mp4:<input type="file" id="video_mp4" name="file" accept="video/mp4" />
-						<div id="video_mp4_progress" class="my_progress">0%</div><br>
-						<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
-						<button id="del_mp4" style="display: none">Delete</button>
-
-					</td><td>
-
-						WebM or Ogg: <input type="file" id="video_webm_ogg" name="file" accept="video/webm, video/ogg"/>
-						<div id="video_webm_ogg_progress" class="my_progress" >0%</div>
-						<div id="video_webm_ogg_ok" class="alert alert-success" style="display: none"></div>
-						<button id="del_webm_ogg" style="display: none">Delete</button>
-
-					</td></tr></table>
-
-
-
-					<br>
-				<div id="video" style="display: none"><video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="468" data-setup="{}"><source  src="" id="source_mp4" type='video/mp4' /><source  src="" id="source_webm" type='video/webm' /><source src="" id="source_ogg" type='video/ogg' /></video></div
-
-				</td></tr>
-
-			</table>
-		</div>-->
-
-
-		<div class="alert alert-info" style="margin-top: 30px"><strong>{{.Lang.limits}}</strong>  {{.LimitsText}}</div>
-
-		<div id="errors"></div>
-		<button class="btn" id="add_promised_amount">{{.Lang.send_to_net}}</button> {{if eq .IncNavigate "miningMenu"}} <button  class="btn" id="skip">{{.Lang.skip}}</button>{{end}}<br><br>
-
-
-		<input type="hidden" id="video_hash">
-		<input type="hidden" id="video_url_id">
-
+	
+		{{template "signatures".}}
+	
 	</div>
-
-	{{template "signatures".}}
-
 </div>
 {{end}}

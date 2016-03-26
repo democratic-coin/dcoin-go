@@ -75,8 +75,8 @@
 	{{template "alertSuccess".}}
 
 	<div id="change_commission" style="{{if eq .PendingTx 0}}display:block{{else}}display:none{{end}}">
-
-		<table class="table" style="width: 600px;" id="conditions_div">
+		<div class="table_fix">
+		<table class="table" style="width:100%; min-width: 600px;" id="conditions_div">
 
 			<tr><th colspan="1" rowspan="2" style="vertical-align: middle;">{{.Lang.currency}}</th><th colspan="3" rowspan="1">{{.Lang.commission}}</th><th colspan="2" rowspan="1">{{.Lang.considered_transaction_amount}}</th></tr>
 
@@ -95,6 +95,7 @@
 			{{end}}
 
 		</table><br>
+		</div>
 		<strong>Url</strong><br>
 		<input id='url' class='form-control' type='text' value="0"><Br>
 

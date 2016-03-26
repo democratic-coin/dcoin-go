@@ -1,0 +1,107 @@
+/* Mining menu page
+----------------------------------------- */
+.mining_menu {
+	.tab-content {
+		margin-left:-15px;
+		margin-right:-15px;
+		@include min(1200px) {
+			#tab1, #tab2, #tab3 {
+				.tabs_table {
+					display:flex;
+					vertical-align:top;
+					.col-lg-3, .col-lg-4 {
+						display:flex;
+						flex:1;
+						float:none;
+						vertical-align:top;
+						.panel {
+							position:relative;
+							flex:1;
+							padding-bottom:30px;
+							.panel-footer {
+								position:absolute;
+								left:0px;
+								bottom:0px;
+								width:100%;
+								height:40px;
+								line-height:18px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

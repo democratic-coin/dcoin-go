@@ -2,10 +2,15 @@
 package main
 
 import (
+	"crypto"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"html"
 	"io/ioutil"
 	"log"
 	"net"
@@ -14,8 +19,8 @@ import (
 	"path/filepath"
 	//	"regexp"
 	//	"net/url"
-	//	"time"
 	"strings"
+	//	"time"
 )
 
 const (
@@ -32,11 +37,6 @@ type Settings struct {
 	FromEmail string `json:"from_email"`
 }
 
-type Answer struct {
-	Success bool   `json:"success"`
-	Error   string `json:"error"`
-}
-
 var (
 	GSettings Settings
 	GDB       *utils.DCDB
@@ -44,86 +44,208 @@ var (
 )
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
-	answer := Answer{false, ``}
-	cmd := r.URL.Path[1:]
-	switch cmd {
-	case `setemail`:
-		if r.Method != `POST` {
-			answer.Error = fmt.Sprintf(`Wrong method %s`, r.Method)
+	var (
+		jsonEmail             utils.JsonEmail
+		err                   error
+		publicKey, remoteAddr string
+	)
+
+	answer := utils.Answer{false, ``}
+
+	result := func(msg string) {
+
+		answer.Error = msg
+		if !answer.Success {
+			log.Println(remoteAddr, `Error:`, answer.Error)
 		} else {
-			r.ParseForm()
-			email := r.FormValue(`email`)
-			userid := r.FormValue(`user_id`)
-			text := r.FormValue(`text`)
-			subject := r.FormValue(`subject`)
-
-			//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
-			//	if !re.MatchString( email ) {
-			if !utils.ValidateEmail(email) {
-				answer.Error = fmt.Sprintf(`Incorrect email %s`, email)
-				break
-			}
-			id, _ := utils.DB.Single(`SELECT user_id from users where user_id=?`, userid).String()
-			if id != userid {
-				answer.Error = fmt.Sprintf(`Incorrect user_id %s`, userid)
-				break
-			}
-			remoteAddr := r.RemoteAddr
-			var ip string
-			if ip = r.Header.Get(XRealIP); len(ip) > 6 {
-				remoteAddr = ip
-			} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
-				remoteAddr = ip
-			}
-			if strings.Contains(remoteAddr, ":") {
-				remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
-			}
-			var ipval uint32
-			log.Println(`IP`, r.RemoteAddr, remoteAddr, ip)
-			if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
-				ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
-					(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
-			}
-			err := GDB.ExecSql(`INSERT INTO users ( user_id, email, verified, code, uptime, ip ) 
-				VALUES ( ?, ?, 0, 0, datetime('now'), ? )`,
-				userid, email, ipval)
-			if err != nil {
-				answer.Error = fmt.Sprintf(`Command error %v`, err)
-				break
-			}
-			if strings.Index(text, `<`) >= 0 || strings.Index(subject, `<`) >= 0 {
-				text = ``
-				answer.Error = fmt.Sprintf(`HTML spam`)
-			}
-			if len(text) > 0 && len(subject) > 0 {
-				err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
-					[]*Email{
-						&Email{``, email}})
-				if err != nil {
-					answer.Error = fmt.Sprintf(`Send %v`, err)
-				} else {
-					log.Println(`Sent test email`, email)
-				}
-
-			}
-			if len(answer.Error) == 0 {
-				answer.Success = true
-			} else {
-				log.Println(`Error`, answer.Error)
-			}
+			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email)
 		}
 
-	default:
-		answer.Error = fmt.Sprintf(`Unknown command %s`, cmd)
-	}
-	ret, err := json.Marshal(answer)
-	if err != nil {
-		ret = []byte(`{"success": false,
+		ret, err := json.Marshal(answer)
+		if err != nil {
+			ret = []byte(`{"success": false,
 "error":"Unknown error"}`)
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		//	w.WriteHeader(200)
+		w.Write(ret)
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	//	w.WriteHeader(200)
-	w.Write(ret)
+	checkParams := func(params ...string) error {
+		for _, name := range params {
+			if _, ok := (*jsonEmail.Params)[name]; !ok {
+				return fmt.Errorf(`Empty %s parameter`, name)
+			}
+			(*jsonEmail.Params)[name] = html.EscapeString((*jsonEmail.Params)[name])
+		}
+		return nil
+	}
+
+	remoteAddr = r.RemoteAddr
+	var ip string
+	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
+		remoteAddr = ip
+	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
+		remoteAddr = ip
+	}
+	if strings.Contains(remoteAddr, ":") {
+		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
+	}
+	var ipval uint32
+	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
+		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
+			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
+	}
+
+	if len(r.URL.Path[1:]) > 0 || r.Method != `POST` {
+		result(`Wrong method or path`)
+		return
+	}
+	r.ParseForm()
+	data := r.FormValue(`data`)
+	sign := r.FormValue(`sign`)
+	if err = json.Unmarshal([]byte(data), &jsonEmail); err != nil ||
+		jsonEmail.UserId == 0 || jsonEmail.Cmd == 0 {
+		result(`Incorrect data`)
+		return
+	}
+	//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
+	//	if !re.MatchString( email ) {
+	if !utils.ValidateEmail(jsonEmail.Email) {
+		result(`Incorrect email`)
+		return
+	}
+
+	if publicKey, err = utils.DB.GetUserPublicKey(jsonEmail.UserId); err != nil || len(publicKey) == 0 {
+		pubVal := r.FormValue(`public`)
+		if (jsonEmail.Cmd == utils.ECMD_TEST || jsonEmail.Cmd == utils.ECMD_NEW) && len(pubVal) > 0 {
+			public, _ := base64.StdEncoding.DecodeString(pubVal)
+			publicKey = string(public)
+		} else {
+			result(`Incorrect user_id or public_key`)
+			return
+		}
+	}
+	fmt.Println(jsonEmail)
+	signature, _ := base64.StdEncoding.DecodeString(sign)
+	var re interface{}
+	if re, err = x509.ParsePKIXPublicKey([]byte(publicKey)); err != nil {
+		result(err.Error())
+		return
+	}
+	if err = rsa.VerifyPKCS1v15(re.(*rsa.PublicKey), crypto.SHA1, utils.HashSha1(data),
+		signature); err != nil {
+		result(err.Error())
+		return
+	}
+	var (
+		params        []byte
+		text, subject string
+	)
+	if jsonEmail.Params == nil {
+		jsonEmail.Params = &map[string]string{}
+	}
+	if len(*jsonEmail.Params) > 0 {
+		params, _ = json.Marshal(jsonEmail.Params)
+	}
+	subject = `DCoin notifications`
+	switch jsonEmail.Cmd {
+	case utils.ECMD_NEW, utils.ECMD_TEST:
+		text = `Test`
+		subject = `Test`
+	case utils.ECMD_ADMINMSG:
+		if err := checkParams(`msg`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = `From Admin: ` + (*jsonEmail.Params)[`msg`]
+	case utils.ECMD_CASHREQ:
+		if err := checkParams(`amount`, `currency`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
+			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])
+	case utils.ECMD_CHANGESTAT:
+		if err := checkParams(`status`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = `New status: ` + (*jsonEmail.Params)[`status`]
+	case utils.ECMD_DCCAME:
+		if err := checkParams(`amount`, `currency`, `comment`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = fmt.Sprintf(`You've got %s D%s %s`, (*jsonEmail.Params)[`amount`],
+			(*jsonEmail.Params)[`currency`], (*jsonEmail.Params)[`comment`])
+	case utils.ECMD_DCSENT:
+		if err := checkParams(`amount`, `currency`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = fmt.Sprintf(`Debiting %s D%s`, (*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])
+	case utils.ECMD_UPDPRIMARY:
+		text = `Update primary key`
+	case utils.ECMD_UPDEMAIL:
+		if err := checkParams(`email`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = `New email: ` + (*jsonEmail.Params)[`email`]
+	case utils.ECMD_UPDSMS:
+		if err := checkParams(`sms`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = `New sms_http_get_request ` + (*jsonEmail.Params)[`sms`]
+	case utils.ECMD_VOTERES:
+		if err := checkParams(`text`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = (*jsonEmail.Params)[`text`]
+	case utils.ECMD_VOTETIME:
+		text = `It's 2 weeks from the moment you voted.`
+	case utils.ECMD_NEWVER:
+		if err := checkParams(`version`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = `New version: ` + (*jsonEmail.Params)[`version`]
+	case utils.ECMD_NODETIME:
+		if err := checkParams(`dif`); err != nil {
+			result(err.Error())
+			return
+		}
+		text = fmt.Sprintf("Divergence time %s sec", (*jsonEmail.Params)[`dif`])
+	default:
+		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
+		return
+	}
+	isStop, _ := GDB.Single(`SELECT id FROM stoplist where email=?`, jsonEmail.Email).Int64()
+	if isStop != 0 {
+		result(fmt.Sprintf(`Email %s is in the stop-list`, jsonEmail.Email))
+		return
+	}
+	if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
+		[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
+		errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
+		GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
+				VALUES ( ?, ?, datetime('now'), ? )`,
+			jsonEmail.Email, errsend, ipval)
+		result(errsend)
+		return
+	}
+	GDB.ExecSql(`INSERT INTO log ( user_id, email, cmd, params, uptime, ip )
+				VALUES ( ?, ?, ?, ?, datetime('now'), ? )`,
+		jsonEmail.UserId, jsonEmail.Email, jsonEmail.Cmd, string(params), ipval)
+	/*	if err != nil {
+		result( fmt.Sprintf(`SQL error %v`, err))
+		return
+	}*/
+	answer.Success = true
+
+	result(``)
 }
 
 /*func Send() {
@@ -158,7 +280,26 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
     fmt.Println( answer )
-}*/
+}
+
+func Send() {
+	time.Sleep(5 * time.Second)
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_TEST, nil /*&map[string]string{}))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_ADMINMSG, &map[string]string{`msg`: `<h1>Header</h1>`}))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CASHREQ, &map[string]string{`amount`: `<h1>Header</h1>`, `currency`: `USD`}))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CHANGESTAT, &map[string]string{`status`: `miner`}))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_DCCAME, &map[string]string{ `amount`: `10`,
+//	                                  `currency`: `USD`, `comment`: `<h1>Header</h1>` }))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_DCSENT, &map[string]string{`amount`: `111`, `currency`: `USD`}))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDPRIMARY, nil ))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDEMAIL, &map[string]string{ `email`: `my@newemail.com` }))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDSMS, &map[string]string{ `sms`: `my SMS` }))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_VOTERES, &map[string]string{ `text`: `Voting result` }))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_VOTETIME, nil ))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NEWVER, &map[string]string{ `version`: `2.1.3` } ))
+//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NODETIME, &map[string]string{ `dif`: `7` } ))
+}
+*/
 
 func main() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -206,21 +347,36 @@ func main() {
 	}
 
 	if list, err := GDB.GetAllTables(); err == nil && len(list) == 0 {
-		if err = GDB.ExecSql(`CREATE TABLE "users" (
+		if err = GDB.ExecSql(`CREATE TABLE log (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	user_id	INTEGER NOT NULL,
 	email	TEXT NOT NULL,
-	verified	INTEGER NOT NULL,
-	code	INTEGER NOT NULL,
+	cmd     INTEGER NOT NULL,
+	params  TEXT NOT NULL,
+	ip	INTEGER NOT NULL,
+	uptime	INTEGER NOT NULL
+	)`); err != nil {
+			//	verified	INTEGER NOT NULL,
+			//	code	INTEGER NOT NULL,
+
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE INDEX userid ON log (user_id)`); err != nil {
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE INDEX ip ON log (ip)`); err != nil {
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE TABLE stoplist (
+	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	email	TEXT NOT NULL,
+	error   TEXT NOT NULL,
 	ip	INTEGER NOT NULL,
 	uptime	INTEGER NOT NULL
 	)`); err != nil {
 			log.Fatalln(err)
 		}
-		if err = GDB.ExecSql(`CREATE INDEX userid ON users (user_id)`); err != nil {
-			log.Fatalln(err)
-		}
-		if err = GDB.ExecSql(`CREATE INDEX ip ON users (ip)`); err != nil {
+		if err = GDB.ExecSql(`CREATE INDEX email ON stoplist (email)`); err != nil {
 			log.Fatalln(err)
 		}
 	}

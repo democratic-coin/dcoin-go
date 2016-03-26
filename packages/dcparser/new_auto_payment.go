@@ -7,7 +7,7 @@ import (
 )
 
 func (p *Parser) NewAutoPaymentInit() error {
-	fields := []map[string]string{{"recipient": "int64"}, {"amount": "float64"}, {"commission": "float64"}, {"currency_id": "int64"}, {"period": "int64"},  {"comment": "string"}, {"sign": "bytes"}}
+	fields := []map[string]string{{"recipient": "int64"}, {"amount": "money"}, {"commission": "money"}, {"currency_id": "int64"}, {"period": "int64"},  {"comment": "string"}, {"sign": "bytes"}}
 	err := p.GetTxMaps(fields)
 	if err != nil {
 		return p.ErrInfo(err)

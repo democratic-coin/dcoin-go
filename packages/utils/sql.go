@@ -100,13 +100,13 @@ func (db *DCDB) GetMainLockName() (string, error) {
 	return db.Single("SELECT script_name FROM main_lock").String()
 }
 
-func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string, community bool, poolAdminUserId int64) error {
+/*func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string, community bool, poolAdminUserId int64) error {
 
 	if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
 		err := sendMail(message, subject, To, mailData)
 		if err != nil {
 			return ErrInfo(err)
-		}
+		}*/
 		/*} else if community {
 		// в пуле пробуем послать с смтп-ешника админа пула
 		prefix := Int64ToStr(poolAdminUserId) + "_"
@@ -118,11 +118,11 @@ func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string
 		if err != nil {
 			return ErrInfo(err)
 		}*/
-	} else {
+/*	} else {
 		return errors.New(`Incorrect mail data`)
 	}
 	return nil
-}
+}*/
 
 func (db *DCDB) GetAllTables() ([]string, error) {
 	var result []string

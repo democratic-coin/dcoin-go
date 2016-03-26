@@ -563,6 +563,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		http.HandleFunc(HandleHttpHost+"/", controllers.Index)
 		http.HandleFunc(HandleHttpHost+"/content", controllers.Content)
 		http.HandleFunc(HandleHttpHost+"/ajax", controllers.Ajax)
+		http.HandleFunc(HandleHttpHost+"/ajaxjson", controllers.AjaxJson)
 		http.HandleFunc(HandleHttpHost+"/tools", controllers.Tools)
 		http.HandleFunc(HandleHttpHost+"/cf/", controllers.IndexCf)
 		http.HandleFunc(HandleHttpHost+"/cf/content", controllers.ContentCf)
