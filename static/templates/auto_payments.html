@@ -53,12 +53,12 @@
 				<tr>
 					<td>{{.Id}}</td>
 					<td>{{.Period}}</td>
-					<td class="unixtime">{{.Time}}</td>
+					<td class="unixtime">{{.Last_payment_time}}</td>
 					<td>{{.Amount}}</td>
 					<td>{{.Commission}}</td>
 					<td>D{{index $.CurrencyList .Currency_id}}</td>
 					<td>{{.Recipient}}</td>
-					<td><a class="btn btn-danger" href="#" onclick="dc_navigate('delCredit', {'credit_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
+					<td><a class="btn btn-danger" href="#" onclick="dc_navigate('delAutoPayment', {'auto_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
 				</tr>
 			{{end}}
 		</table>

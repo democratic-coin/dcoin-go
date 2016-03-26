@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"time"
+	"fmt"
 )
 
 type walletsListPage struct {
@@ -114,6 +115,10 @@ func (c *Controller) WalletsList() (string, error) {
 	arbitrationTrustList := make(map[int64]map[int64][]string)
 	var jsonMap map[string][]string
 	for arbitrator_user_id, conditions := range arbitrationTrustList_ {
+		if len(conditions) == 0 || conditions == "NULL"  {
+			continue
+		}
+		fmt.Println(conditions)
 		err = json.Unmarshal([]byte(conditions), &jsonMap)
 		if err != nil {
 			return "", utils.ErrInfo(err)

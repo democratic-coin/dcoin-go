@@ -409,6 +409,19 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				schema_.S = s
 				schema_.PrintSchema()
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a4")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE migration_history ADD COLUMN test_migration int NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
+
+			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+			if err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
 		}
 
 
@@ -550,6 +563,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		http.HandleFunc(HandleHttpHost+"/", controllers.Index)
 		http.HandleFunc(HandleHttpHost+"/content", controllers.Content)
 		http.HandleFunc(HandleHttpHost+"/ajax", controllers.Ajax)
+		http.HandleFunc(HandleHttpHost+"/ajaxjson", controllers.AjaxJson)
 		http.HandleFunc(HandleHttpHost+"/tools", controllers.Tools)
 		http.HandleFunc(HandleHttpHost+"/cf/", controllers.IndexCf)
 		http.HandleFunc(HandleHttpHost+"/cf/content", controllers.ContentCf)

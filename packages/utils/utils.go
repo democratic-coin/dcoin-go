@@ -9,7 +9,7 @@ import (
 	crand "crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
-	"crypto/tls"
+//	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
@@ -36,8 +36,8 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
-	"net/mail"
-	"net/smtp"
+//	"net/mail"
+//  "net/smtp"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -1384,7 +1384,7 @@ func SendSms(sms_http_get_request, text string) (string, error) {
 	result, _ := json.Marshal(map[string]string{"success": html})
 	return string(result), nil
 }
-
+/*
 func sendMail(body, subj string, To string, mailData map[string]string) error {
 
 	smtpHostAndPort := mailData["smtp_server"] + ":" + mailData["smtp_port"]
@@ -1457,7 +1457,7 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 	}
 
 	c.Quit()
-
+*/
 	/*
 		if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
 			e := email.NewEmail()
@@ -1501,8 +1501,8 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 				return ErrInfo(err)
 			}
 		}*/
-	return nil
-}
+/*	return nil
+}*/
 
 // без проверки на ошибки т.к. тут ошибки не могут навредить
 func StrToInt64(s string) int64 {
