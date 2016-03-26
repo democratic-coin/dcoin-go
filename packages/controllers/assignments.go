@@ -127,6 +127,13 @@ func (c *Controller) Assignments() (string, error) {
 			break
 		}
 
+		if userInfo["pool_user_id"] != "0" {
+			userInfo["http_host"], err = c.Single(`SELECT http_host FROM miners_data WHERE user_id = ?`, userInfo["pool_user_id"]).String()
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+		}
+
 		examplePoints, err = c.GetPoints(c.Lang)
 		if err != nil {
 			return "", utils.ErrInfo(err)
@@ -274,12 +281,20 @@ func (c *Controller) Assignments() (string, error) {
 							 photo_block_id,
 							 photo_max_miner_id,
 							 miners_keepers,
-							 http_host
+							 http_host,
+							 pool_user_id
 				FROM miners_data
 				WHERE user_id = ?
 				`, promisedAmountData["user_id"]).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
+		}
+
+		if userInfo["pool_user_id"] != "0" {
+			userInfo["http_host"], err = c.Single(`SELECT http_host FROM miners_data WHERE user_id = ?`, userInfo["pool_user_id"]).String()
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
 		}
 
 		// получим ID майнеров, у которых лежат фото нужного нам юзера
