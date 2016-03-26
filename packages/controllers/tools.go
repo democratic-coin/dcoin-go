@@ -35,7 +35,7 @@ func Tools(w http.ResponseWriter, r *http.Request) {
 	log.Debug("controllerName=", controllerName)
 
 	html := ""
-	if ok, _ := regexp.MatchString(`^(?i)GetBlock|AvailableKeys$`, controllerName); !ok {
+	if ok, _ := regexp.MatchString(`^(?i)GetBlock|AvailableKeys|Chart`, controllerName); !ok {
 		html = "Access denied"
 	} else {
 		// вызываем контроллер в зависимости от шаблона
