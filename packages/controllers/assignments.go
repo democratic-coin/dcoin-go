@@ -110,7 +110,8 @@ func (c *Controller) Assignments() (string, error) {
 							 photo_block_id,
 							 photo_max_miner_id,
 							 miners_keepers,
-							 http_host
+							 http_host,
+							 pool_user_id
 				FROM votes_miners
 				LEFT JOIN miners_data ON miners_data.user_id = votes_miners.user_id
 				LEFT JOIN `+c.MyPrefix+`my_tasks ON `+c.MyPrefix+`my_tasks.id = votes_miners.id
@@ -134,7 +135,7 @@ func (c *Controller) Assignments() (string, error) {
 		// получим ID майнеров, у которых лежат фото нужного нам юзера
 		minersIds := utils.GetMinersKeepers(userInfo["photo_block_id"], userInfo["photo_max_miner_id"], userInfo["miners_keepers"], true)
 		if len(minersIds) > 0 {
-			photoHosts, err = c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+			photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.miner_id IN (" + utils.JoinInts(minersIds, ",") + ")").String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -213,7 +214,7 @@ func (c *Controller) Assignments() (string, error) {
 			// майнеры, у которых можно получить фото нужного нам юзера
 			minersIds := utils.GetMinersKeepers(photo_block_id, photo_max_miner_id, miners_keepers, true)
 			if len(minersIds) > 0 {
-				photoHosts, err = c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+				photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
 				if err != nil {
 					return "", utils.ErrInfo(err)
 				}
@@ -259,7 +260,7 @@ func (c *Controller) Assignments() (string, error) {
 
 		// если нету видео на ютубе, то получаем host юзера, где брать видео
 		if promisedAmountData["video_url_id"] == "null" {
-			videoHost, err = c.Single("SELECT http_host FROM miners_data WHERE user_id  =  ?", promisedAmountData["user_id"]).String()
+			videoHost, err = c.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE user_id  =  ?", promisedAmountData["user_id"]).String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -284,7 +285,7 @@ func (c *Controller) Assignments() (string, error) {
 		// получим ID майнеров, у которых лежат фото нужного нам юзера
 		minersIds := utils.GetMinersKeepers(userInfo["photo_block_id"], userInfo["photo_max_miner_id"], userInfo["miners_keepers"], true)
 		if len(minersIds) > 0 {
-			photoHosts, err = c.GetList("SELECT http_host FROM miners_data WHERE miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+			photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.miner_id   IN (" + utils.JoinInts(minersIds, ",") + ")").String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
