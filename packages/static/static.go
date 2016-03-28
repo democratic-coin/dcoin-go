@@ -199,6 +199,7 @@
 // static/templates/change_pool.html
 // static/templates/change_primary_key.html
 // static/templates/change_promised_amount.html
+// static/templates/chart.html
 // static/templates/chat.html
 // static/templates/credits.html
 // static/templates/currency_exchange.html
@@ -3885,6 +3886,24 @@ func staticTemplatesChange_promised_amountHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesChartHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesChartHtml() (*asset, error) {
+	path := "static/templates/chart.html"
+	name := "static/templates/chart.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesChatHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChatHtml() (*asset, error) {
 	path := "static/templates/chat.html"
@@ -5540,6 +5559,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/change_pool.html": staticTemplatesChange_poolHtml,
 	"static/templates/change_primary_key.html": staticTemplatesChange_primary_keyHtml,
 	"static/templates/change_promised_amount.html": staticTemplatesChange_promised_amountHtml,
+	"static/templates/chart.html": staticTemplatesChartHtml,
 	"static/templates/chat.html": staticTemplatesChatHtml,
 	"static/templates/credits.html": staticTemplatesCreditsHtml,
 	"static/templates/currency_exchange.html": staticTemplatesCurrency_exchangeHtml,
@@ -6091,6 +6111,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"change_primary_key.html": &bintree{staticTemplatesChange_primary_keyHtml, map[string]*bintree{
 			}},
 			"change_promised_amount.html": &bintree{staticTemplatesChange_promised_amountHtml, map[string]*bintree{
+			}},
+			"chart.html": &bintree{staticTemplatesChartHtml, map[string]*bintree{
 			}},
 			"chat.html": &bintree{staticTemplatesChatHtml, map[string]*bintree{
 			}},
