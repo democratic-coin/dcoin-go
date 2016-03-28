@@ -56,7 +56,10 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 
 		answer.Error = msg
 		if !answer.Success {
-			log.Println(remoteAddr, `Error:`, answer.Error)
+			if len(jsonEmail.Email) == 0 {
+				jsonEmail.Email = r.FormValue(`email`)
+			}
+			log.Println(remoteAddr, `Error:`, answer.Error, jsonEmail.Email)
 		} else {
 			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email)
 		}
@@ -95,12 +98,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
 			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
 	}
+	r.ParseForm()
 
 	if len(r.URL.Path[1:]) > 0 || r.Method != `POST` {
 		result(`Wrong method or path`)
 		return
 	}
-	r.ParseForm()
+
 	data := r.FormValue(`data`)
 	sign := r.FormValue(`sign`)
 	if err = json.Unmarshal([]byte(data), &jsonEmail); err != nil ||
@@ -108,6 +112,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(`Incorrect data`)
 		return
 	}
+
 	//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
 	//	if !re.MatchString( email ) {
 	if !utils.ValidateEmail(jsonEmail.Email) {
@@ -125,7 +130,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	fmt.Println(jsonEmail)
+	//	fmt.Println(jsonEmail)
 	signature, _ := base64.StdEncoding.DecodeString(sign)
 	var re interface{}
 	if re, err = x509.ParsePKIXPublicKey([]byte(publicKey)); err != nil {
