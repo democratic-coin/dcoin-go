@@ -10,18 +10,18 @@
 
 	$('#send_to_net').bind('click', function () {
 
-/*		$.post( 'ajax?controllerName=saveQueue', {
+		$.post( 'ajax?controllerName=saveQueue', {
 					'type' : '{{.TxType}}',
 					'time' : '{{.TimeNow}}',
 					'user_id' : '{{.UserId}}',
-					'auto_id' : $('#auto_id').val(),
+					'auto_payment_id' : $('#auto_id').val(),
 					'signature1': $('#signature1').val(),
 					'signature2': $('#signature2').val(),
 					'signature3': $('#signature3').val()
 				}, function (data) {
-					dc_navigate ('auto_payments', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					dc_navigate ('autoPayments', {'alert': '{{.Lang.sent_to_the_net}}'} );
 				}
-		);*/
+		);
 	});
 
 </script>

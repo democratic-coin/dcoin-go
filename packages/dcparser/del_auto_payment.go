@@ -21,13 +21,13 @@ func (p *Parser) DelAutoPaymentFront() error {
 		return p.ErrInfo(err)
 	}
 
-	verifyData := map[string]string{"auto_payment_id": "int"}
+	verifyData := map[string]string{"auto_payment_id": "bigint"}
 	err = p.CheckInputData(verifyData)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
 	// проверим, есть ли такой автоплатеж, принадлежащий нашем юзеру
-	autoPayment, err := p.Single("SELECT id FROM auto_payments WHERE id  =  ? and sender = ?", p.TxMaps.Int64["project_id"], p.TxUserID).Int64()
+	autoPayment, err := p.Single("SELECT id FROM auto_payments WHERE id  =  ? and sender = ?", p.TxMaps.Int64["auto_payment_id"], p.TxUserID).Int64()
 	if err != nil {
 		return p.ErrInfo(err)
 	}
