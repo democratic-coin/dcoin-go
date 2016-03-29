@@ -274,7 +274,8 @@
 
 				$.post('ajax?controllerName=cropPhoto', {
 						'photo': c.toDataURL(),
-						'type': '{{.PhotoType}}'
+						'type': '{{.PhotoType}}',
+						'copy': {{if .Full}}'0'{{else}}'1'{{end}},
 					}, function (data) {
 						console.log('ok');
 						{{if and (eq .NextStep "3") .IOS}}
