@@ -22,6 +22,7 @@ type upgrade1Page struct {
 	Photo           string
 	Mobile          bool
 	IOS             bool
+	Full            bool
 }
 
 func (c *Controller) Upgrade1() (string, error) {
@@ -42,13 +43,16 @@ func (c *Controller) Upgrade1() (string, error) {
 	}
 
 	step := "1"
-	nextStep := "2"
 	photoType := "face"
 	photo := userFace
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "2", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(0)
-
+	upgradeMenu, full, next := utils.MakeUpgradeMenu(0)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", next, -1)
+	nextStep := "2"
+	
+	if !full {
+		nextStep = "3"
+	}
 	TemplateStr, err := makeTemplate("upgrade_1_and_2", "upgrade1And2", &upgrade1Page{
 		Alert:           c.Alert,
 		Lang:            c.Lang,
@@ -60,6 +64,7 @@ func (c *Controller) Upgrade1() (string, error) {
 		PhotoType:       photoType,
 		Photo:           photo,
 		Step:            step,
+		Full:            full,
 		NextStep:        nextStep,
 		IOS:             utils.IOS(),
 		Mobile:          utils.Mobile()})

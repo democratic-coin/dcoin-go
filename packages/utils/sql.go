@@ -404,6 +404,12 @@ func (db *DCDB) GetList(query string, args ...interface{}) *listResult {
 	return &listResult{result, nil}
 }
 
+func (db *DCDB) GetCountMiners() (int64, error) {
+	return db.Single("SELECT count(miner_id) FROM miners WHERE active = 1").Int64()
+}
+	
+
+
 func GetParent() string {
 	parent := ""
 	for i := 2; ; i++ {

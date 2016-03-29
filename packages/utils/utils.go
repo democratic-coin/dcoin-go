@@ -3010,8 +3010,15 @@ func GetNetworkTime() (*time.Time, error) {
 
 }
 
-func MakeUpgradeMenu(cur int) string {
-	result := ""
+func MakeUpgradeMenu(cur int) ( result string, full bool, next string ) {
+	// Если количество майнеров <= 1000, то тогда не требуем профиль
+	next = IntToStr( cur + 2 )
+	if count, _ := DB.GetCountMiners(); count > 1000 {
+		full = true
+	} else if cur > 0 {
+		next = IntToStr( cur + 1 )
+	}
+	
 	for i := 0; i <= 6; i++ {
 		active := ""
 		if i <= cur {
@@ -3019,14 +3026,22 @@ func MakeUpgradeMenu(cur int) string {
 		} else {
 			active = `disabled`
 		}
+		ind := i + 1
+		if !full {
+			if i == 1 {
+				continue
+			} else if i > 1 {
+				ind--
+			}
+		}	
 		result += `
 			<div class="col-md-1 bs-wizard-step ` + active + `">
-				<div class="text-center bs-wizard-stepnum">` + IntToStr(i+1) + `</div>
+				<div class="text-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
 				<div class="progress"><div class="progress-bar"></div></div>
 				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
 			</div>`
 	}
-	return result
+	return
 }
 
 func SortMap(m map[int64]string) []map[int64]string {
