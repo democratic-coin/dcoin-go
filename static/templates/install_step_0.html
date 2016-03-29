@@ -1,101 +1,231 @@
 {{ define "installStep0" }}
-
-<style>
-	#page-wrapper{
-		margin: 0px 10% 0px 10%;
-		border: 1px solid #E7E7E7;
-		/*min-height: 550px;*/
-	}
-	#wrapper{height: 100%;}
-	#dc_content{
-		/*height: 550px;*/
-		vertical-align: middle;
-	}
-</style>
-<script>
-
-	$('.db_settings').hide();
-
-	$('#extended').bind('click', function () {
-		$('#extended_div').css("display", "block")
-		$("#settings_extended").prop("checked", true)
-	});
-	$('#standard').bind('click', function () {
-		$('#extended_div').css("display", "none")
-		$("#settings_standard").prop("checked", true)
-	});
-	$('#first_load').on('change', function() {
-		if (this.value=="nodes") {
-			$('#url').css("display", "none")
-		} else {
-			$('#url').css("display", "block")
+<div class="dc_install_step_0">
+	<style>
+		body{
+			height:100%;
+			padding-top: 30px;
+			padding-bottom:30px;
 		}
-	});
-	$('#db_type').on('change', function() {
-		console.log(this.value)
-		if (this.value=="sqlite") {
-			$('.db_settings').hide();
-			$('.sqlite_settings').show();
-		} else {
-			$('.db_settings').show();
-			$('.sqlite_settings').hide();
+		#page-wrapper{
+			margin: 0px 10% 0px 10%;
+			border: 1px solid #E7E7E7;
+			width:80%;
+			height:100%;
 		}
-	});
-
-	$('#next').bind('click', function () {
-		$('#next').prop('disabled', true);
-		$('#wrapper').spin();
-		$.post( 'content', {
-			'tpl_name' : 'installStep1',
-			'type' : $('input[name=settings]:checked').val(),
-			'url' : $('#url').val(),
-			'sqlite_db_url' : $('#sqlite_db_url').val(),
-			'first_load' : $('#first_load').val(),
-			'db_type' : $('#db_type').val(),
-			'host' : $('#host').val(),
-			'port' : $('#port').val(),
-			'db_name' : $('#db_name').val(),
-			'username' : $('#username').val(),
-			'password' : $('#password').val(),
-			'setup_password' : $('#setup_password').val(),
-			'key_password' : $('#key_password').val()
-		}, function (data) { $('#dc_content').html( data );  $('#wrapper').spin(false); }, 'html' );
-	} );
-
-</script>
-
-<div style="max-width: 600px; margin: auto; margin-top: 50px">
-
-	<!--<ul class="nav nav-tabs" style="margin-bottom: 20px">
-		<li class="active"><a href="#installStep0">Step 0</a></li>
-		<li><a href="#installStep1">Step 1</a></li>
-	</ul>-->
-	<h3>Settings</h3>
-	<lebel id="standard"><input id="settings_standard" type="radio" name="settings" value="standard" checked> Standard</lebel><br>
-	<lebel id="extended"><input id="settings_extended" type="radio" name="settings" id="extended" value="extended"> Extended</lebel><br>
-	<div id="extended_div" style="display: none">
-		<table class="table">
-
-			<tr class="setup_password"><td>Setup password</td><td><input class="form-control" type="password" id="setup_password"></td></tr>
-
-			<tr class="user_id"><td>Your user_id</td><td><input class="form-control" type="text" id="user_id"></td></tr>
-
-			<tr><td>First load</td><td><select class="form-control" id="first_load"><option value="file">Url</option><option value="nodes">Nodes</option></select><br>
-				<input class="form-control" type="text" id="url" value="http://dcoin.club/blockchain"></td></tr>
-			<tr><td>DB type</td><td><select class="form-control" id="db_type"><option value="sqlite">Sqlite</option><option value="postgresql">Postgresql</option><option value="mysql">Mysql</option></select></td></tr>
-
-			<tr class="db_settings"><td>host</td><td><input class="form-control" type="text" id="host"></td></tr>
-			<tr class="db_settings"><td>port</td><td><input class="form-control" type="text" id="port"></td></tr>
-			<tr class="db_settings"><td>db_name</td><td><input class="form-control" type="text" id="db_name"></td></tr>
-			<tr class="db_settings"><td>username</td><td><input class="form-control" type="text" id="username"></td></tr>
-			<tr class="db_settings"><td>password</td><td><input class="form-control" type="password" id="password"></td></tr>
-
-			<tr class="sqlite_settings"><td>db url</td><td><input class="form-control" type="text" id="sqlite_db_url" value="http://dcoin.club/mlitedb.db"></td></tr>
-
-		</table>
+		@media screen and (max-width: 767px){
+			body{
+				padding-top: 15px;
+				padding-bottom:15px;
+			}
+			#page-wrapper {
+				width:auto;
+				margin-left:15px;
+				margin-right:15px;
+			}
+		}
+		#page-wrapper .row {
+			display:table;
+			width:100%;
+			height:100%;
+			margin-left:0px;
+			margin-right:0px;
+		}
+		#page-wrapper .row .col-lg-12 {
+			display:table-row;
+			float:none;
+			height:100%;
+			vertical-align:middle;
+		}
+		#wrapper{height: 100%;}
+		#dc_content{
+			display:table-cell;
+			width:100%;
+			height:100%;
+			text-align:center;
+			vertical-align: middle;
+		}
+	</style>
+	<script>
+	
+		$('.db_settings').hide();
+	
+		$('#extended').bind('click', function () {
+			$('#extended_div').css("display", "block")
+			$("#settings_extended").prop("checked", true)
+			
+			if ($('body').width() < 768) {
+				var mh = 604;
+				var dmh = 270;
+			} else {
+				var mh = 506;
+				var dmh = 196;
+			}
+			
+			if ($('.db_settings').is(':hidden')) {
+				$('html, body').css("min-height", mh + "px")
+			} else {
+				$('html, body').css("min-height", mh + dmh + "px")
+			}
+		});
+		$('#standard').bind('click', function () {
+			$('#extended_div').css("display", "none")
+			$("#settings_standard").prop("checked", true)
+			$('html, body').css("min-height", "100%")
+		});
+		$('#first_load').on('change', function() {
+			if (this.value=="nodes") {
+				$('#url').css("display", "none")
+			} else {
+				$('#url').css("display", "block")
+			}
+		});
+		$('#db_type').on('change', function() {
+			console.log(this.value)
+			
+			if ($('body').width() < 768) {
+				var mh = 684;
+				var dmh = 204;
+			} else {
+				var mh = 506;
+				var dmh = 196;
+			}
+			
+			if (this.value=="sqlite") {
+				$('.db_settings').hide();
+				$('.sqlite_settings').show();
+				$('html, body').css("min-height", mh + "px")
+			} else {
+				$('.db_settings').show();
+				$('.sqlite_settings').hide();
+				$('html, body').css("min-height", mh + dmh + "px")
+			}
+		});
+	
+		$('#next').bind('click', function () {
+			$('#next').prop('disabled', true);
+			$('#wrapper').spin();
+			$.post( 'content', {
+				'tpl_name' : 'installStep1',
+				'type' : $('input[name=settings]:checked').val(),
+				'url' : $('#url').val(),
+				'sqlite_db_url' : $('#sqlite_db_url').val(),
+				'first_load' : $('#first_load').val(),
+				'db_type' : $('#db_type').val(),
+				'host' : $('#host').val(),
+				'port' : $('#port').val(),
+				'db_name' : $('#db_name').val(),
+				'username' : $('#username').val(),
+				'password' : $('#password').val(),
+				'setup_password' : $('#setup_password').val(),
+				'key_password' : $('#key_password').val()
+			}, function (data) { $('#dc_content').html( data );  $('#wrapper').spin(false); }, 'html' );
+		} );
+	
+	</script>
+	
+	<div style="max-width: 600px; margin: auto;">
+	
+		<!--<ul class="nav nav-tabs" style="margin-bottom: 20px">
+			<li class="active"><a href="#installStep0">Step 0</a></li>
+			<li><a href="#installStep1">Step 1</a></li>
+		</ul>-->
+		<h3>Settings</h3>
+		<lebel id="standard"><input id="settings_standard" type="radio" name="settings" value="standard" checked> Standard</lebel><br>
+		<lebel id="extended"><input id="settings_extended" type="radio" name="settings" id="extended" value="extended"> Extended</lebel>
+		<div id="extended_div" style="display: none">
+			<form class="extended_form">
+				<div class="form-group setup_password">
+					<label class="col-sm-3 control-label" for="setup_password">Setup password</label>
+					<div class="col-sm-9">
+						<input id="setup_password" class="form-control" type="password">
+					</div>
+				</div>
+				<div class="form-group user_id">
+					<label class="col-sm-3 control-label" for="user_id">Your user ID</label>
+					<div class="col-sm-9">
+						<input id="user_id" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label" for="first_load">First load</label>
+					<div class="col-sm-9">
+						<select id="first_load" class="form-control">
+							<option value="file">Url</option>
+							<option value="nodes">Nodes</option>
+						</select>
+						<div>
+							<input class="form-control" type="text" id="url" value="http://dcoin.club/blockchain">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label" for="db_type">DB type</label>
+					<div class="col-sm-9">
+						<select id="db_type" class="form-control">
+							<option value="sqlite">Sqlite</option>
+							<option value="postgresql">Postgresql</option>
+							<option value="mysql">Mysql</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group db_settings">
+					<label class="col-sm-3 control-label" for="host">Host</label>
+					<div class="col-sm-9">
+						<input id="host" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="form-group db_settings">
+					<label class="col-sm-3 control-label" for="port">Port</label>
+					<div class="col-sm-9">
+						<input id="port" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="form-group db_settings">
+					<label class="col-sm-3 control-label" for="db_name">DB name</label>
+					<div class="col-sm-9">
+						<input id="db_name" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="form-group db_settings">
+					<label class="col-sm-3 control-label" for="username">Username</label>
+					<div class="col-sm-9">
+						<input id="username" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="form-group db_settings">
+					<label class="col-sm-3 control-label" for="password">Password</label>
+					<div class="col-sm-9">
+						<input id="password" class="form-control" type="password">
+					</div>
+				</div>
+				<div class="form-group sqlite_settings">
+					<label class="col-sm-3 control-label" for="sqlite_db_url">DB url</label>
+					<div class="col-sm-9">
+						<input id="sqlite_db_url" class="form-control" type="text" value="http://dcoin.club/mlitedb.db">
+					</div>
+				</div>
+			</form>
+			<!--<table class="table">
+	
+				<tr class="setup_password"><td>Setup password</td><td><input class="form-control" type="password" id="setup_password"></td></tr>
+	
+				<tr class="user_id"><td>Your user_id</td><td><input class="form-control" type="text" id="user_id"></td></tr>
+	
+				<tr><td>First load</td><td><select class="form-control" id="first_load"><option value="file">Url</option><option value="nodes">Nodes</option></select><br>
+					<input class="form-control" type="text" id="url" value="http://dcoin.club/blockchain"></td></tr>
+				<tr><td>DB type</td><td><select class="form-control" id="db_type"><option value="sqlite">Sqlite</option><option value="postgresql">Postgresql</option><option value="mysql">Mysql</option></select></td></tr>
+	
+				<tr class="db_settings"><td>host</td><td><input class="form-control" type="text" id="host"></td></tr>
+				<tr class="db_settings"><td>port</td><td><input class="form-control" type="text" id="port"></td></tr>
+				<tr class="db_settings"><td>db_name</td><td><input class="form-control" type="text" id="db_name"></td></tr>
+				<tr class="db_settings"><td>username</td><td><input class="form-control" type="text" id="username"></td></tr>
+				<tr class="db_settings"><td>password</td><td><input class="form-control" type="password" id="password"></td></tr>
+	
+				<tr class="sqlite_settings"><td>db url</td><td><input class="form-control" type="text" id="sqlite_db_url" value="http://dcoin.club/mlitedb.db"></td></tr>
+	
+			</table>-->
+		</div>
+		<button class="btn btn-outline btn-primary btn-block" id="next">{{.Lang.next}}</button>
 	</div>
-	<br>
-	<button class="btn btn-outline btn-primary btn-block" id="next">{{.Lang.next}}</button>
 </div>
-
 {{end}}

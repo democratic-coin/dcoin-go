@@ -84,7 +84,7 @@
 				{{range $id, $data := .MyTrustList}}
 				<tr>
 					<td class='arbitrator_id'>{{index $data "arbitrator_user_id"}}</td>
-					{{if ne (index $data "url") "0"}}<td><a href='{{index $data "url"}}' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
+					{{if ne (index $data "url") "0"}}<td><a href='{{index $data "url"}}' onclick='THRUST.remote.send("{{index $data "url"}}")' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
 					<td>{{index $data "count"}}</td>
 					<td><button class='btn btn-default btn_del'>del</button></td>
 				</tr>
@@ -124,7 +124,7 @@
 			{{range .Arbitrators}}
 			<tr>
 			<td>{{.Arbitrator_user_id}}</td>
-			{{if ne .Url "0"}}<td><a href='{{.Url}}' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
+			{{if ne .Url "0"}}<td><a href='{{.Url}}' onclick='THRUST.remote.send("{{.Url}}")' target='_blank'><i class='fa fa-external-link'></i></a></td>{{else}}<td></td>{{end}}
 			<td>{{.Count}}</td>
 			<td>{{.Refund_data_count}}</td>
 			<td>{{if gt .Refund_data_count 0}}{{round (div .Refund_data_sum .Refund_data_count) 2}}{{else}}0{{end}}</td>
