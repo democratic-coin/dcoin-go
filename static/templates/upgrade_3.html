@@ -73,7 +73,7 @@
 	</div>
 
 	<div class="clearfix"></div>
-
+{{if .Full}}
 	<div id="comment-profile" style="font-weight:bold;">2</div>
 	<div class="divwidth" style="position: relative; float: left">
 		<canvas class="canvas bgwidth" id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg');"></canvas>
@@ -85,29 +85,28 @@
 		<br><button onclick="fclear('profile')"  type="button" class="btn btn-warning">{{.Lang.clean}}</button><br><br>
 	</div>
 	<div class="clearfix"></div>
-
-
-
+{{end}}
 
 	<script>
 
 		var example_face = [
 			{{js .ExamplePoints.face}}
 		]
-		var example_profile = [
-			{{js .ExamplePoints.profile}}
-		]
 		if (w == 300) {
 			for (var i=0; i < example_face.length; i++) {
 				example_face[i][0] = example_face[i][0]*0.85;
 				example_face[i][1] = example_face[i][1]*0.85;
 			}
+		}
+		var example_profile = [
+			{{js .ExamplePoints.profile}}
+		]
+		if (w == 300) {
 			for (var i=0; i < example_profile.length; i++) {
 				example_profile[i][0] = example_profile[i][0]*0.85;
 				example_profile[i][1] = example_profile[i][1]*0.85;
 			}
 		}
-
 		coords.getObject("face").init({
 			for_mouse_move : "face_coords_mouse",
 			example_area : "example_face",
@@ -120,6 +119,7 @@
 
 		});
 
+{{if .Full}}
 		coords.getObject("profile").init({
 
 			for_mouse_move : "profile_coords_mouse",
@@ -132,7 +132,8 @@
 
 		example_coords : example_profile
 		});
-
+{{end}}
+		
 		function fclear (name) {
 			coords.getObject(name).clear();
 		}

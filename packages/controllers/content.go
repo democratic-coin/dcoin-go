@@ -452,8 +452,6 @@ func Content(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(`<script>
 								$( document ).ready(function() {
-								$('.lng_1').attr('href', '#` + tplName + `/lang=1');
-								$('.lng_42').attr('href', '#` + tplName + `/lang=42');
 								` + blockJs + `
 								});
 								</script>`))

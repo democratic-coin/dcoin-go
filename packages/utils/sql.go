@@ -100,13 +100,13 @@ func (db *DCDB) GetMainLockName() (string, error) {
 	return db.Single("SELECT script_name FROM main_lock").String()
 }
 
-func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string, community bool, poolAdminUserId int64) error {
+/*func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string, community bool, poolAdminUserId int64) error {
 
 	if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
 		err := sendMail(message, subject, To, mailData)
 		if err != nil {
 			return ErrInfo(err)
-		}
+		}*/
 		/*} else if community {
 		// в пуле пробуем послать с смтп-ешника админа пула
 		prefix := Int64ToStr(poolAdminUserId) + "_"
@@ -118,11 +118,11 @@ func (db *DCDB) SendMail(message, subject, To string, mailData map[string]string
 		if err != nil {
 			return ErrInfo(err)
 		}*/
-	} else {
+/*	} else {
 		return errors.New(`Incorrect mail data`)
 	}
 	return nil
-}
+}*/
 
 func (db *DCDB) GetAllTables() ([]string, error) {
 	var result []string
@@ -403,6 +403,12 @@ func (db *DCDB) GetList(query string, args ...interface{}) *listResult {
 	}
 	return &listResult{result, nil}
 }
+
+func (db *DCDB) GetCountMiners() (int64, error) {
+	return db.Single("SELECT count(miner_id) FROM miners WHERE active = 1").Int64()
+}
+	
+
 
 func GetParent() string {
 	parent := ""
@@ -1305,7 +1311,7 @@ func (db *DCDB) GetBalances(userId int64) ([]DCAmounts, error) {
 		if err != nil {
 			return result, err
 		}
-		amount += forexOrdersAmount
+		amount -= forexOrdersAmount
 		pctSec, err := db.Single("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC", currency_id).Float64()
 		if err != nil {
 			return result, err
@@ -1644,6 +1650,7 @@ type PromisedAmounts struct {
 	Tdc                float64
 	TdcAmount          float64
 	Status             string
+	InProcess          bool
 }
 
 func (db *DCDB) GetPromisedAmounts(userId, cash_request_time int64) (int64, []PromisedAmounts, map[int]DCAmounts, error) {
@@ -1740,7 +1747,7 @@ func (db *DCDB) GetPromisedAmounts(userId, cash_request_time int64) (int64, []Pr
 		pct_sec := pct
 		pct = Round((math.Pow(1+pct, 3600*24*365)-1)*100, 2)
 		// тут accepted значит просто попало в блок
-		promisedAmountListAccepted = append(promisedAmountListAccepted, PromisedAmounts{Id: id, Pct: pct, PctSec: pct_sec, CurrencyId: currency_id, Amount: amount, MaxAmount: maxAmount, MaxOtherCurrencies: maxOtherCurrencies, StatusText: status_text, Tdc: tdc, TdcAmount: tdc_amount, Status: status})
+		promisedAmountListAccepted = append(promisedAmountListAccepted, PromisedAmounts{Id: id, Pct: pct, PctSec: pct_sec, CurrencyId: currency_id, Amount: amount, MaxAmount: maxAmount, MaxOtherCurrencies: maxOtherCurrencies, StatusText: status_text, Tdc: tdc, TdcAmount: tdc_amount, Status: status, InProcess: false})
 		// для вывода на главную общей инфы
 		promisedAmountListGen[int(currency_id)] = DCAmounts{Tdc: tdc, Amount: amount, PctSec: pct_sec, CurrencyId: (currency_id)}
 	}

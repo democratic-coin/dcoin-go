@@ -40,7 +40,7 @@ func (c *Controller) Upgrade0() (string, error) {
 	}
 
 	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "2", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(0)
+	upgradeMenu,_,_ := utils.MakeUpgradeMenu(0)
 
 	TemplateStr, err := makeTemplate("upgrade_0", "upgrade0", &upgrade0Page{
 		Alert:           c.Alert,

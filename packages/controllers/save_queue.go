@@ -1440,6 +1440,14 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("comment")))...)
 		data = append(data, binSignatures...)
 
+	case "DelAutoPayment":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("auto_payment_id")))...)
+		data = append(data, binSignatures...)
+
 	case "SwitchPool":
 
 		data = utils.DecToBin(txType, 1)

@@ -99,9 +99,16 @@ func (c *Controller) Upgrade7() (string, error) {
 		nodePublicKey = string(utils.BinToHex([]byte(nodePublicKey)))
 	}
 
-	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", "8", -1)
-	upgradeMenu := utils.MakeUpgradeMenu(6)
+	upgradeMenu,full,next := utils.MakeUpgradeMenu(6)
+	saveAndGotoStep := strings.Replace(c.Lang["save_and_goto_step"], "[num]", next, -1)
 
+	stepshift := 2
+	if full {
+		stepshift = 3
+	}
+	for ilng,lngname := range []string{`empty_points`, `empty_video`, `empty_node`, `empty_geolocation`} {
+		c.Lang[ lngname ] += fmt.Sprintf( " %d.", ilng+stepshift )
+	}
 	var noExistsMp4 bool
 	if _, err := os.Stat(*utils.Dir + "/public/" + utils.Int64ToStr(c.SessUserId) + "_user_video.mp4"); os.IsNotExist(err) {
 		noExistsMp4 = true

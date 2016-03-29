@@ -20,10 +20,10 @@
 					}, function (data) {
 						chatMessage = data.success;
 						decryptChatMessage = $('#myChatMessage').val();
-						sendToTheChat()
+						sendToTheChat();
 					}, 'JSON');
 				} else {
-					sendToTheChat()
+					sendToTheChat();
 				}
 			}, 500);
 
@@ -73,6 +73,7 @@
 					}, function (data) {
 						$('#sendToChat').prop('disabled', false);
 						$('#sendToChat').html('Send');
+						$("#myChatMessage").val("");
 					});
 				}
 			};
@@ -157,7 +158,7 @@
 		function lock_unlock() {
 			if ($('#chatLockIco').attr('class') == "fa fa-lock") {
 				$('#chatLockIco').attr("class", "fa fa-unlock");
-				$("#myChatMessage").css("display", "inline-block");
+				$("#myChatMessage, #sendToChat").css("display", "block");
 				$("#selectReceiver").css("display", "none");
 				$("#myChatMessage").css("background-color", "#fff");
 				$("#myChatMessage").css("color", "#000");
@@ -165,7 +166,7 @@
 			} else {
 				$('#chatLockIco').attr("class", "fa fa-lock");
 				if ($("#chatUserIdReceiver").val() == "0") {
-					$("#myChatMessage").css("display", "none");
+					$("#myChatMessage, #sendToChat").css("display", "none");
 					$("#selectReceiver").css("display", "inline-block");
 				}
 				$("#myChatMessage").css("background-color", "#BC5247");

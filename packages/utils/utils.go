@@ -9,7 +9,7 @@ import (
 	crand "crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
-	"crypto/tls"
+//	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
@@ -36,8 +36,8 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
-	"net/mail"
-	"net/smtp"
+//	"net/mail"
+//  "net/smtp"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -1384,7 +1384,7 @@ func SendSms(sms_http_get_request, text string) (string, error) {
 	result, _ := json.Marshal(map[string]string{"success": html})
 	return string(result), nil
 }
-
+/*
 func sendMail(body, subj string, To string, mailData map[string]string) error {
 
 	smtpHostAndPort := mailData["smtp_server"] + ":" + mailData["smtp_port"]
@@ -1457,7 +1457,7 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 	}
 
 	c.Quit()
-
+*/
 	/*
 		if len(mailData["use_smtp"]) > 0 && len(mailData["smtp_server"]) > 0 {
 			e := email.NewEmail()
@@ -1501,8 +1501,8 @@ func sendMail(body, subj string, To string, mailData map[string]string) error {
 				return ErrInfo(err)
 			}
 		}*/
-	return nil
-}
+/*	return nil
+}*/
 
 // без проверки на ошибки т.к. тут ошибки не могут навредить
 func StrToInt64(s string) int64 {
@@ -3010,8 +3010,15 @@ func GetNetworkTime() (*time.Time, error) {
 
 }
 
-func MakeUpgradeMenu(cur int) string {
-	result := ""
+func MakeUpgradeMenu(cur int) ( result string, full bool, next string ) {
+	// Если количество майнеров <= 1000, то тогда не требуем профиль
+	next = IntToStr( cur + 2 )
+	if count, _ := DB.GetCountMiners(); count > 1000 {
+		full = true
+	} else if cur > 0 {
+		next = IntToStr( cur + 1 )
+	}
+	
 	for i := 0; i <= 6; i++ {
 		active := ""
 		if i <= cur {
@@ -3019,14 +3026,22 @@ func MakeUpgradeMenu(cur int) string {
 		} else {
 			active = `disabled`
 		}
+		ind := i + 1
+		if !full {
+			if i == 1 {
+				continue
+			} else if i > 1 {
+				ind--
+			}
+		}	
 		result += `
 			<div class="col-md-1 bs-wizard-step ` + active + `">
-				<div class="text-center bs-wizard-stepnum">` + IntToStr(i+1) + `</div>
+				<div class="text-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
 				<div class="progress"><div class="progress-bar"></div></div>
 				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
 			</div>`
 	}
-	return result
+	return
 }
 
 func SortMap(m map[int64]string) []map[int64]string {

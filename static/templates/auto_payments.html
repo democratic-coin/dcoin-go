@@ -37,7 +37,8 @@
 		{{template "alertSuccess".}}
 
 		<h3>{{.Lang.I_debtor}}</h3>
-		<table class="table" style="width:500px">
+		<div class="table_fix">
+		<table class="table">
 			<tr>
 				<th>ID</th>
 				<th>Period</th>
@@ -52,15 +53,16 @@
 				<tr>
 					<td>{{.Id}}</td>
 					<td>{{.Period}}</td>
-					<td class="unixtime">{{.Time}}</td>
+					<td class="unixtime">{{.Last_payment_time}}</td>
 					<td>{{.Amount}}</td>
 					<td>{{.Commission}}</td>
 					<td>D{{index $.CurrencyList .Currency_id}}</td>
 					<td>{{.Recipient}}</td>
-					<td><a class="btn btn-danger" href="#" onclick="dc_navigate('delCredit', {'credit_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
+					<td><a class="btn btn-danger" href="#" onclick="dc_navigate('delAutoPayment', {'auto_id':'{{.Id}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i></a></td>
 				</tr>
 			{{end}}
 		</table>
+		</div>
 
 		<button type="button" class="btn btn-primary" id="new_auto_payment">{{.Lang.create_auto_payment}}</button>
 

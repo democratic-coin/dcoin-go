@@ -22,6 +22,7 @@
 // static/css/sb-admin-2.css
 // static/css/sb-admin.css
 // static/css/social-buttons.css
+// static/css/style.css
 // static/css/tooltipster-shadow.css
 // static/css/tooltipster.css
 // static/css/upgrade.css
@@ -158,6 +159,9 @@
 // static/lang/locale_en-US.ini
 // static/lang/locale_ru-RU.ini
 // static/nodes.inc
+// static/sass/addons/_mixins.scss
+// static/sass/pages/_home.scss
+// static/sass/style.scss
 // static/swf/sAS3Cam.swf
 // static/templates/.directory
 // static/templates/abuse.html
@@ -195,6 +199,7 @@
 // static/templates/change_pool.html
 // static/templates/change_primary_key.html
 // static/templates/change_promised_amount.html
+// static/templates/chart.html
 // static/templates/chat.html
 // static/templates/credits.html
 // static/templates/currency_exchange.html
@@ -681,6 +686,24 @@ func staticCssSbAdminCss() (*asset, error) {
 func staticCssSocialButtonsCss() (*asset, error) {
 	path := "static/css/social-buttons.css"
 	name := "static/css/social-buttons.css"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticCssStyleCss reads file data from disk. It returns an error on failure.
+func staticCssStyleCss() (*asset, error) {
+	path := "static/css/style.css"
+	name := "static/css/style.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3143,6 +3166,60 @@ func staticNodesInc() (*asset, error) {
 	return a, err
 }
 
+// staticSassAddons_mixinsScss reads file data from disk. It returns an error on failure.
+func staticSassAddons_mixinsScss() (*asset, error) {
+	path := "static/sass/addons/_mixins.scss"
+	name := "static/sass/addons/_mixins.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassPages_homeScss reads file data from disk. It returns an error on failure.
+func staticSassPages_homeScss() (*asset, error) {
+	path := "static/sass/pages/_home.scss"
+	name := "static/sass/pages/_home.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassStyleScss reads file data from disk. It returns an error on failure.
+func staticSassStyleScss() (*asset, error) {
+	path := "static/sass/style.scss"
+	name := "static/sass/style.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSwfSas3camSwf reads file data from disk. It returns an error on failure.
 func staticSwfSas3camSwf() (*asset, error) {
 	path := "static/swf/sAS3Cam.swf"
@@ -3795,6 +3872,24 @@ func staticTemplatesChange_primary_keyHtml() (*asset, error) {
 func staticTemplatesChange_promised_amountHtml() (*asset, error) {
 	path := "static/templates/change_promised_amount.html"
 	name := "static/templates/change_promised_amount.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesChartHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesChartHtml() (*asset, error) {
+	path := "static/templates/chart.html"
+	name := "static/templates/chart.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -5287,6 +5382,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/css/sb-admin-2.css": staticCssSbAdmin2Css,
 	"static/css/sb-admin.css": staticCssSbAdminCss,
 	"static/css/social-buttons.css": staticCssSocialButtonsCss,
+	"static/css/style.css": staticCssStyleCss,
 	"static/css/tooltipster-shadow.css": staticCssTooltipsterShadowCss,
 	"static/css/tooltipster.css": staticCssTooltipsterCss,
 	"static/css/upgrade.css": staticCssUpgradeCss,
@@ -5423,6 +5519,9 @@ var _bindata = map[string]func() (*asset, error){
 	"static/lang/locale_en-US.ini": staticLangLocale_enUsIni,
 	"static/lang/locale_ru-RU.ini": staticLangLocale_ruRuIni,
 	"static/nodes.inc": staticNodesInc,
+	"static/sass/addons/_mixins.scss": staticSassAddons_mixinsScss,
+	"static/sass/pages/_home.scss": staticSassPages_homeScss,
+	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
 	"static/templates/.directory": staticTemplatesDirectory,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
@@ -5460,6 +5559,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/change_pool.html": staticTemplatesChange_poolHtml,
 	"static/templates/change_primary_key.html": staticTemplatesChange_primary_keyHtml,
 	"static/templates/change_promised_amount.html": staticTemplatesChange_promised_amountHtml,
+	"static/templates/chart.html": staticTemplatesChartHtml,
 	"static/templates/chat.html": staticTemplatesChatHtml,
 	"static/templates/credits.html": staticTemplatesCreditsHtml,
 	"static/templates/currency_exchange.html": staticTemplatesCurrency_exchangeHtml,
@@ -5629,6 +5729,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"sb-admin.css": &bintree{staticCssSbAdminCss, map[string]*bintree{
 			}},
 			"social-buttons.css": &bintree{staticCssSocialButtonsCss, map[string]*bintree{
+			}},
+			"style.css": &bintree{staticCssStyleCss, map[string]*bintree{
 			}},
 			"tooltipster-shadow.css": &bintree{staticCssTooltipsterShadowCss, map[string]*bintree{
 			}},
@@ -5921,6 +6023,18 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		}},
 		"nodes.inc": &bintree{staticNodesInc, map[string]*bintree{
 		}},
+		"sass": &bintree{nil, map[string]*bintree{
+			"addons": &bintree{nil, map[string]*bintree{
+				"_mixins.scss": &bintree{staticSassAddons_mixinsScss, map[string]*bintree{
+				}},
+			}},
+			"pages": &bintree{nil, map[string]*bintree{
+				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{
+				}},
+			}},
+			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{
+			}},
+		}},
 		"swf": &bintree{nil, map[string]*bintree{
 			"sAS3Cam.swf": &bintree{staticSwfSas3camSwf, map[string]*bintree{
 			}},
@@ -5997,6 +6111,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"change_primary_key.html": &bintree{staticTemplatesChange_primary_keyHtml, map[string]*bintree{
 			}},
 			"change_promised_amount.html": &bintree{staticTemplatesChange_promised_amountHtml, map[string]*bintree{
+			}},
+			"chart.html": &bintree{staticTemplatesChartHtml, map[string]*bintree{
 			}},
 			"chat.html": &bintree{staticTemplatesChatHtml, map[string]*bintree{
 			}},

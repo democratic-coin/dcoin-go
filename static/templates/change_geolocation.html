@@ -60,7 +60,7 @@
 		<br>
 		<button type="button" class="btn btn-primary" id="show_map">Show map</button><br><br>
 
-		<div id="map_canvas" style="width: 640px; height: 480px; margin-bottom:20px; display:none"></div>
+		<div id="map_canvas" style="width: 100%; height: 480px; margin-bottom:20px; display:none"></div>
 		<input id="latitude" class="input" type="text" placeholder="latitude" value="{{.MyGeolocation.lat}}"><input id="longitude" class="input" type="text" placeholder="longitude" value="{{.MyGeolocation.lon}}">
 		<br>
 		<button class="btn" onclick="next_step()">{{.Lang.next}}</button>

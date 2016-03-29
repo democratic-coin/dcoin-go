@@ -1,231 +1,238 @@
 {{define "miningMenu"}}
-<script>
-	$(document).ready(function() {
-		$( "#progress_bar" ).load( "ajax?controllerName=progressBar" );
-	});
-</script>
-
-<h1 class="page-header">{{.Lang.mining}}</h1>
-
-{{template "alertSuccess".}}
-<div>
-
-	<!-- Nav tabs -->
-	<ul class="nav nav-tabs" style="margin-bottom: 20px">
-		<li class="active"><a aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
-		</li>
-		<li class=""><a aria-expanded="false" href="#tab2" data-toggle="tab">{{.Lang.assignments}}</a>
-		</li>
-		<li class=""><a aria-expanded="false" href="#tab3" data-toggle="tab">{{.Lang.additionally}}</a>
-		</li>
-	</ul>
-
-	<!-- Tab panes -->
-	<div class="tab-content">
-		<div class="tab-pane fade active in" id="tab1">
-			<div class="col-lg-3">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						{{.Lang.promised_amounts}}
+<div class="mining_menu">
+	<script>
+		$(document).ready(function() {
+			$( "#progress_bar" ).load( "ajax?controllerName=progressBar" );
+		});
+	</script>
+	
+	<h1 class="page-header">{{.Lang.mining}}</h1>
+	
+	{{template "alertSuccess".}}
+	<div>
+	
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" style="margin-bottom: 20px">
+			<li class="active"><a aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
+			</li>
+			<li class=""><a aria-expanded="false" href="#tab2" data-toggle="tab">{{.Lang.assignments}}</a>
+			</li>
+			<li class=""><a aria-expanded="false" href="#tab3" data-toggle="tab">{{.Lang.additionally}}</a>
+			</li>
+		</ul>
+	
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="tab1">
+				<div class="tabs_table">
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								{{.Lang.promised_amounts}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_promised_amounts_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#promisedAmountList">{{.Lang.goto}}</a>
+							</div>
+						</div>
 					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_promised_amounts_text}}</p>
+		
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								{{.Lang.outgoing}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_outgoing_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#" onclick="map_navigate('cashRequestOut')">{{.Lang.goto}}</a>
+							</div>
+						</div>
 					</div>
-					<div class="panel-footer">
-						<a href="#promisedAmountList">{{.Lang.goto}}</a>
+		
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								{{.Lang.vote_for_me}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_vote_for_me_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#voteForMe">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+			</div>
+			<div class="tab-pane fade" id="tab2">
+				<div class="tabs_table">
+					<div class="col-lg-3">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								{{.Lang.points}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_points_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#points">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+		
+		
+					<div class="col-lg-3">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								{{.Lang.inbox}}
+							</div>
+							<div class="panel-body">
+								<p>{{noescape .Lang.mining_menu_inbox_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#cashRequestIn">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+		
+		
+		
+					<div class="col-lg-3">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								{{.Lang.tasks}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_tasks_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#" onclick="map_navigate('assignments')">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+		
+		
+					<div class="col-lg-3">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								{{.Lang.voting}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_voting_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#voting">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+	
+	
+	
+			</div>
+			<div class="tab-pane fade" id="tab3">
+	
+				<div class="tabs_table">
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{{.Lang.reg_users}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_reg_users_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#newUser">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+		
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{{.Lang.commission}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_commission_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#changeCommission">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+		
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{{.Lang.holidays}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_holidays_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#holidaysList">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tabs_table">
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{{.Lang.geolocation}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.mining_menu_geolocation_text}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#" onclick="map_navigate ('changeGeolocation')">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								{{.Lang.sms_and_email_notifications}}
+							</div>
+							<div class="panel-body">
+								<p>{{.Lang.sms_and_email_notifications}}</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#" onclick="map_navigate ('Notifications')">{{.Lang.goto}}</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								Exchange voting
+							</div>
+							<div class="panel-body">
+								<p>Exchange voting</p>
+							</div>
+							<div class="panel-footer">
+								<a href="#" onclick="dc_navigate ('VotesExchange')">{{.Lang.goto}}</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="col-lg-3">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						{{.Lang.outgoing}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_outgoing_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#" onclick="map_navigate('cashRequestOut')">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-3">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						{{.Lang.vote_for_me}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_vote_for_me_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#voteForMe">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-
 		</div>
-		<div class="tab-pane fade" id="tab2">
-
-			<div class="col-lg-3">
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						{{.Lang.points}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_points_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#points">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-
-			<div class="col-lg-3">
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						{{.Lang.inbox}}
-					</div>
-					<div class="panel-body">
-						<p>{{noescape .Lang.mining_menu_inbox_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#cashRequestIn">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-
-
-			<div class="col-lg-3">
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						{{.Lang.tasks}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_tasks_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#" onclick="map_navigate('assignments')">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-
-			<div class="col-lg-3">
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						{{.Lang.voting}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_voting_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#voting">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-
-
-
-
-		</div>
-		<div class="tab-pane fade" id="tab3">
-
-
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{{.Lang.reg_users}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_reg_users_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#newUser">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{{.Lang.commission}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_commission_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#changeCommission">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{{.Lang.holidays}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_holidays_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#holidaysList">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{{.Lang.geolocation}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.mining_menu_geolocation_text}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#" onclick="map_navigate ('changeGeolocation')">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{{.Lang.sms_and_email_notifications}}
-					</div>
-					<div class="panel-body">
-						<p>{{.Lang.sms_and_email_notifications}}</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#" onclick="map_navigate ('Notifications')">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Exchange voting
-					</div>
-					<div class="panel-body">
-						<p>Exchange voting</p>
-					</div>
-					<div class="panel-footer">
-						<a href="#" onclick="dc_navigate ('VotesExchange')">{{.Lang.goto}}</a>
-					</div>
-				</div>
-			</div>
-
-		</div>
+	
+	
 	</div>
-
-
+	
+	<div class="clearfix"></div>
+	<div class="table_fix">
+	{{noescape .LastTxFormatted}}
+	<script src="static/js/unixtime.js"></script>
+	
+	{{end}}
+	</div>
 </div>
-
-<div class="clearfix"></div>
-{{noescape .LastTxFormatted}}
-<script src="static/js/unixtime.js"></script>
-
-{{end}}

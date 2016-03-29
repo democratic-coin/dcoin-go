@@ -46,7 +46,7 @@ func (c *Controller) InstallStep1() (string, error) {
 	confIni, err := config.NewConfig("ini", *utils.Dir+"/config.ini")
 	//confIni.Set("sql_log", "1")
 	confIni.Set("error_log", "1")
-	confIni.Set("log_level", "DEBUG")
+	confIni.Set("log_level", "ERROR")
 	confIni.Set("log", "0")
 	confIni.Set("log_block_id_begin", "0")
 	confIni.Set("log_block_id_end", "0")
@@ -266,6 +266,12 @@ func (c *Controller) InstallStep1() (string, error) {
 			log.Error("%v", utils.ErrInfo(err))
 			panic(err)
 			os.Exit(1)
+		}
+
+
+		err = c.DCDB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
 		}
 
 	}()

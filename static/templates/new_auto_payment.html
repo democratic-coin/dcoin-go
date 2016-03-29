@@ -8,6 +8,7 @@
 			var amount = $('#amount').val();
 			var commission = $('#commission').val();
 			var comment = $('#comment').val();
+			var period =  86400 * parseInt($("#period").val());
 
 			$.post( 'ajax?controllerName=saveQueue', {
 				'type' : {{.TxType}},
@@ -16,7 +17,7 @@
 				'recipient' : to_id,
 				'currency_id' : $('#currency_id').val(),
 				'amount' : amount,
-				'period' : $('#period').val(),
+				'period' : period.toString(),
 				'commission' : commission,
 				'comment' : $('#comment_encrypted').val(),
 				'comment_text' : comment,
@@ -33,11 +34,11 @@
 
 	} );
 
-
 	$('#next').bind('click', function () {
-
+		check_form( function( answer ){
 			var recipient = $("#recipient").val();
 			to_id = recipient;
+			var period =  86400 * parseInt($("#period").val());
 			var currency_id = ','+$("#currency_id").val();
 			if (to_id) {
 
@@ -58,14 +59,15 @@
 					{{if .ShowSignData}}
 					$("#sign").css("display", "block"); $("#wallets").css("display", "none");
 					{{end}}
-
-					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + to_id + ',' + $('#amount').val() + ',' + $('#commission').val() + ',' + $("#currency_id").val() + ',' + $("#period").val() + ',' + data );
+					$("#for-signature").val('{{.TxTypeId}},{{.TimeNow}},{{.UserId}},' + to_id + ',' + $('#amount').val() + ',' + $('#commission').val() + ',' + $("#currency_id").val() + ',' + period.toString() + ',' + data );
 					doSign();
 					{{if not .ShowSignData}}
 						$("#send_to_net").trigger("click");
 					{{end}}
 				});
 			}
+
+		})
 	});
 </script>
 <div id="main_div">
@@ -83,7 +85,7 @@
 					<label class="col-md-4 control-label" for="amount">{{.Lang.amount}}</label>
 					<div class="col-md-4">
 						<div class="input-group">
-							<input style="min-width: 100px" id="amount" name="amount" class="form-control" type="text">
+							<input style="min-width: 100px" id="amount" name="amount" check="empty" class="form-control" type="text">
 							<div class="input-group-btn">
 								<select class="form-control" id="currency_id" style="min-width: 100px">
 									{{range $id, $name := .CurrencyList}}
@@ -99,7 +101,7 @@
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="commission">{{.Lang.commission}}</label>
 					<div class="col-md-4">
-						<input style="min-width: 100px" id="commission"  class="form-control" type="text">
+						<input style="min-width: 100px" id="commission"  check="empty"  class="form-control" type="text">
 						<span class="help-block"></span>
 					</div>
 				</div>
@@ -107,15 +109,15 @@
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="period">{{.Lang.period}}</label>
 					<div class="col-md-4">
-						<input style="min-width: 100px" id="period" class="form-control" type="text">
-						<span class="help-block">Seconds</span>
+						<input style="min-width: 100px" id="period" check="interval|1|365" class="form-control" type="text">
+						<span class="help-block">Days</span>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="recipient">{{.Lang.recipient}}</label>
 					<div class="col-md-4">
-						<input style="min-width: 100px" id="recipient" class="form-control" type="text">
+						<input style="min-width: 100px" id="recipient" check="userid" class="form-control" type="text">
 						<span class="help-block"></span>
 					</div>
 				</div>

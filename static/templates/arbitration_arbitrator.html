@@ -67,6 +67,7 @@
 	<div id="main_data">
 
 		<h3>{{.Lang.requests}}</h3>
+		<div class="table_fix">
 		<table class="table" style="max-width: 600px">
 			<tr><th>ID</th><th>{{.Lang.time}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.seller}}</th><th>{{.Lang.buyer}}</th><th>{{.Lang.contacts}}</th><th>{{.Lang.extend_days}}</th><th>{{.Lang.money_back}}</th></tr>
 			{{range $data := .MyOrders}}
@@ -86,6 +87,7 @@
 				</tr>
 			{{end}}
 		</table>
+		</div>
 
 	<a type="button" class="btn btn-primary" href="#changeArbitratorConditions">{{.Lang.my_conditions}}</a>
 

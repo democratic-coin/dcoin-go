@@ -189,15 +189,18 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	// если есть OldFileName, значит работаем под именем tmp_dc и нужно перезапуститься под нормальным именем
+	// если есть OldFileName, значит работаем под именем dc.tmp и нужно перезапуститься под нормальным именем
 	log.Debug("OldFileName %v", *utils.OldFileName)
-	if *utils.OldFileName != "" {
+	if *utils.OldFileName != "" || len(configIni)!=0 {
 
-		err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
-		if err != nil {
-			log.Debug("%v", os.Stderr)
-			log.Debug("%v", utils.ErrInfo(err))
+		if *utils.OldFileName != "" {
+			err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
+			if err != nil {
+				log.Debug("%v", os.Stderr)
+				log.Debug("%v", utils.ErrInfo(err))
+			}
 		}
+
 		// ждем подключения к БД
 		for {
 			if utils.DB == nil || utils.DB.DB == nil {
@@ -206,6 +209,15 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
+
+		oldDbVersion, err := utils.DB.Single(`SELECT version FROM migration_history ORDER BY id DESC LIMIT 1`).String()
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
+		}
+		if len(*utils.OldVersion) == 0 && consts.VERSION != oldDbVersion {
+			*utils.OldVersion = oldDbVersion
+		}
+
 		log.Debug("*utils.OldVersion %v", *utils.OldVersion)
 		if len(*utils.OldVersion) > 0 {
 			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
@@ -346,32 +358,93 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				s2[4] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 				s2[5] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 				s1["fields"] = s2
+				s1["AI"] = "id"
 				s1["PRIMARY"] = []string{"day", "month", "year", "currency_id"}
 				s1["comment"] = ""
 				s["stats"] = s1
 				schema_.S = s
 				schema_.PrintSchema()
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a1")) {
+
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('stats_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "year", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[4] = map[string]string{"name": "currency_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[5] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[6] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["UNIQ"] = []string{"day", "month", "year", "currency_id"}
+				s1["PRIMARY"] = []string{"id"}
+				s1["comment"] = ""
+				s["stats"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a3")) {
+
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "version", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "date_applied", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["migration_history"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a4")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE migration_history ADD COLUMN test_migration int NOT NULL DEFAULT '0'`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
+
+			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+			if err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
 		}
 
-		err = utils.DB.Close()
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		fmt.Println("DB Closed")
-		err = os.Remove(*utils.Dir + "/dcoin.pid")
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
 
-		log.Debug("dc.tmp %v", *utils.Dir+`/dc.tmp`)
-		err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
-		if err != nil {
-			log.Debug("%v", os.Stderr)
-			log.Debug("%v", utils.ErrInfo(err))
+		if *utils.OldFileName != "" {
+			err = utils.DB.Close()
+			if err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
+			fmt.Println("DB Closed")
+			err = os.Remove(*utils.Dir + "/dcoin.pid")
+			if err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
+
+			log.Debug("dc.tmp %v", *utils.Dir+`/dc.tmp`)
+			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
+			if err != nil {
+				log.Debug("%v", os.Stderr)
+				log.Debug("%v", utils.ErrInfo(err))
+			}
+			log.Debug("OldFileName %v", *utils.OldFileName)
+			os.Exit(1)
 		}
-		log.Debug("OldFileName %v", *utils.OldFileName)
-		os.Exit(1)
 	}
 
 	// сохраним текущий pid и версию
@@ -490,6 +563,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		http.HandleFunc(HandleHttpHost+"/", controllers.Index)
 		http.HandleFunc(HandleHttpHost+"/content", controllers.Content)
 		http.HandleFunc(HandleHttpHost+"/ajax", controllers.Ajax)
+		http.HandleFunc(HandleHttpHost+"/ajaxjson", controllers.AjaxJson)
 		http.HandleFunc(HandleHttpHost+"/tools", controllers.Tools)
 		http.HandleFunc(HandleHttpHost+"/cf/", controllers.IndexCf)
 		http.HandleFunc(HandleHttpHost+"/cf/content", controllers.ContentCf)

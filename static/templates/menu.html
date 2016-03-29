@@ -4,6 +4,23 @@
 		for (i=0; i<intervalIdArray.length; i++)
 			clearInterval(intervalIdArray[i]);
 	}
+	
+	$('.lng').bind('click', function() {
+		var id = $(this).attr('data-id');
+		var re = /#([A-Z0-9]*)\/?([A-Z0-9]*)?=?([A-Z0-9]*)?/gi;
+		match = re.exec(window.location.hash);
+		var page = 'home';
+		pars = { "lang": id.toString() };
+		if (match && match[1]) {
+			page = match[1];
+			if ( match[2] && match[3]) {
+				pars[ match[2]] = match[3];
+			}
+		} 
+		dc_navigate( page, pars );
+		return false;
+	})
+	
 	$('#start_daemons').bind('click', function () {
 		$.post( 'ajax/start_daemons.php', { } ,
 				function () {
@@ -136,9 +153,9 @@ static/img/logo-small.png
 			<div class="flag_{{.LangInt}}"></div>
 		</a>
 		<ul class="dropdown-menu dropdown-user">
-			<li><a href="#home/lang=1" class="lng_1">English</a>
+			<li><a href="" class="lng" data-id="1">English</a>
 			</li>
-			<li><a href="#home/lang=42" class="lng_42">Русский</a>
+			<li><a href="" class="lng" data-id="42">Русский</a>
 			</li>
 		</ul>
 	</li>
@@ -249,9 +266,9 @@ static/img/logo-small.png
 				<li id="lng_menu_left">
 					<a href="#"><i class="fa  fa-globe fa-fw"></i> Language<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li><a href="#home/lang=1" class="lng_1">English</a>
+						<li><a href="" class="lng" data-id="1">English</a>
 						</li>
-						<li><a href="#home/lang=42" class="lng_42">Русский</a>
+						<li><a href="" class="lng" data-id="42">Русский</a>
 						</li>
 					</ul>
 				</li>
