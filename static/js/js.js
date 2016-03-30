@@ -26,10 +26,15 @@ function file_upload (file_id, progress, type, script) {
 }
 
 function send_video (file_id, progress, type, user_id) {
-
+	var idname = '#'+file_id;
+	$( idname+'_err').css("display", "none");
+	if ($(idname).get(0).files[0].size > 64<<20 ) {  //64 mb
+        $(idname+'_err').css("display", "block");
+		return
+	}
     $('#wrapper').spin();
     var
-        $f = $('#'+file_id),
+        $f = $(idname),
         $p = $('#'+progress),
         up = new uploader($f.get(0), {
             url:'ajax?controllerName=uploadVideo',
@@ -47,8 +52,8 @@ function send_video (file_id, progress, type, user_id) {
                 }
                 else {
                     $('#'+progress).css("display", "none");
-                    $('#'+file_id+'_ok').css("display", "block");
-                    $('#'+file_id+'_ok').html('File successfully downloaded');
+                    $(idname+'_ok').css("display", "block");
+                    $(idname+'_ok').html('File successfully downloaded');
                     $('#video').css("display", "block");
                     if (/promised_amount/.test(type)) {
                         $('#video').html('<video class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/'+user_id+'_'+type.replace("-","_")+'.mp4?r='+Math.floor((Math.random() * 99999999) + 1)+'" type="video/mp4" /></video>');
