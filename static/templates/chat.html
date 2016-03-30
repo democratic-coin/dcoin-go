@@ -26,7 +26,7 @@
 	<div class="navbar-fixed-bottom row-fluid" style="padding-top: 3px; padding-bottom: 3px; background-color: rgb(248, 248, 248); border-top: 1px solid rgb(204, 204, 204);  opacity: 0.95; display: block; margin-bottom: 50px">
 		<input type="hidden" id="chatUserIdReceiver" value="0">
 
-		{{if not .Community}}<button class="btn btn-default"  onclick="lock_unlock(); return false" id="chatLock" style="display: inline-block; margin: 5px; width: 40px"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
+		{{ if not .Community }}<button class="btn btn-default"  onclick="lock_unlock(); return false" id="chatLock" style="display: inline-block; margin: 5px; width: 40px"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
 
 		<span id="selectReceiver" style="display: none;vertical-align: middle;">Please, select receiver</span>
 		<input type="text" class="form-control" id="myChatMessage" style="display: inline-block;vertical-align: middle; width: 200px" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
