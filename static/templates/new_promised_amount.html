@@ -391,6 +391,7 @@
 				<div class="clearfix" style="margin-top: 20px"></div>
 				<div id="video_mp4_progress" class="my_progress">0%</div><br>
 				<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
+				<div id="video_mp4_err" class="alert alert-danger" style="display: none">{{.Lang.file_size_limit}}</div>
 				<button id="del_mp4" style="display: none">Delete</button>
 				<div id="video" style="display: none">
 					<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
