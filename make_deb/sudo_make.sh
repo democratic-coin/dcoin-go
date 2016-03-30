@@ -11,6 +11,6 @@ chown root dcoin$ARCH0/usr/share/dcoin/dcoin
 chgrp root dcoin$ARCH0/usr/share/dcoin/dcoin
 chmod 0777 dcoin$ARCH0/usr/share/dcoin/dcoin
 dpkg-deb --build dcoin
-zip -j dcoin_linux$ARCH1.zip dcoin/usr/share/dcoin/dcoin
+zip -j dcoin_linux$ARCH1.zip dcoin$ARCH0/usr/share/dcoin/dcoin
 mv dcoin.deb dcoin_linux$ARCH1.deb
 rm -rf dcoin$ARCH0/usr/share/dcoin/dcoin
