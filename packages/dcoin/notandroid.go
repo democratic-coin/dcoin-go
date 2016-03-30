@@ -126,7 +126,12 @@ func tcpListener() {
 		defer listener.Close()
 
 		for {
-			conn, _ := listener.Accept()
+			conn, err := listener.Accept()
+			if err != nil {
+				log.Error("Error listening:", err)
+				utils.Sleep(1)
+				continue
+			}
 			log.Debug("main conn %v\n", conn)
 			log.Debug("conn.RemoteAddr() %v\n", conn.RemoteAddr().String())
 
