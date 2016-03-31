@@ -429,7 +429,7 @@ BEGIN:
 			continue BEGIN
 		}
 
-		currentBlockId, err = d.Single("SELECT block_id FROM info_block").Int64()
+		currentBlockId, err = d.GetBlockId()
 		if err != nil {
 			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 				break BEGIN

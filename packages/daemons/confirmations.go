@@ -73,7 +73,7 @@ BEGIN:
 		if err != nil {
 			log.Error("%v", err)
 		}
-		LastBlockId, err := d.GetLastBlockId()
+		LastBlockId, err := d.GetBlockId()
 		if err != nil {
 			log.Error("%v", err)
 		}
