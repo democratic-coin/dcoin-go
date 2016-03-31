@@ -10,7 +10,7 @@ import (
 func Clear(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -39,7 +39,7 @@ func Clear(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -71,7 +71,7 @@ BEGIN:
 			}
 			continue BEGIN
 		}
-		log.Debug("blockId: %d", blockId)
+		logger.Debug("blockId: %d", blockId)
 		variables, err := d.GetAllVariables()
 		if err != nil {
 			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -265,7 +265,7 @@ BEGIN:
 				continue BEGIN
 			}
 		}
-		log.Debug("variables.Int64[rollback_blocks_2]: %v", variables.Int64["rollback_blocks_2"])
+		logger.Debug("variables.Int64[rollback_blocks_2]: %v", variables.Int64["rollback_blocks_2"])
 
 		d.dbUnlock()
 
@@ -273,5 +273,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

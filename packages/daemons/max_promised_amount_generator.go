@@ -15,7 +15,7 @@ import (
 func MaxPromisedAmountGenerator(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -44,13 +44,13 @@ func MaxPromisedAmountGenerator(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -161,7 +161,7 @@ BEGIN:
 
 		_, myUserId, _, _, _, _, err := d.TestBlock()
 		forSign := fmt.Sprintf("%v,%v,%v,%s", utils.TypeInt("NewMaxPromisedAmounts"), curTime, myUserId, jsonData)
-		log.Debug("forSign = %v", forSign)
+		logger.Debug("forSign = %v", forSign)
 		binSign, err := d.GetBinSign(forSign, myUserId)
 		if err != nil {
 			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -199,6 +199,6 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 
 }

@@ -16,7 +16,7 @@ import (
 func ReductionGenerator(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -45,13 +45,13 @@ func ReductionGenerator(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -124,7 +124,7 @@ BEGIN:
 			}
 			continue BEGIN
 		}
-		log.Info("%v", "promisedAmount", promisedAmount)
+		logger.Info("%v", "promisedAmount", promisedAmount)
 
 		// берем все голоса юзеров
 		rows, err := d.Query(d.FormatQuery(`
@@ -170,7 +170,7 @@ BEGIN:
 					reductionCurrencyId = utils.StrToInt(currency_id)
 					reductionPct = pct
 					reductionType = "manual"
-					log.Info("%v", "reductionCurrencyId", reductionCurrencyId, "reductionPct", reductionPct, "reductionType", reductionType)
+					logger.Info("%v", "reductionCurrencyId", reductionCurrencyId, "reductionPct", reductionPct, "reductionType", reductionType)
 					break
 				}
 			}
@@ -210,7 +210,7 @@ BEGIN:
 			}
 		}
 
-		log.Debug("sumWallets", sumWallets)
+		logger.Debug("sumWallets", sumWallets)
 
 		// получаем суммы обещанных сумм
 		sumPromisedAmount, err := d.GetMap(`
@@ -230,7 +230,7 @@ BEGIN:
 			continue BEGIN
 		}
 
-		log.Debug("sumPromisedAmount", sumPromisedAmount)
+		logger.Debug("sumPromisedAmount", sumPromisedAmount)
 
 		if len(sumWallets) > 0 {
 			for currencyId, sumAmount := range sumWallets {
@@ -245,15 +245,15 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Debug("reductionTime", reductionTime)
+				logger.Debug("reductionTime", reductionTime)
 				// прошло ли 48 часов
 				if curTime-reductionTime <= consts.AUTO_REDUCTION_PERIOD {
-					log.Debug("curTime-reductionTime <= consts.AUTO_REDUCTION_PERIOD %d <= %d", curTime-reductionTime, consts.AUTO_REDUCTION_PERIOD)
+					logger.Debug("curTime-reductionTime <= consts.AUTO_REDUCTION_PERIOD %d <= %d", curTime-reductionTime, consts.AUTO_REDUCTION_PERIOD)
 					continue
 				}
 
 				// если обещанных сумм менее чем 100% от объема DC на кошельках, то запускаем урезание
-				log.Debug("utils.StrToFloat64(sumPromisedAmount[utils.IntToStr(currencyId)]) < sumAmount*consts.AUTO_REDUCTION_PROMISED_AMOUNT_PCT %d < %d", utils.StrToFloat64(sumPromisedAmount[utils.IntToStr(currencyId)]), sumAmount*consts.AUTO_REDUCTION_PROMISED_AMOUNT_PCT)
+				logger.Debug("utils.StrToFloat64(sumPromisedAmount[utils.IntToStr(currencyId)]) < sumAmount*consts.AUTO_REDUCTION_PROMISED_AMOUNT_PCT %d < %d", utils.StrToFloat64(sumPromisedAmount[utils.IntToStr(currencyId)]), sumAmount*consts.AUTO_REDUCTION_PROMISED_AMOUNT_PCT)
 				if utils.StrToFloat64(sumPromisedAmount[utils.IntToStr(currencyId)]) < sumAmount*consts.AUTO_REDUCTION_PROMISED_AMOUNT_PCT {
 
 					// проверим, есть ли хотя бы 1000 юзеров, у которых на кошелках есть или была данная валюты
@@ -264,7 +264,7 @@ BEGIN:
 						}
 						continue BEGIN
 					}
-					log.Debug("countUsers>=countUsers %d >= %d", countUsers, consts.AUTO_REDUCTION_PROMISED_AMOUNT_MIN)
+					logger.Debug("countUsers>=countUsers %d >= %d", countUsers, consts.AUTO_REDUCTION_PROMISED_AMOUNT_MIN)
 					if countUsers >= consts.AUTO_REDUCTION_PROMISED_AMOUNT_MIN {
 						reductionCurrencyId = currencyId
 						reductionPct = consts.AUTO_REDUCTION_PCT
@@ -279,7 +279,7 @@ BEGIN:
 
 			_, myUserId, _, _, _, _, err := d.TestBlock()
 			forSign := fmt.Sprintf("%v,%v,%v,%v,%v,%v", utils.TypeInt("NewReduction"), curTime, myUserId, reductionCurrencyId, reductionPct, reductionType)
-			log.Debug("forSign = %v", forSign)
+			logger.Debug("forSign = %v", forSign)
 			binSign, err := d.GetBinSign(forSign, myUserId)
 			if err != nil {
 				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -323,6 +323,6 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 
 }

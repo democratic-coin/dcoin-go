@@ -15,7 +15,7 @@ import (
 func Disseminator(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -44,7 +44,7 @@ func Disseminator(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -72,7 +72,7 @@ BEGIN:
 				if d.dSleep(d.sleepTime) {
 					break BEGIN
 				}
-				log.Debug("len(hosts) == 0")
+				logger.Debug("len(hosts) == 0")
 				continue
 			}
 		} else {
@@ -101,8 +101,8 @@ BEGIN:
 			}
 			continue
 		}
-		log.Debug("%v", myUsersIds)
-		log.Debug("%v", myMinersIds)
+		logger.Debug("%v", myUsersIds)
+		logger.Debug("%v", myMinersIds)
 
 		// если среди тр-ий есть смена нодовского ключа, то слать через отправку хэшей с последющей отдачей данных может не получиться
 		// т.к. при некорректном нодовском ключе придет зашифрованый запрос на отдачу данных, а мы его не сможем расшифровать т.к. ключ у нас неверный
@@ -127,7 +127,7 @@ BEGIN:
 		// если я майнер и работаю в обычном режиме, то должен слать хэши
 		if len(myMinersIds) > 0 && len(nodeConfig["local_gate_ip"]) == 0 && changeNodeKey == 0 {
 
-			log.Debug("0")
+			logger.Debug("0")
 
 			dataType = 1
 
@@ -198,7 +198,7 @@ BEGIN:
 				if d.dSleep(d.sleepTime) {
 					break BEGIN
 				}
-				log.Debug("len(transactions) == 0 && len(toBeSent) == 0")
+				logger.Debug("len(transactions) == 0 && len(toBeSent) == 0")
 				continue BEGIN
 			}
 			for _, data := range transactions {
@@ -225,7 +225,7 @@ BEGIN:
 			}
 		} else {
 
-			log.Debug("1")
+			logger.Debug("1")
 
 			var remoteNodeHost string
 			// если просто юзер или работаю в защищенном режиме, то шлю тр-ии целиком. слать блоки не имею права.
@@ -237,7 +237,7 @@ BEGIN:
 				remoteNodeHost = ""
 			}
 
-			log.Debug("dataType: %d", dataType)
+			logger.Debug("dataType: %d", dataType)
 
 			var toBeSent []byte // сюда пишем все тр-ии, которые будем слать другим нодам
 			// возьмем хэши и сами тр-ии
@@ -260,7 +260,7 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Debug("hash %x", hash)
+				logger.Debug("hash %x", hash)
 				hashHex := utils.BinToHex(hash)
 				utils.WriteSelectiveLog("UPDATE transactions SET sent = 1 WHERE hex(hash) = " + string(hashHex))
 				affect, err := d.ExecSqlGetAffect("UPDATE transactions SET sent = 1 WHERE hex(hash) = ?", hashHex)
@@ -284,31 +284,31 @@ BEGIN:
 					userId := utils.StrToInt64(host["user_id"])
 					go func(host string, userId int64, node_public_key string) {
 
-						log.Debug("host %v / userId %v", host, userId)
+						logger.Debug("host %v / userId %v", host, userId)
 
 						conn, err := utils.TcpConn(host)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						defer conn.Close()
 
 						randTestblockHash, err := d.Single("SELECT head_hash FROM queue_testblock").String()
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						// получаем IV + ключ + зашифрованный текст
 						encryptedData, _, _, err := utils.EncryptData(toBeSent, []byte(node_public_key), randTestblockHash)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
 						// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
 						_, err = conn.Write(utils.DecToBin(dataType, 2))
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
@@ -331,19 +331,19 @@ BEGIN:
 							encryptedData = append([]byte(remoteNodeHost), encryptedData...)
 						}
 
-						log.Debug("encryptedData %x", encryptedData)
+						logger.Debug("encryptedData %x", encryptedData)
 
 						// в 4-х байтах пишем размер данных, которые пошлем далее
 						size := utils.DecToBin(len(encryptedData), 4)
 						_, err = conn.Write(size)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						// далее шлем сами данные
 						_, err = conn.Write(encryptedData)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
@@ -358,87 +358,87 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }
 
 func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key string, toBeSent []byte, dataType int64) {
 
-	log.Debug("host %v / userId %v", host, userId)
+	logger.Debug("host %v / userId %v", host, userId)
 
 	// шлем данные указанному хосту
 	conn, err := utils.TcpConn(host)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
 	defer conn.Close()
 
 	randTestblockHash, err := d.Single("SELECT head_hash FROM queue_testblock").String()
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
 	// получаем IV + ключ + зашифрованный текст
 	dataToBeSent, key, iv, err := utils.EncryptData(toBeSent, []byte(node_public_key), randTestblockHash)
-	log.Debug("key: %s", key)
-	log.Debug("iv: %s", iv)
+	logger.Debug("key: %s", key)
+	logger.Debug("iv: %s", iv)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
 
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
 	n, err := conn.Write(utils.DecToBin(dataType, 2))
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
-	log.Debug("n: %x", n)
+	logger.Debug("n: %x", n)
 
 	// т.к. на приеме может быть пул, то нужно дописать в начало user_id, чьим нодовским ключем шифруем
 	dataToBeSent = append(utils.DecToBin(userId, 5), dataToBeSent...)
-	log.Debug("dataToBeSent: %x", dataToBeSent)
+	logger.Debug("dataToBeSent: %x", dataToBeSent)
 
 	// в 4-х байтах пишем размер данных, которые пошлем далее
 	size := utils.DecToBin(len(dataToBeSent), 4)
 	n, err = conn.Write(size)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
-	log.Debug("n: %x", n)
+	logger.Debug("n: %x", n)
 	n, err = conn.Write(dataToBeSent)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
-	log.Debug("n: %d / size: %v / len: %d", n, utils.BinToDec(size), len(dataToBeSent))
+	logger.Debug("n: %d / size: %v / len: %d", n, utils.BinToDec(size), len(dataToBeSent))
 
 	// в ответ получаем размер данных, которые нам хочет передать сервер
 	buf := make([]byte, 4)
 	n, err = conn.Read(buf)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return
 	}
-	log.Debug("n: %x", n)
+	logger.Debug("n: %x", n)
 	dataSize := utils.BinToDec(buf)
-	log.Debug("dataSize %d", dataSize)
+	logger.Debug("dataSize %d", dataSize)
 	// и если данных менее 1мб, то получаем их
 	if dataSize < 1048576 {
 		encBinaryTxHashes := make([]byte, dataSize)
 		_, err = io.ReadFull(conn, encBinaryTxHashes)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			logger.Error("%v", utils.ErrInfo(err))
 			return
 		}
 		// разбираем полученные данные
 		binaryTxHashes, err := utils.DecryptCFB(iv, encBinaryTxHashes, key)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			logger.Error("%v", utils.ErrInfo(err))
 			return
 		}
-		log.Debug("binaryTxHashes %x", binaryTxHashes)
+		logger.Debug("binaryTxHashes %x", binaryTxHashes)
 		var binaryTx []byte
 		for {
 			// Разбираем список транзакций
@@ -447,13 +447,13 @@ func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key st
 				txHash = utils.BytesShift(&binaryTxHashes, 16)
 			}
 			txHash = utils.BinToHex(txHash)
-			log.Debug("txHash %s", txHash)
+			logger.Debug("txHash %s", txHash)
 			utils.WriteSelectiveLog("SELECT data FROM transactions WHERE hex(hash) = " + string(txHash))
 			tx, err := d.Single("SELECT data FROM transactions WHERE hex(hash) = ?", txHash).Bytes()
-			log.Debug("tx %x", tx)
+			logger.Debug("tx %x", tx)
 			if err != nil {
 				utils.WriteSelectiveLog(err)
-				log.Error("%v", utils.ErrInfo(err))
+				logger.Error("%v", utils.ErrInfo(err))
 				return
 			}
 			utils.WriteSelectiveLog("tx: " + string(utils.BinToHex(tx)))
@@ -465,27 +465,27 @@ func (d *daemon) DisseminatorType1(host string, userId int64, node_public_key st
 			}
 		}
 
-		log.Debug("binaryTx %x", binaryTx)
+		logger.Debug("binaryTx %x", binaryTx)
 		// шифруем тр-ии. Вначале encData добавляется IV
 		encData, _, err := utils.EncryptCFB(binaryTx, key, iv)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			logger.Error("%v", utils.ErrInfo(err))
 			return
 		}
-		log.Debug("encData %x", encData)
+		logger.Debug("encData %x", encData)
 
 		// шлем серверу
 		// в первых 4-х байтах пишем размер данных, которые пошлем далее
 		size := utils.DecToBin(len(encData), 4)
 		_, err = conn.Write(size)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			logger.Error("%v", utils.ErrInfo(err))
 			return
 		}
 		// далее шлем сами данные
 		_, err = conn.Write(encData)
 		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
+			logger.Error("%v", utils.ErrInfo(err))
 			return
 		}
 	}
