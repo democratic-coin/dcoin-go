@@ -1940,10 +1940,6 @@ func (db *DCDB) CheckUser(userId int64) error {
 	}
 }
 
-func (db *DCDB) GetLastBlockId() (int64, error) {
-	return db.Single("SELECT block_id FROM info_block").Int64()
-}
-
 func (db *DCDB) GetPct() (map[int64][]map[int64]map[string]float64, error) {
 	result := make(map[int64][]map[int64]map[string]float64)
 	var q string

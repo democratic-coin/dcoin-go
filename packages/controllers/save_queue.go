@@ -286,6 +286,10 @@ func (c *Controller) SaveQueue() (string, error) {
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
+			// Удаляем предыдущие комментарии
+			if err = c.ExecSql(`DELETE FROM `+c.MyPrefix+`my_comments WHERE type = 'miner'` ); err != nil {
+				return "", utils.ErrInfo(err)
+			}
 		}
 
 	case "VotesMiner": // голос за юзера, который хочет стать майнером

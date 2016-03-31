@@ -14,7 +14,7 @@ import (
 func QueueParserTestblock(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -43,13 +43,13 @@ func QueueParserTestblock(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -102,14 +102,14 @@ BEGIN:
 		p := new(dcparser.Parser)
 		p.DCDB = d.DCDB
 		if len(tx) > 0 {
-			log.Debug("len(tx): %d", len(tx))
+			logger.Debug("len(tx): %d", len(tx))
 			for {
-				log.Debug("tx: %x", tx)
+				logger.Debug("tx: %x", tx)
 				txSize := utils.DecodeLength(&tx)
-				log.Debug("txSize: %d", txSize)
+				logger.Debug("txSize: %d", txSize)
 				// отделим одну транзакцию от списка транзакций
 				txBinaryData := utils.BytesShift(&tx, txSize)
-				log.Debug("txBinaryData: %x", txBinaryData)
+				logger.Debug("txBinaryData: %x", txBinaryData)
 				// проверим, нет ли несовместимых тр-ий
 				fatalError, waitError, _, _, _, _ := p.ClearIncompatibleTx(txBinaryData, false)
 				if len(fatalError) > 0 || len(waitError) > 0 {
@@ -132,7 +132,7 @@ BEGIN:
 		err = p.ParseDataGate(false)
 		if err != nil {
 
-			log.Error("%v", err)
+			logger.Error("%v", err)
 
 			// т.к. мы откатили наши тр-ии из transactions_testblock, то теперь нужно обработать их по новой
 			// получим наши транзакции в 1 бинарнике, просто для удобства
@@ -256,6 +256,6 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 
 }

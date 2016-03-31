@@ -19,7 +19,7 @@ Using it for watching for forks
 func Confirmations(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -58,7 +58,7 @@ BEGIN:
 			d.sleepTime = 10
 		}
 
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -71,11 +71,11 @@ BEGIN:
 		// то начинаем проверку последних 5 блоков
 		ConfirmedBlockId, err := d.GetConfirmedBlockId()
 		if err != nil {
-			log.Error("%v", err)
+			logger.Error("%v", err)
 		}
-		LastBlockId, err := d.GetLastBlockId()
+		LastBlockId, err := d.GetBlockId()
 		if err != nil {
-			log.Error("%v", err)
+			logger.Error("%v", err)
 		}
 		if LastBlockId-ConfirmedBlockId > 5 {
 			startBlockId = ConfirmedBlockId + 1
@@ -85,7 +85,7 @@ BEGIN:
 		if startBlockId == 0 {
 			startBlockId = LastBlockId - 1
 		}
-		log.Debug("startBlockId: %d / LastBlockId: %d", startBlockId, LastBlockId)
+		logger.Debug("startBlockId: %d / LastBlockId: %d", startBlockId, LastBlockId)
 
 		for blockId := LastBlockId; blockId > startBlockId; blockId-- {
 
@@ -94,13 +94,13 @@ BEGIN:
 				break BEGIN
 			}
 
-			log.Debug("blockId: %d", blockId)
+			logger.Debug("blockId: %d", blockId)
 
 			hash, err := d.Single("SELECT hash FROM block_chain WHERE id =  ?", blockId).String()
 			if err != nil {
-				log.Error("%v", err)
+				logger.Error("%v", err)
 			}
-			log.Info("hash: %v", hash)
+			logger.Info("hash: %v", hash)
 
 			var hosts []map[string]string
 			if d.ConfigIni["test_mode"] == "1" {
@@ -108,7 +108,7 @@ BEGIN:
 			} else {
 				maxMinerId, err := d.Single("SELECT max(miner_id) FROM miners_data").Int64()
 				if err != nil {
-					log.Error("%v", err)
+					logger.Error("%v", err)
 				}
 				if maxMinerId == 0 {
 					maxMinerId = 1
@@ -121,15 +121,15 @@ BEGIN:
 				}
 				hosts, err = d.GetAll(q, consts.COUNT_CONFIRMED_NODES)
 				if err != nil {
-					log.Error("%v", err)
+					logger.Error("%v", err)
 				}
 			}
 
 			ch := make(chan string)
 			for i := 0; i < len(hosts); i++ {
-				log.Info("hosts[i] %v", hosts[i])
+				logger.Info("hosts[i] %v", hosts[i])
 				host := hosts[i]["tcp_host"]
-				log.Info("host %v", host)
+				logger.Info("host %v", host)
 				go func() {
 					IsReachable(host, blockId, ch)
 				}()
@@ -138,30 +138,30 @@ BEGIN:
 			var st0, st1 int64
 			for i := 0; i < len(hosts); i++ {
 				answer = <-ch
-				log.Info("answer == hash (%x = %x)", answer, hash)
-				log.Info("answer == hash (%s = %s)", answer, hash)
+				logger.Info("answer == hash (%x = %x)", answer, hash)
+				logger.Info("answer == hash (%s = %s)", answer, hash)
 				if answer == hash {
 					st1++
 				} else {
 					st0++
 				}
-				log.Info("%v", "CHanswer", answer)
+				logger.Info("%v", "CHanswer", answer)
 			}
 			exists, err := d.Single("SELECT block_id FROM confirmations WHERE block_id= ?", blockId).Int64()
 			if exists > 0 {
-				log.Debug("UPDATE confirmations SET good = %v, bad = %v, time = %v WHERE block_id = %v", st1, st0, time.Now().Unix(), blockId)
+				logger.Debug("UPDATE confirmations SET good = %v, bad = %v, time = %v WHERE block_id = %v", st1, st0, time.Now().Unix(), blockId)
 				err = d.ExecSql("UPDATE confirmations SET good = ?, bad = ?, time = ? WHERE block_id = ?", st1, st0, time.Now().Unix(), blockId)
 				if err != nil {
-					log.Error("%v", err)
+					logger.Error("%v", err)
 				}
 			} else {
-				log.Debug("INSERT INTO confirmations ( block_id, good, bad, time ) VALUES ( %v, %v, %v, %v )", blockId, st1, st0, time.Now().Unix())
+				logger.Debug("INSERT INTO confirmations ( block_id, good, bad, time ) VALUES ( %v, %v, %v, %v )", blockId, st1, st0, time.Now().Unix())
 				err = d.ExecSql("INSERT INTO confirmations ( block_id, good, bad, time ) VALUES ( ?, ?, ?, ? )", blockId, st1, st0, time.Now().Unix())
 				if err != nil {
-					log.Error("%v", err)
+					logger.Error("%v", err)
 				}
 			}
-			log.Debug("blockId > startBlockId && st1 >= consts.MIN_CONFIRMED_NODES %d>%d && %d>=%d\n", blockId, startBlockId, st1, consts.MIN_CONFIRMED_NODES)
+			logger.Debug("blockId > startBlockId && st1 >= consts.MIN_CONFIRMED_NODES %d>%d && %d>=%d\n", blockId, startBlockId, st1, consts.MIN_CONFIRMED_NODES)
 			if blockId > startBlockId && st1 >= consts.MIN_CONFIRMED_NODES {
 				break
 			}
@@ -171,12 +171,12 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }
 
 func checkConf(host string, blockId int64) string {
 
-	log.Debug("host: %v", host)
+	logger.Debug("host: %v", host)
 	/*tcpAddr, err := net.ResolveTCPAddr("tcp", host)
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
@@ -185,7 +185,7 @@ func checkConf(host string, blockId int64) string {
 	conn, err := net.DialTCP("tcp", nil, tcpAddr)*/
 	conn, err := net.DialTimeout("tcp", host, 5*time.Second)
 	if err != nil {
-		log.Debug("%v", utils.ErrInfo(err))
+		logger.Debug("%v", utils.ErrInfo(err))
 		return "0"
 	}
 	defer conn.Close()
@@ -196,7 +196,7 @@ func checkConf(host string, blockId int64) string {
 	// вначале шлем тип данных, чтобы принимающая сторона могла понять, как именно надо обрабатывать присланные данные
 	_, err = conn.Write(utils.DecToBin(4, 2))
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return "0"
 	}
 
@@ -204,7 +204,7 @@ func checkConf(host string, blockId int64) string {
 	size := utils.DecToBin(blockId, 4)
 	_, err = conn.Write(size)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return "0"
 	}
 
@@ -212,14 +212,14 @@ func checkConf(host string, blockId int64) string {
 	hash := make([]byte, 32)
 	_, err = conn.Read(hash)
 	if err != nil {
-		log.Error("%v", utils.ErrInfo(err))
+		logger.Error("%v", utils.ErrInfo(err))
 		return "0"
 	}
 	return string(hash)
 }
 
 func IsReachable(host string, blockId int64, ch0 chan string) {
-	log.Info("IsReachable %v", host)
+	logger.Info("IsReachable %v", host)
 	ch := make(chan string, 1)
 	go func() {
 		ch <- checkConf(host, blockId)
