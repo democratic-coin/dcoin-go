@@ -113,7 +113,7 @@ public class MyService extends Service  {
     }
     private void ShortcutIcon(){
 
-        Log.d("JavaGo", "MyService ShortcutIcon");
+        /*Log.d("JavaGo", "MyService ShortcutIcon");
         Intent shortcutIntent = new Intent(getApplicationContext(), MainActivity.class);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -123,7 +123,7 @@ public class MyService extends Service  {
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Dcoin");
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon));
         addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        getApplicationContext().sendBroadcast(addIntent);
+        getApplicationContext().sendBroadcast(addIntent);*/
     }
 
     public static boolean DcoinStarted(int port) {
