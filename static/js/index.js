@@ -532,6 +532,8 @@ function doSign_(type) {
         console.log('key='+key);
         console.log('pass='+pass);
         var e_n_sign = get_e_n_sign(key, pass, forsignature, 'modal_alert');
+	} else {
+		return;
 	}
 	if (SIGN_LOGIN) {
 

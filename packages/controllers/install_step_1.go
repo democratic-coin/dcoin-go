@@ -55,6 +55,7 @@ func (c *Controller) InstallStep1() (string, error) {
 	confIni.Set("log_tables", "")
 	confIni.Set("log_fns", "")
 	confIni.Set("sign_hash", "ip")
+	confIni.Set("install_type", installType)	
 	if len(sqliteDbUrl) > 0 && dbType == "sqlite" {
 		utils.SqliteDbUrl = sqliteDbUrl
 	}
