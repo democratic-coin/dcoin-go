@@ -16,7 +16,7 @@ import (
 func NodeVoting(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -45,13 +45,13 @@ func NodeVoting(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -145,13 +145,13 @@ BEGIN:
 				profilePath := *utils.Dir + "/public/profile_" + user_id + ".jpg"
 				_, err = utils.DownloadToFile(host+"/public/"+user_id+"_user_profile.jpg", profilePath, 60, chBreaker, chAnswer, GoroutineName)
 				if err != nil {
-					log.Error("%s", utils.ErrInfo(err))
+					logger.Error("%s", utils.ErrInfo(err))
 					downloadError = true
 				}
 				facePath := *utils.Dir + "/public/face_" + user_id + ".jpg"
 				_, err = utils.DownloadToFile(host+"/public/"+user_id+"_user_face.jpg", facePath, 60, chBreaker, chAnswer, GoroutineName)
 				if err != nil {
-					log.Error("%s", utils.ErrInfo(err))
+					logger.Error("%s", utils.ErrInfo(err))
 					downloadError = true
 				}
 				if !downloadError {
@@ -165,7 +165,7 @@ BEGIN:
 						continue BEGIN
 					}
 					profileHash = string(utils.DSha256(profileFile))
-					log.Info("%v", "profileHash", profileHash)
+					logger.Info("%v", "profileHash", profileHash)
 					faceFile, err = ioutil.ReadFile(facePath)
 					if err != nil {
 						rows.Close()
@@ -175,13 +175,13 @@ BEGIN:
 						continue BEGIN
 					}
 					faceHash = string(utils.DSha256(faceFile))
-					log.Info("%v", "faceHash", faceHash)
+					logger.Info("%v", "faceHash", faceHash)
 				}
 				// проверяем хэш. Если сходится, то голосуем за, если нет - против и размер не должен быть более 200 Kb.
 				if profileHash == row_profile_hash && faceHash == row_face_hash && len(profileFile) < 204800 && len(faceFile) < 204800 {
 					vote = 1
 				} else {
-					log.Error("%s %s %s %s %d %d", profileHash, row_face_hash, faceHash, row_profile_hash, len(profileFile), len(faceFile))
+					logger.Error("%s %s %s %s %d %d", profileHash, row_face_hash, faceHash, row_profile_hash, len(profileFile), len(faceFile))
 					vote = 0 // если хэш не сходится, то удаляем только что скаченное фото
 					os.Remove(profilePath)
 					os.Remove(facePath)
@@ -246,6 +246,6 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 
 }

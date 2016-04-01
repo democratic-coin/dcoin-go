@@ -3,13 +3,6 @@ package dcparser
 import (
 	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	//	"encoding/json"
-	//"regexp"
-	//"math"
-	//"strings"
-	//	"os"
-	//"time"
-	//"strings"
 )
 
 func (p *Parser) VotesPromisedAmountInit() error {

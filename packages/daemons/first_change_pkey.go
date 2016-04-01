@@ -9,7 +9,7 @@ import (
 func FirstChangePkey(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -38,7 +38,7 @@ func FirstChangePkey(chBreaker chan bool, chAnswer chan string) {
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -66,7 +66,7 @@ BEGIN:
 			}
 			uids = append(uids, myuid)
 		}
-		log.Debug("uids %v", uids)
+		logger.Debug("uids %v", uids)
 		var status, myPrefix string
 		for _, uid := range uids {
 			if len(community) > 0 {
@@ -79,7 +79,7 @@ BEGIN:
 				}
 				continue BEGIN
 			}
-			log.Debug("status: %v / myPrefix: %v", status, myPrefix)
+			logger.Debug("status: %v / myPrefix: %v", status, myPrefix)
 			if status == "waiting_accept_new_key" {
 
 				// если ключ кто-то сменил
@@ -98,7 +98,7 @@ BEGIN:
 					continue BEGIN
 				}
 				if !bytes.Equal(myUserPublicKey, []byte(userPublicKey)) {
-					log.Debug("myUserPublicKey:%s != userPublicKey:%s", utils.BinToHex(myUserPublicKey), utils.BinToHex(userPublicKey))
+					logger.Debug("myUserPublicKey:%s != userPublicKey:%s", utils.BinToHex(myUserPublicKey), utils.BinToHex(userPublicKey))
 					// удаляем старый ключ
 					err = d.ExecSql(`DELETE FROM ` + myPrefix + `my_keys`)
 					if err != nil {
@@ -170,7 +170,7 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Debug("userPubKey: %v", userPubKeyCount)
+				logger.Debug("userPubKey: %v", userPubKeyCount)
 				if userPubKeyCount > 1 {
 					err = d.ExecSql(`UPDATE ` + myPrefix + `my_table SET status='user'`)
 					if err != nil {
@@ -204,7 +204,7 @@ BEGIN:
 					}
 					continue BEGIN
 				}
-				log.Debug("lastTx: %v", lastTx)
+				logger.Debug("lastTx: %v", lastTx)
 				if len(lastTx) > 0 {
 					if len(lastTx[0]["error"]) > 0 || utils.Time()-utils.StrToInt64(lastTx[0]["time_int"]) > 1800 {
 						// генерим и шлем новую тр-ию
@@ -224,5 +224,5 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 }

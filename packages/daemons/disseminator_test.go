@@ -14,7 +14,7 @@ import (
 func TestDisseminator(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
