@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var ChatMinSignTime int64
+
 // сигнал горутине, которая мониторит таблу chat, что есть новые данные
 var ChatNewTx = make(chan int64, 1000)
 
