@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/astaxie/beego/config"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
+	"github.com/democratic-coin/dcoin-go/packages/daemons"
 )
 
 func (c *Controller) ClearDb() (string, error) {
@@ -12,7 +14,19 @@ func (c *Controller) ClearDb() (string, error) {
 		return "", utils.ErrInfo(errors.New("Permission denied"))
 	}
 
-	err := c.ExecSql(`UPDATE install SET progress = 0`)
+	for _, ch := range utils.DaemonsChans {
+		ch.ChBreaker<-true
+	}
+	utils.Sleep(1)
+/*	
+	// ClearDb может требоваться в случае оставшейся записи main_lock
+	// поэтому ждем и очищаем её 
+	c.ExecSql(`DELETE FROM main_lock`)
+	for _, ch := range utils.DaemonsChans {
+		 <-ch.ChAnswer
+	}*/
+//  Нужно удалять так как в противном случае появится две записи
+	err := c.ExecSql(`DELETE FROM install`)
 	if err != nil {
 		utils.Mutex.Unlock()
 		return "", utils.ErrInfo(err)
@@ -21,6 +35,10 @@ func (c *Controller) ClearDb() (string, error) {
 	confIni, err := config.NewConfig("ini", *utils.Dir+"/config.ini")
 	confIni.Set("db_type", "")
 	err = confIni.SaveConfigFile(*utils.Dir + "/config.ini")
-
+	
+	daemons.StartDaemons()
+	stopdaemons.Signals()
+	utils.Sleep(1)
+	
 	return "", nil
 }
