@@ -3250,6 +3250,22 @@ func (schema *SchemaStruct) GetSchema() {
 	schema.S = s
 	schema.PrintSchema()
 
+	s = make(Recmap)
+	s1 = make(Recmap)
+	s2 = make(Recmapi)
+	s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
+	s2[1] = map[string]string{"name": "amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": ""}
+	s2[2] = map[string]string{"name": "currency_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
+	s2[3] = map[string]string{"name": "start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+	s1["fields"] = s2
+	s1["PRIMARY"] = []string{"id"}
+	s1["AI"] = "id"
+	s1["comment"] = ""
+	s["promised_amount_restricted"] = s1
+	schema.S = s
+	schema.PrintSchema()
+
+
 	prefix := ""
 	if schema.PrefixUserId > 0 {
 		prefix = utils.IntToStr(schema.PrefixUserId) + `_`
