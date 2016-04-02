@@ -8,7 +8,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
 	"text/template"
-	"fmt"
+	//"fmt"
 )
 
 var chatIds = make(map[int64][]int)
@@ -107,14 +107,14 @@ func (c *Controller) GetChatMessages() (string, error) {
 	}
 
 	log.Debug("chat data: %v", result)
-	fmt.Println("Result",result)
-	fmt.Println("chatIds",chatIds)
+	//fmt.Println("Result",result)
+	//fmt.Println("chatIds",chatIds)
 	chatStatus := "ok"
 	if len(utils.ChatInConnections) == 0 || len(utils.ChatOutConnections) == 0 {
 		chatStatus = "bad"
 	}
 
-	fmt.Println("result",result)
+	//fmt.Println("result",result)
 
 	resultJson, _ := json.Marshal(map[string]string{"messages": result, "chatStatus": chatStatus})
 
@@ -127,7 +127,7 @@ func getChatData(c *Controller) ([]map[string]string, error) {
 	lang := utils.StrToInt64(c.r.FormValue("lang"))
 	ids := `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
 
-	fmt.Println("utils.ChatMinSignTime", utils.ChatMinSignTime)
+	//fmt.Println("utils.ChatMinSignTime", utils.ChatMinSignTime)
 	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  ` +
 			ids +
 			` ORDER BY sign_time DESC LIMIT `+
