@@ -257,6 +257,8 @@
 // static/templates/progress_bar.html
 // static/templates/promised_amount_actualization.html
 // static/templates/promised_amount_list.html
+// static/templates/promised_amount_restricted.html
+// static/templates/promised_amount_restricted_list.html
 // static/templates/repayment_credit.html
 // static/templates/restoring_access.html
 // static/templates/rewrite_primary_key.html
@@ -4934,6 +4936,42 @@ func staticTemplatesPromised_amount_listHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesPromised_amount_restrictedHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesPromised_amount_restrictedHtml() (*asset, error) {
+	path := "static/templates/promised_amount_restricted.html"
+	name := "static/templates/promised_amount_restricted.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesPromised_amount_restricted_listHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesPromised_amount_restricted_listHtml() (*asset, error) {
+	path := "static/templates/promised_amount_restricted_list.html"
+	name := "static/templates/promised_amount_restricted_list.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesRepayment_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRepayment_creditHtml() (*asset, error) {
 	path := "static/templates/repayment_credit.html"
@@ -5693,6 +5731,8 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/progress_bar.html": staticTemplatesProgress_barHtml,
 	"static/templates/promised_amount_actualization.html": staticTemplatesPromised_amount_actualizationHtml,
 	"static/templates/promised_amount_list.html": staticTemplatesPromised_amount_listHtml,
+	"static/templates/promised_amount_restricted.html": staticTemplatesPromised_amount_restrictedHtml,
+	"static/templates/promised_amount_restricted_list.html": staticTemplatesPromised_amount_restricted_listHtml,
 	"static/templates/repayment_credit.html": staticTemplatesRepayment_creditHtml,
 	"static/templates/restoring_access.html": staticTemplatesRestoring_accessHtml,
 	"static/templates/rewrite_primary_key.html": staticTemplatesRewrite_primary_keyHtml,
@@ -6307,6 +6347,10 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"promised_amount_actualization.html": &bintree{staticTemplatesPromised_amount_actualizationHtml, map[string]*bintree{
 			}},
 			"promised_amount_list.html": &bintree{staticTemplatesPromised_amount_listHtml, map[string]*bintree{
+			}},
+			"promised_amount_restricted.html": &bintree{staticTemplatesPromised_amount_restrictedHtml, map[string]*bintree{
+			}},
+			"promised_amount_restricted_list.html": &bintree{staticTemplatesPromised_amount_restricted_listHtml, map[string]*bintree{
 			}},
 			"repayment_credit.html": &bintree{staticTemplatesRepayment_creditHtml, map[string]*bintree{
 			}},

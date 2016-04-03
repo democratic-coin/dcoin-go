@@ -1,0 +1,47 @@
+{{define "PromisedAmountRestricted"}}
+<script>
+
+	$('#getCoins').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},72,30');
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'currency_id' : 72,
+						'amount' : 30,
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('miningMenu', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+		});
+
+
+</script>
+<h1 class="page-header">Mining</h1>
+
+{{template "alertSuccess".}}
+{{if .Alert}}
+<img src="/static/img/load.gif">
+{{else}}
+
+<button id="getCoins" class="btn btn-primary">Get FREE coins</button>
+{{end}}
+
+
+{{template "signatures".}}
+
+<script>
+	//doSign();
+</script>
+{{end}}

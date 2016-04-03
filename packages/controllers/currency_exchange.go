@@ -132,7 +132,7 @@ func (c *Controller) CurrencyExchange() (string, error) {
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		profit, err := c.CalcProfitGen(currency_id, amount, c.SessUserId, last_update, timeNow, "wallets")
+		profit, err := c.CalcProfitGen(currency_id, amount, c.SessUserId, last_update, timeNow, "wallet")
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}

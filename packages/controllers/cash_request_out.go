@@ -59,7 +59,7 @@ func (c *Controller) CashRequestOut() (string, error) {
 		if currency_id == 1 {
 			continue
 		}
-		profit, err := c.CalcProfitGen(currency_id, amount, c.SessUserId, last_update, timeNow, "wallets")
+		profit, err := c.CalcProfitGen(currency_id, amount, c.SessUserId, last_update, timeNow, "wallet")
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
