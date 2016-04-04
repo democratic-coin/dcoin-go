@@ -74,7 +74,7 @@ func (p *Parser) ParseDataFull() error {
 
 			err = p.CheckLogTx(transactionBinaryDataFull)
 			if err != nil {
-				err0 = p.RollbackTo(txForRollbackTo, true, false)
+				err0 := p.RollbackTo(txForRollbackTo, true, false)
 				if err0!=nil{
 					log.Error("error: %v", err0)
 				}
@@ -86,7 +86,7 @@ func (p *Parser) ParseDataFull() error {
 			if err != nil {
 				utils.WriteSelectiveLog(err)
 				utils.WriteSelectiveLog("RollbackTo")
-				err0 = p.RollbackTo(txForRollbackTo, true, false)
+				err0 := p.RollbackTo(txForRollbackTo, true, false)
 				if err0!=nil{
 					log.Error("error: %v", err0)
 				}
@@ -99,7 +99,7 @@ func (p *Parser) ParseDataFull() error {
 			p.TxSlice, err = p.ParseTransaction(&transactionBinaryData)
 			log.Debug("p.TxSlice %v", p.TxSlice)
 			if err != nil {
-				err0 = p.RollbackTo(txForRollbackTo, true, false)
+				err0 := p.RollbackTo(txForRollbackTo, true, false)
 				if err0!=nil{
 					log.Error("error: %v", err0)
 				}
@@ -124,7 +124,7 @@ func (p *Parser) ParseDataFull() error {
 
 				// чтобы 1 юзер не смог прислать дос-блок размером в 10гб, который заполнит своими же транзакциями
 				if txCounter[userId] > p.Variables.Int64["max_block_user_transactions"] {
-					err0 = p.RollbackTo(txForRollbackTo, true, false)
+					err0 := p.RollbackTo(txForRollbackTo, true, false)
 					if err0!=nil{
 						log.Error("error: %v", err0)
 					}
@@ -135,7 +135,7 @@ func (p *Parser) ParseDataFull() error {
 			// время в транзакции не может быть больше, чем на MAX_TX_FORW сек времени блока
 			// и  время в транзакции не может быть меньше времени блока -24ч.
 			if utils.BytesToInt64(p.TxSlice[2])-consts.MAX_TX_FORW > p.BlockData.Time || utils.BytesToInt64(p.TxSlice[2]) < p.BlockData.Time-consts.MAX_TX_BACK {
-				err0 = p.RollbackTo(txForRollbackTo, true, false)
+				err0 := p.RollbackTo(txForRollbackTo, true, false)
 				if err0!=nil{
 					log.Error("error: %v", err0)
 				}
@@ -165,7 +165,7 @@ func (p *Parser) ParseDataFull() error {
 			err_ = utils.CallMethod(p, MethodName+"Front")
 			if _, ok := err_.(error); ok {
 				log.Error("error: %v", err_)
-				err0 = p.RollbackTo(txForRollbackTo, true, false)
+				err0 := p.RollbackTo(txForRollbackTo, true, false)
 				if err0!=nil{
 					log.Error("error: %v", err0)
 				}
