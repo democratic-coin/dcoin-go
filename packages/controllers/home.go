@@ -354,6 +354,8 @@ func (c *Controller) Home() (string, error) {
 
 	DCTarget := consts.DCTarget[72]
 
+	utils.ChatMinSignTime = 0
+
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		DCTarget: DCTarget,
 		Chart: 					chart,
