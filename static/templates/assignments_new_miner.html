@@ -255,7 +255,7 @@
 	<canvas id="face" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
 
 	<br><br>
-
+<div class="is_profile">
 	<canvas id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg'); background-size: 350px;" width="350" height="500"></canvas>
 	<canvas style="position: relative; top:0px; left:0px;" width="350" height="500"></canvas>
 
@@ -263,7 +263,7 @@
 	<canvas id="profile" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
 
 	<br><br>
-
+</div>
 	{{.Lang.attention}}
 	<br>
 	Comment: <input type="text" id="comment_step_1" value="">English only<br>
@@ -299,8 +299,22 @@
 				{{js .ExamplePoints.profile}}
 		]
 		});
-
-
+		/* Если майнеров <= 1000, то шага загрузки профиля нет и в реальности он является дубликатом
+		фото анфаса. Поэтому при проверке майнеров в уэтом случае необходимо скриывать проверку профиля, 
+		чтобы не путать майнера. Если профиль не загружался, то пользовательские координаты профиля 
+		(6 первых точек) такие же как у анфаса. Поэтому просто проверим первые точки (достаочно 2-3) у профиля и анфаса.
+		Если они равны, то профиль не загружался и его не будем показывать.*/
+		var coord_face = coords.getObject("face").user_coords;
+		var coord_profile = coords.getObject("profile").user_coords;
+		if ( coord_face.length > 3 && coord_profile.length > 3 ) {
+			var i;
+			for ( i = 0; i < 3; i++ ) {
+				if ( coord_face[i][0] != coord_profile[i][0] || coord_face[i][1] != coord_profile[i][1] )
+					break;
+			}
+			if ( i == 3 )
+				$(".is_profile").hide();
+		}		
 	</script>
 </div>
 
@@ -310,14 +324,14 @@
 <div id="step_2" style="display:none; ">
 	<div id="xx1" style="width:300px; position:fixed;">
 		<div style="float:left;width:150px; height:220px" id="main_face"></div>
-		<div style="float:left;width:150px; height:220px" id="main_profile"></div>
+		<div class="is_profile" style="float:left;width:150px; height:220px" id="main_profile"></div>
 	</div>
 
 	<div style="padding-top:220px">
 		{{range $cloneUserId, $hosts := .CloneHosts}}
 			<div style='width: 300px; height:220px'>
 			<div style='width: 150px; height: 220px; float:left' id='clone_photo_face[{{$cloneUserId}}]'></div>
-			<div style='width: 150px; height: 220px; float:left' id='clone_photo_profile[{{$cloneUserId}}]'></div>
+			<div class="is_profile" style='width: 150px; height: 220px; float:left' id='clone_photo_profile[{{$cloneUserId}}]'></div>
 			</div>
 		{{end}}
 	</div>
@@ -340,7 +354,7 @@
 	<p>{{.Lang.tasks_new_miner_video}}</p>
 	<div style="width:300px;float: left;">
 		<div style="float: left;width:150px; height:220px;" id="step_3_face"></div>
-		<div style="float: left;width:150px; height:220px;" id="step_3_profile"></div>
+		<div class="is_profile" style="float: left;width:150px; height:220px;" id="step_3_profile"></div>
 	</div>
 	<div>
 		{{if ne .UserInfo.video_url_id "null"}}

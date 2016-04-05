@@ -161,6 +161,9 @@
 // static/nodes.inc
 // static/sass/addons/_mixins.scss
 // static/sass/pages/_home.scss
+// static/sass/pages/_mining_menu.scss
+// static/sass/pages/_new_promised_amount.scss
+// static/sass/pages/_new_user.scss
 // static/sass/style.scss
 // static/swf/sAS3Cam.swf
 // static/templates/.directory
@@ -199,12 +202,14 @@
 // static/templates/change_pool.html
 // static/templates/change_primary_key.html
 // static/templates/change_promised_amount.html
+// static/templates/chart.html
 // static/templates/chat.html
 // static/templates/credits.html
 // static/templates/currency_exchange.html
 // static/templates/currency_exchange_delete.html
 // static/templates/db_info.html
 // static/templates/db_info_nodes.html
+// static/templates/del_auto_payment.html
 // static/templates/del_cf_funding.html
 // static/templates/del_cf_project.html
 // static/templates/del_credit.html
@@ -252,6 +257,8 @@
 // static/templates/progress_bar.html
 // static/templates/promised_amount_actualization.html
 // static/templates/promised_amount_list.html
+// static/templates/promised_amount_restricted.html
+// static/templates/promised_amount_restricted_list.html
 // static/templates/repayment_credit.html
 // static/templates/restoring_access.html
 // static/templates/rewrite_primary_key.html
@@ -3201,6 +3208,60 @@ func staticSassPages_homeScss() (*asset, error) {
 	return a, err
 }
 
+// staticSassPages_mining_menuScss reads file data from disk. It returns an error on failure.
+func staticSassPages_mining_menuScss() (*asset, error) {
+	path := "static/sass/pages/_mining_menu.scss"
+	name := "static/sass/pages/_mining_menu.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassPages_new_promised_amountScss reads file data from disk. It returns an error on failure.
+func staticSassPages_new_promised_amountScss() (*asset, error) {
+	path := "static/sass/pages/_new_promised_amount.scss"
+	name := "static/sass/pages/_new_promised_amount.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassPages_new_userScss reads file data from disk. It returns an error on failure.
+func staticSassPages_new_userScss() (*asset, error) {
+	path := "static/sass/pages/_new_user.scss"
+	name := "static/sass/pages/_new_user.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSassStyleScss reads file data from disk. It returns an error on failure.
 func staticSassStyleScss() (*asset, error) {
 	path := "static/sass/style.scss"
@@ -3885,6 +3946,24 @@ func staticTemplatesChange_promised_amountHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesChartHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesChartHtml() (*asset, error) {
+	path := "static/templates/chart.html"
+	name := "static/templates/chart.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesChatHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChatHtml() (*asset, error) {
 	path := "static/templates/chat.html"
@@ -3979,6 +4058,24 @@ func staticTemplatesDb_infoHtml() (*asset, error) {
 func staticTemplatesDb_info_nodesHtml() (*asset, error) {
 	path := "static/templates/db_info_nodes.html"
 	name := "static/templates/db_info_nodes.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesDel_auto_paymentHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesDel_auto_paymentHtml() (*asset, error) {
+	path := "static/templates/del_auto_payment.html"
+	name := "static/templates/del_auto_payment.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -4839,6 +4936,42 @@ func staticTemplatesPromised_amount_listHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesPromised_amount_restrictedHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesPromised_amount_restrictedHtml() (*asset, error) {
+	path := "static/templates/promised_amount_restricted.html"
+	name := "static/templates/promised_amount_restricted.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesPromised_amount_restricted_listHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesPromised_amount_restricted_listHtml() (*asset, error) {
+	path := "static/templates/promised_amount_restricted_list.html"
+	name := "static/templates/promised_amount_restricted_list.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesRepayment_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRepayment_creditHtml() (*asset, error) {
 	path := "static/templates/repayment_credit.html"
@@ -5502,6 +5635,9 @@ var _bindata = map[string]func() (*asset, error){
 	"static/nodes.inc": staticNodesInc,
 	"static/sass/addons/_mixins.scss": staticSassAddons_mixinsScss,
 	"static/sass/pages/_home.scss": staticSassPages_homeScss,
+	"static/sass/pages/_mining_menu.scss": staticSassPages_mining_menuScss,
+	"static/sass/pages/_new_promised_amount.scss": staticSassPages_new_promised_amountScss,
+	"static/sass/pages/_new_user.scss": staticSassPages_new_userScss,
 	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
 	"static/templates/.directory": staticTemplatesDirectory,
@@ -5540,12 +5676,14 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/change_pool.html": staticTemplatesChange_poolHtml,
 	"static/templates/change_primary_key.html": staticTemplatesChange_primary_keyHtml,
 	"static/templates/change_promised_amount.html": staticTemplatesChange_promised_amountHtml,
+	"static/templates/chart.html": staticTemplatesChartHtml,
 	"static/templates/chat.html": staticTemplatesChatHtml,
 	"static/templates/credits.html": staticTemplatesCreditsHtml,
 	"static/templates/currency_exchange.html": staticTemplatesCurrency_exchangeHtml,
 	"static/templates/currency_exchange_delete.html": staticTemplatesCurrency_exchange_deleteHtml,
 	"static/templates/db_info.html": staticTemplatesDb_infoHtml,
 	"static/templates/db_info_nodes.html": staticTemplatesDb_info_nodesHtml,
+	"static/templates/del_auto_payment.html": staticTemplatesDel_auto_paymentHtml,
 	"static/templates/del_cf_funding.html": staticTemplatesDel_cf_fundingHtml,
 	"static/templates/del_cf_project.html": staticTemplatesDel_cf_projectHtml,
 	"static/templates/del_credit.html": staticTemplatesDel_creditHtml,
@@ -5593,6 +5731,8 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/progress_bar.html": staticTemplatesProgress_barHtml,
 	"static/templates/promised_amount_actualization.html": staticTemplatesPromised_amount_actualizationHtml,
 	"static/templates/promised_amount_list.html": staticTemplatesPromised_amount_listHtml,
+	"static/templates/promised_amount_restricted.html": staticTemplatesPromised_amount_restrictedHtml,
+	"static/templates/promised_amount_restricted_list.html": staticTemplatesPromised_amount_restricted_listHtml,
 	"static/templates/repayment_credit.html": staticTemplatesRepayment_creditHtml,
 	"static/templates/restoring_access.html": staticTemplatesRestoring_accessHtml,
 	"static/templates/rewrite_primary_key.html": staticTemplatesRewrite_primary_keyHtml,
@@ -6011,6 +6151,12 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"pages": &bintree{nil, map[string]*bintree{
 				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{
 				}},
+				"_mining_menu.scss": &bintree{staticSassPages_mining_menuScss, map[string]*bintree{
+				}},
+				"_new_promised_amount.scss": &bintree{staticSassPages_new_promised_amountScss, map[string]*bintree{
+				}},
+				"_new_user.scss": &bintree{staticSassPages_new_userScss, map[string]*bintree{
+				}},
 			}},
 			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{
 			}},
@@ -6092,6 +6238,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			}},
 			"change_promised_amount.html": &bintree{staticTemplatesChange_promised_amountHtml, map[string]*bintree{
 			}},
+			"chart.html": &bintree{staticTemplatesChartHtml, map[string]*bintree{
+			}},
 			"chat.html": &bintree{staticTemplatesChatHtml, map[string]*bintree{
 			}},
 			"credits.html": &bintree{staticTemplatesCreditsHtml, map[string]*bintree{
@@ -6103,6 +6251,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"db_info.html": &bintree{staticTemplatesDb_infoHtml, map[string]*bintree{
 			}},
 			"db_info_nodes.html": &bintree{staticTemplatesDb_info_nodesHtml, map[string]*bintree{
+			}},
+			"del_auto_payment.html": &bintree{staticTemplatesDel_auto_paymentHtml, map[string]*bintree{
 			}},
 			"del_cf_funding.html": &bintree{staticTemplatesDel_cf_fundingHtml, map[string]*bintree{
 			}},
@@ -6197,6 +6347,10 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"promised_amount_actualization.html": &bintree{staticTemplatesPromised_amount_actualizationHtml, map[string]*bintree{
 			}},
 			"promised_amount_list.html": &bintree{staticTemplatesPromised_amount_listHtml, map[string]*bintree{
+			}},
+			"promised_amount_restricted.html": &bintree{staticTemplatesPromised_amount_restrictedHtml, map[string]*bintree{
+			}},
+			"promised_amount_restricted_list.html": &bintree{staticTemplatesPromised_amount_restricted_listHtml, map[string]*bintree{
 			}},
 			"repayment_credit.html": &bintree{staticTemplatesRepayment_creditHtml, map[string]*bintree{
 			}},

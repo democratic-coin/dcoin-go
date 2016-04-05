@@ -26,15 +26,13 @@
 					sendToTheChat();
 				}
 			}, 500);
-
 		});
 
 		if (!Date.now) {
 			Date.now = function() { return new Date().getTime(); }
 		}
+
 		function sendToTheChat() {
-
-
 			var chatMessageReceiver =  $('#chatUserIdReceiver').val();
 			var chatMessageSender =  userId;
 			var status = 0;
@@ -42,9 +40,6 @@
 				status = 1
 			}
 			var signTime = Math.floor(Date.now() / 1000);
-
-
-
 
 			var objEx =
 			{
@@ -93,10 +88,24 @@
 				objDiv.scrollTop = objDiv.scrollHeight;
 			}
 		}
-		$(document).ready(function() {
 
-			$.post('ajax?controllerName=getChatMessages&first=1&room='+room+'&lang='+lang, {}, function (data) {
+		Array.prototype.getUnique = function(){
+		   var u = {}, a = [];
+		   for(var i = 0, l = this.length; i < l; ++i){
+			  if(u.hasOwnProperty(this[i])) {
+				 continue;
+			  }
+			  a.push(this[i]);
+			  u[this[i]] = 1;
+		   }
+		   return a;
+		};
+
+		$(document).ready(function() {
+			$.post('ajax?controllerName=getChatMessages&first=1&room='+room+'&lang='+lang, {},
+				function (data) {
 				if (typeof data.messages != "undefined" && data.messages != "") {
+					console.log("messages ", data.messages);
 					$('#chatMessages').append(data.messages);
 					scrollToBottom();
 				}

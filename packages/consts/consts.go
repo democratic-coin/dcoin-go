@@ -2,7 +2,7 @@ package consts
 
 
 // текущая версия
-const VERSION = "2.2.3a5"
+const VERSION = "2.2.3a7"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -264,6 +264,8 @@ var TxTypes = map[int]string{
 	73: "DelUserFromPool",
 	// юзер меняет пул
 	74: "ChangePool",
+	// юзер меняет пул
+	75: "NewRestrictedPromisedAmount",
 }
 
 func init() {

@@ -354,6 +354,7 @@ func (c *Controller) Home() (string, error) {
 
 	DCTarget := consts.DCTarget[72]
 
+
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		DCTarget: DCTarget,
 		Chart: 					chart,

@@ -404,6 +404,12 @@ func (db *DCDB) GetList(query string, args ...interface{}) *listResult {
 	return &listResult{result, nil}
 }
 
+func (db *DCDB) GetCountMiners() (int64, error) {
+	return db.Single("SELECT count(miner_id) FROM miners WHERE active = 1").Int64()
+}
+	
+
+
 func GetParent() string {
 	parent := ""
 	for i := 2; ; i++ {
@@ -1932,10 +1938,6 @@ func (db *DCDB) CheckUser(userId int64) error {
 	} else {
 		return fmt.Errorf("user_id is null")
 	}
-}
-
-func (db *DCDB) GetLastBlockId() (int64, error) {
-	return db.Single("SELECT block_id FROM info_block").Int64()
 }
 
 func (db *DCDB) GetPct() (map[int64][]map[int64]map[string]float64, error) {

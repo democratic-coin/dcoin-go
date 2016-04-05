@@ -286,6 +286,10 @@ func (c *Controller) SaveQueue() (string, error) {
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
+			// Удаляем предыдущие комментарии
+			if err = c.ExecSql(`DELETE FROM `+c.MyPrefix+`my_comments WHERE type = 'miner'` ); err != nil {
+				return "", utils.ErrInfo(err)
+			}
 		}
 
 	case "VotesMiner": // голос за юзера, который хочет стать майнером
@@ -1440,6 +1444,14 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("comment")))...)
 		data = append(data, binSignatures...)
 
+	case "DelAutoPayment":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("auto_payment_id")))...)
+		data = append(data, binSignatures...)
+
 	case "SwitchPool":
 
 		data = utils.DecToBin(txType, 1)
@@ -1461,6 +1473,15 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.DecToBin(txTime, 4)...)
 		data = append(data, utils.EncodeLengthPlusData(userId)...)
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("pool_user_id")))...)
+		data = append(data, binSignatures...)
+
+	case "NewRestrictedPromisedAmount":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("currency_id")))...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("amount")))...)
 		data = append(data, binSignatures...)
 
 	}

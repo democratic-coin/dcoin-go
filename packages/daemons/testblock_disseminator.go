@@ -14,7 +14,7 @@ import (
 func TestblockDisseminator(chBreaker chan bool, chAnswer chan string) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("daemon Recovered", r)
+			logger.Error("daemon Recovered", r)
 			panic(r)
 		}
 	}()
@@ -43,13 +43,13 @@ func TestblockDisseminator(chBreaker chan bool, chAnswer chan string) {
 
 	err = d.notMinerSetSleepTime(1800)
 	if err != nil {
-		log.Error("%v", err)
+		logger.Error("%v", err)
 		return
 	}
 
 BEGIN:
 	for {
-		log.Info(GoroutineName)
+		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
 		// проверим, не нужно ли нам выйти из цикла
@@ -72,18 +72,18 @@ BEGIN:
 			}
 			continue
 		}
-		log.Debug("level: %v", level)
-		log.Debug("levelsRange: %v", levelsRange)
+		logger.Debug("level: %v", level)
+		logger.Debug("levelsRange: %v", levelsRange)
 		// получим id майнеров, которые на нашем уровне
 		nodesIds := utils.GetOurLevelNodes(level, levelsRange)
 		if len(nodesIds) == 0 {
-			log.Debug("len(nodesIds) == 0")
+			logger.Debug("len(nodesIds) == 0")
 			if d.dSleep(d.sleepTime) {
 				break BEGIN
 			}
 			continue
 		}
-		log.Debug("nodesIds: %v", nodesIds)
+		logger.Debug("nodesIds: %v", nodesIds)
 
 		// получим хосты майнеров, которые на нашем уровне
 		hosts_, err := d.GetList("SELECT tcp_host FROM miners_data WHERE miner_id IN (" + strings.Join(utils.SliceInt64ToString(nodesIds), `,`) + ")").String()
@@ -101,7 +101,7 @@ BEGIN:
 			}
 		}
 
-		log.Debug("hosts: %v", hosts)
+		logger.Debug("hosts: %v", hosts)
 
 		// шлем block_id, user_id, mrkl_root, signature
 		data, err := d.OneRow("SELECT block_id, time, user_id, mrkl_root, signature FROM testblock WHERE status  =  'active' AND sent=0").String()
@@ -129,10 +129,10 @@ BEGIN:
 
 			for _, host := range hosts {
 				go func(host string) {
-					log.Debug("host: %v", host)
+					logger.Debug("host: %v", host)
 					conn, err := utils.TcpConn(host)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					}
 					defer conn.Close()
@@ -140,21 +140,21 @@ BEGIN:
 					// вначале шлем тип данных
 					_, err = conn.Write(utils.DecToBin(6, 2))
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					}
 
 					// в 4-х байтах пишем размер данных, которые пошлем далее
 					_, err = conn.Write(utils.DecToBin(len(dataToBeSent), 4))
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					}
 					// далее шлем сами данные
-					log.Debug("dataToBeSent: %x", dataToBeSent)
+					logger.Debug("dataToBeSent: %x", dataToBeSent)
 					_, err = conn.Write(dataToBeSent)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					}
 
@@ -165,7 +165,7 @@ BEGIN:
 					buf := make([]byte, 4)
 					_, err = conn.Read(buf)
 					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+						logger.Error("%v", utils.ErrInfo(err))
 						return
 					}
 					dataSize := utils.BinToDec(buf)
@@ -174,7 +174,7 @@ BEGIN:
 
 						data, err := d.OneRow("SELECT * FROM testblock").String()
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
@@ -188,7 +188,7 @@ BEGIN:
 							binaryData := make([]byte, dataSize)
 							_, err := conn.Read(binaryData)
 							if err != nil {
-								log.Error("%v", utils.ErrInfo(err))
+								logger.Error("%v", utils.ErrInfo(err))
 								return
 							}
 
@@ -212,7 +212,7 @@ BEGIN:
 						var transactions []byte
 						transactions_testblock, err := d.GetList(`SELECT data FROM transactions_testblock ` + addSql).String()
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						for _, txData := range transactions_testblock {
@@ -224,7 +224,7 @@ BEGIN:
 						// порядок тр-ий
 						transactions_testblock, err = d.GetList(`SELECT hash FROM transactions_testblock ORDER BY id ASC`).String()
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 						for _, txHash := range transactions_testblock {
@@ -234,14 +234,14 @@ BEGIN:
 						// в 4-х байтах пишем размер данных, которые пошлем далее
 						_, err = conn.Write(utils.DecToBin(len(responseBinaryData), 4))
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 
 						// далее шлем сами данные
 						_, err = conn.Write(responseBinaryData)
 						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
+							logger.Error("%v", utils.ErrInfo(err))
 							return
 						}
 					}
@@ -254,7 +254,7 @@ BEGIN:
 			break BEGIN
 		}
 	}
-	log.Debug("break BEGIN %v", GoroutineName)
+	logger.Debug("break BEGIN %v", GoroutineName)
 
 }
 

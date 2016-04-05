@@ -8,39 +8,33 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
 	"text/template"
+	//"fmt"
 )
 
 var chatIds = make(map[int64][]int)
-var chatMinSignTime int64
+
+type Message struct {
+
+}
 
 func (c *Controller) GetChatMessages() (string, error) {
-
 	c.r.ParseForm()
 	first := c.r.FormValue("first")
-	room := utils.StrToInt64(c.r.FormValue("room"))
-	lang := utils.StrToInt64(c.r.FormValue("lang"))
 
 	if first == "1" {
 		chatIds[c.SessUserId] = []int{}
 	}
-	maxId, err := c.Single(`SELECT max(id) FROM chat`).Int64()
+
+	if err := removeOld(c); err != nil {
+		return "", err
+	}
+
+	chatData, err := getChatData(c)
 	if err != nil {
-		return "", utils.ErrInfo(err)
+		return "", err
 	}
-	// удалим старое
-	err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId-consts.CHAT_MAX_MESSAGES)
-	if err != nil {
-		return "", utils.ErrInfo(err)
-	}
-	ids := ""
-	if len(chatIds[c.SessUserId]) > 0 {
-		ids = `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
-	}
+
 	var result string
-	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  `+ids+` ORDER BY sign_time DESC LIMIT `+utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES), consts.CHAT_COUNT_MESSAGES, chatMinSignTime, room, lang)
-	if err != nil {
-		return "", utils.ErrInfo(err)
-	}
 	for i := len(chatData) - 1; i >= 0; i-- {
 		data := chatData[i]
 		status := data["status"]
@@ -55,26 +49,15 @@ func (c *Controller) GetChatMessages() (string, error) {
 					log.Error("%v", utils.ErrInfo(err))
 					continue
 				}
+
 				if len(privateKey) > 0 {
-					rsaPrivateKey, err := utils.MakePrivateKey(privateKey)
-					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
+					decrypted, err := decrypt(privateKey, data["message"], data["id"], c)
+					if err != nil || len(decrypted) < 1 {
+						log.Error("%v", err)
 						continue
 					}
-					decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, rsaPrivateKey, utils.HexToBin([]byte(data["message"])))
-					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
-						continue
-					}
-					if len(decrypted) > 0 {
-						err = c.ExecSql(`UPDATE chat SET enc_message = message, message = ?, status = ? WHERE id = ?`, decrypted, 2, data["id"])
-						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
-							continue
-						}
-						message = string(decrypted)
-						status = "2"
-					}
+					message = string(decrypted)
+					status = "2"
 				}
 			}
 		}
@@ -116,20 +99,77 @@ func (c *Controller) GetChatMessages() (string, error) {
 		result += row
 		chatIds[c.SessUserId] = append(chatIds[c.SessUserId], utils.StrToInt(data["id"]))
 		if first == "1" {
-			if utils.StrToInt64(data["sign_time"]) < chatMinSignTime || chatMinSignTime == 0 {
-				chatMinSignTime = utils.StrToInt64(data["sign_time"])
-				log.Debug("chatMinSignTime", chatMinSignTime)
+			if utils.StrToInt64(data["sign_time"]) < utils.ChatMinSignTime || utils.ChatMinSignTime == 0 {
+				utils.ChatMinSignTime = utils.StrToInt64(data["sign_time"])
+				log.Debug("utils.ChatMinSignTime", utils.ChatMinSignTime)
 			}
 		}
 	}
 
 	log.Debug("chat data: %v", result)
+	//fmt.Println("Result",result)
+	//fmt.Println("chatIds",chatIds)
 	chatStatus := "ok"
 	if len(utils.ChatInConnections) == 0 || len(utils.ChatOutConnections) == 0 {
 		chatStatus = "bad"
 	}
 
+	//fmt.Println("result",result)
+
 	resultJson, _ := json.Marshal(map[string]string{"messages": result, "chatStatus": chatStatus})
 
 	return string(resultJson), nil
+}
+
+
+func getChatData(c *Controller) ([]map[string]string, error) {
+	room := utils.StrToInt64(c.r.FormValue("room"))
+	lang := utils.StrToInt64(c.r.FormValue("lang"))
+	ids := `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
+
+	//fmt.Println("utils.ChatMinSignTime", utils.ChatMinSignTime)
+	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  ` +
+			ids +
+			` ORDER BY sign_time DESC LIMIT `+
+			utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES),
+			consts.CHAT_COUNT_MESSAGES,
+			utils.ChatMinSignTime,
+			room,
+			lang)
+
+	return chatData, utils.ErrInfo(err)
+}
+
+func decrypt(privateKey, message, id string, c *Controller) (string, error) {
+	rsaPrivateKey, err := utils.MakePrivateKey(privateKey)
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
+	decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, rsaPrivateKey, utils.HexToBin([]byte(message)))
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	if len(decrypted) > 0 {
+		err = c.ExecSql(`UPDATE chat SET enc_message = message, message = ?, status = ? WHERE id = ?`, decrypted, 2, id)
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+
+		return string(decrypted), nil
+	}
+
+	return "", nil
+}
+
+
+func removeOld(c *Controller) error {
+	maxId, err := c.Single(`SELECT max(id) FROM chat`).Int64()
+	if err != nil {
+		return utils.ErrInfo(err)
+	}
+
+	// удалим старое
+	err = c.ExecSql(`DELETE FROM chat WHERE id < ?`, maxId - consts.CHAT_MAX_MESSAGES)
+	return utils.ErrInfo(err)
 }

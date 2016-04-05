@@ -31,5 +31,16 @@ func (c *Controller) SaveUserCoords() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+	if coordsType == "face" {
+		if count, _ := utils.DB.GetCountMiners(); count <= 1000 {
+			if coordsJson_, err = json.Marshal(coords[:6]); err != nil {
+				return "", err
+			}
+			err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET profile_coords = ?", string(coordsJson_))
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+		}
+	}
 	return `{"success":"ok"}`, nil
 }

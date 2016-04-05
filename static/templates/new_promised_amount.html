@@ -233,25 +233,6 @@
 			}*/
 	
 	
-			$( "#from_webcam_show" ).click(function() {
-				$("#from_webcam").css("display", "block");
-				$("#from_file").css("display", "none");
-				return false;
-			});
-	
-			$( "#from_file_show" ).click(function() {
-				$("#from_file").css("display", "block");
-				$("#from_webcam").css("display", "none");
-				return false;
-			});
-	
-			$( "#refresh_youtube" ).click(function() {
-				var iframe = document.getElementById('player');
-				iframe.src = iframe.src;
-				console.log('player');
-				return false;
-			});
-	
 			$("#main_div select").addClass( "form-control" );
 			$("#main_div input").addClass( "form-control" );
 			$("#main_div button").addClass( "btn-outline btn-primary" );
@@ -272,22 +253,22 @@
 							$('#del_webm_ogg').css("display", "none");
 						});
 			});
-			$( "#from_webcam_show" ).click(function() {
+/*			$( "#from_webcam_show" ).click(function() {
 				$("#from_webcam").css("display", "block");
 				$("#from_file").css("display", "none");
 				$("#from_youtube").css("display", "none");
 				return false;
-			});
+			});*/
 			$( "#from_file_show" ).click(function() {
 				$("#from_file").css("display", "block");
-				$("#from_webcam").css("display", "none");
+//				$("#from_webcam").css("display", "none");
 				$("#from_youtube").css("display", "none");
 				return false;
 			});
 			$( "#from_youtube_show" ).click(function() {
 				$("#from_youtube").css("display", "block");
 				$("#from_file").css("display", "none");
-				$("#from_webcam").css("display", "none");
+//				$("#from_webcam").css("display", "none");
 				return false;
 			});
 	
@@ -297,7 +278,7 @@
 				console.log('player');
 				return false;
 			});
-	
+
 	</script>
 	
 	<style>
@@ -319,21 +300,14 @@
 			}
 		}
 	
-		{{if .Mobile}}
-		#selectType {
-			display: none;
-		}
 		#from_file {
 			display: block;
-		}
-		#from_webcam {
-			display: none;
 		}
 		#from_youtube {
 			display: none;
 		}
-		{{else}}
-		#from_file {
+		{{if .Mobile}}
+		#selectType {
 			display: none;
 		}
 		{{end}}
@@ -379,19 +353,19 @@
 	
 			<p style="margin-top: 20px">{{.Lang.promised_amount_add_video_text}}</p>
 	
-			<p id="selectType"><a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} <a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
+			<p id="selectType"><!--a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}}--><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
 	
 	
-			<div id="from_webcam">
+			<!--div id="from_webcam">
 	
 				<div id="widget"></div>
 				<div id="player"></div>
 				<div id="refresh_youtube_div" style="display: none"><a href="#" id="refresh_youtube"><i class="fa fa-refresh fa-fw" style="font-size: 30px"></i></a></div>
 	
 				<script src="static/js/youtube_webcam.js"></script>
-			</div>
+			</div-->
 	
-			<div id="from_youtube" style="display: none">
+			<div id="from_youtube">
 	
 				<table class="table table-bordered">
 					<tr><td>
@@ -417,6 +391,7 @@
 				<div class="clearfix" style="margin-top: 20px"></div>
 				<div id="video_mp4_progress" class="my_progress">0%</div><br>
 				<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
+				<div id="video_mp4_err" class="alert alert-danger" style="display: none">{{.Lang.file_size_limit}}</div>
 				<button id="del_mp4" style="display: none">Delete</button>
 				<div id="video" style="display: none">
 					<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
