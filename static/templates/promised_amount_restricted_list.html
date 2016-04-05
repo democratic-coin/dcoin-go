@@ -1,0 +1,38 @@
+{{define "PromisedAmountRestrictedList"}}
+<script>
+
+	$('#getCoins').bind('click', function () {
+		if (new_amount-30 > 1) {
+			dc_navigate ('upgrade1', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		} else {
+			$('#message').html(	'<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Min 1 dUSD, please wait</div>' )
+		}
+	});
+
+	var i=0;
+	var pct = {{.Pct}}/10;
+	var amount = {{.Amount}}
+	var new_amount = 0
+
+	var intervalID = setInterval( function() {
+		i++;
+		//var new_amount = (amount * (pct * i)) / 100;
+		new_amount =  (Math.pow(1+pct, i) * amount);
+		$('#tdc').text((new_amount-30).toFixed(7) + " dUSD");
+	} , 100);
+	intervalIdArray.push(intervalID);
+
+</script>
+<h1 class="page-header">Mining</h1>
+<div id="message"></div>
+{{template "alertSuccess".}}
+
+<div id="tdc" style="font-size:60px"></div>
+1 dUSD = 1$<br>
+<button id="getCoins" class="btn btn-primary">dUSD -> USD</button>
+{{template "signatures".}}
+
+<script>
+	//doSign();
+</script>
+{{end}}

@@ -23,6 +23,9 @@ func Content(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "text/html")
 
+	// чтобы в чат не вставлялись старые сообщения после новых
+	utils.ChatMinSignTime = 0
+
 	sess, err := globalSessions.SessionStart(w, r)
 	if err != nil {
 		log.Error("%v", err)
