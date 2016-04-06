@@ -418,6 +418,28 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a8")) {
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "currency_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[4] = map[string]string{"name": "start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["promised_amount_restricted"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+			}
+
 			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))

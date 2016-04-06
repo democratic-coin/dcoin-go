@@ -1255,8 +1255,10 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 					return utils.ErrInfo(err_.(error))
 				}
 			}
-			p.DelLogTx(transactionBinaryData_)
-
+			err = p.DelLogTx(transactionBinaryData_)
+			if err!=nil{
+				log.Error("error: %v", err)
+			}
 			// =================== ради эксперимента =========
 			if onlyFront {
 				utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(p.TxHash))
@@ -3445,7 +3447,7 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 			p.ClearIncompatibleTxSql("NewPct", userId, &waitError)
 		}
 		if txType == utils.TypeInt("NewMinerUpdate") {
-			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner"}, userId, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner", "VotesNodeNewMiner"}, userId, &waitError, "")
 		}
 		if txType == utils.TypeInt("NewPct") {
 			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner"}, userId, &waitError, "")
@@ -3498,7 +3500,7 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "") // дополнить
 		}
 		if txType == utils.TypeInt("VotesNodeNewMiner") {
-			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners", "NewMinerUpdate"}, 0, &waitError, "")
 		}
 		if txType == utils.TypeInt("VotesPromisedAmount") {
 			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "")

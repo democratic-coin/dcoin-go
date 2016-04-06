@@ -54,6 +54,16 @@ func (a *AvailablekeyStruct) GetAvailableKey() (int64, string, error) {
 		if err != nil {
 			return 0, "", utils.ErrInfo(err)
 		}
+		if status == "waiting_set_new_key" {
+			// Была прервана регистрация - обнуляем таблицы
+			if err = a.ExecSql("UPDATE my_table SET user_id = 0, status = ?", "my_pending" ); err != nil {
+				return 0, "", utils.ErrInfo(err)
+			}
+			if err = a.ExecSql("DELETE FROM my_keys");err != nil {
+				return 0, "", utils.ErrInfo(err)
+			}
+			status = "my_pending"
+		}
 		if status != "my_pending" {
 			return 0, "", utils.ErrInfo(errors.New("my_table not null"))
 		}
