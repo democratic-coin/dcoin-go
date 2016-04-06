@@ -35,7 +35,7 @@ func (d *daemon) chatConnector() {
 		logger.Error("%v", err)
 	}
 	// исключим себя
-	myTcpHost, err := d.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end as tcp_host FROM miners_data as m WHERE m.user_id = ?`, myUserIdForChat).String()
+	myTcpHost, err := d.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host FROM miners_data as m WHERE m.user_id = ?`, myUserIdForChat).String()
 	if err != nil {
 		logger.Error("%v", err)
 	}
@@ -54,7 +54,7 @@ func (d *daemon) chatConnector() {
 		return
 	}
 
-	existsTcpHost, err := d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end as tcp_host FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
+	existsTcpHost, err := d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
 	if err != nil {
 		logger.Error("%v", err)
 	}
