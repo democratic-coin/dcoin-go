@@ -264,9 +264,7 @@ BEGIN:
 		}
 		logger.Info("%v", myMinersIds)
 		nodesBan, err := d.GetMap(`
-				SELECT tcp_host, ban_start
-				FROM nodes_ban
-				LEFT JOIN miners_data ON miners_data.user_id = nodes_ban.user_id
+				SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END, ban_start FROM nodes_ban as n LEFT JOIN miners_data as m ON m.user_id = n.user_id
 				`, "tcp_host", "ban_start")
 		logger.Info("%v", nodesBan)
 		nodesConnections, err := d.GetAll(`
@@ -410,9 +408,7 @@ BEGIN:
 				}
 				ids = ids[:len(ids)-1]
 				minersHosts, err := d.GetMap(`
-						SELECT tcp_host, user_id
-						FROM miners_data
-						WHERE miner_id IN (`+ids+`)`, "tcp_host", "user_id")
+						SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END, user_id FROM miners_data as m  WHERE miner_id IN (`+ids+`)`, "tcp_host", "user_id")
 				if err != nil {
 					if d.dPrintSleep(err, d.sleepTime) {
 						break BEGIN
