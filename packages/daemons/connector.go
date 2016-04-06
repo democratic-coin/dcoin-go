@@ -380,12 +380,14 @@ BEGIN:
 				}
 				continue BEGIN
 			}
+			logger.Info("max", max)
 			i0 := 0
 			for {
 				rand := 1
 				if max > 1 {
 					rand = utils.RandInt(1, max+1)
 				}
+				logger.Info("rand", rand)
 				idArray[rand] = 1
 				i0++
 				if i0 > 30 || len(idArray) >= need || len(idArray) >= max {
@@ -416,6 +418,8 @@ BEGIN:
 					}
 					continue BEGIN
 				}
+
+				logger.Info("minersHosts %v", minersHosts)
 				for host, userId := range minersHosts {
 					if len(nodesBan[host]) > 0 {
 						if utils.StrToInt64(nodesBan[host]) > utils.Time()-consts.NODE_BAN_TIME {
@@ -436,6 +440,8 @@ BEGIN:
 						continue BEGIN
 					}*/
 				}
+
+				logger.Info("newHostsForCheck %v", newHostsForCheck)
 			}
 		}
 
