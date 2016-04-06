@@ -3,7 +3,7 @@
 	var w = 350;
 	var h = 500;
 	if ($(window).width() <= 320) {
-		w = 300;
+		w = 290;
 		h = 428;
 	}
 	var jcrop_api = '';
@@ -24,7 +24,8 @@
 		#photo_select_method{display: none}
 	}
 
-	@media (max-width: 320px) {
+{#	@media (max-width: 320px) {#}
+	@media (max-width: 480px) {
 		#img_face {
 			width: 100%;
 		}
@@ -34,9 +35,9 @@
 		height: 500px;
 	}
 
-	@media (max-width: 320px) {
+	@media (max-width: 480px) {
 		.photo_cropper{
-			width: 300px;
+			width: 290px !important;
 			height: 428px;
 		}
 	}

@@ -1475,6 +1475,15 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("pool_user_id")))...)
 		data = append(data, binSignatures...)
 
+	case "NewRestrictedPromisedAmount":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("currency_id")))...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("amount")))...)
+		data = append(data, binSignatures...)
+
 	}
 
 	md5 := utils.Md5(data)

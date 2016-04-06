@@ -2392,7 +2392,7 @@ func (db *DCDB) NodesBan(userId int64, info string) error {
 			return err
 		}
 	} else {
-		err = db.ExecSql(`UPDATE nodes_ban SET ban_start = ?, info = ? WHERE user_id = ?`, userId, Time(), info)
+		err = db.ExecSql(`UPDATE nodes_ban SET ban_start = ?, info = ? WHERE user_id = ?`, Time(), info, userId)
 		if err != nil {
 			return err
 		}

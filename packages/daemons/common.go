@@ -287,7 +287,8 @@ func ClearDb(ChAnswer chan string, goroutineName string) error {
 	StartDaemons()
 	stopdaemons.Signals()
 	utils.Sleep(1)
-	// мониторим сигнал из БД о том, что демонам надо завершаться
-	go stopdaemons.WaitStopTime()
+// мониторим сигнал из БД о том, что демонам надо завершаться
+// Похоже это не нужно так как WaitStopTime не прекращает работу и от демонов не зависит
+//	go stopdaemons.WaitStopTime()
 	return nil
 }
