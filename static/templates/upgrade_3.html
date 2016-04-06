@@ -3,7 +3,7 @@
 	var w = 350;
 	var h = 500;
 	if ($(window).width() <= 320) {
-		w = 300;
+		w = 290;
 		h = 428;
 	}
 	var jcrop_api = '';
@@ -29,7 +29,7 @@
 
 	@media (max-width: 320px) {
 		.divwidth{
-			width: 300px;
+			width: 290px;
 		}
 		.bgwidth{
 			background-size: 300px;
@@ -92,7 +92,7 @@
 		var example_face = [
 			{{js .ExamplePoints.face}}
 		]
-		if (w == 300) {
+		if (w == 290) {
 			for (var i=0; i < example_face.length; i++) {
 				example_face[i][0] = example_face[i][0]*0.85;
 				example_face[i][1] = example_face[i][1]*0.85;
@@ -101,7 +101,7 @@
 		var example_profile = [
 			{{js .ExamplePoints.profile}}
 		]
-		if (w == 300) {
+		if (w == 290) {
 			for (var i=0; i < example_profile.length; i++) {
 				example_profile[i][0] = example_profile[i][0]*0.85;
 				example_profile[i][1] = example_profile[i][1]*0.85;
