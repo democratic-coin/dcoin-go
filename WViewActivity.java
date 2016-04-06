@@ -45,6 +45,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.content.pm.ActivityInfo;
 import android.os.SystemClock;
+import android.webkit.GeolocationPermissions;
 
 
 public class WViewActivity extends Activity {
