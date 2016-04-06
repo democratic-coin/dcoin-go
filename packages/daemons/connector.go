@@ -35,7 +35,7 @@ func (d *daemon) chatConnector() {
 		logger.Error("%v", err)
 	}
 	// исключим себя
-	myTcpHost, err := d.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.user_id = ?`, myUserIdForChat).String()
+	myTcpHost, err := d.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end as tcp_host FROM miners_data as m WHERE m.user_id = ?`, myUserIdForChat).String()
 	if err != nil {
 		logger.Error("%v", err)
 	}
@@ -53,7 +53,7 @@ func (d *daemon) chatConnector() {
 		return
 	}
 
-	existsTcpHost, err := d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
+	existsTcpHost, err := d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end as tcp_host FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
 	if err != nil {
 		logger.Error("%v", err)
 	}
@@ -265,7 +265,7 @@ BEGIN:
 		}
 		logger.Info("%v", myMinersIds)
 		nodesBan, err := d.GetMap(`
-				SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END, ban_start FROM nodes_ban as n LEFT JOIN miners_data as m ON m.user_id = n.user_id
+				SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host, ban_start FROM nodes_ban as n LEFT JOIN miners_data as m ON m.user_id = n.user_id
 				`, "tcp_host", "ban_start")
 		logger.Info("%v", nodesBan)
 		nodesConnections, err := d.GetAll(`
@@ -411,7 +411,7 @@ BEGIN:
 				}
 				ids = ids[:len(ids)-1]
 				minersHosts, err := d.GetMap(`
-						SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END, user_id FROM miners_data as m  WHERE miner_id IN (`+ids+`)`, "tcp_host", "user_id")
+						SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host, user_id FROM miners_data as m  WHERE miner_id IN (`+ids+`)`, "tcp_host", "user_id")
 				if err != nil {
 					if d.dPrintSleep(err, d.sleepTime) {
 						break BEGIN
