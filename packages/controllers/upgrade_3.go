@@ -41,9 +41,9 @@ func (c *Controller) Upgrade3() (string, error) {
 	}
 
 	fmt.Println("race", r)
-
 	l.Println("Race detected:", r)
 	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET race = ?", r)
+
 	if err != nil {
 		l.Println(err)
 	}
@@ -63,14 +63,18 @@ func (c *Controller) Upgrade3() (string, error) {
 	log.Debug("userProfile: %s", userProfile)
 	log.Debug("userFace: %s", userFace)
 
+	l.Printf("userProfile: %s", userProfile)
+	l.Printf("userFace: %s", userFace)
 
 	// текущий набор точек для шаблонов
+	// current set of points for the templates
 	examplePoints, err := c.GetPoints(c.Lang)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 
 	// точки, которые юзер уже отмечал
+	// user selected points
 	data, err := c.OneRow("SELECT face_coords, profile_coords FROM " + c.MyPrefix + "my_table").String()
 	if err != nil {
 		return "", utils.ErrInfo(err)

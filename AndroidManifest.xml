@@ -2,11 +2,15 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.golang.app"
-	android:versionCode="2.2.5"
+	android:versionCode="6"
 	android:versionName="2.2.3a5">
 
 	<uses-sdk android:minSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -27,7 +31,6 @@
             android:configChanges="orientation|keyboardHidden">
             <meta-data android:name="android.app.lib_name" android:value="dcoin" />
         </activity>
-
 
 		<activity android:name="org.golang.app.MainActivity"
 				  android:label="Dcoin"
