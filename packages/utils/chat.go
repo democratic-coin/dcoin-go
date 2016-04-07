@@ -360,6 +360,8 @@ func ChatOutput(newTx chan int64) {
 // когда подклюаемся к кому-то или когда кто-то подключается к нам,
 // то создается горутина, которая будет ждать, пока появятся свежие
 // данные в табле chat, чтобы послать их
+
+// create a go routine on connect. It waits for fresh data in table chat
 func ChatTxDisseminator(conn net.Conn, userId int64, connectionChan chan *ChatData) {
 	chatId, err := DB.Single(`SELECT max(id) FROM chat`).Int64()
 	if err != nil {
