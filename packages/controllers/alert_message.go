@@ -6,6 +6,7 @@ import (
 	"math"
 	"regexp"
 	"strings"
+	"fmt"
 )
 
 func (c *Controller) AlertMessage() (string, error) {
@@ -158,10 +159,11 @@ func (c *Controller) AlertMessage() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		myNodePublicKey, err := c.GetMyNodePublicKey(c.MyPrefix)
+		fmt.Println("My Node {ublic key", c.MyPrefix)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		if (len(myNodePrivateKey) == 0 && minerId > 0) || (string(nodePublicKey) != myNodePublicKey && len(nodePublicKey) > 0) {
+		if (len(myNodePrivateKey) == 0 && minerId > 0) || string(nodePublicKey) != myNodePublicKey {
 			result += `<div class="alert alert-danger alert-dismissable" style='margin-top: 30px'><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 				     <h4>Warning!</h4>
 				     <div>` + c.Lang["alert_change_node_key"] + `</div>
