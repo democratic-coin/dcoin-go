@@ -1255,8 +1255,10 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 					return utils.ErrInfo(err_.(error))
 				}
 			}
-			p.DelLogTx(transactionBinaryData_)
-
+			err = p.DelLogTx(transactionBinaryData_)
+			if err!=nil{
+				log.Error("error: %v", err)
+			}
 			// =================== ради эксперимента =========
 			if onlyFront {
 				utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(p.TxHash))

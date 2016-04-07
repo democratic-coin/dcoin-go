@@ -45,6 +45,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.content.pm.ActivityInfo;
 import android.os.SystemClock;
+import android.webkit.GeolocationPermissions;
 
 
 public class WViewActivity extends Activity {
@@ -262,6 +263,14 @@ public class WViewActivity extends Activity {
 					cm.message(), cm.lineNumber(), cm.sourceId()));
 			return true;
 		}
+
+
+		@Override
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+            callback.invoke(origin, true, false);
+        }
+
+
 		private String getTitleFromUrl(String url) {
 			String title = url;
 			try {

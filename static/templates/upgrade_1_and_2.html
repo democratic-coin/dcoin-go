@@ -3,7 +3,7 @@
 	var w = 350;
 	var h = 500;
 	if ($(window).width() <= 320) {
-		w = 300;
+		w = 290;
 		h = 428;
 	}
 	var jcrop_api = '';
@@ -23,7 +23,9 @@
 		#from_webcam{display: none}
 		#photo_select_method{display: none}
 	}
-	@media (max-width: 320px) {
+
+{#	@media (max-width: 320px) {#}
+	@media (max-width: 480px) {
 		#img_face {
 			width: 100%;
 		}
@@ -33,9 +35,9 @@
 		height: 500px;
 	}
 
-	@media (max-width: 320px) {
+	@media (max-width: 480px) {
 		.photo_cropper{
-			width: 300px;
+			width: 290px !important;
 			height: 428px;
 		}
 	}
@@ -48,7 +50,7 @@
 <link rel="stylesheet" href="static/css/AS3Cam.css" type="text/css" />
 
 <h1 class="page-header">{{.Lang.upgrade_title}}</h1>
-{{if not .Mobile}}
+{{ if not .Mobile }}
 <ol class="breadcrumb" style="position: relative;">
 	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
 	<li class="active">{{.Lang.upgrade_title}}</li>
@@ -60,11 +62,10 @@
 		{{noescape .UpgradeMenu}}
 	</div>
 </div>
-    
 	<h3>{{.Lang.upload_2_photo}}</h3>
 	<div style="display: none">Please upgrade your browser to latest version</div>
 	{{noescape .Lang.upload_2_photo_rules}}
-	<p id="photo_select_method"><a href="#" id="from_webcam_show">{{.Lang.from_webcam}}</a> {{.Lang.or}} <a href="#" id="from_file_show">{{.Lang.from_file}}</a></p>
+	<p id="photo_select_method"><a href="#" id="from_webcam_show">{{ .Lang.from_webcam }}</a> {{.Lang.or}} <a href="#" id="from_file_show">{{.Lang.from_file}}</a></p>
 	<div id="from_webcam">
 
 		<table border="0" cellspacing="0" cellpadding="0">
@@ -101,7 +102,7 @@
 				<div style="margin:auto; text-align:center; line-height:22px">
 					<p style="margin-bottom:0px"  id="change_pkey_key_file_name" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
 					<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="fa fa-camera"></i> Select photo</button>
-					{{if not .Mobile}}<p>or dgag and drop photo</p>{{end}}
+					{{if not .Mobile}}<p>or drag and drop photo</p>{{end}}
 				</div>
 			</div>
 		</fieldset>
@@ -303,7 +304,6 @@
 				{{end}}
 			{{end}}
 		}
-
 	});
 
 	{{if .Photo}}
