@@ -77,7 +77,7 @@ BEGIN:
 			}
 		} else {
 			// защищенный режим
-			nodeData, err = d.OneRow("SELECT node_public_key, tcp_host FROM miners_data WHERE user_id  =  ?", nodeConfig["static_node_user_id"]).String()
+			nodeData, err = d.OneRow("SELECT node_public_key, CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host FROM miners_data as m WHERE m.user_id = ?", nodeConfig["static_node_user_id"]).String()
 			if err != nil {
 				if d.dPrintSleep(err, d.sleepTime) {
 					break BEGIN

@@ -863,7 +863,7 @@ func (db *DCDB) GetTcpHost() string {
 		}
 		tcpHost := data["tcp_host"]
 		if len(tcpHost) == 0 {
-			tcpHost, err = db.Single("SELECT tcp_host FROM miners_data WHERE user_id = ?", myUserId).String()
+			tcpHost, err = db.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?", myUserId).String()
 			if err != nil {
 				log.Error("%v", ErrInfo(err))
 			}
@@ -2392,7 +2392,7 @@ func (db *DCDB) NodesBan(userId int64, info string) error {
 			return err
 		}
 	} else {
-		err = db.ExecSql(`UPDATE nodes_ban SET ban_start = ?, info = ? WHERE user_id = ?`, userId, Time(), info)
+		err = db.ExecSql(`UPDATE nodes_ban SET ban_start = ?, info = ? WHERE user_id = ?`, Time(), info, userId)
 		if err != nil {
 			return err
 		}

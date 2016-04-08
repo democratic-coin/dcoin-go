@@ -51,10 +51,13 @@
 
 
 	$('#full').bind('click', function () {
+		$('#wrapper').spin( true );
 		$('#wait').text('{{.Lang.please_wait}}');
 		$.post( 'ajax?controllerName=clearDb', { } ,
 				function () {
-					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
+					$('#wrapper').spin( false );
+					window.location = '/';
+//					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
 				});
 	});
 

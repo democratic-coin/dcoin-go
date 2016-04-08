@@ -133,7 +133,16 @@ func (c *Controller) MiningMenu() (string, error) {
 					}
 				}
 			} else { // запрос на получение статуса "майнер" мы еще не слали
-				result = "null"
+				// может уже добавили ограниченную обещанную сумму
+				pa_restricted_list, err := c.Single("SELECT id FROM promised_amount_restricted WHERE user_id = ?", c.SessUserId).Int64()
+				if err != nil {
+					return "", utils.ErrInfo(err)
+				}
+				if pa_restricted_list > 0 {
+					result = "pa_restricted_list"
+				} else {
+					result = "null"
+				}
 			}
 		} else {
 
@@ -195,6 +204,14 @@ func (c *Controller) MiningMenu() (string, error) {
 	log.Debug(">result:", result)
 	var nodePrivateKey string
 	if result == "null" {
+		tplName = "promised_amount_restricted"
+		tplTitle = "promisedAmountRestricted"
+		return c.PromisedAmountRestricted()
+	} else if result == "pa_restricted_list" {
+		tplName = "promised_amount_restricted_list"
+		tplTitle = "promisedAmountRestrictedList"
+		return c.PromisedAmountRestrictedList()
+	} else if result == "upgrade" {
 		tplName = "upgrade_1"
 		tplTitle = "upgrade1"
 		return c.Upgrade1()
