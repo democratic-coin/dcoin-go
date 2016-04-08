@@ -349,7 +349,7 @@ BEGIN:
 		}
 
 		logger.Info("%v", hosts)
-		fmt.Println(`Hosts`, hosts )
+//		fmt.Println(`Hosts`, hosts )
 		if len(hosts) == 0 {
 			if d.dPrintSleep(err, 1) {
 				break BEGIN
