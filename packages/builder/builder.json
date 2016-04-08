@@ -1,0 +1,14 @@
+{
+	"default" : {
+		"Branch" : "dev",
+		"GitRoot" : "https://github.com/gentee/dcoin-go",
+		"TempPath" : "k:\\dcoin",
+		"GoPath" : "k:\\dcoin\\git",
+		"BinData" : "k:\\go\\src\\github.com\\democratic-coin\\dcoin-go\\go-bindata.exe",
+		"BinDebug" : false,
+		"OutFile" :  "k:\\dcoin\\output\\dcoin.exe"
+	},
+	"dev" : {
+		"Branch" : "dev"
+	}
+}
