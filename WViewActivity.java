@@ -299,6 +299,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+
+		    if (message.contains("location") return false;
+
 			String newTitle = getTitleFromUrl(url);
 
 			new AlertDialog.Builder(WViewActivity.this).setTitle(newTitle).setMessage(message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -314,6 +317,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+            if (message.contains("location")) {
+                return false;
+            }
 
 			String newTitle = getTitleFromUrl(url);
 
