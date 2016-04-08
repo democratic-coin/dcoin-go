@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"net/http"
-//	"bytes"
+	"runtime"
 	"io"
 	"path/filepath"
 	"os/exec"
@@ -135,8 +135,8 @@ func main() {
 	}
 	defer z.Close()
 	if _, err := os.Stat( filepath.Join( srcPath, "dcoinwindows.go")); err == nil {
-		fmt.Println(`Removing `, options.GitPath )		
-		if err = os.RemoveAll(options.GitPath); err!=nil {
+		fmt.Println(`Removing `, srcPath )		
+		if err = os.RemoveAll( srcPath); err!=nil {
 			exit(err)
 		}
 	}
@@ -162,8 +162,11 @@ func main() {
 	if err = os.MkdirAll( filepath.Dir(options.OutFile), 0755); err != nil {
 		exit(err)
 	}
-	fmt.Println( srcPath, options.OutFile )
-	cmd := exec.Command( `go`, `build`, `-o`, options.OutFile, `-ldflags`, `-H windowsgui`, GITPATH )
+	args = []string{ `build`, `-o`, options.OutFile, `-ldflags` }
+	if runtime.GOOS == `windows` {
+		args = append( args, `-H windowsgui`)
+	}
+	cmd = exec.Command( `go`, append( args, GITPATH )... )
 	if err = cmd.Run(); err != nil {
 		exit( err )
 	}
