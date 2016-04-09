@@ -444,7 +444,7 @@
 	$('#reloadBlockchain').bind('click', function () {
 		$('#reloadBlockchain').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
 		$('#reloadBlockchain').prop('disabled', true);
-		$.get('ajax?controllerName=' + {{if .StandardInstall}}'ClearDb'{{else}}'RestartDb'{{end}}, function (data) {
+		$.get('ajax?controllerName=' + {{if .StandardInstall}}'ReloadDb'{{else}}'RestartDb'{{end}}, function (data) {
 			$('#wrapper').spin( false );
 			window.location.href = "/";
 		});

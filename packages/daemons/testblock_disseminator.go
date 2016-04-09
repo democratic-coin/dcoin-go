@@ -86,7 +86,7 @@ BEGIN:
 		logger.Debug("nodesIds: %v", nodesIds)
 
 		// получим хосты майнеров, которые на нашем уровне
-		hosts_, err := d.GetList("SELECT tcp_host FROM miners_data WHERE miner_id IN (" + strings.Join(utils.SliceInt64ToString(nodesIds), `,`) + ")").String()
+		hosts_, err := d.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE miner_id IN (" + strings.Join(utils.SliceInt64ToString(nodesIds), `,`) + ")").String()
 		if err != nil {
 			if d.dPrintSleep(err, d.sleepTime) {
 				break BEGIN
