@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"fmt"
 )
 
 type promisedAmountRestrictedList struct {
@@ -24,21 +23,16 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 	}
 
 	amount := utils.StrToFloat64(paRestricted["amount"])
-	fmt.Println(paRestricted)
 	profit, err := c.CalcProfitGen(utils.StrToInt64(paRestricted["currency_id"]), amount, c.SessUserId, utils.StrToInt64(paRestricted["start_time"]), utils.Time(), "wallet")
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
 	profit += amount
-	fmt.Println(profit)
 
 	pct, err := c.Single(c.FormatQuery("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC"), utils.StrToInt64(paRestricted["currency_id"])).Float64()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
-	fmt.Println(pct)
-	fmt.Println( profit)
 
 	TemplateStr, err := makeTemplate("promised_amount_restricted_list", "PromisedAmountRestrictedList", &promisedAmountRestrictedList{
 		Alert:           c.Alert,

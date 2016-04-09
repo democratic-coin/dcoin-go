@@ -184,8 +184,7 @@ BEGIN:
 			}
 			logger.Debug("i %v", i)
 			logger.Debug("sleep %v", sleep)
-			var newHeadHash string
-			err = d.QueryRow(d.FormatQuery("SELECT hex(head_hash) FROM info_block")).Scan(&newHeadHash)
+			newHeadHash, err := d.Single("SELECT hex(head_hash) FROM info_block").String()
 			if err != nil {
 				if d.dPrintSleep(err, d.sleepTime) {
 					break BEGIN
