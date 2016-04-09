@@ -18,7 +18,7 @@ func (c *Controller) SendToPool() (string, error) {
 	filesSign := c.r.FormValue("filesSign")
 
 	poolUid := utils.StrToInt64(c.r.FormValue("poolUid"))
-	data_, err := c.OneRow(`SELECT tcp_host, http_host FROM miners_data WHERE user_id = ?`, poolUid).String()
+	data_, err := c.OneRow(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host, CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end as http_host FROM miners_data as m WHERE m.user_id = ?`, poolUid).String()
 	tcpHost := data_["tcp_host"]
 	httpHost := data_["http_host"]
 	if err != nil {

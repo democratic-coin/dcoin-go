@@ -164,7 +164,7 @@ BEGIN:
 		/*
 		 * Загрузка блоков для детальной проверки
 		 */
-		host, err := d.Single("SELECT tcp_host FROM miners_data WHERE user_id  =  ?", newBlockData["user_id"]).String()
+		host, err := d.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?", newBlockData["user_id"]).String()
 		if err != nil {
 			d.DeleteQueueBlock(newBlockData["head_hash_hex"], newBlockData["hash_hex"])
 			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {

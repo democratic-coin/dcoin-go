@@ -62,6 +62,9 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 		req               *http.Request
 		res               *http.Response
 	)
+	if len( email ) == 0 {
+		return
+	}
 	community, err = DB.GetCommunityUsers()
 	if len(community) > 0 {
 		myPrefix = Int64ToStr(userId) + "_"
