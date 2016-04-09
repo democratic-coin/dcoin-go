@@ -321,7 +321,7 @@ func (t *TcpServer) Type6() {
 					return
 				}
 			}
-			t.DbUnlock("test6")
+			t.DbUnlock("type6")
 		}
 
 		err = t.DbLockGate("type6")
@@ -334,7 +334,7 @@ func (t *TcpServer) Type6() {
 			t.PrintSleep(utils.ErrInfo(err), 0)
 			return
 		}
-		t.DbUnlock("test6")
+		t.DbUnlock("type6")
 
 		//t.DbUnlockGate("6")
 	}
