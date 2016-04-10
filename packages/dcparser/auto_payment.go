@@ -38,18 +38,21 @@ func (p *Parser) AutoPaymentFront() error {
 	} else {
 		txTime = utils.Time() - 30 // просто на всякий случай небольшой запас
 	}
-	// проверим, существует ли такой платеж и прошло ли нужное кол-во времени с последнего платежа
-	autoPaymentData, err := p.OneRow(`
+
+	if p.BlockData == nil || p.BlockData.BlockId > 289840 {
+		// проверим, существует ли такой платеж и прошло ли нужное кол-во времени с последнего платежа
+		autoPaymentData, err := p.OneRow(`
 			SELECT id, commission, currency_id, amount
 			FROM auto_payments
 			WHERE id = ? AND sender	= ?	AND last_payment_time < ? - period AND del_block_id = 0
 			LIMIT 1
 			`, p.TxMaps.Int64["auto_payment_id"], p.TxUserID, txTime).String()
-	if err != nil {
-		return p.ErrInfo(err)
-	}
-	if len(autoPaymentData["id"]) == 0 {
-		return p.ErrInfo("autoPaymentData==0")
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		if len(autoPaymentData["id"]) == 0 {
+			return p.ErrInfo("autoPaymentData==0")
+		}
 	}
 	commission := utils.StrToFloat64(autoPaymentData["commission"])
 	amount := utils.StrToFloat64(autoPaymentData["amount"])
@@ -149,6 +152,11 @@ func (p *Parser) AutoPayment() error {
 		return p.ErrInfo(err)
 	}
 
+	err = p.selectiveLoggingAndUpd([]string{"last_payment_time"}, []interface{}{p.BlockData.Time}, "auto_payments", []string{"id"}, []string{p.TxMaps.Int64["auto_payment_id"]})
+	if err != nil {
+		return p.ErrInfo(err)
+	}
+
 	return nil
 }
 
@@ -216,6 +224,11 @@ func (p *Parser) AutoPaymentRollback() error {
 	}
 
 	err = p.mydctxRollback()
+	if err != nil {
+		return p.ErrInfo(err)
+	}
+
+	err = p.selectiveRollback([]string{"last_payment_time"}, "auto_payments", "id="+utils.Int64ToStr(p.TxMaps.Int64["auto_payment_id"]), false)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
