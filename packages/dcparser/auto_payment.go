@@ -39,9 +39,10 @@ func (p *Parser) AutoPaymentFront() error {
 		txTime = utils.Time() - 30 // просто на всякий случай небольшой запас
 	}
 
+	var autoPaymentData map[string]string
 	if p.BlockData == nil || p.BlockData.BlockId > 289840 {
 		// проверим, существует ли такой платеж и прошло ли нужное кол-во времени с последнего платежа
-		autoPaymentData, err := p.OneRow(`
+		autoPaymentData, err = p.OneRow(`
 			SELECT id, commission, currency_id, amount
 			FROM auto_payments
 			WHERE id = ? AND sender	= ?	AND last_payment_time < ? - period AND del_block_id = 0
