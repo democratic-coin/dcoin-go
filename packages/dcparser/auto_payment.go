@@ -153,7 +153,7 @@ func (p *Parser) AutoPayment() error {
 		return p.ErrInfo(err)
 	}
 
-	err = p.selectiveLoggingAndUpd([]string{"last_payment_time"}, []interface{}{p.BlockData.Time}, "auto_payments", []string{"id"}, []string{p.TxMaps.Int64["auto_payment_id"]})
+	err = p.selectiveLoggingAndUpd([]string{"last_payment_time"}, []interface{}{p.BlockData.Time}, "auto_payments", []string{"id"}, []string{utils.Int64ToStr(p.TxMaps.Int64["auto_payment_id"])})
 	if err != nil {
 		return p.ErrInfo(err)
 	}
