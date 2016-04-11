@@ -386,12 +386,11 @@ public class WViewActivity extends Activity {
 
 
         void onResult(int resultCode, Intent intent) {
-            if (mUploadMessage == null) return;
-
             if (intent == null) {
                 mUploadMessage.onReceiveValue(null);
                 return;
             }
+
             Uri[] uris;
             // As the media capture is always supported, we can't use
             // FileChooserParams.parseResult().
