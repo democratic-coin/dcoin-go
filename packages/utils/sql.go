@@ -1148,7 +1148,11 @@ func (db *DCDB) CalcProfitGen(currencyId int64, amount float64, userId int64, la
 	}
 	var profit float64
 	if (calcType == "mining" || calcType == "repaid" && db.CheckCashRequests(userId) == nil) || calcType == "wallet" {
+		//fmt.Println("currencyId", currencyId, "amount", amount, "lastUpdate", lastUpdate, "endTime", endTime, "pct[currencyId]", pct[currencyId], "pointsStatus",pointsStatus, "userHolidays", userHolidays, "maxPromisedAmounts[currencyId]", maxPromisedAmounts[currencyId], "repaidAmount", repaidAmount)
 		profit, err = CalcProfit(amount, lastUpdate, endTime, pct[currencyId], pointsStatus, userHolidays, maxPromisedAmounts[currencyId], currencyId, repaidAmount)
+		if err != nil {
+			return 0, err
+		}
 	}
 	return profit, nil
 }

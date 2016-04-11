@@ -1,51 +1,45 @@
 package org.golang.app;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.MalformedURLException;
-import android.util.Log;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.webkit.ConsoleMessage;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebSettings.PluginState;
-import android.widget.Toast;
+import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.graphics.Bitmap;
-import android.webkit.ConsoleMessage;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.nio.channels.ReadableByteChannel;
-import java.io.FileOutputStream;
-import java.nio.channels.Channels;
-import java.net.URLConnection;
-import java.io.InputStream;
+import android.widget.Toast;
 import java.io.BufferedInputStream;
-import java.nio.ByteBuffer;
-import org.apache.http.util.ByteArrayBuffer;
-import android.media.MediaScannerConnection;
-import android.media.MediaScannerConnection.MediaScannerConnectionClient;
-import android.os.Build;
-import android.content.ContentUris;
-import android.view.KeyEvent;
-import android.view.Window;
-import android.view.WindowManager;
-import android.content.pm.ActivityInfo;
-import android.os.SystemClock;
-import android.webkit.GeolocationPermissions;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 
 public class WViewActivity extends Activity {
@@ -121,11 +115,11 @@ public class WViewActivity extends Activity {
 									   /*
 										* Read bytes to the Buffer until there is nothing more to read(-1).
 										*/
-										ByteArrayBuffer baf = new ByteArrayBuffer(5000);
-										int current = 0;
-										while ((current = bis.read()) != -1) {
-											baf.append((byte) current);
-										}
+										ByteArrayOutputStream baf = new ByteArrayOutputStream(5000);
+                                        int current;
+                                        while ((current = bis.read()) != -1) {
+                                            baf.write(current);
+                                        }
 
 										Log.d("JavaGoWV", "2");
 										/* Convert the Bytes read to a String. */
@@ -299,6 +293,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+
+		    if (message.contains("location") return false;
+
 			String newTitle = getTitleFromUrl(url);
 
 			new AlertDialog.Builder(WViewActivity.this).setTitle(newTitle).setMessage(message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -314,6 +311,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+            if (message.contains("location")) {
+                return false;
+            }
 
 			String newTitle = getTitleFromUrl(url);
 
@@ -358,190 +358,194 @@ public class WViewActivity extends Activity {
 		}
 	}
 
-	// copied from android-4.4.3_r1/src/com/android/browser/UploadHandler.java
-	//////////////////////////////////////////////////////////////////////
 
-    /*
-     * Copyright (C) 2010 The Android Open Source Project
-     *
-     * Licensed under the Apache License, Version 2.0 (the "License");
-     * you may not use this file except in compliance with the License.
-     * You may obtain a copy of the License at
-     *
-     *      http://www.apache.org/licenses/LICENSE-2.0
-     *
-     * Unless required by applicable law or agreed to in writing, software
-     * distributed under the License is distributed on an "AS IS" BASIS,
-     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     * See the License for the specific language governing permissions and
-     * limitations under the License.
-     */
+    public class UploadHandler {
 
-	// package com.android.browser;
-	//
-	// import android.app.Activity;
-	// import android.content.ActivityNotFoundException;
-	// import android.content.Intent;
-	// import android.net.Uri;
-	// import android.os.Environment;
-	// import android.provider.MediaStore;
-	// import android.webkit.ValueCallback;
-	// import android.widget.Toast;
-	//
-	// import java.io.File;
-	// import java.util.Vector;
-	//
-	// /**
-	// * Handle the file upload callbacks from WebView here
-	// */
-	// public class UploadHandler {
+        private String mCameraFilePath;
 
-	class UploadHandler {
-		/*
+        private final static String IMAGE_MIME_TYPE = "image/*";
+        private final static String VIDEO_MIME_TYPE = "video/*";
+        private final static String AUDIO_MIME_TYPE = "audio/*";
+        private final static String FILE_PROVIDER_AUTHORITY = "org.golang.app.fileProvider";
+
+
+        /*
          * The Object used to inform the WebView of the file to upload.
          */
-		private ValueCallback<Uri> mUploadMessage;
-		private String mCameraFilePath;
-		private boolean mHandled;
-		private boolean mCaughtActivityNotFoundException;
-		private Controller mController;
-		public UploadHandler(Controller controller) {
-			mController = controller;
-		}
-		String getFilePath() {
-			return mCameraFilePath;
-		}
-		boolean handled() {
-			return mHandled;
-		}
-		void onResult(int resultCode, Intent intent) {
-			if (resultCode == Activity.RESULT_CANCELED && mCaughtActivityNotFoundException) {
-				// Couldn't resolve an activity, we are going to try again so skip
-				// this result.
-				mCaughtActivityNotFoundException = false;
-				return;
-			}
-			Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
-					: intent.getData();
-			// As we ask the camera to save the result of the user taking
-			// a picture, the camera application does not return anything other
-			// than RESULT_OK. So we need to check whether the file we expected
-			// was written to disk in the in the case that we
-			// did not get an intent returned but did get a RESULT_OK. If it was,
-			// we assume that this result has came back from the camera.
-			if (result == null && intent == null && resultCode == Activity.RESULT_OK) {
-				File cameraFile = new File(mCameraFilePath);
-				if (cameraFile.exists()) {
-					result = Uri.fromFile(cameraFile);
-					// Broadcast to the media scanner that we have a new photo
-					// so it will be added into the gallery for the user.
-					mController.getActivity().sendBroadcast(
-							new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, result));
-				}
-			}
-			mUploadMessage.onReceiveValue(result);
-			mHandled = true;
-			mCaughtActivityNotFoundException = false;
-		}
-		void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+        private ValueCallback<Uri[]> mUploadMessage;
+        private boolean mHandled;
+        private Controller mController;
+        private WebChromeClient.FileChooserParams mParams;
+        private Uri mCapturedMedia;
+        public UploadHandler(Controller controller) {
+            mController = controller;
+        }
 
-			Log.d("JavaGoWV", "openFileChooser ValueCallback");
 
-			final String imageMimeType = "image/*";
-			final String videoMimeType = "video/*";
-			final String audioMimeType = "audio/*";
-			final String mediaSourceKey = "capture";
-			final String mediaSourceValueCamera = "camera";
-			final String mediaSourceValueFileSystem = "filesystem";
-			final String mediaSourceValueCamcorder = "camcorder";
-			final String mediaSourceValueMicrophone = "microphone";
-			// According to the spec, media source can be 'filesystem' or 'camera' or 'camcorder'
-			// or 'microphone' and the default value should be 'filesystem'.
-			String mediaSource = mediaSourceValueFileSystem;
-			if (mUploadMessage != null) {
-				// Already a file picker operation in progress.
-				return;
-			}
-			mUploadMessage = uploadMsg;
-			// Parse the accept type.
-			String params[] = acceptType.split(";");
-			String mimeType = params[0];
-			if (capture.length() > 0) {
-				mediaSource = capture;
-			}
+        boolean handled() {
+            return mHandled;
+        }
 
-			Log.d("JavaGoWV", "openFileChooser 1 ");
-			if (capture.equals(mediaSourceValueFileSystem)) {
-				// To maintain backwards compatibility with the previous implementation
-				// of the media capture API, if the value of the 'capture' attribute is
-				// "filesystem", we should examine the accept-type for a MIME type that
-				// may specify a different capture value.
-				for (String p : params) {
-					String[] keyValue = p.split("=");
-					if (keyValue.length == 2) {
-						// Process key=value parameters.
-						if (mediaSourceKey.equals(keyValue[0])) {
-							mediaSource = keyValue[1];
-						}
-					}
-				}
-			}
-			Log.d("JavaGoWV", "openFileChooser 2 ");
-			//Ensure it is not still set from a previous upload.
-			mCameraFilePath = null;
-			if (mimeType.equals(imageMimeType)) {
-				if (mediaSource.equals(mediaSourceValueCamera)) {
-					Log.d("JavaGoWV", "001");
-					// Specified 'image/*' and requested the camera, so go ahead and launch the
-					// camera directly.
-					startActivity(createCameraIntent());
-					return;
-				} else {
-					// Specified just 'image/*', capture=filesystem, or an invalid capture parameter.
-					// In all these cases we show a traditional picker filetered on accept type
-					// so launch an intent for both the Camera and image/* OPENABLE.
-					Log.d("JavaGoWV", "chooser 4");
-					Intent chooser = createChooserIntent(createCameraIntent());
-					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(imageMimeType));
-					startActivity(chooser);
-					return;
-				}
-			} else if (mimeType.equals(videoMimeType)) {
-				if (mediaSource.equals(mediaSourceValueCamcorder)) {
-					// Specified 'video/*' and requested the camcorder, so go ahead and launch the
-					// camcorder directly.
-					startActivity(createCamcorderIntent());
-					return;
-				} else {
-					// Specified just 'video/*', capture=filesystem or an invalid capture parameter.
-					// In all these cases we show an intent for the traditional file picker, filtered
-					// on accept type so launch an intent for both camcorder and video/* OPENABLE.
-					Log.d("JavaGoWV", "chooser 3");
-					Intent chooser = createChooserIntent(createCamcorderIntent());
-					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(videoMimeType));
-					startActivity(chooser);
-					return;
-				}
-			} else if (mimeType.equals(audioMimeType)) {
-				if (mediaSource.equals(mediaSourceValueMicrophone)) {
-					// Specified 'audio/*' and requested microphone, so go ahead and launch the sound
-					// recorder.
-					startActivity(createSoundRecorderIntent());
-					return;
-				} else {
-					// Specified just 'audio/*',  capture=filesystem of an invalid capture parameter.
-					// In all these cases so go ahead and launch an intent for both the sound
-					// recorder and audio/* OPENABLE.
-					Log.d("JavaGoWV", "chooser 2");
-					Intent chooser = createChooserIntent(createSoundRecorderIntent());
-					chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(audioMimeType));
-					startActivity(chooser);
-					return;
-				}
-			}
-			// No special handling based on the accept type was necessary, so trigger the default
-			// file upload chooser.
-			Log.d("JavaGoWV", "createDefaultOpenableIntent");
+
+        void onResult(int resultCode, Intent intent) {
+            Uri[] uris;
+            // As the media capture is always supported, we can't use
+            // FileChooserParams.parseResult().
+            uris = parseResult(resultCode, intent);
+            mUploadMessage.onReceiveValue(uris);
+            mHandled = true;
+        }
+
+
+        @TargetApi(21)
+        void openFileChooser(ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams fileChooserParams) {
+            if (mUploadMessage != null) {
+                // Already a file picker operation in progress.
+                return;
+            }
+
+            mUploadMessage = callback;
+            mParams = fileChooserParams;
+            Intent[] captureIntents = createCaptureIntent();
+
+            Intent intent = null;
+            // Go to the media capture directly if capture is specified, this is the
+            // preferred way.
+
+            if (fileChooserParams.isCaptureEnabled() && captureIntents.length == 1) {
+                intent = captureIntents[0];
+            } else {
+                intent = new Intent(Intent.ACTION_CHOOSER);
+                intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, captureIntents);
+                intent.putExtra(Intent.EXTRA_INTENT, fileChooserParams.createIntent());
+            }
+
+            startActivity(intent);
+        }
+
+
+        private Uri[] parseResult(int resultCode, Intent intent) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                return null;
+            }
+            Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
+                    : intent.getData();
+            // As we ask the camera to save the result of the user taking
+            // a picture, the camera application does not return anything other
+            // than RESULT_OK. So we need to check whether the file we expected
+            // was written to disk in the in the case that we
+            // did not get an intent returned but did get a RESULT_OK. If it was,
+            // we assume that this result has came back from the camera.
+            if (result == null && intent == null && resultCode == Activity.RESULT_OK
+                    && mCapturedMedia != null) {
+                result = mCapturedMedia;
+            }
+            Uri[] uris = null;
+            if (result != null) {
+                uris = new Uri[1];
+                uris[0] = result;
+            }
+            return uris;
+        }
+
+
+        void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+
+            Log.d("JavaGoWV", "openFileChooser ValueCallback");
+
+            final String mediaSourceKey = "capture";
+            final String mediaSourceValueCamera = "camera";
+            final String mediaSourceValueFileSystem = "filesystem";
+            final String mediaSourceValueCamcorder = "camcorder";
+            final String mediaSourceValueMicrophone = "microphone";
+            // According to the spec, media source can be 'filesystem' or 'camera' or 'camcorder'
+            // or 'microphone' and the default value should be 'filesystem'.
+            String mediaSource = mediaSourceValueFileSystem;
+            if (mUploadMessage != null) {
+                // Already a file picker operation in progress.
+                return;
+            }
+
+            // Parse the accept type.
+            String params[] = acceptType.split(";");
+            String mimeType = params[0];
+            if (capture.length() > 0) {
+                mediaSource = capture;
+            }
+
+            Log.d("JavaGoWV", "openFileChooser 1 ");
+            if (capture.equals(mediaSourceValueFileSystem)) {
+                // To maintain backwards compatibility with the previous implementation
+                // of the media capture API, if the value of the 'capture' attribute is
+                // "filesystem", we should examine the accept-type for a MIME type that
+                // may specify a different capture value.
+                for (String p : params) {
+                    String[] keyValue = p.split("=");
+                    if (keyValue.length == 2) {
+                        // Process key=value parameters.
+                        if (mediaSourceKey.equals(keyValue[0])) {
+                            mediaSource = keyValue[1];
+                        }
+                    }
+                }
+            }
+            Log.d("JavaGoWV", "openFileChooser 2 ");
+            //Ensure it is not still set from a previous upload.
+            mCameraFilePath = null;
+            switch (mimeType) {
+                case IMAGE_MIME_TYPE:
+                    if (mediaSource.equals(mediaSourceValueCamera)) {
+                        Log.d("JavaGoWV", "001");
+                        // Specified 'image/*' and requested the camera, so go ahead and launch the
+                        // camera directly.
+                        startActivity(createCameraIntent());
+                        return;
+                    } else {
+                        // Specified just 'image/*', capture=filesystem, or an invalid capture parameter.
+                        // In all these cases we show a traditional picker filetered on accept type
+                        // so launch an intent for both the Camera and image/* OPENABLE.
+                        Log.d("JavaGoWV", "chooser 4");
+                        Intent chooser = createChooserIntent(createCameraIntent());
+                        chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(IMAGE_MIME_TYPE));
+                        startActivity(chooser);
+                        return;
+                    }
+                case VIDEO_MIME_TYPE:
+                    if (mediaSource.equals(mediaSourceValueCamcorder)) {
+                        // Specified 'video/*' and requested the camcorder, so go ahead and launch the
+                        // camcorder directly.
+                        startActivity(createCamcorderIntent());
+                        return;
+                    } else {
+                        // Specified just 'video/*', capture=filesystem or an invalid capture parameter.
+                        // In all these cases we show an intent for the traditional file picker, filtered
+                        // on accept type so launch an intent for both camcorder and video/* OPENABLE.
+                        Log.d("JavaGoWV", "chooser 3");
+                        Intent chooser = createChooserIntent(createCamcorderIntent());
+                        chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(VIDEO_MIME_TYPE));
+                        startActivity(chooser);
+                        return;
+                    }
+                case AUDIO_MIME_TYPE:
+                    if (mediaSource.equals(mediaSourceValueMicrophone)) {
+                        // Specified 'audio/*' and requested microphone, so go ahead and launch the sound
+                        // recorder.
+                        startActivity(createSoundRecorderIntent());
+                        return;
+                    } else {
+                        // Specified just 'audio/*',  capture=filesystem of an invalid capture parameter.
+                        // In all these cases so go ahead and launch an intent for both the sound
+                        // recorder and audio/* OPENABLE.
+                        Log.d("JavaGoWV", "chooser 2");
+                        Intent chooser = createChooserIntent(createSoundRecorderIntent());
+                        chooser.putExtra(Intent.EXTRA_INTENT, createOpenableIntent(AUDIO_MIME_TYPE));
+                        startActivity(chooser);
+                        return;
+                    }
+            }
+            // No special handling based on the accept type was necessary, so trigger the default
+            // file upload chooser.
+            Log.d("JavaGoWV", "createDefaultOpenableIntent");
 /*
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
@@ -549,75 +553,137 @@ public class WViewActivity extends Activity {
 			Log.d("JavaGoWV", "path ="+Environment.getExternalStorageDirectory().getPath() + "/Android/data/org.golang.app/files/");
 			intent.setDataAndType(uri, "**");
 			//startActivity(Intent.createChooser(intent, "Open folder"));*/
-			startActivity(createDefaultOpenableIntent());
-		}
-		private void startActivity(Intent intent) {
-			try {
-				mController.getActivity().startActivityForResult(intent, Controller.FILE_SELECTED);
-			} catch (ActivityNotFoundException e) {
-				// No installed app was able to handle the intent that
-				// we sent, so fallback to the default file upload control.
-				try {
-					mCaughtActivityNotFoundException = true;
-					mController.getActivity().startActivityForResult(createDefaultOpenableIntent(),
-							Controller.FILE_SELECTED);
-				} catch (ActivityNotFoundException e2) {
-					// Nothing can return us a file, so file upload is effectively disabled.
-					Toast.makeText(mController.getActivity(), R.string.uploads_disabled,
-							Toast.LENGTH_LONG).show();
-				}
-			}
-		}
-		private Intent createDefaultOpenableIntent() {
-			// Create and return a chooser with the default OPENABLE
-			// actions including the camera, camcorder and sound
-			// recorder where available.
-			Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-			i.addCategory(Intent.CATEGORY_OPENABLE);
-			i.setType("*/*");
-			Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-					+ "/download/");
-			i.setDataAndType(uri, "*/*");
-			Log.d("JavaGoWV", "chooser 0");
-			Intent chooser = createChooserIntent(createCameraIntent(), createCamcorderIntent(),
-					createSoundRecorderIntent());
-			chooser.putExtra(Intent.EXTRA_INTENT, i);
-			return chooser;
-		}
-		private Intent createChooserIntent(Intent... intents) {
+            startActivity(createDefaultOpenableIntent());
+        }
 
-			Log.d("JavaGoWV", "createChooserIntent");
-			Intent chooser = new Intent(Intent.ACTION_CHOOSER);
-			chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents);
-			chooser.putExtra(Intent.EXTRA_TITLE,
-					mController.getActivity().getResources()
-							.getString(R.string.choose_upload));
-			Log.d("JavaGoWV", "return chooser");
-			return chooser;
-		}
-		private Intent createOpenableIntent(String type) {
-			Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-			i.addCategory(Intent.CATEGORY_OPENABLE);
-			i.setType(type);
-			return i;
-		}
-		private Intent createCameraIntent() {
-			Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			File externalDataDir = Environment.getExternalStoragePublicDirectory(
-					Environment.DIRECTORY_DCIM);
-			File cameraDataDir = new File(externalDataDir.getAbsolutePath() +
-					File.separator + "browser-photos");
-			cameraDataDir.mkdirs();
-			mCameraFilePath = cameraDataDir.getAbsolutePath() + File.separator +
-					System.currentTimeMillis() + ".jpg";
-			cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mCameraFilePath)));
-			return cameraIntent;
-		}
-		private Intent createCamcorderIntent() {
-			return new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-		}
-		private Intent createSoundRecorderIntent() {
-			return new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-		}
-	}
+        private Intent createDefaultOpenableIntent() {
+            // Create and return a chooser with the default OPENABLE
+            // actions including the camera, camcorder and sound
+            // recorder where available.
+            Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("*/*");
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+                    + "/download/");
+            i.setDataAndType(uri, "*/*");
+            Log.d("JavaGoWV", "chooser 0");
+            Intent chooser = createChooserIntent(createCameraIntent(), createCamcorderIntent(),
+                    createSoundRecorderIntent());
+            chooser.putExtra(Intent.EXTRA_INTENT, i);
+            return chooser;
+        }
+
+
+        private Intent createChooserIntent(Intent... intents) {
+
+            Log.d("JavaGoWV", "createChooserIntent");
+            Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents);
+            chooser.putExtra(Intent.EXTRA_TITLE,
+                    mController.getActivity().getResources()
+                            .getString(R.string.choose_upload));
+            Log.d("JavaGoWV", "return chooser");
+            return chooser;
+        }
+
+
+        private Intent createOpenableIntent(String type) {
+            Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType(type);
+            return i;
+        }
+
+
+        private Intent createCameraIntent() {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File externalDataDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DCIM);
+            File cameraDataDir = new File(externalDataDir.getAbsolutePath() +
+                    File.separator + "browser-photos");
+            cameraDataDir.mkdirs();
+            mCameraFilePath = cameraDataDir.getAbsolutePath() + File.separator +
+                    System.currentTimeMillis() + ".jpg";
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mCameraFilePath)));
+            return cameraIntent;
+        }
+
+
+        private void startActivity(Intent intent) {
+            try {
+                mController.getActivity().startActivityForResult(intent, Controller.FILE_SELECTED);
+            } catch (ActivityNotFoundException e) {
+                // No installed app was able to handle the intent that
+                // we sent, so file upload is effectively disabled.
+                Toast.makeText(mController.getActivity(), R.string.uploads_disabled,
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+        private Intent[] createCaptureIntent() {
+            String mimeType = "*/*";
+            String[] acceptTypes = mParams.getAcceptTypes();
+            if ( acceptTypes != null && acceptTypes.length > 0) {
+                mimeType = acceptTypes[0];
+            }
+            Intent[] intents;
+            if (mimeType.equals(IMAGE_MIME_TYPE)) {
+                intents = new Intent[1];
+                intents[0] = createCameraIntent(createTempFileContentUri(".jpg"));
+            } else if (mimeType.equals(VIDEO_MIME_TYPE)) {
+                intents = new Intent[1];
+                intents[0] = createCamcorderIntent();
+            } else if (mimeType.equals(AUDIO_MIME_TYPE)) {
+                intents = new Intent[1];
+                intents[0] = createSoundRecorderIntent();
+            } else {
+                intents = new Intent[3];
+                intents[0] = createCameraIntent(createTempFileContentUri(".jpg"));
+                intents[1] = createCamcorderIntent();
+                intents[2] = createSoundRecorderIntent();
+            }
+            return intents;
+        }
+
+
+        private Uri createTempFileContentUri(String suffix) {
+
+            try {
+                File mediaPath = new File(mController.getActivity().getFilesDir(), "files");
+                if (!mediaPath.exists() && !mediaPath.mkdir()) {
+                    throw new RuntimeException("Folder cannot be created.");
+                }
+                File mediaFile = File.createTempFile(
+                        String.valueOf(System.currentTimeMillis()), suffix, mediaPath);
+                return FileProvider.getUriForFile(mController.getActivity(),
+                        FILE_PROVIDER_AUTHORITY, mediaFile);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        private Intent createCameraIntent(Uri contentUri) {
+            if (contentUri == null) throw new IllegalArgumentException();
+            mCapturedMedia = contentUri;
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedMedia);
+            intent.setClipData(ClipData.newUri(mController.getActivity().getContentResolver(),
+                    FILE_PROVIDER_AUTHORITY, mCapturedMedia));
+            return intent;
+        }
+
+
+        private Intent createCamcorderIntent() {
+            return new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        }
+
+
+        private Intent createSoundRecorderIntent() {
+            return new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        }
+    }
 }

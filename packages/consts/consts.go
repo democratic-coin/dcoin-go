@@ -264,7 +264,7 @@ var TxTypes = map[int]string{
 	73: "DelUserFromPool",
 	// юзер меняет пул
 	74: "ChangePool",
-	// юзер меняет пул
+	// новая ограниченная обещанная сумма
 	75: "NewRestrictedPromisedAmount",
 }
 
