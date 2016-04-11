@@ -290,6 +290,11 @@ func (t *TcpServer) Type6() {
 				}
 			}
 		} else {
+			err := t.DbLockGate("type6")
+			if err != nil {
+				t.PrintSleep(utils.ErrInfo(err), 0)
+				return
+			}
 			// если всё нормально, то пишем в таблу testblock новые данные
 			exists, err := t.Single(`SELECT block_id FROM testblock`).Int64()
 			if err != nil {
@@ -316,12 +321,21 @@ func (t *TcpServer) Type6() {
 					return
 				}
 			}
+			t.DbUnlock("type6")
+		}
+
+		err = t.DbLockGate("type6")
+		if err != nil {
+			t.PrintSleep(utils.ErrInfo(err), 0)
+			return
 		}
 		err = t.ExecSql("UPDATE testblock SET status = 'active'")
 		if err != nil {
 			t.PrintSleep(utils.ErrInfo(err), 0)
 			return
 		}
+		t.DbUnlock("type6")
+
 		//t.DbUnlockGate("6")
 	}
 }

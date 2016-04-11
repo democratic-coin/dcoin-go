@@ -30,7 +30,7 @@ func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 	d.chAnswer = chAnswer
 	d.chBreaker = chBreaker
 	if utils.Mobile() {
-		d.sleepTime = 300
+		d.sleepTime = 60
 	} else {
 		d.sleepTime = 60
 	}

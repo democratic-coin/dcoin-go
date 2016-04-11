@@ -99,9 +99,9 @@
 		<fieldset id="from_file_form">
 			<input accept="image/*"  capture="camera" type="file" name="upload" id="change_pkey_upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
 			<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
-				<div style="margin:auto; text-align:center; line-height:22px">
-					<p style="margin-bottom:0px"  id="change_pkey_key_file_name" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
-					<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="fa fa-camera"></i> Select photo</button>
+				<div id="change_pkey_key_file_name" style="margin:auto; text-align:center; line-height:22px">
+					<p style="margin-bottom:0px" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
+					<button style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="fa fa-camera"></i> Select photo</button>
 					{{if not .Mobile}}<p>or drag and drop photo</p>{{end}}
 				</div>
 			</div>
