@@ -27,7 +27,7 @@ func QueueParserTx(chBreaker chan bool, chAnswer chan string) {
 	d.chAnswer = chAnswer
 	d.chBreaker = chBreaker
 	if utils.Mobile() {
-		d.sleepTime = 180
+		d.sleepTime = 60
 	} else {
 		d.sleepTime = 1
 	}
