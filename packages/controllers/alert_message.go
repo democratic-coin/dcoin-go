@@ -6,6 +6,7 @@ import (
 	"math"
 	"regexp"
 	"strings"
+	"fmt"
 )
 
 func (c *Controller) AlertMessage() (string, error) {
@@ -158,6 +159,9 @@ func (c *Controller) AlertMessage() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		myNodePublicKey, err := c.GetMyNodePublicKey(c.MyPrefix)
+		fmt.Println("Node public key", (string(nodePublicKey)))
+		fmt.Println("My Node public key", myNodePublicKey)
+
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -167,7 +171,6 @@ func (c *Controller) AlertMessage() (string, error) {
 				     <div>` + c.Lang["alert_change_node_key"] + `</div>
 				     </div>`
 		}
-
 	}
 
 	// просто информируем, что в данном разделе у юзера нет прав
