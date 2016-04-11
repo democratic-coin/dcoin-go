@@ -366,9 +366,7 @@ public class WViewActivity extends Activity {
         private final static String IMAGE_MIME_TYPE = "image/*";
         private final static String VIDEO_MIME_TYPE = "video/*";
         private final static String AUDIO_MIME_TYPE = "audio/*";
-        private final static String FILE_PROVIDER_AUTHORITY = "org.golang.app.fileProvider";
-
-
+        private final static String FILE_PROVIDER_AUTHORITY = "com.jam.webview.dcoinwebview.fileProvider";
         /*
          * The Object used to inform the WebView of the file to upload.
          */
@@ -388,6 +386,12 @@ public class WViewActivity extends Activity {
 
 
         void onResult(int resultCode, Intent intent) {
+            if (mUploadMessage == null) return;
+
+            if (intent == null) {
+                mUploadMessage.onReceiveValue(null);
+                return;
+            }
             Uri[] uris;
             // As the media capture is always supported, we can't use
             // FileChooserParams.parseResult().
@@ -396,14 +400,12 @@ public class WViewActivity extends Activity {
             mHandled = true;
         }
 
-
         @TargetApi(21)
         void openFileChooser(ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams fileChooserParams) {
             if (mUploadMessage != null) {
                 // Already a file picker operation in progress.
                 return;
             }
-
             mUploadMessage = callback;
             mParams = fileChooserParams;
             Intent[] captureIntents = createCaptureIntent();
@@ -419,10 +421,8 @@ public class WViewActivity extends Activity {
                 intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, captureIntents);
                 intent.putExtra(Intent.EXTRA_INTENT, fileChooserParams.createIntent());
             }
-
             startActivity(intent);
         }
-
 
         private Uri[] parseResult(int resultCode, Intent intent) {
             if (resultCode == Activity.RESULT_CANCELED) {
