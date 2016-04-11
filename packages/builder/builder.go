@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"os/exec"
 	"strings"
+	"reflect"
 )
 
 const (
@@ -24,13 +25,16 @@ var (
 )
 
 type Settings struct {
-	Branch    string 
-	GitRoot   string 
-	TempPath  string
-	OutFile   string
-	GoPath   string
-	BinData   string
-	BinDebug  bool
+	Branch    string   // Branch name 
+	GitRoot   string   // https://github.com/democratic-coin/dcoin-go
+	TempPath  string   // Temporary path
+	OutFile   string   // Output dcoin executable file
+	GoPath    string   // GOPATH
+	BinData   string   // Full path to go-bindata 
+	BinDebug  string   // Specify "true" for debug option
+	RunAfter  string   // 
+	Arch      string   // Custom GOARCH
+	Skip      string   // d - download, z - unzip, s - static.go, b - build, a - make package
 }
 
 func exit( err error ) {  
@@ -46,8 +50,11 @@ func exit( err error ) {
 
 func download( zfile string ) ( destfile string ) {
 	srcfile := fmt.Sprintf("%s/archive/%s", options.GitRoot, zfile )
-	fmt.Println(`Downloading `, srcfile )
 	destfile = filepath.Join( options.TempPath, zfile )
+	if strings.IndexRune( options.Skip, 'd' ) >= 0 {
+		return
+	}
+	fmt.Println(`Downloading `, srcfile )
 	out, err := os.Create( destfile )
   	if err != nil  {
   		exit( err )
@@ -78,7 +85,7 @@ func  extract(f *zip.File) error {
     }
     defer rc.Close()
 	fname := f.Name[strings.IndexRune( f.Name, '/' ) + 1:]
-    path := filepath.Join( options.GoPath, GITPATH, fname )
+    path := filepath.Join( options.GoPath, `src`, GITPATH, fname )
 	fmt.Println(`Decompressing`, fname )
     if f.FileInfo().IsDir() {
         return os.MkdirAll(path, f.Mode())
@@ -115,60 +122,85 @@ func main() {
 	options = settings[`default`]
 	if len(os.Args ) > 1 {
 		if cmdopt, found := settings[ os.Args[1]]; found {
-			if len( cmdopt.Branch )> 0 {
-				options.Branch = cmdopt.Branch
+			r := reflect.ValueOf(cmdopt)
+			for i:=0; i < r.NumField(); i++ {
+				val := r.Field(i).String()
+				if len( val ) > 0 {
+					ro := reflect.ValueOf(&options)
+					ro.Elem().Field(i).SetString( val )
+				}
 			}
 		} else {
 			exit( fmt.Errorf( `Cannot find %s settings`, os.Args[1]))
 		}
 	}
-	srcPath := filepath.Join( options.GoPath, GITPATH )
+	fmt.Println( options )
+	srcPath := filepath.Join( options.GoPath, `src`, GITPATH )
 	if err = os.MkdirAll( srcPath, 0755); err != nil {
 		exit(err)
 	}
+	fmt.Println( `Destination Path`, srcPath )
 	zfile := options.Branch + `.zip`
 	srcfile := download( zfile )
 	
-	z, err := zip.OpenReader(srcfile)
-	if err != nil {
-		exit( err )
-	}
-	defer z.Close()
-	if _, err := os.Stat( filepath.Join( srcPath, "dcoinwindows.go")); err == nil {
-		fmt.Println(`Removing `, srcPath )		
-		if err = os.RemoveAll( srcPath); err!=nil {
-			exit(err)
-		}
-	}
-	
-	for _, f := range z.File {
-		if err = extract( f ); err != nil {
+	if strings.IndexRune( options.Skip, 'z' ) < 0 {
+		z, err := zip.OpenReader(srcfile)
+		if err != nil {
 			exit( err )
 		}
+		defer z.Close()
+		if _, err := os.Stat( filepath.Join( srcPath, "dcoinwindows.go")); err == nil {
+			fmt.Println(`Removing `, srcPath )		
+			if err = os.RemoveAll( srcPath); err!=nil {
+				exit(err)
+			}
+		}
+		
+		for _, f := range z.File {
+			if err = extract( f ); err != nil {
+				exit( err )
+			}
+		}
 	}
+
 	if err = os.Chdir( srcPath ); err != nil {
 		exit( err )
 	}
-	fmt.Println(`Creating static.go`)
-	args := []string{ `-o=packages/static/static.go`, `-pkg=static\` }
-	if options.BinDebug {
-		args = append( args, `-debug=true`)
+	if strings.IndexRune( options.Skip, 's' ) < 0 {
+		fmt.Println(`Creating static.go`)
+		args := []string{ `-o=packages/static/static.go`, `-pkg=static` }
+		if options.BinDebug == `true` {
+			args = append( args, `-debug=true`)
+		}
+		cmd := exec.Command( options.BinData, append( args, `static/...` )...)
+		if err := cmd.Run(); err != nil {
+			exit( err )
+		}
 	}
-	cmd := exec.Command( options.BinData, append( args, `static/...` )...)
-	if err := cmd.Run(); err != nil {
-		exit( err )
+	if strings.IndexRune( options.Skip, 'b' ) < 0 {
+		fmt.Println(`Compiling dcoin.go`)
+		if err = os.MkdirAll( filepath.Dir(options.OutFile), 0755); err != nil {
+			exit(err)
+		}
+		os.Setenv(`GOPATH`, options.GoPath )
+		if len( options.Arch ) > 0 {
+			os.Setenv(`GOARCH`, options.Arch )
+		}
+		args := []string{ `build`, `-o`, options.OutFile, `-ldflags` }
+		if runtime.GOOS == `windows` {
+			args = append( args, `-H windowsgui`)
+		}
+		cmd := exec.Command( `go`, append( args, GITPATH )... )
+		if err = cmd.Run(); err != nil {
+			exit( err )
+		}
 	}
-	fmt.Println(`Compiling dcoin.go`)
-	if err = os.MkdirAll( filepath.Dir(options.OutFile), 0755); err != nil {
-		exit(err)
-	}
-	args = []string{ `build`, `-o`, options.OutFile, `-ldflags` }
-	if runtime.GOOS == `windows` {
-		args = append( args, `-H windowsgui`)
-	}
-	cmd = exec.Command( `go`, append( args, GITPATH )... )
-	if err = cmd.Run(); err != nil {
-		exit( err )
+	if len(options.RunAfter) > 0 && strings.IndexRune( options.Skip, 'a' ) < 0 {
+		fmt.Println(`Run at the end`)
+		cmd := exec.Command( options.RunAfter )
+		if err = cmd.Run(); err != nil {
+			exit( err )
+		}
 	}
 	exit(nil)
 }
