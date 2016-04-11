@@ -370,7 +370,7 @@ public class WViewActivity extends Activity {
         private final static String IMAGE_MIME_TYPE = "image/*";
         private final static String VIDEO_MIME_TYPE = "video/*";
         private final static String AUDIO_MIME_TYPE = "audio/*";
-        private final static String FILE_PROVIDER_AUTHORITY = "com.jam.webview.dcoinwebview.fileProvider";
+        private final static String FILE_PROVIDER_AUTHORITY = "org.golang.app.fileProvider";
         /*
          * The Object used to inform the WebView of the file to upload.
          */
