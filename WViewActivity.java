@@ -333,21 +333,25 @@ public class WViewActivity extends Activity {
 			// return super.onJsConfirm(view, url, message, result);
 		}
 
-		// Android 2.x
-		public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-			openFileChooser(uploadMsg, "");
-		}
-
-		// Android 3.0
-		public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-			openFileChooser(uploadMsg, "", "filesystem");
-		}
-
 		// Android 4.1
-		public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-			mUploadHandler = new UploadHandler(new Controller());
-			mUploadHandler.openFileChooser(uploadMsg, acceptType, capture);
-		}
+        void openFileChooser(ValueCallback uploadMsg, String acceptType, String capture) {
+            mUploadHandler = new UploadHandler(new Controller());
+            mUploadHandler.openFileChooser(uploadMsg, acceptType, capture);
+        }
+
+        public void openFileChooser(ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams fileChooserParams) {
+            mUploadHandler = new UploadHandler(new Controller());
+            mUploadHandler.openFileChooser(callback, fileChooserParams);
+        }
+
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            Log.d("show file chooser", "here");
+
+            openFileChooser(filePathCallback, fileChooserParams);
+
+            return true;
+        }
 	};
 
 	class Controller {
@@ -403,6 +407,7 @@ public class WViewActivity extends Activity {
 
         @TargetApi(21)
         void openFileChooser(ValueCallback callback, WebChromeClient.FileChooserParams fileChooserParams) {
+            Log.d("mUploader:", "URI[]");
             if (mUploadMessage != null) {
                 // Already a file picker operation in progress.
                 return;
@@ -451,7 +456,7 @@ public class WViewActivity extends Activity {
 
 
         void openFileChooser(ValueCallback uploadMsg, String acceptType, String capture) {
-
+            Log.d("mUploader:", "URI");
             Log.d("JavaGoWV", "openFileChooser ValueCallback");
             mUploadMessage = uploadMsg;
             final String mediaSourceKey = "capture";
@@ -547,13 +552,7 @@ public class WViewActivity extends Activity {
             // No special handling based on the accept type was necessary, so trigger the default
             // file upload chooser.
             Log.d("JavaGoWV", "createDefaultOpenableIntent");
-/*
-			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-			Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-					+ "/Android/data/org.golang.app/files/");
-			Log.d("JavaGoWV", "path ="+Environment.getExternalStorageDirectory().getPath() + "/Android/data/org.golang.app/files/");
-			intent.setDataAndType(uri, "**");
-			//startActivity(Intent.createChooser(intent, "Open folder"));*/
+
             startActivity(createDefaultOpenableIntent());
         }
 
