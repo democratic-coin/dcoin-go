@@ -115,7 +115,7 @@ func (c *Controller) PoolAddUsers() (string, error) {
 			log.Debug("%v", values)
 			err = c.ExecSql(query, values...)
 			if err != nil {
-				return "", utils.ErrInfo(err)
+				log.Error("%s", err)
 			}
 		}
 		if id {

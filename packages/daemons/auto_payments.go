@@ -63,6 +63,12 @@ BEGIN:
 		}
 
 		myUsersIds, err := d.GetMyUsersIds(false, true)
+		if len(myUsersIds) == 0 {
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
+			continue BEGIN
+		}
 		// берем автоплатежи, которые пора провести
 		rows, err := d.Query(d.FormatQuery(`
 				SELECT id, sender
