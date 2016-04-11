@@ -300,7 +300,7 @@ public class WViewActivity extends Activity {
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
 
-		    if (message.contains("location") return false;
+		    if (message.contains("location")) return false;
 
 			String newTitle = getTitleFromUrl(url);
 
