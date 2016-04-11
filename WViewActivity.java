@@ -389,17 +389,19 @@ public class WViewActivity extends Activity {
             if (intent == null) {
                 mUploadMessage.onReceiveValue(null);
                 return;
-            }
+            } else {
+                Uri[] uris;
+                // As the media capture is always supported, we can't use
+                // FileChooserParams.parseResult().
+                uris = parseResult(resultCode, intent);
+                mUploadMessage.onReceiveValue(uris);
 
-            Uri[] uris;
-            // As the media capture is always supported, we can't use
-            // FileChooserParams.parseResult().
-            uris = parseResult(resultCode, intent);
-            mUploadMessage.onReceiveValue(uris);
+            }
             mHandled = true;
+            mUploadMessage = null;
         }
 
-
+        @TargetApi(21)
         void openFileChooser(ValueCallback callback, WebChromeClient.FileChooserParams fileChooserParams) {
             if (mUploadMessage != null) {
                 // Already a file picker operation in progress.
@@ -449,10 +451,6 @@ public class WViewActivity extends Activity {
 
 
         void openFileChooser(ValueCallback uploadMsg, String acceptType, String capture) {
-            if (mUploadMessage != null) {
-                // Already a file picker operation in progress.
-                return;
-            }
 
             Log.d("JavaGoWV", "openFileChooser ValueCallback");
             mUploadMessage = uploadMsg;
@@ -464,6 +462,10 @@ public class WViewActivity extends Activity {
             // According to the spec, media source can be 'filesystem' or 'camera' or 'camcorder'
             // or 'microphone' and the default value should be 'filesystem'.
             String mediaSource = mediaSourceValueFileSystem;
+            if (mUploadMessage != null) {
+                // Already a file picker operation in progress.
+                return;
+            }
 
             // Parse the accept type.
             String params[] = acceptType.split(";");
