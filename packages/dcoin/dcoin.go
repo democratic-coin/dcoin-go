@@ -444,7 +444,29 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
-		}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a1")) {
+
+				s = make(Recmap)
+				s1 = make(Recmap)
+				s2 = make(Recmapi)
+				s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_arbitrator_conditions_log_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "prev_log_id", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"log_id"}
+				s1["AI"] = "log_id"
+				s1["comment"] = ""
+				s["log_auto_payments"] = s1
+				schema.S = s
+				schema.PrintSchema()
+
+				err = utils.DB.ExecSql(`ALTER TABLE auto_payments ADD COLUMN log_id bigint(20) NOT NULL DEFAULT '0';`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
 
 
 		if *utils.OldFileName != "" {
