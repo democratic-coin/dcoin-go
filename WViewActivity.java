@@ -400,8 +400,8 @@ public class WViewActivity extends Activity {
             mHandled = true;
         }
 
-        @TargetApi(21)
-        void openFileChooser(ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams fileChooserParams) {
+
+        void openFileChooser(ValueCallback callback, WebChromeClient.FileChooserParams fileChooserParams) {
             if (mUploadMessage != null) {
                 // Already a file picker operation in progress.
                 return;
@@ -449,10 +449,10 @@ public class WViewActivity extends Activity {
         }
 
 
-        void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+        void openFileChooser(ValueCallback uploadMsg, String acceptType, String capture) {
 
             Log.d("JavaGoWV", "openFileChooser ValueCallback");
-
+            mUploadMessage = uploadMsg;
             final String mediaSourceKey = "capture";
             final String mediaSourceValueCamera = "camera";
             final String mediaSourceValueFileSystem = "filesystem";
