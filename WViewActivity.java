@@ -370,7 +370,7 @@ public class WViewActivity extends Activity {
         /*
          * The Object used to inform the WebView of the file to upload.
          */
-        private ValueCallback<Uri[]> mUploadMessage;
+        private ValueCallback mUploadMessage;
         private boolean mHandled;
         private Controller mController;
         private WebChromeClient.FileChooserParams mParams;
@@ -449,6 +449,10 @@ public class WViewActivity extends Activity {
 
 
         void openFileChooser(ValueCallback uploadMsg, String acceptType, String capture) {
+            if (mUploadMessage != null) {
+                // Already a file picker operation in progress.
+                return;
+            }
 
             Log.d("JavaGoWV", "openFileChooser ValueCallback");
             mUploadMessage = uploadMsg;
@@ -460,10 +464,6 @@ public class WViewActivity extends Activity {
             // According to the spec, media source can be 'filesystem' or 'camera' or 'camcorder'
             // or 'microphone' and the default value should be 'filesystem'.
             String mediaSource = mediaSourceValueFileSystem;
-            if (mUploadMessage != null) {
-                // Already a file picker operation in progress.
-                return;
-            }
 
             // Parse the accept type.
             String params[] = acceptType.split(";");
