@@ -161,6 +161,7 @@
 // static/nodes.inc
 // static/sass/addons/_mixins.scss
 // static/sass/pages/_home.scss
+// static/sass/pages/_install_step_0.scss
 // static/sass/pages/_mining_menu.scss
 // static/sass/pages/_new_promised_amount.scss
 // static/sass/pages/_new_user.scss
@@ -263,7 +264,6 @@
 // static/templates/restoring_access.html
 // static/templates/rewrite_primary_key.html
 // static/templates/set_password.html
-// static/templates/set_password_new.html
 // static/templates/setup_password.html
 // static/templates/sign_up_in_the_pool.html
 // static/templates/signatures.html
@@ -3208,6 +3208,24 @@ func staticSassPages_homeScss() (*asset, error) {
 	return a, err
 }
 
+// staticSassPages_install_step_0Scss reads file data from disk. It returns an error on failure.
+func staticSassPages_install_step_0Scss() (*asset, error) {
+	path := "static/sass/pages/_install_step_0.scss"
+	name := "static/sass/pages/_install_step_0.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSassPages_mining_menuScss reads file data from disk. It returns an error on failure.
 func staticSassPages_mining_menuScss() (*asset, error) {
 	path := "static/sass/pages/_mining_menu.scss"
@@ -5044,24 +5062,6 @@ func staticTemplatesSet_passwordHtml() (*asset, error) {
 	return a, err
 }
 
-// staticTemplatesSet_password_newHtml reads file data from disk. It returns an error on failure.
-func staticTemplatesSet_password_newHtml() (*asset, error) {
-	path := "static/templates/set_password_new.html"
-	name := "static/templates/set_password_new.html"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
 // staticTemplatesSetup_passwordHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSetup_passwordHtml() (*asset, error) {
 	path := "static/templates/setup_password.html"
@@ -5635,6 +5635,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/nodes.inc": staticNodesInc,
 	"static/sass/addons/_mixins.scss": staticSassAddons_mixinsScss,
 	"static/sass/pages/_home.scss": staticSassPages_homeScss,
+	"static/sass/pages/_install_step_0.scss": staticSassPages_install_step_0Scss,
 	"static/sass/pages/_mining_menu.scss": staticSassPages_mining_menuScss,
 	"static/sass/pages/_new_promised_amount.scss": staticSassPages_new_promised_amountScss,
 	"static/sass/pages/_new_user.scss": staticSassPages_new_userScss,
@@ -5737,7 +5738,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/restoring_access.html": staticTemplatesRestoring_accessHtml,
 	"static/templates/rewrite_primary_key.html": staticTemplatesRewrite_primary_keyHtml,
 	"static/templates/set_password.html": staticTemplatesSet_passwordHtml,
-	"static/templates/set_password_new.html": staticTemplatesSet_password_newHtml,
 	"static/templates/setup_password.html": staticTemplatesSetup_passwordHtml,
 	"static/templates/sign_up_in_the_pool.html": staticTemplatesSign_up_in_the_poolHtml,
 	"static/templates/signatures.html": staticTemplatesSignaturesHtml,
@@ -6151,6 +6151,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"pages": &bintree{nil, map[string]*bintree{
 				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{
 				}},
+				"_install_step_0.scss": &bintree{staticSassPages_install_step_0Scss, map[string]*bintree{
+				}},
 				"_mining_menu.scss": &bintree{staticSassPages_mining_menuScss, map[string]*bintree{
 				}},
 				"_new_promised_amount.scss": &bintree{staticSassPages_new_promised_amountScss, map[string]*bintree{
@@ -6359,8 +6361,6 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"rewrite_primary_key.html": &bintree{staticTemplatesRewrite_primary_keyHtml, map[string]*bintree{
 			}},
 			"set_password.html": &bintree{staticTemplatesSet_passwordHtml, map[string]*bintree{
-			}},
-			"set_password_new.html": &bintree{staticTemplatesSet_password_newHtml, map[string]*bintree{
 			}},
 			"setup_password.html": &bintree{staticTemplatesSetup_passwordHtml, map[string]*bintree{
 			}},
