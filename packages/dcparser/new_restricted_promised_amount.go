@@ -43,7 +43,7 @@ func (p *Parser) NewRestrictedPromisedAmountFront() error {
 	}
 
 	// не майнер ли он
-	isMiner, err := p.Single("SELECT user_id FROM miners_data WHERE user_id = ?", p.TxUserID).Int64()
+	isMiner, err := p.Single("SELECT miner_id FROM miners_data WHERE user_id = ?", p.TxUserID).Int64()
 	if err != nil {
 		return p.ErrInfo(err)
 	}

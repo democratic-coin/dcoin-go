@@ -32,7 +32,7 @@ type Settings struct {
 	GoPath    string   // GOPATH
 	BinData   string   // Full path to go-bindata 
 	BinDebug  string   // Specify "true" for debug option
-	RunAfter  string   // 
+	RunAfter  [][]string   
 	Arch      string   // Custom GOARCH
 	Skip      string   // d - download, z - unzip, s - static.go, b - build, a - make package
 }
@@ -124,11 +124,17 @@ func main() {
 		if cmdopt, found := settings[ os.Args[1]]; found {
 			r := reflect.ValueOf(cmdopt)
 			for i:=0; i < r.NumField(); i++ {
+				if reflect.ValueOf(&cmdopt).Elem().Type().Field(i).Name == `RunAfter` {
+					continue
+				}
 				val := r.Field(i).String()
 				if len( val ) > 0 {
 					ro := reflect.ValueOf(&options)
 					ro.Elem().Field(i).SetString( val )
 				}
+			}
+			if len( cmdopt.RunAfter ) > 0 {
+				options.RunAfter = cmdopt.RunAfter
 			}
 		} else {
 			exit( fmt.Errorf( `Cannot find %s settings`, os.Args[1]))
@@ -197,9 +203,15 @@ func main() {
 	}
 	if len(options.RunAfter) > 0 && strings.IndexRune( options.Skip, 'a' ) < 0 {
 		fmt.Println(`Run at the end`)
-		cmd := exec.Command( options.RunAfter )
-		if err = cmd.Run(); err != nil {
-			exit( err )
+		for _, icmd := range options.RunAfter {
+			if len(icmd) > 0 && len( icmd[0]) > 0 {
+				fmt.Println(`Executing`, icmd[0], `...` )
+				out, err := exec.Command( icmd[0], icmd[1:]... ).Output()
+				if err != nil {
+					exit( err )
+				}
+				fmt.Println( string(out) )
+			}
 		}
 	}
 	exit(nil)
