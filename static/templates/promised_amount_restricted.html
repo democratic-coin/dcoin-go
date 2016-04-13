@@ -1,18 +1,21 @@
 {{define "PromisedAmountRestricted"}}
 <script>
 
+function freecoin_reload( err ) {
+	$("#freewait").hide();
+	$("#getCoins").show();
+	$("#freeerr").html('{{.Lang.error_occured}} ' + err )
+	$("#freeerr").show();
+}
+
 function freecoin_process( first ) {
 	$.post( 'ajax?controllerName=freecoinProcess', {first: first}, function (ret) {
 		data = JSON.parse( ret );
 		if (data.status == 'reload') {
-			$("#freewait").hide();
-			$("#freesent").hide();
-			$("#getCoins").show();
+			freecoin_reload( '' );
 			return;
 		} else if (data.status == 'error') {
-			$("#freewait").hide();
-			$("#freesent").hide();
-			$("#getCoins").show();
+			freecoin_reload( data.error );
 			return;
 		} else if (data.status == 'success') {
 			dc_navigate ('miningMenu', {} );
@@ -31,7 +34,6 @@ function freecoin_process( first ) {
 		});
 
 		$('#send_to_net').bind('click', function () {
-
 			$.post( 'ajax?controllerName=saveQueue', {
 						'type' : '{{.TxType}}',
 						'time' : '{{.TimeNow}}',
@@ -44,8 +46,8 @@ function freecoin_process( first ) {
 					}, function (data) {
 //						dc_navigate ('miningMenu', {'alert': '{{.Lang.sent_to_the_net}}'} );
 						$("#getCoins").hide();
+						$("#freeerr").hide();
 						$("#freewait").show();
-						$("#freesent").show();
 						setTimeout( function(){ freecoin_process( true )}, 2000 );
 					}
 			);
@@ -59,9 +61,12 @@ function freecoin_process( first ) {
 {{if .Alert}}
 <img src="/static/img/load.gif">
 {{else}}
-<div id="freesent" style="display: none;" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
-<img id="freewait" src="/static/img/load.gif" style="display: none;">
-<button id="getCoins" class="btn btn-primary">Get FREE coins</button>
+<div id="freeerr" style="display: none;" class="alert alert-danger"></div>
+<div id="freewait" style="display: none;">
+<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
+<h3>{{.Lang.please_wait}}</h3>
+<img src="/static/img/load.gif"></div>
+<button id="getCoins" class="btn btn-primary">{{.Lang.get_free_coins}}</button>
 {{end}}
 {{template "signatures".}}
 
