@@ -218,17 +218,19 @@ $('#next, #cf_next').bind('click', function () {
 				console.log('null_arbitrators='+null_arbitrators);
 				console.log('arbitrators_array:');
 				console.log(arbitrators_array);
-				for (var id in arbitrators_array) {
-					if (arbitrators!='')
-						arbitrators = arbitrators + ',' + id;
-					else
-						arbitrators = id;
-					if (arbitrators_commissions!='')
-						arbitrators_commissions = arbitrators_commissions+','+global_arbitrators_commissions_array[id];
-					else
-						arbitrators_commissions = global_arbitrators_commissions_array[id];
-					global_arbitrators_commissions_array2.push(global_arbitrators_commissions_array[id]);
-					global_arbitrators_array.push(id);
+				if (arbitrators_array != '') {
+					for (var id in arbitrators_array) {
+						if (arbitrators!='')
+							arbitrators = arbitrators + ',' + id;
+						else
+							arbitrators = id;
+						if (arbitrators_commissions!='')
+							arbitrators_commissions = arbitrators_commissions+','+global_arbitrators_commissions_array[id];
+						else
+							arbitrators_commissions = global_arbitrators_commissions_array[id];
+						global_arbitrators_commissions_array2.push(global_arbitrators_commissions_array[id]);
+						global_arbitrators_array.push(id);
+					}
 				}
 				console.log('global_arbitrators_array:');
 				console.log(global_arbitrators_array);
