@@ -469,6 +469,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a2")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN getpool_host varchar(255)`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
 		}
 
 		if *utils.OldFileName != "" {
@@ -683,6 +691,10 @@ func exhangeHttpListener(HandleHttpHost string) {
 	if len(config["stat_host"]) > 0 {
 		//fmt.Println("stat_host", config["stat_host"])
 		http.HandleFunc(config["stat_host"]+"/", controllers.IndexStat)
+	}
+	if len(config["getpool_host"]) > 0 {
+		//fmt.Println("stat_host", config["stat_host"])
+		http.HandleFunc(config["getpool_host"]+"/", controllers.IndexGetPool)
 	}
 
 	if eConfig["enable"] == "1" {
