@@ -184,8 +184,7 @@ BEGIN:
 			}
 			logger.Debug("i %v", i)
 			logger.Debug("sleep %v", sleep)
-			var newHeadHash string
-			err = d.QueryRow(d.FormatQuery("SELECT hex(head_hash) FROM info_block")).Scan(&newHeadHash)
+			newHeadHash, err := d.Single("SELECT hex(head_hash) FROM info_block").String()
 			if err != nil {
 				if d.dPrintSleep(err, d.sleepTime) {
 					break BEGIN
@@ -446,7 +445,9 @@ BEGIN:
 
 		// хэш шапки блока. нужен для сравнивания с другими и у кого будет меньше - у того блок круче
 		headerHash := utils.DSha256([]byte(fmt.Sprintf("%s,%s,%s", myUserId, newBlockId, prevHeadHash)))
-		err = d.ExecSql("DELETE FROM testblock WHERE block_id = ?", newBlockId)
+		//err = d.ExecSql("DELETE FROM testblock WHERE block_id = ?", newBlockId)
+		// чистим testblock. когда было WHERE block_id = ? то возникал баг т.к. в таблу писал tcpserver.type6
+		err = d.ExecSql("DELETE FROM testblock")
 		if err != nil {
 			if d.dPrintSleep(err, d.sleepTime) {
 				break BEGIN

@@ -63,6 +63,12 @@ BEGIN:
 		}
 
 		myUsersIds, err := d.GetMyUsersIds(false, true)
+		if len(myUsersIds) == 0 {
+			if d.dPrintSleep(err, d.sleepTime) {
+				break BEGIN
+			}
+			continue BEGIN
+		}
 		// берем автоплатежи, которые пора провести
 		rows, err := d.Query(d.FormatQuery(`
 				SELECT id, sender
@@ -94,29 +100,41 @@ BEGIN:
 				break
 			}
 
-			curTime := utils.Time()
-			forSign := fmt.Sprintf("%v,%v,%v,%v", utils.TypeInt("AutoPayment"), curTime, sender, auto_payment_id)
-			binSign, err := d.GetBinSign(forSign, sender)
+			myUsersIds, err := d.GetMyUsersIds(true, true)
 			if err != nil {
 				rows.Close()
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 					break BEGIN
 				}
 				continue BEGIN
 			}
-			data := utils.DecToBin(utils.TypeInt("AutoPayment"), 1)
-			data = append(data, utils.DecToBin(curTime, 4)...)
-			data = append(data, utils.EncodeLengthPlusData(utils.Int64ToByte(sender))...)
-			data = append(data, utils.EncodeLengthPlusData(utils.Int64ToByte(auto_payment_id))...)
-			data = append(data, utils.EncodeLengthPlusData([]byte(binSign))...)
 
-			err = d.InsertReplaceTxInQueue(data)
-			if err != nil {
-				rows.Close()
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-					break BEGIN
+			// не наш ли это автоплатеж
+			if utils.InSliceInt64(sender, myUsersIds) {
+				curTime := utils.Time()
+				forSign := fmt.Sprintf("%v,%v,%v,%v", utils.TypeInt("AutoPayment"), curTime, sender, auto_payment_id)
+				binSign, err := d.GetBinSign(forSign, sender)
+				if err != nil {
+					rows.Close()
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
+					continue BEGIN
 				}
-				continue BEGIN
+				data := utils.DecToBin(utils.TypeInt("AutoPayment"), 1)
+				data = append(data, utils.DecToBin(curTime, 4)...)
+				data = append(data, utils.EncodeLengthPlusData(utils.Int64ToByte(sender))...)
+				data = append(data, utils.EncodeLengthPlusData(utils.Int64ToByte(auto_payment_id))...)
+				data = append(data, utils.EncodeLengthPlusData([]byte(binSign))...)
+
+				err = d.InsertReplaceTxInQueue(data)
+				if err != nil {
+					rows.Close()
+					if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+						break BEGIN
+					}
+					continue BEGIN
+				}
 			}
 		}
 		rows.Close()

@@ -129,15 +129,7 @@
 {{noescape .Lang.upload_face_video_rules}}
 {{noescape .Lang.upload_face_video_rules2}}
 
-<p id="selectType"><!--a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}} --><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
-<!--div id="from_webcam">
-
-	<div id="widget"></div>
-	<div id="player">{if .VideoUrl}<iframe width=640 height=480  src='{.VideoUrl}' frameborder=0 allowfullscreen></iframe>{end}</div>
-	<div id="refresh_youtube_div" style="display: none"><a href="#" id="refresh_youtube"><i class="fa fa-refresh fa-fw" style="font-size: 30px"></i></a></div>
-
-	<script src="static/js/youtube_webcam.js"></script>
-</div-->
+<p id="selectType">{{.Lang.or}} --><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
 
 <div id="from_youtube">
 

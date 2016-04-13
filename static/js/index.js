@@ -504,7 +504,7 @@ function doSign_(type) {
     var pass = $("#password").text();
     var setup_password = $("#setup_password").text();
     var save_key = $("#save_key").text();
-    console.log("save_key=" + save_key)
+    console.log("save_key=" + save_key);
 
     if (key.length < 512) {
         $("#modal_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+$('#incorrect_key_or_password').val()+'</p></div>');

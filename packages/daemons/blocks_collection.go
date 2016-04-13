@@ -30,7 +30,7 @@ func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 	d.chAnswer = chAnswer
 	d.chBreaker = chBreaker
 	if utils.Mobile() {
-		d.sleepTime = 300
+		d.sleepTime = 60
 	} else {
 		d.sleepTime = 60
 	}
@@ -42,8 +42,13 @@ func BlocksCollection(chBreaker chan bool, chAnswer chan string) {
 		return
 	}
 	//var cur bool
+	var file *os.File
 BEGIN:
 	for {
+		if file != nil {
+			file.Close()
+			file = nil
+		}
 		logger.Info(GoroutineName)
 		MonitorDaemonCh <- []string{GoroutineName, utils.Int64ToStr(utils.Time())}
 
@@ -168,7 +173,7 @@ BEGIN:
 				  }*/
 
 				logger.Debug("GO!")
-				file, err := os.Open(*utils.Dir + "/public/blockchain")
+				file, err = os.Open(*utils.Dir + "/public/blockchain")
 				if err != nil {
 					if d.unlockPrintSleep(err, d.sleepTime) {
 						break BEGIN
@@ -200,10 +205,9 @@ BEGIN:
 						//logger.Debug("data %x\n", data)
 						blockId := utils.BinToDec(data[0:5])
 						if *utils.EndBlockId > 0 && blockId == *utils.EndBlockId {
-							if d.dPrintSleep(err, 3600) {
+/*	!!!						if d.dPrintSleep(err, d.sleepTime ) {
 								break BEGIN
-							}
-							file.Close()
+							}*/
 							continue BEGIN
 						}
 						logger.Info("blockId", blockId)
@@ -223,45 +227,40 @@ BEGIN:
 								parser.CurrentVersion = consts.VERSION
 								first = false
 							}
-							err = parser.ParseDataFull()
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
+							if err = parser.ParseDataFull(); err != nil {
+								if d.unlockPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
-								file.Close()
 								continue BEGIN
 							}
-							err = parser.InsertIntoBlockchain()
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
+							if err = parser.InsertIntoBlockchain(); err != nil {
+								if d.unlockPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
-								file.Close()
 								continue BEGIN
 							}
 
 							// отметимся, чтобы не спровоцировать очистку таблиц
-							err = parser.UpdMainLock()
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
+							if err = parser.UpdMainLock(); err != nil {
+								if d.unlockPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
-								file.Close()
 								continue BEGIN
 							}
 							if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
-								if d.dPrintSleep(err, d.sleepTime) {
+								d.unlockPrintSleep(nil, 0) 
+/*!!!								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
-								}
-								file.Close()
-								continue BEGIN
+								}*/
+								break BEGIN
+//!!!   						continue BEGIN
 							}
 						}
 						// ненужный тут размер в конце блока данных
 						data = make([]byte, 5)
 						file.Read(data)
 					} else {
-						if d.unlockPrintSleep(err, d.sleepTime) {
+						if d.unlockPrintSleep( nil, d.sleepTime) {
 							break BEGIN
 						}
 						continue BEGIN
@@ -269,11 +268,12 @@ BEGIN:
 					// utils.Sleep(1)
 				}
 				file.Close()
+				file = nil
 			} else {
 
 				newBlock, err := static.Asset("static/1block.bin")
 				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {
+					if d.unlockPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
@@ -281,23 +281,19 @@ BEGIN:
 				parser.BinaryData = newBlock
 				parser.CurrentVersion = consts.VERSION
 
-				err = parser.ParseDataFull()
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {
+				if err = parser.ParseDataFull(); err != nil {
+					if d.unlockPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
 				}
-				err = parser.InsertIntoBlockchain()
-
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {
+				if err = parser.InsertIntoBlockchain(); err != nil {
+					if d.unlockPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
 				}
 			}
-
 			utils.Sleep(1)
 			d.dbUnlock()
 			continue BEGIN
@@ -306,10 +302,11 @@ BEGIN:
 
 		err = d.ExecSql(`UPDATE config SET current_load_blockchain = 'nodes'`)
 		if err != nil {
-			if d.unlockPrintSleep(err, d.sleepTime) {
-				break BEGIN
+//!!!			d.unlockPrintSleep(err, d.sleepTime) unlock был выше
+			if d.dPrintSleep(err, d.sleepTime) {
+				break
 			}
-			continue BEGIN
+			continue
 		}
 
 		myConfig, err := d.OneRow("SELECT local_gate_ip, static_node_user_id FROM config").String()
@@ -319,6 +316,7 @@ BEGIN:
 			}
 			continue
 		}
+
 		var hosts []map[string]string
 		var nodeHost string
 		var dataTypeMaxBlockId, dataTypeBlockBody int64
@@ -351,14 +349,14 @@ BEGIN:
 		}
 
 		logger.Info("%v", hosts)
-
+//		fmt.Println(`Hosts`, hosts )
 		if len(hosts) == 0 {
 			if d.dPrintSleep(err, 1) {
 				break BEGIN
 			}
 			continue
 		}
-
+		
 		maxBlockId := int64(1)
 		maxBlockIdHost := ""
 		var maxBlockIdUserId int64
@@ -429,7 +427,7 @@ BEGIN:
 			continue BEGIN
 		}
 
-		currentBlockId, err = d.Single("SELECT block_id FROM info_block").Int64()
+		currentBlockId, err = d.GetBlockId()
 		if err != nil {
 			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 				break BEGIN
@@ -444,15 +442,14 @@ BEGIN:
 			continue
 		}
 
-		fmt.Printf("\nnode: %s\n", maxBlockIdHost)
+		fmt.Printf("\nnode: %s curid=%d maxid=%d\n", maxBlockIdHost, currentBlockId, maxBlockId )
 
+		/////----///////
 		// в цикле собираем блоки, пока не дойдем до максимального
 		for blockId := currentBlockId + 1; blockId < maxBlockId+1; blockId++ {
 			d.UpdMainLock()
 			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
-				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
-					break BEGIN
-				}
+				d.unlockPrintSleep(utils.ErrInfo(err), 0) 
 				break BEGIN
 			}
 			variables, err := d.GetAllVariables()
@@ -682,12 +679,24 @@ BEGIN:
 			}
 		}
 
+
+/*		toclose, err := collectBlocks(currentBlockId, maxBlockId, dataTypeBlockBody, maxBlockIdUserId, maxBlockIdHost, nodeHost); 
+		if toclose {
+			break
+		}
+		if err != nil {
+			continue
+		}*/
+
 		d.dbUnlock()
 
 		if d.dSleep(d.sleepTime) {
-			break BEGIN
+			break
+			//continue
 		}
 	}
-
+	if file != nil {
+		file.Close()
+	}
 	logger.Debug("break BEGIN %v", GoroutineName)
 }

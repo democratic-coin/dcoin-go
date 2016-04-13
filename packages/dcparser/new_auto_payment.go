@@ -40,6 +40,20 @@ func (p *Parser) NewAutoPaymentFront() error {
 		return p.ErrInfo(err)
 	}
 
+	nodeCommission, err := p.getMyNodeCommission(p.TxMaps.Int64["currency_id"], p.TxUserID, p.TxMaps.Money["amount"])
+	if err != nil {
+		return p.ErrInfo(err)
+	}
+
+	// проверим, удовлетворяет ли нас комиссия, которую предлагает юзер
+	if p.TxMaps.Money["commission"] < nodeCommission {
+		return p.ErrInfo(fmt.Sprintf("commission %v<%v", p.TxMaps.Money["commission"], nodeCommission))
+	}
+
+	if p.TxMaps.Money["amount"] < 0.01 { // 0.01 - минимальная сумма
+		return p.ErrInfo("amount")
+	}
+
 	if (p.TxMaps.Int64["period"] < 86400 || p.TxMaps.Int64["period"] > 86400*365) {
 		return p.ErrInfo("incorrect period")
 	}

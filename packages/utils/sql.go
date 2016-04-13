@@ -863,7 +863,7 @@ func (db *DCDB) GetTcpHost() string {
 		}
 		tcpHost := data["tcp_host"]
 		if len(tcpHost) == 0 {
-			tcpHost, err = db.Single("SELECT tcp_host FROM miners_data WHERE user_id = ?", myUserId).String()
+			tcpHost, err = db.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?", myUserId).String()
 			if err != nil {
 				log.Error("%v", ErrInfo(err))
 			}
@@ -1148,7 +1148,11 @@ func (db *DCDB) CalcProfitGen(currencyId int64, amount float64, userId int64, la
 	}
 	var profit float64
 	if (calcType == "mining" || calcType == "repaid" && db.CheckCashRequests(userId) == nil) || calcType == "wallet" {
+		//fmt.Println("currencyId", currencyId, "amount", amount, "lastUpdate", lastUpdate, "endTime", endTime, "pct[currencyId]", pct[currencyId], "pointsStatus",pointsStatus, "userHolidays", userHolidays, "maxPromisedAmounts[currencyId]", maxPromisedAmounts[currencyId], "repaidAmount", repaidAmount)
 		profit, err = CalcProfit(amount, lastUpdate, endTime, pct[currencyId], pointsStatus, userHolidays, maxPromisedAmounts[currencyId], currencyId, repaidAmount)
+		if err != nil {
+			return 0, err
+		}
 	}
 	return profit, nil
 }

@@ -130,7 +130,7 @@ func (p *Parser) GetBlocks(blockId int64, host string, userId int64, rollbackBlo
 			return utils.ErrInfo(errors.New("count > variables[rollback_blocks]"))
 		}
 		if len(host) == 0 {
-			host, err = p.Single("SELECT tcp_host FROM miners_data WHERE user_id = ?", userId).String()
+			host, err = p.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?", userId).String()
 			if err != nil {
 				ClearTmp(blocks)
 				return utils.ErrInfo(err)
@@ -3908,6 +3908,9 @@ func (p *Parser) AllTxParser() error {
 			)  AS x
 			`, -1)
 	for _, data := range all {
+
+		log.Debug("hash: %x", data["hash"])
+
 		err = p.TxParser([]byte(data["hash"]), []byte(data["data"]), false)
 		if err != nil {
 			err0 := p.ExecSql(`INSERT INTO incorrect_tx (time, hash, err) VALUES (?, [hex], ?)`, utils.Time(), utils.BinToHex(data["hash"]), fmt.Sprintf("%s", err))

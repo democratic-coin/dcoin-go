@@ -660,6 +660,7 @@ func check(host string, userId int64) *answerType {
 	if utils.BinToDec(answer) == 1 {
 
 	}
+
 	logger.Debug("host: %v / answer: %v / userId: %v", host, answer, userId)
 	return &answerType{userId: userId, answer: utils.BinToDec(answer)}
 }
