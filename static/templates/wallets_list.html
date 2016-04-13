@@ -302,6 +302,7 @@ $('#send_to_net').bind('click', function () {
 	var json_global_arbitrators_array = JSON.stringify(global_arbitrators_array);
 	var json_global_arbitrators_commissions_array2 = JSON.stringify(global_arbitrators_commissions_array2);
 
+	$("#alerterror").hide();
 	$.post( 'ajax?controllerName=saveQueue', {
 		'type' : tx_type,
 		'time' : '{{.Time}}',
@@ -318,11 +319,13 @@ $('#send_to_net').bind('click', function () {
 		'signature2': $('#signature2').val(),
 		'signature3': $('#signature3').val()
 	}, function (data) {
-		var qAlert = '{{.Lang.sent_to_the_net}}'
+		var qAlert = '{{.Lang.sent_to_the_net}}';
 		if (data.error != "null") {
-			qAlert = data.error
+			$("#alerterror").html( data.error );
+			$("#alerterror").show();
+		} else {
+			dc_navigate ('walletsList', {'alert': qAlert } );
 		}
-		dc_navigate ('walletsList', {'alert': qAlert} );
 	}, 'JSON' );
 
 } );
@@ -625,6 +628,7 @@ function foattoupper(x) {
 	</div>
 
 </div>
+<div style="display:none;" class="alert alert-danger alert-dismissable" id="alerterror"></div>
 
 <div id="wallets_confirm" style="margin: auto; max-width: 600px; display: none">
 	<h3>{{.Lang.check_data}}</h3>

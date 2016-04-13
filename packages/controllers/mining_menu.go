@@ -132,17 +132,27 @@ func (c *Controller) MiningMenu() (string, error) {
 						result = "resend"
 					}
 				}
-			} else { // запрос на получение статуса "майнер" мы еще не слали
-				// может уже добавили ограниченную обещанную сумму
-				pa_restricted_list, err := c.Single("SELECT id FROM promised_amount_restricted WHERE user_id = ?", c.SessUserId).Int64()
+			} else { 
+			    // Проверяем чтобы не было в miners_data
+				myUserId, err := c.Single("SELECT user_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
 				if err != nil {
 					return "", utils.ErrInfo(err)
 				}
-				if pa_restricted_list > 0 {
-					result = "pa_restricted_list"
+				if myUserId == 0 {
+				   // запрос на получение статуса "майнер" мы еще не слали
+					// может уже добавили ограниченную обещанную сумму
+					pa_restricted_list, err := c.Single("SELECT id FROM promised_amount_restricted WHERE user_id = ?", c.SessUserId).Int64()
+					if err != nil {
+						return "", utils.ErrInfo(err)
+					}
+					if pa_restricted_list > 0 {
+						result = "pa_restricted_list"
+					} else {
+						result = "null"
+					}
 				} else {
-					result = "null"
-				}
+					result = "upgrade"
+    			}
 			}
 		} else {
 

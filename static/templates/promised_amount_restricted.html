@@ -1,6 +1,30 @@
 {{define "PromisedAmountRestricted"}}
 <script>
 
+function freecoin_reload( err ) {
+	$("#freewait").hide();
+	$("#getCoins").show();
+	$("#freeerr").html('{{.Lang.error_occured}} ' + err )
+	$("#freeerr").show();
+}
+
+function freecoin_process( first ) {
+	$.post( 'ajax?controllerName=freecoinProcess', {first: first}, function (ret) {
+		data = JSON.parse( ret );
+		if (data.status == 'reload') {
+			freecoin_reload( '' );
+			return;
+		} else if (data.status == 'error') {
+			freecoin_reload( data.error );
+			return;
+		} else if (data.status == 'success') {
+			dc_navigate ('miningMenu', {} );
+			return;
+		}
+		setTimeout( function(){ freecoin_process( false )}, 2000 );
+	});
+}
+
 	$('#getCoins').bind('click', function () {
 
 		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
@@ -10,7 +34,6 @@
 		});
 
 		$('#send_to_net').bind('click', function () {
-
 			$.post( 'ajax?controllerName=saveQueue', {
 						'type' : '{{.TxType}}',
 						'time' : '{{.TimeNow}}',
@@ -21,7 +44,11 @@
 						'signature2': $('#signature2').val(),
 						'signature3': $('#signature3').val()
 					}, function (data) {
-						dc_navigate ('miningMenu', {'alert': '{{.Lang.sent_to_the_net}}'} );
+//						dc_navigate ('miningMenu', {'alert': '{{.Lang.sent_to_the_net}}'} );
+						$("#getCoins").hide();
+						$("#freeerr").hide();
+						$("#freewait").show();
+						setTimeout( function(){ freecoin_process( true )}, 2000 );
 					}
 			);
 		});
@@ -34,11 +61,13 @@
 {{if .Alert}}
 <img src="/static/img/load.gif">
 {{else}}
-
-<button id="getCoins" class="btn btn-primary">Get FREE coins</button>
+<div id="freeerr" style="display: none;" class="alert alert-danger"></div>
+<div id="freewait" style="display: none;">
+<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
+<h3>{{.Lang.please_wait}}</h3>
+<img src="/static/img/load.gif"></div>
+<button id="getCoins" class="btn btn-primary">{{.Lang.get_free_coins}}</button>
 {{end}}
-
-
 {{template "signatures".}}
 
 <script>
