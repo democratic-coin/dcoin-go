@@ -494,10 +494,10 @@ func (c *Controller) SaveQueue() (string, error) {
 		for i := 0; i < 5; i++ {
 			if len(arbitrators[i]) > 0 {
 				if !utils.CheckInputData(arbitrators[i], "int") {
-					return "incorrect arbitrators", nil
+					return "", errors.New("incorrect arbitrators")
 				}
 				if ok, _ := regexp.MatchString(`^[0-9]{0,10}(\.[0-9]{0,2})?$`, utils.Float64ToStrPct(arbitrators_commissions[i])); !ok {
-					return "incorrect arbitrator_commission", nil
+					return "", errors.New("incorrect arbitrator_commission")
 				}
 			} else {
 				arbitrators[i] = "0"
