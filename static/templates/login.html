@@ -55,7 +55,7 @@
 	<div style="margin:0 auto; display: table; position: relative; top: 35%;" id="login_div">
 		<span style="display: inline-block">
 			<button type="button" class="btn btn-primary btn-lg" id="show_login" style="position: relative; display: table;">{{.Lang.login}}</button>
-			<button type="button" class="btn btn-primary btn-lg" id="show_signup" style="position: relative; display: table;  ">{{.Lang.sign_up}}</button>
+			{{if .SignUp}}<button type="button" class="btn btn-primary btn-lg" id="show_signup" style="position: relative; display: table;  ">{{.Lang.sign_up}}</button>{{end}}
 		</span>
 	</div>
 {{end}}

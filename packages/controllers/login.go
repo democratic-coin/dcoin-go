@@ -15,6 +15,7 @@ type loginStruct struct {
 	SetupPassword bool
 	Community     bool
 	Mobile        bool
+	SignUp        bool
 	Desktop bool
 }
 
@@ -41,10 +42,16 @@ func (c *Controller) Login() (string, error) {
 	t = template.Must(t.Parse(string(modal)))
 
 	b := new(bytes.Buffer)
-
+	signUp := true
 	// есть ли установочный пароль и был ли начально записан ключ
 	var setupPassword bool
 	if !c.Community {
+		// Нельзя зарегистрироваться если в my_table уже есть статус
+		if status, err := c.Single("SELECT status FROM my_table").String(); err == nil &&
+			status != "waiting_set_new_key" && status != "my_pending" {
+			signUp = false
+		}
+		
 		setupPassword_, err := c.Single("SELECT setup_password FROM config").String()
 		if err != nil {
 			return "", err
@@ -71,6 +78,7 @@ func (c *Controller) Login() (string, error) {
 		PoolTechWorks: pool_tech_works,
 		SetupPassword: setupPassword,
 		Community:     c.Community,
+		SignUp:        signUp,
 		Desktop: utils.Desktop(),
 		Mobile:        utils.Mobile()})
 	if err != nil {
