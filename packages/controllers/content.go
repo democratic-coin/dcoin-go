@@ -365,7 +365,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			tplName = "home"
 		}
 
-		if tplName == "home" && c.Parameters["first_select"] != "1" {
+/*		if tplName == "home" && c.Parameters["first_select"] != "1" {
 			data, err := c.OneRow(`SELECT first_select, miner_id from ` + c.MyPrefix + `my_table`).Int64()
 			if err != nil {
 				log.Error("%v", err)
@@ -373,7 +373,7 @@ func Content(w http.ResponseWriter, r *http.Request) {
 			if data["first_select"] == 0 && data["miner_id"] == 0 && c.SessRestricted == 0 {
 				tplName = "firstSelect"
 			}
-		}
+		} */
 		c.TplName = tplName
 
 		log.Debug("communityUsers:", communityUsers)
