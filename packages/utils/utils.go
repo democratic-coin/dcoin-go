@@ -3380,25 +3380,26 @@ func IPwoPort(ipport string) string {
 }
 
 func DcoinUpd(url string) error {
-	_, err := DownloadToFile(url, *Dir+"/dc.zip", 3600, nil, nil, "upd")
+	zipfile := filepath.Join(*Dir, "dc.zip" )
+	_, err := DownloadToFile(url, zipfile, 3600, nil, nil, "upd")
 	if err != nil {
 		return ErrInfo(err)
 	}
-	zipfile := *Dir + "/dc.zip"
 	fmt.Println(zipfile)
 	reader, err := zip.OpenReader(zipfile)
 	if err != nil {
 		return ErrInfo(err)
 	}
-
+	appname := filepath.Base(os.Args[0])
+	tmpname := filepath.Join(*Dir, `tmp_`+appname )
+	
 	f_ := reader.Reader.File
 	f := f_[0]
 	zipped, err := f.Open()
 	if err != nil {
 		return ErrInfo(err)
 	}
-
-	writer, err := os.OpenFile(*Dir+"/dc.tmp", os.O_WRONLY|os.O_CREATE, f.Mode())
+	writer, err := os.OpenFile( tmpname, os.O_WRONLY|os.O_CREATE, f.Mode())
 	if err != nil {
 		return ErrInfo(err)
 	}
@@ -3424,13 +3425,13 @@ func DcoinUpd(url string) error {
 	old := ""
 	if _, err := os.Stat(os.Args[0]); err == nil {
 		old = os.Args[0]
-	} else if _, err := os.Stat(folderPath + "/" + filepath.Base(os.Args[0])); err == nil {
-		old = folderPath + "/" + filepath.Base(os.Args[0])
+	} else if _, err := os.Stat( filepath.Join( folderPath, appname )); err == nil {
+		old = filepath.Join( folderPath, appname )
 	} else {
-		old = *Dir + "/" + filepath.Base(os.Args[0])
+		old = filepath.Join( *Dir, appname )
 	}
-	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
-	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
+	log.Debug( tmpname, "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
+	err = exec.Command( tmpname, "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
 	if err != nil {
 		return ErrInfo(err)
 	}
@@ -3441,8 +3442,6 @@ func GetUpdVerAndUrl(host string) (string, string, error) {
 
 	update, err := GetHttpTextAnswer(host + "/update.json")
 	if len(update) > 0 {
-
-		//fmt.Println(update)
 
 		updateData := new(updateType)
 		err = json.Unmarshal([]byte(update), &updateData)
