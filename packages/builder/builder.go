@@ -14,6 +14,7 @@ import (
 	"os/exec"
 	"strings"
 	"reflect"
+	"time"
 )
 
 const (
@@ -102,6 +103,18 @@ func  extract(f *zip.File) error {
         }
     }
     return nil
+}
+
+func BytesInfoHeader(size int, filename string) (*zip.FileHeader, error) {
+	fh := &zip.FileHeader{
+		Name:               filename,
+		UncompressedSize64: uint64(size),
+		UncompressedSize:   uint32(size),
+		Method:             zip.Deflate,
+	}
+	fh.SetModTime(time.Now())
+	//   fh.SetMode(fi.Mode())
+	return fh, nil
 }
 
 func main() {
@@ -201,6 +214,33 @@ func main() {
 			exit( err )
 		}
 	}
+	zipfile := `dcoin.zip`
+	switch runtime.GOOS {
+		case `windows`:
+			if runtime.GOARCH == `386` {
+				zipfile = `dcoin_win32.zip` 
+			} else {
+				zipfile = `dcoin_win64.zip` 
+			}
+	}
+	zipname := filepath.Join(filepath.Dir( filepath.Dir( options.OutFile )), zipfile )
+	fmt.Println(`Compressing`, zipname)
+	
+	zipf, err := os.Create(zipname)
+	if err != nil {
+		exit( err )
+	}
+	z := zip.NewWriter(zipf)
+	var out []byte
+	if out, err = ioutil.ReadFile( options.OutFile ); err != nil {
+		exit(err)
+	}
+	header, _ := BytesInfoHeader(len(out), filepath.Base( options.OutFile ))
+	f,_ := z.CreateHeader(header)
+	f.Write(out)
+	z.Close()
+	zipf.Close()
+	
 	if len(options.RunAfter) > 0 && strings.IndexRune( options.Skip, 'a' ) < 0 {
 		fmt.Println(`Run at the end`)
 		for _, icmd := range options.RunAfter {
