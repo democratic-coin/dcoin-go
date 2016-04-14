@@ -14,6 +14,7 @@ type promisedAmountRestricted struct {
 	TxTypeId         int64
 	TimeNow          int64
 	Lang            map[string]string
+	Started         bool
 }
 
 func (c *Controller) PromisedAmountRestricted() (string, error) {
@@ -22,8 +23,17 @@ func (c *Controller) PromisedAmountRestricted() (string, error) {
 	txTypeId := utils.TypeInt(txType)
 	timeNow := utils.Time()
 
+	var ( last_tx []map[string]string
+		  started bool
+		  err     error
+	)
+	if last_tx, err = c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewRestrictedPromisedAmount"}), 
+		                    1, c.TimeFormat); err == nil && len(last_tx) > 0 {
+		started = true
+	}
 	TemplateStr, err := makeTemplate("promised_amount_restricted", "PromisedAmountRestricted", &promisedAmountRestricted{
 		Alert:           c.Alert,
+		Started:         started,
 		Lang:            c.Lang,
 		CountSignArr:    c.CountSignArr,
 		ShowSignData:    c.ShowSignData,
