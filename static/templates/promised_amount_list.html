@@ -106,8 +106,9 @@
 		</table>
 	</div>
 	{{end}}
-
+	{{if not .DisableNewAmount}}
 	<a href="#newPromisedAmount" type="button" class="btn btn-outline btn-primary">{{.Lang.add_note}}</a>
+	{{end}}
 	
 	<div class="table_fix">
 		{{noescape .LastTxFormatted}}
