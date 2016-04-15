@@ -26,7 +26,7 @@ func (c *Controller) DelPoolUser() (string, error) {
 
 	delUserId := int64(utils.StrToFloat64(c.Parameters["del_user_id"]))
 
-	TemplateStr, err := makeTemplate("del_pool_user", "DelPoolUser", &DelPoolUserPage{
+	TemplateStr, err := makeTemplate("del_pool_user", "delPoolUser", &DelPoolUserPage{
 		Alert:        c.Alert,
 		Lang:         c.Lang,
 		CountSignArr: c.CountSignArr,
