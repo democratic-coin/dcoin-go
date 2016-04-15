@@ -48,6 +48,10 @@ func (c *Controller) PromisedAmountList() (string, error) {
 	}
 	for _, tx := range last_tx {
 		if utils.StrToInt64( tx[`block_id`] ) == 0 {
+			if len( tx[`tx`] ) > 0 || len( tx[`queue_tx`] ) > 0 {
+				// Есть необработанные транзакции
+				disableNewAmount = true
+			}
 			IDB:
 			for _, idb := range []string{`queue_tx`,`transactions`}{
 				data, err := c.Single(`SELECT data FROM `+ idb +` WHERE hex(hash)=?`, utils.BinToHex([]byte(tx["hash"])) ).Bytes(); 
@@ -60,7 +64,6 @@ func (c *Controller) PromisedAmountList() (string, error) {
 					for i, ipromise := range promisedAmountListAccepted {
 						if ipromise.Id == idPromise {
 							promisedAmountListAccepted[i].InProcess = true
-							disableNewAmount = true
 							break IDB
 						}
 					}
