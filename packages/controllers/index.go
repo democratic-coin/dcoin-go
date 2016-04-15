@@ -89,7 +89,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if utils.DB == nil || utils.DB.DB == nil {
 		showIOSMenu = false
 	} else {
-		if status == "my_pending" {
+		if status == "my_pending" || status == "waiting_set_new_key" || status == "waiting_accept_new_key" {
 			showIOSMenu = false
 		}
 	}
