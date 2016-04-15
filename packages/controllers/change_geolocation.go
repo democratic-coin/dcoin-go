@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/geolocation"
+	"fmt"
 	"strings"
 )
 
@@ -33,12 +35,16 @@ func (c *Controller) ChangeGeolocation() (string, error) {
 	myGeolocationStr, err := c.Single(`SELECT geolocation FROM ` + c.MyPrefix + `my_table`).String()
 	if len(myGeolocationStr) == 0 {
 		myGeolocationStr = "39.94887, -75.15005"
+		if !utils.Mobile() {
+			if coord, err := geolocation.GetLocation(); err == nil {
+				myGeolocationStr = fmt.Sprintf("%.6f, %.6f", coord.Latitude, coord.Longitude )
+			}
+		}
 	}
 	x := strings.Split(myGeolocationStr, ", ")
 	myGeolocation := make(map[string]string)
 	myGeolocation["lat"] = x[0]
 	myGeolocation["lon"] = x[1]
-
 	myCountry, err := c.Single("SELECT country FROM miners_data WHERE user_id = ?", c.SessUserId).Int()
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -50,6 +56,7 @@ func (c *Controller) ChangeGeolocation() (string, error) {
 	TemplateStr, err := makeTemplate("change_geolocation", "changeGeolocation", &changeGeolocationPage{
 		Alert:         c.Alert,
 		Lang:          c.Lang,
+		TxType:        txType,
 		TxTypeId:      txTypeId,
 		TimeNow:       timeNow,
 		UserId:        c.SessUserId,

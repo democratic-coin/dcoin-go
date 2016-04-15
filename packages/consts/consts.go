@@ -1,8 +1,8 @@
-package consts
+﻿package consts
 
 
 // текущая версия
-const VERSION = "2.2.4a2"
+const VERSION = "2.2.4b1"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -25,7 +25,7 @@ const MIN_CONFIRMED_NODES = 1
 const LAST_BLOCK = 300000
 
 // примерный размер блокчейна
-const BLOCKCHAIN_SIZE = 80000000
+const BLOCKCHAIN_SIZE = 77000000
 
 // где лежит блокчейн. для тех, кто не хочет собирать его с нодов
 const BLOCKCHAIN_URL = "http://dcoin.club/blockchain"

@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
@@ -193,8 +194,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" || len(configIni)!=0 {
 
-		if *utils.OldFileName != "" {
-			err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
+		if *utils.OldFileName != "" {   //*utils.Dir+`/dc.tmp`
+			err = utils.CopyFileContents( os.Args[0], *utils.OldFileName)
 			if err != nil {
 				log.Debug("%v", os.Stderr)
 				log.Debug("%v", utils.ErrInfo(err))
@@ -469,6 +470,14 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 					log.Error("%v", utils.ErrInfo(err))
 				}
 			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a2")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN getpool_host varchar(255)`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
 		}
 
 		if *utils.OldFileName != "" {
@@ -477,12 +486,12 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 			fmt.Println("DB Closed")
-			err = os.Remove(*utils.Dir + "/dcoin.pid")
+			err = os.Remove( filepath.Join( *utils.Dir, "dcoin.pid" ))
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 
-			log.Debug("dc.tmp %v", *utils.Dir+`/dc.tmp`)
+			log.Debug("dc.tmp %v", os.Args[0])//*utils.Dir+`/dc.tmp`)
 			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 			if err != nil {
 				log.Debug("%v", os.Stderr)
@@ -683,6 +692,10 @@ func exhangeHttpListener(HandleHttpHost string) {
 	if len(config["stat_host"]) > 0 {
 		//fmt.Println("stat_host", config["stat_host"])
 		http.HandleFunc(config["stat_host"]+"/", controllers.IndexStat)
+	}
+	if len(config["getpool_host"]) > 0 {
+		//fmt.Println("stat_host", config["stat_host"])
+		http.HandleFunc(config["getpool_host"]+"/", controllers.IndexGetPool)
 	}
 
 	if eConfig["enable"] == "1" {

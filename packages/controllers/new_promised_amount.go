@@ -87,7 +87,7 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 
 	countPs := []int{1, 2, 3, 4, 5}
 
-	tcpHostPort, err := c.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?`, c.SessUserId).String()
+	tcpHostPort, err := c.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host FROM miners_data as m WHERE m.user_id = ?`, c.SessUserId).String()
 	tcpHost, _, _ := net.SplitHostPort(tcpHostPort)
 	nodeIp, err := net.ResolveIPAddr("ip4", tcpHost)
 	if err != nil {
