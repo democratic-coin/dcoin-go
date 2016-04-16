@@ -125,8 +125,10 @@ func (c *Controller) GetChatMessages() (string, error) {
 func getChatData(c *Controller) ([]map[string]string, error) {
 	room := utils.StrToInt64(c.r.FormValue("room"))
 	lang := utils.StrToInt64(c.r.FormValue("lang"))
-	ids := `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
-
+	var ids string
+	if len(chatIds[c.SessUserId]) > 0 {
+		ids = `AND id NOT IN(` + strings.Join(utils.IntSliceToStr(chatIds[c.SessUserId]), ",") + `)`
+	}
 	//fmt.Println("utils.ChatMinSignTime", utils.ChatMinSignTime)
 	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  ` +
 			ids +
