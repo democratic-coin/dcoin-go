@@ -2321,9 +2321,9 @@ func MakeAsn1(hex_n, hex_e []byte) []byte {
 	//log.Debug("%v", string(rez))
 	rez = append([]byte("30"), rez...)
 
-	log.Debug("hex_n: %s", hex_n)
-	log.Debug("hex_e: %s", hex_e)
-	log.Debug("%v", string(rez))
+	//log.Debug("hex_n: %s", hex_n)
+	//log.Debug("hex_e: %s", hex_e)
+	//log.Debug("%v", string(rez))
 
 	return rez
 	//b64:=base64.StdEncoding.EncodeToString([]byte(utils.HexToBin("30"+length+bin_enc)))
