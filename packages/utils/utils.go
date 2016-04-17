@@ -3341,7 +3341,7 @@ func UpdEWallet(userId, currencyId, lastUpdate int64, amount float64, newAmount 
 }
 
 func WriteSelectiveLog(text interface{}) {
-	/*var text_ string
+	var text_ string
 	switch text.(type) {
 		case string:
 		text_ = text.(string)
@@ -3367,7 +3367,7 @@ func WriteSelectiveLog(text interface{}) {
 
 	if _, err = f.WriteString(data); err != nil {
 		panic(err)
-	}*/
+	}
 }
 
 func IPwoPort(ipport string) string {
