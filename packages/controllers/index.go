@@ -62,7 +62,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		if len(communityUsers) > 0 {
 			myPrefix = utils.Int64ToStr(sessUserId) + "_"
 		}
-		status, err := utils.DB.Single("SELECT status FROM " + myPrefix + "my_table").String()
+		status, err = utils.DB.Single("SELECT status FROM " + myPrefix + "my_table").String()
 
 		// чтобы нельзя было зайти по локалке
 		// :: - для маков
@@ -89,7 +89,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if utils.DB == nil || utils.DB.DB == nil {
 		showIOSMenu = false
 	} else {
-		if status == "my_pending" {
+		if status == "my_pending" || status == "waiting_set_new_key" || status == "waiting_accept_new_key" {
 			showIOSMenu = false
 		}
 	}

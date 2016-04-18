@@ -2321,9 +2321,9 @@ func MakeAsn1(hex_n, hex_e []byte) []byte {
 	//log.Debug("%v", string(rez))
 	rez = append([]byte("30"), rez...)
 
-	log.Debug("hex_n: %s", hex_n)
-	log.Debug("hex_e: %s", hex_e)
-	log.Debug("%v", string(rez))
+	//log.Debug("hex_n: %s", hex_n)
+	//log.Debug("hex_e: %s", hex_e)
+	//log.Debug("%v", string(rez))
 
 	return rez
 	//b64:=base64.StdEncoding.EncodeToString([]byte(utils.HexToBin("30"+length+bin_enc)))
@@ -3341,7 +3341,7 @@ func UpdEWallet(userId, currencyId, lastUpdate int64, amount float64, newAmount 
 }
 
 func WriteSelectiveLog(text interface{}) {
-	/*var text_ string
+	var text_ string
 	switch text.(type) {
 		case string:
 		text_ = text.(string)
@@ -3367,7 +3367,7 @@ func WriteSelectiveLog(text interface{}) {
 
 	if _, err = f.WriteString(data); err != nil {
 		panic(err)
-	}*/
+	}
 }
 
 func IPwoPort(ipport string) string {

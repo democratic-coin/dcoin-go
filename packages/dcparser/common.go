@@ -503,6 +503,7 @@ func (p *Parser) RollbackTransactionsTestblock(truncate bool) error {
 		if err != nil {
 			return utils.ErrInfo(err)
 		}
+		log.Debug("hash %x", hash)
 		blockBody = append(blockBody, utils.EncodeLengthPlusData(data)...)
 		if truncate {
 			// чтобы тр-ия не потерлась, её нужно заново записать
@@ -1218,7 +1219,7 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 			}
 			MethodName := consts.TxTypes[utils.BytesToInt(p.TxSlice[1])]
 			p.TxMap = map[string][]byte{}
-			err_ := utils.CallMethod(p, MethodName+"_init")
+			err_ := utils.CallMethod(p, MethodName+"Init")
 			if _, ok := err_.(error); ok {
 				return utils.ErrInfo(err_.(error))
 			}
@@ -1231,9 +1232,9 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 				// если успели дойти только до половины фронтальной функции
 				MethodNameRollbackFront := ""
 				if p.halfRollback {
-					MethodNameRollbackFront = MethodName + "_rollback_front_0"
+					MethodNameRollbackFront = MethodName + "RollbackFront0"
 				} else {
-					MethodNameRollbackFront = MethodName + "_rollback_front"
+					MethodNameRollbackFront = MethodName + "RollbackFront"
 				}
 				// откатываем только фронтальную проверку
 				err_ = utils.CallMethod(p, MethodNameRollbackFront)
@@ -1241,16 +1242,16 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 					return utils.ErrInfo(err_.(error))
 				}
 			} else if onlyFront {
-				err_ = utils.CallMethod(p, MethodName+"_rollback_front")
+				err_ = utils.CallMethod(p, MethodName+"RollbackFront")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
 			} else {
-				err_ = utils.CallMethod(p, MethodName+"_rollback_front")
+				err_ = utils.CallMethod(p, MethodName+"RollbackFront")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
-				err_ = utils.CallMethod(p, MethodName+"_rollback")
+				err_ = utils.CallMethod(p, MethodName+"Rollback")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
