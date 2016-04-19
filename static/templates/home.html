@@ -514,6 +514,10 @@
 		script_tag.setAttribute("type","text/javascript");
 		script_tag.setAttribute("src","http://maps.google.com/maps/api/js?callback=gMapsCallback");
 		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
+		var script_lib = document.createElement('script');
+		script_lib.setAttribute("type","text/javascript");
+		script_lib.setAttribute("src","static/js/oms.min.js");
+		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_lib);
 	}
 
 	$(document).ready(function(){
@@ -544,7 +548,7 @@
 
 				map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);*/
 
-
+				var gm = google.maps;
 				infowindow = new google.maps.InfoWindow();
 
 				markers.markerClickFunction = function(user_id) {
@@ -563,18 +567,56 @@
 
 					};
 				};
+				
+			      var oms = new OverlappingMarkerSpiderfier(map,
+					{markersWontMove: true, markersWontHide: true});
+			
+				  //var usualColor = 'eebb22';
+				  var spiderfiedColor = 'AD4B84';
+				  var iconWithColor = function(color) {
+					return 'http://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin|+|' +
+					  color + '|000000|ffff00';
+				  }
+				  /*var shadow = new gm.MarkerImage(
+					'https://www.google.com/intl/en_ALL/mapfiles/shadow50.png',
+					new gm.Size(37, 34),
+					new gm.Point(0, 0),
+					new gm.Point(10, 34)
+				  );*/
+				  
+				  oms.addListener('click', function(marker) {
+					//infowindow.open(map, marker);
+				  });
+				  oms.addListener('spiderfy', function(markers) {
+					/*for(var i = 0; i < markers.length; i ++) {
+					  markers[i].setIcon(iconWithColor(spiderfiedColor));
+					  markers[i].setShadow(null);
+					} */
+					infowindow.close();
+				  });
+				  oms.addListener('unspiderfy', function(markers) {
+					/*for(var i = 0; i < markers.length; i ++) {
+					  markers[i].setIcon(iconWithColor(usualColor));
+					  markers[i].setShadow(shadow);
+					}*/
+				  });
 
-
+				var bounds = new gm.LatLngBounds();
+				
 				for (var i = 0; i < map_markers.info.length; i++) {
 
 					var datainfo = map_markers.info[i];
-					var latLng = new google.maps.LatLng(datainfo.latitude,
-						datainfo.longitude);
+					var latLng = new google.maps.LatLng(datainfo.latitude, datainfo.longitude);
+					bounds.extend(latLng);
 					var marker = new google.maps.Marker({
 						position: latLng,
+						map: map,
+						//icon: iconWithColor(usualColor),
+					  	//shadow: shadow,
 						draggable: true
 					});
-
+					oms.addMarker(marker);
+					
 					var fn = markers.markerClickFunction(datainfo.user_id);
 					google.maps.event.addListener(marker, 'click', fn);
 
@@ -590,7 +632,11 @@
 									}, "json" );
 				{{end}}
 
-
+				map.fitBounds(bounds);
+			
+				// for debugging/exploratory use in console
+				window.map = map;
+				window.oms = oms;
 			}, "JSON" );
 
 		}
