@@ -248,16 +248,12 @@ BEGIN:
 								continue BEGIN
 							}
 							if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
-//								d.unlockPrintSleep(nil, 0) 
+								d.unlockPrintSleep(nil, 0) 
 /*!!!								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}*/
-//								break BEGIN
+								break BEGIN
 //!!!   						continue BEGIN
-	 							if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-		   						continue BEGIN
 							}
 						}
 						// ненужный тут размер в конце блока данных
