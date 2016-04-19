@@ -503,6 +503,7 @@ func (p *Parser) RollbackTransactionsTestblock(truncate bool) error {
 		if err != nil {
 			return utils.ErrInfo(err)
 		}
+		log.Debug("hash %x", hash)
 		blockBody = append(blockBody, utils.EncodeLengthPlusData(data)...)
 		if truncate {
 			// чтобы тр-ия не потерлась, её нужно заново записать
