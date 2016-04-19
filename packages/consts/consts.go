@@ -25,7 +25,7 @@ const MIN_CONFIRMED_NODES = 1
 const LAST_BLOCK = 300000
 
 // примерный размер блокчейна
-const BLOCKCHAIN_SIZE = 79000000
+const BLOCKCHAIN_SIZE = 77000000
 
 // где лежит блокчейн. для тех, кто не хочет собирать его с нодов
 const BLOCKCHAIN_URL = "http://dcoin.club/blockchain"
