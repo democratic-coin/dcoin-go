@@ -205,9 +205,9 @@ BEGIN:
 						//logger.Debug("data %x\n", data)
 						blockId := utils.BinToDec(data[0:5])
 						if *utils.EndBlockId > 0 && blockId == *utils.EndBlockId {
-/*	!!!						if d.dPrintSleep(err, d.sleepTime ) {
+							if d.dPrintSleep(err, d.sleepTime ) {
 								break BEGIN
-							}*/
+							}
 							continue BEGIN
 						}
 						logger.Info("blockId", blockId)
@@ -228,13 +228,13 @@ BEGIN:
 								first = false
 							}
 							if err = parser.ParseDataFull(); err != nil {
-								if d.unlockPrintSleep(err, d.sleepTime) {
+								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
 								continue BEGIN
 							}
 							if err = parser.InsertIntoBlockchain(); err != nil {
-								if d.unlockPrintSleep(err, d.sleepTime) {
+								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
 								continue BEGIN
@@ -242,18 +242,22 @@ BEGIN:
 
 							// отметимся, чтобы не спровоцировать очистку таблиц
 							if err = parser.UpdMainLock(); err != nil {
-								if d.unlockPrintSleep(err, d.sleepTime) {
+								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}
 								continue BEGIN
 							}
 							if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
-								d.unlockPrintSleep(nil, 0) 
+//								d.unlockPrintSleep(nil, 0) 
 /*!!!								if d.dPrintSleep(err, d.sleepTime) {
 									break BEGIN
 								}*/
-								break BEGIN
+//								break BEGIN
 //!!!   						continue BEGIN
+	 							if d.dPrintSleep(err, d.sleepTime) {
+									break BEGIN
+								}
+		   						continue BEGIN
 							}
 						}
 						// ненужный тут размер в конце блока данных
@@ -273,7 +277,7 @@ BEGIN:
 
 				newBlock, err := static.Asset("static/1block.bin")
 				if err != nil {
-					if d.unlockPrintSleep(err, d.sleepTime) {
+					if d.dPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
@@ -282,13 +286,13 @@ BEGIN:
 				parser.CurrentVersion = consts.VERSION
 
 				if err = parser.ParseDataFull(); err != nil {
-					if d.unlockPrintSleep(err, d.sleepTime) {
+					if d.dPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
 				}
 				if err = parser.InsertIntoBlockchain(); err != nil {
-					if d.unlockPrintSleep(err, d.sleepTime) {
+					if d.dPrintSleep(err, d.sleepTime) {
 						break BEGIN
 					}
 					continue BEGIN
@@ -449,7 +453,7 @@ BEGIN:
 		for blockId := currentBlockId + 1; blockId < maxBlockId+1; blockId++ {
 			d.UpdMainLock()
 			if CheckDaemonsRestart(chBreaker, chAnswer, GoroutineName) {
-				d.unlockPrintSleep(utils.ErrInfo(err), 0) 
+				d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime ) 
 				break BEGIN
 			}
 			variables, err := d.GetAllVariables()
@@ -698,5 +702,7 @@ BEGIN:
 	if file != nil {
 		file.Close()
 	}
+//  Нужно ли разлочивать базу?
+// 	d.dbUnlock()
 	logger.Debug("break BEGIN %v", GoroutineName)
 }
