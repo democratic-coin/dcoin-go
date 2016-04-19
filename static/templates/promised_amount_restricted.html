@@ -1,0 +1,79 @@
+{{define "PromisedAmountRestricted"}}
+<script>
+
+function freecoin_reload( err ) {
+	$("#freewait").hide();
+	$("#getCoins").show();
+	$("#freeerr").html('{{.Lang.error_occured}} ' + err )
+	$("#freeerr").show();
+}
+
+function freecoin_process( first ) {
+	$.post( 'ajax?controllerName=freecoinProcess', {first: first}, function (ret) {
+		data = JSON.parse( ret );
+		if (data.status == 'reload') {
+			freecoin_reload( '' );
+			return;
+		} else if (data.status == 'error') {
+			freecoin_reload( data.error );
+			return;
+		} else if (data.status == 'success') {
+			dc_navigate ('miningMenu', {} );
+			return;
+		}
+		setTimeout( function(){ freecoin_process( false )}, 2000 );
+	});
+}
+
+	$('#getCoins').bind('click', function () {
+
+		{{if .ShowSignData}}$("#main_data").css("display", "none"); $("#sign").css("display", "block");{{end}}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},72,30');
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'currency_id' : 72,
+						'amount' : 30,
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+//						dc_navigate ('miningMenu', {'alert': '{{.Lang.sent_to_the_net}}'} );
+						$("#getCoins").hide();
+						$("#freeerr").hide();
+						$("#freewait").show();
+						setTimeout( function(){ freecoin_process( true )}, 2000 );
+					}
+			);
+		});
+{{if .Started}}
+	$( document ).ready(function() {
+		freecoin_process( false );
+	})
+{{end}}
+</script>
+<h1 class="page-header">Mining</h1>
+
+{{template "alertSuccess".}}
+{{if .Alert}}
+<img src="/static/img/load.gif">
+{{else}}
+<div id="freeerr" style="display: none;" class="alert alert-danger"></div>
+<div id="freewait" {{if not .Started}}style="display: none;"{{end}}>
+<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
+<h3>{{.Lang.please_wait}}</h3>
+<img src="/static/img/load.gif"></div>
+<button id="getCoins" class="btn btn-primary" {{if .Started}}style="display: none;"{{end}}>{{.Lang.get_free_coins}}</button>
+{{end}}
+{{template "signatures".}}
+
+<script>
+	//doSign();
+</script>
+{{end}}

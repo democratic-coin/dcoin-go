@@ -116,7 +116,7 @@ BEGIN:
 			continue BEGIN
 		}
 		if curTime-pctTime <= variables.Int64["new_max_promised_amount"] {
-			if d.unlockPrintSleep(utils.ErrInfo("14 day error"), 1) {
+			if d.unlockPrintSleep(utils.ErrInfo("14 day error"), d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN

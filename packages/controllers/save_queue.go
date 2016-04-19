@@ -494,10 +494,10 @@ func (c *Controller) SaveQueue() (string, error) {
 		for i := 0; i < 5; i++ {
 			if len(arbitrators[i]) > 0 {
 				if !utils.CheckInputData(arbitrators[i], "int") {
-					return "incorrect arbitrators", nil
+					return "", errors.New("incorrect arbitrators")
 				}
 				if ok, _ := regexp.MatchString(`^[0-9]{0,10}(\.[0-9]{0,2})?$`, utils.Float64ToStrPct(arbitrators_commissions[i])); !ok {
-					return "incorrect arbitrator_commission", nil
+					return "", errors.New("incorrect arbitrator_commission")
 				}
 			} else {
 				arbitrators[i] = "0"
@@ -1473,6 +1473,15 @@ func (c *Controller) SaveQueue() (string, error) {
 		data = append(data, utils.DecToBin(txTime, 4)...)
 		data = append(data, utils.EncodeLengthPlusData(userId)...)
 		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("pool_user_id")))...)
+		data = append(data, binSignatures...)
+
+	case "NewRestrictedPromisedAmount":
+
+		data = utils.DecToBin(txType, 1)
+		data = append(data, utils.DecToBin(txTime, 4)...)
+		data = append(data, utils.EncodeLengthPlusData(userId)...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("currency_id")))...)
+		data = append(data, utils.EncodeLengthPlusData([]byte(c.r.FormValue("amount")))...)
 		data = append(data, binSignatures...)
 
 	}

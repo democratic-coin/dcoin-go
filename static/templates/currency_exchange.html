@@ -28,7 +28,7 @@
 		$("#confirm").html('sell_currency_id: '+sell_currency_id+'<br>'+'sell_rate: '+sell_rate+'<br>'+'sell_amount: '+sell_amount+'<br>'+'buy_currency_id: '+buy_currency_id+'<br>'+'commission: '+commission+'<br><br>');
 		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+sell_currency_id+','+sell_rate+','+sell_amount+','+buy_currency_id+','+commission);
 		doSign();
-		{{if .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 	});
 
 
@@ -51,7 +51,7 @@
 		$("#confirm").html('sell_currency_id: '+sell_currency_id+'<br>'+'sell_rate: '+sell_rate+'<br>'+'sell_amount: '+sell_amount+'<br>'+'buy_currency_id: '+buy_currency_id+'<br>'+'commission: '+commission+'<br><br>');
 		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+sell_currency_id+','+sell_rate+','+sell_amount+','+buy_currency_id+','+commission);
 		doSign();
-		{{if .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 	});
 
 

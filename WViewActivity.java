@@ -45,6 +45,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.content.pm.ActivityInfo;
 import android.os.SystemClock;
+import android.webkit.GeolocationPermissions;
 
 
 public class WViewActivity extends Activity {
@@ -262,6 +263,14 @@ public class WViewActivity extends Activity {
 					cm.message(), cm.lineNumber(), cm.sourceId()));
 			return true;
 		}
+
+
+		@Override
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+            callback.invoke(origin, true, false);
+        }
+
+
 		private String getTitleFromUrl(String url) {
 			String title = url;
 			try {
@@ -290,6 +299,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+
+		    if (message.contains("location")) return false;
+
 			String newTitle = getTitleFromUrl(url);
 
 			new AlertDialog.Builder(WViewActivity.this).setTitle(newTitle).setMessage(message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -305,6 +317,9 @@ public class WViewActivity extends Activity {
 
 		@Override
 		public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+            if (message.contains("location")) {
+                return false;
+            }
 
 			String newTitle = getTitleFromUrl(url);
 

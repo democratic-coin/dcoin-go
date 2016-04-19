@@ -123,11 +123,14 @@ func Ajax(w http.ResponseWriter, r *http.Request) {
 	html := ""
 
 	//w.Header().Set("Access-Control-Allow-Origin", "*")
-
-	if ok, _ := regexp.MatchString(`^(?i)RestartDb|RewritePrimaryKeySave|SendPromisedAmountToPool|SaveEmailAndSendTestMess|sendMobile|DebugInfo|rewritePrimaryKey|EImportData|EDataBaseDump|AlertFromAdmin|Update|UpdateDcoin|exchangeAdmin|newPhoto|NodeConfigControl|SaveDecryptComment|EncryptChatMessage|GetChatMessages|SendToTheChat|SaveToken|SendToPool|CheckSetupPassword|getBlock|AcceptNewKeyStatus|availableKeys|ClearDbLite|ClearDb|UploadVideo|DcoinKey|SynchronizationBlockchain|PoolAddUsers|SaveQueue|AlertMessage|Menu|SaveHost|GetMinerDataMap|SignUpInPool|Check_sign|PoolDataBaseDump|GetSellerData|GenerateNewPrimaryKey|GenerateNewNodeKey|CheckNode|SignLogin|SaveNotifications|ProgressBar|MinersMap|GetMinerData|EncryptComment|Logout|SaveVideo|SaveShopData|SaveRaceCountry|MyNoticeData|HolidaysList|ClearVideo|CheckCfCurrency|WalletsListCfProject|SendTestEmail|SendSms|SaveUserCoords|SaveGeolocation|SaveEmailSms|Profile|DeleteVideo|CropPhoto$`, controllerName); !ok {
+	// Общие контролы для двух проверок
+	pages := "FreecoinProcess|RestartDb|ReloadDb|DebugInfo|CheckSetupPassword|AcceptNewKeyStatus|availableKeys|CfCatalog|CfPagePreview|CfStart|Check_sign|CheckNode|GetBlock|GetMinerData|GetMinerDataMap|GetSellerData|Index|IndexCf|InstallStep0|InstallStep1|InstallStep2|Login|SynchronizationBlockchain|UpdatingBlockchain|Menu|SignUpInPool|SignLogin"
+	// Почему CfCatalog,CfPagePreview,CfStart,Index,IndexCf,InstallStep0,InstallStep1,
+	// InstallStep2,Login,UpdatingBlockchain были только во втором случае? Похоже не нужны больше.
+	
+	if ok, _ := regexp.MatchString(`^(?i)` + pages + `|RewritePrimaryKeySave|SendPromisedAmountToPool|SaveEmailAndSendTestMess|sendMobile|rewritePrimaryKey|EImportData|EDataBaseDump|AlertFromAdmin|Update|UpdateDcoin|exchangeAdmin|newPhoto|NodeConfigControl|SaveDecryptComment|EncryptChatMessage|GetChatMessages|SendToTheChat|SaveToken|SendToPool|ClearDbLite|ClearDb|UploadVideo|DcoinKey|PoolAddUsers|SaveQueue|AlertMessage|SaveHost|PoolDataBaseDump|GenerateNewPrimaryKey|GenerateNewNodeKey|SaveNotifications|ProgressBar|MinersMap|EncryptComment|Logout|SaveVideo|SaveShopData|SaveRaceCountry|MyNoticeData|HolidaysList|ClearVideo|CheckCfCurrency|WalletsListCfProject|SendTestEmail|SendSms|SaveUserCoords|SaveGeolocation|SaveEmailSms|Profile|DeleteVideo|CropPhoto$`, controllerName); !ok {
 		html = "Access denied 0"
 	} else {
-		pages := "RestartDb|DebugInfo|CheckSetupPassword|AcceptNewKeyStatus|availableKeys|CfCatalog|CfPagePreview|CfStart|Check_sign|CheckNode|GetBlock|GetMinerData|GetMinerDataMap|GetSellerData|Index|IndexCf|InstallStep0|InstallStep1|InstallStep2|Login|SynchronizationBlockchain|UpdatingBlockchain|Menu|SignUpInPool|SignLogin"
 		if utils.Mobile() { // На IOS можно сгенерить ключ без сессии
 			pages += "|DcoinKey"
 		}

@@ -218,17 +218,19 @@ $('#next, #cf_next').bind('click', function () {
 				console.log('null_arbitrators='+null_arbitrators);
 				console.log('arbitrators_array:');
 				console.log(arbitrators_array);
-				for (var id in arbitrators_array) {
-					if (arbitrators!='')
-						arbitrators = arbitrators + ',' + id;
-					else
-						arbitrators = id;
-					if (arbitrators_commissions!='')
-						arbitrators_commissions = arbitrators_commissions+','+global_arbitrators_commissions_array[id];
-					else
-						arbitrators_commissions = global_arbitrators_commissions_array[id];
-					global_arbitrators_commissions_array2.push(global_arbitrators_commissions_array[id]);
-					global_arbitrators_array.push(id);
+				if (arbitrators_array != '') {
+					for (var id in arbitrators_array) {
+						if (arbitrators!='')
+							arbitrators = arbitrators + ',' + id;
+						else
+							arbitrators = id;
+						if (arbitrators_commissions!='')
+							arbitrators_commissions = arbitrators_commissions+','+global_arbitrators_commissions_array[id];
+						else
+							arbitrators_commissions = global_arbitrators_commissions_array[id];
+						global_arbitrators_commissions_array2.push(global_arbitrators_commissions_array[id]);
+						global_arbitrators_array.push(id);
+					}
 				}
 				console.log('global_arbitrators_array:');
 				console.log(global_arbitrators_array);
@@ -302,6 +304,7 @@ $('#send_to_net').bind('click', function () {
 	var json_global_arbitrators_array = JSON.stringify(global_arbitrators_array);
 	var json_global_arbitrators_commissions_array2 = JSON.stringify(global_arbitrators_commissions_array2);
 
+	$("#alerterror").hide();
 	$.post( 'ajax?controllerName=saveQueue', {
 		'type' : tx_type,
 		'time' : '{{.Time}}',
@@ -318,11 +321,13 @@ $('#send_to_net').bind('click', function () {
 		'signature2': $('#signature2').val(),
 		'signature3': $('#signature3').val()
 	}, function (data) {
-		var qAlert = '{{.Lang.sent_to_the_net}}'
+		var qAlert = '{{.Lang.sent_to_the_net}}';
 		if (data.error != "null") {
-			qAlert = data.error
+			$("#alerterror").html( data.error );
+			$("#alerterror").show();
+		} else {
+			dc_navigate ('walletsList', {'alert': qAlert } );
 		}
-		dc_navigate ('walletsList', {'alert': qAlert} );
 	}, 'JSON' );
 
 } );
@@ -625,6 +630,7 @@ function foattoupper(x) {
 	</div>
 
 </div>
+<div style="display:none;" class="alert alert-danger alert-dismissable" id="alerterror"></div>
 
 <div id="wallets_confirm" style="margin: auto; max-width: 600px; display: none">
 	<h3>{{.Lang.check_data}}</h3>

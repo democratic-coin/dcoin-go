@@ -2321,9 +2321,9 @@ func MakeAsn1(hex_n, hex_e []byte) []byte {
 	//log.Debug("%v", string(rez))
 	rez = append([]byte("30"), rez...)
 
-	log.Debug("hex_n: %s", hex_n)
-	log.Debug("hex_e: %s", hex_e)
-	log.Debug("%v", string(rez))
+	//log.Debug("hex_n: %s", hex_n)
+	//log.Debug("hex_e: %s", hex_e)
+	//log.Debug("%v", string(rez))
 
 	return rez
 	//b64:=base64.StdEncoding.EncodeToString([]byte(utils.HexToBin("30"+length+bin_enc)))
@@ -3035,7 +3035,7 @@ func MakeUpgradeMenu(cur int) ( result string, full bool, next string ) {
 			}
 		}	
 		result += `
-			<div class="col-md-1 bs-wizard-step ` + active + `">
+			<div class="col-xs-2 col-md-2 bs-wizard-step ` + active + `">
 				<div class="text-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
 				<div class="progress"><div class="progress-bar"></div></div>
 				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
@@ -3341,7 +3341,7 @@ func UpdEWallet(userId, currencyId, lastUpdate int64, amount float64, newAmount 
 }
 
 func WriteSelectiveLog(text interface{}) {
-	/*var text_ string
+	var text_ string
 	switch text.(type) {
 		case string:
 		text_ = text.(string)
@@ -3367,7 +3367,7 @@ func WriteSelectiveLog(text interface{}) {
 
 	if _, err = f.WriteString(data); err != nil {
 		panic(err)
-	}*/
+	}
 }
 
 func IPwoPort(ipport string) string {
@@ -3380,25 +3380,26 @@ func IPwoPort(ipport string) string {
 }
 
 func DcoinUpd(url string) error {
-	_, err := DownloadToFile(url, *Dir+"/dc.zip", 3600, nil, nil, "upd")
+	zipfile := filepath.Join(*Dir, "dc.zip" )
+	_, err := DownloadToFile(url, zipfile, 3600, nil, nil, "upd")
 	if err != nil {
 		return ErrInfo(err)
 	}
-	zipfile := *Dir + "/dc.zip"
 	fmt.Println(zipfile)
 	reader, err := zip.OpenReader(zipfile)
 	if err != nil {
 		return ErrInfo(err)
 	}
-
+	appname := filepath.Base(os.Args[0])
+	tmpname := filepath.Join(*Dir, `tmp_`+appname )
+	
 	f_ := reader.Reader.File
 	f := f_[0]
 	zipped, err := f.Open()
 	if err != nil {
 		return ErrInfo(err)
 	}
-
-	writer, err := os.OpenFile(*Dir+"/dc.tmp", os.O_WRONLY|os.O_CREATE, f.Mode())
+	writer, err := os.OpenFile( tmpname, os.O_WRONLY|os.O_CREATE, f.Mode())
 	if err != nil {
 		return ErrInfo(err)
 	}
@@ -3424,13 +3425,13 @@ func DcoinUpd(url string) error {
 	old := ""
 	if _, err := os.Stat(os.Args[0]); err == nil {
 		old = os.Args[0]
-	} else if _, err := os.Stat(folderPath + "/" + filepath.Base(os.Args[0])); err == nil {
-		old = folderPath + "/" + filepath.Base(os.Args[0])
+	} else if _, err := os.Stat( filepath.Join( folderPath, appname )); err == nil {
+		old = filepath.Join( folderPath, appname )
 	} else {
-		old = *Dir + "/" + filepath.Base(os.Args[0])
+		old = filepath.Join( *Dir, appname )
 	}
-	log.Debug(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
-	err = exec.Command(*Dir+"/dc.tmp", "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
+	log.Debug( tmpname, "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION)
+	err = exec.Command( tmpname, "-oldFileName", old, "-dir", *Dir, "-oldVersion", consts.VERSION).Start()
 	if err != nil {
 		return ErrInfo(err)
 	}
@@ -3441,8 +3442,6 @@ func GetUpdVerAndUrl(host string) (string, string, error) {
 
 	update, err := GetHttpTextAnswer(host + "/update.json")
 	if len(update) > 0 {
-
-		//fmt.Println(update)
 
 		updateData := new(updateType)
 		err = json.Unmarshal([]byte(update), &updateData)

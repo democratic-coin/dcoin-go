@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
@@ -193,8 +194,8 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	log.Debug("OldFileName %v", *utils.OldFileName)
 	if *utils.OldFileName != "" || len(configIni)!=0 {
 
-		if *utils.OldFileName != "" {
-			err = utils.CopyFileContents(*utils.Dir+`/dc.tmp`, *utils.OldFileName)
+		if *utils.OldFileName != "" {   //*utils.Dir+`/dc.tmp`
+			err = utils.CopyFileContents( os.Args[0], *utils.OldFileName)
 			if err != nil {
 				log.Debug("%v", os.Stderr)
 				log.Debug("%v", utils.ErrInfo(err))
@@ -418,12 +419,66 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				}
 			}
 
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a8")) {
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "currency_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[4] = map[string]string{"name": "start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"id"}
+				s1["AI"] = "id"
+				s1["comment"] = ""
+				s["promised_amount_restricted"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+			}
+
 			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
-		}
 
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a1")) {
+				schema_ := &schema.SchemaStruct{}
+				schema_.DbType = utils.DB.ConfigIni["db_type"]
+				schema_.DCDB = utils.DB
+				s := make(schema.Recmap)
+				s1 := make(schema.Recmap)
+				s2 := make(schema.Recmapi)
+				s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_arbitrator_conditions_log_id_seq')", "comment": ""}
+				s2[1] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+				s2[3] = map[string]string{"name": "prev_log_id", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
+				s1["fields"] = s2
+				s1["PRIMARY"] = []string{"log_id"}
+				s1["AI"] = "log_id"
+				s1["comment"] = ""
+				s["log_auto_payments"] = s1
+				schema_.S = s
+				schema_.PrintSchema()
+
+				err = utils.DB.ExecSql(`ALTER TABLE auto_payments ADD COLUMN log_id bigint(20) NOT NULL DEFAULT '0';`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
+
+			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a2")) {
+
+				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN getpool_host varchar(255)`)
+				if err != nil {
+					log.Error("%v", utils.ErrInfo(err))
+				}
+			}
+		}
 
 		if *utils.OldFileName != "" {
 			err = utils.DB.Close()
@@ -431,12 +486,12 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 			fmt.Println("DB Closed")
-			err = os.Remove(*utils.Dir + "/dcoin.pid")
+			err = os.Remove( filepath.Join( *utils.Dir, "dcoin.pid" ))
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 
-			log.Debug("dc.tmp %v", *utils.Dir+`/dc.tmp`)
+			log.Debug("dc.tmp %v", os.Args[0])//*utils.Dir+`/dc.tmp`)
 			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 			if err != nil {
 				log.Debug("%v", os.Stderr)
@@ -637,6 +692,10 @@ func exhangeHttpListener(HandleHttpHost string) {
 	if len(config["stat_host"]) > 0 {
 		//fmt.Println("stat_host", config["stat_host"])
 		http.HandleFunc(config["stat_host"]+"/", controllers.IndexStat)
+	}
+	if len(config["getpool_host"]) > 0 {
+		//fmt.Println("stat_host", config["stat_host"])
+		http.HandleFunc(config["getpool_host"]+"/", controllers.IndexGetPool)
 	}
 
 	if eConfig["enable"] == "1" {

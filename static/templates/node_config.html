@@ -19,6 +19,7 @@
 				'chat_enabled' : $('#chat_enabled').val(),
 				'analytics_disabled' : $('#analytics_disabled').val(),
 				'stat_host' : $('#stat_host').val(),
+				'getpool_host' : $('#getpool_host').val(),
 				'config_ini' : $('#config_ini').val()
 			});
 
@@ -51,10 +52,13 @@
 
 
 	$('#full').bind('click', function () {
+		$('#wrapper').spin( true );
 		$('#wait').text('{{.Lang.please_wait}}');
 		$.post( 'ajax?controllerName=clearDb', { } ,
 				function () {
-					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
+					$('#wrapper').spin( false );
+					window.location = '/';
+//					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
 				});
 	});
 
@@ -112,6 +116,8 @@
 		<input id="chat_enabled" class="input" type="text" value="{{.Config.chat_enabled}}">
 		<label>Disable analytics</label>
 		<input id="analytics_disabled" class="input" type="text" value="{{.Config.analytics_disabled}}">
+		<label>getpool_host</label>
+		<input id="getpool_host" class="input" type="text" value="{{.Config.getpool_host}}">
 		<label>Stat host</label>
 		<input id="stat_host" class="input" type="text" value="{{.Config.stat_host}}">
 		<br>

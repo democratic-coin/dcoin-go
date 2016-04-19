@@ -1,8 +1,8 @@
-package consts
+﻿package consts
 
 
 // текущая версия
-const VERSION = "2.2.3a7"
+const VERSION = "2.2.4b1"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -22,10 +22,10 @@ const MIN_CONFIRMED_NODES = 1
 
 
 // примерный текущий крайний блок
-const LAST_BLOCK = 290000
+const LAST_BLOCK = 300000
 
 // примерный размер блокчейна
-const BLOCKCHAIN_SIZE = 65000000
+const BLOCKCHAIN_SIZE = 77000000
 
 // где лежит блокчейн. для тех, кто не хочет собирать его с нодов
 const BLOCKCHAIN_URL = "http://dcoin.club/blockchain"
@@ -264,6 +264,8 @@ var TxTypes = map[int]string{
 	73: "DelUserFromPool",
 	// юзер меняет пул
 	74: "ChangePool",
+	// новая ограниченная обещанная сумма
+	75: "NewRestrictedPromisedAmount",
 }
 
 func init() {

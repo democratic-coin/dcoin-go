@@ -206,7 +206,7 @@ BEGIN:
 				}
 				logger.Debug("lastTx: %v", lastTx)
 				if len(lastTx) > 0 {
-					if len(lastTx[0]["error"]) > 0 || utils.Time()-utils.StrToInt64(lastTx[0]["time_int"]) > 1800 {
+					if len(lastTx[0]["error"]) > 0 || utils.Time()-utils.StrToInt64(lastTx[0]["time_int"]) > 60 {
 						// генерим и шлем новую тр-ию
 						err = d.SendTxChangePkey(uid)
 						if err != nil {

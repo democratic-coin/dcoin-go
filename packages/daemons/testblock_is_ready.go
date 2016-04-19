@@ -141,8 +141,7 @@ BEGIN:
 			Далее - тело блока (Тр-ии)
 		*/
 
-		// блокируем изменения данных в тестблоке
-		// также, нужно блокировать main, т.к. изменение в info_block и block_chain ведут к изменению подписи в testblock
+		// нужно блокировать т.к. изменение в info_block и block_chain ведут к изменению подписи в testblock
 		err, restart := d.dbLock()
 		if restart {
 			break BEGIN
@@ -199,7 +198,7 @@ BEGIN:
 			testBlockDataTx = append(testBlockDataTx, utils.EncodeLengthPlusData([]byte(data))...)
 		}
 
-		// в промежутке межде тем, как блок был сгенерирован и запуском данного скрипта может измениться текущий блок
+		// в промежутке между тем, как блок был сгенерирован и запуском данного демона может измениться текущий блок
 		// поэтому нужно проверять подпись блока из тестблока
 		prevBlockHash, err := d.Single("SELECT hash FROM info_block").Bytes()
 		if err != nil {
@@ -283,7 +282,7 @@ BEGIN:
 		block := append(blockHeader, testBlockDataTx...)
 		logger.Debug("block %x", block)
 
-		// теперь нужно разнести блок по таблицам и после этого мы будем его слать всем нодам скриптом disseminator.php
+		// теперь нужно разнести блок по таблицам и после этого мы будем его слать всем нодам демоном disseminator
 		p.BinaryData = block
 		err = p.ParseDataFront()
 		if err != nil {
@@ -293,21 +292,29 @@ BEGIN:
 			continue BEGIN
 		}
 
-		// и можно удалять данные о тестблоке, т.к. они перешел в нормальный блок
-		err = d.ExecSql("DELETE FROM transactions_testblock")
+		// и можно удалять данные о тестблоке, т.к. они перешли в нормальный блок
+		affect, err := d.ExecSqlGetAffect("DELETE FROM transactions_testblock")
 		if err != nil {
 			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN
 		}
-		err = d.ExecSql("DELETE FROM testblock")
+		logger.Debug("affect %d", affect)
+		/*
+		Почему-то тут не произошло удаление testblock, в итоге в testblock_generator запрос err = d.ExecSql(`INSERT INTO testblock (block_id, time, level, user_id, header_hash, signature, mrkl_root) VALUES (?, ?, ?, ?, [hex], [hex], [hex])`,
+ привел к ошибке
+		*/
+		affect, err = d.ExecSqlGetAffect("DELETE FROM testblock")
 		if err != nil {
 			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN
 		}
+		logger.Debug("affect %d", affect)
+		testblockTmp, _ := d.OneRow(`SELECT * FROM testblock`).String()
+		logger.Debug("testblockTmp %v", testblockTmp)
 
 		// между testblock_generator и testbock_is_ready
 		p.RollbackTransactionsTestblock(false)

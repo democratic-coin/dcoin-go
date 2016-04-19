@@ -130,7 +130,7 @@ func (p *Parser) GetBlocks(blockId int64, host string, userId int64, rollbackBlo
 			return utils.ErrInfo(errors.New("count > variables[rollback_blocks]"))
 		}
 		if len(host) == 0 {
-			host, err = p.Single("SELECT tcp_host FROM miners_data WHERE user_id = ?", userId).String()
+			host, err = p.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end FROM miners_data as m WHERE m.user_id = ?", userId).String()
 			if err != nil {
 				ClearTmp(blocks)
 				return utils.ErrInfo(err)
@@ -503,6 +503,7 @@ func (p *Parser) RollbackTransactionsTestblock(truncate bool) error {
 		if err != nil {
 			return utils.ErrInfo(err)
 		}
+		log.Debug("hash %x", hash)
 		blockBody = append(blockBody, utils.EncodeLengthPlusData(data)...)
 		if truncate {
 			// чтобы тр-ия не потерлась, её нужно заново записать
@@ -1218,7 +1219,7 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 			}
 			MethodName := consts.TxTypes[utils.BytesToInt(p.TxSlice[1])]
 			p.TxMap = map[string][]byte{}
-			err_ := utils.CallMethod(p, MethodName+"_init")
+			err_ := utils.CallMethod(p, MethodName+"Init")
 			if _, ok := err_.(error); ok {
 				return utils.ErrInfo(err_.(error))
 			}
@@ -1231,9 +1232,9 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 				// если успели дойти только до половины фронтальной функции
 				MethodNameRollbackFront := ""
 				if p.halfRollback {
-					MethodNameRollbackFront = MethodName + "_rollback_front_0"
+					MethodNameRollbackFront = MethodName + "RollbackFront0"
 				} else {
-					MethodNameRollbackFront = MethodName + "_rollback_front"
+					MethodNameRollbackFront = MethodName + "RollbackFront"
 				}
 				// откатываем только фронтальную проверку
 				err_ = utils.CallMethod(p, MethodNameRollbackFront)
@@ -1241,22 +1242,24 @@ func (p *Parser) RollbackTo(binaryData []byte, skipCurrent bool, onlyFront bool)
 					return utils.ErrInfo(err_.(error))
 				}
 			} else if onlyFront {
-				err_ = utils.CallMethod(p, MethodName+"_rollback_front")
+				err_ = utils.CallMethod(p, MethodName+"RollbackFront")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
 			} else {
-				err_ = utils.CallMethod(p, MethodName+"_rollback_front")
+				err_ = utils.CallMethod(p, MethodName+"RollbackFront")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
-				err_ = utils.CallMethod(p, MethodName+"_rollback")
+				err_ = utils.CallMethod(p, MethodName+"Rollback")
 				if _, ok := err_.(error); ok {
 					return utils.ErrInfo(err_.(error))
 				}
 			}
-			p.DelLogTx(transactionBinaryData_)
-
+			err = p.DelLogTx(transactionBinaryData_)
+			if err!=nil{
+				log.Error("error: %v", err)
+			}
 			// =================== ради эксперимента =========
 			if onlyFront {
 				utils.WriteSelectiveLog("UPDATE transactions SET verified = 0 WHERE hex(hash) = " + string(p.TxHash))
@@ -3445,7 +3448,7 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 			p.ClearIncompatibleTxSql("NewPct", userId, &waitError)
 		}
 		if txType == utils.TypeInt("NewMinerUpdate") {
-			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner"}, userId, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner", "VotesNodeNewMiner"}, userId, &waitError, "")
 		}
 		if txType == utils.TypeInt("NewPct") {
 			p.ClearIncompatibleTxSqlSet([]string{"ChangeNodeKey", "NewMiner"}, userId, &waitError, "")
@@ -3498,7 +3501,7 @@ func (p *Parser) ClearIncompatibleTx(binaryTx []byte, myTx bool) (string, string
 			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "") // дополнить
 		}
 		if txType == utils.TypeInt("VotesNodeNewMiner") {
-			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "")
+			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners", "NewMinerUpdate"}, 0, &waitError, "")
 		}
 		if txType == utils.TypeInt("VotesPromisedAmount") {
 			p.ClearIncompatibleTxSqlSet([]string{"AdminBanMiners"}, 0, &waitError, "")
@@ -3906,6 +3909,9 @@ func (p *Parser) AllTxParser() error {
 			)  AS x
 			`, -1)
 	for _, data := range all {
+
+		log.Debug("hash: %x", data["hash"])
+
 		err = p.TxParser([]byte(data["hash"]), []byte(data["data"]), false)
 		if err != nil {
 			err0 := p.ExecSql(`INSERT INTO incorrect_tx (time, hash, err) VALUES (?, [hex], ?)`, utils.Time(), utils.BinToHex(data["hash"]), fmt.Sprintf("%s", err))
