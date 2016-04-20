@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 )
 
 func (p *Parser) ChangePromisedAmountInit() error {
@@ -48,6 +49,14 @@ func (p *Parser) ChangePromisedAmountFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
+	
+	// пока нет хотя бы 1000 майнеров по этой валюте, ограничиваем размер обещанной суммы
+	countMiners, err := p.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", promisedAmountData["currency_id"]).Int64()
+
+	if countMiners < 1000 && (p.BlockData == nil || p.BlockData.BlockId > 297496) {
+		maxPromisedAmount = float64(consts.MaxGreen[promisedAmountData["currency_id"]])
+	}
+	
 	// т.к. можно перевести из mining в repaid, где нет лимитов, и так проделать много раз, то
 	// нужно жестко лимитировать ОБЩУЮ сумму по всем promised_amount данной валюты
 	repaidAmount, err := p.GetRepaidAmount(promisedAmountData["currency_id"], p.TxUserID)
