@@ -1,6 +1,24 @@
 {{define "miningMenu"}}
 <div class="mining_menu">
 	<script>
+	
+		{{if .IsRestricted}}
+		{
+			var i=0;
+			var pct = {{.Pct}}/10;
+			var amount = {{.Amount}}
+			var new_amount = 0
+
+
+			var intervalID = setInterval( function() {
+				i++;
+				new_amount =  (Math.pow(1+pct, i) * amount);
+				$('#tdc').text((new_amount-30).toFixed(7) + " dUSD");
+			} , 100);
+			intervalIdArray.push(intervalID);
+		}
+		{{end}}	
+
 		$(document).ready(function() {
 			$( "#progress_bar" ).load( "ajax?controllerName=progressBar" );
 		});
@@ -10,7 +28,9 @@
 	
 	{{template "alertSuccess".}}
 	<div>
-	
+	{{if .IsRestricted}}
+		<div id="tdc" style="font-size:60px"></div>
+	{{end}}	
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" style="margin-bottom: 20px">
 			<li class="active"><a aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
