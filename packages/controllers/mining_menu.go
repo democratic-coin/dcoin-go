@@ -24,6 +24,9 @@ type miningMenuPage struct {
 	Result            string
 	NodePrivateKey    string
 	Mobile            bool
+	Pct               float64
+	Amount            float64
+	IsRestricted      bool
 }
 
 func (c *Controller) MiningMenu() (string, error) {
@@ -265,7 +268,24 @@ func (c *Controller) MiningMenu() (string, error) {
 		tplName = "upgrade"
 		tplTitle = "upgrade"
 	}
-
+	
+	var ( isRestricted bool
+		  profit, pct float64
+	)
+	idPromised,err := c.Single("SELECT id FROM promised_amount WHERE user_id = ? AND currency_id = ? AND status != 'pending' AND status != 'rejected'",
+	                              c.SessUserId, 72 ).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	if idPromised == 0 {
+		profit, pct, err = c.GetPromisedAmountCounter()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		if profit > 0 {
+			isRestricted = true
+		}
+	}
 	log.Debug("tplName, tplTitle %v, %v", tplName, tplTitle)
 	TemplateStr, err := makeTemplate(tplName, tplTitle, &miningMenuPage{
 		Alert:             c.Alert,
@@ -281,7 +301,10 @@ func (c *Controller) MiningMenu() (string, error) {
 		NodePrivateKey:    nodePrivateKey,
 		MinerVotesAttempt: minerVotesAttempt,
 		Mobile:            utils.Mobile(),
-		Host:              hostTpl})
+		Host:              hostTpl,
+		IsRestricted:      isRestricted,
+		Amount:            profit,
+		Pct:               pct })
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
