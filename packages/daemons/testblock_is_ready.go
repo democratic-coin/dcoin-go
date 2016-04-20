@@ -222,10 +222,16 @@ BEGIN:
 		p := new(dcparser.Parser)
 		p.DCDB = d.DCDB
 		// проверяем подпись
-		_, err = utils.CheckSign([][]byte{nodePublicKey}, forSign, []byte(testBlockData["signature"]), true)
-		if err != nil {
+		_, err0 := utils.CheckSign([][]byte{nodePublicKey}, forSign, []byte(testBlockData["signature"]), true)
+		if err0 != nil {
 			logger.Error("incorrect signature %v")
-			p.RollbackTransactionsTestblock(true)
+			err:=p.RollbackTransactionsTestblock(true)
+			if err != nil {
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
+				continue BEGIN
+			}
 			err = d.ExecSql("DELETE FROM testblock")
 			if err != nil {
 				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
@@ -233,7 +239,14 @@ BEGIN:
 				}
 				continue BEGIN
 			}
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+			err = p.RollbackTransactions()
+			if err != nil {
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
+				continue BEGIN
+			}
+			if d.unlockPrintSleep(utils.ErrInfo(err0), d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN
@@ -256,7 +269,14 @@ BEGIN:
 				}
 				continue BEGIN
 			}
-			if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+			err = p.RollbackTransactions()
+			if err != nil {
+				if d.unlockPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+					break BEGIN
+				}
+				continue BEGIN
+			}
+			if d.unlockPrintSleep(utils.ErrInfo("testBlockData block_id =  prevBlock.BlockId"), d.sleepTime) {
 				break BEGIN
 			}
 			continue BEGIN
@@ -317,7 +337,20 @@ BEGIN:
 		logger.Debug("testblockTmp %v", testblockTmp)
 
 		// между testblock_generator и testbock_is_ready
-		p.RollbackTransactionsTestblock(false)
+		err = p.RollbackTransactionsTestblock(false)
+		if err != nil {
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
+			continue BEGIN
+		}
+		err = p.RollbackTransactions()
+		if err != nil {
+			if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
+				break BEGIN
+			}
+			continue BEGIN
+		}
 
 		d.dbUnlock()
 

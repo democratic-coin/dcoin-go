@@ -3341,32 +3341,34 @@ func UpdEWallet(userId, currencyId, lastUpdate int64, amount float64, newAmount 
 }
 
 func WriteSelectiveLog(text interface{}) {
-	var text_ string
-	switch text.(type) {
-		case string:
-		text_ = text.(string)
-		case []byte:
-		text_ = string(text.([]byte))
-		case error:
-		text_ = fmt.Sprintf("%v", text)
-	}
-	allTransactionsStr:=""
-	allTransactions, _ := DB.GetAll("SELECT hex(hash) as hex_hash, *  FROM transactions", 100)
-	for _, data := range allTransactions {
-		allTransactionsStr+=data["hex_hash"]+"|"+data["verified"]+"|"+data["used"]+"|"+data["high_rate"]+"|"+data["for_self_use"]+"|"+consts.TxTypes[StrToInt(data["type"])]+"|"+data["user_id"]+"|"+data["third_var"]+"|"+data["counter"]+"|"+data["sent"]+"\n"
-	}
-	t := time.Now()
-	data := allTransactionsStr + GetParent() + " ### "+ t.Format(time.StampMicro)+" ### "+text_+"\n\n"
-	//ioutil.WriteFile(*Dir+"/SelectiveLog.txt", []byte(data), 0644)
-	f, err := os.OpenFile(*Dir+"/SelectiveLog.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		panic(err)
-	}
+	if *LogLevel == "DEBUG" {
+		var text_ string
+		switch text.(type) {
+			case string:
+			text_ = text.(string)
+			case []byte:
+			text_ = string(text.([]byte))
+			case error:
+			text_ = fmt.Sprintf("%v", text)
+		}
+		allTransactionsStr := ""
+		allTransactions, _ := DB.GetAll("SELECT hex(hash) as hex_hash, verified, used, high_rate, for_self_use, user_id, third_var, counter, sent FROM transactions", 100)
+		for _, data := range allTransactions {
+			allTransactionsStr+=data["hex_hash"]+"|"+data["verified"]+"|"+data["used"]+"|"+data["high_rate"]+"|"+data["for_self_use"]+"|"+consts.TxTypes[StrToInt(data["type"])]+"|"+data["user_id"]+"|"+data["third_var"]+"|"+data["counter"]+"|"+data["sent"]+"\n"
+		}
+		t := time.Now()
+		data := allTransactionsStr + GetParent() + " ### "+ t.Format(time.StampMicro)+" ### "+text_+"\n\n"
+		//ioutil.WriteFile(*Dir+"/SelectiveLog.txt", []byte(data), 0644)
+		f, err := os.OpenFile(*Dir+"/SelectiveLog.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			panic(err)
+		}
 
-	defer f.Close()
+		defer f.Close()
 
-	if _, err = f.WriteString(data); err != nil {
-		panic(err)
+		if _, err = f.WriteString(data); err != nil {
+			panic(err)
+		}
 	}
 }
 
