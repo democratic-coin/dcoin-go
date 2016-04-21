@@ -125,7 +125,7 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 		alertTime = strings.Replace(c.Lang["alert_time"], "[sec]", utils.Int64ToStr(diff), -1)
 	}
 
-	sleepTime := int64(500)
+	sleepTime := int64(1500)
 	if c.dbInit {
 		community, err := c.GetCommunityUsers()
 		if err != nil {
