@@ -166,10 +166,10 @@ func (p *Parser) VotesComplexFront() error {
 			return p.ErrInfo("incorrect data")
 		}
 		if !utils.CheckPct(data[0]) {
-			return p.ErrInfo("incorrect miner_pct")
+			return p.ErrInfo("incorrect miner_pct "+utils.Float64ToStr(data[0]))
 		}
 		if !utils.CheckPct(data[1]) {
-			return p.ErrInfo("incorrect user_pct")
+			return p.ErrInfo("incorrect user_pct "+utils.Float64ToStr(data[1]))
 		}
 
 		// max promise amount
