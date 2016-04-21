@@ -79,10 +79,10 @@
 		}
 
 
-		$('#show_map').bind('click', function () {
+		//$('#show_map').bind('click', function () {
 			map_init ({{.UserInfo.latitude}}, {{.UserInfo.longitude}}, 'map_canvas', true);
 			google.maps.event.trigger(map, 'resize');
-		});
+		//});
 
 
 
@@ -166,8 +166,8 @@
 	<!-- снизу - юзер на  карте -->
 	{{.Lang.location_on_map}}
 	<br>
-	<button type="button" class="btn btn-primary" id="show_map">{{.Lang.show_miner_on_map}}</button><br><br>
-	<div id="map_canvas" style="width: 640px; height: 480px; display: none"></div>
+	<!--<button type="hidden" class="btn btn-primary" id="show_map">{{.Lang.show_miner_on_map}}</button><br><br>-->
+	<div id="map_canvas" style="width: 100%; height: 480px;"></div>
 
 	{{.MainQuestion}}<br>
 
