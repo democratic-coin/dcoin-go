@@ -21,11 +21,6 @@
 		$('#tdc').text((new_amount-30).toFixed(7) + " dUSD");
 	} , 100);
 	intervalIdArray.push(intervalID);
-	
-	if (new_amount-30 > 0.1) {
-		$("#getCoinsNow").html('dUSD -> USD - Get Your Coins Now!');
-		$("#getCoinsBlock").remove();
-	}
 
 </script>
 <h1 class="page-header">Mining</h1>
@@ -34,10 +29,8 @@
 
 <div id="tdc" style="font-size:60px"></div>
 1 dUSD = 1$<br>
-<span id="getCoinsBlock">
-	<button id="getCoins" class="btn btn-primary">dUSD -> USD</button>&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;
-</span>
-<button id="getCoinsNow" class="btn btn-primary" onclick="dc_navigate('upgrade1')">Upgrade Now</button>
+<button id="getCoins" class="btn btn-primary">dUSD -> USD</button>
+<!--<button class="btn btn-primary" onclick="dc_navigate('upgrade1')">Upgrade Now</button>-->
 {{template "signatures".}}
 
 <script>
