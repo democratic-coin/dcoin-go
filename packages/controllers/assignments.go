@@ -254,11 +254,13 @@ func (c *Controller) Assignments() (string, error) {
 		}
 		promisedAmountData["currency_name"] = c.CurrencyList[utils.StrToInt64(promisedAmountData["currency_id"])]
 
+		log.Debug("promisedAmountData %v", promisedAmountData)
 		// проверим, не голосовали ли мы за это в последние 30 минут
 		repeated, err := c.Single("SELECT id FROM "+c.MyPrefix+"my_tasks WHERE type  =  'promised_amount' AND id  =  ? AND time > ?", promisedAmountData["id"], utils.Time()-consts.ASSIGN_TIME).Int64()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
+		log.Debug("repeated %v", repeated)
 		if repeated > 0 {
 			tplName = "assignments"
 			tplTitle = "assignments"
