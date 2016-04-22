@@ -158,7 +158,7 @@
 		{{if ne .PromisedAmountData.video_url_id "null"}}
 			<iframe width="320" height="240" src="http://www.youtube.com/embed/{{.PromisedAmountData.video_url_id}}" frameborder="0" allowfullscreen></iframe>
 		{{else}}
-			<video class="video-js vjs-default-skin" controls preload="none" width="320" height="240" data-setup="{}"><source src="{{.PromisedAmountData.host}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.mp4" type="video/mp4" /><source src="{{.PromisedAmountData.host}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.webm" type="video/webm" /><source src="{{.PromisedAmountData.host}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.ogv" type="video/ogg" /></video>
+			<video class="video-js vjs-default-skin" controls preload="none" width="320" height="240" data-setup="{}"><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.mp4" type="video/mp4" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.webm" type="video/webm" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.ogv" type="video/ogg" /></video>
 		{{end}}
 	</div>
 	<input type="hidden" id="candidate-id" value="{{.UserInfo.user_id}}">
