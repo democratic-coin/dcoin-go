@@ -339,26 +339,20 @@ func Content(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Error("%v", err)
 		}
+		/* !!! Зачем эта проверка нужна?
+			Если sessUserId > 0 && installProgress == "complete", то в users точно должно что-то быть
 		countUsers, err := c.Single(`SELECT count(*) FROM users`).Int64()
 		if err != nil {
 			log.Error("%v", err)
-		}
-		if (string(utils.BinToHex(userPublicKey)) != sessPublicKey && len(myPrivateKey) == 0) || (countUsers > 0 && len(myPrivateKey) > 0 && !bytes.Equal(myPublicKey, []byte(userPublicKey))) {
+		}*/
+		if (string(utils.BinToHex(userPublicKey)) != sessPublicKey && len(myPrivateKey) == 0) || (/*countUsers > 0 &&*/ len(myPrivateKey) > 0 && !bytes.Equal(myPublicKey, []byte(userPublicKey))) {
 			log.Debug("userPublicKey!=sessPublicKey %s!=%s / userId: %d", utils.BinToHex(userPublicKey), sessPublicKey, userId)
 			log.Debug("len(myPrivateKey) = %d  && %x!=%x", len(myPrivateKey), string(myPublicKey), userPublicKey)
-			sess.Delete("user_id")
-			sess.Delete("private_key")
-			sess.Delete("public_key")
-			log.Debug("window.location.href = /")
+			c.Logout()
 			if len(userPublicKey) > 0 {
 				w.Write([]byte("<script language=\"javascript\">window.location.href = \"/\"</script>If you are not redirected automatically, follow the <a href=\"/\">/</a>"))
 				return
-			} else {
-				c.sess.Delete("user_id")
-				c.sess.Delete("public_key")
-				c.sess.Delete("private_key")
-			}
-
+			} 
 		}
 
 		if tplName == "login" {
