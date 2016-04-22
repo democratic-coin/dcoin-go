@@ -33,7 +33,6 @@
 // static/fonts/fontawesome-webfont.ttf
 // static/fonts/fontawesome-webfont.woff
 // static/fonts/luxisr.ttf
-// static/img/.directory
 // static/img/alert.png
 // static/img/anonim.png
 // static/img/blank.png
@@ -58,7 +57,6 @@
 // static/img/race_1.png
 // static/img/race_2.png
 // static/img/race_3.png
-// static/img/reduction.png
 // static/img/rolling.gif
 // static/img/squares.gif
 // static/img/squares2.gif
@@ -117,6 +115,7 @@
 // static/js/markerclusterer.js
 // static/js/mcrypt.js
 // static/js/md5.js
+// static/js/oms.min.js
 // static/js/plugins/flot/excanvas.min.js
 // static/js/plugins/flot/jquery.flot.js
 // static/js/plugins/flot/jquery.flot.pie.js
@@ -167,7 +166,6 @@
 // static/sass/pages/_new_user.scss
 // static/sass/style.scss
 // static/swf/sAS3Cam.swf
-// static/templates/.directory
 // static/templates/abuse.html
 // static/templates/add_cf_project_data.html
 // static/templates/admin_variables.html
@@ -291,9 +289,9 @@ package static
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // bindataRead reads the given file from disk. It returns an error on failure.
@@ -312,7 +310,7 @@ type asset struct {
 
 // static1blockBin reads file data from disk. It returns an error on failure.
 func static1blockBin() (*asset, error) {
-	path := "static/1block.bin"
+	path := "/home/yurecbig/dcoin-go/static/1block.bin"
 	name := "static/1block.bin"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -330,7 +328,7 @@ func static1blockBin() (*asset, error) {
 
 // staticCssAs3camCss reads file data from disk. It returns an error on failure.
 func staticCssAs3camCss() (*asset, error) {
-	path := "static/css/AS3Cam.css"
+	path := "/home/yurecbig/dcoin-go/static/css/AS3Cam.css"
 	name := "static/css/AS3Cam.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -348,7 +346,7 @@ func staticCssAs3camCss() (*asset, error) {
 
 // staticCssJcropGif reads file data from disk. It returns an error on failure.
 func staticCssJcropGif() (*asset, error) {
-	path := "static/css/Jcrop.gif"
+	path := "/home/yurecbig/dcoin-go/static/css/Jcrop.gif"
 	name := "static/css/Jcrop.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -366,7 +364,7 @@ func staticCssJcropGif() (*asset, error) {
 
 // staticCssBootstrapModalCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapModalCss() (*asset, error) {
-	path := "static/css/bootstrap-modal.css"
+	path := "/home/yurecbig/dcoin-go/static/css/bootstrap-modal.css"
 	name := "static/css/bootstrap-modal.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -384,7 +382,7 @@ func staticCssBootstrapModalCss() (*asset, error) {
 
 // staticCssBootstrapResponsiveCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapResponsiveCss() (*asset, error) {
-	path := "static/css/bootstrap-responsive.css"
+	path := "/home/yurecbig/dcoin-go/static/css/bootstrap-responsive.css"
 	name := "static/css/bootstrap-responsive.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -402,7 +400,7 @@ func staticCssBootstrapResponsiveCss() (*asset, error) {
 
 // staticCssBootstrapCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapCss() (*asset, error) {
-	path := "static/css/bootstrap.css"
+	path := "/home/yurecbig/dcoin-go/static/css/bootstrap.css"
 	name := "static/css/bootstrap.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -420,7 +418,7 @@ func staticCssBootstrapCss() (*asset, error) {
 
 // staticCssBootstrapMinCss reads file data from disk. It returns an error on failure.
 func staticCssBootstrapMinCss() (*asset, error) {
-	path := "static/css/bootstrap.min.css"
+	path := "/home/yurecbig/dcoin-go/static/css/bootstrap.min.css"
 	name := "static/css/bootstrap.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -438,7 +436,7 @@ func staticCssBootstrapMinCss() (*asset, error) {
 
 // staticCssCfCss reads file data from disk. It returns an error on failure.
 func staticCssCfCss() (*asset, error) {
-	path := "static/css/cf.css"
+	path := "/home/yurecbig/dcoin-go/static/css/cf.css"
 	name := "static/css/cf.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -456,7 +454,7 @@ func staticCssCfCss() (*asset, error) {
 
 // staticCssCropperCss reads file data from disk. It returns an error on failure.
 func staticCssCropperCss() (*asset, error) {
-	path := "static/css/cropper.css"
+	path := "/home/yurecbig/dcoin-go/static/css/cropper.css"
 	name := "static/css/cropper.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -474,7 +472,7 @@ func staticCssCropperCss() (*asset, error) {
 
 // staticCssDatatablesBootstrapCss reads file data from disk. It returns an error on failure.
 func staticCssDatatablesBootstrapCss() (*asset, error) {
-	path := "static/css/dataTables.bootstrap.css"
+	path := "/home/yurecbig/dcoin-go/static/css/dataTables.bootstrap.css"
 	name := "static/css/dataTables.bootstrap.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -492,7 +490,7 @@ func staticCssDatatablesBootstrapCss() (*asset, error) {
 
 // staticCssFontAwesomeCss reads file data from disk. It returns an error on failure.
 func staticCssFontAwesomeCss() (*asset, error) {
-	path := "static/css/font-awesome.css"
+	path := "/home/yurecbig/dcoin-go/static/css/font-awesome.css"
 	name := "static/css/font-awesome.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -510,7 +508,7 @@ func staticCssFontAwesomeCss() (*asset, error) {
 
 // staticCssJqueryUiTimepickerAddonCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryUiTimepickerAddonCss() (*asset, error) {
-	path := "static/css/jquery-ui-timepicker-addon.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery-ui-timepicker-addon.css"
 	name := "static/css/jquery-ui-timepicker-addon.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -528,7 +526,7 @@ func staticCssJqueryUiTimepickerAddonCss() (*asset, error) {
 
 // staticCssJqueryUiCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryUiCss() (*asset, error) {
-	path := "static/css/jquery-ui.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery-ui.css"
 	name := "static/css/jquery-ui.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -546,7 +544,7 @@ func staticCssJqueryUiCss() (*asset, error) {
 
 // staticCssJqueryJcropCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryJcropCss() (*asset, error) {
-	path := "static/css/jquery.Jcrop.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery.Jcrop.css"
 	name := "static/css/jquery.Jcrop.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -564,7 +562,7 @@ func staticCssJqueryJcropCss() (*asset, error) {
 
 // staticCssJqueryJcropMinCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryJcropMinCss() (*asset, error) {
-	path := "static/css/jquery.Jcrop.min.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery.Jcrop.min.css"
 	name := "static/css/jquery.Jcrop.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -582,7 +580,7 @@ func staticCssJqueryJcropMinCss() (*asset, error) {
 
 // staticCssJqueryCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryCss() (*asset, error) {
-	path := "static/css/jquery.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery.css"
 	name := "static/css/jquery.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -600,7 +598,7 @@ func staticCssJqueryCss() (*asset, error) {
 
 // staticCssJqueryQtipMinCss reads file data from disk. It returns an error on failure.
 func staticCssJqueryQtipMinCss() (*asset, error) {
-	path := "static/css/jquery.qtip.min.css"
+	path := "/home/yurecbig/dcoin-go/static/css/jquery.qtip.min.css"
 	name := "static/css/jquery.qtip.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -618,7 +616,7 @@ func staticCssJqueryQtipMinCss() (*asset, error) {
 
 // staticCssPluginsMetismenuMetismenuMinCss reads file data from disk. It returns an error on failure.
 func staticCssPluginsMetismenuMetismenuMinCss() (*asset, error) {
-	path := "static/css/plugins/metisMenu/metisMenu.min.css"
+	path := "/home/yurecbig/dcoin-go/static/css/plugins/metisMenu/metisMenu.min.css"
 	name := "static/css/plugins/metisMenu/metisMenu.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -636,7 +634,7 @@ func staticCssPluginsMetismenuMetismenuMinCss() (*asset, error) {
 
 // staticCssProgressCss reads file data from disk. It returns an error on failure.
 func staticCssProgressCss() (*asset, error) {
-	path := "static/css/progress.css"
+	path := "/home/yurecbig/dcoin-go/static/css/progress.css"
 	name := "static/css/progress.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -654,7 +652,7 @@ func staticCssProgressCss() (*asset, error) {
 
 // staticCssSbAdmin2Css reads file data from disk. It returns an error on failure.
 func staticCssSbAdmin2Css() (*asset, error) {
-	path := "static/css/sb-admin-2.css"
+	path := "/home/yurecbig/dcoin-go/static/css/sb-admin-2.css"
 	name := "static/css/sb-admin-2.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -672,7 +670,7 @@ func staticCssSbAdmin2Css() (*asset, error) {
 
 // staticCssSbAdminCss reads file data from disk. It returns an error on failure.
 func staticCssSbAdminCss() (*asset, error) {
-	path := "static/css/sb-admin.css"
+	path := "/home/yurecbig/dcoin-go/static/css/sb-admin.css"
 	name := "static/css/sb-admin.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -690,7 +688,7 @@ func staticCssSbAdminCss() (*asset, error) {
 
 // staticCssSocialButtonsCss reads file data from disk. It returns an error on failure.
 func staticCssSocialButtonsCss() (*asset, error) {
-	path := "static/css/social-buttons.css"
+	path := "/home/yurecbig/dcoin-go/static/css/social-buttons.css"
 	name := "static/css/social-buttons.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -708,7 +706,7 @@ func staticCssSocialButtonsCss() (*asset, error) {
 
 // staticCssStyleCss reads file data from disk. It returns an error on failure.
 func staticCssStyleCss() (*asset, error) {
-	path := "static/css/style.css"
+	path := "/home/yurecbig/dcoin-go/static/css/style.css"
 	name := "static/css/style.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -726,7 +724,7 @@ func staticCssStyleCss() (*asset, error) {
 
 // staticCssTooltipsterShadowCss reads file data from disk. It returns an error on failure.
 func staticCssTooltipsterShadowCss() (*asset, error) {
-	path := "static/css/tooltipster-shadow.css"
+	path := "/home/yurecbig/dcoin-go/static/css/tooltipster-shadow.css"
 	name := "static/css/tooltipster-shadow.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -744,7 +742,7 @@ func staticCssTooltipsterShadowCss() (*asset, error) {
 
 // staticCssTooltipsterCss reads file data from disk. It returns an error on failure.
 func staticCssTooltipsterCss() (*asset, error) {
-	path := "static/css/tooltipster.css"
+	path := "/home/yurecbig/dcoin-go/static/css/tooltipster.css"
 	name := "static/css/tooltipster.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -762,7 +760,7 @@ func staticCssTooltipsterCss() (*asset, error) {
 
 // staticCssUpgradeCss reads file data from disk. It returns an error on failure.
 func staticCssUpgradeCss() (*asset, error) {
-	path := "static/css/upgrade.css"
+	path := "/home/yurecbig/dcoin-go/static/css/upgrade.css"
 	name := "static/css/upgrade.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -780,7 +778,7 @@ func staticCssUpgradeCss() (*asset, error) {
 
 // staticFontsFontawesomeOtf reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeOtf() (*asset, error) {
-	path := "static/fonts/FontAwesome.otf"
+	path := "/home/yurecbig/dcoin-go/static/fonts/FontAwesome.otf"
 	name := "static/fonts/FontAwesome.otf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -798,7 +796,7 @@ func staticFontsFontawesomeOtf() (*asset, error) {
 
 // staticFontsOpensansRegularTtf reads file data from disk. It returns an error on failure.
 func staticFontsOpensansRegularTtf() (*asset, error) {
-	path := "static/fonts/OpenSans-Regular.ttf"
+	path := "/home/yurecbig/dcoin-go/static/fonts/OpenSans-Regular.ttf"
 	name := "static/fonts/OpenSans-Regular.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -816,7 +814,7 @@ func staticFontsOpensansRegularTtf() (*asset, error) {
 
 // staticFontsFontawesomeWebfontEot reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontEot() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.eot"
+	path := "/home/yurecbig/dcoin-go/static/fonts/fontawesome-webfont.eot"
 	name := "static/fonts/fontawesome-webfont.eot"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -834,7 +832,7 @@ func staticFontsFontawesomeWebfontEot() (*asset, error) {
 
 // staticFontsFontawesomeWebfontSvg reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontSvg() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.svg"
+	path := "/home/yurecbig/dcoin-go/static/fonts/fontawesome-webfont.svg"
 	name := "static/fonts/fontawesome-webfont.svg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -852,7 +850,7 @@ func staticFontsFontawesomeWebfontSvg() (*asset, error) {
 
 // staticFontsFontawesomeWebfontTtf reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontTtf() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.ttf"
+	path := "/home/yurecbig/dcoin-go/static/fonts/fontawesome-webfont.ttf"
 	name := "static/fonts/fontawesome-webfont.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -870,7 +868,7 @@ func staticFontsFontawesomeWebfontTtf() (*asset, error) {
 
 // staticFontsFontawesomeWebfontWoff reads file data from disk. It returns an error on failure.
 func staticFontsFontawesomeWebfontWoff() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.woff"
+	path := "/home/yurecbig/dcoin-go/static/fonts/fontawesome-webfont.woff"
 	name := "static/fonts/fontawesome-webfont.woff"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -888,26 +886,8 @@ func staticFontsFontawesomeWebfontWoff() (*asset, error) {
 
 // staticFontsLuxisrTtf reads file data from disk. It returns an error on failure.
 func staticFontsLuxisrTtf() (*asset, error) {
-	path := "static/fonts/luxisr.ttf"
+	path := "/home/yurecbig/dcoin-go/static/fonts/luxisr.ttf"
 	name := "static/fonts/luxisr.ttf"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
-// staticImgDirectory reads file data from disk. It returns an error on failure.
-func staticImgDirectory() (*asset, error) {
-	path := "static/img/.directory"
-	name := "static/img/.directory"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -924,7 +904,7 @@ func staticImgDirectory() (*asset, error) {
 
 // staticImgAlertPng reads file data from disk. It returns an error on failure.
 func staticImgAlertPng() (*asset, error) {
-	path := "static/img/alert.png"
+	path := "/home/yurecbig/dcoin-go/static/img/alert.png"
 	name := "static/img/alert.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -942,7 +922,7 @@ func staticImgAlertPng() (*asset, error) {
 
 // staticImgAnonimPng reads file data from disk. It returns an error on failure.
 func staticImgAnonimPng() (*asset, error) {
-	path := "static/img/anonim.png"
+	path := "/home/yurecbig/dcoin-go/static/img/anonim.png"
 	name := "static/img/anonim.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -960,7 +940,7 @@ func staticImgAnonimPng() (*asset, error) {
 
 // staticImgBlankPng reads file data from disk. It returns an error on failure.
 func staticImgBlankPng() (*asset, error) {
-	path := "static/img/blank.png"
+	path := "/home/yurecbig/dcoin-go/static/img/blank.png"
 	name := "static/img/blank.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -978,7 +958,7 @@ func staticImgBlankPng() (*asset, error) {
 
 // staticImgCf_blurb_imgPng reads file data from disk. It returns an error on failure.
 func staticImgCf_blurb_imgPng() (*asset, error) {
-	path := "static/img/cf_blurb_img.png"
+	path := "/home/yurecbig/dcoin-go/static/img/cf_blurb_img.png"
 	name := "static/img/cf_blurb_img.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -996,7 +976,7 @@ func staticImgCf_blurb_imgPng() (*asset, error) {
 
 // staticImgFaceJpg reads file data from disk. It returns an error on failure.
 func staticImgFaceJpg() (*asset, error) {
-	path := "static/img/face.jpg"
+	path := "/home/yurecbig/dcoin-go/static/img/face.jpg"
 	name := "static/img/face.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1014,7 +994,7 @@ func staticImgFaceJpg() (*asset, error) {
 
 // staticImgGlyphiconsHalflingsPng reads file data from disk. It returns an error on failure.
 func staticImgGlyphiconsHalflingsPng() (*asset, error) {
-	path := "static/img/glyphicons-halflings.png"
+	path := "/home/yurecbig/dcoin-go/static/img/glyphicons-halflings.png"
 	name := "static/img/glyphicons-halflings.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1032,7 +1012,7 @@ func staticImgGlyphiconsHalflingsPng() (*asset, error) {
 
 // staticImgK_bgPng reads file data from disk. It returns an error on failure.
 func staticImgK_bgPng() (*asset, error) {
-	path := "static/img/k_bg.png"
+	path := "/home/yurecbig/dcoin-go/static/img/k_bg.png"
 	name := "static/img/k_bg.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1050,7 +1030,7 @@ func staticImgK_bgPng() (*asset, error) {
 
 // staticImgK_bgPsd reads file data from disk. It returns an error on failure.
 func staticImgK_bgPsd() (*asset, error) {
-	path := "static/img/k_bg.psd"
+	path := "/home/yurecbig/dcoin-go/static/img/k_bg.psd"
 	name := "static/img/k_bg.psd"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1068,7 +1048,7 @@ func staticImgK_bgPsd() (*asset, error) {
 
 // staticImgK_bg_passPng reads file data from disk. It returns an error on failure.
 func staticImgK_bg_passPng() (*asset, error) {
-	path := "static/img/k_bg_pass.png"
+	path := "/home/yurecbig/dcoin-go/static/img/k_bg_pass.png"
 	name := "static/img/k_bg_pass.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1086,7 +1066,7 @@ func staticImgK_bg_passPng() (*asset, error) {
 
 // staticImgK_db_passPsd reads file data from disk. It returns an error on failure.
 func staticImgK_db_passPsd() (*asset, error) {
-	path := "static/img/k_db_pass.psd"
+	path := "/home/yurecbig/dcoin-go/static/img/k_db_pass.psd"
 	name := "static/img/k_db_pass.psd"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1104,7 +1084,7 @@ func staticImgK_db_passPsd() (*asset, error) {
 
 // staticImgLoadGif reads file data from disk. It returns an error on failure.
 func staticImgLoadGif() (*asset, error) {
-	path := "static/img/load.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/load.gif"
 	name := "static/img/load.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1122,7 +1102,7 @@ func staticImgLoadGif() (*asset, error) {
 
 // staticImgLogo2Png reads file data from disk. It returns an error on failure.
 func staticImgLogo2Png() (*asset, error) {
-	path := "static/img/logo-2.png"
+	path := "/home/yurecbig/dcoin-go/static/img/logo-2.png"
 	name := "static/img/logo-2.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1140,7 +1120,7 @@ func staticImgLogo2Png() (*asset, error) {
 
 // staticImgLogoSmallPng reads file data from disk. It returns an error on failure.
 func staticImgLogoSmallPng() (*asset, error) {
-	path := "static/img/logo-small.png"
+	path := "/home/yurecbig/dcoin-go/static/img/logo-small.png"
 	name := "static/img/logo-small.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1158,7 +1138,7 @@ func staticImgLogoSmallPng() (*asset, error) {
 
 // staticImgLogoPng reads file data from disk. It returns an error on failure.
 func staticImgLogoPng() (*asset, error) {
-	path := "static/img/logo.png"
+	path := "/home/yurecbig/dcoin-go/static/img/logo.png"
 	name := "static/img/logo.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1176,7 +1156,7 @@ func staticImgLogoPng() (*asset, error) {
 
 // staticImgMain_loaderGif reads file data from disk. It returns an error on failure.
 func staticImgMain_loaderGif() (*asset, error) {
-	path := "static/img/main_loader.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/main_loader.gif"
 	name := "static/img/main_loader.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1194,7 +1174,7 @@ func staticImgMain_loaderGif() (*asset, error) {
 
 // staticImgNoavatarPng reads file data from disk. It returns an error on failure.
 func staticImgNoavatarPng() (*asset, error) {
-	path := "static/img/noavatar.png"
+	path := "/home/yurecbig/dcoin-go/static/img/noavatar.png"
 	name := "static/img/noavatar.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1212,7 +1192,7 @@ func staticImgNoavatarPng() (*asset, error) {
 
 // staticImgPersJpg reads file data from disk. It returns an error on failure.
 func staticImgPersJpg() (*asset, error) {
-	path := "static/img/pers.jpg"
+	path := "/home/yurecbig/dcoin-go/static/img/pers.jpg"
 	name := "static/img/pers.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1230,7 +1210,7 @@ func staticImgPersJpg() (*asset, error) {
 
 // staticImgPhotoPng reads file data from disk. It returns an error on failure.
 func staticImgPhotoPng() (*asset, error) {
-	path := "static/img/photo.png"
+	path := "/home/yurecbig/dcoin-go/static/img/photo.png"
 	name := "static/img/photo.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1248,7 +1228,7 @@ func staticImgPhotoPng() (*asset, error) {
 
 // staticImgProfileJpg reads file data from disk. It returns an error on failure.
 func staticImgProfileJpg() (*asset, error) {
-	path := "static/img/profile.jpg"
+	path := "/home/yurecbig/dcoin-go/static/img/profile.jpg"
 	name := "static/img/profile.jpg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1266,7 +1246,7 @@ func staticImgProfileJpg() (*asset, error) {
 
 // staticImgProgressGif reads file data from disk. It returns an error on failure.
 func staticImgProgressGif() (*asset, error) {
-	path := "static/img/progress.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/progress.gif"
 	name := "static/img/progress.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1284,7 +1264,7 @@ func staticImgProgressGif() (*asset, error) {
 
 // staticImgRaceGif reads file data from disk. It returns an error on failure.
 func staticImgRaceGif() (*asset, error) {
-	path := "static/img/race.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/race.gif"
 	name := "static/img/race.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1302,7 +1282,7 @@ func staticImgRaceGif() (*asset, error) {
 
 // staticImgRace_1Png reads file data from disk. It returns an error on failure.
 func staticImgRace_1Png() (*asset, error) {
-	path := "static/img/race_1.png"
+	path := "/home/yurecbig/dcoin-go/static/img/race_1.png"
 	name := "static/img/race_1.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1320,7 +1300,7 @@ func staticImgRace_1Png() (*asset, error) {
 
 // staticImgRace_2Png reads file data from disk. It returns an error on failure.
 func staticImgRace_2Png() (*asset, error) {
-	path := "static/img/race_2.png"
+	path := "/home/yurecbig/dcoin-go/static/img/race_2.png"
 	name := "static/img/race_2.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1338,26 +1318,8 @@ func staticImgRace_2Png() (*asset, error) {
 
 // staticImgRace_3Png reads file data from disk. It returns an error on failure.
 func staticImgRace_3Png() (*asset, error) {
-	path := "static/img/race_3.png"
+	path := "/home/yurecbig/dcoin-go/static/img/race_3.png"
 	name := "static/img/race_3.png"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
-// staticImgReductionPng reads file data from disk. It returns an error on failure.
-func staticImgReductionPng() (*asset, error) {
-	path := "static/img/reduction.png"
-	name := "static/img/reduction.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -1374,7 +1336,7 @@ func staticImgReductionPng() (*asset, error) {
 
 // staticImgRollingGif reads file data from disk. It returns an error on failure.
 func staticImgRollingGif() (*asset, error) {
-	path := "static/img/rolling.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/rolling.gif"
 	name := "static/img/rolling.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1392,7 +1354,7 @@ func staticImgRollingGif() (*asset, error) {
 
 // staticImgSquaresGif reads file data from disk. It returns an error on failure.
 func staticImgSquaresGif() (*asset, error) {
-	path := "static/img/squares.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/squares.gif"
 	name := "static/img/squares.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1410,7 +1372,7 @@ func staticImgSquaresGif() (*asset, error) {
 
 // staticImgSquares2Gif reads file data from disk. It returns an error on failure.
 func staticImgSquares2Gif() (*asset, error) {
-	path := "static/img/squares2.gif"
+	path := "/home/yurecbig/dcoin-go/static/img/squares2.gif"
 	name := "static/img/squares2.gif"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1428,7 +1390,7 @@ func staticImgSquares2Gif() (*asset, error) {
 
 // staticImgStatPng reads file data from disk. It returns an error on failure.
 func staticImgStatPng() (*asset, error) {
-	path := "static/img/stat.png"
+	path := "/home/yurecbig/dcoin-go/static/img/stat.png"
 	name := "static/img/stat.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1446,7 +1408,7 @@ func staticImgStatPng() (*asset, error) {
 
 // staticImgUsRuPng reads file data from disk. It returns an error on failure.
 func staticImgUsRuPng() (*asset, error) {
-	path := "static/img/us-ru.png"
+	path := "/home/yurecbig/dcoin-go/static/img/us-ru.png"
 	name := "static/img/us-ru.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1464,7 +1426,7 @@ func staticImgUsRuPng() (*asset, error) {
 
 // staticJsSerpentJs reads file data from disk. It returns an error on failure.
 func staticJsSerpentJs() (*asset, error) {
-	path := "static/js/Serpent.js"
+	path := "/home/yurecbig/dcoin-go/static/js/Serpent.js"
 	name := "static/js/Serpent.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1482,7 +1444,7 @@ func staticJsSerpentJs() (*asset, error) {
 
 // staticJsAesJs reads file data from disk. It returns an error on failure.
 func staticJsAesJs() (*asset, error) {
-	path := "static/js/aes.js"
+	path := "/home/yurecbig/dcoin-go/static/js/aes.js"
 	name := "static/js/aes.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1500,7 +1462,7 @@ func staticJsAesJs() (*asset, error) {
 
 // staticJsAsn1hex11Js reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex11Js() (*asset, error) {
-	path := "static/js/asn1hex-1.1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/asn1hex-1.1.js"
 	name := "static/js/asn1hex-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1518,7 +1480,7 @@ func staticJsAsn1hex11Js() (*asset, error) {
 
 // staticJsAsn1hex11MinJs reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex11MinJs() (*asset, error) {
-	path := "static/js/asn1hex-1.1.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/asn1hex-1.1.min.js"
 	name := "static/js/asn1hex-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1536,7 +1498,7 @@ func staticJsAsn1hex11MinJs() (*asset, error) {
 
 // staticJsAsn1hex1Js reads file data from disk. It returns an error on failure.
 func staticJsAsn1hex1Js() (*asset, error) {
-	path := "static/js/asn1hex-1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/asn1hex-1.js"
 	name := "static/js/asn1hex-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1554,7 +1516,7 @@ func staticJsAsn1hex1Js() (*asset, error) {
 
 // staticJsBase64Js reads file data from disk. It returns an error on failure.
 func staticJsBase64Js() (*asset, error) {
-	path := "static/js/base64.js"
+	path := "/home/yurecbig/dcoin-go/static/js/base64.js"
 	name := "static/js/base64.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1572,7 +1534,7 @@ func staticJsBase64Js() (*asset, error) {
 
 // staticJsBootstrapAlertJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapAlertJs() (*asset, error) {
-	path := "static/js/bootstrap-alert.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-alert.js"
 	name := "static/js/bootstrap-alert.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1590,7 +1552,7 @@ func staticJsBootstrapAlertJs() (*asset, error) {
 
 // staticJsBootstrapButtonJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapButtonJs() (*asset, error) {
-	path := "static/js/bootstrap-button.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-button.js"
 	name := "static/js/bootstrap-button.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1608,7 +1570,7 @@ func staticJsBootstrapButtonJs() (*asset, error) {
 
 // staticJsBootstrapCarouselJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapCarouselJs() (*asset, error) {
-	path := "static/js/bootstrap-carousel.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-carousel.js"
 	name := "static/js/bootstrap-carousel.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1626,7 +1588,7 @@ func staticJsBootstrapCarouselJs() (*asset, error) {
 
 // staticJsBootstrapCollapseJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapCollapseJs() (*asset, error) {
-	path := "static/js/bootstrap-collapse.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-collapse.js"
 	name := "static/js/bootstrap-collapse.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1644,7 +1606,7 @@ func staticJsBootstrapCollapseJs() (*asset, error) {
 
 // staticJsBootstrapDropdownJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapDropdownJs() (*asset, error) {
-	path := "static/js/bootstrap-dropdown.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-dropdown.js"
 	name := "static/js/bootstrap-dropdown.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1662,7 +1624,7 @@ func staticJsBootstrapDropdownJs() (*asset, error) {
 
 // staticJsBootstrapModalJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapModalJs() (*asset, error) {
-	path := "static/js/bootstrap-modal.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-modal.js"
 	name := "static/js/bootstrap-modal.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1680,7 +1642,7 @@ func staticJsBootstrapModalJs() (*asset, error) {
 
 // staticJsBootstrapPopoverJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapPopoverJs() (*asset, error) {
-	path := "static/js/bootstrap-popover.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-popover.js"
 	name := "static/js/bootstrap-popover.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1698,7 +1660,7 @@ func staticJsBootstrapPopoverJs() (*asset, error) {
 
 // staticJsBootstrapScrollspyJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapScrollspyJs() (*asset, error) {
-	path := "static/js/bootstrap-scrollspy.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-scrollspy.js"
 	name := "static/js/bootstrap-scrollspy.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1716,7 +1678,7 @@ func staticJsBootstrapScrollspyJs() (*asset, error) {
 
 // staticJsBootstrapTabJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTabJs() (*asset, error) {
-	path := "static/js/bootstrap-tab.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-tab.js"
 	name := "static/js/bootstrap-tab.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1734,7 +1696,7 @@ func staticJsBootstrapTabJs() (*asset, error) {
 
 // staticJsBootstrapTooltipJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTooltipJs() (*asset, error) {
-	path := "static/js/bootstrap-tooltip.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-tooltip.js"
 	name := "static/js/bootstrap-tooltip.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1752,7 +1714,7 @@ func staticJsBootstrapTooltipJs() (*asset, error) {
 
 // staticJsBootstrapTransitionJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTransitionJs() (*asset, error) {
-	path := "static/js/bootstrap-transition.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-transition.js"
 	name := "static/js/bootstrap-transition.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1770,7 +1732,7 @@ func staticJsBootstrapTransitionJs() (*asset, error) {
 
 // staticJsBootstrapTypeaheadJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapTypeaheadJs() (*asset, error) {
-	path := "static/js/bootstrap-typeahead.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap-typeahead.js"
 	name := "static/js/bootstrap-typeahead.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1788,7 +1750,7 @@ func staticJsBootstrapTypeaheadJs() (*asset, error) {
 
 // staticJsBootstrapMinJs reads file data from disk. It returns an error on failure.
 func staticJsBootstrapMinJs() (*asset, error) {
-	path := "static/js/bootstrap.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/bootstrap.min.js"
 	name := "static/js/bootstrap.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1806,7 +1768,7 @@ func staticJsBootstrapMinJs() (*asset, error) {
 
 // staticJsChatJs reads file data from disk. It returns an error on failure.
 func staticJsChatJs() (*asset, error) {
-	path := "static/js/chat.js"
+	path := "/home/yurecbig/dcoin-go/static/js/chat.js"
 	name := "static/js/chat.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1824,7 +1786,7 @@ func staticJsChatJs() (*asset, error) {
 
 // staticJsCropperJs reads file data from disk. It returns an error on failure.
 func staticJsCropperJs() (*asset, error) {
-	path := "static/js/cropper.js"
+	path := "/home/yurecbig/dcoin-go/static/js/cropper.js"
 	name := "static/js/cropper.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1842,7 +1804,7 @@ func staticJsCropperJs() (*asset, error) {
 
 // staticJsCryptoJsAesJs reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsAesJs() (*asset, error) {
-	path := "static/js/crypto-js-aes.js"
+	path := "/home/yurecbig/dcoin-go/static/js/crypto-js-aes.js"
 	name := "static/js/crypto-js-aes.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1860,7 +1822,7 @@ func staticJsCryptoJsAesJs() (*asset, error) {
 
 // staticJsCryptoJsModeEcbJs reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsModeEcbJs() (*asset, error) {
-	path := "static/js/crypto-js-mode-ecb.js"
+	path := "/home/yurecbig/dcoin-go/static/js/crypto-js-mode-ecb.js"
 	name := "static/js/crypto-js-mode-ecb.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1878,7 +1840,7 @@ func staticJsCryptoJsModeEcbJs() (*asset, error) {
 
 // staticJsCryptoJsPadIso10126Js reads file data from disk. It returns an error on failure.
 func staticJsCryptoJsPadIso10126Js() (*asset, error) {
-	path := "static/js/crypto-js-pad-iso10126.js"
+	path := "/home/yurecbig/dcoin-go/static/js/crypto-js-pad-iso10126.js"
 	name := "static/js/crypto-js-pad-iso10126.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1896,7 +1858,7 @@ func staticJsCryptoJsPadIso10126Js() (*asset, error) {
 
 // staticJsDatatablesBootstrapJs reads file data from disk. It returns an error on failure.
 func staticJsDatatablesBootstrapJs() (*asset, error) {
-	path := "static/js/dataTables.bootstrap.js"
+	path := "/home/yurecbig/dcoin-go/static/js/dataTables.bootstrap.js"
 	name := "static/js/dataTables.bootstrap.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1914,7 +1876,7 @@ func staticJsDatatablesBootstrapJs() (*asset, error) {
 
 // staticJsDemoFlotDemoJs reads file data from disk. It returns an error on failure.
 func staticJsDemoFlotDemoJs() (*asset, error) {
-	path := "static/js/demo/flot-demo.js"
+	path := "/home/yurecbig/dcoin-go/static/js/demo/flot-demo.js"
 	name := "static/js/demo/flot-demo.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1932,7 +1894,7 @@ func staticJsDemoFlotDemoJs() (*asset, error) {
 
 // staticJsEncBase64MinJs reads file data from disk. It returns an error on failure.
 func staticJsEncBase64MinJs() (*asset, error) {
-	path := "static/js/enc-base64-min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/enc-base64-min.js"
 	name := "static/js/enc-base64-min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1950,7 +1912,7 @@ func staticJsEncBase64MinJs() (*asset, error) {
 
 // staticJsHex2aJs reads file data from disk. It returns an error on failure.
 func staticJsHex2aJs() (*asset, error) {
-	path := "static/js/hex2a.js"
+	path := "/home/yurecbig/dcoin-go/static/js/hex2a.js"
 	name := "static/js/hex2a.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1968,7 +1930,7 @@ func staticJsHex2aJs() (*asset, error) {
 
 // staticJsHtml5shivJs reads file data from disk. It returns an error on failure.
 func staticJsHtml5shivJs() (*asset, error) {
-	path := "static/js/html5shiv.js"
+	path := "/home/yurecbig/dcoin-go/static/js/html5shiv.js"
 	name := "static/js/html5shiv.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -1986,7 +1948,7 @@ func staticJsHtml5shivJs() (*asset, error) {
 
 // staticJsIndexJs reads file data from disk. It returns an error on failure.
 func staticJsIndexJs() (*asset, error) {
-	path := "static/js/index.js"
+	path := "/home/yurecbig/dcoin-go/static/js/index.js"
 	name := "static/js/index.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2004,7 +1966,7 @@ func staticJsIndexJs() (*asset, error) {
 
 // staticJsInfobubbleJs reads file data from disk. It returns an error on failure.
 func staticJsInfobubbleJs() (*asset, error) {
-	path := "static/js/infobubble.js"
+	path := "/home/yurecbig/dcoin-go/static/js/infobubble.js"
 	name := "static/js/infobubble.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2022,7 +1984,7 @@ func staticJsInfobubbleJs() (*asset, error) {
 
 // staticJsJquery1102Js reads file data from disk. It returns an error on failure.
 func staticJsJquery1102Js() (*asset, error) {
-	path := "static/js/jquery-1.10.2.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-1.10.2.js"
 	name := "static/js/jquery-1.10.2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2040,7 +2002,7 @@ func staticJsJquery1102Js() (*asset, error) {
 
 // staticJsJquery1110Js reads file data from disk. It returns an error on failure.
 func staticJsJquery1110Js() (*asset, error) {
-	path := "static/js/jquery-1.11.0.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-1.11.0.js"
 	name := "static/js/jquery-1.11.0.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2058,7 +2020,7 @@ func staticJsJquery1110Js() (*asset, error) {
 
 // staticJsJquery191MinJs reads file data from disk. It returns an error on failure.
 func staticJsJquery191MinJs() (*asset, error) {
-	path := "static/js/jquery-1.9.1.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-1.9.1.min.js"
 	name := "static/js/jquery-1.9.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2076,7 +2038,7 @@ func staticJsJquery191MinJs() (*asset, error) {
 
 // staticJsJqueryUiSlideraccessJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiSlideraccessJs() (*asset, error) {
-	path := "static/js/jquery-ui-sliderAccess.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-ui-sliderAccess.js"
 	name := "static/js/jquery-ui-sliderAccess.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2094,7 +2056,7 @@ func staticJsJqueryUiSlideraccessJs() (*asset, error) {
 
 // staticJsJqueryUiTimepickerAddonJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiTimepickerAddonJs() (*asset, error) {
-	path := "static/js/jquery-ui-timepicker-addon.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-ui-timepicker-addon.js"
 	name := "static/js/jquery-ui-timepicker-addon.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2112,7 +2074,7 @@ func staticJsJqueryUiTimepickerAddonJs() (*asset, error) {
 
 // staticJsJqueryUiMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiMinJs() (*asset, error) {
-	path := "static/js/jquery-ui.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery-ui.min.js"
 	name := "static/js/jquery-ui.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2130,7 +2092,7 @@ func staticJsJqueryUiMinJs() (*asset, error) {
 
 // staticJsJqueryJcropJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryJcropJs() (*asset, error) {
-	path := "static/js/jquery.Jcrop.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.Jcrop.js"
 	name := "static/js/jquery.Jcrop.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2148,7 +2110,7 @@ func staticJsJqueryJcropJs() (*asset, error) {
 
 // staticJsJqueryDatatablesJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryDatatablesJs() (*asset, error) {
-	path := "static/js/jquery.dataTables.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.dataTables.js"
 	name := "static/js/jquery.dataTables.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2166,7 +2128,7 @@ func staticJsJqueryDatatablesJs() (*asset, error) {
 
 // staticJsJqueryFlotJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryFlotJs() (*asset, error) {
-	path := "static/js/jquery.flot.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.flot.js"
 	name := "static/js/jquery.flot.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2184,7 +2146,7 @@ func staticJsJqueryFlotJs() (*asset, error) {
 
 // staticJsJqueryJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryJs() (*asset, error) {
-	path := "static/js/jquery.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.js"
 	name := "static/js/jquery.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2202,7 +2164,7 @@ func staticJsJqueryJs() (*asset, error) {
 
 // staticJsJqueryMetismenuJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryMetismenuJs() (*asset, error) {
-	path := "static/js/jquery.metisMenu.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.metisMenu.js"
 	name := "static/js/jquery.metisMenu.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2220,7 +2182,7 @@ func staticJsJqueryMetismenuJs() (*asset, error) {
 
 // staticJsJqueryMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryMinJs() (*asset, error) {
-	path := "static/js/jquery.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.min.js"
 	name := "static/js/jquery.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2238,7 +2200,7 @@ func staticJsJqueryMinJs() (*asset, error) {
 
 // staticJsJqueryQtipMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryQtipMinJs() (*asset, error) {
-	path := "static/js/jquery.qtip.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.qtip.min.js"
 	name := "static/js/jquery.qtip.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2256,7 +2218,7 @@ func staticJsJqueryQtipMinJs() (*asset, error) {
 
 // staticJsJqueryTooltipsterMinJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryTooltipsterMinJs() (*asset, error) {
-	path := "static/js/jquery.tooltipster.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.tooltipster.min.js"
 	name := "static/js/jquery.tooltipster.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2274,7 +2236,7 @@ func staticJsJqueryTooltipsterMinJs() (*asset, error) {
 
 // staticJsJqueryWebcamAs3Js reads file data from disk. It returns an error on failure.
 func staticJsJqueryWebcamAs3Js() (*asset, error) {
-	path := "static/js/jquery.webcam.as3.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery.webcam.as3.js"
 	name := "static/js/jquery.webcam.as3.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2292,7 +2254,7 @@ func staticJsJqueryWebcamAs3Js() (*asset, error) {
 
 // staticJsJquery_002Js reads file data from disk. It returns an error on failure.
 func staticJsJquery_002Js() (*asset, error) {
-	path := "static/js/jquery_002.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jquery_002.js"
 	name := "static/js/jquery_002.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2310,7 +2272,7 @@ func staticJsJquery_002Js() (*asset, error) {
 
 // staticJsJsJs reads file data from disk. It returns an error on failure.
 func staticJsJsJs() (*asset, error) {
-	path := "static/js/js.js"
+	path := "/home/yurecbig/dcoin-go/static/js/js.js"
 	name := "static/js/js.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2328,7 +2290,7 @@ func staticJsJsJs() (*asset, error) {
 
 // staticJsJsbnJs reads file data from disk. It returns an error on failure.
 func staticJsJsbnJs() (*asset, error) {
-	path := "static/js/jsbn.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jsbn.js"
 	name := "static/js/jsbn.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2346,7 +2308,7 @@ func staticJsJsbnJs() (*asset, error) {
 
 // staticJsJsbn2Js reads file data from disk. It returns an error on failure.
 func staticJsJsbn2Js() (*asset, error) {
-	path := "static/js/jsbn2.js"
+	path := "/home/yurecbig/dcoin-go/static/js/jsbn2.js"
 	name := "static/js/jsbn2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2364,7 +2326,7 @@ func staticJsJsbn2Js() (*asset, error) {
 
 // staticJsMarkerclustererJs reads file data from disk. It returns an error on failure.
 func staticJsMarkerclustererJs() (*asset, error) {
-	path := "static/js/markerclusterer.js"
+	path := "/home/yurecbig/dcoin-go/static/js/markerclusterer.js"
 	name := "static/js/markerclusterer.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2382,7 +2344,7 @@ func staticJsMarkerclustererJs() (*asset, error) {
 
 // staticJsMcryptJs reads file data from disk. It returns an error on failure.
 func staticJsMcryptJs() (*asset, error) {
-	path := "static/js/mcrypt.js"
+	path := "/home/yurecbig/dcoin-go/static/js/mcrypt.js"
 	name := "static/js/mcrypt.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2400,8 +2362,26 @@ func staticJsMcryptJs() (*asset, error) {
 
 // staticJsMd5Js reads file data from disk. It returns an error on failure.
 func staticJsMd5Js() (*asset, error) {
-	path := "static/js/md5.js"
+	path := "/home/yurecbig/dcoin-go/static/js/md5.js"
 	name := "static/js/md5.js"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticJsOmsMinJs reads file data from disk. It returns an error on failure.
+func staticJsOmsMinJs() (*asset, error) {
+	path := "/home/yurecbig/dcoin-go/static/js/oms.min.js"
+	name := "static/js/oms.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -2418,7 +2398,7 @@ func staticJsMd5Js() (*asset, error) {
 
 // staticJsPluginsFlotExcanvasMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotExcanvasMinJs() (*asset, error) {
-	path := "static/js/plugins/flot/excanvas.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/flot/excanvas.min.js"
 	name := "static/js/plugins/flot/excanvas.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2436,7 +2416,7 @@ func staticJsPluginsFlotExcanvasMinJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotJs() (*asset, error) {
-	path := "static/js/plugins/flot/jquery.flot.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/flot/jquery.flot.js"
 	name := "static/js/plugins/flot/jquery.flot.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2454,7 +2434,7 @@ func staticJsPluginsFlotJqueryFlotJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotPieJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotPieJs() (*asset, error) {
-	path := "static/js/plugins/flot/jquery.flot.pie.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/flot/jquery.flot.pie.js"
 	name := "static/js/plugins/flot/jquery.flot.pie.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2472,7 +2452,7 @@ func staticJsPluginsFlotJqueryFlotPieJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotResizeJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotResizeJs() (*asset, error) {
-	path := "static/js/plugins/flot/jquery.flot.resize.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/flot/jquery.flot.resize.js"
 	name := "static/js/plugins/flot/jquery.flot.resize.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2490,7 +2470,7 @@ func staticJsPluginsFlotJqueryFlotResizeJs() (*asset, error) {
 
 // staticJsPluginsFlotJqueryFlotTooltipMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsFlotJqueryFlotTooltipMinJs() (*asset, error) {
-	path := "static/js/plugins/flot/jquery.flot.tooltip.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/flot/jquery.flot.tooltip.min.js"
 	name := "static/js/plugins/flot/jquery.flot.tooltip.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2508,7 +2488,7 @@ func staticJsPluginsFlotJqueryFlotTooltipMinJs() (*asset, error) {
 
 // staticJsPluginsMetismenuMetismenuMinJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsMetismenuMetismenuMinJs() (*asset, error) {
-	path := "static/js/plugins/metisMenu/metisMenu.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/metisMenu/metisMenu.min.js"
 	name := "static/js/plugins/metisMenu/metisMenu.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2526,7 +2506,7 @@ func staticJsPluginsMetismenuMetismenuMinJs() (*asset, error) {
 
 // staticJsPluginsModalBootstrapModalJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsModalBootstrapModalJs() (*asset, error) {
-	path := "static/js/plugins/modal/bootstrap-modal.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/modal/bootstrap-modal.js"
 	name := "static/js/plugins/modal/bootstrap-modal.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2544,7 +2524,7 @@ func staticJsPluginsModalBootstrapModalJs() (*asset, error) {
 
 // staticJsPluginsModalBootstrapModalmanagerJs reads file data from disk. It returns an error on failure.
 func staticJsPluginsModalBootstrapModalmanagerJs() (*asset, error) {
-	path := "static/js/plugins/modal/bootstrap-modalmanager.js"
+	path := "/home/yurecbig/dcoin-go/static/js/plugins/modal/bootstrap-modalmanager.js"
 	name := "static/js/plugins/modal/bootstrap-modalmanager.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2562,7 +2542,7 @@ func staticJsPluginsModalBootstrapModalmanagerJs() (*asset, error) {
 
 // staticJsPrng4Js reads file data from disk. It returns an error on failure.
 func staticJsPrng4Js() (*asset, error) {
-	path := "static/js/prng4.js"
+	path := "/home/yurecbig/dcoin-go/static/js/prng4.js"
 	name := "static/js/prng4.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2580,7 +2560,7 @@ func staticJsPrng4Js() (*asset, error) {
 
 // staticJsRespondMinJs reads file data from disk. It returns an error on failure.
 func staticJsRespondMinJs() (*asset, error) {
-	path := "static/js/respond.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/respond.min.js"
 	name := "static/js/respond.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2598,7 +2578,7 @@ func staticJsRespondMinJs() (*asset, error) {
 
 // staticJsRijndaelJs reads file data from disk. It returns an error on failure.
 func staticJsRijndaelJs() (*asset, error) {
-	path := "static/js/rijndael.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rijndael.js"
 	name := "static/js/rijndael.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2616,7 +2596,7 @@ func staticJsRijndaelJs() (*asset, error) {
 
 // staticJsRipemd160Js reads file data from disk. It returns an error on failure.
 func staticJsRipemd160Js() (*asset, error) {
-	path := "static/js/ripemd160.js"
+	path := "/home/yurecbig/dcoin-go/static/js/ripemd160.js"
 	name := "static/js/ripemd160.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2634,7 +2614,7 @@ func staticJsRipemd160Js() (*asset, error) {
 
 // staticJsRngJs reads file data from disk. It returns an error on failure.
 func staticJsRngJs() (*asset, error) {
-	path := "static/js/rng.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rng.js"
 	name := "static/js/rng.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2652,7 +2632,7 @@ func staticJsRngJs() (*asset, error) {
 
 // staticJsRsaJs reads file data from disk. It returns an error on failure.
 func staticJsRsaJs() (*asset, error) {
-	path := "static/js/rsa.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsa.js"
 	name := "static/js/rsa.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2670,7 +2650,7 @@ func staticJsRsaJs() (*asset, error) {
 
 // staticJsRsa2Js reads file data from disk. It returns an error on failure.
 func staticJsRsa2Js() (*asset, error) {
-	path := "static/js/rsa2.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsa2.js"
 	name := "static/js/rsa2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2688,7 +2668,7 @@ func staticJsRsa2Js() (*asset, error) {
 
 // staticJsRsapem11Js reads file data from disk. It returns an error on failure.
 func staticJsRsapem11Js() (*asset, error) {
-	path := "static/js/rsapem-1.1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsapem-1.1.js"
 	name := "static/js/rsapem-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2706,7 +2686,7 @@ func staticJsRsapem11Js() (*asset, error) {
 
 // staticJsRsapem11MinJs reads file data from disk. It returns an error on failure.
 func staticJsRsapem11MinJs() (*asset, error) {
-	path := "static/js/rsapem-1.1.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsapem-1.1.min.js"
 	name := "static/js/rsapem-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2724,7 +2704,7 @@ func staticJsRsapem11MinJs() (*asset, error) {
 
 // staticJsRsapem1Js reads file data from disk. It returns an error on failure.
 func staticJsRsapem1Js() (*asset, error) {
-	path := "static/js/rsapem-1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsapem-1.js"
 	name := "static/js/rsapem-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2742,7 +2722,7 @@ func staticJsRsapem1Js() (*asset, error) {
 
 // staticJsRsasign12Js reads file data from disk. It returns an error on failure.
 func staticJsRsasign12Js() (*asset, error) {
-	path := "static/js/rsasign-1.2.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsasign-1.2.js"
 	name := "static/js/rsasign-1.2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2760,7 +2740,7 @@ func staticJsRsasign12Js() (*asset, error) {
 
 // staticJsRsasign12MinJs reads file data from disk. It returns an error on failure.
 func staticJsRsasign12MinJs() (*asset, error) {
-	path := "static/js/rsasign-1.2.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsasign-1.2.min.js"
 	name := "static/js/rsasign-1.2.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2778,7 +2758,7 @@ func staticJsRsasign12MinJs() (*asset, error) {
 
 // staticJsRsasign1Js reads file data from disk. It returns an error on failure.
 func staticJsRsasign1Js() (*asset, error) {
-	path := "static/js/rsasign-1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/rsasign-1.js"
 	name := "static/js/rsasign-1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2796,7 +2776,7 @@ func staticJsRsasign1Js() (*asset, error) {
 
 // staticJsSas3camJs reads file data from disk. It returns an error on failure.
 func staticJsSas3camJs() (*asset, error) {
-	path := "static/js/sAS3Cam.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sAS3Cam.js"
 	name := "static/js/sAS3Cam.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2814,7 +2794,7 @@ func staticJsSas3camJs() (*asset, error) {
 
 // staticJsSbAdmin2Js reads file data from disk. It returns an error on failure.
 func staticJsSbAdmin2Js() (*asset, error) {
-	path := "static/js/sb-admin-2.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sb-admin-2.js"
 	name := "static/js/sb-admin-2.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2832,7 +2812,7 @@ func staticJsSbAdmin2Js() (*asset, error) {
 
 // staticJsSbAdminJs reads file data from disk. It returns an error on failure.
 func staticJsSbAdminJs() (*asset, error) {
-	path := "static/js/sb-admin.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sb-admin.js"
 	name := "static/js/sb-admin.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2850,7 +2830,7 @@ func staticJsSbAdminJs() (*asset, error) {
 
 // staticJsSha1Js reads file data from disk. It returns an error on failure.
 func staticJsSha1Js() (*asset, error) {
-	path := "static/js/sha1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sha1.js"
 	name := "static/js/sha1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2868,7 +2848,7 @@ func staticJsSha1Js() (*asset, error) {
 
 // staticJsSha256Js reads file data from disk. It returns an error on failure.
 func staticJsSha256Js() (*asset, error) {
-	path := "static/js/sha256.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sha256.js"
 	name := "static/js/sha256.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2886,7 +2866,7 @@ func staticJsSha256Js() (*asset, error) {
 
 // staticJsSha512Js reads file data from disk. It returns an error on failure.
 func staticJsSha512Js() (*asset, error) {
-	path := "static/js/sha512.js"
+	path := "/home/yurecbig/dcoin-go/static/js/sha512.js"
 	name := "static/js/sha512.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2904,7 +2884,7 @@ func staticJsSha512Js() (*asset, error) {
 
 // staticJsSpinJs reads file data from disk. It returns an error on failure.
 func staticJsSpinJs() (*asset, error) {
-	path := "static/js/spin.js"
+	path := "/home/yurecbig/dcoin-go/static/js/spin.js"
 	name := "static/js/spin.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2922,7 +2902,7 @@ func staticJsSpinJs() (*asset, error) {
 
 // staticJsSpotsJs reads file data from disk. It returns an error on failure.
 func staticJsSpotsJs() (*asset, error) {
-	path := "static/js/spots.js"
+	path := "/home/yurecbig/dcoin-go/static/js/spots.js"
 	name := "static/js/spots.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2940,7 +2920,7 @@ func staticJsSpotsJs() (*asset, error) {
 
 // staticJsStacktableJs reads file data from disk. It returns an error on failure.
 func staticJsStacktableJs() (*asset, error) {
-	path := "static/js/stacktable.js"
+	path := "/home/yurecbig/dcoin-go/static/js/stacktable.js"
 	name := "static/js/stacktable.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2958,7 +2938,7 @@ func staticJsStacktableJs() (*asset, error) {
 
 // staticJsUnixtimeJs reads file data from disk. It returns an error on failure.
 func staticJsUnixtimeJs() (*asset, error) {
-	path := "static/js/unixtime.js"
+	path := "/home/yurecbig/dcoin-go/static/js/unixtime.js"
 	name := "static/js/unixtime.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2976,7 +2956,7 @@ func staticJsUnixtimeJs() (*asset, error) {
 
 // staticJsUploaderJs reads file data from disk. It returns an error on failure.
 func staticJsUploaderJs() (*asset, error) {
-	path := "static/js/uploader.js"
+	path := "/home/yurecbig/dcoin-go/static/js/uploader.js"
 	name := "static/js/uploader.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -2994,7 +2974,7 @@ func staticJsUploaderJs() (*asset, error) {
 
 // staticJsWorkerJs reads file data from disk. It returns an error on failure.
 func staticJsWorkerJs() (*asset, error) {
-	path := "static/js/worker.js"
+	path := "/home/yurecbig/dcoin-go/static/js/worker.js"
 	name := "static/js/worker.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3012,7 +2992,7 @@ func staticJsWorkerJs() (*asset, error) {
 
 // staticJsX50911Js reads file data from disk. It returns an error on failure.
 func staticJsX50911Js() (*asset, error) {
-	path := "static/js/x509-1.1.js"
+	path := "/home/yurecbig/dcoin-go/static/js/x509-1.1.js"
 	name := "static/js/x509-1.1.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3030,7 +3010,7 @@ func staticJsX50911Js() (*asset, error) {
 
 // staticJsX50911MinJs reads file data from disk. It returns an error on failure.
 func staticJsX50911MinJs() (*asset, error) {
-	path := "static/js/x509-1.1.min.js"
+	path := "/home/yurecbig/dcoin-go/static/js/x509-1.1.min.js"
 	name := "static/js/x509-1.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3048,7 +3028,7 @@ func staticJsX50911MinJs() (*asset, error) {
 
 // staticJsYoutube_webcamJs reads file data from disk. It returns an error on failure.
 func staticJsYoutube_webcamJs() (*asset, error) {
-	path := "static/js/youtube_webcam.js"
+	path := "/home/yurecbig/dcoin-go/static/js/youtube_webcam.js"
 	name := "static/js/youtube_webcam.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3066,7 +3046,7 @@ func staticJsYoutube_webcamJs() (*asset, error) {
 
 // staticLang1Ini reads file data from disk. It returns an error on failure.
 func staticLang1Ini() (*asset, error) {
-	path := "static/lang/1.ini"
+	path := "/home/yurecbig/dcoin-go/static/lang/1.ini"
 	name := "static/lang/1.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3084,7 +3064,7 @@ func staticLang1Ini() (*asset, error) {
 
 // staticLang42Ini reads file data from disk. It returns an error on failure.
 func staticLang42Ini() (*asset, error) {
-	path := "static/lang/42.ini"
+	path := "/home/yurecbig/dcoin-go/static/lang/42.ini"
 	name := "static/lang/42.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3102,7 +3082,7 @@ func staticLang42Ini() (*asset, error) {
 
 // staticLangEnUsAllJson reads file data from disk. It returns an error on failure.
 func staticLangEnUsAllJson() (*asset, error) {
-	path := "static/lang/en-us.all.json"
+	path := "/home/yurecbig/dcoin-go/static/lang/en-us.all.json"
 	name := "static/lang/en-us.all.json"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3120,7 +3100,7 @@ func staticLangEnUsAllJson() (*asset, error) {
 
 // staticLangLocale_enUsIni reads file data from disk. It returns an error on failure.
 func staticLangLocale_enUsIni() (*asset, error) {
-	path := "static/lang/locale_en-US.ini"
+	path := "/home/yurecbig/dcoin-go/static/lang/locale_en-US.ini"
 	name := "static/lang/locale_en-US.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3138,7 +3118,7 @@ func staticLangLocale_enUsIni() (*asset, error) {
 
 // staticLangLocale_ruRuIni reads file data from disk. It returns an error on failure.
 func staticLangLocale_ruRuIni() (*asset, error) {
-	path := "static/lang/locale_ru-RU.ini"
+	path := "/home/yurecbig/dcoin-go/static/lang/locale_ru-RU.ini"
 	name := "static/lang/locale_ru-RU.ini"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3156,7 +3136,7 @@ func staticLangLocale_ruRuIni() (*asset, error) {
 
 // staticNodesInc reads file data from disk. It returns an error on failure.
 func staticNodesInc() (*asset, error) {
-	path := "static/nodes.inc"
+	path := "/home/yurecbig/dcoin-go/static/nodes.inc"
 	name := "static/nodes.inc"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3174,7 +3154,7 @@ func staticNodesInc() (*asset, error) {
 
 // staticSassAddons_mixinsScss reads file data from disk. It returns an error on failure.
 func staticSassAddons_mixinsScss() (*asset, error) {
-	path := "static/sass/addons/_mixins.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/addons/_mixins.scss"
 	name := "static/sass/addons/_mixins.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3192,7 +3172,7 @@ func staticSassAddons_mixinsScss() (*asset, error) {
 
 // staticSassPages_homeScss reads file data from disk. It returns an error on failure.
 func staticSassPages_homeScss() (*asset, error) {
-	path := "static/sass/pages/_home.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/pages/_home.scss"
 	name := "static/sass/pages/_home.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3210,7 +3190,7 @@ func staticSassPages_homeScss() (*asset, error) {
 
 // staticSassPages_install_step_0Scss reads file data from disk. It returns an error on failure.
 func staticSassPages_install_step_0Scss() (*asset, error) {
-	path := "static/sass/pages/_install_step_0.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/pages/_install_step_0.scss"
 	name := "static/sass/pages/_install_step_0.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3228,7 +3208,7 @@ func staticSassPages_install_step_0Scss() (*asset, error) {
 
 // staticSassPages_mining_menuScss reads file data from disk. It returns an error on failure.
 func staticSassPages_mining_menuScss() (*asset, error) {
-	path := "static/sass/pages/_mining_menu.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/pages/_mining_menu.scss"
 	name := "static/sass/pages/_mining_menu.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3246,7 +3226,7 @@ func staticSassPages_mining_menuScss() (*asset, error) {
 
 // staticSassPages_new_promised_amountScss reads file data from disk. It returns an error on failure.
 func staticSassPages_new_promised_amountScss() (*asset, error) {
-	path := "static/sass/pages/_new_promised_amount.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/pages/_new_promised_amount.scss"
 	name := "static/sass/pages/_new_promised_amount.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3264,7 +3244,7 @@ func staticSassPages_new_promised_amountScss() (*asset, error) {
 
 // staticSassPages_new_userScss reads file data from disk. It returns an error on failure.
 func staticSassPages_new_userScss() (*asset, error) {
-	path := "static/sass/pages/_new_user.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/pages/_new_user.scss"
 	name := "static/sass/pages/_new_user.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3282,7 +3262,7 @@ func staticSassPages_new_userScss() (*asset, error) {
 
 // staticSassStyleScss reads file data from disk. It returns an error on failure.
 func staticSassStyleScss() (*asset, error) {
-	path := "static/sass/style.scss"
+	path := "/home/yurecbig/dcoin-go/static/sass/style.scss"
 	name := "static/sass/style.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3300,26 +3280,8 @@ func staticSassStyleScss() (*asset, error) {
 
 // staticSwfSas3camSwf reads file data from disk. It returns an error on failure.
 func staticSwfSas3camSwf() (*asset, error) {
-	path := "static/swf/sAS3Cam.swf"
+	path := "/home/yurecbig/dcoin-go/static/swf/sAS3Cam.swf"
 	name := "static/swf/sAS3Cam.swf"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
-// staticTemplatesDirectory reads file data from disk. It returns an error on failure.
-func staticTemplatesDirectory() (*asset, error) {
-	path := "static/templates/.directory"
-	name := "static/templates/.directory"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3336,7 +3298,7 @@ func staticTemplatesDirectory() (*asset, error) {
 
 // staticTemplatesAbuseHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAbuseHtml() (*asset, error) {
-	path := "static/templates/abuse.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/abuse.html"
 	name := "static/templates/abuse.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3354,7 +3316,7 @@ func staticTemplatesAbuseHtml() (*asset, error) {
 
 // staticTemplatesAdd_cf_project_dataHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAdd_cf_project_dataHtml() (*asset, error) {
-	path := "static/templates/add_cf_project_data.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/add_cf_project_data.html"
 	name := "static/templates/add_cf_project_data.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3372,7 +3334,7 @@ func staticTemplatesAdd_cf_project_dataHtml() (*asset, error) {
 
 // staticTemplatesAdmin_variablesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAdmin_variablesHtml() (*asset, error) {
-	path := "static/templates/admin_variables.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/admin_variables.html"
 	name := "static/templates/admin_variables.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3390,7 +3352,7 @@ func staticTemplatesAdmin_variablesHtml() (*asset, error) {
 
 // staticTemplatesAlert_successHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAlert_successHtml() (*asset, error) {
-	path := "static/templates/alert_success.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/alert_success.html"
 	name := "static/templates/alert_success.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3408,7 +3370,7 @@ func staticTemplatesAlert_successHtml() (*asset, error) {
 
 // staticTemplatesArbitrationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitrationHtml() (*asset, error) {
-	path := "static/templates/arbitration.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/arbitration.html"
 	name := "static/templates/arbitration.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3426,7 +3388,7 @@ func staticTemplatesArbitrationHtml() (*asset, error) {
 
 // staticTemplatesArbitration_arbitratorHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_arbitratorHtml() (*asset, error) {
-	path := "static/templates/arbitration_arbitrator.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/arbitration_arbitrator.html"
 	name := "static/templates/arbitration_arbitrator.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3444,7 +3406,7 @@ func staticTemplatesArbitration_arbitratorHtml() (*asset, error) {
 
 // staticTemplatesArbitration_buyerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_buyerHtml() (*asset, error) {
-	path := "static/templates/arbitration_buyer.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/arbitration_buyer.html"
 	name := "static/templates/arbitration_buyer.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3462,7 +3424,7 @@ func staticTemplatesArbitration_buyerHtml() (*asset, error) {
 
 // staticTemplatesArbitration_sellerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesArbitration_sellerHtml() (*asset, error) {
-	path := "static/templates/arbitration_seller.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/arbitration_seller.html"
 	name := "static/templates/arbitration_seller.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3480,7 +3442,7 @@ func staticTemplatesArbitration_sellerHtml() (*asset, error) {
 
 // staticTemplatesAssignmentsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignmentsHtml() (*asset, error) {
-	path := "static/templates/assignments.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/assignments.html"
 	name := "static/templates/assignments.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3498,7 +3460,7 @@ func staticTemplatesAssignmentsHtml() (*asset, error) {
 
 // staticTemplatesAssignments_new_minerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignments_new_minerHtml() (*asset, error) {
-	path := "static/templates/assignments_new_miner.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/assignments_new_miner.html"
 	name := "static/templates/assignments_new_miner.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3516,7 +3478,7 @@ func staticTemplatesAssignments_new_minerHtml() (*asset, error) {
 
 // staticTemplatesAssignments_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAssignments_promised_amountHtml() (*asset, error) {
-	path := "static/templates/assignments_promised_amount.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/assignments_promised_amount.html"
 	name := "static/templates/assignments_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3534,7 +3496,7 @@ func staticTemplatesAssignments_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesAuto_paymentsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAuto_paymentsHtml() (*asset, error) {
-	path := "static/templates/auto_payments.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/auto_payments.html"
 	name := "static/templates/auto_payments.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3552,7 +3514,7 @@ func staticTemplatesAuto_paymentsHtml() (*asset, error) {
 
 // staticTemplatesAvailable_keysHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAvailable_keysHtml() (*asset, error) {
-	path := "static/templates/available_keys.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/available_keys.html"
 	name := "static/templates/available_keys.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3570,7 +3532,7 @@ func staticTemplatesAvailable_keysHtml() (*asset, error) {
 
 // staticTemplatesBlock_explorerHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesBlock_explorerHtml() (*asset, error) {
-	path := "static/templates/block_explorer.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/block_explorer.html"
 	name := "static/templates/block_explorer.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3588,7 +3550,7 @@ func staticTemplatesBlock_explorerHtml() (*asset, error) {
 
 // staticTemplatesBug_reportingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesBug_reportingHtml() (*asset, error) {
-	path := "static/templates/bug_reporting.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/bug_reporting.html"
 	name := "static/templates/bug_reporting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3606,7 +3568,7 @@ func staticTemplatesBug_reportingHtml() (*asset, error) {
 
 // staticTemplatesCash_request_inHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCash_request_inHtml() (*asset, error) {
-	path := "static/templates/cash_request_in.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cash_request_in.html"
 	name := "static/templates/cash_request_in.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3624,7 +3586,7 @@ func staticTemplatesCash_request_inHtml() (*asset, error) {
 
 // staticTemplatesCash_request_outHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCash_request_outHtml() (*asset, error) {
-	path := "static/templates/cash_request_out.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cash_request_out.html"
 	name := "static/templates/cash_request_out.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3642,7 +3604,7 @@ func staticTemplatesCash_request_outHtml() (*asset, error) {
 
 // staticTemplatesCf_catalogHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_catalogHtml() (*asset, error) {
-	path := "static/templates/cf_catalog.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cf_catalog.html"
 	name := "static/templates/cf_catalog.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3660,7 +3622,7 @@ func staticTemplatesCf_catalogHtml() (*asset, error) {
 
 // staticTemplatesCf_page_previewHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_page_previewHtml() (*asset, error) {
-	path := "static/templates/cf_page_preview.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cf_page_preview.html"
 	name := "static/templates/cf_page_preview.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3678,7 +3640,7 @@ func staticTemplatesCf_page_previewHtml() (*asset, error) {
 
 // staticTemplatesCf_project_change_categoryHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_project_change_categoryHtml() (*asset, error) {
-	path := "static/templates/cf_project_change_category.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cf_project_change_category.html"
 	name := "static/templates/cf_project_change_category.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3696,7 +3658,7 @@ func staticTemplatesCf_project_change_categoryHtml() (*asset, error) {
 
 // staticTemplatesCf_startHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCf_startHtml() (*asset, error) {
-	path := "static/templates/cf_start.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/cf_start.html"
 	name := "static/templates/cf_start.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3714,7 +3676,7 @@ func staticTemplatesCf_startHtml() (*asset, error) {
 
 // staticTemplatesChange_arbitrator_conditionsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_arbitrator_conditionsHtml() (*asset, error) {
-	path := "static/templates/change_arbitrator_conditions.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_arbitrator_conditions.html"
 	name := "static/templates/change_arbitrator_conditions.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3732,7 +3694,7 @@ func staticTemplatesChange_arbitrator_conditionsHtml() (*asset, error) {
 
 // staticTemplatesChange_avatarHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_avatarHtml() (*asset, error) {
-	path := "static/templates/change_avatar.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_avatar.html"
 	name := "static/templates/change_avatar.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3750,7 +3712,7 @@ func staticTemplatesChange_avatarHtml() (*asset, error) {
 
 // staticTemplatesChange_commissionHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_commissionHtml() (*asset, error) {
-	path := "static/templates/change_commission.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_commission.html"
 	name := "static/templates/change_commission.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3768,7 +3730,7 @@ func staticTemplatesChange_commissionHtml() (*asset, error) {
 
 // staticTemplatesChange_country_raceHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_country_raceHtml() (*asset, error) {
-	path := "static/templates/change_country_race.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_country_race.html"
 	name := "static/templates/change_country_race.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3786,7 +3748,7 @@ func staticTemplatesChange_country_raceHtml() (*asset, error) {
 
 // staticTemplatesChange_creditorHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_creditorHtml() (*asset, error) {
-	path := "static/templates/change_creditor.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_creditor.html"
 	name := "static/templates/change_creditor.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3804,7 +3766,7 @@ func staticTemplatesChange_creditorHtml() (*asset, error) {
 
 // staticTemplatesChange_geolocationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_geolocationHtml() (*asset, error) {
-	path := "static/templates/change_geolocation.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_geolocation.html"
 	name := "static/templates/change_geolocation.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3822,7 +3784,7 @@ func staticTemplatesChange_geolocationHtml() (*asset, error) {
 
 // staticTemplatesChange_hostHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_hostHtml() (*asset, error) {
-	path := "static/templates/change_host.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_host.html"
 	name := "static/templates/change_host.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3840,7 +3802,7 @@ func staticTemplatesChange_hostHtml() (*asset, error) {
 
 // staticTemplatesChange_key_closeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_key_closeHtml() (*asset, error) {
-	path := "static/templates/change_key_close.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_key_close.html"
 	name := "static/templates/change_key_close.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3858,7 +3820,7 @@ func staticTemplatesChange_key_closeHtml() (*asset, error) {
 
 // staticTemplatesChange_key_requestHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_key_requestHtml() (*asset, error) {
-	path := "static/templates/change_key_request.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_key_request.html"
 	name := "static/templates/change_key_request.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3876,7 +3838,7 @@ func staticTemplatesChange_key_requestHtml() (*asset, error) {
 
 // staticTemplatesChange_money_back_timeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_money_back_timeHtml() (*asset, error) {
-	path := "static/templates/change_money_back_time.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_money_back_time.html"
 	name := "static/templates/change_money_back_time.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3894,7 +3856,7 @@ func staticTemplatesChange_money_back_timeHtml() (*asset, error) {
 
 // staticTemplatesChange_node_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_node_keyHtml() (*asset, error) {
-	path := "static/templates/change_node_key.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_node_key.html"
 	name := "static/templates/change_node_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3912,7 +3874,7 @@ func staticTemplatesChange_node_keyHtml() (*asset, error) {
 
 // staticTemplatesChange_poolHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_poolHtml() (*asset, error) {
-	path := "static/templates/change_pool.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_pool.html"
 	name := "static/templates/change_pool.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3930,7 +3892,7 @@ func staticTemplatesChange_poolHtml() (*asset, error) {
 
 // staticTemplatesChange_primary_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_primary_keyHtml() (*asset, error) {
-	path := "static/templates/change_primary_key.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_primary_key.html"
 	name := "static/templates/change_primary_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3948,7 +3910,7 @@ func staticTemplatesChange_primary_keyHtml() (*asset, error) {
 
 // staticTemplatesChange_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChange_promised_amountHtml() (*asset, error) {
-	path := "static/templates/change_promised_amount.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/change_promised_amount.html"
 	name := "static/templates/change_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3966,7 +3928,7 @@ func staticTemplatesChange_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesChartHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChartHtml() (*asset, error) {
-	path := "static/templates/chart.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/chart.html"
 	name := "static/templates/chart.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -3984,7 +3946,7 @@ func staticTemplatesChartHtml() (*asset, error) {
 
 // staticTemplatesChatHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesChatHtml() (*asset, error) {
-	path := "static/templates/chat.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/chat.html"
 	name := "static/templates/chat.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4002,7 +3964,7 @@ func staticTemplatesChatHtml() (*asset, error) {
 
 // staticTemplatesCreditsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCreditsHtml() (*asset, error) {
-	path := "static/templates/credits.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/credits.html"
 	name := "static/templates/credits.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4020,7 +3982,7 @@ func staticTemplatesCreditsHtml() (*asset, error) {
 
 // staticTemplatesCurrency_exchangeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCurrency_exchangeHtml() (*asset, error) {
-	path := "static/templates/currency_exchange.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/currency_exchange.html"
 	name := "static/templates/currency_exchange.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4038,7 +4000,7 @@ func staticTemplatesCurrency_exchangeHtml() (*asset, error) {
 
 // staticTemplatesCurrency_exchange_deleteHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesCurrency_exchange_deleteHtml() (*asset, error) {
-	path := "static/templates/currency_exchange_delete.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/currency_exchange_delete.html"
 	name := "static/templates/currency_exchange_delete.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4056,7 +4018,7 @@ func staticTemplatesCurrency_exchange_deleteHtml() (*asset, error) {
 
 // staticTemplatesDb_infoHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDb_infoHtml() (*asset, error) {
-	path := "static/templates/db_info.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/db_info.html"
 	name := "static/templates/db_info.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4074,7 +4036,7 @@ func staticTemplatesDb_infoHtml() (*asset, error) {
 
 // staticTemplatesDb_info_nodesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDb_info_nodesHtml() (*asset, error) {
-	path := "static/templates/db_info_nodes.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/db_info_nodes.html"
 	name := "static/templates/db_info_nodes.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4092,7 +4054,7 @@ func staticTemplatesDb_info_nodesHtml() (*asset, error) {
 
 // staticTemplatesDel_auto_paymentHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_auto_paymentHtml() (*asset, error) {
-	path := "static/templates/del_auto_payment.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_auto_payment.html"
 	name := "static/templates/del_auto_payment.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4110,7 +4072,7 @@ func staticTemplatesDel_auto_paymentHtml() (*asset, error) {
 
 // staticTemplatesDel_cf_fundingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_cf_fundingHtml() (*asset, error) {
-	path := "static/templates/del_cf_funding.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_cf_funding.html"
 	name := "static/templates/del_cf_funding.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4128,7 +4090,7 @@ func staticTemplatesDel_cf_fundingHtml() (*asset, error) {
 
 // staticTemplatesDel_cf_projectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_cf_projectHtml() (*asset, error) {
-	path := "static/templates/del_cf_project.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_cf_project.html"
 	name := "static/templates/del_cf_project.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4146,7 +4108,7 @@ func staticTemplatesDel_cf_projectHtml() (*asset, error) {
 
 // staticTemplatesDel_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_creditHtml() (*asset, error) {
-	path := "static/templates/del_credit.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_credit.html"
 	name := "static/templates/del_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4164,7 +4126,7 @@ func staticTemplatesDel_creditHtml() (*asset, error) {
 
 // staticTemplatesDel_pool_userHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_pool_userHtml() (*asset, error) {
-	path := "static/templates/del_pool_user.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_pool_user.html"
 	name := "static/templates/del_pool_user.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4182,7 +4144,7 @@ func staticTemplatesDel_pool_userHtml() (*asset, error) {
 
 // staticTemplatesDel_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesDel_promised_amountHtml() (*asset, error) {
-	path := "static/templates/del_promised_amount.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/del_promised_amount.html"
 	name := "static/templates/del_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4200,7 +4162,7 @@ func staticTemplatesDel_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesE_mainHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_mainHtml() (*asset, error) {
-	path := "static/templates/e_main.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_main.html"
 	name := "static/templates/e_main.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4218,7 +4180,7 @@ func staticTemplatesE_mainHtml() (*asset, error) {
 
 // staticTemplatesE_my_financeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_financeHtml() (*asset, error) {
-	path := "static/templates/e_my_finance.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_my_finance.html"
 	name := "static/templates/e_my_finance.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4236,7 +4198,7 @@ func staticTemplatesE_my_financeHtml() (*asset, error) {
 
 // staticTemplatesE_my_historyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_historyHtml() (*asset, error) {
-	path := "static/templates/e_my_history.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_my_history.html"
 	name := "static/templates/e_my_history.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4254,7 +4216,7 @@ func staticTemplatesE_my_historyHtml() (*asset, error) {
 
 // staticTemplatesE_my_ordersHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_ordersHtml() (*asset, error) {
-	path := "static/templates/e_my_orders.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_my_orders.html"
 	name := "static/templates/e_my_orders.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4272,7 +4234,7 @@ func staticTemplatesE_my_ordersHtml() (*asset, error) {
 
 // staticTemplatesE_pagesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_pagesHtml() (*asset, error) {
-	path := "static/templates/e_pages.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_pages.html"
 	name := "static/templates/e_pages.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4290,7 +4252,7 @@ func staticTemplatesE_pagesHtml() (*asset, error) {
 
 // staticTemplatesE_redirectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_redirectHtml() (*asset, error) {
-	path := "static/templates/e_redirect.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/e_redirect.html"
 	name := "static/templates/e_redirect.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4308,7 +4270,7 @@ func staticTemplatesE_redirectHtml() (*asset, error) {
 
 // staticTemplatesExchange_adminHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesExchange_adminHtml() (*asset, error) {
-	path := "static/templates/exchange_admin.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/exchange_admin.html"
 	name := "static/templates/exchange_admin.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4326,7 +4288,7 @@ func staticTemplatesExchange_adminHtml() (*asset, error) {
 
 // staticTemplatesFirst_selectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesFirst_selectHtml() (*asset, error) {
-	path := "static/templates/first_select.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/first_select.html"
 	name := "static/templates/first_select.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4344,7 +4306,7 @@ func staticTemplatesFirst_selectHtml() (*asset, error) {
 
 // staticTemplatesFor_repaid_fixHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesFor_repaid_fixHtml() (*asset, error) {
-	path := "static/templates/for_repaid_fix.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/for_repaid_fix.html"
 	name := "static/templates/for_repaid_fix.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4362,7 +4324,7 @@ func staticTemplatesFor_repaid_fixHtml() (*asset, error) {
 
 // staticTemplatesHolidays_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesHolidays_listHtml() (*asset, error) {
-	path := "static/templates/holidays_list.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/holidays_list.html"
 	name := "static/templates/holidays_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4380,7 +4342,7 @@ func staticTemplatesHolidays_listHtml() (*asset, error) {
 
 // staticTemplatesHomeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesHomeHtml() (*asset, error) {
-	path := "static/templates/home.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/home.html"
 	name := "static/templates/home.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4398,7 +4360,7 @@ func staticTemplatesHomeHtml() (*asset, error) {
 
 // staticTemplatesHome0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesHome0Html() (*asset, error) {
-	path := "static/templates/home0.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/home0.html"
 	name := "static/templates/home0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4416,7 +4378,7 @@ func staticTemplatesHome0Html() (*asset, error) {
 
 // staticTemplatesIndexHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndexHtml() (*asset, error) {
-	path := "static/templates/index.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/index.html"
 	name := "static/templates/index.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4434,7 +4396,7 @@ func staticTemplatesIndexHtml() (*asset, error) {
 
 // staticTemplatesIndex_cfHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndex_cfHtml() (*asset, error) {
-	path := "static/templates/index_cf.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/index_cf.html"
 	name := "static/templates/index_cf.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4452,7 +4414,7 @@ func staticTemplatesIndex_cfHtml() (*asset, error) {
 
 // staticTemplatesIndex_eHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesIndex_eHtml() (*asset, error) {
-	path := "static/templates/index_e.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/index_e.html"
 	name := "static/templates/index_e.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4470,7 +4432,7 @@ func staticTemplatesIndex_eHtml() (*asset, error) {
 
 // staticTemplatesInformationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesInformationHtml() (*asset, error) {
-	path := "static/templates/information.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/information.html"
 	name := "static/templates/information.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4488,7 +4450,7 @@ func staticTemplatesInformationHtml() (*asset, error) {
 
 // staticTemplatesInstall_step_0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesInstall_step_0Html() (*asset, error) {
-	path := "static/templates/install_step_0.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/install_step_0.html"
 	name := "static/templates/install_step_0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4506,7 +4468,7 @@ func staticTemplatesInstall_step_0Html() (*asset, error) {
 
 // staticTemplatesInstall_step_1Html reads file data from disk. It returns an error on failure.
 func staticTemplatesInstall_step_1Html() (*asset, error) {
-	path := "static/templates/install_step_1.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/install_step_1.html"
 	name := "static/templates/install_step_1.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4524,7 +4486,7 @@ func staticTemplatesInstall_step_1Html() (*asset, error) {
 
 // staticTemplatesInterfaceHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesInterfaceHtml() (*asset, error) {
-	path := "static/templates/interface.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/interface.html"
 	name := "static/templates/interface.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4542,7 +4504,7 @@ func staticTemplatesInterfaceHtml() (*asset, error) {
 
 // staticTemplatesLoginHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesLoginHtml() (*asset, error) {
-	path := "static/templates/login.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/login.html"
 	name := "static/templates/login.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4560,7 +4522,7 @@ func staticTemplatesLoginHtml() (*asset, error) {
 
 // staticTemplatesMenuHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMenuHtml() (*asset, error) {
-	path := "static/templates/menu.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/menu.html"
 	name := "static/templates/menu.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4578,7 +4540,7 @@ func staticTemplatesMenuHtml() (*asset, error) {
 
 // staticTemplatesMining_menuHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMining_menuHtml() (*asset, error) {
-	path := "static/templates/mining_menu.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/mining_menu.html"
 	name := "static/templates/mining_menu.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4596,7 +4558,7 @@ func staticTemplatesMining_menuHtml() (*asset, error) {
 
 // staticTemplatesMining_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMining_promised_amountHtml() (*asset, error) {
-	path := "static/templates/mining_promised_amount.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/mining_promised_amount.html"
 	name := "static/templates/mining_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4614,7 +4576,7 @@ func staticTemplatesMining_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesModalHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesModalHtml() (*asset, error) {
-	path := "static/templates/modal.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/modal.html"
 	name := "static/templates/modal.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4632,7 +4594,7 @@ func staticTemplatesModalHtml() (*asset, error) {
 
 // staticTemplatesMoney_backHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMoney_backHtml() (*asset, error) {
-	path := "static/templates/money_back.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/money_back.html"
 	name := "static/templates/money_back.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4650,7 +4612,7 @@ func staticTemplatesMoney_backHtml() (*asset, error) {
 
 // staticTemplatesMoney_back_requestHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMoney_back_requestHtml() (*asset, error) {
-	path := "static/templates/money_back_request.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/money_back_request.html"
 	name := "static/templates/money_back_request.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4668,7 +4630,7 @@ func staticTemplatesMoney_back_requestHtml() (*asset, error) {
 
 // staticTemplatesMy_cf_projectsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesMy_cf_projectsHtml() (*asset, error) {
-	path := "static/templates/my_cf_projects.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/my_cf_projects.html"
 	name := "static/templates/my_cf_projects.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4686,7 +4648,7 @@ func staticTemplatesMy_cf_projectsHtml() (*asset, error) {
 
 // staticTemplatesNew_auto_paymentHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_auto_paymentHtml() (*asset, error) {
-	path := "static/templates/new_auto_payment.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_auto_payment.html"
 	name := "static/templates/new_auto_payment.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4704,7 +4666,7 @@ func staticTemplatesNew_auto_paymentHtml() (*asset, error) {
 
 // staticTemplatesNew_cf_projectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_cf_projectHtml() (*asset, error) {
-	path := "static/templates/new_cf_project.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_cf_project.html"
 	name := "static/templates/new_cf_project.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4722,7 +4684,7 @@ func staticTemplatesNew_cf_projectHtml() (*asset, error) {
 
 // staticTemplatesNew_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_creditHtml() (*asset, error) {
-	path := "static/templates/new_credit.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_credit.html"
 	name := "static/templates/new_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4740,7 +4702,7 @@ func staticTemplatesNew_creditHtml() (*asset, error) {
 
 // staticTemplatesNew_holidaysHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_holidaysHtml() (*asset, error) {
-	path := "static/templates/new_holidays.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_holidays.html"
 	name := "static/templates/new_holidays.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4758,7 +4720,7 @@ func staticTemplatesNew_holidaysHtml() (*asset, error) {
 
 // staticTemplatesNew_promised_amountHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_promised_amountHtml() (*asset, error) {
-	path := "static/templates/new_promised_amount.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_promised_amount.html"
 	name := "static/templates/new_promised_amount.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4776,7 +4738,7 @@ func staticTemplatesNew_promised_amountHtml() (*asset, error) {
 
 // staticTemplatesNew_userHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNew_userHtml() (*asset, error) {
-	path := "static/templates/new_user.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/new_user.html"
 	name := "static/templates/new_user.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4794,7 +4756,7 @@ func staticTemplatesNew_userHtml() (*asset, error) {
 
 // staticTemplatesNode_configHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNode_configHtml() (*asset, error) {
-	path := "static/templates/node_config.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/node_config.html"
 	name := "static/templates/node_config.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4812,7 +4774,7 @@ func staticTemplatesNode_configHtml() (*asset, error) {
 
 // staticTemplatesNotificationsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesNotificationsHtml() (*asset, error) {
-	path := "static/templates/notifications.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/notifications.html"
 	name := "static/templates/notifications.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4830,7 +4792,7 @@ func staticTemplatesNotificationsHtml() (*asset, error) {
 
 // staticTemplatesPointsHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPointsHtml() (*asset, error) {
-	path := "static/templates/points.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/points.html"
 	name := "static/templates/points.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4848,7 +4810,7 @@ func staticTemplatesPointsHtml() (*asset, error) {
 
 // staticTemplatesPool_adminHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPool_adminHtml() (*asset, error) {
-	path := "static/templates/pool_admin.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/pool_admin.html"
 	name := "static/templates/pool_admin.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4866,7 +4828,7 @@ func staticTemplatesPool_adminHtml() (*asset, error) {
 
 // staticTemplatesPool_admin_loginHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPool_admin_loginHtml() (*asset, error) {
-	path := "static/templates/pool_admin_login.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/pool_admin_login.html"
 	name := "static/templates/pool_admin_login.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4884,7 +4846,7 @@ func staticTemplatesPool_admin_loginHtml() (*asset, error) {
 
 // staticTemplatesProgressHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesProgressHtml() (*asset, error) {
-	path := "static/templates/progress.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/progress.html"
 	name := "static/templates/progress.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4902,7 +4864,7 @@ func staticTemplatesProgressHtml() (*asset, error) {
 
 // staticTemplatesProgress_barHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesProgress_barHtml() (*asset, error) {
-	path := "static/templates/progress_bar.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/progress_bar.html"
 	name := "static/templates/progress_bar.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4920,7 +4882,7 @@ func staticTemplatesProgress_barHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_actualizationHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_actualizationHtml() (*asset, error) {
-	path := "static/templates/promised_amount_actualization.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/promised_amount_actualization.html"
 	name := "static/templates/promised_amount_actualization.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4938,7 +4900,7 @@ func staticTemplatesPromised_amount_actualizationHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_listHtml() (*asset, error) {
-	path := "static/templates/promised_amount_list.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/promised_amount_list.html"
 	name := "static/templates/promised_amount_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4956,7 +4918,7 @@ func staticTemplatesPromised_amount_listHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_restrictedHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_restrictedHtml() (*asset, error) {
-	path := "static/templates/promised_amount_restricted.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/promised_amount_restricted.html"
 	name := "static/templates/promised_amount_restricted.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4974,7 +4936,7 @@ func staticTemplatesPromised_amount_restrictedHtml() (*asset, error) {
 
 // staticTemplatesPromised_amount_restricted_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesPromised_amount_restricted_listHtml() (*asset, error) {
-	path := "static/templates/promised_amount_restricted_list.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/promised_amount_restricted_list.html"
 	name := "static/templates/promised_amount_restricted_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -4992,7 +4954,7 @@ func staticTemplatesPromised_amount_restricted_listHtml() (*asset, error) {
 
 // staticTemplatesRepayment_creditHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRepayment_creditHtml() (*asset, error) {
-	path := "static/templates/repayment_credit.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/repayment_credit.html"
 	name := "static/templates/repayment_credit.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5010,7 +4972,7 @@ func staticTemplatesRepayment_creditHtml() (*asset, error) {
 
 // staticTemplatesRestoring_accessHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRestoring_accessHtml() (*asset, error) {
-	path := "static/templates/restoring_access.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/restoring_access.html"
 	name := "static/templates/restoring_access.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5028,7 +4990,7 @@ func staticTemplatesRestoring_accessHtml() (*asset, error) {
 
 // staticTemplatesRewrite_primary_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesRewrite_primary_keyHtml() (*asset, error) {
-	path := "static/templates/rewrite_primary_key.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/rewrite_primary_key.html"
 	name := "static/templates/rewrite_primary_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5046,7 +5008,7 @@ func staticTemplatesRewrite_primary_keyHtml() (*asset, error) {
 
 // staticTemplatesSet_passwordHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSet_passwordHtml() (*asset, error) {
-	path := "static/templates/set_password.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/set_password.html"
 	name := "static/templates/set_password.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5064,7 +5026,7 @@ func staticTemplatesSet_passwordHtml() (*asset, error) {
 
 // staticTemplatesSetup_passwordHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSetup_passwordHtml() (*asset, error) {
-	path := "static/templates/setup_password.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/setup_password.html"
 	name := "static/templates/setup_password.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5082,7 +5044,7 @@ func staticTemplatesSetup_passwordHtml() (*asset, error) {
 
 // staticTemplatesSign_up_in_the_poolHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSign_up_in_the_poolHtml() (*asset, error) {
-	path := "static/templates/sign_up_in_the_pool.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/sign_up_in_the_pool.html"
 	name := "static/templates/sign_up_in_the_pool.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5100,7 +5062,7 @@ func staticTemplatesSign_up_in_the_poolHtml() (*asset, error) {
 
 // staticTemplatesSignaturesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesSignaturesHtml() (*asset, error) {
-	path := "static/templates/signatures.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/signatures.html"
 	name := "static/templates/signatures.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5118,7 +5080,7 @@ func staticTemplatesSignaturesHtml() (*asset, error) {
 
 // staticTemplatesStatisticHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesStatisticHtml() (*asset, error) {
-	path := "static/templates/statistic.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/statistic.html"
 	name := "static/templates/statistic.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5136,7 +5098,7 @@ func staticTemplatesStatisticHtml() (*asset, error) {
 
 // staticTemplatesStatistic_votingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesStatistic_votingHtml() (*asset, error) {
-	path := "static/templates/statistic_voting.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/statistic_voting.html"
 	name := "static/templates/statistic_voting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5154,7 +5116,7 @@ func staticTemplatesStatistic_votingHtml() (*asset, error) {
 
 // staticTemplatesUpdating_blockchainHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpdating_blockchainHtml() (*asset, error) {
-	path := "static/templates/updating_blockchain.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/updating_blockchain.html"
 	name := "static/templates/updating_blockchain.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5172,7 +5134,7 @@ func staticTemplatesUpdating_blockchainHtml() (*asset, error) {
 
 // staticTemplatesUpgradeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgradeHtml() (*asset, error) {
-	path := "static/templates/upgrade.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade.html"
 	name := "static/templates/upgrade.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5190,7 +5152,7 @@ func staticTemplatesUpgradeHtml() (*asset, error) {
 
 // staticTemplatesUpgrade_0Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_0Html() (*asset, error) {
-	path := "static/templates/upgrade_0.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_0.html"
 	name := "static/templates/upgrade_0.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5208,7 +5170,7 @@ func staticTemplatesUpgrade_0Html() (*asset, error) {
 
 // staticTemplatesUpgrade_1_and_2Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_1_and_2Html() (*asset, error) {
-	path := "static/templates/upgrade_1_and_2.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_1_and_2.html"
 	name := "static/templates/upgrade_1_and_2.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5226,7 +5188,7 @@ func staticTemplatesUpgrade_1_and_2Html() (*asset, error) {
 
 // staticTemplatesUpgrade_3Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_3Html() (*asset, error) {
-	path := "static/templates/upgrade_3.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_3.html"
 	name := "static/templates/upgrade_3.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5244,7 +5206,7 @@ func staticTemplatesUpgrade_3Html() (*asset, error) {
 
 // staticTemplatesUpgrade_4Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_4Html() (*asset, error) {
-	path := "static/templates/upgrade_4.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_4.html"
 	name := "static/templates/upgrade_4.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5262,7 +5224,7 @@ func staticTemplatesUpgrade_4Html() (*asset, error) {
 
 // staticTemplatesUpgrade_5Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_5Html() (*asset, error) {
-	path := "static/templates/upgrade_5.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_5.html"
 	name := "static/templates/upgrade_5.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5280,7 +5242,7 @@ func staticTemplatesUpgrade_5Html() (*asset, error) {
 
 // staticTemplatesUpgrade_6Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_6Html() (*asset, error) {
-	path := "static/templates/upgrade_6.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_6.html"
 	name := "static/templates/upgrade_6.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5298,7 +5260,7 @@ func staticTemplatesUpgrade_6Html() (*asset, error) {
 
 // staticTemplatesUpgrade_7Html reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_7Html() (*asset, error) {
-	path := "static/templates/upgrade_7.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_7.html"
 	name := "static/templates/upgrade_7.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5316,7 +5278,7 @@ func staticTemplatesUpgrade_7Html() (*asset, error) {
 
 // staticTemplatesUpgrade_resendHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpgrade_resendHtml() (*asset, error) {
-	path := "static/templates/upgrade_resend.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/upgrade_resend.html"
 	name := "static/templates/upgrade_resend.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5334,7 +5296,7 @@ func staticTemplatesUpgrade_resendHtml() (*asset, error) {
 
 // staticTemplatesVote_for_meHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVote_for_meHtml() (*asset, error) {
-	path := "static/templates/vote_for_me.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/vote_for_me.html"
 	name := "static/templates/vote_for_me.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5352,7 +5314,7 @@ func staticTemplatesVote_for_meHtml() (*asset, error) {
 
 // staticTemplatesVotes_exchangeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVotes_exchangeHtml() (*asset, error) {
-	path := "static/templates/votes_exchange.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/votes_exchange.html"
 	name := "static/templates/votes_exchange.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5370,7 +5332,7 @@ func staticTemplatesVotes_exchangeHtml() (*asset, error) {
 
 // staticTemplatesVotingHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesVotingHtml() (*asset, error) {
-	path := "static/templates/voting.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/voting.html"
 	name := "static/templates/voting.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5388,7 +5350,7 @@ func staticTemplatesVotingHtml() (*asset, error) {
 
 // staticTemplatesWaiting_accept_new_keyHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesWaiting_accept_new_keyHtml() (*asset, error) {
-	path := "static/templates/waiting_accept_new_key.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/waiting_accept_new_key.html"
 	name := "static/templates/waiting_accept_new_key.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5406,7 +5368,7 @@ func staticTemplatesWaiting_accept_new_keyHtml() (*asset, error) {
 
 // staticTemplatesWallets_listHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesWallets_listHtml() (*asset, error) {
-	path := "static/templates/wallets_list.html"
+	path := "/home/yurecbig/dcoin-go/static/templates/wallets_list.html"
 	name := "static/templates/wallets_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -5441,7 +5403,7 @@ func Asset(name string) ([]byte, error) {
 // It simplifies safe initialization of global variables.
 func MustAsset(name string) []byte {
 	a, err := Asset(name)
-	if (err != nil) {
+	if err != nil {
 		panic("asset: Asset(" + name + "): " + err.Error())
 	}
 
@@ -5507,7 +5469,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/fonts/fontawesome-webfont.ttf": staticFontsFontawesomeWebfontTtf,
 	"static/fonts/fontawesome-webfont.woff": staticFontsFontawesomeWebfontWoff,
 	"static/fonts/luxisr.ttf": staticFontsLuxisrTtf,
-	"static/img/.directory": staticImgDirectory,
 	"static/img/alert.png": staticImgAlertPng,
 	"static/img/anonim.png": staticImgAnonimPng,
 	"static/img/blank.png": staticImgBlankPng,
@@ -5532,7 +5493,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/img/race_1.png": staticImgRace_1Png,
 	"static/img/race_2.png": staticImgRace_2Png,
 	"static/img/race_3.png": staticImgRace_3Png,
-	"static/img/reduction.png": staticImgReductionPng,
 	"static/img/rolling.gif": staticImgRollingGif,
 	"static/img/squares.gif": staticImgSquaresGif,
 	"static/img/squares2.gif": staticImgSquares2Gif,
@@ -5591,6 +5551,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/js/markerclusterer.js": staticJsMarkerclustererJs,
 	"static/js/mcrypt.js": staticJsMcryptJs,
 	"static/js/md5.js": staticJsMd5Js,
+	"static/js/oms.min.js": staticJsOmsMinJs,
 	"static/js/plugins/flot/excanvas.min.js": staticJsPluginsFlotExcanvasMinJs,
 	"static/js/plugins/flot/jquery.flot.js": staticJsPluginsFlotJqueryFlotJs,
 	"static/js/plugins/flot/jquery.flot.pie.js": staticJsPluginsFlotJqueryFlotPieJs,
@@ -5641,7 +5602,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/pages/_new_user.scss": staticSassPages_new_userScss,
 	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
-	"static/templates/.directory": staticTemplatesDirectory,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
 	"static/templates/add_cf_project_data.html": staticTemplatesAdd_cf_project_dataHtml,
 	"static/templates/admin_variables.html": staticTemplatesAdmin_variablesHtml,
@@ -5796,660 +5756,374 @@ func AssetDir(name string) ([]string, error) {
 }
 
 type bintree struct {
-	Func func() (*asset, error)
+	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
 var _bintree = &bintree{nil, map[string]*bintree{
 	"static": &bintree{nil, map[string]*bintree{
-		"1block.bin": &bintree{static1blockBin, map[string]*bintree{
-		}},
+		"1block.bin": &bintree{static1blockBin, map[string]*bintree{}},
 		"css": &bintree{nil, map[string]*bintree{
-			"AS3Cam.css": &bintree{staticCssAs3camCss, map[string]*bintree{
-			}},
-			"Jcrop.gif": &bintree{staticCssJcropGif, map[string]*bintree{
-			}},
-			"bootstrap-modal.css": &bintree{staticCssBootstrapModalCss, map[string]*bintree{
-			}},
-			"bootstrap-responsive.css": &bintree{staticCssBootstrapResponsiveCss, map[string]*bintree{
-			}},
-			"bootstrap.css": &bintree{staticCssBootstrapCss, map[string]*bintree{
-			}},
-			"bootstrap.min.css": &bintree{staticCssBootstrapMinCss, map[string]*bintree{
-			}},
-			"cf.css": &bintree{staticCssCfCss, map[string]*bintree{
-			}},
-			"cropper.css": &bintree{staticCssCropperCss, map[string]*bintree{
-			}},
-			"dataTables.bootstrap.css": &bintree{staticCssDatatablesBootstrapCss, map[string]*bintree{
-			}},
-			"font-awesome.css": &bintree{staticCssFontAwesomeCss, map[string]*bintree{
-			}},
-			"jquery-ui-timepicker-addon.css": &bintree{staticCssJqueryUiTimepickerAddonCss, map[string]*bintree{
-			}},
-			"jquery-ui.css": &bintree{staticCssJqueryUiCss, map[string]*bintree{
-			}},
-			"jquery.Jcrop.css": &bintree{staticCssJqueryJcropCss, map[string]*bintree{
-			}},
-			"jquery.Jcrop.min.css": &bintree{staticCssJqueryJcropMinCss, map[string]*bintree{
-			}},
-			"jquery.css": &bintree{staticCssJqueryCss, map[string]*bintree{
-			}},
-			"jquery.qtip.min.css": &bintree{staticCssJqueryQtipMinCss, map[string]*bintree{
-			}},
+			"AS3Cam.css": &bintree{staticCssAs3camCss, map[string]*bintree{}},
+			"Jcrop.gif": &bintree{staticCssJcropGif, map[string]*bintree{}},
+			"bootstrap-modal.css": &bintree{staticCssBootstrapModalCss, map[string]*bintree{}},
+			"bootstrap-responsive.css": &bintree{staticCssBootstrapResponsiveCss, map[string]*bintree{}},
+			"bootstrap.css": &bintree{staticCssBootstrapCss, map[string]*bintree{}},
+			"bootstrap.min.css": &bintree{staticCssBootstrapMinCss, map[string]*bintree{}},
+			"cf.css": &bintree{staticCssCfCss, map[string]*bintree{}},
+			"cropper.css": &bintree{staticCssCropperCss, map[string]*bintree{}},
+			"dataTables.bootstrap.css": &bintree{staticCssDatatablesBootstrapCss, map[string]*bintree{}},
+			"font-awesome.css": &bintree{staticCssFontAwesomeCss, map[string]*bintree{}},
+			"jquery-ui-timepicker-addon.css": &bintree{staticCssJqueryUiTimepickerAddonCss, map[string]*bintree{}},
+			"jquery-ui.css": &bintree{staticCssJqueryUiCss, map[string]*bintree{}},
+			"jquery.Jcrop.css": &bintree{staticCssJqueryJcropCss, map[string]*bintree{}},
+			"jquery.Jcrop.min.css": &bintree{staticCssJqueryJcropMinCss, map[string]*bintree{}},
+			"jquery.css": &bintree{staticCssJqueryCss, map[string]*bintree{}},
+			"jquery.qtip.min.css": &bintree{staticCssJqueryQtipMinCss, map[string]*bintree{}},
 			"plugins": &bintree{nil, map[string]*bintree{
 				"metisMenu": &bintree{nil, map[string]*bintree{
-					"metisMenu.min.css": &bintree{staticCssPluginsMetismenuMetismenuMinCss, map[string]*bintree{
-					}},
+					"metisMenu.min.css": &bintree{staticCssPluginsMetismenuMetismenuMinCss, map[string]*bintree{}},
 				}},
 			}},
-			"progress.css": &bintree{staticCssProgressCss, map[string]*bintree{
-			}},
-			"sb-admin-2.css": &bintree{staticCssSbAdmin2Css, map[string]*bintree{
-			}},
-			"sb-admin.css": &bintree{staticCssSbAdminCss, map[string]*bintree{
-			}},
-			"social-buttons.css": &bintree{staticCssSocialButtonsCss, map[string]*bintree{
-			}},
-			"style.css": &bintree{staticCssStyleCss, map[string]*bintree{
-			}},
-			"tooltipster-shadow.css": &bintree{staticCssTooltipsterShadowCss, map[string]*bintree{
-			}},
-			"tooltipster.css": &bintree{staticCssTooltipsterCss, map[string]*bintree{
-			}},
-			"upgrade.css": &bintree{staticCssUpgradeCss, map[string]*bintree{
-			}},
+			"progress.css": &bintree{staticCssProgressCss, map[string]*bintree{}},
+			"sb-admin-2.css": &bintree{staticCssSbAdmin2Css, map[string]*bintree{}},
+			"sb-admin.css": &bintree{staticCssSbAdminCss, map[string]*bintree{}},
+			"social-buttons.css": &bintree{staticCssSocialButtonsCss, map[string]*bintree{}},
+			"style.css": &bintree{staticCssStyleCss, map[string]*bintree{}},
+			"tooltipster-shadow.css": &bintree{staticCssTooltipsterShadowCss, map[string]*bintree{}},
+			"tooltipster.css": &bintree{staticCssTooltipsterCss, map[string]*bintree{}},
+			"upgrade.css": &bintree{staticCssUpgradeCss, map[string]*bintree{}},
 		}},
 		"fonts": &bintree{nil, map[string]*bintree{
-			"FontAwesome.otf": &bintree{staticFontsFontawesomeOtf, map[string]*bintree{
-			}},
-			"OpenSans-Regular.ttf": &bintree{staticFontsOpensansRegularTtf, map[string]*bintree{
-			}},
-			"fontawesome-webfont.eot": &bintree{staticFontsFontawesomeWebfontEot, map[string]*bintree{
-			}},
-			"fontawesome-webfont.svg": &bintree{staticFontsFontawesomeWebfontSvg, map[string]*bintree{
-			}},
-			"fontawesome-webfont.ttf": &bintree{staticFontsFontawesomeWebfontTtf, map[string]*bintree{
-			}},
-			"fontawesome-webfont.woff": &bintree{staticFontsFontawesomeWebfontWoff, map[string]*bintree{
-			}},
-			"luxisr.ttf": &bintree{staticFontsLuxisrTtf, map[string]*bintree{
-			}},
+			"FontAwesome.otf": &bintree{staticFontsFontawesomeOtf, map[string]*bintree{}},
+			"OpenSans-Regular.ttf": &bintree{staticFontsOpensansRegularTtf, map[string]*bintree{}},
+			"fontawesome-webfont.eot": &bintree{staticFontsFontawesomeWebfontEot, map[string]*bintree{}},
+			"fontawesome-webfont.svg": &bintree{staticFontsFontawesomeWebfontSvg, map[string]*bintree{}},
+			"fontawesome-webfont.ttf": &bintree{staticFontsFontawesomeWebfontTtf, map[string]*bintree{}},
+			"fontawesome-webfont.woff": &bintree{staticFontsFontawesomeWebfontWoff, map[string]*bintree{}},
+			"luxisr.ttf": &bintree{staticFontsLuxisrTtf, map[string]*bintree{}},
 		}},
 		"img": &bintree{nil, map[string]*bintree{
-			".directory": &bintree{staticImgDirectory, map[string]*bintree{
-			}},
-			"alert.png": &bintree{staticImgAlertPng, map[string]*bintree{
-			}},
-			"anonim.png": &bintree{staticImgAnonimPng, map[string]*bintree{
-			}},
-			"blank.png": &bintree{staticImgBlankPng, map[string]*bintree{
-			}},
-			"cf_blurb_img.png": &bintree{staticImgCf_blurb_imgPng, map[string]*bintree{
-			}},
-			"face.jpg": &bintree{staticImgFaceJpg, map[string]*bintree{
-			}},
-			"glyphicons-halflings.png": &bintree{staticImgGlyphiconsHalflingsPng, map[string]*bintree{
-			}},
-			"k_bg.png": &bintree{staticImgK_bgPng, map[string]*bintree{
-			}},
-			"k_bg.psd": &bintree{staticImgK_bgPsd, map[string]*bintree{
-			}},
-			"k_bg_pass.png": &bintree{staticImgK_bg_passPng, map[string]*bintree{
-			}},
-			"k_db_pass.psd": &bintree{staticImgK_db_passPsd, map[string]*bintree{
-			}},
-			"load.gif": &bintree{staticImgLoadGif, map[string]*bintree{
-			}},
-			"logo-2.png": &bintree{staticImgLogo2Png, map[string]*bintree{
-			}},
-			"logo-small.png": &bintree{staticImgLogoSmallPng, map[string]*bintree{
-			}},
-			"logo.png": &bintree{staticImgLogoPng, map[string]*bintree{
-			}},
-			"main_loader.gif": &bintree{staticImgMain_loaderGif, map[string]*bintree{
-			}},
-			"noavatar.png": &bintree{staticImgNoavatarPng, map[string]*bintree{
-			}},
-			"pers.jpg": &bintree{staticImgPersJpg, map[string]*bintree{
-			}},
-			"photo.png": &bintree{staticImgPhotoPng, map[string]*bintree{
-			}},
-			"profile.jpg": &bintree{staticImgProfileJpg, map[string]*bintree{
-			}},
-			"progress.gif": &bintree{staticImgProgressGif, map[string]*bintree{
-			}},
-			"race.gif": &bintree{staticImgRaceGif, map[string]*bintree{
-			}},
-			"race_1.png": &bintree{staticImgRace_1Png, map[string]*bintree{
-			}},
-			"race_2.png": &bintree{staticImgRace_2Png, map[string]*bintree{
-			}},
-			"race_3.png": &bintree{staticImgRace_3Png, map[string]*bintree{
-			}},
-			"reduction.png": &bintree{staticImgReductionPng, map[string]*bintree{
-			}},
-			"rolling.gif": &bintree{staticImgRollingGif, map[string]*bintree{
-			}},
-			"squares.gif": &bintree{staticImgSquaresGif, map[string]*bintree{
-			}},
-			"squares2.gif": &bintree{staticImgSquares2Gif, map[string]*bintree{
-			}},
-			"stat.png": &bintree{staticImgStatPng, map[string]*bintree{
-			}},
-			"us-ru.png": &bintree{staticImgUsRuPng, map[string]*bintree{
-			}},
+			"alert.png": &bintree{staticImgAlertPng, map[string]*bintree{}},
+			"anonim.png": &bintree{staticImgAnonimPng, map[string]*bintree{}},
+			"blank.png": &bintree{staticImgBlankPng, map[string]*bintree{}},
+			"cf_blurb_img.png": &bintree{staticImgCf_blurb_imgPng, map[string]*bintree{}},
+			"face.jpg": &bintree{staticImgFaceJpg, map[string]*bintree{}},
+			"glyphicons-halflings.png": &bintree{staticImgGlyphiconsHalflingsPng, map[string]*bintree{}},
+			"k_bg.png": &bintree{staticImgK_bgPng, map[string]*bintree{}},
+			"k_bg.psd": &bintree{staticImgK_bgPsd, map[string]*bintree{}},
+			"k_bg_pass.png": &bintree{staticImgK_bg_passPng, map[string]*bintree{}},
+			"k_db_pass.psd": &bintree{staticImgK_db_passPsd, map[string]*bintree{}},
+			"load.gif": &bintree{staticImgLoadGif, map[string]*bintree{}},
+			"logo-2.png": &bintree{staticImgLogo2Png, map[string]*bintree{}},
+			"logo-small.png": &bintree{staticImgLogoSmallPng, map[string]*bintree{}},
+			"logo.png": &bintree{staticImgLogoPng, map[string]*bintree{}},
+			"main_loader.gif": &bintree{staticImgMain_loaderGif, map[string]*bintree{}},
+			"noavatar.png": &bintree{staticImgNoavatarPng, map[string]*bintree{}},
+			"pers.jpg": &bintree{staticImgPersJpg, map[string]*bintree{}},
+			"photo.png": &bintree{staticImgPhotoPng, map[string]*bintree{}},
+			"profile.jpg": &bintree{staticImgProfileJpg, map[string]*bintree{}},
+			"progress.gif": &bintree{staticImgProgressGif, map[string]*bintree{}},
+			"race.gif": &bintree{staticImgRaceGif, map[string]*bintree{}},
+			"race_1.png": &bintree{staticImgRace_1Png, map[string]*bintree{}},
+			"race_2.png": &bintree{staticImgRace_2Png, map[string]*bintree{}},
+			"race_3.png": &bintree{staticImgRace_3Png, map[string]*bintree{}},
+			"rolling.gif": &bintree{staticImgRollingGif, map[string]*bintree{}},
+			"squares.gif": &bintree{staticImgSquaresGif, map[string]*bintree{}},
+			"squares2.gif": &bintree{staticImgSquares2Gif, map[string]*bintree{}},
+			"stat.png": &bintree{staticImgStatPng, map[string]*bintree{}},
+			"us-ru.png": &bintree{staticImgUsRuPng, map[string]*bintree{}},
 		}},
 		"js": &bintree{nil, map[string]*bintree{
-			"Serpent.js": &bintree{staticJsSerpentJs, map[string]*bintree{
-			}},
-			"aes.js": &bintree{staticJsAesJs, map[string]*bintree{
-			}},
-			"asn1hex-1.1.js": &bintree{staticJsAsn1hex11Js, map[string]*bintree{
-			}},
-			"asn1hex-1.1.min.js": &bintree{staticJsAsn1hex11MinJs, map[string]*bintree{
-			}},
-			"asn1hex-1.js": &bintree{staticJsAsn1hex1Js, map[string]*bintree{
-			}},
-			"base64.js": &bintree{staticJsBase64Js, map[string]*bintree{
-			}},
-			"bootstrap-alert.js": &bintree{staticJsBootstrapAlertJs, map[string]*bintree{
-			}},
-			"bootstrap-button.js": &bintree{staticJsBootstrapButtonJs, map[string]*bintree{
-			}},
-			"bootstrap-carousel.js": &bintree{staticJsBootstrapCarouselJs, map[string]*bintree{
-			}},
-			"bootstrap-collapse.js": &bintree{staticJsBootstrapCollapseJs, map[string]*bintree{
-			}},
-			"bootstrap-dropdown.js": &bintree{staticJsBootstrapDropdownJs, map[string]*bintree{
-			}},
-			"bootstrap-modal.js": &bintree{staticJsBootstrapModalJs, map[string]*bintree{
-			}},
-			"bootstrap-popover.js": &bintree{staticJsBootstrapPopoverJs, map[string]*bintree{
-			}},
-			"bootstrap-scrollspy.js": &bintree{staticJsBootstrapScrollspyJs, map[string]*bintree{
-			}},
-			"bootstrap-tab.js": &bintree{staticJsBootstrapTabJs, map[string]*bintree{
-			}},
-			"bootstrap-tooltip.js": &bintree{staticJsBootstrapTooltipJs, map[string]*bintree{
-			}},
-			"bootstrap-transition.js": &bintree{staticJsBootstrapTransitionJs, map[string]*bintree{
-			}},
-			"bootstrap-typeahead.js": &bintree{staticJsBootstrapTypeaheadJs, map[string]*bintree{
-			}},
-			"bootstrap.min.js": &bintree{staticJsBootstrapMinJs, map[string]*bintree{
-			}},
-			"chat.js": &bintree{staticJsChatJs, map[string]*bintree{
-			}},
-			"cropper.js": &bintree{staticJsCropperJs, map[string]*bintree{
-			}},
-			"crypto-js-aes.js": &bintree{staticJsCryptoJsAesJs, map[string]*bintree{
-			}},
-			"crypto-js-mode-ecb.js": &bintree{staticJsCryptoJsModeEcbJs, map[string]*bintree{
-			}},
-			"crypto-js-pad-iso10126.js": &bintree{staticJsCryptoJsPadIso10126Js, map[string]*bintree{
-			}},
-			"dataTables.bootstrap.js": &bintree{staticJsDatatablesBootstrapJs, map[string]*bintree{
-			}},
+			"Serpent.js": &bintree{staticJsSerpentJs, map[string]*bintree{}},
+			"aes.js": &bintree{staticJsAesJs, map[string]*bintree{}},
+			"asn1hex-1.1.js": &bintree{staticJsAsn1hex11Js, map[string]*bintree{}},
+			"asn1hex-1.1.min.js": &bintree{staticJsAsn1hex11MinJs, map[string]*bintree{}},
+			"asn1hex-1.js": &bintree{staticJsAsn1hex1Js, map[string]*bintree{}},
+			"base64.js": &bintree{staticJsBase64Js, map[string]*bintree{}},
+			"bootstrap-alert.js": &bintree{staticJsBootstrapAlertJs, map[string]*bintree{}},
+			"bootstrap-button.js": &bintree{staticJsBootstrapButtonJs, map[string]*bintree{}},
+			"bootstrap-carousel.js": &bintree{staticJsBootstrapCarouselJs, map[string]*bintree{}},
+			"bootstrap-collapse.js": &bintree{staticJsBootstrapCollapseJs, map[string]*bintree{}},
+			"bootstrap-dropdown.js": &bintree{staticJsBootstrapDropdownJs, map[string]*bintree{}},
+			"bootstrap-modal.js": &bintree{staticJsBootstrapModalJs, map[string]*bintree{}},
+			"bootstrap-popover.js": &bintree{staticJsBootstrapPopoverJs, map[string]*bintree{}},
+			"bootstrap-scrollspy.js": &bintree{staticJsBootstrapScrollspyJs, map[string]*bintree{}},
+			"bootstrap-tab.js": &bintree{staticJsBootstrapTabJs, map[string]*bintree{}},
+			"bootstrap-tooltip.js": &bintree{staticJsBootstrapTooltipJs, map[string]*bintree{}},
+			"bootstrap-transition.js": &bintree{staticJsBootstrapTransitionJs, map[string]*bintree{}},
+			"bootstrap-typeahead.js": &bintree{staticJsBootstrapTypeaheadJs, map[string]*bintree{}},
+			"bootstrap.min.js": &bintree{staticJsBootstrapMinJs, map[string]*bintree{}},
+			"chat.js": &bintree{staticJsChatJs, map[string]*bintree{}},
+			"cropper.js": &bintree{staticJsCropperJs, map[string]*bintree{}},
+			"crypto-js-aes.js": &bintree{staticJsCryptoJsAesJs, map[string]*bintree{}},
+			"crypto-js-mode-ecb.js": &bintree{staticJsCryptoJsModeEcbJs, map[string]*bintree{}},
+			"crypto-js-pad-iso10126.js": &bintree{staticJsCryptoJsPadIso10126Js, map[string]*bintree{}},
+			"dataTables.bootstrap.js": &bintree{staticJsDatatablesBootstrapJs, map[string]*bintree{}},
 			"demo": &bintree{nil, map[string]*bintree{
-				"flot-demo.js": &bintree{staticJsDemoFlotDemoJs, map[string]*bintree{
-				}},
+				"flot-demo.js": &bintree{staticJsDemoFlotDemoJs, map[string]*bintree{}},
 			}},
-			"enc-base64-min.js": &bintree{staticJsEncBase64MinJs, map[string]*bintree{
-			}},
-			"hex2a.js": &bintree{staticJsHex2aJs, map[string]*bintree{
-			}},
-			"html5shiv.js": &bintree{staticJsHtml5shivJs, map[string]*bintree{
-			}},
-			"index.js": &bintree{staticJsIndexJs, map[string]*bintree{
-			}},
-			"infobubble.js": &bintree{staticJsInfobubbleJs, map[string]*bintree{
-			}},
-			"jquery-1.10.2.js": &bintree{staticJsJquery1102Js, map[string]*bintree{
-			}},
-			"jquery-1.11.0.js": &bintree{staticJsJquery1110Js, map[string]*bintree{
-			}},
-			"jquery-1.9.1.min.js": &bintree{staticJsJquery191MinJs, map[string]*bintree{
-			}},
-			"jquery-ui-sliderAccess.js": &bintree{staticJsJqueryUiSlideraccessJs, map[string]*bintree{
-			}},
-			"jquery-ui-timepicker-addon.js": &bintree{staticJsJqueryUiTimepickerAddonJs, map[string]*bintree{
-			}},
-			"jquery-ui.min.js": &bintree{staticJsJqueryUiMinJs, map[string]*bintree{
-			}},
-			"jquery.Jcrop.js": &bintree{staticJsJqueryJcropJs, map[string]*bintree{
-			}},
-			"jquery.dataTables.js": &bintree{staticJsJqueryDatatablesJs, map[string]*bintree{
-			}},
-			"jquery.flot.js": &bintree{staticJsJqueryFlotJs, map[string]*bintree{
-			}},
-			"jquery.js": &bintree{staticJsJqueryJs, map[string]*bintree{
-			}},
-			"jquery.metisMenu.js": &bintree{staticJsJqueryMetismenuJs, map[string]*bintree{
-			}},
-			"jquery.min.js": &bintree{staticJsJqueryMinJs, map[string]*bintree{
-			}},
-			"jquery.qtip.min.js": &bintree{staticJsJqueryQtipMinJs, map[string]*bintree{
-			}},
-			"jquery.tooltipster.min.js": &bintree{staticJsJqueryTooltipsterMinJs, map[string]*bintree{
-			}},
-			"jquery.webcam.as3.js": &bintree{staticJsJqueryWebcamAs3Js, map[string]*bintree{
-			}},
-			"jquery_002.js": &bintree{staticJsJquery_002Js, map[string]*bintree{
-			}},
-			"js.js": &bintree{staticJsJsJs, map[string]*bintree{
-			}},
-			"jsbn.js": &bintree{staticJsJsbnJs, map[string]*bintree{
-			}},
-			"jsbn2.js": &bintree{staticJsJsbn2Js, map[string]*bintree{
-			}},
-			"markerclusterer.js": &bintree{staticJsMarkerclustererJs, map[string]*bintree{
-			}},
-			"mcrypt.js": &bintree{staticJsMcryptJs, map[string]*bintree{
-			}},
-			"md5.js": &bintree{staticJsMd5Js, map[string]*bintree{
-			}},
+			"enc-base64-min.js": &bintree{staticJsEncBase64MinJs, map[string]*bintree{}},
+			"hex2a.js": &bintree{staticJsHex2aJs, map[string]*bintree{}},
+			"html5shiv.js": &bintree{staticJsHtml5shivJs, map[string]*bintree{}},
+			"index.js": &bintree{staticJsIndexJs, map[string]*bintree{}},
+			"infobubble.js": &bintree{staticJsInfobubbleJs, map[string]*bintree{}},
+			"jquery-1.10.2.js": &bintree{staticJsJquery1102Js, map[string]*bintree{}},
+			"jquery-1.11.0.js": &bintree{staticJsJquery1110Js, map[string]*bintree{}},
+			"jquery-1.9.1.min.js": &bintree{staticJsJquery191MinJs, map[string]*bintree{}},
+			"jquery-ui-sliderAccess.js": &bintree{staticJsJqueryUiSlideraccessJs, map[string]*bintree{}},
+			"jquery-ui-timepicker-addon.js": &bintree{staticJsJqueryUiTimepickerAddonJs, map[string]*bintree{}},
+			"jquery-ui.min.js": &bintree{staticJsJqueryUiMinJs, map[string]*bintree{}},
+			"jquery.Jcrop.js": &bintree{staticJsJqueryJcropJs, map[string]*bintree{}},
+			"jquery.dataTables.js": &bintree{staticJsJqueryDatatablesJs, map[string]*bintree{}},
+			"jquery.flot.js": &bintree{staticJsJqueryFlotJs, map[string]*bintree{}},
+			"jquery.js": &bintree{staticJsJqueryJs, map[string]*bintree{}},
+			"jquery.metisMenu.js": &bintree{staticJsJqueryMetismenuJs, map[string]*bintree{}},
+			"jquery.min.js": &bintree{staticJsJqueryMinJs, map[string]*bintree{}},
+			"jquery.qtip.min.js": &bintree{staticJsJqueryQtipMinJs, map[string]*bintree{}},
+			"jquery.tooltipster.min.js": &bintree{staticJsJqueryTooltipsterMinJs, map[string]*bintree{}},
+			"jquery.webcam.as3.js": &bintree{staticJsJqueryWebcamAs3Js, map[string]*bintree{}},
+			"jquery_002.js": &bintree{staticJsJquery_002Js, map[string]*bintree{}},
+			"js.js": &bintree{staticJsJsJs, map[string]*bintree{}},
+			"jsbn.js": &bintree{staticJsJsbnJs, map[string]*bintree{}},
+			"jsbn2.js": &bintree{staticJsJsbn2Js, map[string]*bintree{}},
+			"markerclusterer.js": &bintree{staticJsMarkerclustererJs, map[string]*bintree{}},
+			"mcrypt.js": &bintree{staticJsMcryptJs, map[string]*bintree{}},
+			"md5.js": &bintree{staticJsMd5Js, map[string]*bintree{}},
+			"oms.min.js": &bintree{staticJsOmsMinJs, map[string]*bintree{}},
 			"plugins": &bintree{nil, map[string]*bintree{
 				"flot": &bintree{nil, map[string]*bintree{
-					"excanvas.min.js": &bintree{staticJsPluginsFlotExcanvasMinJs, map[string]*bintree{
-					}},
-					"jquery.flot.js": &bintree{staticJsPluginsFlotJqueryFlotJs, map[string]*bintree{
-					}},
-					"jquery.flot.pie.js": &bintree{staticJsPluginsFlotJqueryFlotPieJs, map[string]*bintree{
-					}},
-					"jquery.flot.resize.js": &bintree{staticJsPluginsFlotJqueryFlotResizeJs, map[string]*bintree{
-					}},
-					"jquery.flot.tooltip.min.js": &bintree{staticJsPluginsFlotJqueryFlotTooltipMinJs, map[string]*bintree{
-					}},
+					"excanvas.min.js": &bintree{staticJsPluginsFlotExcanvasMinJs, map[string]*bintree{}},
+					"jquery.flot.js": &bintree{staticJsPluginsFlotJqueryFlotJs, map[string]*bintree{}},
+					"jquery.flot.pie.js": &bintree{staticJsPluginsFlotJqueryFlotPieJs, map[string]*bintree{}},
+					"jquery.flot.resize.js": &bintree{staticJsPluginsFlotJqueryFlotResizeJs, map[string]*bintree{}},
+					"jquery.flot.tooltip.min.js": &bintree{staticJsPluginsFlotJqueryFlotTooltipMinJs, map[string]*bintree{}},
 				}},
 				"metisMenu": &bintree{nil, map[string]*bintree{
-					"metisMenu.min.js": &bintree{staticJsPluginsMetismenuMetismenuMinJs, map[string]*bintree{
-					}},
+					"metisMenu.min.js": &bintree{staticJsPluginsMetismenuMetismenuMinJs, map[string]*bintree{}},
 				}},
 				"modal": &bintree{nil, map[string]*bintree{
-					"bootstrap-modal.js": &bintree{staticJsPluginsModalBootstrapModalJs, map[string]*bintree{
-					}},
-					"bootstrap-modalmanager.js": &bintree{staticJsPluginsModalBootstrapModalmanagerJs, map[string]*bintree{
-					}},
+					"bootstrap-modal.js": &bintree{staticJsPluginsModalBootstrapModalJs, map[string]*bintree{}},
+					"bootstrap-modalmanager.js": &bintree{staticJsPluginsModalBootstrapModalmanagerJs, map[string]*bintree{}},
 				}},
 			}},
-			"prng4.js": &bintree{staticJsPrng4Js, map[string]*bintree{
-			}},
-			"respond.min.js": &bintree{staticJsRespondMinJs, map[string]*bintree{
-			}},
-			"rijndael.js": &bintree{staticJsRijndaelJs, map[string]*bintree{
-			}},
-			"ripemd160.js": &bintree{staticJsRipemd160Js, map[string]*bintree{
-			}},
-			"rng.js": &bintree{staticJsRngJs, map[string]*bintree{
-			}},
-			"rsa.js": &bintree{staticJsRsaJs, map[string]*bintree{
-			}},
-			"rsa2.js": &bintree{staticJsRsa2Js, map[string]*bintree{
-			}},
-			"rsapem-1.1.js": &bintree{staticJsRsapem11Js, map[string]*bintree{
-			}},
-			"rsapem-1.1.min.js": &bintree{staticJsRsapem11MinJs, map[string]*bintree{
-			}},
-			"rsapem-1.js": &bintree{staticJsRsapem1Js, map[string]*bintree{
-			}},
-			"rsasign-1.2.js": &bintree{staticJsRsasign12Js, map[string]*bintree{
-			}},
-			"rsasign-1.2.min.js": &bintree{staticJsRsasign12MinJs, map[string]*bintree{
-			}},
-			"rsasign-1.js": &bintree{staticJsRsasign1Js, map[string]*bintree{
-			}},
-			"sAS3Cam.js": &bintree{staticJsSas3camJs, map[string]*bintree{
-			}},
-			"sb-admin-2.js": &bintree{staticJsSbAdmin2Js, map[string]*bintree{
-			}},
-			"sb-admin.js": &bintree{staticJsSbAdminJs, map[string]*bintree{
-			}},
-			"sha1.js": &bintree{staticJsSha1Js, map[string]*bintree{
-			}},
-			"sha256.js": &bintree{staticJsSha256Js, map[string]*bintree{
-			}},
-			"sha512.js": &bintree{staticJsSha512Js, map[string]*bintree{
-			}},
-			"spin.js": &bintree{staticJsSpinJs, map[string]*bintree{
-			}},
-			"spots.js": &bintree{staticJsSpotsJs, map[string]*bintree{
-			}},
-			"stacktable.js": &bintree{staticJsStacktableJs, map[string]*bintree{
-			}},
-			"unixtime.js": &bintree{staticJsUnixtimeJs, map[string]*bintree{
-			}},
-			"uploader.js": &bintree{staticJsUploaderJs, map[string]*bintree{
-			}},
-			"worker.js": &bintree{staticJsWorkerJs, map[string]*bintree{
-			}},
-			"x509-1.1.js": &bintree{staticJsX50911Js, map[string]*bintree{
-			}},
-			"x509-1.1.min.js": &bintree{staticJsX50911MinJs, map[string]*bintree{
-			}},
-			"youtube_webcam.js": &bintree{staticJsYoutube_webcamJs, map[string]*bintree{
-			}},
+			"prng4.js": &bintree{staticJsPrng4Js, map[string]*bintree{}},
+			"respond.min.js": &bintree{staticJsRespondMinJs, map[string]*bintree{}},
+			"rijndael.js": &bintree{staticJsRijndaelJs, map[string]*bintree{}},
+			"ripemd160.js": &bintree{staticJsRipemd160Js, map[string]*bintree{}},
+			"rng.js": &bintree{staticJsRngJs, map[string]*bintree{}},
+			"rsa.js": &bintree{staticJsRsaJs, map[string]*bintree{}},
+			"rsa2.js": &bintree{staticJsRsa2Js, map[string]*bintree{}},
+			"rsapem-1.1.js": &bintree{staticJsRsapem11Js, map[string]*bintree{}},
+			"rsapem-1.1.min.js": &bintree{staticJsRsapem11MinJs, map[string]*bintree{}},
+			"rsapem-1.js": &bintree{staticJsRsapem1Js, map[string]*bintree{}},
+			"rsasign-1.2.js": &bintree{staticJsRsasign12Js, map[string]*bintree{}},
+			"rsasign-1.2.min.js": &bintree{staticJsRsasign12MinJs, map[string]*bintree{}},
+			"rsasign-1.js": &bintree{staticJsRsasign1Js, map[string]*bintree{}},
+			"sAS3Cam.js": &bintree{staticJsSas3camJs, map[string]*bintree{}},
+			"sb-admin-2.js": &bintree{staticJsSbAdmin2Js, map[string]*bintree{}},
+			"sb-admin.js": &bintree{staticJsSbAdminJs, map[string]*bintree{}},
+			"sha1.js": &bintree{staticJsSha1Js, map[string]*bintree{}},
+			"sha256.js": &bintree{staticJsSha256Js, map[string]*bintree{}},
+			"sha512.js": &bintree{staticJsSha512Js, map[string]*bintree{}},
+			"spin.js": &bintree{staticJsSpinJs, map[string]*bintree{}},
+			"spots.js": &bintree{staticJsSpotsJs, map[string]*bintree{}},
+			"stacktable.js": &bintree{staticJsStacktableJs, map[string]*bintree{}},
+			"unixtime.js": &bintree{staticJsUnixtimeJs, map[string]*bintree{}},
+			"uploader.js": &bintree{staticJsUploaderJs, map[string]*bintree{}},
+			"worker.js": &bintree{staticJsWorkerJs, map[string]*bintree{}},
+			"x509-1.1.js": &bintree{staticJsX50911Js, map[string]*bintree{}},
+			"x509-1.1.min.js": &bintree{staticJsX50911MinJs, map[string]*bintree{}},
+			"youtube_webcam.js": &bintree{staticJsYoutube_webcamJs, map[string]*bintree{}},
 		}},
 		"lang": &bintree{nil, map[string]*bintree{
-			"1.ini": &bintree{staticLang1Ini, map[string]*bintree{
-			}},
-			"42.ini": &bintree{staticLang42Ini, map[string]*bintree{
-			}},
-			"en-us.all.json": &bintree{staticLangEnUsAllJson, map[string]*bintree{
-			}},
-			"locale_en-US.ini": &bintree{staticLangLocale_enUsIni, map[string]*bintree{
-			}},
-			"locale_ru-RU.ini": &bintree{staticLangLocale_ruRuIni, map[string]*bintree{
-			}},
+			"1.ini": &bintree{staticLang1Ini, map[string]*bintree{}},
+			"42.ini": &bintree{staticLang42Ini, map[string]*bintree{}},
+			"en-us.all.json": &bintree{staticLangEnUsAllJson, map[string]*bintree{}},
+			"locale_en-US.ini": &bintree{staticLangLocale_enUsIni, map[string]*bintree{}},
+			"locale_ru-RU.ini": &bintree{staticLangLocale_ruRuIni, map[string]*bintree{}},
 		}},
-		"nodes.inc": &bintree{staticNodesInc, map[string]*bintree{
-		}},
+		"nodes.inc": &bintree{staticNodesInc, map[string]*bintree{}},
 		"sass": &bintree{nil, map[string]*bintree{
 			"addons": &bintree{nil, map[string]*bintree{
-				"_mixins.scss": &bintree{staticSassAddons_mixinsScss, map[string]*bintree{
-				}},
+				"_mixins.scss": &bintree{staticSassAddons_mixinsScss, map[string]*bintree{}},
 			}},
 			"pages": &bintree{nil, map[string]*bintree{
-				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{
-				}},
-				"_install_step_0.scss": &bintree{staticSassPages_install_step_0Scss, map[string]*bintree{
-				}},
-				"_mining_menu.scss": &bintree{staticSassPages_mining_menuScss, map[string]*bintree{
-				}},
-				"_new_promised_amount.scss": &bintree{staticSassPages_new_promised_amountScss, map[string]*bintree{
-				}},
-				"_new_user.scss": &bintree{staticSassPages_new_userScss, map[string]*bintree{
-				}},
+				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{}},
+				"_install_step_0.scss": &bintree{staticSassPages_install_step_0Scss, map[string]*bintree{}},
+				"_mining_menu.scss": &bintree{staticSassPages_mining_menuScss, map[string]*bintree{}},
+				"_new_promised_amount.scss": &bintree{staticSassPages_new_promised_amountScss, map[string]*bintree{}},
+				"_new_user.scss": &bintree{staticSassPages_new_userScss, map[string]*bintree{}},
 			}},
-			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{
-			}},
+			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{}},
 		}},
 		"swf": &bintree{nil, map[string]*bintree{
-			"sAS3Cam.swf": &bintree{staticSwfSas3camSwf, map[string]*bintree{
-			}},
+			"sAS3Cam.swf": &bintree{staticSwfSas3camSwf, map[string]*bintree{}},
 		}},
 		"templates": &bintree{nil, map[string]*bintree{
-			".directory": &bintree{staticTemplatesDirectory, map[string]*bintree{
-			}},
-			"abuse.html": &bintree{staticTemplatesAbuseHtml, map[string]*bintree{
-			}},
-			"add_cf_project_data.html": &bintree{staticTemplatesAdd_cf_project_dataHtml, map[string]*bintree{
-			}},
-			"admin_variables.html": &bintree{staticTemplatesAdmin_variablesHtml, map[string]*bintree{
-			}},
-			"alert_success.html": &bintree{staticTemplatesAlert_successHtml, map[string]*bintree{
-			}},
-			"arbitration.html": &bintree{staticTemplatesArbitrationHtml, map[string]*bintree{
-			}},
-			"arbitration_arbitrator.html": &bintree{staticTemplatesArbitration_arbitratorHtml, map[string]*bintree{
-			}},
-			"arbitration_buyer.html": &bintree{staticTemplatesArbitration_buyerHtml, map[string]*bintree{
-			}},
-			"arbitration_seller.html": &bintree{staticTemplatesArbitration_sellerHtml, map[string]*bintree{
-			}},
-			"assignments.html": &bintree{staticTemplatesAssignmentsHtml, map[string]*bintree{
-			}},
-			"assignments_new_miner.html": &bintree{staticTemplatesAssignments_new_minerHtml, map[string]*bintree{
-			}},
-			"assignments_promised_amount.html": &bintree{staticTemplatesAssignments_promised_amountHtml, map[string]*bintree{
-			}},
-			"auto_payments.html": &bintree{staticTemplatesAuto_paymentsHtml, map[string]*bintree{
-			}},
-			"available_keys.html": &bintree{staticTemplatesAvailable_keysHtml, map[string]*bintree{
-			}},
-			"block_explorer.html": &bintree{staticTemplatesBlock_explorerHtml, map[string]*bintree{
-			}},
-			"bug_reporting.html": &bintree{staticTemplatesBug_reportingHtml, map[string]*bintree{
-			}},
-			"cash_request_in.html": &bintree{staticTemplatesCash_request_inHtml, map[string]*bintree{
-			}},
-			"cash_request_out.html": &bintree{staticTemplatesCash_request_outHtml, map[string]*bintree{
-			}},
-			"cf_catalog.html": &bintree{staticTemplatesCf_catalogHtml, map[string]*bintree{
-			}},
-			"cf_page_preview.html": &bintree{staticTemplatesCf_page_previewHtml, map[string]*bintree{
-			}},
-			"cf_project_change_category.html": &bintree{staticTemplatesCf_project_change_categoryHtml, map[string]*bintree{
-			}},
-			"cf_start.html": &bintree{staticTemplatesCf_startHtml, map[string]*bintree{
-			}},
-			"change_arbitrator_conditions.html": &bintree{staticTemplatesChange_arbitrator_conditionsHtml, map[string]*bintree{
-			}},
-			"change_avatar.html": &bintree{staticTemplatesChange_avatarHtml, map[string]*bintree{
-			}},
-			"change_commission.html": &bintree{staticTemplatesChange_commissionHtml, map[string]*bintree{
-			}},
-			"change_country_race.html": &bintree{staticTemplatesChange_country_raceHtml, map[string]*bintree{
-			}},
-			"change_creditor.html": &bintree{staticTemplatesChange_creditorHtml, map[string]*bintree{
-			}},
-			"change_geolocation.html": &bintree{staticTemplatesChange_geolocationHtml, map[string]*bintree{
-			}},
-			"change_host.html": &bintree{staticTemplatesChange_hostHtml, map[string]*bintree{
-			}},
-			"change_key_close.html": &bintree{staticTemplatesChange_key_closeHtml, map[string]*bintree{
-			}},
-			"change_key_request.html": &bintree{staticTemplatesChange_key_requestHtml, map[string]*bintree{
-			}},
-			"change_money_back_time.html": &bintree{staticTemplatesChange_money_back_timeHtml, map[string]*bintree{
-			}},
-			"change_node_key.html": &bintree{staticTemplatesChange_node_keyHtml, map[string]*bintree{
-			}},
-			"change_pool.html": &bintree{staticTemplatesChange_poolHtml, map[string]*bintree{
-			}},
-			"change_primary_key.html": &bintree{staticTemplatesChange_primary_keyHtml, map[string]*bintree{
-			}},
-			"change_promised_amount.html": &bintree{staticTemplatesChange_promised_amountHtml, map[string]*bintree{
-			}},
-			"chart.html": &bintree{staticTemplatesChartHtml, map[string]*bintree{
-			}},
-			"chat.html": &bintree{staticTemplatesChatHtml, map[string]*bintree{
-			}},
-			"credits.html": &bintree{staticTemplatesCreditsHtml, map[string]*bintree{
-			}},
-			"currency_exchange.html": &bintree{staticTemplatesCurrency_exchangeHtml, map[string]*bintree{
-			}},
-			"currency_exchange_delete.html": &bintree{staticTemplatesCurrency_exchange_deleteHtml, map[string]*bintree{
-			}},
-			"db_info.html": &bintree{staticTemplatesDb_infoHtml, map[string]*bintree{
-			}},
-			"db_info_nodes.html": &bintree{staticTemplatesDb_info_nodesHtml, map[string]*bintree{
-			}},
-			"del_auto_payment.html": &bintree{staticTemplatesDel_auto_paymentHtml, map[string]*bintree{
-			}},
-			"del_cf_funding.html": &bintree{staticTemplatesDel_cf_fundingHtml, map[string]*bintree{
-			}},
-			"del_cf_project.html": &bintree{staticTemplatesDel_cf_projectHtml, map[string]*bintree{
-			}},
-			"del_credit.html": &bintree{staticTemplatesDel_creditHtml, map[string]*bintree{
-			}},
-			"del_pool_user.html": &bintree{staticTemplatesDel_pool_userHtml, map[string]*bintree{
-			}},
-			"del_promised_amount.html": &bintree{staticTemplatesDel_promised_amountHtml, map[string]*bintree{
-			}},
-			"e_main.html": &bintree{staticTemplatesE_mainHtml, map[string]*bintree{
-			}},
-			"e_my_finance.html": &bintree{staticTemplatesE_my_financeHtml, map[string]*bintree{
-			}},
-			"e_my_history.html": &bintree{staticTemplatesE_my_historyHtml, map[string]*bintree{
-			}},
-			"e_my_orders.html": &bintree{staticTemplatesE_my_ordersHtml, map[string]*bintree{
-			}},
-			"e_pages.html": &bintree{staticTemplatesE_pagesHtml, map[string]*bintree{
-			}},
-			"e_redirect.html": &bintree{staticTemplatesE_redirectHtml, map[string]*bintree{
-			}},
-			"exchange_admin.html": &bintree{staticTemplatesExchange_adminHtml, map[string]*bintree{
-			}},
-			"first_select.html": &bintree{staticTemplatesFirst_selectHtml, map[string]*bintree{
-			}},
-			"for_repaid_fix.html": &bintree{staticTemplatesFor_repaid_fixHtml, map[string]*bintree{
-			}},
-			"holidays_list.html": &bintree{staticTemplatesHolidays_listHtml, map[string]*bintree{
-			}},
-			"home.html": &bintree{staticTemplatesHomeHtml, map[string]*bintree{
-			}},
-			"home0.html": &bintree{staticTemplatesHome0Html, map[string]*bintree{
-			}},
-			"index.html": &bintree{staticTemplatesIndexHtml, map[string]*bintree{
-			}},
-			"index_cf.html": &bintree{staticTemplatesIndex_cfHtml, map[string]*bintree{
-			}},
-			"index_e.html": &bintree{staticTemplatesIndex_eHtml, map[string]*bintree{
-			}},
-			"information.html": &bintree{staticTemplatesInformationHtml, map[string]*bintree{
-			}},
-			"install_step_0.html": &bintree{staticTemplatesInstall_step_0Html, map[string]*bintree{
-			}},
-			"install_step_1.html": &bintree{staticTemplatesInstall_step_1Html, map[string]*bintree{
-			}},
-			"interface.html": &bintree{staticTemplatesInterfaceHtml, map[string]*bintree{
-			}},
-			"login.html": &bintree{staticTemplatesLoginHtml, map[string]*bintree{
-			}},
-			"menu.html": &bintree{staticTemplatesMenuHtml, map[string]*bintree{
-			}},
-			"mining_menu.html": &bintree{staticTemplatesMining_menuHtml, map[string]*bintree{
-			}},
-			"mining_promised_amount.html": &bintree{staticTemplatesMining_promised_amountHtml, map[string]*bintree{
-			}},
-			"modal.html": &bintree{staticTemplatesModalHtml, map[string]*bintree{
-			}},
-			"money_back.html": &bintree{staticTemplatesMoney_backHtml, map[string]*bintree{
-			}},
-			"money_back_request.html": &bintree{staticTemplatesMoney_back_requestHtml, map[string]*bintree{
-			}},
-			"my_cf_projects.html": &bintree{staticTemplatesMy_cf_projectsHtml, map[string]*bintree{
-			}},
-			"new_auto_payment.html": &bintree{staticTemplatesNew_auto_paymentHtml, map[string]*bintree{
-			}},
-			"new_cf_project.html": &bintree{staticTemplatesNew_cf_projectHtml, map[string]*bintree{
-			}},
-			"new_credit.html": &bintree{staticTemplatesNew_creditHtml, map[string]*bintree{
-			}},
-			"new_holidays.html": &bintree{staticTemplatesNew_holidaysHtml, map[string]*bintree{
-			}},
-			"new_promised_amount.html": &bintree{staticTemplatesNew_promised_amountHtml, map[string]*bintree{
-			}},
-			"new_user.html": &bintree{staticTemplatesNew_userHtml, map[string]*bintree{
-			}},
-			"node_config.html": &bintree{staticTemplatesNode_configHtml, map[string]*bintree{
-			}},
-			"notifications.html": &bintree{staticTemplatesNotificationsHtml, map[string]*bintree{
-			}},
-			"points.html": &bintree{staticTemplatesPointsHtml, map[string]*bintree{
-			}},
-			"pool_admin.html": &bintree{staticTemplatesPool_adminHtml, map[string]*bintree{
-			}},
-			"pool_admin_login.html": &bintree{staticTemplatesPool_admin_loginHtml, map[string]*bintree{
-			}},
-			"progress.html": &bintree{staticTemplatesProgressHtml, map[string]*bintree{
-			}},
-			"progress_bar.html": &bintree{staticTemplatesProgress_barHtml, map[string]*bintree{
-			}},
-			"promised_amount_actualization.html": &bintree{staticTemplatesPromised_amount_actualizationHtml, map[string]*bintree{
-			}},
-			"promised_amount_list.html": &bintree{staticTemplatesPromised_amount_listHtml, map[string]*bintree{
-			}},
-			"promised_amount_restricted.html": &bintree{staticTemplatesPromised_amount_restrictedHtml, map[string]*bintree{
-			}},
-			"promised_amount_restricted_list.html": &bintree{staticTemplatesPromised_amount_restricted_listHtml, map[string]*bintree{
-			}},
-			"repayment_credit.html": &bintree{staticTemplatesRepayment_creditHtml, map[string]*bintree{
-			}},
-			"restoring_access.html": &bintree{staticTemplatesRestoring_accessHtml, map[string]*bintree{
-			}},
-			"rewrite_primary_key.html": &bintree{staticTemplatesRewrite_primary_keyHtml, map[string]*bintree{
-			}},
-			"set_password.html": &bintree{staticTemplatesSet_passwordHtml, map[string]*bintree{
-			}},
-			"setup_password.html": &bintree{staticTemplatesSetup_passwordHtml, map[string]*bintree{
-			}},
-			"sign_up_in_the_pool.html": &bintree{staticTemplatesSign_up_in_the_poolHtml, map[string]*bintree{
-			}},
-			"signatures.html": &bintree{staticTemplatesSignaturesHtml, map[string]*bintree{
-			}},
-			"statistic.html": &bintree{staticTemplatesStatisticHtml, map[string]*bintree{
-			}},
-			"statistic_voting.html": &bintree{staticTemplatesStatistic_votingHtml, map[string]*bintree{
-			}},
-			"updating_blockchain.html": &bintree{staticTemplatesUpdating_blockchainHtml, map[string]*bintree{
-			}},
-			"upgrade.html": &bintree{staticTemplatesUpgradeHtml, map[string]*bintree{
-			}},
-			"upgrade_0.html": &bintree{staticTemplatesUpgrade_0Html, map[string]*bintree{
-			}},
-			"upgrade_1_and_2.html": &bintree{staticTemplatesUpgrade_1_and_2Html, map[string]*bintree{
-			}},
-			"upgrade_3.html": &bintree{staticTemplatesUpgrade_3Html, map[string]*bintree{
-			}},
-			"upgrade_4.html": &bintree{staticTemplatesUpgrade_4Html, map[string]*bintree{
-			}},
-			"upgrade_5.html": &bintree{staticTemplatesUpgrade_5Html, map[string]*bintree{
-			}},
-			"upgrade_6.html": &bintree{staticTemplatesUpgrade_6Html, map[string]*bintree{
-			}},
-			"upgrade_7.html": &bintree{staticTemplatesUpgrade_7Html, map[string]*bintree{
-			}},
-			"upgrade_resend.html": &bintree{staticTemplatesUpgrade_resendHtml, map[string]*bintree{
-			}},
-			"vote_for_me.html": &bintree{staticTemplatesVote_for_meHtml, map[string]*bintree{
-			}},
-			"votes_exchange.html": &bintree{staticTemplatesVotes_exchangeHtml, map[string]*bintree{
-			}},
-			"voting.html": &bintree{staticTemplatesVotingHtml, map[string]*bintree{
-			}},
-			"waiting_accept_new_key.html": &bintree{staticTemplatesWaiting_accept_new_keyHtml, map[string]*bintree{
-			}},
-			"wallets_list.html": &bintree{staticTemplatesWallets_listHtml, map[string]*bintree{
-			}},
+			"abuse.html": &bintree{staticTemplatesAbuseHtml, map[string]*bintree{}},
+			"add_cf_project_data.html": &bintree{staticTemplatesAdd_cf_project_dataHtml, map[string]*bintree{}},
+			"admin_variables.html": &bintree{staticTemplatesAdmin_variablesHtml, map[string]*bintree{}},
+			"alert_success.html": &bintree{staticTemplatesAlert_successHtml, map[string]*bintree{}},
+			"arbitration.html": &bintree{staticTemplatesArbitrationHtml, map[string]*bintree{}},
+			"arbitration_arbitrator.html": &bintree{staticTemplatesArbitration_arbitratorHtml, map[string]*bintree{}},
+			"arbitration_buyer.html": &bintree{staticTemplatesArbitration_buyerHtml, map[string]*bintree{}},
+			"arbitration_seller.html": &bintree{staticTemplatesArbitration_sellerHtml, map[string]*bintree{}},
+			"assignments.html": &bintree{staticTemplatesAssignmentsHtml, map[string]*bintree{}},
+			"assignments_new_miner.html": &bintree{staticTemplatesAssignments_new_minerHtml, map[string]*bintree{}},
+			"assignments_promised_amount.html": &bintree{staticTemplatesAssignments_promised_amountHtml, map[string]*bintree{}},
+			"auto_payments.html": &bintree{staticTemplatesAuto_paymentsHtml, map[string]*bintree{}},
+			"available_keys.html": &bintree{staticTemplatesAvailable_keysHtml, map[string]*bintree{}},
+			"block_explorer.html": &bintree{staticTemplatesBlock_explorerHtml, map[string]*bintree{}},
+			"bug_reporting.html": &bintree{staticTemplatesBug_reportingHtml, map[string]*bintree{}},
+			"cash_request_in.html": &bintree{staticTemplatesCash_request_inHtml, map[string]*bintree{}},
+			"cash_request_out.html": &bintree{staticTemplatesCash_request_outHtml, map[string]*bintree{}},
+			"cf_catalog.html": &bintree{staticTemplatesCf_catalogHtml, map[string]*bintree{}},
+			"cf_page_preview.html": &bintree{staticTemplatesCf_page_previewHtml, map[string]*bintree{}},
+			"cf_project_change_category.html": &bintree{staticTemplatesCf_project_change_categoryHtml, map[string]*bintree{}},
+			"cf_start.html": &bintree{staticTemplatesCf_startHtml, map[string]*bintree{}},
+			"change_arbitrator_conditions.html": &bintree{staticTemplatesChange_arbitrator_conditionsHtml, map[string]*bintree{}},
+			"change_avatar.html": &bintree{staticTemplatesChange_avatarHtml, map[string]*bintree{}},
+			"change_commission.html": &bintree{staticTemplatesChange_commissionHtml, map[string]*bintree{}},
+			"change_country_race.html": &bintree{staticTemplatesChange_country_raceHtml, map[string]*bintree{}},
+			"change_creditor.html": &bintree{staticTemplatesChange_creditorHtml, map[string]*bintree{}},
+			"change_geolocation.html": &bintree{staticTemplatesChange_geolocationHtml, map[string]*bintree{}},
+			"change_host.html": &bintree{staticTemplatesChange_hostHtml, map[string]*bintree{}},
+			"change_key_close.html": &bintree{staticTemplatesChange_key_closeHtml, map[string]*bintree{}},
+			"change_key_request.html": &bintree{staticTemplatesChange_key_requestHtml, map[string]*bintree{}},
+			"change_money_back_time.html": &bintree{staticTemplatesChange_money_back_timeHtml, map[string]*bintree{}},
+			"change_node_key.html": &bintree{staticTemplatesChange_node_keyHtml, map[string]*bintree{}},
+			"change_pool.html": &bintree{staticTemplatesChange_poolHtml, map[string]*bintree{}},
+			"change_primary_key.html": &bintree{staticTemplatesChange_primary_keyHtml, map[string]*bintree{}},
+			"change_promised_amount.html": &bintree{staticTemplatesChange_promised_amountHtml, map[string]*bintree{}},
+			"chart.html": &bintree{staticTemplatesChartHtml, map[string]*bintree{}},
+			"chat.html": &bintree{staticTemplatesChatHtml, map[string]*bintree{}},
+			"credits.html": &bintree{staticTemplatesCreditsHtml, map[string]*bintree{}},
+			"currency_exchange.html": &bintree{staticTemplatesCurrency_exchangeHtml, map[string]*bintree{}},
+			"currency_exchange_delete.html": &bintree{staticTemplatesCurrency_exchange_deleteHtml, map[string]*bintree{}},
+			"db_info.html": &bintree{staticTemplatesDb_infoHtml, map[string]*bintree{}},
+			"db_info_nodes.html": &bintree{staticTemplatesDb_info_nodesHtml, map[string]*bintree{}},
+			"del_auto_payment.html": &bintree{staticTemplatesDel_auto_paymentHtml, map[string]*bintree{}},
+			"del_cf_funding.html": &bintree{staticTemplatesDel_cf_fundingHtml, map[string]*bintree{}},
+			"del_cf_project.html": &bintree{staticTemplatesDel_cf_projectHtml, map[string]*bintree{}},
+			"del_credit.html": &bintree{staticTemplatesDel_creditHtml, map[string]*bintree{}},
+			"del_pool_user.html": &bintree{staticTemplatesDel_pool_userHtml, map[string]*bintree{}},
+			"del_promised_amount.html": &bintree{staticTemplatesDel_promised_amountHtml, map[string]*bintree{}},
+			"e_main.html": &bintree{staticTemplatesE_mainHtml, map[string]*bintree{}},
+			"e_my_finance.html": &bintree{staticTemplatesE_my_financeHtml, map[string]*bintree{}},
+			"e_my_history.html": &bintree{staticTemplatesE_my_historyHtml, map[string]*bintree{}},
+			"e_my_orders.html": &bintree{staticTemplatesE_my_ordersHtml, map[string]*bintree{}},
+			"e_pages.html": &bintree{staticTemplatesE_pagesHtml, map[string]*bintree{}},
+			"e_redirect.html": &bintree{staticTemplatesE_redirectHtml, map[string]*bintree{}},
+			"exchange_admin.html": &bintree{staticTemplatesExchange_adminHtml, map[string]*bintree{}},
+			"first_select.html": &bintree{staticTemplatesFirst_selectHtml, map[string]*bintree{}},
+			"for_repaid_fix.html": &bintree{staticTemplatesFor_repaid_fixHtml, map[string]*bintree{}},
+			"holidays_list.html": &bintree{staticTemplatesHolidays_listHtml, map[string]*bintree{}},
+			"home.html": &bintree{staticTemplatesHomeHtml, map[string]*bintree{}},
+			"home0.html": &bintree{staticTemplatesHome0Html, map[string]*bintree{}},
+			"index.html": &bintree{staticTemplatesIndexHtml, map[string]*bintree{}},
+			"index_cf.html": &bintree{staticTemplatesIndex_cfHtml, map[string]*bintree{}},
+			"index_e.html": &bintree{staticTemplatesIndex_eHtml, map[string]*bintree{}},
+			"information.html": &bintree{staticTemplatesInformationHtml, map[string]*bintree{}},
+			"install_step_0.html": &bintree{staticTemplatesInstall_step_0Html, map[string]*bintree{}},
+			"install_step_1.html": &bintree{staticTemplatesInstall_step_1Html, map[string]*bintree{}},
+			"interface.html": &bintree{staticTemplatesInterfaceHtml, map[string]*bintree{}},
+			"login.html": &bintree{staticTemplatesLoginHtml, map[string]*bintree{}},
+			"menu.html": &bintree{staticTemplatesMenuHtml, map[string]*bintree{}},
+			"mining_menu.html": &bintree{staticTemplatesMining_menuHtml, map[string]*bintree{}},
+			"mining_promised_amount.html": &bintree{staticTemplatesMining_promised_amountHtml, map[string]*bintree{}},
+			"modal.html": &bintree{staticTemplatesModalHtml, map[string]*bintree{}},
+			"money_back.html": &bintree{staticTemplatesMoney_backHtml, map[string]*bintree{}},
+			"money_back_request.html": &bintree{staticTemplatesMoney_back_requestHtml, map[string]*bintree{}},
+			"my_cf_projects.html": &bintree{staticTemplatesMy_cf_projectsHtml, map[string]*bintree{}},
+			"new_auto_payment.html": &bintree{staticTemplatesNew_auto_paymentHtml, map[string]*bintree{}},
+			"new_cf_project.html": &bintree{staticTemplatesNew_cf_projectHtml, map[string]*bintree{}},
+			"new_credit.html": &bintree{staticTemplatesNew_creditHtml, map[string]*bintree{}},
+			"new_holidays.html": &bintree{staticTemplatesNew_holidaysHtml, map[string]*bintree{}},
+			"new_promised_amount.html": &bintree{staticTemplatesNew_promised_amountHtml, map[string]*bintree{}},
+			"new_user.html": &bintree{staticTemplatesNew_userHtml, map[string]*bintree{}},
+			"node_config.html": &bintree{staticTemplatesNode_configHtml, map[string]*bintree{}},
+			"notifications.html": &bintree{staticTemplatesNotificationsHtml, map[string]*bintree{}},
+			"points.html": &bintree{staticTemplatesPointsHtml, map[string]*bintree{}},
+			"pool_admin.html": &bintree{staticTemplatesPool_adminHtml, map[string]*bintree{}},
+			"pool_admin_login.html": &bintree{staticTemplatesPool_admin_loginHtml, map[string]*bintree{}},
+			"progress.html": &bintree{staticTemplatesProgressHtml, map[string]*bintree{}},
+			"progress_bar.html": &bintree{staticTemplatesProgress_barHtml, map[string]*bintree{}},
+			"promised_amount_actualization.html": &bintree{staticTemplatesPromised_amount_actualizationHtml, map[string]*bintree{}},
+			"promised_amount_list.html": &bintree{staticTemplatesPromised_amount_listHtml, map[string]*bintree{}},
+			"promised_amount_restricted.html": &bintree{staticTemplatesPromised_amount_restrictedHtml, map[string]*bintree{}},
+			"promised_amount_restricted_list.html": &bintree{staticTemplatesPromised_amount_restricted_listHtml, map[string]*bintree{}},
+			"repayment_credit.html": &bintree{staticTemplatesRepayment_creditHtml, map[string]*bintree{}},
+			"restoring_access.html": &bintree{staticTemplatesRestoring_accessHtml, map[string]*bintree{}},
+			"rewrite_primary_key.html": &bintree{staticTemplatesRewrite_primary_keyHtml, map[string]*bintree{}},
+			"set_password.html": &bintree{staticTemplatesSet_passwordHtml, map[string]*bintree{}},
+			"setup_password.html": &bintree{staticTemplatesSetup_passwordHtml, map[string]*bintree{}},
+			"sign_up_in_the_pool.html": &bintree{staticTemplatesSign_up_in_the_poolHtml, map[string]*bintree{}},
+			"signatures.html": &bintree{staticTemplatesSignaturesHtml, map[string]*bintree{}},
+			"statistic.html": &bintree{staticTemplatesStatisticHtml, map[string]*bintree{}},
+			"statistic_voting.html": &bintree{staticTemplatesStatistic_votingHtml, map[string]*bintree{}},
+			"updating_blockchain.html": &bintree{staticTemplatesUpdating_blockchainHtml, map[string]*bintree{}},
+			"upgrade.html": &bintree{staticTemplatesUpgradeHtml, map[string]*bintree{}},
+			"upgrade_0.html": &bintree{staticTemplatesUpgrade_0Html, map[string]*bintree{}},
+			"upgrade_1_and_2.html": &bintree{staticTemplatesUpgrade_1_and_2Html, map[string]*bintree{}},
+			"upgrade_3.html": &bintree{staticTemplatesUpgrade_3Html, map[string]*bintree{}},
+			"upgrade_4.html": &bintree{staticTemplatesUpgrade_4Html, map[string]*bintree{}},
+			"upgrade_5.html": &bintree{staticTemplatesUpgrade_5Html, map[string]*bintree{}},
+			"upgrade_6.html": &bintree{staticTemplatesUpgrade_6Html, map[string]*bintree{}},
+			"upgrade_7.html": &bintree{staticTemplatesUpgrade_7Html, map[string]*bintree{}},
+			"upgrade_resend.html": &bintree{staticTemplatesUpgrade_resendHtml, map[string]*bintree{}},
+			"vote_for_me.html": &bintree{staticTemplatesVote_for_meHtml, map[string]*bintree{}},
+			"votes_exchange.html": &bintree{staticTemplatesVotes_exchangeHtml, map[string]*bintree{}},
+			"voting.html": &bintree{staticTemplatesVotingHtml, map[string]*bintree{}},
+			"waiting_accept_new_key.html": &bintree{staticTemplatesWaiting_accept_new_keyHtml, map[string]*bintree{}},
+			"wallets_list.html": &bintree{staticTemplatesWallets_listHtml, map[string]*bintree{}},
 		}},
 	}},
 }}
 
 // RestoreAsset restores an asset under the given directory
 func RestoreAsset(dir, name string) error {
-        data, err := Asset(name)
-        if err != nil {
-                return err
-        }
-        info, err := AssetInfo(name)
-        if err != nil {
-                return err
-        }
-        err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
-        if err != nil {
-                return err
-        }
-        err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
-        if err != nil {
-                return err
-        }
-        err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
-        if err != nil {
-                return err
-        }
-        return nil
+	data, err := Asset(name)
+	if err != nil {
+		return err
+	}
+	info, err := AssetInfo(name)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(_filePath(dir, filepath.Dir(name)), os.FileMode(0755))
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
+	if err != nil {
+		return err
+	}
+	err = os.Chtimes(_filePath(dir, name), info.ModTime(), info.ModTime())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // RestoreAssets restores an asset under the given directory recursively
 func RestoreAssets(dir, name string) error {
-        children, err := AssetDir(name)
-        // File
-        if err != nil {
-                return RestoreAsset(dir, name)
-        }
-        // Dir
-        for _, child := range children {
-                err = RestoreAssets(dir, filepath.Join(name, child))
-                if err != nil {
-                        return err
-                }
-        }
-        return nil
+	children, err := AssetDir(name)
+	// File
+	if err != nil {
+		return RestoreAsset(dir, name)
+	}
+	// Dir
+	for _, child := range children {
+		err = RestoreAssets(dir, filepath.Join(name, child))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func _filePath(dir, name string) string {
-        cannonicalName := strings.Replace(name, "\\", "/", -1)
-        return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
+	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
 
