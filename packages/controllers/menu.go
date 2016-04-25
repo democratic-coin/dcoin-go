@@ -30,6 +30,9 @@ type menuPage struct {
 	ExchangeEnable bool
 	Admin          bool
 	Desktop bool
+	Pct               float64
+	Amount            float64
+	IsRestricted      bool
 }
 
 func (c *Controller) Menu() (string, error) {
@@ -146,10 +149,42 @@ func (c *Controller) Menu() (string, error) {
 		exchangeEnable = true
 	}
 
+	var ( isRestricted bool
+		  profit, pct float64
+	)
+	myUserId, err := c.Single("SELECT user_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	if myUserId > 0 {
+		idPromised,err := c.Single("SELECT id FROM promised_amount WHERE user_id = ? AND currency_id = ? AND status != 'pending' AND status != 'rejected'",
+		                              c.SessUserId, 72 ).Int64()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		if idPromised == 0 {
+			profit, pct, err = c.GetPromisedAmountCounter()
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			if profit > 0 {
+				isRestricted = true
+			}
+		}
+	}
 	t := template.Must(template.New("template").Parse(string(data)))
 	t = template.Must(t.Parse(string(modal)))
 	b := new(bytes.Buffer)
-	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, MyModalIdName: "myModal", Lang: c.Lang, PoolAdmin: c.PoolAdmin, Community: c.Community, MinerId: minerId, Name: name, LangInt: c.LangInt, UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, FaceUrls: strings.Join(face_urls, ",")})
+	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, 
+			ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, 
+			MyModalIdName: "myModal", Lang: c.Lang, PoolAdmin: c.PoolAdmin, 
+			Community: c.Community, MinerId: minerId, Name: name, LangInt: c.LangInt, 
+			UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, 
+			MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, 
+			FaceUrls: strings.Join(face_urls, ","),
+			IsRestricted:      isRestricted,
+			Amount:            profit,
+			Pct:               pct })
 	if err != nil {
 		log.Error("%s", utils.ErrInfo(err))
 		return "", utils.ErrInfo(err)
