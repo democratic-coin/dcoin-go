@@ -319,9 +319,7 @@ static/img/logo-small.png
 		var irest=0;
 		var ipct = {{.Pct}}/10;
 		var iamount = {{.Amount}};
-	{{end}}	
 
-	{{if .IsRestricted}}
 		var intID = setInterval( function() {
 			irest++;
 			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
