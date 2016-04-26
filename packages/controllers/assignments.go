@@ -42,7 +42,21 @@ func (c *Controller) Assignments() (string, error) {
 
 	// Модерация новых майнеров
 	// берем тех, кто прошел проверку нодов (type='node_voting')
-	num, err := c.Single("SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting'").Int64()
+	
+	getCount := func( query, qtype string ) (ret int64, err error)  {
+		if c.SessRestricted == 0 {
+			ret, err = c.Single( query +
+				` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype,  utils.Time()-consts.ASSIGN_TIME ).Int64()
+		} else {
+			ret, err = c.Single( query ).Int64()
+		}				
+		if err != nil {
+			return 
+		}
+		return
+	}
+	
+	num, err := getCount("SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting'", `miner` )
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -62,7 +76,7 @@ func (c *Controller) Assignments() (string, error) {
 		if c.SessUserId != 1 {
 			addSql = "AND currency_id IN (" + currencyIds + ")"
 		}
-		num, err := c.Single("SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 " + addSql + "").Int64()
+		num, err := getCount("SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 " + addSql, `promised_amount` )
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -114,11 +128,8 @@ func (c *Controller) Assignments() (string, error) {
 							 pool_user_id
 				FROM votes_miners
 				LEFT JOIN miners_data ON miners_data.user_id = votes_miners.user_id
-				LEFT JOIN `+c.MyPrefix+`my_tasks ON `+c.MyPrefix+`my_tasks.id = votes_miners.id
-				WHERE 	votes_end = 0 AND
-						votes_miners.type = 'user_voting' AND
-						(`+c.MyPrefix+`my_tasks.time IS NULL OR (`+c.MyPrefix+`my_tasks.time < ? AND `+c.MyPrefix+`my_tasks.type  =  'miner'))
-				`, utils.Time()-consts.ASSIGN_TIME).String()
+				WHERE votes_end = 0 AND votes_miners.type = 'user_voting' AND
+				votes_miners.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='miner' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -142,7 +153,7 @@ func (c *Controller) Assignments() (string, error) {
 		// получим ID майнеров, у которых лежат фото нужного нам юзера
 		minersIds := utils.GetMinersKeepers(userInfo["photo_block_id"], userInfo["photo_max_miner_id"], userInfo["miners_keepers"], true)
 		if len(minersIds) > 0 {
-			photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.miner_id IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+			photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host END as http_host FROM miners_data as m WHERE m.miner_id IN (" + utils.JoinInts(minersIds, ",") + ")").String()
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
@@ -205,7 +216,7 @@ func (c *Controller) Assignments() (string, error) {
 							version IN (`+addSqlCompatibility+`) AND
 				             faces.status = 'used' AND
 				             miners_data.user_id != ?
-				LIMIT 100
+				LIMIT 0,100
 				`), userInfo["user_id"])
 		if err != nil {
 			return "", utils.ErrInfo(err)
@@ -221,7 +232,7 @@ func (c *Controller) Assignments() (string, error) {
 			// майнеры, у которых можно получить фото нужного нам юзера
 			minersIds := utils.GetMinersKeepers(photo_block_id, photo_max_miner_id, miners_keepers, true)
 			if len(minersIds) > 0 {
-				photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE m.miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
+				photoHosts, err = c.GetList("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host END as http_host FROM miners_data as m WHERE m.miner_id  IN (" + utils.JoinInts(minersIds, ",") + ")").String()
 				if err != nil {
 					return "", utils.ErrInfo(err)
 				}
@@ -229,17 +240,15 @@ func (c *Controller) Assignments() (string, error) {
 			cloneHosts[user_id] = photoHosts
 		}
 
-		data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").Int64()
-		myRace = c.Races[data["race"]]
-		myCountry = consts.Countries[int(data["country"])]
+		myRace = c.Races[utils.StrToInt64(relations["race"])]
+		myCountry = consts.Countries[utils.StrToInt(relations["country"])]
 
 		tplName = "assignments_new_miner"
 		tplTitle = "assignmentsNewMiner"
 
 	case 2:
 		promisedAmountData, err = c.OneRow(`
-				SELECT id,
-							 currency_id,
+				SELECT id, currency_id,
 							 amount,
 							 user_id,
 							 video_type,
@@ -247,26 +256,13 @@ func (c *Controller) Assignments() (string, error) {
 				FROM promised_amount
 				WHERE status =  'pending' AND
 							 del_block_id = 0
-				` + addSql + `
-		`).String()
+				` + addSql + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
 		promisedAmountData["currency_name"] = c.CurrencyList[utils.StrToInt64(promisedAmountData["currency_id"])]
 
 		log.Debug("promisedAmountData %v", promisedAmountData)
-		// проверим, не голосовали ли мы за это в последние 30 минут
-		repeated, err := c.Single("SELECT id FROM "+c.MyPrefix+"my_tasks WHERE type  =  'promised_amount' AND id  =  ? AND time > ?", promisedAmountData["id"], utils.Time()-consts.ASSIGN_TIME).Int64()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		log.Debug("repeated %v", repeated)
-		if repeated > 0 {
-			tplName = "assignments"
-			tplTitle = "assignments"
-			break
-		}
-
 		// если нету видео на ютубе, то получаем host юзера, где брать видео
 		if promisedAmountData["video_url_id"] == "null" {
 			videoHost, err = c.Single("SELECT CASE WHEN m.pool_user_id > 0 then (SELECT http_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE http_host end FROM miners_data as m WHERE user_id  =  ?", promisedAmountData["user_id"]).String()
