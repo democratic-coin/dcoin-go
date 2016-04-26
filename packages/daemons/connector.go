@@ -40,6 +40,7 @@ func (d *daemon) chatConnector() {
 		logger.Error("%v", err)
 	}
 	fmt.Println("myTcpHost:", myTcpHost)
+	logger.Debug("%v", myTcpHost)
 
 	// исключим хосты, к которым уже подключены
 	var uids string
@@ -51,6 +52,7 @@ func (d *daemon) chatConnector() {
 	}
 
 	if len(uids) == 0 {
+		logger.Debug("len(uids) == 0")
 		return
 	}
 
