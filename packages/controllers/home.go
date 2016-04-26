@@ -131,11 +131,26 @@ func (c *Controller) Home() (string, error) {
 
 	// задания
 	var assignments int64
-	count, err := c.Single("SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting'").Int64()
-	if err != nil {
+
+	getCount := func( query, qtype string ) (err error)  {
+		var ret int64
+		
+		if c.SessRestricted == 0 {
+			ret, err = c.Single( query +
+				` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype, time.Now().Unix()-consts.ASSIGN_TIME ).Int64()
+		} else {
+			ret, err = c.Single( query ).Int64()
+		}				
+		if err != nil {
+			return 
+		}
+		assignments += ret
+		return
+	}
+	if err := getCount(`SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting' `,
+	                    `miner` ); err !=nil {
 		return "", err
 	}
-	assignments += count
 
 	// вначале получим ID валют, которые мы можем проверять.
 	currencyIds, err := c.GetList("SELECT currency_id FROM promised_amount WHERE status IN ('mining', 'repaid') AND user_id  =  ?", c.SessUserId).String()
@@ -146,21 +161,9 @@ func (c *Controller) Home() (string, error) {
 		} else {
 			addSql = "AND currency_id IN (" + strings.Join(currencyIds, ",") + ")"
 		}
-		count, err := c.Single("SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 " + addSql).Int64()
-		if err != nil {
+		if err := getCount(`SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 ` + addSql,
+	    	                `promised_amount` ); err !=nil {
 			return "", err
-		}
-		assignments += count
-	}
-
-	if c.SessRestricted == 0 {
-		count, err := c.Single("SELECT count(id) FROM "+c.MyPrefix+"my_tasks WHERE time > ?", time.Now().Unix()-consts.ASSIGN_TIME).Int64()
-		if err != nil {
-			return "", err
-		}
-		assignments -= count
-		if assignments < 0 {
-			assignments = 0
 		}
 	}
 
