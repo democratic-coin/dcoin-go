@@ -316,15 +316,17 @@ static/img/logo-small.png
 </nav>
 <script>
 	{{if .IsRestricted}}
-		var irest=0;
 		var ipct = {{.Pct}}/10;
 		var iamount = {{.Amount}};
+		var istart = new Date().getTime();
 
-		var intID = setInterval( function() {
-			irest++;
+		function money_counter() {
+			irest = Math.round( (new Date().getTime() - istart)/100 );
 			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
 			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
-		} , 130);
+			setTimeout( money_counter, 200 );
+		}
+		setTimeout( money_counter, 200 );
 	{{end}}	
 
 
