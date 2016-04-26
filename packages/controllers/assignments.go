@@ -240,9 +240,8 @@ func (c *Controller) Assignments() (string, error) {
 			cloneHosts[user_id] = photoHosts
 		}
 
-		data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").Int64()
-		myRace = c.Races[data["race"]]
-		myCountry = consts.Countries[int(data["country"])]
+		myRace = c.Races[utils.StrToInt64(relations["race"])]
+		myCountry = consts.Countries[utils.StrToInt(relations["country"])]
 
 		tplName = "assignments_new_miner"
 		tplTitle = "assignmentsNewMiner"
