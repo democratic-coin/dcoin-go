@@ -132,7 +132,7 @@ func getChatData(c *Controller) ([]map[string]string, error) {
 	//fmt.Println("utils.ChatMinSignTime", utils.ChatMinSignTime)
 	chatData, err := c.GetAll(`SELECT * FROM chat WHERE sign_time > ? AND room = ? AND lang = ?  ` +
 			ids +
-			` ORDER BY sign_time DESC LIMIT `+
+			` ORDER BY time DESC LIMIT `+
 			utils.Int64ToStr(consts.CHAT_COUNT_MESSAGES),
 			consts.CHAT_COUNT_MESSAGES,
 			utils.ChatMinSignTime,
