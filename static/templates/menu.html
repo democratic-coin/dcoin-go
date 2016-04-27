@@ -66,7 +66,6 @@
 		get_img(0);
 	{{end}}
 
-
 </script>
 <!--
 static/img/logo-2.png
@@ -193,6 +192,9 @@ static/img/logo-small.png
 				</li>
 				<li>
 					<a href="#miningMenu"><i class="fa  fa-money  fa-fw"></i> {{.Lang.mining}} {{if not .MinerId}}<i class="fa fa-arrow-left"></i>{{end}}</a>
+					{{if .IsRestricted}}
+						<div id="tdcr" style="font-size:20px;text-align:right;padding-right: 1em;"></div>
+					{{end}}	
 				</li>
 				{{if .MinerId}}
 					<li><a href="#newUser"><i class="fa  fa-smile-o  fa-fw"></i> {{.Lang.my_referrals}}</a></li>
@@ -313,6 +315,21 @@ static/img/logo-small.png
 	<!-- /.navbar-static-side -->
 </nav>
 <script>
+	{{if .IsRestricted}}
+		var ipct = {{.Pct}}/10;
+		var iamount = {{.Amount}};
+		var istart = new Date().getTime();
+
+		function money_counter() {
+			irest = Math.round( (new Date().getTime() - istart)/100 );
+			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
+			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
+			setTimeout( money_counter, 200 );
+		}
+		setTimeout( money_counter, 200 );
+	{{end}}	
+
+
 	$( document ).ready(function() {
 		console.log($('#key').html().length);
 		if ($('#key').html().length>150){
@@ -326,8 +343,8 @@ static/img/logo-small.png
 		}else{
 			$('#menu-collapse').addClass('collapse');
 		}
-
 	});
+
 </script>
 {{ template "modal". }}
 

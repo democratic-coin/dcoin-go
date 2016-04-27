@@ -87,21 +87,6 @@
 <link href="static/css/cf.css" rel="stylesheet">
 <script>
 
-	function updDcoin() {
-
-		$('#UpdateMessage').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
-		$('#UpdateMessage').prop('disabled', true);
-
-		$.get('ajax?controllerName=UpdateDcoin', function (data) {
-			if (typeof data.success !== 'undefined') {
-				console.log("Download succeed");
-				$('#UpdateMessage').html("Download succeed");
-			}
-			$('#UpdateMessage').html('complete');
-		}, 'JSON');
-
-	}
-
 	$( document ).ready(function() {
 		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
 			if (typeof data.success !== 'undefined') {
@@ -109,6 +94,7 @@
 				$('#AlertMessage p').html(data.success);
 			}
 		}, 'JSON');
+	
 		$.get('ajax?controllerName=Update', function (data) {
 			if (typeof data.success !== 'undefined') {
 				$('#UpdateMessage').css("display", "block");
