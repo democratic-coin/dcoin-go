@@ -9,13 +9,13 @@ type ChangeCountryRacePage struct {
 	Alert     string
 	Lang      map[string]string
 	Countries []string
-	Country   string
-	Race      string
+	Country   int
+	Race      int
 }
 
 func (c *Controller) ChangeCountryRace() (string, error) {
 
-	data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").String()
+	data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").Int()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

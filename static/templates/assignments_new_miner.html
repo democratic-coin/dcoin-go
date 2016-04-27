@@ -245,7 +245,7 @@
 <div id="step_1" style="position: relative;">
 	<p>{{.Lang.tasks_new_miner_spots}}</p>
 
-	{{.Lang.accounted_country}}: {{.MyCountry}} {{.Lang.and_race}}: {{.MyRace}} <a href="#changeCountryRace">{{.Lang.change}}</a><br>
+	{{.Lang.accounted_country}}: {{if .MyCountry}}{{.MyCountry}}{{else}}{{.Lang.all}}{{end}} {{.Lang.and_race}}: {{if .MyRace}}{{.MyRace}}{{else}}{{.Lang.all}}{{end}} <a href="#changeCountryRace">{{.Lang.change}}</a><br>
 	<input type="hidden" id="candidate-id" value="{{.UserInfo.user_id}}">
 
 	<canvas id="example_face" style="position: absolute; background-image: url('static/img/face.jpg'); background-size: 350px;" width="350" height="500"></canvas>

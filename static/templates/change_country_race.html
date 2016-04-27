@@ -19,10 +19,10 @@
 
 <img src="static/img/race.gif"><Br>
 
-<div style="float: left;width: 190px; text-align: center;"><input type="radio" name="race" value="1" {{ if eq .Race 1}}checked{{end}}></div>
-<div style="float: left;width: 160px; text-align: center; "><input type="radio" name="race" value="2" {{ if eq .Race 2}}checked{{end}}></div>
-<div style="float: left; width: 140px; text-align: center; "><input type="radio" name="race" value="3" {{ if eq .Race 3}}checked{{end}}></div>>
-<Br>
+<div style="float: left;width: 190px; text-align: center;"><input type="radio" name="race" value="1" {{if eq .Race 1}}checked{{end}}></div>
+<div style="float: left;width: 160px; text-align: center; "><input type="radio" name="race" value="2" {{if eq .Race 2}}checked{{end}}></div>
+<div style="float: left; width: 140px; text-align: center; "><input type="radio" name="race" value="3" {{if eq .Race 3}}checked{{end}}></div>
+<br>
 <h3>Country</h3>
 <select id='country'><option value='0'></option>
 	{{range $i, $country := .Countries}}
@@ -30,7 +30,7 @@
 	{{end}}
 </select>
 
-<br>
+<br>&nbsp;<br>
 
 <button class="btn btn-success" id="save">Save</button>
 <br><br><br>
