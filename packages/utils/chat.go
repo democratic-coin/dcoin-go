@@ -48,6 +48,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		binaryData, err := TCPGetSizeAndData(conn, 1048576)
 		if err != nil {
 			fmt.Println("ChatInput ERROR", err, conn.RemoteAddr().String(), Time())
+			log.Error("ChatInput ERROR", err, conn.RemoteAddr().String(), Time())
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
 			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
@@ -79,6 +80,7 @@ func ChatInput(conn net.Conn, userId int64) {
 
 		if len(addsql) == 0 {
 			fmt.Println("empty hashes")
+			log.Error("empty hashes")
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
 			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
@@ -91,6 +93,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		rows, err := DB.Query(`SELECT hash FROM chat WHERE hash IN (` + addsql + `)`)
 		if err != nil {
 			fmt.Println(ErrInfo(err))
+			log.Error("%v", ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
 			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
@@ -101,6 +104,7 @@ func ChatInput(conn net.Conn, userId int64) {
 			err = rows.Scan(&hash)
 			if err != nil {
 				fmt.Println(ErrInfo(err))
+				log.Error("%v", ErrInfo(err))
 				safeDeleteFromChatMapIn(ChatInConnections, userId)
 				safeDeleteFromChatMap(ChatOutConnections, userId)
 				return
@@ -130,6 +134,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		err = WriteSizeAndData([]byte(binHash), conn)
 		if err != nil {
 			fmt.Println(ErrInfo(err))
+			log.Error("%v", ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
 			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
@@ -157,6 +162,7 @@ func ChatInput(conn net.Conn, userId int64) {
 		binaryData, err = TCPGetSizeAndData(conn, 10485760)
 		if err != nil {
 			fmt.Println(ErrInfo(err))
+			log.Error("%v", ErrInfo(err))
 			safeDeleteFromChatMapIn(ChatInConnections, userId)
 			safeDeleteFromChatMap(ChatOutConnections, userId)
 			return
@@ -167,6 +173,7 @@ func ChatInput(conn net.Conn, userId int64) {
 			fmt.Println("length: ", length)
 			if int(length) > len(binaryData) {
 				fmt.Println("break length > len(binaryData)", length, len(binaryData))
+				log.Error("break length > len(binaryData)", length, len(binaryData))
 				safeDeleteFromChatMapIn(ChatInConnections, userId)
 				safeDeleteFromChatMap(ChatOutConnections, userId)
 				return
@@ -196,9 +203,11 @@ func ChatInput(conn net.Conn, userId int64) {
 				err := DB.CheckChatMessage(string(message), sender, receiver, lang, room, status, signTime, signature)
 				if err != nil {
 					fmt.Println(ErrInfo(err))
-					safeDeleteFromChatMapIn(ChatInConnections, userId)
-					safeDeleteFromChatMap(ChatOutConnections, userId)
-					return
+					log.Error("%v", ErrInfo(err))
+					//safeDeleteFromChatMapIn(ChatInConnections, userId)
+					//safeDeleteFromChatMap(ChatOutConnections, userId)
+					//return
+					continue
 				}
 
 				data := Int64ToByte(lang)
@@ -459,6 +468,7 @@ func safeDeleteFromChatMap(delMap map[int64]*ChatOutConnectionsType, userId int6
 }
 
 func safeDeleteFromChatMapIn(delMap map[int64]int, userId int64) {
+	log.Debug("safeDeleteFromChatMapIn %v %d", safeDeleteFromChatMapIn, userId)
 	ChatMutex.Lock()
 	delete(delMap, userId)
 	ChatMutex.Unlock()
