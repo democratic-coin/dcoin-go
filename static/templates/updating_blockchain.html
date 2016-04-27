@@ -422,6 +422,9 @@
 		</div>
 		<div class="meter_wait" style="padding-bottom:20px;">{{.Lang.meter_wait}}</div>
 	</div>
+	{{if .NewVersion}}
+	<div class="alert alert-info alert-dismissable" id="UpdateMessage"><p>{{noescape .NewVersion}}</p></div>
+	{{end}}
 
 	{{if .RestartDb}}
 	<div class="alert alert-danger">
@@ -455,6 +458,7 @@
 			$('#debugDiv').html("<textarea>"+data+"</textarea>")
 		});
 	});
+	
 	$( document ).ready(function() {
 		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
 			if (typeof data.success !== 'undefined') {
