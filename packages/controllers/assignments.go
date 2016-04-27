@@ -240,9 +240,15 @@ func (c *Controller) Assignments() (string, error) {
 			cloneHosts[user_id] = photoHosts
 		}
 
-		myRace = c.Races[utils.StrToInt64(relations["race"])]
-		myCountry = consts.Countries[utils.StrToInt(relations["country"])]
-
+		if data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").Int64(); err == nil {
+			if data["race"] > 0 {
+				myRace = c.Races[data["race"]]
+			}
+			if data["country"] > 0 {
+				myCountry = consts.Countries[int(data["country"])]
+			}
+		}
+		
 		tplName = "assignments_new_miner"
 		tplTitle = "assignmentsNewMiner"
 

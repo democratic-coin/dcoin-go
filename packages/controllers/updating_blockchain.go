@@ -26,7 +26,8 @@ type updatingBlockchainStruct struct {
 	AlertTime      string
 	RestartDb       bool
 	StandardInstall bool
-	SleepTime int64
+	SleepTime       int64
+	NewVersion      string
 }
 
 func (c *Controller) UpdatingBlockchain() (string, error) {
@@ -149,10 +150,20 @@ func (c *Controller) UpdatingBlockchain() (string, error) {
 	}
 	b := new(bytes.Buffer)
 	standardInstall = configIni[`install_type`] == `standard`
+
+	var newVersion string
+	if community, err := c.DCDB.GetCommunityUsers(); err==nil && (len(community) == 0 || c.NodeAdmin){
+		if ver, _, err := utils.GetUpdVerAndUrl(consts.UPD_AND_VER_URL); err == nil {
+			if len(ver) > 0 {
+				newVersion = strings.Replace(c.Lang["new_version"], "[ver]", ver, -1)
+			}	
+		}
+	}
+
 	t.Execute(b, &updatingBlockchainStruct{SleepTime: sleepTime, StandardInstall: standardInstall, RestartDb: restartDb, Lang: c.Lang, 
 	WaitText: waitText, BlockId: blockId, BlockTime: blockTime, StartDaemons: startDaemons, 
 	BlockMeter: blockMeter, CheckTime: checkTime, LastBlock: consts.LAST_BLOCK, 
-	BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime})
+	BlockChainSize: consts.BLOCKCHAIN_SIZE, Mobile: mobile, AlertTime: alertTime, NewVersion: newVersion })
 	
 	return b.String(), nil
 }
