@@ -30,7 +30,7 @@ func (p *Parser) NewCfProjectFront() error {
 		return p.ErrInfo(err)
 	}
 
-	if p.BlockData != nil && p.BlockData.BlockId >= 168904 {
+	if p.BlockData == nil || p.BlockData.BlockId >= 168904 {
 		// является ли данный юзер майнером
 		err = p.checkMiner(p.TxUserID)
 		if err != nil {
