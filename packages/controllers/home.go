@@ -137,7 +137,7 @@ func (c *Controller) Home() (string, error) {
 		
 		if c.SessRestricted == 0 {
 			ret, err = c.Single( query +
-				` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype, time.Now().Unix()-consts.ASSIGN_TIME ).Int64()
+				` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype, time.Now().Unix()-consts.ASSIGN_TIME ).Int64()
 		} else {
 			ret, err = c.Single( query ).Int64()
 		}				
@@ -147,8 +147,20 @@ func (c *Controller) Home() (string, error) {
 		assignments += ret
 		return
 	}
-	if err := getCount(`SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting' `,
-	                    `miner` ); err !=nil {
+
+	query := `SELECT count(v.id) FROM votes_miners as v `
+	where := `WHERE votes_end  =  0 AND v.type  =  'user_voting' `
+	country, race := getMyCountryRace(c)
+	if race > 0 || country > 0 {
+		query += `left join faces as f on f.user_id=v.user_id `
+		if race > 0 {
+			where += fmt.Sprintf( `AND f.race=%d `, race )
+		}
+		if country > 0 {
+			where += fmt.Sprintf( `AND f.country=%d `, country )
+		}
+	}
+	if err := getCount( query + where, `miner` ); err !=nil {
 		return "", err
 	}
 
@@ -161,7 +173,7 @@ func (c *Controller) Home() (string, error) {
 		} else {
 			addSql = "AND currency_id IN (" + strings.Join(currencyIds, ",") + ")"
 		}
-		if err := getCount(`SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 ` + addSql,
+		if err := getCount(`SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 ` + addSql,
 	    	                `promised_amount` ); err !=nil {
 			return "", err
 		}
