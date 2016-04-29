@@ -91,7 +91,6 @@ func (ec *EmailClient) GetToken() error {
 }
 
 func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
-
 	if time.Now().After(ec.timeExpired) {
 		err := ec.GetToken()
 		if err != nil {
