@@ -158,7 +158,7 @@ func (p *Parser) CashRequestOutFront() error {
 	 * там же исключается попадение данного типа с new_forex и пр.
 	 * А проверка 2-го списания идет в ParseDataFull
 	 * */
-	if p.BlockData != nil && p.BlockData.BlockId > 173941 {
+	if p.BlockData == nil || p.BlockData.BlockId > 173941 {
 		// в блоке 173941 была попытка отправить 2 запроса на 408 и 200 dUSD, в то время как на кошельке было только 449.6
 		// в итоге check_sender_money возвращало ошибку
 		// есть ли нужная сумма на кошельке

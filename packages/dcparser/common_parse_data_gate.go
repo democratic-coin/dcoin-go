@@ -211,12 +211,14 @@ func (p *Parser) ParseDataGate(onlyTx bool) error {
 		log.Debug("MethodName", MethodName+"Init")
 		err_ := utils.CallMethod(p, MethodName+"Init")
 		if _, ok := err_.(error); ok {
+			log.Error("%v", utils.ErrInfo(err_.(error)))
 			return utils.ErrInfo(err_.(error))
 		}
 
 		log.Debug("MethodName", MethodName+"Front")
 		err_ = utils.CallMethod(p, MethodName+"Front")
 		if _, ok := err_.(error); ok {
+			log.Error("%v", utils.ErrInfo(err_.(error)))
 			return utils.ErrInfo(err_.(error))
 		}
 
