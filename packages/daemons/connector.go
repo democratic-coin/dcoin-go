@@ -26,9 +26,9 @@ func (d *daemon) chatConnector() {
 	}
 	q := ""
 	if d.ConfigIni["db_type"] == "postgresql" {
-		q = "SELECT DISTINCT ON (tcp_host) tcp_host, user_id FROM miners_data WHERE miner_id IN (" + strings.Join(utils.RandSlice(1, maxMinerId, consts.COUNT_CHAT_NODES), ",") + ")"
+		q = "SELECT DISTINCT ON (tcp_host) CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host, user_id FROM miners_data as m  WHERE miner_id IN (" + strings.Join(utils.RandSlice(1, maxMinerId, consts.COUNT_CHAT_NODES), ",") + ")"
 	} else {
-		q = "SELECT tcp_host, user_id FROM miners_data WHERE miner_id IN  (" + strings.Join(utils.RandSlice(1, maxMinerId, consts.COUNT_CHAT_NODES), ",") + ") GROUP BY tcp_host"
+		q = " SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host, user_id FROM miners_data as m  WHERE miner_id IN (" + strings.Join(utils.RandSlice(1, maxMinerId, consts.COUNT_CHAT_NODES), ",") + ") GROUP BY tcp_host"
 	}
 	hosts, err := d.GetAll(q, consts.COUNT_CHAT_NODES)
 	if err != nil {
@@ -51,14 +51,12 @@ func (d *daemon) chatConnector() {
 		uids = uids[:len(uids)-1]
 	}
 
-	if len(uids) == 0 {
-		logger.Debug("len(uids) == 0")
-		return
-	}
-
-	existsTcpHost, err := d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
-	if err != nil {
-		logger.Error("%v", err)
+	var existsTcpHost []string
+	if len(uids) > 0 {
+		existsTcpHost, err = d.GetList(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host end as tcp_host FROM miners_data as m WHERE m.user_id IN (` + uids + `)`).String()
+		if err != nil {
+			logger.Error("%v", err)
+		}
 	}
 
 	logger.Debug("hosts: %v", hosts)
@@ -67,7 +65,8 @@ func (d *daemon) chatConnector() {
 		host := data["tcp_host"]
 		userId := utils.StrToInt64(data["user_id"])
 
-		if host == myTcpHost || utils.InSliceString(host, existsTcpHost) {
+		if len(existsTcpHost) > 0 && (host == myTcpHost || utils.InSliceString(host, existsTcpHost)) {
+			logger.Debug("continue")
 			continue
 		}
 
@@ -115,6 +114,9 @@ func (d *daemon) chatConnector() {
 						utils.ChatMutex.Lock()
 						utils.ChatInConnections[userId] = 1
 						utils.ChatMutex.Unlock()
+
+						logger.Debug("utils.ChatInConnections", utils.ChatInConnections)
+						logger.Debug("utils.ChatOutConnections", utils.ChatOutConnections)
 						go utils.ChatInput(conn, userId)
 					}
 
@@ -144,7 +146,8 @@ func (d *daemon) chatConnector() {
 						utils.ChatMutex.Lock()
 						utils.ChatOutConnections[userId] = &utils.ChatOutConnectionsType{MessIds: []int64{}, ConnectionChan: connChan}
 						utils.ChatMutex.Unlock()
-						fmt.Println("ChatOutConnections", utils.ChatOutConnections)
+						logger.Debug("utils.ChatInConnections", utils.ChatInConnections)
+						logger.Debug("utils.ChatOutConnections", utils.ChatOutConnections)
 						utils.ChatTxDisseminator(conn2, userId, connChan)
 					}
 				}
@@ -202,6 +205,8 @@ func Connector(chBreaker chan bool, chAnswer chan string) {
 				continue
 			}
 			if len(utils.ChatOutConnections) < 5 || len(utils.ChatInConnections) < 5 {
+				logger.Debug("utils.ChatInConnections", utils.ChatInConnections)
+				logger.Debug("utils.ChatOutConnections", utils.ChatOutConnections)
 				go d.chatConnector()
 			}
 			utils.Sleep(30)

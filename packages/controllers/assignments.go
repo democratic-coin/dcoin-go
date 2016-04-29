@@ -34,6 +34,18 @@ type AssignmentsPage struct {
 	CloneHosts         map[int64][]string
 }
 
+func getMyCountryRace( c *Controller ) ( country int, race int64 ) {
+	if data, err := c.OneRow("SELECT race, country FROM " + c.MyPrefix + "my_table").Int64(); err == nil {
+		if data["race"] > 0 {
+				race = data["race"]
+		}
+		if data["country"] > 0 {
+			country = int(data["country"])
+		}
+	}
+	return 	
+}
+
 func (c *Controller) Assignments() (string, error) {
 
 	var randArr []int64
@@ -46,7 +58,7 @@ func (c *Controller) Assignments() (string, error) {
 	getCount := func( query, qtype string ) (ret int64, err error)  {
 		if c.SessRestricted == 0 {
 			ret, err = c.Single( query +
-				` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype,  utils.Time()-consts.ASSIGN_TIME ).Int64()
+				` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 		} else {
 			ret, err = c.Single( query ).Int64()
 		}				
@@ -56,7 +68,21 @@ func (c *Controller) Assignments() (string, error) {
 		return
 	}
 	
-	num, err := getCount("SELECT count(id) FROM votes_miners WHERE votes_end  =  0 AND type  =  'user_voting'", `miner` )
+	country, race := getMyCountryRace(c)
+	
+	query := ` `
+	where := `WHERE votes_end  =  0 AND v.type  =  'user_voting' `
+	if race > 0 || country > 0 {
+		query += `left join faces as f on f.user_id=v.user_id `
+		if race > 0 {
+			where += fmt.Sprintf( `AND f.race=%d `, race )
+		}
+		if country > 0 {
+			where += fmt.Sprintf( `AND f.country=%d `, country )
+		}
+	}
+
+	num, err := getCount( `SELECT count(v.id) FROM votes_miners as v ` + query + where, `miner` )
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -76,7 +102,7 @@ func (c *Controller) Assignments() (string, error) {
 		if c.SessUserId != 1 {
 			addSql = "AND currency_id IN (" + currencyIds + ")"
 		}
-		num, err := getCount("SELECT count(id) FROM promised_amount WHERE status  =  'pending' AND del_block_id  =  0 " + addSql, `promised_amount` )
+		num, err := getCount("SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 " + addSql, `promised_amount` )
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -115,21 +141,20 @@ func (c *Controller) Assignments() (string, error) {
 		timeNow = utils.Time()
 
 		userInfo, err = c.OneRow(`
-				SELECT miners_data.user_id,
-							 votes_miners.id as vote_id,
-							 face_coords,
-							 profile_coords,
-							 video_type,
-							 video_url_id,
-							 photo_block_id,
-							 photo_max_miner_id,
-							 miners_keepers,
-							 http_host,
-							 pool_user_id
-				FROM votes_miners
-				LEFT JOIN miners_data ON miners_data.user_id = votes_miners.user_id
-				WHERE votes_end = 0 AND votes_miners.type = 'user_voting' AND
-				votes_miners.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='miner' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+			SELECT miners_data.user_id,
+						 v.id as vote_id,
+						 face_coords,
+						 profile_coords,
+						 video_type,
+						 video_url_id,
+						 photo_block_id,
+						 photo_max_miner_id,
+						 miners_keepers,
+						 http_host,
+						 pool_user_id
+			FROM votes_miners as v ` + query +
+			`LEFT JOIN miners_data ON miners_data.user_id = v.user_id ` + where + 
+			` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='miner' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -240,9 +265,13 @@ func (c *Controller) Assignments() (string, error) {
 			cloneHosts[user_id] = photoHosts
 		}
 
-		myRace = c.Races[utils.StrToInt64(relations["race"])]
-		myCountry = consts.Countries[utils.StrToInt(relations["country"])]
-
+		if race > 0 {
+			myRace = c.Races[race]
+		}
+		if country > 0 {
+			myCountry = consts.Countries[ country ]
+		}
+		
 		tplName = "assignments_new_miner"
 		tplTitle = "assignmentsNewMiner"
 
