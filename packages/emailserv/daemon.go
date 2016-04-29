@@ -26,11 +26,12 @@ func sendEmail( text string, cmd int, userId int64 ) bool {
 	subject := `DCoin notifications`
 	if err := GEmail.SendEmail("<p>"+text+"</p>", text, subject,
 		[]*Email{&Email{``, user[`email`] }}); err != nil {
-		if err = GDB.ExecSql(`UPDATE users SET verified=? WHERE id=?`, userId ); err!=nil {
+		if err = GDB.ExecSql(`UPDATE users SET verified=? WHERE id=?`, -1, userId ); err!=nil {
 			return result( err.Error() )
 		}
 		return result( fmt.Sprintf(`SendPulse %s`, err.Error()))
-	}	
+	}
+	log.Println( `Daemon Sent:`, cmd, user[`email`], userId )
 	if err := GDB.ExecSql(`INSERT INTO log ( user_id, email, cmd, params, uptime, ip )
 				 VALUES ( ?, ?, ?, ?, datetime('now'), ? )`,
 		         userId, user[`email`], cmd, ``, 1 ); err != nil {
