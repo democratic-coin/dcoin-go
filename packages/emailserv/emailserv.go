@@ -17,6 +17,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"html/template"
+	
 	//	"regexp"
 	//	"net/url"
 	"strings"
@@ -35,22 +37,47 @@ type Settings struct {
 	ApiSecret string `json:"api_secret"`
 	FromName  string `json:"from_name"`
 	FromEmail string `json:"from_email"`
+	Password  string `json:"password"`
+	Admin     string `json:"admin"`
 }
 
 var (
 	GSettings Settings
 	GDB       *utils.DCDB
 	GEmail    *EmailClient
+	GPageTpl  *template.Template
+	GPagePattern  *template.Template
 )
+
+func getIP(r *http.Request) (uint32, string) {
+	var ipval uint32
+
+	remoteAddr := r.RemoteAddr
+	var ip string
+	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
+		remoteAddr = ip
+	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
+		remoteAddr = ip
+	}
+	if strings.Contains(remoteAddr, ":") {
+		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
+	}
+	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
+		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
+			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
+	}
+	return ipval,remoteAddr
+}
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var (
 		jsonEmail             utils.JsonEmail
 		err                   error
-		/*publicKey,*/ remoteAddr string
+		/*publicKey,*/
 	)
 
 	answer := utils.Answer{false, ``}
+	ipval, remoteAddr := getIP( r )
 
 	result := func(msg string) {
 
@@ -83,21 +110,6 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		return nil
 	}
 
-	remoteAddr = r.RemoteAddr
-	var ip string
-	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
-		remoteAddr = ip
-	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
-		remoteAddr = ip
-	}
-	if strings.Contains(remoteAddr, ":") {
-		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
-	}
-	var ipval uint32
-	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
-		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
-			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
-	}
 	iplog, err := GDB.Single(`select count(id) from log where ip=? AND date( uptime, '+1 hour' ) > datetime('now')`, 
 	                     ipval ).Int64()
 	if err!=nil {
@@ -131,8 +143,15 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		email = user[`email`]
 		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
-			result(`Overwrite email`)
-			return
+			if jsonEmail.Cmd == utils.ECMD_NEW {
+				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?s, verified=0 where user_id=?`, 
+									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
+					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
+				}
+			} else {
+				result(`Overwrite email`)
+				return
+			}
 		}
 	}
 	if len(jsonEmail.Email) == 0 && len(email) > 0 {
@@ -474,16 +493,26 @@ func main() {
 			log.Fatalln(err)
 		}
 	}
+	os.Chdir(dir)	
+	if GPageTpl,err =template.ParseGlob(`template/*.tpl`); err!=nil {
+		log.Fatalln( err )
+	}
+	if GPagePattern,err =template.ParseGlob(`pattern/*.tpl`); err!=nil {
+		log.Fatalln( err )
+	}
 	
 	go daemon()
-	
+	go sendDaemon()
+
 	GEmail = NewEmailClient(GSettings.ApiId, GSettings.ApiSecret,
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
 
 	//	go Send()
 
-	http.HandleFunc("/", emailHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/unban`, unbanHandler)
+	http.HandleFunc( `/`, emailHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
 	log.Println("Finish")
 }
