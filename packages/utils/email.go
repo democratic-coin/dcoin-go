@@ -2,9 +2,9 @@
 package utils
 
 import (
-	"crypto"
-	"crypto/rand"
-	"crypto/rsa"
+//	"crypto"
+//	"crypto/rand"
+//	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
@@ -54,10 +54,10 @@ type JsonEmail struct {
 
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
 	var (
-		community         []int64
-		private, myPrefix string
+//		community         []int64
+//		private, myPrefix string
 		data, signature   []byte
-		privateKey        *rsa.PrivateKey
+//		privateKey        *rsa.PrivateKey
 		answer            Answer
 		req               *http.Request
 		res               *http.Response
@@ -65,7 +65,7 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	if len( email ) == 0 {
 		return
 	}
-	community, err = DB.GetCommunityUsers()
+/*	community, err = DB.GetCommunityUsers()
 	if len(community) > 0 {
 		myPrefix = Int64ToStr(userId) + "_"
 	}
@@ -74,16 +74,16 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	}
 	if privateKey, err = MakePrivateKey(private); err != nil {
 		return
-	}
+	}*/
 	jsonEmail := &JsonEmail{Email: email, UserId: userId, Cmd: cmd, Params: params}
 
 	if data, err = json.Marshal(jsonEmail); err != nil {
 		return
 	}
-	signature, err = rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA1, HashSha1(string(data)))
+/*	signature, err = rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA1, HashSha1(string(data)))
 	if err != nil {
 		return
-	}
+	}*/
 
 	Client := &http.Client{
 		Transport: http.DefaultTransport,
@@ -92,13 +92,13 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	values := url.Values{}
 	values.Set("data", string(data))
 	values.Set("sign", base64.StdEncoding.EncodeToString(signature))
-	if cmd == ECMD_TEST || cmd == ECMD_NEW {
+/*	if cmd == ECMD_TEST || cmd == ECMD_NEW {
 		// В случае подключения уведомлений таблица users еще может не иметь данного пользователя
 		// поэтому вместе с данными отправляем публичный ключ
 		if public, err := DB.GetMyPublicKey(myPrefix); err == nil {
 			values.Set("public", base64.StdEncoding.EncodeToString(public))
 		}
-	}
+	}*/
 	if req, err = http.NewRequest("POST", EMAIL_SERVER,
 		strings.NewReader(values.Encode())); err != nil {
 		return

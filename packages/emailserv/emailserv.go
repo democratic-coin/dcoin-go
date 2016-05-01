@@ -2,10 +2,10 @@
 package main
 
 import (
-	"crypto"
+/*	"crypto"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/base64"
+	"encoding/base64"*/
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
@@ -17,6 +17,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"html/template"
+	
 	//	"regexp"
 	//	"net/url"
 	"strings"
@@ -35,22 +37,47 @@ type Settings struct {
 	ApiSecret string `json:"api_secret"`
 	FromName  string `json:"from_name"`
 	FromEmail string `json:"from_email"`
+	Password  string `json:"password"`
+	Admin     string `json:"admin"`
 }
 
 var (
 	GSettings Settings
 	GDB       *utils.DCDB
 	GEmail    *EmailClient
+	GPageTpl  *template.Template
+	GPagePattern  *template.Template
 )
+
+func getIP(r *http.Request) (uint32, string) {
+	var ipval uint32
+
+	remoteAddr := r.RemoteAddr
+	var ip string
+	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
+		remoteAddr = ip
+	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
+		remoteAddr = ip
+	}
+	if strings.Contains(remoteAddr, ":") {
+		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
+	}
+	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
+		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
+			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
+	}
+	return ipval,remoteAddr
+}
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var (
 		jsonEmail             utils.JsonEmail
 		err                   error
-		publicKey, remoteAddr string
+		/*publicKey,*/
 	)
 
 	answer := utils.Answer{false, ``}
+	ipval, remoteAddr := getIP( r )
 
 	result := func(msg string) {
 
@@ -59,9 +86,9 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			if len(jsonEmail.Email) == 0 {
 				jsonEmail.Email = r.FormValue(`email`)
 			}
-			log.Println(remoteAddr, `Error:`, answer.Error, jsonEmail.Email)
+			log.Println(remoteAddr, `Error:`, answer.Error, jsonEmail.Email, jsonEmail.UserId)
 		} else {
-			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email)
+			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email, jsonEmail.UserId)
 		}
 
 		ret, err := json.Marshal(answer)
@@ -83,21 +110,15 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		return nil
 	}
 
-	remoteAddr = r.RemoteAddr
-	var ip string
-	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
-		remoteAddr = ip
-	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
-		remoteAddr = ip
+	iplog, err := GDB.Single(`select count(id) from log where ip=? AND date( uptime, '+1 hour' ) > datetime('now')`, 
+	                     ipval ).Int64()
+	if err!=nil {
+		log.Println("SQL Error", err )
+	} else if iplog > 10 {
+		result(`Anti-spam`)
+		return
 	}
-	if strings.Contains(remoteAddr, ":") {
-		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
-	}
-	var ipval uint32
-	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
-		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
-			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
-	}
+	
 	r.ParseForm()
 
 	if len(r.URL.Path[1:]) > 0 || r.Method != `POST` {
@@ -106,11 +127,35 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := r.FormValue(`data`)
-	sign := r.FormValue(`sign`)
+//	sign := r.FormValue(`sign`)
 	if err = json.Unmarshal([]byte(data), &jsonEmail); err != nil ||
 		jsonEmail.UserId == 0 || jsonEmail.Cmd == 0 {
 		result(`Incorrect data`)
 		return
+	}
+	var email string
+	
+	user,_ := GDB.OneRow(`SELECT * FROM users WHERE user_id=?`, jsonEmail.UserId ).String()
+	if len(user[`user_id`]) > 0 {
+		if utils.StrToInt(user[`verified`]) < 0 {
+			result(`Stop list`)
+			return
+		}
+		email = user[`email`]
+		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
+			if jsonEmail.Cmd == utils.ECMD_NEW {
+				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?s, verified=0 where user_id=?`, 
+									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
+					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
+				}
+			} else {
+				result(`Overwrite email`)
+				return
+			}
+		}
+	}
+	if len(jsonEmail.Email) == 0 && len(email) > 0 {
+		jsonEmail.Email = email
 	}
 
 	//	re := regexp.MustCompile( `^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$` )
@@ -119,7 +164,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(`Incorrect email`)
 		return
 	}
-
+/*
 	if publicKey, err = utils.DB.GetUserPublicKey(jsonEmail.UserId); err != nil || len(publicKey) == 0 {
 		pubVal := r.FormValue(`public`)
 		if (jsonEmail.Cmd == utils.ECMD_TEST || jsonEmail.Cmd == utils.ECMD_NEW) && len(pubVal) > 0 {
@@ -141,7 +186,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		signature); err != nil {
 		result(err.Error())
 		return
-	}
+	}*/
 	var (
 		params        []byte
 		text, subject string
@@ -163,13 +208,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		text = `From Admin: ` + (*jsonEmail.Params)[`msg`]
-	case utils.ECMD_CASHREQ:
+/*	case utils.ECMD_CASHREQ:
 		if err := checkParams(`amount`, `currency`); err != nil {
 			result(err.Error())
 			return
 		}
 		text = fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
-			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])
+			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])*/
 	case utils.ECMD_CHANGESTAT:
 		if err := checkParams(`status`); err != nil {
 			result(err.Error())
@@ -240,6 +285,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			jsonEmail.Email, errsend, ipval)
 		result(errsend)
 		return
+	}
+	// Пока запрещаем перезапись существующих юзеров
+	if jsonEmail.Cmd == utils.ECMD_NEW && len(email)==0 {
+		if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', 0, 0, 0)`, 
+								jsonEmail.UserId, jsonEmail.Email ); err!=nil {
+			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
+		}
 	}
 	GDB.ExecSql(`INSERT INTO log ( user_id, email, cmd, params, uptime, ip )
 				VALUES ( ?, ?, ?, ?, datetime('now'), ? )`,
@@ -350,8 +402,9 @@ func main() {
 	if utils.DB, err = utils.NewDbConnect(configIni); err != nil {
 		log.Fatalln(`Utils connect`, err)
 	}
-
-	if list, err := GDB.GetAllTables(); err == nil && len(list) == 0 {
+	
+	var list []string
+	if list, err = GDB.GetAllTables(); err == nil && len(list) == 0 {
 		if err = GDB.ExecSql(`CREATE TABLE log (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	user_id	INTEGER NOT NULL,
@@ -384,13 +437,82 @@ func main() {
 		if err = GDB.ExecSql(`CREATE INDEX email ON stoplist (email)`); err != nil {
 			log.Fatalln(err)
 		}
+	} 
+	
+	if !utils.InSliceString(`users`, list ) || len(list) == 0 {
+		if err = GDB.ExecSql(`CREATE TABLE users (
+	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	user_id	INTEGER NOT NULL,
+	email	 TEXT NOT NULL,
+	newemail TEXT NOT NULL,
+	lang	 INTEGER NOT NULL,	
+	code	 INTEGER NOT NULL,	
+	verified  INTEGER NOT NULL
+	)`); err != nil {
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE INDEX usersid ON users (user_id)`); err != nil {
+			log.Fatalln(err)
+		}
+
+		curlist, _ := GDB.GetAll(`SELECT DISTINCT user_id, email FROM log order by user_id, email`, -1 )
+		prev := 0
+		for _, curi := range curlist {
+			if prev == utils.StrToInt( curi[`user_id`] ) {
+				continue
+			}
+			prev = utils.StrToInt( curi[`user_id`] )
+			
+			verified := 0
+			if isStop, _ := GDB.Single(`SELECT id FROM stoplist where email=?`, curi[`email`]).Int64(); isStop > 0 {
+				verified = -1
+			}
+			
+			if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', ?, 0, 0 )`, 
+			      curi[`user_id`], curi[`email`], verified ); err!=nil {
+				log.Fatalln( err )
+			}
+		}
 	}
+
+	if !utils.InSliceString(`latest`, list ) || len(list) == 0 {
+		if err = GDB.ExecSql(`CREATE TABLE latest (
+	cmd_id	INTEGER NOT NULL,
+	latest	INTEGER NOT NULL
+	)`); err != nil {
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE INDEX cmdid ON latest (cmd_id)`); err != nil {
+			log.Fatalln(err)
+		}
+		if cash, err := utils.DB.Single(`SELECT max(id) FROM cash_requests` ).Int64(); err==nil {
+			if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_CASHREQ, cash ); err!=nil {
+				log.Fatalln( err )
+			}
+		} else {
+			log.Fatalln(err)
+		}
+	}
+	os.Chdir(dir)	
+	if GPageTpl,err =template.ParseGlob(`template/*.tpl`); err!=nil {
+		log.Fatalln( err )
+	}
+	if GPagePattern,err =template.ParseGlob(`pattern/*.tpl`); err!=nil {
+		log.Fatalln( err )
+	}
+	
+	go daemon()
+	go sendDaemon()
+
 	GEmail = NewEmailClient(GSettings.ApiId, GSettings.ApiSecret,
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
+
 	//	go Send()
 
-	http.HandleFunc("/", emailHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/unban`, unbanHandler)
+	http.HandleFunc( `/`, emailHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
 	log.Println("Finish")
 }
