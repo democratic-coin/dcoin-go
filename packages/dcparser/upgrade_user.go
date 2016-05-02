@@ -66,11 +66,11 @@ func (p *Parser) UpgradeUser() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	return p.selectiveLoggingAndUpd([]string{"sn_type", "sn_url_id", "votes_start_time", "votes_0", "votes_1", "sn_attempt"}, []interface{}{p.TxMaps.String["sn_type"], p.TxMaps.String["sn_url_id"], p.BlockData.Time, 0, 0, attempts+1}, "users", []string{"user_id"}, []string{utils.Int64ToStr(p.TxUserID)})
+	return p.selectiveLoggingAndUpd([]string{"sn_type", "sn_url_id", "votes_start_time", "votes_0", "votes_1", "sn_attempts"}, []interface{}{p.TxMaps.String["sn_type"], p.TxMaps.String["sn_url_id"], p.BlockData.Time, 0, 0, attempts+1}, "users", []string{"user_id"}, []string{utils.Int64ToStr(p.TxUserID)})
 }
 
 func (p *Parser) UpgradeUserRollback() error {
-	return p.selectiveRollback([]string{"sn_type", "sn_url_id", "votes_start_time", "votes_0", "votes_1", "sn_attempt"}, "users", "user_id="+utils.Int64ToStr(p.TxUserID), false)
+	return p.selectiveRollback([]string{"sn_type", "sn_url_id", "votes_start_time", "votes_0", "votes_1", "sn_attempts"}, "users", "user_id="+utils.Int64ToStr(p.TxUserID), false)
 }
 
 func (p *Parser) UpgradeUserRollbackFront() error {

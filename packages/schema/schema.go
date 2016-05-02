@@ -19,6 +19,8 @@ type SchemaStruct struct {
 	PrefixUserId int
 	S            Recmap
 	OnlyPrint bool
+	AddColumn bool
+	ChangeType bool
 }
 
 /*
@@ -3338,15 +3340,39 @@ func (schema *SchemaStruct) typeMysql() {
 		AI := ""
 		AI_START := "1"
 		schema.replMy(&table_name)
-		if !schema.OnlyPrint {
-			err = schema.DCDB.ExecSql("DROP TABLE IF EXISTS " + table_name)
-		} else {
-			fmt.Println("DROP TABLE IF EXISTS " + table_name+";")
+
+		result = ""
+		/*if schema.ChangeType {
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql(fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name))
+			} else {
+				fmt.Println(fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name))
+			}
+		}
+
+		if !schema.AddColumn {
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql("DROP TABLE IF EXISTS " + table_name)
+			} else {
+				fmt.Println("DROP TABLE IF EXISTS " + table_name+";")
+			}
+		}*/
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\";\n", table_name)
 		}
 		if err != nil {
 			log.Error("%v %v", err, table_name)
 		}
-		result = fmt.Sprintf("CREATE TABLE IF NOT EXISTS %[1]s (\n", table_name)
+
+		if !schema.AddColumn {
+			result += fmt.Sprintf("CREATE TABLE IF NOT EXISTS %[1]s (\n", table_name)
+		} else {
+			result += fmt.Sprintf("ALTER TABLE `%[1]s`\n", table_name)
+		}
+
 		var tableComment string
 		primaryKey := ""
 		uniqKey := ""
@@ -3393,16 +3419,26 @@ func (schema *SchemaStruct) typeMysql() {
 		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
+			if schema.AddColumn {
+				result += "ADD COLUMN "
+			}
 			if i == len(tableSlice)-1 {
 				result += fmt.Sprintf("%s\n", line)
 			} else {
 				result += fmt.Sprintf("%s,\n", line)
 			}
 		}
-		if len(AI) > 0 {
-			result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=%s COMMENT='%s';\n\n", AI_START, tableComment)
+		if !schema.AddColumn {
+			if len(AI) > 0 {
+				result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=%s COMMENT='%s';\n\n", AI_START, tableComment)
+			} else {
+				result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='%s';\n\n", tableComment)
+			}
 		} else {
-			result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='%s';\n\n", tableComment)
+			result += ";"
+		}
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
 		}
 		if !schema.OnlyPrint {
 			err = schema.DCDB.ExecSql(result)
@@ -3489,16 +3525,30 @@ func (schema *SchemaStruct) typePostgresql() {
 			result += fmt.Sprintf("DROP SEQUENCE IF EXISTS %[3]s_%[1]s_seq CASCADE;\nCREATE SEQUENCE %[3]s_%[1]s_seq START WITH %[2]s;\n", AI, AI_START, table_name)
 		}
 
-		result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		} else {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\"\n", table_name)
+		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
+			if schema.AddColumn {
+				result += "ADD COLUMN "
+			}
 			if i == len(tableSlice)-1 {
 				result += fmt.Sprintf("%s\n", line)
 			} else {
 				result += fmt.Sprintf("%s,\n", line)
 			}
 		}
-		result += fmt.Sprintln(");")
+		if !schema.AddColumn {
+			result += fmt.Sprintln(");")
+		} else {
+			result += fmt.Sprintln(";")
+		}
 
 		if len(uniqKey) > 0 {
 			result += fmt.Sprintln(uniqKey)
@@ -3512,6 +3562,9 @@ func (schema *SchemaStruct) typePostgresql() {
 			result += fmt.Sprintln(primaryKey)
 		}
 
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
+		}
 		result += fmt.Sprintln("\n\n")
 		if !schema.OnlyPrint {
 			err = schema.DCDB.ExecSql(result)
@@ -3545,7 +3598,12 @@ func (schema *SchemaStruct) typeSqlite() {
 		result = ""
 		schema.replMy(&table_name)
 
-		result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		}
 		//var tableComment string
 		primaryKey := ""
 		uniqKey := ""
@@ -3590,13 +3648,25 @@ func (schema *SchemaStruct) typeSqlite() {
 		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
-			if i == len(tableSlice)-1 {
-				result += fmt.Sprintf("%s\n", line)
+			if schema.AddColumn {
+				result += fmt.Sprintf("ALTER TABLE \"%[1]s\" ", table_name) + " ADD COLUMN "
+				result += fmt.Sprintf("%s;\n", line)
 			} else {
-				result += fmt.Sprintf("%s,\n", line)
+				if i == len(tableSlice)-1 {
+					result += fmt.Sprintf("%s\n", line)
+				} else {
+					result += fmt.Sprintf("%s,\n", line)
+				}
 			}
 		}
-		result += fmt.Sprintln(");\n\n")
+		if !schema.AddColumn {
+			result += fmt.Sprintln(");\n\n")
+		}
+
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
+		}
+
 		//log.Println(result)
 		if !schema.OnlyPrint {
 			err := schema.DCDB.ExecSql(result)
