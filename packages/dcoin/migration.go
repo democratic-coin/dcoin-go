@@ -293,6 +293,9 @@ func migration() {
 			schema_.PrintSchema()
 
 
+			s = nil
+			s1 = nil
+			s2 = nil
 			s2[0] = map[string]string{"name": "sn_type", "mysql": "varchar(100) NOT NULL DEFAULT ''", "sqlite": "varchar(100) NOT NULL DEFAULT ''", "postgresql": "varchar(100) NOT NULL DEFAULT ''", "comment": ""}
 			s2[1] = map[string]string{"name": "sn_url_id", "mysql": "varchar(255) NOT NULL DEFAULT ''", "sqlite": "varchar(255) NOT NULL DEFAULT ''", "postgresql": "varchar(255) NOT NULL DEFAULT ''", "comment": ""}
 			s2[2] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -306,8 +309,9 @@ func migration() {
 			schema_.AddColumn = true
 			schema_.PrintSchema()
 
-
-
+			s = nil
+			s1 = nil
+			s2 = nil
 			s2[0] = map[string]string{"name": "sn_type", "mysql": "varchar(100) NOT NULL DEFAULT ''", "sqlite": "varchar(100) NOT NULL DEFAULT ''", "postgresql": "varchar(100) NOT NULL DEFAULT ''", "comment": ""}
 			s2[1] = map[string]string{"name": "sn_url_id", "mysql": "varchar(255) NOT NULL DEFAULT ''", "sqlite": "varchar(255) NOT NULL DEFAULT ''", "postgresql": "varchar(255) NOT NULL DEFAULT ''", "comment": ""}
 			s2[2] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -321,6 +325,9 @@ func migration() {
 			schema_.AddColumn = true
 			schema_.PrintSchema()
 
+			s = nil
+			s1 = nil
+			s2 = nil
 			s2[0] = map[string]string{"name": "user_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": "Кто голосует"}
 			s2[1] = map[string]string{"name": "voting_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": "За что голосует. тут может быть id geolocation и пр"}
 			s2[2] = map[string]string{"name": "type", "mysql": "enum('null','votes_miners','promised_amount','sn_user') NOT NULL", "sqlite": "varchar(100)  NOT NULL", "postgresql": "enum('null','votes_miners','promised_amount','sn_user') NOT NULL", "comment": "Нужно для voting_id' DEFAULT 'null"}
@@ -334,16 +341,45 @@ func migration() {
 			schema_.PrintSchema()
 
 
+			s = nil
+			s1 = nil
+			s2 = nil
 			s2[0] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
 			s2[1] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
+			s1["fields"] = s2
 			s["promised_amount_restricted"] = s1
 			schema_.S = s
 			schema_.AddColumn = true
 			schema_.PrintSchema()
 
+			s = nil
+			s1 = nil
+			s2 = nil
+			s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_promised_amount_log_id_seq')", "comment": ""}
+			s2[1] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
+			s2[2] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
+			s2[3] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": "В каком блоке было занесено. Нужно для удаления старых данных"}
+			s2[4] = map[string]string{"name": "prev_log_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+			s1["fields"] = s2
+			s1["PRIMARY"] = []string{"log_id"}
+			s1["AI"] = "log_id"
+			s1["comment"] = ""
+			s["log_promised_amount_restricted"] = s1
+			schema_.S = s
+			schema_.AddColumn = true
+			schema_.PrintSchema()
 
+
+			s = nil
+			s1 = nil
+			s2 = nil
+			s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": ""}
+			s1["fields"] = s2
+			s["promised_amount_restricted"] = s1
+			schema_.S = s
+			schema_.AddColumn = true
+			schema_.PrintSchema()
 		}
-
 	}
 }
 
