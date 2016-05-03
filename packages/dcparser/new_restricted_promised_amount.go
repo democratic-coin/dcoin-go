@@ -42,13 +42,15 @@ func (p *Parser) NewRestrictedPromisedAmountFront() error {
 		return p.ErrInfo("exists promised_amount_restricted")
 	}
 
-	// не майнер ли он
-	isMiner, err := p.Single("SELECT user_id FROM miners_data WHERE user_id = ?", p.TxUserID).Int64()
-	if err != nil {
-		return p.ErrInfo(err)
-	}
-	if isMiner > 0 {
-		return p.ErrInfo("isMiner")
+	if p.BlockData == nil && p.BlockData.BlockId > 310000 {
+		// прошел ли проверку соц. сети
+		status, err := p.Single("SELECT status FROM users WHERE user_id = ?", p.TxUserID).String()
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		if status != "sn_user" {
+			return p.ErrInfo("!sn_user")
+		}
 	}
 
 	if p.TxMaps.Float64["amount"] > 30 || p.TxMaps.Int64["currency_id"] != 72 {
@@ -76,7 +78,7 @@ func (p *Parser) NewRestrictedPromisedAmount() error {
 						user_id,
 						amount,
 						currency_id,
-						start_time
+						last_update
 					)
 					VALUES (
 						` + utils.Int64ToStr(p.TxMaps.Int64["user_id"]) + `,
