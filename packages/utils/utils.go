@@ -1281,8 +1281,12 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 		if ok, _ := regexp.MatchString("^(youtube|vimeo|youku|null)$", data); ok {
 			return true
 		}
-	case "video_url_id":
+	case "video_url_id", "sn_url_id":
 		if ok, _ := regexp.MatchString("^(?i)([0-9a-z_-]{5,32}|null)$", data); ok {
+			return true
+		}
+	case "sn_type":
+		if ok, _ := regexp.MatchString("^(vk|fb|qq)$", data); ok {
 			return true
 		}
 	case "photo_hash", "sha256":
