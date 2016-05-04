@@ -6,6 +6,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
+	//"github.com/blevesearch/bleve/search/searchers"
 )
 
 type AssignmentsPage struct {
@@ -32,6 +33,8 @@ type AssignmentsPage struct {
 	PromisedAmountData map[string]string
 	UserInfo           map[string]string
 	CloneHosts         map[int64][]string
+	SN string
+	SnUserId int64
 }
 
 func getMyCountryRace( c *Controller ) ( country int, race int64 ) {
@@ -51,6 +54,7 @@ func (c *Controller) Assignments() (string, error) {
 	var randArr []int64
 	// Нельзя завершить голосование юзеров раньше чем через сутки, даже если набрано нужное кол-во голосов.
 	// В голосовании нодов ждать сутки не требуется, т.к. там нельзя поставить поддельных нодов
+
 
 	// Модерация новых майнеров
 	// берем тех, кто прошел проверку нодов (type='node_voting')
@@ -111,6 +115,23 @@ func (c *Controller) Assignments() (string, error) {
 		}
 	}
 
+	// модерация акков в соц. сетях
+	mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	addSql = ""
+	if c.SessUserId!=1 {
+		addSql = `AND sn_type = "`+mySnType+`"`
+	}
+	num, err = c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	if num > 0 {
+		randArr = append(randArr, 3)
+	}
+
 	log.Debug("randArr %v", randArr)
 
 	var AssignType int64
@@ -127,9 +148,10 @@ func (c *Controller) Assignments() (string, error) {
 	var txType string
 	var txTypeId int64
 	var timeNow int64
+	var snUserId int64
 	var myRace, myCountry, mainQuestion, newPromiseAmount, videoHost string
 	var promisedAmountData, userInfo map[string]string
-
+	var sn string
 	switch AssignType {
 	case 1:
 
@@ -346,6 +368,28 @@ func (c *Controller) Assignments() (string, error) {
 		tplName = "assignments_promised_amount"
 		tplTitle = "assignmentsPromisedAmount"
 
+	case 3:
+
+		mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		addSql = ""
+		if c.SessUserId!=1 {
+			addSql = `AND sn_type = "`+mySnType+`"`
+		}
+		usersSN, err := c.OneRow("SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'" + addSql).String()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		if len(usersSN)>0 {
+			sn = `<a href="http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`">http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`"</a>`
+		}
+		snUserId = utils.StrToInt64(usersSN["sn_url_id"])
+
+		tplName = "assignments_sn"
+		tplTitle = "assignmentsSn"
+
 	default:
 		tplName = "assignments"
 		tplTitle = "assignments"
@@ -371,6 +415,8 @@ func (c *Controller) Assignments() (string, error) {
 		PhotoHosts:         photoHosts,
 		PromisedAmountData: promisedAmountData,
 		UserInfo:           userInfo,
+		SN:           sn,
+		SnUserId: snUserId,
 		CloneHosts:         cloneHosts})
 	if err != nil {
 		return "", utils.ErrInfo(err)

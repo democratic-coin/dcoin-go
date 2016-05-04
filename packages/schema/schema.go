@@ -52,7 +52,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s = make(Recmap)
 	s1 = make(Recmap)
 	s2 = make(Recmapi)
-	s2[0] = map[string]string{"name": "type", "mysql": "enum('promised_amount','miner', 'null') NOT NULL DEFAULT 'null'", "sqlite": "varchar(100) ", "postgresql": "enum('promised_amount','miner', 'null') NOT NULL DEFAULT 'null'", "comment": ""}
+	s2[0] = map[string]string{"name": "type", "mysql": "enum('promised_amount','miner','sn', 'null') NOT NULL DEFAULT 'null'", "sqlite": "varchar(100) ", "postgresql": "enum('promised_amount','miner','sn', 'null') NOT NULL DEFAULT 'null'", "comment": ""}
 	s2[1] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[2] = map[string]string{"name": "time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s1["fields"] = s2
@@ -2433,7 +2433,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s2[20] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[21] = map[string]string{"name": "votes_0", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[22] = map[string]string{"name": "votes_1", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-	s2[23] = map[string]string{"name": "status", "mysql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'pending'", "sqlite": "varchar(100)  NOT NULL DEFAULT 'pending'", "postgresql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "comment": ""}
+	s2[23] = map[string]string{"name": "status", "mysql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "sqlite": "varchar(100)  NOT NULL DEFAULT 'user'", "postgresql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "comment": ""}
 	s2[24] = map[string]string{"name": "sn_attempts", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[25] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 	s1["fields"] = s2
@@ -3606,6 +3606,7 @@ func (schema *SchemaStruct) replMy(table_name *string) {
 func (schema *SchemaStruct) typeSqlite() {
 	var result string
 	for table_name, v := range schema.S {
+		log.Debug("table_name", table_name)
 		if ok, _ := regexp.MatchString(`\[my_prefix\]`, table_name); !ok {
 			if schema.PrefixUserId > 0 {
 				continue
@@ -3685,9 +3686,10 @@ func (schema *SchemaStruct) typeSqlite() {
 
 		//log.Println(result)
 		if !schema.OnlyPrint {
+			log.Debug("result", result)
 			err := schema.DCDB.ExecSql(result)
 			if err != nil {
-				log.Debug("%v", err)
+				log.Error("%v", err)
 			}
 		} else {
 			fmt.Println(result)
@@ -3699,7 +3701,7 @@ func (schema *SchemaStruct) typeSqlite() {
 				err := schema.DCDB.ExecSql(q)
 				//log.Println(q)
 				if err != nil {
-					log.Debug("%v", err)
+					log.Error("%v", err)
 				}
 			} else {
 				fmt.Println(result)

@@ -1282,7 +1282,7 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 			return true
 		}
 	case "video_url_id", "sn_url_id":
-		if ok, _ := regexp.MatchString("^(?i)([0-9a-z_-]{5,32}|null)$", data); ok {
+		if ok, _ := regexp.MatchString("^(?i)([0-9a-z_-]{2,32}|null)$", data); ok {
 			return true
 		}
 	case "sn_type":
