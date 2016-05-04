@@ -86,7 +86,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			if len(jsonEmail.Email) == 0 {
 				jsonEmail.Email = r.FormValue(`email`)
 			}
-			log.Println(remoteAddr, `Error:`, answer.Error, jsonEmail.Email, jsonEmail.UserId)
+			log.Println(remoteAddr, `Error:`, jsonEmail.Cmd, answer.Error, jsonEmail.Email, jsonEmail.UserId)
 		} else {
 			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email, jsonEmail.UserId)
 		}
@@ -144,14 +144,15 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		email = user[`email`]
 		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
 			if jsonEmail.Cmd == utils.ECMD_NEW {
-				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?s, verified=0 where user_id=?`, 
+				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
 									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
 					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
 				}
-			} else {
+			} /*else {
 				result(`Overwrite email`)
 				return
-			}
+			}*/
+			jsonEmail.Email = email
 		}
 	}
 	if len(jsonEmail.Email) == 0 && len(email) > 0 {
@@ -286,7 +287,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(errsend)
 		return
 	}
-	// Пока запрещаем перезапись существующих юзеров
+	// Пока не запрещаем перезапись существующих юзеров
 	if jsonEmail.Cmd == utils.ECMD_NEW && len(email)==0 {
 		if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', 0, 0, 0)`, 
 								jsonEmail.UserId, jsonEmail.Email ); err!=nil {
@@ -510,8 +511,12 @@ func main() {
 
 	//	go Send()
 
+	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/unban`, unbanHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
 	http.HandleFunc( `/`, emailHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
 	log.Println("Finish")
