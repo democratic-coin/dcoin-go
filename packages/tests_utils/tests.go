@@ -199,7 +199,7 @@ func MakeFrontTest(transactionArray [][]byte, time int64, dataForSign string, tx
 	parser.GoroutineName = "test"
 	parser.TxSlice = transactionArray
 	parser.BlockData = &utils.BlockData{BlockId: blockId, Time: time, UserId: userId}
-	parser.TxHash = []byte("111111111111111")
+	parser.TxHash = "111111111111111"
 	parser.Variables, _ = parser.DCDB.GetAllVariables()
 
 	err0 := utils.CallMethod(parser, txType+"Init")
@@ -228,7 +228,7 @@ func MakeTest(txSlice [][]byte, blockData *utils.BlockData, txType string, testT
 	parser.DCDB = db
 	parser.TxSlice = txSlice
 	parser.BlockData = blockData
-	parser.TxHash = []byte("111111111111111")
+	parser.TxHash = "111111111111111"
 	parser.Variables, _ = db.GetAllVariables()
 
 	// делаем снимок БД в виде хэшей до начала тестов

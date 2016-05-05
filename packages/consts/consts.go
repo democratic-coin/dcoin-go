@@ -2,7 +2,7 @@
 
 
 // текущая версия
-const VERSION = "2.2.5b2"
+const VERSION = "2.3.0a1"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -93,7 +93,14 @@ const LIMIT_AUTO_PAYMENTS = 5
 const LIMIT_AUTO_PAYMENTS_PERIOD = 3600 * 24
 const LIMIT_DEL_USER_FROM_POOL = 10
 const LIMIT_DEL_USER_FROM_POOL_PERIOD = 3600 * 24
+const LIMIT_SN_USER = 3
+const LIMIT_SN_USER_PERIOD = 3600 * 24 * 2
 
+const LIMIT_SN_VOTES_0 = 5
+const LIMIT_SN_VOTES_1 = 5
+const LIMIT_SN_VOTES_PERIOD = 86400
+
+const SN_USER_ATTEMPTS = 3600 * 24 * 2
 
 const CRON_CHECKED_TIME_SEC = 86400 * 3
 
@@ -266,6 +273,12 @@ var TxTypes = map[int]string{
 	74: "ChangePool",
 	// новая ограниченная обещанная сумма
 	75: "NewRestrictedPromisedAmount",
+	// добавление акка соц. сети
+	76: "UpgradeUser",
+	// голоса майнеров за нового с указанной соц. сетью
+	77: "VotesSnUser",
+	// снятие набежавших dUSD с ограниченной обещанной
+	78: "MiningSn",
 }
 
 func init() {

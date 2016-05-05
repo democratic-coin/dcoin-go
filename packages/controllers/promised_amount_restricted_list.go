@@ -12,6 +12,10 @@ type promisedAmountRestrictedList struct {
 	UserId          int64
 	Pct float64
 	Amount float64
+	UserSn string
+	LastTxQueueTx     bool
+	LastTxTx          bool
+	LastTxFormatted string
 	Lang            map[string]string
 }
 
@@ -45,13 +49,35 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
+	userSn, err := c.Single(`SELECT status FROM users WHERE user_id = ?`, c.SessUserId).String()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
+	var lastTxQueueTx, lastTxTx bool
+	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"UpgradeUser", "MiningSn"}), 1, c.TimeFormat)
+	lastTxFormatted := ""
+	if len(lastTx) > 0 {
+		lastTxFormatted, _ = utils.MakeLastTx(lastTx, c.Lang)
+		if len(lastTx[0]["queue_tx"]) > 0 {
+			lastTxQueueTx = true
+		}
+		if len(lastTx[0]["tx"]) > 0 {
+			lastTxTx = true
+		}
+	}
+
 	TemplateStr, err := makeTemplate("promised_amount_restricted_list", "PromisedAmountRestrictedList", &promisedAmountRestrictedList{
 		Alert:           c.Alert,
 		Lang:            c.Lang,
 		CountSignArr:    c.CountSignArr,
 		Pct : pct,
 		Amount : profit,
+		LastTxFormatted: lastTxFormatted,
+		LastTxQueueTx:     lastTxQueueTx,
+		LastTxTx:          lastTxTx,
 		ShowSignData:    c.ShowSignData,
+		UserSn: userSn,
 		UserId:          c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)

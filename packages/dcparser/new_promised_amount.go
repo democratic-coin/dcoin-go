@@ -170,33 +170,36 @@ func (p *Parser) NewPromisedAmount() error {
 		}
 	}
 
-	// возможно юзер хочет забрать ранее намайненное когда он еще не был майнером
-	restrictedPA, err := p.OneRow(`SELECT * from promised_amount_restricted WHERE currency_id = ? AND user_id = ?`, p.TxMaps.Int64["currency_id"], p.TxUserID).String()
-
-	// провереим, точно ли это первый перевод из урезанных
-	existsPA, err := p.Single(`SELECT id from promised_amount WHERE currency_id = ? AND user_id = ?`, p.TxMaps.Int64["currency_id"], p.TxUserID).Int64()
-	var	profit float64
+	var profit float64
 	var tdcAmountUpdate int64
-	if existsPA == 0 {
-		pct, err := p.GetPct()
+	if p.BlockData.BlockId < 310000 { // перенсено в mining_sn
+		// возможно юзер хочет забрать ранее намайненное когда он еще не был майнером
+		restrictedPA, err := p.OneRow(`SELECT * from promised_amount_restricted WHERE currency_id = ? AND user_id = ?`, p.TxMaps.Int64["currency_id"], p.TxUserID).String()
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		startTime := utils.StrToInt64(restrictedPA["start_time"])
-		// максимум 6 мес. ~ 26$
-		endTime := p.BlockData.Time
-		if p.BlockData.Time - startTime > 86400*180 {
-			endTime = startTime + 86400*180
+		// провереим, точно ли это первый перевод из урезанных
+		existsPA, err := p.Single(`SELECT id from promised_amount WHERE currency_id = ? AND user_id = ?`, p.TxMaps.Int64["currency_id"], p.TxUserID).Int64()
+		if existsPA == 0 {
+			pct, err := p.GetPct()
+			if err != nil {
+				return p.ErrInfo(err)
+			}
+			startTime := utils.StrToInt64(restrictedPA["start_time"])
+			// максимум 6 мес. ~ 26$
+			endTime := p.BlockData.Time
+			if p.BlockData.Time - startTime > 86400*180 {
+				endTime = startTime + 86400*180
+			}
+			profit, err = p.calcProfit_(utils.StrToFloat64(restrictedPA["amount"]), startTime, endTime, pct[p.TxMaps.Int64["currency_id"]], []map[int64]string{{0: "user"}}, [][]int64{}, []map[int64]string{}, 0, 0)
+			if err != nil {
+				return p.ErrInfo(err)
+			}
+			tdcAmountUpdate = p.BlockData.Time
 		}
-		profit, err = p.calcProfit_(utils.StrToFloat64(restrictedPA["amount"]), startTime, endTime, pct[p.TxMaps.Int64["currency_id"]], []map[int64]string{{0: "user"}}, [][]int64{}, []map[int64]string{}, 0, 0)
-		if err != nil {
-			return p.ErrInfo(err)
-		}
-		tdcAmountUpdate = p.BlockData.Time
 	}
-
 	//добавляем promised_amount в БД
-	err = p.ExecSql(`
+	err := p.ExecSql(`
 				INSERT INTO promised_amount (
 						user_id,
 						amount,

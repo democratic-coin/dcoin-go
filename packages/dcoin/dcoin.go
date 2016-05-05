@@ -1,22 +1,23 @@
 package dcoin
 
 import (
-	"github.com/go-thrust/thrust"
-//"github.com/go-thrust/tutorials/provisioner"
-	"github.com/go-thrust/lib/commands"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/session"
 	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/controllers"
 	"github.com/democratic-coin/dcoin-go/packages/daemons"
+	"github.com/democratic-coin/dcoin-go/packages/dcparser"
 	"github.com/democratic-coin/dcoin-go/packages/static"
+	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/go-bindata-assetfs"
+	"github.com/go-thrust/lib/bindings/window"
+	"github.com/go-thrust/lib/commands"
+	"github.com/go-thrust/thrust"
 	"github.com/op/go-logging"
 	_ "image/png"
-//"io"
-	"encoding/json"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -27,11 +28,6 @@ import (
 	"runtime"
 	"strings"
 	"time"
-//"syscall"
-	"github.com/democratic-coin/dcoin-go/packages/dcparser"
-	"github.com/go-thrust/lib/bindings/window"
-	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
-	"github.com/democratic-coin/dcoin-go/packages/schema"
 )
 
 var (
@@ -75,11 +71,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}()
 
-	Exit :=	func ( code int ) {
-		if ( thrustWindowLoder != nil ) {
+	Exit := func(code int) {
+		if thrustWindowLoder != nil {
 			thrustWindowLoder.Close()
 		}
-		os.Exit( code )
+		os.Exit(code)
 	}
 
 	if dir != "" {
@@ -140,8 +136,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}
 
-
-
 	controllers.SessInit()
 	controllers.ConfigInit()
 	daemons.ConfigInit()
@@ -199,10 +193,10 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	// если есть OldFileName, значит работаем под именем dc.tmp и нужно перезапуститься под нормальным именем
 	log.Debug("OldFileName %v", *utils.OldFileName)
-	if *utils.OldFileName != "" || len(configIni)!=0 {
+	if *utils.OldFileName != "" || len(configIni) != 0 {
 
-		if *utils.OldFileName != "" {   //*utils.Dir+`/dc.tmp`
-			err = utils.CopyFileContents( os.Args[0], *utils.OldFileName)
+		if *utils.OldFileName != "" { //*utils.Dir+`/dc.tmp`
+			err = utils.CopyFileContents(os.Args[0], *utils.OldFileName)
 			if err != nil {
 				log.Debug("%v", os.Stderr)
 				log.Debug("%v", utils.ErrInfo(err))
@@ -218,274 +212,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			break
 		}
 
-		oldDbVersion, err := utils.DB.Single(`SELECT version FROM migration_history ORDER BY id DESC LIMIT 1`).String()
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-		if len(*utils.OldVersion) == 0 && consts.VERSION != oldDbVersion {
-			*utils.OldVersion = oldDbVersion
-		}
-
-		log.Debug("*utils.OldVersion %v", *utils.OldVersion)
-		if len(*utils.OldVersion) > 0 {
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("1.0.2b5")) {
-				log.Debug("%v", "ALTER TABLE config ADD COLUMN analytics_disabled smallint")
-				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN analytics_disabled smallint`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.0.1b2")) {
-				log.Debug("%v", "ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)")
-				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN sqlite_db_url varchar(255)`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a13")) {
-				community, err := utils.DB.GetCommunityUsers()
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				if len(community) > 0 {
-					for i := 0; i < len(community); i++ {
-						err = utils.DB.ExecSql(`ALTER TABLE `+utils.Int64ToStr(community[i])+`_my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
-						if err != nil {
-							log.Error("%v", utils.ErrInfo(err))
-						}
-					}
-				} else {
-					log.Debug(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
-					err = utils.DB.ExecSql(`ALTER TABLE my_table ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
-					if err != nil {
-						log.Error("%v", utils.ErrInfo(err))
-					}
-				}
-
-				log.Debug(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
-				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN stat_host varchar(255)`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN i_am_pool int NOT NULL DEFAULT '0'`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_user_id int  NOT NULL DEFAULT '0'`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN pool_count_users int  NOT NULL DEFAULT '0'`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN pool_user_id int NOT NULL DEFAULT '0'`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-				err = utils.DB.ExecSql(`ALTER TABLE log_miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "bigint(20) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint NOT NULL  default nextval('auto_payments_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "amount", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "commission", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
-				s2[3] = map[string]string{"name": "currency_id", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[4] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Когда был последний платеж. При создании авто-платежа пишется текущее время"}
-				s2[5] = map[string]string{"name": "period", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[6] = map[string]string{"name": "sender", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[7] = map[string]string{"name": "recipient", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[8] = map[string]string{"name": "comment", "mysql": "text CHARACTER SET utf8 NOT NULL DEFAULT ''", "sqlite": "text NOT NULL DEFAULT ''", "postgresql": "text NOT NULL DEFAULT ''", "comment": ""}
-				s2[9] = map[string]string{"name": "block_id", "mysql": "int(11)  unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)   NOT NULL DEFAULT '0'", "postgresql": "int   NOT NULL DEFAULT '0'", "comment": "Для отката новой записи об авто-платеже"}
-				s2[10] = map[string]string{"name": "del_block_id", "mysql": "int(11)  unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)   NOT NULL DEFAULT '0'", "postgresql": "int   NOT NULL DEFAULT '0'", "comment": "Чистим по крону старые данные раз в сутки. Удалять нельзя, т.к. нужно откатывать"}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"id"}
-				s1["AI"] = "id"
-				s1["comment"] = ""
-				s["auto_payments"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-
-				s = make(schema.Recmap)
-				s1 = make(schema.Recmap)
-				s2 = make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"id"}
-				s1["AI"] = "id"
-				s1["comment"] = ""
-				s["log_time_auto_payments"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-
-				s = make(schema.Recmap)
-				s1 = make(schema.Recmap)
-				s2 = make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"id"}
-				s1["AI"] = "id"
-				s1["comment"] = ""
-				s["log_time_del_user_from_pool"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a16")) {
-				err = utils.DB.ExecSql(`ALTER TABLE miners_data ADD COLUMN backup_pool_users text NOT NULL DEFAULT ''`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a23")) {
-
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[1] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "year", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[3] = map[string]string{"name": "currency_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[4] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[5] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["AI"] = "id"
-				s1["PRIMARY"] = []string{"day", "month", "year", "currency_id"}
-				s1["comment"] = ""
-				s["stats"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a1")) {
-
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('stats_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[3] = map[string]string{"name": "year", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[4] = map[string]string{"name": "currency_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[5] = map[string]string{"name": "dc", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[6] = map[string]string{"name": "promised_amount", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["UNIQ"] = []string{"day", "month", "year", "currency_id"}
-				s1["PRIMARY"] = []string{"id"}
-				s1["comment"] = ""
-				s["stats"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a3")) {
-
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "version", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "date_applied", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"id"}
-				s1["AI"] = "id"
-				s1["comment"] = ""
-				s["migration_history"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a4")) {
-
-				err = utils.DB.ExecSql(`ALTER TABLE migration_history ADD COLUMN test_migration int NOT NULL DEFAULT '0'`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a8")) {
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": ""}
-				s2[3] = map[string]string{"name": "currency_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[4] = map[string]string{"name": "start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"id"}
-				s1["AI"] = "id"
-				s1["comment"] = ""
-				s["promised_amount_restricted"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-			}
-
-			err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
-			if err != nil {
-				log.Error("%v", utils.ErrInfo(err))
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a1")) {
-				schema_ := &schema.SchemaStruct{}
-				schema_.DbType = utils.DB.ConfigIni["db_type"]
-				schema_.DCDB = utils.DB
-				s := make(schema.Recmap)
-				s1 := make(schema.Recmap)
-				s2 := make(schema.Recmapi)
-				s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_arbitrator_conditions_log_id_seq')", "comment": ""}
-				s2[1] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-				s2[3] = map[string]string{"name": "prev_log_id", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
-				s1["fields"] = s2
-				s1["PRIMARY"] = []string{"log_id"}
-				s1["AI"] = "log_id"
-				s1["comment"] = ""
-				s["log_auto_payments"] = s1
-				schema_.S = s
-				schema_.PrintSchema()
-
-				err = utils.DB.ExecSql(`ALTER TABLE auto_payments ADD COLUMN log_id bigint(20) NOT NULL DEFAULT '0';`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-
-			if (utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a2")) {
-
-				err = utils.DB.ExecSql(`ALTER TABLE config ADD COLUMN getpool_host varchar(255)`)
-				if err != nil {
-					log.Error("%v", utils.ErrInfo(err))
-				}
-			}
-		}
+		migration()
 
 		if *utils.OldFileName != "" {
 			err = utils.DB.Close()
@@ -493,12 +220,12 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 			fmt.Println("DB Closed")
-			err = os.Remove( filepath.Join( *utils.Dir, "dcoin.pid" ))
+			err = os.Remove(filepath.Join(*utils.Dir, "dcoin.pid"))
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 
-			log.Debug("dc.tmp %v", os.Args[0])//*utils.Dir+`/dc.tmp`)
+			log.Debug("dc.tmp %v", os.Args[0]) //*utils.Dir+`/dc.tmp`)
 			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 			if err != nil {
 				log.Debug("%v", os.Stderr)
@@ -523,8 +250,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 		}
 	}
 
-
-
 	// откат БД до указанного блока
 	if *utils.RollbackToBlockId > 0 {
 		utils.DB, err = utils.NewDbConnect(configIni)
@@ -544,9 +269,9 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			panic(err)
 		}
 
-		startData := map[string]int64 {"my_notifications":999999,"my_table": 1, "admin": 1, "cf_lang": 66, "block_chain": 1, "currency": 77, "info_block": 1, "log_transactions": 1, "main_lock": 1, "miners": 1, "miners_data": 1, "pct": 77, "max_promised_amounts": 77, "queue_tx": 9999999, "spots_compatibility": 1, "users": 1, "variables": 73, "install": 1, "payment_systems": 76, "config": 1, "e_currency": 5, "e_currency_pair": 4}
+		startData := map[string]int64{"my_notifications": 999999, "my_table": 1, "admin": 1, "cf_lang": 66, "block_chain": 1, "currency": 77, "info_block": 1, "log_transactions": 1, "main_lock": 1, "miners": 1, "miners_data": 1, "pct": 77, "max_promised_amounts": 77, "queue_tx": 9999999, "spots_compatibility": 1, "users": 1, "variables": 73, "install": 1, "payment_systems": 76, "config": 1, "e_currency": 5, "e_currency_pair": 4}
 		for _, table := range allTable {
-			count, err := utils.DB.Single(`SELECT count(*) FROM `+table).Int64()
+			count, err := utils.DB.Single(`SELECT count(*) FROM ` + table).Int64()
 			if err != nil {
 				fmt.Println(err)
 				panic(err)
@@ -642,11 +367,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 		if *utils.Console == 0 && !utils.Mobile() {
 			utils.Sleep(1)
-			if thrustWindowLoder!=nil {
+			if thrustWindowLoder != nil {
 				thrustWindowLoder.Close()
 				thrustWindow := thrust.NewWindow(thrust.WindowOptions{
 					RootUrl: BrowserHttpHost,
-					Size: commands.SizeHW{Width:1024, Height:600},
+					Size:    commands.SizeHW{Width: 1024, Height: 600},
 				})
 				thrustWindow.HandleEvent("*", func(cr commands.EventResult) {
 					fmt.Println("HandleEvent", cr)
@@ -677,8 +402,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	utils.Sleep(3600 * 24 * 90)
 	log.Debug("EXIT")
 }
-
-
 
 func exhangeHttpListener(HandleHttpHost string) {
 
@@ -726,7 +449,6 @@ func exhangeHttpListener(HandleHttpHost string) {
 			}
 		}
 	}
-
 
 }
 

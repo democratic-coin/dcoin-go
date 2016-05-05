@@ -1,0 +1,77 @@
+{{define "assignmentsSn"}}
+<script>
+
+	function write_for_signature (result) {
+		if ($('#comment').val()=='') {
+			$('#comment').val('null');
+		}
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},{{.SnUserId}},'+result+','+$('#comment').val() );
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	}
+
+		$('#btn-bad').bind('click', function () {
+
+			$('#step_1').css('display', 'none');
+			$('#sign').css('display', 'block');
+			$('#result').val( '0' );
+
+			write_for_signature(0);
+
+		} );
+
+
+		$('#btn-success').bind('click', function () {
+
+			$('#step_1').css('display', 'none');
+			$('#sign').css('display', 'block');
+			$('#result').val( '1' );
+
+			write_for_signature(1);
+
+		} );
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+				'type' : '{{.TxType}}',
+				'time' : '{{.TimeNow}}',
+				'user_id' : '{{.UserId}}',
+				'sn_user_id' : $('#sn_user_id').val(),
+				'result' : $('#result').val(),
+				'comment' : $('#comment').val(),
+				'signature1': $('#signature1').val(),
+				'signature2': $('#signature2').val(),
+				'signature3': $('#signature3').val()
+			}, function () {
+				dc_navigate ('assignments', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			} );
+
+		});
+</script>
+
+<h1 class="page-header">assignmentsSn</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<li><a href="#assignments">{{.Lang.tasks_title}}</a></li>
+<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<div id="step_1">
+
+	<p>{{.SN}}</p>
+	<p>Пожалуйста, проверьте, есть ли у данного пользователя минимум 50 друзей. Затем напишите ему "Вы хотите зарегистрироваться в Dcoin".Он должен ответить "Да". Если у Вас есть подозрения, что это бот, жмите на кнопку "No". Успех и процветание Dcoin зависит от кол-во новых пользователей, но при этом, боты могут сильно навредить, поэтому, просим Вас относиться к проверке ответственно.</p>
+
+	Comment: <input type="text" id="comment" value="" class="form-control"><br>
+	<button class="btn btn-inverse" id="btn-bad">{{.Lang.no}}</button>
+	<button class="btn btn-success" id="btn-success">{{.Lang.yes}}</button>
+</div>
+
+{{template "signatures".}}
+
+<input type="hidden" id="user_id" value="{{.UserId}}">
+<input type="hidden" id="sn_user_id" value="{{.SnUserId}}">
+<input type="hidden" id="result">
+
+{{end}}
