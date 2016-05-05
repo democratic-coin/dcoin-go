@@ -387,6 +387,10 @@ func (c *Controller) Assignments() (string, error) {
 		}
 		snUserId = utils.StrToInt64(usersSN["sn_url_id"])
 
+		txType = "VotesSnUser"
+		txTypeId = utils.TypeInt(txType)
+		timeNow = utils.Time()
+
 		tplName = "assignments_sn"
 		tplTitle = "assignmentsSn"
 
