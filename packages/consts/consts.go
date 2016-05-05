@@ -276,7 +276,7 @@ var TxTypes = map[int]string{
 	// добавление акка соц. сети
 	76: "UpgradeUser",
 	// голоса майнеров за нового с указанной соц. сетью
-	77: "VotesSNUser",
+	77: "VotesSnUser",
 	// снятие набежавших dUSD с ограниченной обещанной
 	78: "MiningSn",
 }

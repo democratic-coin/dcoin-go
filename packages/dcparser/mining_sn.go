@@ -1,8 +1,9 @@
 package dcparser
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"fmt"
 )
 
 func (p *Parser) MiningSnInit() error {
@@ -61,10 +62,18 @@ func (p *Parser) MiningSnFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
+	fmt.Println("profit", profit)
+
+	newDcAmount := utils.StrToFloat64(restrictedPA["dc_amount"]) + profit;
+	if newDcAmount > 30 {
+		newDcAmount = 30;
+		profit = 30 - utils.StrToFloat64(restrictedPA["dc_amount"]);
+	}
+	profit = utils.Round(profit, 2);
 
 	// можно получить нахаляву максимум 30 dUSD
-	if profit < 0.02 || utils.StrToFloat64(restrictedPA["dc_amount"]) > 29.98 {
-		return p.ErrInfo("incorrect amount")
+	if profit < 0.01 || utils.StrToFloat64(restrictedPA["dc_amount"]) > 29.99 {
+		return p.ErrInfo(fmt.Sprintf("incorrect amount %v %v", profit, restrictedPA["dc_amount"] ))
 	}
 
 	err = p.limitRequest(p.Variables.Int64["limit_mining"], "mining", p.Variables.Int64["limit_mining_period"])
@@ -102,6 +111,12 @@ func (p *Parser) MiningSn() error {
 	}
 
 	newDcAmount := utils.StrToFloat64(restrictedPA["dc_amount"]) + profit;
+	if newDcAmount > 30 {
+		newDcAmount = 30;
+		profit = 30 - utils.StrToFloat64(restrictedPA["dc_amount"]);
+	}
+	profit = utils.Round(profit, 2);
+
 	err = p.selectiveLoggingAndUpd([]string{"dc_amount", "last_update"}, []interface{}{newDcAmount, p.BlockData.Time}, "promised_amount_restricted", []string{"user_id"}, []string{utils.Int64ToStr(p.TxUserID)})
 	if err != nil {
 		return p.ErrInfo(err)
@@ -148,5 +163,5 @@ func (p *Parser) MiningSnRollback() error {
 }
 
 func (p *Parser) MiningSnRollbackFront() error {
-	return p.limitRequestsRollback("MiningSn")
+	return p.limitRequestsRollback("mining")
 }

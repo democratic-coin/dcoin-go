@@ -1,0 +1,60 @@
+{{define "upgradeUser"}}
+<script>
+
+	$('#save').bind('click', function () {
+
+		$("#upgradeUser").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#sn_type").val()+','+$("#sn_url_id").val());
+		doSign();
+		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		});
+
+		$('#send_to_net').bind('click', function () {
+
+			$.post( 'ajax?controllerName=saveQueue', {
+						'type' : '{{.TxType}}',
+						'time' : '{{.TimeNow}}',
+						'user_id' : '{{.UserId}}',
+						'sn_type' : $('#sn_type').val(),
+						'sn_url_id' : $('#sn_url_id').val(),
+						'signature1': $('#signature1').val(),
+						'signature2': $('#signature2').val(),
+						'signature3': $('#signature3').val()
+					}, function (data) {
+						dc_navigate ('PromisedAmountRestrictedList', {'alert': '{{.Lang.sent_to_the_net}}'} );
+					}
+			);
+
+		} );
+
+</script>
+
+
+
+<h1 class="page-header">upgradeUser</h1>
+<ol class="breadcrumb" style="position: relative;">
+	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+	<span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+
+{{template "alertSuccess".}}
+
+<div id="change_host">
+	Укажите, пожалуйста, свой аккаунт в соц. сети, где у Вас есть минимум 50 друзей. Dcoin-пользователи напишут Вам вопрос "Вы хотите зарегистрироваться в Dcoin", Вам нужно ответить им всем "Да". Проверьте настройки своего аккаунта в соц. сети, чтобы другие пользователи могли видеть кол-во Ваших друзей и иметь возможность писать Вам сообщения
+	<form>
+		<fieldset>
+			<select id="sn_type">
+				<option value="fb" selected>http://facebook.com/</option>
+				<option value="vk">http://vk.com/</option>
+				<option value="qq">http://user.qzone.qq.com/</option>
+			</select>
+			<input type="text" id="sn_url_id">
+			<button type="submit" class="btn" id="save">{{.Lang.next}}</button>
+		</fieldset>
+	</form>
+
+</div>
+
+{{template "signatures".}}
+
+{{end}}

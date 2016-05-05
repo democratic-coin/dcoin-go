@@ -26,4 +26,3 @@ func tcpListener() {
 func tray() {
 
 }
-

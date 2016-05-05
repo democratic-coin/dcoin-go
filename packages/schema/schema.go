@@ -19,6 +19,8 @@ type SchemaStruct struct {
 	PrefixUserId int
 	S            Recmap
 	OnlyPrint bool
+	AddColumn bool
+	ChangeType bool
 }
 
 /*
@@ -50,7 +52,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s = make(Recmap)
 	s1 = make(Recmap)
 	s2 = make(Recmapi)
-	s2[0] = map[string]string{"name": "type", "mysql": "enum('promised_amount','miner', 'null') NOT NULL DEFAULT 'null'", "sqlite": "varchar(100) ", "postgresql": "enum('promised_amount','miner', 'null') NOT NULL DEFAULT 'null'", "comment": ""}
+	s2[0] = map[string]string{"name": "type", "mysql": "enum('promised_amount','miner','sn', 'null') NOT NULL DEFAULT 'null'", "sqlite": "varchar(100) ", "postgresql": "enum('promised_amount','miner','sn', 'null') NOT NULL DEFAULT 'null'", "comment": ""}
 	s2[1] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[2] = map[string]string{"name": "time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s1["fields"] = s2
@@ -2431,7 +2433,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s2[20] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[21] = map[string]string{"name": "votes_0", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[22] = map[string]string{"name": "votes_1", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
-	s2[23] = map[string]string{"name": "status", "mysql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'pending'", "sqlite": "varchar(100)  NOT NULL DEFAULT 'pending'", "postgresql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "comment": ""}
+	s2[23] = map[string]string{"name": "status", "mysql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "sqlite": "varchar(100)  NOT NULL DEFAULT 'user'", "postgresql": "enum('user','sn_user', 'rejected_sn_user') NOT NULL DEFAULT 'user'", "comment": ""}
 	s2[24] = map[string]string{"name": "sn_attempts", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[25] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 	s1["fields"] = s2
@@ -3298,6 +3300,21 @@ func (schema *SchemaStruct) GetSchema() {
 	schema.S = s
 	schema.PrintSchema()
 
+
+	s = make(Recmap)
+	s1 = make(Recmap)
+	s2 = make(Recmapi)
+	s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_promised_amount_log_id_seq')", "comment": ""}
+	s2[1] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
+	s2[2] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
+	s2[3] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": "В каком блоке было занесено. Нужно для удаления старых данных"}
+	s2[4] = map[string]string{"name": "prev_log_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+	s1["fields"] = s2
+	s1["PRIMARY"] = []string{"log_id"}
+	s1["AI"] = "log_id"
+	s1["comment"] = ""
+	s["log_promised_amount_restricted"] = s1
+
 	s = make(Recmap)
 	s1 = make(Recmap)
 	s2 = make(Recmapi)
@@ -3307,6 +3324,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s2[3] = map[string]string{"name": "currency_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
 	s2[4] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
 	s2[5] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
+	s2[6] = map[string]string{"name": "log_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": ""}
 	s1["fields"] = s2
 	s1["PRIMARY"] = []string{"id"}
 	s1["AI"] = "id"
@@ -3338,15 +3356,39 @@ func (schema *SchemaStruct) typeMysql() {
 		AI := ""
 		AI_START := "1"
 		schema.replMy(&table_name)
-		if !schema.OnlyPrint {
-			err = schema.DCDB.ExecSql("DROP TABLE IF EXISTS " + table_name)
-		} else {
-			fmt.Println("DROP TABLE IF EXISTS " + table_name+";")
+
+		result = ""
+		/*if schema.ChangeType {
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql(fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name))
+			} else {
+				fmt.Println(fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name))
+			}
+		}
+
+		if !schema.AddColumn {
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql("DROP TABLE IF EXISTS " + table_name)
+			} else {
+				fmt.Println("DROP TABLE IF EXISTS " + table_name+";")
+			}
+		}*/
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\";\n", table_name)
 		}
 		if err != nil {
 			log.Error("%v %v", err, table_name)
 		}
-		result = fmt.Sprintf("CREATE TABLE IF NOT EXISTS %[1]s (\n", table_name)
+
+		if !schema.AddColumn {
+			result += fmt.Sprintf("CREATE TABLE IF NOT EXISTS %[1]s (\n", table_name)
+		} else {
+			result += fmt.Sprintf("ALTER TABLE `%[1]s`\n", table_name)
+		}
+
 		var tableComment string
 		primaryKey := ""
 		uniqKey := ""
@@ -3393,16 +3435,26 @@ func (schema *SchemaStruct) typeMysql() {
 		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
+			if schema.AddColumn {
+				result += "ADD COLUMN "
+			}
 			if i == len(tableSlice)-1 {
 				result += fmt.Sprintf("%s\n", line)
 			} else {
 				result += fmt.Sprintf("%s,\n", line)
 			}
 		}
-		if len(AI) > 0 {
-			result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=%s COMMENT='%s';\n\n", AI_START, tableComment)
+		if !schema.AddColumn {
+			if len(AI) > 0 {
+				result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=%s COMMENT='%s';\n\n", AI_START, tableComment)
+			} else {
+				result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='%s';\n\n", tableComment)
+			}
 		} else {
-			result += fmt.Sprintf(") ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='%s';\n\n", tableComment)
+			result += ";"
+		}
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
 		}
 		if !schema.OnlyPrint {
 			err = schema.DCDB.ExecSql(result)
@@ -3489,16 +3541,30 @@ func (schema *SchemaStruct) typePostgresql() {
 			result += fmt.Sprintf("DROP SEQUENCE IF EXISTS %[3]s_%[1]s_seq CASCADE;\nCREATE SEQUENCE %[3]s_%[1]s_seq START WITH %[2]s;\n", AI, AI_START, table_name)
 		}
 
-		result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		} else {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\"\n", table_name)
+		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
+			if schema.AddColumn {
+				result += "ADD COLUMN "
+			}
 			if i == len(tableSlice)-1 {
 				result += fmt.Sprintf("%s\n", line)
 			} else {
 				result += fmt.Sprintf("%s,\n", line)
 			}
 		}
-		result += fmt.Sprintln(");")
+		if !schema.AddColumn {
+			result += fmt.Sprintln(");")
+		} else {
+			result += fmt.Sprintln(";")
+		}
 
 		if len(uniqKey) > 0 {
 			result += fmt.Sprintln(uniqKey)
@@ -3512,6 +3578,9 @@ func (schema *SchemaStruct) typePostgresql() {
 			result += fmt.Sprintln(primaryKey)
 		}
 
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
+		}
 		result += fmt.Sprintln("\n\n")
 		if !schema.OnlyPrint {
 			err = schema.DCDB.ExecSql(result)
@@ -3537,6 +3606,7 @@ func (schema *SchemaStruct) replMy(table_name *string) {
 func (schema *SchemaStruct) typeSqlite() {
 	var result string
 	for table_name, v := range schema.S {
+		log.Debug("table_name", table_name)
 		if ok, _ := regexp.MatchString(`\[my_prefix\]`, table_name); !ok {
 			if schema.PrefixUserId > 0 {
 				continue
@@ -3545,7 +3615,12 @@ func (schema *SchemaStruct) typeSqlite() {
 		result = ""
 		schema.replMy(&table_name)
 
-		result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		if schema.ChangeType {
+			result += fmt.Sprintf("ALTER TABLE \"%[1]s\" RENAME TO tmp;\n", table_name)
+		}
+		if !schema.AddColumn {
+			result += fmt.Sprintf("DROP TABLE IF EXISTS \"%[1]s\"; CREATE TABLE \"%[1]s\" (\n", table_name)
+		}
 		//var tableComment string
 		primaryKey := ""
 		uniqKey := ""
@@ -3590,18 +3665,31 @@ func (schema *SchemaStruct) typeSqlite() {
 		}
 		//fmt.Println(tableSlice)
 		for i, line := range tableSlice {
-			if i == len(tableSlice)-1 {
-				result += fmt.Sprintf("%s\n", line)
+			if schema.AddColumn {
+				result += fmt.Sprintf("ALTER TABLE \"%[1]s\" ", table_name) + " ADD COLUMN "
+				result += fmt.Sprintf("%s;\n", line)
 			} else {
-				result += fmt.Sprintf("%s,\n", line)
+				if i == len(tableSlice)-1 {
+					result += fmt.Sprintf("%s\n", line)
+				} else {
+					result += fmt.Sprintf("%s,\n", line)
+				}
 			}
 		}
-		result += fmt.Sprintln(");\n\n")
+		if !schema.AddColumn {
+			result += fmt.Sprintln(");\n\n")
+		}
+
+		if schema.ChangeType {
+			result += fmt.Sprintf("INSERT INTO \"%[1]s\" SELECT * FROM tmp;\nDROP TABLE tmp;\n", table_name)
+		}
+
 		//log.Println(result)
 		if !schema.OnlyPrint {
+			log.Debug("result", result)
 			err := schema.DCDB.ExecSql(result)
 			if err != nil {
-				log.Debug("%v", err)
+				log.Error("%v", err)
 			}
 		} else {
 			fmt.Println(result)
@@ -3613,7 +3701,7 @@ func (schema *SchemaStruct) typeSqlite() {
 				err := schema.DCDB.ExecSql(q)
 				//log.Println(q)
 				if err != nil {
-					log.Debug("%v", err)
+					log.Error("%v", err)
 				}
 			} else {
 				fmt.Println(result)

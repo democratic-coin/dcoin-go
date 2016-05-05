@@ -3,10 +3,15 @@
 
 	$('#getCoins').bind('click', function () {
 		if (new_amount-30 > 0.1) {
-			dc_navigate ('upgrade1', {'alert': '{{.Lang.sent_to_the_net}}'} );
+			dc_navigate ('miningSn', {'alert': '{{.Lang.sent_to_the_net}}'} );
 		} else {
 			$('#message').html(	'<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Min 0.1 dUSD, please wait</div>' )
 		}
+	});
+
+
+	$('#upgradeUser').bind('click', function () {
+		dc_navigate ('upgradeUser');
 	});
 
 	var i=0;
@@ -26,14 +31,33 @@
 <h1 class="page-header">Mining</h1>
 <div id="message"></div>
 {{template "alertSuccess".}}
-
 <div id="tdc" style="font-size:60px"></div>
 1 dUSD = 1$<br>
-<button id="getCoins" class="btn btn-primary">dUSD -> USD</button>
+Passed the test in a social network:
+{{if or (.LastTxQueueTx) (.LastTxTx)}}
+	Pending<br>
+{{else if (eq .UserSn "user")}}
+	<a id="upgradeUser" href="#">no</a><br>
+{{else}}
+	YES<br><button id="getCoins" class="btn btn-primary">dUSD -> USD</button>
+{{end}}
+
 <!--<button class="btn btn-primary" onclick="dc_navigate('upgrade1')">Upgrade Now</button>-->
 {{template "signatures".}}
 
 <script>
 	//doSign();
 </script>
+
+<div style="max-width: 600px;" id="tx_history">
+
+	{{if .LastTxFormatted}}{{noescape .LastTxFormatted}}{{end}}
+
+</div>
+
+<script src="static/js/unixtime.js"></script>
+
+
 {{end}}
+
+

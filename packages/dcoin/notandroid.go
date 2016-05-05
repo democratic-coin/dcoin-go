@@ -18,7 +18,6 @@ import (
 func IosLog(text string) {
 }
 
-
 func NewBoundListener(maxActive int, l net.Listener) net.Listener {
 	return &boundListener{l, make(chan bool, maxActive)}
 }
@@ -48,7 +47,6 @@ func (l *boundConn) Close() error {
 	<-l.active
 	return err
 }
-
 
 func httpListener(ListenHttpHost, BrowserHttpHost string) {
 	l, err := net.Listen("tcp", ListenHttpHost)
