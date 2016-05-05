@@ -3374,10 +3374,20 @@ func (schema *SchemaStruct) typeMysql() {
 			}
 		}*/
 		if schema.ChangeType {
-			result += fmt.Sprintf("ALTER TABLE %[1]s RENAME TO tmp;\n", table_name)
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql(fmt.Sprintf("ALTER TABLE %[1]s RENAME TO tmp;\n", table_name))
+			} else {
+				fmt.Println(fmt.Sprintf("ALTER TABLE %[1]s RENAME TO tmp;\n", table_name))
+			}
+			//result += fmt.Sprintf("ALTER TABLE %[1]s RENAME TO tmp;\n", table_name)
 		}
 		if !schema.AddColumn {
-			result += fmt.Sprintf("DROP TABLE IF EXISTS %[1]s;\n", table_name)
+			if !schema.OnlyPrint {
+				err = schema.DCDB.ExecSql(fmt.Sprintf("DROP TABLE IF EXISTS %[1]s;\n", table_name))
+			} else {
+				fmt.Println(fmt.Sprintf("DROP TABLE IF EXISTS %[1]s;\n", table_name))
+			}
+			//result += fmt.Sprintf("DROP TABLE IF EXISTS %[1]s;\n", table_name)
 		}
 		if err != nil {
 			log.Error("%v %v", err, table_name)
