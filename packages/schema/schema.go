@@ -3458,6 +3458,7 @@ func (schema *SchemaStruct) typeMysql() {
 		}
 		if !schema.OnlyPrint {
 			err = schema.DCDB.ExecSql(result)
+			log.Debug("sql", result)
 		} else {
 			fmt.Println(result)
 		}
