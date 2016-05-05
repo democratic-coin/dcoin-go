@@ -178,6 +178,21 @@ func (c *Controller) Home() (string, error) {
 			return "", err
 		}
 	}
+	// модерация акков в соц. сетях
+	mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+	if err != nil {
+		return "", err
+	}
+	addSql := ` AND sn_url_id != ''`
+	if c.SessUserId!=1 && len(mySnType)>0 {
+		addSql = ` AND sn_type = "`+mySnType+`"`
+	}
+	num, err := c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
+				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
+	if err != nil {
+		return "", err
+	}
+	assignments += num
 
 	// баллы
 	points, err := c.Single("SELECT points FROM points WHERE user_id  =  ?", c.SessUserId).Int64()
