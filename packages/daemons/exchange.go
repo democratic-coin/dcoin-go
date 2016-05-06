@@ -84,6 +84,7 @@ BEGIN:
 		}
 		confirmations := utils.StrToInt64(eConfig["confirmations"])
 		mainDcAccount := utils.StrToInt64(eConfig["main_dc_account"])
+		logger.Debug("confirmations", confirmations)
 
 		// все валюты, с которыми работаем
 		currencyList, err := utils.EGetCurrencyList()
@@ -207,6 +208,8 @@ BEGIN:
 			continue BEGIN
 		}
 
+		logger.Debug("blockId-confirmations", blockId-confirmations)
+		logger.Debug("mainDcAccount", mainDcAccount)
 		rows, err = d.Query(d.FormatQuery(`
 				SELECT amount, id, block_id, type_id, currency_id, to_user_id, time, comment, comment_status
 				FROM my_dc_transactions

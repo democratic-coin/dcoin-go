@@ -13,6 +13,7 @@ function freecoin_process( first ) {
 		data = JSON.parse( ret );
 		if (data.status == 'reload') {
 			freecoin_reload( '' );
+
 			return;
 		} else if (data.status == 'error') {
 			freecoin_reload( data.error );

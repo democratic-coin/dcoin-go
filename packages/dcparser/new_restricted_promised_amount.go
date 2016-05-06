@@ -42,7 +42,7 @@ func (p *Parser) NewRestrictedPromisedAmountFront() error {
 		return p.ErrInfo("exists promised_amount_restricted")
 	}
 
-	if p.BlockData == nil && p.BlockData.BlockId > 310000 {
+	if p.BlockData == nil || p.BlockData.BlockId > 310000 {
 		// прошел ли проверку соц. сети
 		status, err := p.Single("SELECT status FROM users WHERE user_id = ?", p.TxUserID).String()
 		if err != nil {
