@@ -120,11 +120,12 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	addSql = ""
-	if c.SessUserId!=1 {
-		addSql = `AND sn_type = "`+mySnType+`"`
+	addSql = ` AND sn_url_id != ''`
+	if c.SessUserId!=1 && len(mySnType)>0 {
+		addSql = ` AND sn_type = "`+mySnType+`"`
 	}
-	num, err = c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql).Int64()
+	num, err = c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
+				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -374,19 +375,24 @@ func (c *Controller) Assignments() (string, error) {
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
-		addSql = ""
+		addSql = ` AND sn_url_id != ''`
 		if c.SessUserId!=1 {
-			addSql = `AND sn_type = "`+mySnType+`"`
+			addSql = ` AND sn_type = "`+mySnType+`"`
 		}
-		usersSN, err := c.OneRow("SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'" + addSql).String()
+		usersSN, err := c.OneRow("SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'" + addSql +
+							` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
 		if len(usersSN)>0 {
 			sn = `<a href="http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`">http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`"</a>`
 		}
-		snUserId = utils.StrToInt64(usersSN["sn_url_id"])
+		snUserId = utils.StrToInt64(usersSN["user_id"])
 
+		txType = "VotesSnUser"
+		txTypeId = utils.TypeInt(txType)
+		timeNow = utils.Time()
+		
 		tplName = "assignments_sn"
 		tplTitle = "assignmentsSn"
 

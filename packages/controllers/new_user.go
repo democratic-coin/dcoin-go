@@ -44,7 +44,7 @@ func (c *Controller) NewUser() (string, error) {
 				SELECT users.user_id,	private_key,  log_id
 				FROM ` + c.MyPrefix + `my_new_users
 				LEFT JOIN users ON users.user_id = ` + join + `
-				WHERE status = 'approved'
+				WHERE ` + c.MyPrefix + `my_new_users.status = 'approved'
 				`))
 		if err != nil {
 			return "", utils.ErrInfo(err)
