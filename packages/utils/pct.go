@@ -50,11 +50,22 @@ func CheckPct(pct float64) bool {
 			if StrToFloat64(ClearNull(y, 2)) == pct {
 				return true
 			}
-		}		
+		}
 	}
 	return false
 }
 
+func CheckPct0(pct float64) bool {
+	arr := fillPct()
+	for _, pct0 := range arr {
+		for _, sec := range pct0 {
+			if sec == Float64ToStr(pct) {
+				return true
+			}
+		}
+	}
+	return false
+}
 func pct_(data *[]byte) string {
 	data_ := *data
 	//fmt.Printf("data_=%s\n", data_)
