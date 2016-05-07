@@ -42,6 +42,7 @@ func (p *Parser) NewRestrictedPromisedAmountFront() error {
 		return p.ErrInfo("exists promised_amount_restricted")
 	}
 
+	/*Даем юзера вначале увидеть его монеты, а перед их переводом на счет просим указать акк соц. сети
 	if p.BlockData == nil || p.BlockData.BlockId > 310000 {
 		// прошел ли проверку соц. сети
 		status, err := p.Single("SELECT status FROM users WHERE user_id = ?", p.TxUserID).String()
@@ -51,7 +52,7 @@ func (p *Parser) NewRestrictedPromisedAmountFront() error {
 		if status != "sn_user" {
 			return p.ErrInfo("!sn_user")
 		}
-	}
+	}*/
 
 	if p.TxMaps.Float64["amount"] > 30 || p.TxMaps.Int64["currency_id"] != 72 {
 		return p.ErrInfo("incorrect amount currency_id")
