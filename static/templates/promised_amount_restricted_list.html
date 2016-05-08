@@ -28,7 +28,15 @@
 	intervalIdArray.push(intervalID);
 
 </script>
-<h1 class="page-header">Mining</h1>
+<h1 class="page-header">{{.Lang.mining}}</h1>
+{{if .MinerId}}
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">Free Coins</li>
+	    <span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+{{end}}
+
+
 <div id="message"></div>
 {{template "alertSuccess".}}
 <div id="tdc" style="font-size:60px"></div>
