@@ -22,10 +22,12 @@ func (c *Controller) EGateCP() (string, error) {
 	log.Error("Authorization %v", c.r.Header.Get("Authorization"))
 
 	sEnc := strings.Split(c.r.Header.Get("Authorization"), " ")
-	log.Error("sEnc %v", sEnc)
+	log.Error("sEnc %v", sEnc[0])
 
-	sDec, _ := b64.StdEncoding.DecodeString(sEnc[0])
-	log.Error("sDec %v", string(sDec))
+	if len(sEnc) > 1 {
+		sDec, _ := b64.StdEncoding.DecodeString(sEnc[1])
+		log.Error("sDec %v", string(sDec))
+	}
 
 	for k, v := range c.r.Header {
 		log.Error("key: %v / value: %v", k, v)
