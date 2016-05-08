@@ -1047,7 +1047,7 @@
 	</script>
 	<script src="/static/js/chat.js"></script>
 
-	{{if and (eq .ChatEnabled "1") (not .Mobile)}}
+	{{if and (gt 0 1) (eq .ChatEnabled "1") (not .Mobile)}}
 	<style>
 		#chat img{width: 50px; float: left; margin-right: 10px}
 		#chatLock { padding: 3px 7px; font-size: 20px; }
