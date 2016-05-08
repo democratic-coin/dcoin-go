@@ -185,7 +185,7 @@ func (p *Parser) NewPromisedAmount() error {
 			if err != nil {
 				return p.ErrInfo(err)
 			}
-			startTime := utils.StrToInt64(restrictedPA["start_time"])
+			startTime := utils.StrToInt64(restrictedPA["last_update"])
 			// максимум 6 мес. ~ 26$
 			endTime := p.BlockData.Time
 			if p.BlockData.Time - startTime > 86400*180 {

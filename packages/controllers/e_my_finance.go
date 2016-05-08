@@ -100,11 +100,7 @@ func (c *Controller) EMyFinance() (string, error) {
 
 	currency["1001"]["name"] = "USD"
 	currency["1001"]["input"] = `<div class="pull-left"><h4>` + c.Lang["deposit0"] + ` USD</h4>
-		<select id="ps_select" class="form-control">
-		  <option value="pm">Perfect Money</option>
-		  <option value="ik">Mobile, Yandex</option>
-		  <option value="payeer">BTC</option>
-		</select>
+		 Perfect Money</option>
 			<div style="display:block" id="pm_form">
 				<form action="https://perfectmoney.is/api/step1.asp" method="POST">
 					<input type="hidden" name="PAYEE_ACCOUNT" value="` + c.EConfig["pm_id"] + `">
@@ -127,26 +123,6 @@ func (c *Controller) EMyFinance() (string, error) {
 						<tr>
 					 </tbody>
 					 </table>
-				</form>
-			</div>
-			<div style="display:none" id="ik_form">
-				<form id="payment" name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8">
-				    <input type="hidden" name="ik_co_id" value="` + c.EConfig["ik_id"] + `" />
-					<input type="hidden" name="ik_pm_no" value="ik_pm_no" />
-					<input type="hidden" name="ik_cur" value="USD" />
-					<input type="hidden" name="ik_ia_u" value="` + c.EURL + `ajax?controllerName=EGateIk" />
-					<input type="hidden" name="ik_suc_u" value=""` + c.EURL + `ajax?controllerName=ESuccess" />
-					<input type="hidden" name="ik_fal_u" value="` + c.EURL + `ajax?controllerName=EFailure" />
-					<input type="hidden" name="ik_desc" value="` + utils.Int64ToStr(c.SessUserId) + `" />
-				<table class="table_out">
-				<tbody>
-					<tr>
-					<td>` + c.Lang["amount_to_pay"] + `</td>
-					<td class="form-inline" style="line-height: 35px;"><input name="ik_am" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="` + c.Lang["deposit"] + `" class="btn btn-outline btn-success"></td>
-					</tr>
-					<tr>
-				 </tbody>
-				 </table>
 				</form>
 			</div>
 			<script>
@@ -189,7 +165,7 @@ func (c *Controller) EMyFinance() (string, error) {
 			<tbody>
 			<tr>
 			<td>` + c.Lang["withdrawal_on_the_purse"] + `:</td>
-			<td class="form-inline"><div class="form-group"><select class="form-control" style="width:300px"><option>Perfect Money [1.5%] [min 10 USD]</option></select></div></td>
+			<td class="form-inline"><div class="form-group"><select class="form-control" style="width:300px"><option>Perfect Money [1.5%] [min 1 USD]</option></select></div></td>
 			</tr>
 			<tr>
 			<td>` + c.Lang["purse"] + `:</td>
@@ -205,6 +181,55 @@ func (c *Controller) EMyFinance() (string, error) {
 			</tr>
 			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1001, 'Perfect-money')">` + c.Lang["withdrawal"] + `</button>
 			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:350px">` + c.Lang["withdrawal_within_hours"] + `</div>`
+
+
+
+	currency["1002"]["name"] = "BTC"
+	currency["1002"]["input"] = `<div class="pull-left"><h4>` + c.Lang["deposit0"] + ` BTC</h4>
+			<div style="display:block" id="pm_form">
+				<form action="https://www.coinpayments.net/index.php" method="POST">
+					<input type="hidden" name="cmd" value="_pay_simple">
+					<input type="hidden" name="reset" value="1">
+					<input type="hidden" name="merchant" value="` + c.EConfig["cp_id"] + `">
+					<input type="hidden" name="currency" value="BTC">
+					<input type="hidden" name="success_url" value="` + c.EURL + `ajax?controllerName=EGateBtc">
+					<input type="hidden" name="item_name" value="` + utils.Int64ToStr(c.SessUserId) + `">
+					<table class="table_out">
+					<tbody>
+						<tr>
+						<td>` + c.Lang["amount_to_pay"] + `</td>
+						<td class="form-inline" style="line-height: 35px;"><input name="amountf" class="form-control" type="text" style="margin-right:5px; width:120px"><input type="submit" value="` + c.Lang["deposit"] + `" class="btn btn-outline btn-success"></td>
+						</tr>
+						<tr>
+					</tbody>
+					</table>
+				</form>
+			</div>
+			</div>`
+
+	currency["1002"]["output"] = `<div class="pull-left"><h4>` + c.Lang["withdraw0"] + ` BTC</h4>
+		<table class="table_out">
+			<tbody>
+			<tr>
+			<td>` + c.Lang["withdrawal_on_the_purse"] + `:</td>
+			<td class="form-inline"><div class="form-group">[1.5%] [min 0.002]</div></td>
+			</tr>
+			<tr>
+			<td>` + c.Lang["purse"] + `:</td>
+			<td class="form-inline" style="line-height: 35px;"><input id="account-1002" class="form-control" type="text" style="margin-right:5px; width:300px"></td>
+			</tr>
+			<tr>
+			<td>` + c.Lang["amount_to_withdrawal"] + `:</td>
+			<td class="form-inline" style="line-height: 35px;"><input id="amount-1002" class="form-control" type="text"  onkeyup="calc_withdraw_amount(1002, '1.5')" onchange="calc_withdraw_amount(1002, '1.5')" style="margin-right:5px; width:300px"></td>
+			</tr>
+			<tr>
+			<td>` + c.Lang["you_will_receive"] + `:</td>
+			<td class="form-inline" style="line-height: 35px"><input  disabled="" id="withdraw_amount-1002" class="form-control" type="text" style="margin-right:5px; width:300px"> </td>
+			</tr>
+			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1002, 'Perfect-money')">` + c.Lang["withdrawal"] + `</button>
+			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:350px">` + c.Lang["withdrawal_within_hours"] + `</div>`
+
+
 
 	types := map[string]string{"withdraw": c.Lang["withdraw0"], "adding_funds": c.Lang["deposit0"]}
 

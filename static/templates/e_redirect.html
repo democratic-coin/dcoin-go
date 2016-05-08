@@ -30,7 +30,7 @@
 </form>
 
 <form name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8" id="ik">
-  <input type="hidden" name="ik_co_id" value="{{index .EConfig "ik_id"}}" />
+  <input type="hidden" name="ik_co_id" value="{{index .EConfig "cp_id"}}" />
   <input type="hidden" name="ik_pm_no" value="ik_pm_no" />
   <input type="hidden" name="ik_cur" value="USD" />
   <input type="hidden" name="ik_ia_u" value="{{.EURL}}ajax?controllerName=EGateIk" />

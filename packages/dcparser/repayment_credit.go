@@ -140,5 +140,5 @@ func (p *Parser) RepaymentCreditRollback() error {
 }
 
 func (p *Parser) RepaymentCreditRollbackFront() error {
-	return nil
+	return p.limitRequestsRollback("repayment_credit")
 }

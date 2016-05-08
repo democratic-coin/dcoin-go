@@ -717,7 +717,7 @@
 	<div class="navbar-inner" style="">
 		<div class="container" style="">
 			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#home'"><i class="fa fa-home fa-lg ico"></i><p>Home</p></div>
-			{{if eq .ChatEnabled "1"}}<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#chat'"><i class="fa fa-wechat fa-lg ico"></i><p>Chat</p></div>{{end}}
+			{{if and (gt 0 1) (eq .ChatEnabled "1")}}<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#chat'"><i class="fa fa-wechat fa-lg ico"></i><p>Chat</p></div>{{end}}
 			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#walletsList'"><i class="fa fa-credit-card fa-lg ico"></i><p>Account</p></div>
 			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#miningMenu'"><i class="fa fa-money fa-lg ico"></i><p>Mining</p></div>
 			<div class="icoDiv" onclick="javascript:location.href='#statistic'"><i class="fa fa-database fa-lg ico"></i><p>Statistic</p></div>
