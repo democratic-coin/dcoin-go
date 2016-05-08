@@ -51,6 +51,8 @@ func (c *Controller) EGateCP() (string, error) {
 	}
 
 	amount := utils.StrToFloat64(c.r.FormValue("amount1"))
+	log.Error("amount %v", amount)
+	log.Error("FormValue %v", c.r.FormValue("amount1"))
 	pmId := utils.StrToInt64(c.r.FormValue("txn_id"))
 	// проверим, не зачисляли ли мы уже это платеж
 	existsId, err := c.Single(`SELECT id FROM e_adding_funds_cp WHERE id = ?`, pmId).Int64()
@@ -63,10 +65,16 @@ func (c *Controller) EGateCP() (string, error) {
 	}
 	paymentInfo := c.r.FormValue("item_name")
 
-	txTime := utils.Time()
-	err = EPayment(paymentInfo, currencyId, txTime, amount, pmId, "cp", c.ECommission)
-	if err != nil {
-		return "", utils.ErrInfo(err)
+	status:=utils.StrToInt64(c.r.FormValue("status"))
+	if status >= 100 || status == 2 {
+		txTime := utils.Time()
+		err = EPayment(paymentInfo, currencyId, txTime, amount, pmId, "cp", c.ECommission)
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+	} else {
+		log.Error("status %v", status)
+		return "", errors.New("Incorrect txn_id")
 	}
 
 	return ``, nil
