@@ -99,7 +99,7 @@ BEGIN:
 
 			err = d.ExecSql(`INSERT INTO stats (day, month, year, currency_id, dc, promised_amount) VALUES (?, ?, ?, ?, ?, ?)`, t.Day(), int(t.Month()), t.Year(), currencyId, int64(sumWallets), int64(sumPromisedAmount))
 			if err != nil {
-				logger.Error("%v", err)
+				logger.Debug("%v", err)
 			}
 		}
 		if d.dSleep(d.sleepTime) {
