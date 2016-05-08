@@ -16,6 +16,7 @@ type promisedAmountRestrictedList struct {
 	LastTxQueueTx     bool
 	LastTxTx          bool
 	LastTxFormatted string
+	MinerId         int64
 	Lang            map[string]string
 }
 
@@ -66,6 +67,10 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 			lastTxTx = true
 		}
 	}
+	minerId,err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
 
 	TemplateStr, err := makeTemplate("promised_amount_restricted_list", "PromisedAmountRestrictedList", &promisedAmountRestrictedList{
 		Alert:           c.Alert,
@@ -77,7 +82,8 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		LastTxQueueTx:     lastTxQueueTx,
 		LastTxTx:          lastTxTx,
 		ShowSignData:    c.ShowSignData,
-		UserSn: userSn,
+		MinerId:         minerId,
+		UserSn:          userSn,
 		UserId:          c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)

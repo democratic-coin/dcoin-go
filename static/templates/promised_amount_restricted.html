@@ -59,7 +59,13 @@ function freecoin_process( first ) {
 	})
 {{end}}
 </script>
-<h1 class="page-header">Mining</h1>
+<h1 class="page-header">{{.Lang.mining}}</h1>
+{{if .MinerId}}
+	<ol class="breadcrumb" style="position: relative;">
+		<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
+		<li class="active">{{.Lang.get_free_coins}}</li>
+	    <span style="position: absolute; right: 13px;"><i class="fa fa-refresh" onclick="rTpl()" style="color: #2A6496;cursor: pointer; cursor: hand; "></i></span></ol>
+{{end}}
 
 {{template "alertSuccess".}}
 {{if .Alert}}
