@@ -59,6 +59,9 @@ func (c *Controller) EImportData() (string, error) {
 				if name == "id" {
 					id = true
 				}
+				if name == "lock" && c.ConfigIni["db_type"] == "mysql" {
+					name = "`lock`"
+				}
 				colNames += name + ","
 				values = append(values, value)
 				if ok, _ := regexp.MatchString("(tx_hash)", name); ok {
