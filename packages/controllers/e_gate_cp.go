@@ -22,7 +22,7 @@ func (c *Controller) EGateCP() (string, error) {
 	log.Error("Authorization %v", c.r.Header.Get("Authorization"))
 
 	sEnc := strings.Split(c.r.Header.Get("Authorization"), " ")
-	log.Error("s %v", s)
+	log.Error("sEnc %v", sEnc)
 
 	sDec, _ := b64.StdEncoding.DecodeString(sEnc[0])
 	log.Error("sDec %v", string(sDec))
