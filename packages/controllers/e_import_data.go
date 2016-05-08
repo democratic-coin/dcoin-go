@@ -77,7 +77,11 @@ func (c *Controller) EImportData() (string, error) {
 			log.Debug("%v", values)
 			err = c.ExecSql(query, values...)
 			if err != nil {
-				return "", utils.ErrInfo(err)
+				if table == "e_authorization" {
+					log.Error("%v", values)
+				} else {
+					return "", utils.ErrInfo(err)
+				}
 			}
 		}
 		if id {
