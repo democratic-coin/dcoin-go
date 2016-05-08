@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	//"github.com/democratic-coin/dcoin-go/packages/utils"
-	//"errors"
 	"strings"
 	b64 "encoding/base64"
+	"errors"
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
 func (c *Controller) EGateCP() (string, error) {
@@ -26,16 +26,19 @@ func (c *Controller) EGateCP() (string, error) {
 
 	if len(sEnc) > 1 {
 		sDec, _ := b64.StdEncoding.DecodeString(sEnc[1])
-		log.Error("sDec %v", string(sDec))
+		sEnc = strings.Split(string(sDec), ":")
+		if len(sEnc) > 1 {
+			if sEnc[0] != c.EConfig["cp_id"] || sEnc[1]!= c.EConfig["cp_s_key"] {
+				return "", errors.New("cp_id cp_s_key")
+			}
+		} else {
+			return "", errors.New("cp_id cp_s_key")
+		}
+	} else {
+		return "", errors.New("cp_id cp_s_key")
 	}
 
-	for k, v := range c.r.Header {
-		log.Error("key: %v / value: %v", k, v)
-	}
-
-
-/*
-	currencyId := 0
+	var currencyId int64
 	if c.r.FormValue("currency1") == "BTC" {
 		currencyId = 1002
 	}
@@ -60,6 +63,6 @@ func (c *Controller) EGateCP() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-*/
+
 	return ``, nil
 }
