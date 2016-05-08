@@ -29,13 +29,16 @@ func (c *Controller) EGateCP() (string, error) {
 		sEnc = strings.Split(string(sDec), ":")
 		if len(sEnc) > 1 {
 			if sEnc[0] != c.EConfig["cp_id"] || sEnc[1]!= c.EConfig["cp_s_key"] {
+				log.Error("incorrect cp_id cp_s_key")
 				return "", errors.New("cp_id cp_s_key")
 			}
 		} else {
 			return "", errors.New("cp_id cp_s_key")
+			log.Error("incorrect cp_id cp_s_key")
 		}
 	} else {
 		return "", errors.New("cp_id cp_s_key")
+		log.Error("incorrect cp_id cp_s_key")
 	}
 
 	var currencyId int64
@@ -43,6 +46,7 @@ func (c *Controller) EGateCP() (string, error) {
 		currencyId = 1002
 	}
 	if currencyId == 0 {
+		log.Error("Incorrect currencyId")
 		return "", errors.New("Incorrect currencyId")
 	}
 
@@ -54,6 +58,7 @@ func (c *Controller) EGateCP() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	if existsId != 0 {
+		log.Error("Incorrect txn_id")
 		return "", errors.New("Incorrect txn_id")
 	}
 	paymentInfo := c.r.FormValue("item_name")
