@@ -4,6 +4,8 @@ import (
 	"fmt"
 	//"github.com/democratic-coin/dcoin-go/packages/utils"
 	//"errors"
+	"strings"
+	b64 "encoding/base64"
 )
 
 func (c *Controller) EGateCP() (string, error) {
@@ -16,15 +18,19 @@ func (c *Controller) EGateCP() (string, error) {
 	fmt.Println(c.r.Header.Get("HTTP_HMAC"))
 	log.Error("HTTP_HMAC %v", c.r.Header.Get("HTTP_HMAC"))
 
-	fmt.Println(c.r.Header.Get("PHP_AUTH_USER"))
-	log.Error("PHP_AUTH_USER %v", c.r.Header.Get("PHP_AUTH_USER"))
+	fmt.Println(c.r.Header.Get("Authorization"))
+	log.Error("Authorization %v", c.r.Header.Get("Authorization"))
 
-	fmt.Println(c.r.Header.Get("PHP_AUTH_PW"))
-	log.Error("PHP_AUTH_PW %v", c.r.Header.Get("PHP_AUTH_PW"))
+	sEnc := strings.Split(c.r.Header.Get("Authorization"), " ")
+	log.Error("s %v", s)
+
+	sDec, _ := b64.StdEncoding.DecodeString(sEnc[0])
+	log.Error("sDec %v", string(sDec))
 
 	for k, v := range c.r.Header {
 		log.Error("key: %v / value: %v", k, v)
 	}
+
 
 /*
 	currencyId := 0
