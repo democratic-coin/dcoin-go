@@ -184,6 +184,9 @@ func (c *Controller) EMyFinance() (string, error) {
 
 
 
+	if currency["1002"] == nil {
+		currency["1002"] = make(map[string]string)
+	}
 	currency["1002"]["name"] = "BTC"
 	currency["1002"]["input"] = `<div class="pull-left"><h4>` + c.Lang["deposit0"] + ` BTC</h4>
 			<div style="display:block" id="pm_form">
