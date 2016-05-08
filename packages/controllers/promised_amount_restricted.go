@@ -15,6 +15,7 @@ type promisedAmountRestricted struct {
 	TimeNow          int64
 	Lang            map[string]string
 	Started         bool
+	MinerId         int64
 }
 
 func (c *Controller) PromisedAmountRestricted() (string, error) {
@@ -31,6 +32,12 @@ func (c *Controller) PromisedAmountRestricted() (string, error) {
 		                    1, c.TimeFormat); err == nil && len(last_tx) > 0 {
 		started = true
 	}
+	minerId,err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
+
 	TemplateStr, err := makeTemplate("promised_amount_restricted", "PromisedAmountRestricted", &promisedAmountRestricted{
 		Alert:           c.Alert,
 		Started:         started,
@@ -40,6 +47,7 @@ func (c *Controller) PromisedAmountRestricted() (string, error) {
 		TimeNow:          timeNow,
 		TxType:           txType,
 		TxTypeId:         txTypeId,
+		MinerId:          minerId,
 		UserId:          c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)
