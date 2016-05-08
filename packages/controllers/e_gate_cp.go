@@ -26,19 +26,19 @@ func (c *Controller) EGateCP() (string, error) {
 
 	if len(sEnc) > 1 {
 		sDec, _ := b64.StdEncoding.DecodeString(sEnc[1])
-		sEnc = strings.Split(string(sDec), ":")
-		if len(sEnc) > 1 {
-			if sEnc[0] != c.EConfig["cp_id"] || sEnc[1]!= c.EConfig["cp_s_key"] {
-				log.Error("incorrect cp_id cp_s_key")
+		sEnc0 := strings.Split(string(sDec), ":")
+		if len(sEnc0) > 1 {
+			if sEnc0[0] != c.EConfig["cp_id"] || sEnc0[1]!= c.EConfig["cp_s_key"] {
+				log.Error("incorrect cp_id cp_s_key %v %v %v %v ", sEnc0[0], c.EConfig["cp_id"], sEnc0[1], c.EConfig["cp_s_key"])
 				return "", errors.New("cp_id cp_s_key")
 			}
 		} else {
+			log.Error("incorrect cp_id cp_s_key %v", sEnc0)
 			return "", errors.New("cp_id cp_s_key")
-			log.Error("incorrect cp_id cp_s_key")
 		}
 	} else {
-		return "", errors.New("cp_id cp_s_key")
 		log.Error("incorrect cp_id cp_s_key")
+		return "", errors.New("cp_id cp_s_key")
 	}
 
 	var currencyId int64
