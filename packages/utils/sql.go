@@ -777,6 +777,7 @@ func FormatQueryArgs(q, dbType string, args ...interface{}) (string, []interface
 		case "mysql":
 			newQ = strings.Replace(newQ, "[hex]", "UNHEX(?)", -1)
 			newQ = strings.Replace(newQ, "lock,", "`lock`,", -1)
+			newQ = strings.Replace(newQ, " lock ", " `lock` ", -1)
 			newArgs = args
 		}
 	}
