@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"math"
 )
 
 type eMyFinancePage struct {
@@ -15,10 +16,11 @@ type eMyFinancePage struct {
 	MyFinanceHistory []*EmyFinanceType
 	Collapse         string
 	Currency         map[string]map[string]string
+	CurrencyPct map[int]CurrencyPct
 }
 
 type EmyFinanceType struct {
-	Ftype, Status, Method                        string
+	Ftype, Status, Method, Account                        string
 	Amount, WdAmount                             float64
 	Id, CurrencyId, AddTime, CloseTime, OpenTime int64
 }
@@ -214,7 +216,7 @@ func (c *Controller) EMyFinance() (string, error) {
 		<table class="table_out">
 			<tbody>
 			<tr>
-			<td>` + c.Lang["withdrawal_on_the_purse"] + `:</td>
+			<td></td>
 			<td class="form-inline"><div class="form-group">[1.5%] [min 0.002]</div></td>
 			</tr>
 			<tr>
@@ -229,7 +231,7 @@ func (c *Controller) EMyFinance() (string, error) {
 			<td>` + c.Lang["you_will_receive"] + `:</td>
 			<td class="form-inline" style="line-height: 35px"><input  disabled="" id="withdraw_amount-1002" class="form-control" type="text" style="margin-right:5px; width:300px"> </td>
 			</tr>
-			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1002, 'Perfect-money')">` + c.Lang["withdrawal"] + `</button>
+			</tbody></table><div id="alerts-1001"></div><button class="btn btn-outline btn-primary" onclick="withdraw(1002, 'CP')">` + c.Lang["withdrawal"] + `</button>
 			</div><div class="pull-left" style="margin-left:30px; margin-top:43px; border-left: 4px solid #ccc; padding:7px 7px; width:350px">` + c.Lang["withdrawal_within_hours"] + `</div>`
 
 
@@ -239,7 +241,7 @@ func (c *Controller) EMyFinance() (string, error) {
 	// история вывода средств
 	myFinanceHistory_ := make(map[int64][]*EmyFinanceType)
 	rows, err := c.Query(c.FormatQuery(`
-			SELECT id, amount, wd_amount, close_time, currency_id, method, open_time
+			SELECT id, amount, wd_amount, close_time, currency_id, method,  account, open_time
 			FROM e_withdraw
 			WHERE user_id = ?
 			ORDER BY open_time DESC
@@ -251,7 +253,7 @@ func (c *Controller) EMyFinance() (string, error) {
 	defer rows.Close()
 	for rows.Next() {
 		Finance := new(EmyFinanceType)
-		err = rows.Scan(&Finance.Id, &Finance.Amount, &Finance.WdAmount, &Finance.CloseTime, &Finance.CurrencyId, &Finance.Method, &Finance.OpenTime)
+		err = rows.Scan(&Finance.Id, &Finance.Amount, &Finance.WdAmount, &Finance.CloseTime, &Finance.CurrencyId, &Finance.Method,  &Finance.Account, &Finance.OpenTime)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -358,12 +360,24 @@ func (c *Controller) EMyFinance() (string, error) {
 
 	collapse := c.Parameters["collapse"]
 
+	currency_pct := make(map[int]CurrencyPct)
+	// проценты
+	listPct, err := c.GetMap("SELECT * FROM currency", "id", "name")
+	for id, name := range listPct {
+		pct, err := c.OneRow("SELECT * FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC", id).Float64()
+		if err != nil {
+			return "", err
+		}
+		currency_pct[utils.StrToInt(id)] = CurrencyPct{Name: name, Miner: (utils.Round((math.Pow(1+pct["miner"], 3600*24*365)-1)*100, 2)), User: (utils.Round((math.Pow(1+pct["user"], 3600*24*365)-1)*100, 2)), MinerBlock: (utils.Round((math.Pow(1+pct["miner"], 120)-1)*100, 4)), UserBlock: (utils.Round((math.Pow(1+pct["user"], 120)-1)*100, 4)), MinerSec: (pct["miner"]), UserSec: (pct["user"])}
+	}
+
 	TemplateStr, err := makeTemplate("e_my_finance", "eMyFinance", &eMyFinancePage{
 		Lang:             c.Lang,
 		UserId:           c.SessUserId,
 		MyFinanceHistory: my_finance_history,
 		Collapse:         collapse,
 		Currency:         currency,
+		CurrencyPct:      currency_pct,
 		CurrencyList:     currencyList})
 	if err != nil {
 		return "", utils.ErrInfo(err)

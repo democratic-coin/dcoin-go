@@ -186,6 +186,8 @@
 	<input id="e_dc_commission" class="input" type="text" value="{{index .EConfig "dc_commission"}}">
 	<label>PM withdraw commission</label>
 	<input id="e_pm_commission" class="input" type="text" value="{{index .EConfig "pm_commission"}}">
+	<label>Coinpayments withdraw commission</label>
+	<input id="e_cp_commission" class="input" type="text" value="{{index .EConfig "cp_commission"}}">
 	<label>static_file_path</label>
 	<input id="e_static_file_path" class="input" type="text" value="{{index .EConfig "static_file_path"}}">
 	<label>static_file</label>
@@ -217,6 +219,7 @@
 			'e_payeer_id' : $('#e_payeer_id').val(),
 			'e_dc_commission' : $('#e_dc_commission').val(),
 			'e_pm_commission' : $('#e_pm_commission').val(),
+			'e_cp_commission' : $('#e_cp_commission').val(),
 			'e_static_file_path' : $('#e_static_file_path').val(),
 			'e_static_file' : $('#e_static_file').val()
 		});

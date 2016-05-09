@@ -1198,6 +1198,10 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 		if ok, _ := regexp.MatchString(`^[0-9]{0,10}(\.[0-9]{0,2})?$`, data); ok {
 			return true
 		}
+	case "amount_btc":
+		if ok, _ := regexp.MatchString(`^[0-9]{0,10}(\.[0-9]{0,5})?$`, data); ok {
+			return true
+		}
 	case "tpl_name":
 		if ok, _ := regexp.MatchString("^[\\w]{1,30}$", data); ok {
 			return true
@@ -1332,7 +1336,7 @@ func CheckInputData_(data_ interface{}, dataType string, info string) bool {
 			}
 		}
 	case "account":
-		if ok, _ := regexp.MatchString(`^[0-9a-zA-Z\-\s_\+\#\:]{1,30}$`, data); ok {
+		if ok, _ := regexp.MatchString(`^[0-9a-zA-Z\-\s_\+\#\:]{1,50}$`, data); ok {
 			return true
 		}
 	case "method":
