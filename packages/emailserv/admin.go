@@ -8,6 +8,11 @@ import (
 
 func adminHandler(w http.ResponseWriter, r *http.Request) {
 	
+	_, _,ok := checkLogin( w, r )
+	if !ok {
+		return
+	}
+	
 	data := make( map[string]interface{})
 	out := new(bytes.Buffer)
 	data[`Path`] = GSettings.Admin

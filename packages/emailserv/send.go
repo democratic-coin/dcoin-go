@@ -84,12 +84,14 @@ func TaskProceed() {
 
 func sendHandler(w http.ResponseWriter, r *http.Request) {
 	
-	ipval,_ := getIP( r )
-
+	_,_,ok := checkLogin( w, r )
+	if !ok {
+		return
+	}
 	data := make( map[string]interface{})
 	out := new(bytes.Buffer)
 	r.ParseForm()
-	pass := r.PostFormValue(`password`)
+	users := strings.Split( r.PostFormValue(`idusers`), `,` )
 	clear := r.PostFormValue(`clearqueue`)
 	if len(clear) > 0 {
 		qMutex.Lock()
@@ -97,23 +99,11 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 		qCurrent = 0
 		data[`message`] = `Очередь очищена`
 		qMutex.Unlock()
-	}
-	if len(pass) > 0 {
-		if stopip[ ipval ] > 5 {
-			w.Write( []byte(`Blocked`))
-			return
-		}
-		users := strings.Split( r.PostFormValue(`idusers`), `,` )
+	} else if len(users) > 0 && len(users[0]) > 0 {
 		pattern := r.PostFormValue(`pattern`)
-		if pass != GSettings.Password {
-			stopip[ ipval ] += 1
-			data[`message`] = `Указан неверный пароль`
-		} else if len(users) == 0 {
-			data[`message`] = `Не указаны пользователи`
-		} else if len(pattern) == 0 {
-			data[`message`] = `Не указаны шаблон`
+		if len(pattern) == 0 {
+			data[`message`] = `Не указан шаблон`
 		} else {
-			stopip[ ipval ] = 0
 			if users[0] == `*` {
 				if list, err := GDB.GetAll("select user_id from users where verified >= 0", -1); err == nil {
 					users = users[:0]
@@ -129,6 +119,8 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 			qMutex.Unlock()
 			http.Redirect(w, r, `/` + GSettings.Admin + `/send`, http.StatusFound )
 		}
+	} else {
+		data[`message`] = `Не указаны пользователи`
 	}
 	data[`count`],_ = GDB.Single(`select count(id) from users where verified>=0`).Int64()
 	data[`tasks`] = queue[:qCurrent]
