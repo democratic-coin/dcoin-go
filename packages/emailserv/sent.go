@@ -19,6 +19,12 @@ func IntToIP(ip uint32) string {
 
 func sentHandler(w http.ResponseWriter, r *http.Request) {
 	
+	_,_,ok := checkLogin( w, r )
+	if !ok {
+		return
+	}
+
+	
 	data := make( map[string]interface{})
 	out := new(bytes.Buffer)
 	list,_ := GDB.GetAll(`select * from log order by id desc`, 50 )

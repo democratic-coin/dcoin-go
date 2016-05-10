@@ -2,10 +2,11 @@
 package main
 
 import (
-/*	"crypto"
-	"crypto/rsa"
+	"crypto/md5"
+/*	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"*/
+//	"golang.org/x/crypto/bcrypt"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
@@ -18,11 +19,9 @@ import (
 	"os"
 	"path/filepath"
 	"html/template"
-	
 	//	"regexp"
 	//	"net/url"
 	"strings"
-	//	"time"
 )
 
 const (
@@ -148,10 +147,10 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
 					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
 				}
-			} /*else {
+			} else {
 				result(`Overwrite email`)
 				return
-			}*/
+			}
 			jsonEmail.Email = email
 		}
 	}
@@ -216,12 +215,12 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		text = fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
 			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])*/
-	case utils.ECMD_CHANGESTAT:
+/*	case utils.ECMD_CHANGESTAT:
 		if err := checkParams(`status`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = `New status: ` + (*jsonEmail.Params)[`status`]
+		text = `New status: ` + (*jsonEmail.Params)[`status`]*/
 	case utils.ECMD_DCCAME:
 		if err := checkParams(`amount`, `currency`, `comment`); err != nil {
 			result(err.Error())
@@ -358,6 +357,17 @@ func Send() {
 //	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NODETIME, &map[string]string{ `dif`: `7` } ))
 }
 */
+
+func checkLogin( w http.ResponseWriter, req *http.Request ) ( ip uint32, ips string, ok bool ) {
+	ip, ips = getIP( req )
+	if phash,err := req.Cookie(`admpass`); err == http.ErrNoCookie || 
+	          fmt.Sprintf("%x", md5.Sum([]byte(GSettings.Password))) != phash.Value {
+		http.Redirect(w, req, `/` + GSettings.Admin + `/login`, http.StatusFound)
+		return
+	}
+	ok = true
+	return
+}
 
 func main() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -514,6 +524,10 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/unban`, unbanHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/ban`, banHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/edit`, editHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/new`, newHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/patterns`, patternsHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
