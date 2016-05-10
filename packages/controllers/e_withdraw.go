@@ -14,12 +14,19 @@ func (c *Controller) EWithdraw() (string, error) {
 
 	c.r.ParseForm()
 	currencyId := utils.StrToInt64(c.r.FormValue("currency_id"))
-	if !utils.CheckInputData(c.r.FormValue("amount"), "amount") {
-		return "", fmt.Errorf("incorrect amount")
-	}
+
 	method := c.r.FormValue("method")
 	if !utils.CheckInputData(method, "method") {
 		return "", fmt.Errorf("incorrect method")
+	}
+	if method == "CP" {
+		if !utils.CheckInputData(c.r.FormValue("amount"), "amount_btc") {
+			return "", fmt.Errorf("incorrect amount")
+		}
+	} else {
+		if !utils.CheckInputData(c.r.FormValue("amount"), "amount") {
+			return "", fmt.Errorf("incorrect amount")
+		}
 	}
 	account := c.r.FormValue("account")
 	if !utils.CheckInputData(account, "account") {
@@ -51,8 +58,12 @@ func (c *Controller) EWithdraw() (string, error) {
 		commission = utils.StrToFloat64(c.EConfig["dc_commission"])
 	} else if method == "Perfect-money" {
 		commission = utils.StrToFloat64(c.EConfig["pm_commission"])
+	} else if method == "CP" {
+		commission = utils.StrToFloat64(c.EConfig["cp_commission"])
+	} else {
+		return "", fmt.Errorf("incorrect method")
 	}
-	wdAmount := utils.ClearNull(utils.Float64ToStr(amount*(1-commission/100)), 2)
+	wdAmount := utils.ClearNull(utils.Float64ToStr(amount*(1-commission/100)), 5)
 
 	err = c.ExecSql(`INSERT INTO e_withdraw (open_time, user_id, currency_id, account, amount, wd_amount, method) VALUES (?, ?, ?, ?, ?, ?, ?)`, curTime, c.SessUserId, currencyId, account, amount, wdAmount, method)
 	if err != nil {

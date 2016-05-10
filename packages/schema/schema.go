@@ -2855,7 +2855,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s1["PRIMARY"] = []string{"id"}
 	s1["AI"] = "id"
 	s1["comment"] = ""
-	s["e_adding_funds_ik"] = s1
+	s["e_adding_funds_cp"] = s1
 	schema.S = s
 	schema.PrintSchema()
 

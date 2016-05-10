@@ -52,15 +52,7 @@ type homePage struct {
 	DCTarget int64
 }
 
-type CurrencyPct struct {
-	Name       string
-	Miner      float64
-	User       float64
-	MinerBlock float64
-	UserBlock  float64
-	MinerSec   float64
-	UserSec    float64
-}
+
 
 func (c *Controller) Home() (string, error) {
 

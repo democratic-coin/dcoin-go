@@ -700,3 +700,13 @@ func NewForexOrder(userId int64, amount, sellRate float64, sellCurrencyId, buyCu
 func userUnlock(userId int64) {
 	utils.DB.ExecSql("UPDATE e_users SET lock = 0 WHERE id = ?", userId)
 }
+
+type CurrencyPct struct {
+	Name       string
+	Miner      float64
+	User       float64
+	MinerBlock float64
+	UserBlock  float64
+	MinerSec   float64
+	UserSec    float64
+}
