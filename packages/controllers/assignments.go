@@ -384,8 +384,9 @@ func (c *Controller) Assignments() (string, error) {
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
+		types := map[string]string{"fb" : "facebook.com", "vk" : "vk.com"}
 		if len(usersSN)>0 {
-			sn = `<a href="http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`">http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`"</a>`
+			sn = `<a href="http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`" target="blank">http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`</a>`
 		}
 		snUserId = utils.StrToInt64(usersSN["user_id"])
 
