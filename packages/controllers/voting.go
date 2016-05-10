@@ -213,7 +213,7 @@ func (c *Controller) Voting() (string, error) {
 				if data["votes_miner_pct"] == sec {
 					sel = "selected"
 				}
-				selectBox=selectBox+`<option `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
+				selectBox=selectBox+`<option  value="`+ sec +`" `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
 			}
 		}
 		minerPctSelectBox[currencyId] = selectBox
@@ -225,7 +225,7 @@ func (c *Controller) Voting() (string, error) {
 				if data["votes_user_pct"] == sec {
 					sel = "selected"
 				}
-				selectBox=selectBox+`<option `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
+				selectBox=selectBox+`<option value="`+ sec +`" `+sel+`>`+utils.ClearNull(y, 2)+`</option>`
 			}
 		}
 		userPctSelectBox[currencyId] = selectBox
