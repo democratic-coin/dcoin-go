@@ -3,7 +3,10 @@
 	.table_out td{padding: 3px 3px }
 </style>
 <script>
-
+	if (typeof intervalIdArray != "undefined") {
+		for (i=0; i<intervalIdArray.length; i++)
+			clearInterval(intervalIdArray[i]);
+	}
 	$('#m_amount').bind("keyup change", function(e) {
 
 		var amount = $("#m_amount").val();
@@ -74,10 +77,63 @@
 		}
 		amount = parseFloat(amount_);
 		var withdraw_amount = amount - amount*parseFloat(commission);
-		withdraw_amount = parseInt(withdraw_amount * 100)/100;
-		withdraw_amount = withdraw_amount.toFixed(2)-0;
+		console.log("withdraw_amount", withdraw_amount)
+		withdraw_amount = parseInt(withdraw_amount * 10000)/10000;
+		console.log("withdraw_amount", withdraw_amount)
+		withdraw_amount = withdraw_amount.toFixed(4)-0;
+		console.log("withdraw_amount", withdraw_amount)
 		$("#withdraw_amount-"+currency_id).val(withdraw_amount);
 	}
+
+	function dc_counter(pct, amount_id, characters)
+	{
+		console.log($('#'+amount_id).text());
+		var amount_str = $('#'+amount_id).text();
+		console.log('dc_counter/amount_str='+amount_str);
+		var amount = parseFloat(amount_str);
+		console.log('dc_counter/'+amount_id+'/'+amount+'/'+pct);
+		var i=0;
+		pct = pct / 3;
+
+		var intervalID = setInterval( function() {
+			i++;
+			//console.log(i);
+			var new_amount =  Math.pow(1+pct, i) * amount;
+			var number = Math.pow(10, Number(characters));
+			//console.log('characters='+characters);
+			if (new_amount<number) {
+				if (parseFloat(new_amount)<1)
+					var s = 2;
+				else
+					var s = 2;
+				new_amount = new_amount.toString();
+				new_amount = new_amount.substr(0, characters+s);
+				//console.log('new_amount<number='+new_amount+'/'+s);
+			}
+			else {
+				new_amount = new_amount.toFixed();
+				//console.log('new_amount.toFixed='+new_amount);
+			}
+			if (new_amount!="NaN" ) {
+				$('#'+amount_id).text(new_amount);
+				console.log('new_amount='+new_amount);
+			}
+			else {
+				amount = parseFloat($('#'+amount_id).text());
+				//console.log('amount='+amount);
+			}
+		} , 300);
+		intervalIdArray.push(intervalID);
+	}
+
+	console.log("intervalIdArray", intervalIdArray)
+	var currency_list = [];
+	{{range $id, $data := .CurrencyPct}}
+		currency_list[{{$id}}] = []
+		currency_list[{{$id}}]['miner'] = {{$data.MinerSec}}
+		currency_list[{{$id}}]['user'] = {{$data.UserSec}}
+		currency_list[{{$id}}]['name'] = '{{$data.Name}}'
+	{{end}}
 </script>
 <div class="row">
 	<div class="col-lg-12">
@@ -92,9 +148,16 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4 class="panel-title">
-									<div style="float: left">{{index $data "name"}}<br>{{$.Lang.balance}}: {{index $data "amount"}} {{index $data "name"}}</a></div>
 
+									<div style="float: left">{{index $data "name"}}<br><span id="balanceAmount-{{$id}}" style="font-size:30px">{{index $data "amount"}}</span> {{index $data "name"}}</a></div>
+									{{if lt (strToInt $id) 1000}}
+									<script>
+										var pct_sec = currency_list[{{$id}}]["user"];
+										console.log("pct_sec", pct_sec);
+										dc_counter(pct_sec, "balanceAmount-{{$id}}", 8);</script>
+									{{end}}
 									<div class="pull-right">
+
 										<button type="button" class="btn btn-success collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{index $data "name"}}">{{$.Lang.deposit}}</button>
 										<button type="button" class="btn btn-primary collapsed"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{index $data "name"}}2">{{$.Lang.withdraw}}</button>
 									</div>
@@ -102,6 +165,7 @@
 								</h4>
 								<div class="clearfix"></div>
 							</div>
+
 							<div style="height: 0px;" id="collapse{{index $data "name"}}" class="panel-collapse collapse">
 								<div class="panel-body">
 									{{noescape (index $data "input")}}
@@ -109,6 +173,7 @@
 							</div>
 							<div style="height: 0px;" id="collapse{{index $data "name"}}2" class="panel-collapse collapse">
 								<div class="panel-body">
+									<div id="alerts-{{$id}}"></div>
 									{{noescape (index $data "output")}}
 								</div>
 							</div>
@@ -130,15 +195,16 @@
 							<tr>
 								<th>#</th>
 								<th>{{.Lang.type}}</th>
-								<th class="unixtime">{{.Lang.time}}</th>
+								<th>{{.Lang.time}}</th>
 								<th>{{.Lang.method}}</th>
+								<th>{{.Lang.account}}</th>
 								<th>{{.Lang.amount}}</th>
 								<th>{{.Lang.status}}</th>
 							</tr>
 							</thead>
 							<tbody>
 							{{range $id, $data := .MyFinanceHistory}}
-								<tr><td>{{$data.Id}}</td><td>{{$data.Ftype}}</td><td class="unixtime">{{$data.AddTime}}</td><td>{{$data.Method}}</td><td>{{$data.Amount}}</td><td>{{noescape $data.Status}}</td></tr>
+								<tr><td>{{$data.Id}}</td><td>{{$data.Ftype}}</td><td class="unixtime">{{$data.AddTime}}</td><td>{{$data.Method}}</td><td>{{$data.Account}}</td><td>{{$data.Amount}}</td><td>{{noescape $data.Status}}</td></tr>
 							{{end}}
 							</tbody>
 						</table>
@@ -151,7 +217,7 @@
 		</div>
 </div>
 
-<script src="static/js/unixtime.js"></script>
+<script src="/static/js/unixtime.js"></script>
 
 {{if .Collapse}}
 	<script>$("#collapse{{.Collapse}}").collapse();</script>

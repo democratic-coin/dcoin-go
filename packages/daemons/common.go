@@ -185,7 +185,7 @@ func StartDaemons() {
 		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"UnbanNodes": UnbanNodes, "FirstChangePkey": FirstChangePkey, "QueueParserTx": QueueParserTx, "Notifications": Notifications, "Disseminator": Disseminator, "Confirmations": Confirmations, "Connector": Connector, "Clear": Clear, "CleaningDb": CleaningDb, "BlocksCollection": BlocksCollection, "AutoPayments": AutoPayments}
 	}
 	if *utils.TestRollBack == 1 {
-		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"BlocksCollection": BlocksCollection}
+		daemonsStart = map[string]func(chBreaker chan bool, chAnswer chan string){"BlocksCollection": BlocksCollection, "Connector": Connector, "Confirmations": Confirmations}
 	}
 
 	if len(configIni["daemons"]) > 0 && configIni["daemons"] != "null" {

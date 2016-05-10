@@ -231,7 +231,7 @@
 								<p>FREE COINS</p>
 							</div>
 							<div class="panel-footer">
-								<a href="#" onclick="map_navigate ('PromisedAmountRestrictedList')">{{.Lang.goto}}</a>
+								<a href="#" onclick="map_navigate ('{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>

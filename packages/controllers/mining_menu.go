@@ -23,6 +23,7 @@ type miningMenuPage struct {
 	Host              string
 	Result            string
 	NodePrivateKey    string
+	FreeCoin          int64
 	Mobile            bool
 }
 
@@ -265,6 +266,11 @@ func (c *Controller) MiningMenu() (string, error) {
 		tplName = "upgrade"
 		tplTitle = "upgrade"
 	}
+	freecoin, err := c.Single("SELECT id FROM promised_amount_restricted WHERE user_id = ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+		
 	log.Debug("tplName, tplTitle %v, %v", tplName, tplTitle)
 	TemplateStr, err := makeTemplate(tplName, tplTitle, &miningMenuPage{
 		Alert:             c.Alert,
@@ -280,6 +286,7 @@ func (c *Controller) MiningMenu() (string, error) {
 		NodePrivateKey:    nodePrivateKey,
 		MinerVotesAttempt: minerVotesAttempt,
 		Mobile:            utils.Mobile(),
+		FreeCoin:          freecoin,
 		Host:              hostTpl })
 	if err != nil {
 		return "", utils.ErrInfo(err)

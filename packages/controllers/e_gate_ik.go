@@ -1,16 +1,11 @@
 package controllers
 
 import (
-	"encoding/base64"
-	"errors"
-	"fmt"
-	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"sort"
-	"strings"
+
 )
 
 func (c *Controller) EGateIk() (string, error) {
-
+/*
 	c.r.ParseForm()
 	fmt.Println(c.r.Form)
 	var ikNames []string
@@ -61,6 +56,6 @@ func (c *Controller) EGateIk() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+*/
 	return ``, nil
 }

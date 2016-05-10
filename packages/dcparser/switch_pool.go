@@ -92,7 +92,7 @@ func (p *Parser) SwitchPool() error {
 		}
 	} else {
 		// выключаем режим пула
-		users, err := p.GetList(`SELECT pool_user_id FROM miners_data WHERE user_id = ?`, p.TxUserID).Int64()
+		users, err := p.GetAll(`SELECT user_id, log_id FROM miners_data WHERE pool_user_id = ?`, -1, p.TxUserID)
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -101,12 +101,19 @@ func (p *Parser) SwitchPool() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
+		// логируем юзерские данные для роллбека
 		logId, err := p.ExecSqlGetLastInsertId(`INSERT INTO log_miners_data (backup_pool_users, prev_log_id) VALUES (?, ?)`, 
 												"log_id", string(jsonData), minersData["log_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
+		// отмечаемся, что мы больше не пул
 		err = p.ExecSql(`UPDATE miners_data SET i_am_pool = 0, log_id = ? WHERE user_id = ?`, logId, p.TxUserID);
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		// убираем у юзеров наш пул из pool_user_id
+		err = p.ExecSql(`UPDATE miners_data SET pool_user_id = 0, log_id = ? WHERE pool_user_id = ?`, logId, p.TxUserID)
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -125,11 +132,6 @@ func (p *Parser) SwitchPoolRollback() error {
 		return p.ErrInfo(err)
 	}
 	if minersData["i_am_pool"] == 0 {
-		// включаем режим пула
-		err := p.ExecSql(`UPDATE miners_data SET i_am_pool = 1 WHERE user_id = ?`, p.TxUserID)
-		if err != nil {
-			return p.ErrInfo(err)
-		}
 
 		// восстановим юзерам, у которых ставили pool_user_id в 0
 		log_miners_data, err := p.OneRow(`
@@ -139,14 +141,21 @@ func (p *Parser) SwitchPoolRollback() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		var users []int64
+
+		// включаем режим пула
+		err = p.ExecSql(`UPDATE miners_data SET i_am_pool = 1, log_id = ? WHERE user_id = ?`, log_miners_data["prev_log_id"], p.TxUserID)
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+
+		var users []map[string]string
 		err = json.Unmarshal(log_miners_data["backup_pool_users"], &users)
 		if err != nil {
 			return p.ErrInfo(err)
 		}
 
-		for i:=0; i<len(users); i++ {
-			err := p.ExecSql(`UPDATE miners_data SET pool_user_id = ?, log_id = ? WHERE user_id = ?`, p.TxUserID, string(log_miners_data["prev_log_id"]), users[i])
+		for _, userData := range users {
+			err := p.ExecSql(`UPDATE miners_data SET pool_user_id = ?, log_id = ? WHERE user_id = ?`, p.TxUserID, userData["log_id"], userData["user_id"])
 			if err != nil {
 				return p.ErrInfo(err)
 			}

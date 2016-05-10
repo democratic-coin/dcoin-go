@@ -59,6 +59,9 @@ func (c *Controller) EImportData() (string, error) {
 				if name == "id" {
 					id = true
 				}
+				if name == "lock" && c.ConfigIni["db_type"] == "mysql" {
+					name = "`lock`"
+				}
 				colNames += name + ","
 				values = append(values, value)
 				if ok, _ := regexp.MatchString("(tx_hash)", name); ok {
@@ -74,7 +77,11 @@ func (c *Controller) EImportData() (string, error) {
 			log.Debug("%v", values)
 			err = c.ExecSql(query, values...)
 			if err != nil {
-				return "", utils.ErrInfo(err)
+				if table == "e_authorization" {
+					log.Error("%v", values)
+				} else {
+					return "", utils.ErrInfo(err)
+				}
 			}
 		}
 		if id {

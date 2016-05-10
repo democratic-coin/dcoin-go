@@ -33,7 +33,7 @@ func main() {
 	blockData.Time = utils.StrToInt64(txTime)
 	blockData.UserId = utils.BytesToInt64(userId)
 
-	err := tests_utils.MakeTest(txSlice, blockData, txType, "work");
+	err := tests_utils.MakeTest(txSlice, blockData, txType, "work_and_rollback");
 	if err != nil {
 		fmt.Println(err)
 	}
