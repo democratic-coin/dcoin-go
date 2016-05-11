@@ -30,6 +30,7 @@ type upgrade6Page struct {
 	VideoHash       string
 	Mobile          bool
 	VideoUrlId      string
+	PoolAdminUserId string
 }
 
 func (c *Controller) Upgrade6() (string, error) {
@@ -42,6 +43,7 @@ func (c *Controller) Upgrade6() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+	hostData["PoolAdminUserId"] = "0"
 
 	// в режиме пула выдаем только хост ноды
 	log.Debug("c.Community: %v", c.Community)
@@ -56,6 +58,7 @@ func (c *Controller) Upgrade6() (string, error) {
 			hostData["http_host"] = "null http_host in miners_data"
 			hostData["tcp_host"] = "null tcp_host in miners_data"
 		}
+		hostData["PoolAdminUserId"] = utils.Int64ToStr(c.PoolAdminUserId)
 	} else {
 		// если смогли подключиться из вне
 		ip, err := utils.GetHttpTextAnswer("http://api.ipify.org")
@@ -172,6 +175,7 @@ func (c *Controller) Upgrade6() (string, error) {
 		CountSignArr:    c.CountSignArr,
 		HttpHost:        hostData["http_host"],
 		TcpHost:         hostData["tcp_host"],
+		PoolAdminUserId:         hostData["PoolAdminUserId"],
 		Community:       c.Community,
 		HostType:        hostType,
 		ProfileHash:     profileHash,
