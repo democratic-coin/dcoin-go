@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"fmt"
 )
 
 type promisedAmountRestrictedList struct {
@@ -39,7 +38,6 @@ func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
 	if err != nil {
 		return 0, 0, err
 	}
-	fmt.Println( `Profit`, amount, `=`, profit )
 	profit += amount
 	
 	pct, err := c.Single(c.FormatQuery("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC"), utils.StrToInt64(paRestricted["currency_id"])).Float64()
