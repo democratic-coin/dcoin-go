@@ -55,7 +55,7 @@ func (p *Parser) ChangeHostFront() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		if exists > 0 {
+		if exists > 0 && exists != p.TxUserID {
 			return p.ErrInfo("host exists")
 		}
 	}

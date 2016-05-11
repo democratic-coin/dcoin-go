@@ -108,6 +108,7 @@ func (d *daemon) notMinerSetSleepTime(sleep int) error {
 	if err != nil {
 		return err
 	}
+	logger.Debug("community", community)
 	if len(community) == 0 {
 		userId, err := d.GetMyUserId("")
 		if err != nil {
@@ -117,6 +118,7 @@ func (d *daemon) notMinerSetSleepTime(sleep int) error {
 		if minerId == 0 {
 			d.sleepTime = sleep
 		}
+		logger.Debug("minerId", minerId)
 	}
 	return nil
 }

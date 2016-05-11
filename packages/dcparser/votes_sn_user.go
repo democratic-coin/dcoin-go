@@ -38,7 +38,7 @@ func (p *Parser) VotesSnUserFront() error {
 	}
 
 	// проверим, не закончилось ли уже голосование и верный ли статус
-	status, err := p.Single("SELECT status FROM users WHERE id  =  ?", p.TxMaps.Int64["sn_user_id"]).String()
+	status, err := p.Single("SELECT status FROM users WHERE user_id  =  ?", p.TxMaps.Int64["sn_user_id"]).String()
 	if err != nil {
 		return p.ErrInfo(err)
 	}
