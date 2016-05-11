@@ -30,12 +30,16 @@ func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
 	}
 	
 	amount := utils.StrToFloat64(paRestricted["amount"])
-	profit, err := c.CalcProfitGen(utils.StrToInt64(paRestricted["currency_id"]), amount, c.SessUserId, utils.StrToInt64(paRestricted["start_time"]), utils.Time(), "wallet")
+	// Временная проверка для старого формата таблицы promised_amount_restricted. 
+	if _, ok := paRestricted["start_time"]; ok && utils.StrToInt64(paRestricted["last_update"]) == 0 {
+		paRestricted["last_update"] = paRestricted["start_time"]
+	}
+	profit, err := c.CalcProfitGen(utils.StrToInt64(paRestricted["currency_id"]), amount, c.SessUserId, utils.StrToInt64(paRestricted["last_update"]), utils.Time(), "wallet")
 	if err != nil {
 		return 0, 0, err
 	}
 	profit += amount
-
+	
 	pct, err := c.Single(c.FormatQuery("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC"), utils.StrToInt64(paRestricted["currency_id"])).Float64()
 	if err != nil {
 		return 0, 0, err
