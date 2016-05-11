@@ -124,7 +124,7 @@ func (c *Controller) Assignments() (string, error) {
 	if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}
-	num, err = c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
+	num, err = c.Single(`SELECT count(user_id) FROM users WHERE sn_type!="" AND status  =  'user'` + addSql +
 				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -379,7 +379,7 @@ func (c *Controller) Assignments() (string, error) {
 		if c.SessUserId!=1 {
 			addSql = ` AND sn_type = "`+mySnType+`"`
 		}
-		usersSN, err := c.OneRow("SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'" + addSql +
+		usersSN, err := c.OneRow(`SELECT user_id, sn_type, sn_url_id FROM users WHERE sn_type != "" AND status  =  'user'` + addSql +
 							` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
