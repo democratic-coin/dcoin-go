@@ -112,7 +112,7 @@
 {{if eq .HostType "pool"}}
 	<div id='node_http_host'><input type='hidden' id='http_host' value='{{.HttpHost}}'><p><strong>{{.HttpHost}}</strong><!--<br>[<a href='#' id='change_node_http_host'>change</a>]</p>--></div><br>
 	<div id='node_tcp_host'><input type='hidden' id='tcp_host' value='{{.TcpHost}}'><p><strong>{{.TcpHost}}</strong><!--<br>[<a href='#' id='change_node_tcp_host'>change</a>]</p>--></div>
-	<div id='PoolAdminUserId'><input type='hidden' id='PoolAdminUserId' value='{{.PoolAdminUserId}}'></div>
+	<div id='node_PoolAdminUserId'><input type='hidden' id='PoolAdminUserId' value='{{.PoolAdminUserId}}'></div>
 
 	<br>
 	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
