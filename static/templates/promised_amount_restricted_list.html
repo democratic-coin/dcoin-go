@@ -23,7 +23,7 @@
 		rest = Math.round( (new Date().getTime() - pstart)/100 );
 		new_amount =  (Math.pow(1+pct, rest) * amount);
 		$('#tdc').html((new_amount-30).toFixed(7) + " dUSD");
-		{{if not .MinerId}}
+		{{if and (not .MinerId) .MinWalletAmount}}
 			if ( more && new_amount-30 > 0.1 ) {
 				$("#morecoins").show();
 				more = false;
