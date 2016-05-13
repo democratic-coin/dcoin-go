@@ -14,18 +14,24 @@
 		dc_navigate ('upgradeUser');
 	});
 
-	var i=0;
 	var pct = {{.Pct}}/10;
-	var amount = {{.Amount}}
-	var new_amount = 0
+	var amount = {{.Amount}};
+	var pstart = new Date().getTime();
+	var more = true;
 
-	var intervalID = setInterval( function() {
-		i++;
-		//var new_amount = (amount * (pct * i)) / 100;
-		new_amount =  (Math.pow(1+pct, i) * amount);
-		$('#tdc').text((new_amount-30).toFixed(7) + " dUSD");
-	} , 100);
-	intervalIdArray.push(intervalID);
+	function coins_counter() {
+		rest = Math.round( (new Date().getTime() - pstart)/100 );
+		new_amount =  (Math.pow(1+pct, rest) * amount);
+		$('#tdc').html((new_amount-30).toFixed(7) + " dUSD");
+		{{if not .MinerId}}
+			if ( more && new_amount-30 > 0.1 ) {
+				$("#morecoins").show();
+				more = false;
+			}
+		{{end}}
+		setTimeout( coins_counter, 200 );
+	}
+	setTimeout( coins_counter, 200 );
 
 </script>
 <h1 class="page-header">{{.Lang.mining}}</h1>
@@ -41,6 +47,9 @@
 {{template "alertSuccess".}}
 <div id="tdc" style="font-size:60px"></div>
 1 dUSD = 1$<br>
+{{if not .MinerId}}
+	<button class="btn btn-primary" id="morecoins" style="display:none;" onclick="dc_navigate('upgrade1')">{{.Lang.want_more}}</button><br>
+{{end}}
 Passed the test in a social network:
 {{if or (.LastTxQueueTx) (.LastTxTx)}}
 	Pending<br>
