@@ -17,17 +17,21 @@ func (c *Controller) Check_sign() (string, error) {
 	setupPassword := c.r.FormValue("setup_password")
 	private_key := c.r.FormValue("private_key")
 	if !utils.CheckInputData(n, "hex") {
+		log.Error("incorrect n %v", n)
 		return `{"result":"incorrect n"}`, nil
 	}
 	if !utils.CheckInputData(e, "hex") {
+		log.Error("incorrect e %v", e)
 		return `{"result":"incorrect e"}`, nil
 	}
 	if !utils.CheckInputData(string(sign), "hex_sign") {
+		log.Error("incorrect sign %v", string(sign))
 		return `{"result":"incorrect sign"}`, nil
 	}
 
 	allTables, err := c.DCDB.GetAllTables()
 	if err != nil {
+		log.Error("err %v", err)
 		return "{\"result\":0}", err
 	}
 
@@ -58,6 +62,7 @@ func (c *Controller) Check_sign() (string, error) {
 			// получим открытый ключ юзера
 			publicKey, err := c.DCDB.GetMyPublicKey(myPrefix)
 			if err != nil {
+				log.Error("err %v", err)
 				return "{\"result\":0}", err
 			}
 
@@ -83,6 +88,7 @@ func (c *Controller) Check_sign() (string, error) {
 				log.Debug("c.sess.Set(user_id) %d", myUserId)
 				public_key, err := c.DCDB.GetUserPublicKey(myUserId)
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				// паблик кей в сессии нужен чтобы выбрасывать юзера, если ключ изменился
@@ -91,6 +97,7 @@ func (c *Controller) Check_sign() (string, error) {
 
 				adminUSerID, err := c.DCDB.GetAdminUserId()
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				if adminUSerID == myUserId {
@@ -105,6 +112,7 @@ func (c *Controller) Check_sign() (string, error) {
 		userId_, err := c.DCDB.GetUserIdByPublicKey(publicKey)
 		userId := utils.StrToInt64(userId_)
 		if err != nil {
+			log.Error("err %v", err)
 			return "{\"result\":0}", err
 		}
 
@@ -120,6 +128,7 @@ func (c *Controller) Check_sign() (string, error) {
 			// проверим подпись
 			resultCheckSign, err := utils.CheckSign([][]byte{utils.HexToBin(publicKey)}, forSign, utils.HexToBin(sign), true)
 			if err != nil {
+				log.Error("err %v", err)
 				return "{\"result\":0}", err
 			}
 			if resultCheckSign {
@@ -135,10 +144,12 @@ func (c *Controller) Check_sign() (string, error) {
 				if utils.InSliceString(utils.Int64ToStr(userId)+"_my_keys", allTables) {
 					curBlockId, err := c.DCDB.GetBlockId()
 					if err != nil {
+						log.Error("err %v", err)
 						return "{\"result\":0}", err
 					}
 					err = c.DCDB.InsertIntoMyKey(utils.Int64ToStr(userId)+"_", publicKey, utils.Int64ToStr(curBlockId))
 					if err != nil {
+						log.Error("err %v", err)
 						return "{\"result\":0}", err
 					}
 					c.sess.Delete("restricted")
@@ -148,6 +159,7 @@ func (c *Controller) Check_sign() (string, error) {
 				}
 				return "{\"result\":1}", nil
 			} else {
+				log.Error("!resultCheckSign")
 				return "{\"result\":0}", nil
 			}
 		}
@@ -155,6 +167,7 @@ func (c *Controller) Check_sign() (string, error) {
 		// получим открытый ключ юзера
 		publicKey, err := c.DCDB.GetMyPublicKey("")
 		if err != nil {
+			log.Error("err %v", err)
 			return "{\"result\":0}", err
 		}
 
@@ -164,6 +177,7 @@ func (c *Controller) Check_sign() (string, error) {
 			// пока не собрана цепочка блоков не даем ввести ключ
 			infoBlock, err := c.DCDB.GetInfoBlock()
 			if err != nil {
+				log.Error("err %v", err)
 				return "{\"result\":0}", err
 			}
 			// если последний блок не старше 2-х часов
@@ -177,10 +191,11 @@ func (c *Controller) Check_sign() (string, error) {
 				// проверим, верный ли установочный пароль, если он, конечно, есть
 				setupPassword_, err := c.Single("SELECT setup_password FROM config").String()
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				if len(setupPassword_) > 0 && setupPassword_ != string(utils.DSha256(setupPassword)) {
-					log.Debug(setupPassword_, string(utils.DSha256(setupPassword)), setupPassword)
+					log.Error(setupPassword_, string(utils.DSha256(setupPassword)), setupPassword)
 					return "{\"result\":0}", nil
 				}
 
@@ -188,12 +203,14 @@ func (c *Controller) Check_sign() (string, error) {
 				log.Debug("new key", string(publicKey))
 				userId, err := c.GetUserIdByPublicKey(publicKey)
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 
 				// получим данные для подписи
 				forSign, err := c.DCDB.GetDataAuthorization(hash)
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				log.Debug("forSign", forSign)
@@ -202,19 +219,23 @@ func (c *Controller) Check_sign() (string, error) {
 				// проверим подпись
 				resultCheckSign, err := utils.CheckSign([][]byte{utils.HexToBin(publicKey)}, forSign, utils.HexToBin(sign), true)
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				if !resultCheckSign {
+					log.Error("!resultCheckSign")
 					return "{\"result\":0}", nil
 				}
 
 				if len(userId) > 0 {
 					err := c.InsertIntoMyKey("", publicKey, "0")
 					if err != nil {
+						log.Error("err %v", err)
 						return "{\"result\":0}", err
 					}
 					minerId, err := c.GetMinerId(utils.StrToInt64(userId))
 					if err != nil {
+						log.Error("err %v", err)
 						return "{\"result\":0}", err
 					}
 					//myUserId, err := c.GetMyUserId("")
@@ -222,11 +243,13 @@ func (c *Controller) Check_sign() (string, error) {
 					if minerId > 0 {
 						err = c.ExecSql("UPDATE my_table SET user_id = ?, miner_id = ?, status = 'miner'", userId, minerId)
 						if err != nil {
+							log.Error("err %v", err)
 							return "{\"result\":0}", err
 						}
 					} else {
 						err = c.ExecSql("UPDATE my_table SET user_id = ?, status = 'user'", userId)
 						if err != nil {
+							log.Error("err %v", err)
 							return "{\"result\":0}", err
 						}
 					}
@@ -258,15 +281,18 @@ func (c *Controller) Check_sign() (string, error) {
 			// проверим подпись
 			resultCheckSign, err := utils.CheckSign([][]byte{publicKey}, forSign, utils.HexToBin(sign), true)
 			if err != nil {
+				log.Error("err %v", err)
 				return "{\"result\":0}", err
 			}
 			if !resultCheckSign {
+				log.Error("!resultCheckSign")
 				return "{\"result\":0}", nil
 			}
 
 		}
 
 		if checkError {
+			log.Error("checkError")
 			return "{\"result\":0}", nil
 		} else {
 			myUserId, err := c.DCDB.GetMyUserId("")
@@ -274,6 +300,7 @@ func (c *Controller) Check_sign() (string, error) {
 				myUserId = -1
 			}
 			if err != nil {
+				log.Error("err %v", err)
 				return "{\"result\":0}", err
 			}
 			c.sess.Delete("restricted")
@@ -284,6 +311,7 @@ func (c *Controller) Check_sign() (string, error) {
 
 				public_key, err := c.DCDB.GetUserPublicKey(myUserId)
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				// паблик кей в сессии нужен чтобы выбрасывать юзера, если ключ изменился
@@ -296,6 +324,7 @@ func (c *Controller) Check_sign() (string, error) {
 
 				AdminUserId, err := c.DCDB.GetAdminUserId()
 				if err != nil {
+					log.Error("err %v", err)
 					return "{\"result\":0}", err
 				}
 				if AdminUserId == myUserId {
@@ -305,5 +334,6 @@ func (c *Controller) Check_sign() (string, error) {
 			}
 		}
 	}
+	log.Error("result 0 ")
 	return "{\"result\":0}", nil
 }
