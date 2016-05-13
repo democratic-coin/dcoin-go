@@ -198,7 +198,7 @@ func Connector(chBreaker chan bool, chAnswer chan string) {
 	}
 
 	// соединения для чата иногда отваливаются, поэтому в цикле мониторим состояние
-	go func() {
+	/*go func() {
 		for {
 			if myUserIdForChat == 0 {
 				utils.Sleep(1)
@@ -211,7 +211,7 @@ func Connector(chBreaker chan bool, chAnswer chan string) {
 			}
 			utils.Sleep(30)
 		}
-	}()
+	}()*/
 
 BEGIN:
 	for {

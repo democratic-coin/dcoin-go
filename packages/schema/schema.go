@@ -3314,6 +3314,8 @@ func (schema *SchemaStruct) GetSchema() {
 	s1["AI"] = "log_id"
 	s1["comment"] = ""
 	s["log_promised_amount_restricted"] = s1
+	schema.S = s
+	schema.PrintSchema()
 
 	s = make(Recmap)
 	s1 = make(Recmap)

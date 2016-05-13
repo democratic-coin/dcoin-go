@@ -394,7 +394,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 
 	// ожидает появления свежих записей в чате, затем ждет появления коннектов
 	// (заносятся из демеона connections и от тех, кто сам подключился к ноде)
-	go utils.ChatOutput(utils.ChatNewTx)
+	//go utils.ChatOutput(utils.ChatNewTx)
 
 	log.Debug("ALL RIGHT")
 	IosLog("ALL RIGHT")
