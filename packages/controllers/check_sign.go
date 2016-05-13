@@ -120,7 +120,7 @@ func (c *Controller) Check_sign() (string, error) {
 			return "{\"result\":0}", err
 		}
 
-		log.Debug("userId:", userId)
+		log.Debug("userId: %v / publicKey %v", userId, publicKey)
 		// юзер с таким ключем есть в БД
 		if userId > 0 {
 
