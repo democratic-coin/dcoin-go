@@ -3,15 +3,15 @@
 package dcoin
 
 import (
-	"fmt"
-	"github.com/democratic-coin/dcoin-go/packages/consts"
+	//"fmt"
+	//"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/tcpserver"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	_ "github.com/mattn/go-sqlite3"
 	"net"
 	"net/http"
 	"os"
-	"regexp"
+	//"regexp"
 	"time"
 )
 
@@ -115,7 +115,7 @@ func tcpListener() {
 	}()
 
 	// Листенинг для чата
-	go func() {
+	/*go func() {
 		listener, err := net.Listen("tcp", ":"+consts.CHAT_PORT)
 		if err != nil {
 			log.Error("Error listening:", err)
@@ -184,5 +184,5 @@ func tcpListener() {
 				}
 			}(conn)
 		}
-	}()
+	}()*/
 }

@@ -33,8 +33,9 @@ func (p *Parser) ChangePoolFront() error {
 		return p.ErrInfo(err)
 	}
 
+	// TODO: проверить, точно ли это пул
 	// есть ли места на выбранном пуле
-	count, err := p.Single(`SELECT pool_count_users WHERE user_id = ?`, p.TxMaps.Int64["pool_user_id"]).Int64()
+	count, err := p.Single(`SELECT pool_count_users FROM miners_data WHERE user_id = ?`, p.TxMaps.Int64["pool_user_id"]).Int64()
 	if err != nil {
 		return p.ErrInfo(err)
 	}
