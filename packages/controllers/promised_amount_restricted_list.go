@@ -18,6 +18,7 @@ type promisedAmountRestrictedList struct {
 	LastTxFormatted string
 	MinerId         int64
 	Lang            map[string]string
+	MinWalletAmount string
 }
 
 func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
@@ -71,7 +72,12 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 			lastTxTx = true
 		}
 	}
-	minerId,err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	minerId, err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
+	minWalletAmount, err := c.Single("SELECT amount FROM wallets WHERE user_id  =  ? and currency_id = ?", c.SessUserId, 72).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -87,6 +93,7 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		LastTxTx:          lastTxTx,
 		ShowSignData:    c.ShowSignData,
 		MinerId:         minerId,
+		MinWalletAmount: minWalletAmount,
 		UserSn:          userSn,
 		UserId:          c.SessUserId})
 	if err != nil {

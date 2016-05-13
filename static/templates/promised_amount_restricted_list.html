@@ -47,7 +47,7 @@
 {{template "alertSuccess".}}
 <div id="tdc" style="font-size:60px"></div>
 1 dUSD = 1$<br>
-{{if not .MinerId}}
+{{if and (not .MinerId) .MinWalletAmount}}
 	<button class="btn btn-primary" id="morecoins" style="display:none;" onclick="dc_navigate('upgrade1')">{{.Lang.want_more}}</button><br>
 {{end}}
 Passed the test in a social network:
