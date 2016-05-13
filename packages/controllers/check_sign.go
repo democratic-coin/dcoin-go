@@ -36,7 +36,9 @@ func (c *Controller) Check_sign() (string, error) {
 	}
 
 	var hash []byte
-	log.Debug("configIni[sign_hash] %s", configIni["sign_hash"])
+	log.Debug("string(sign) %s", string(sign))
+	log.Debug("n %s", n)
+	log.Debug("e %s", e)
 	log.Debug("c.r.RemoteAddr %s", c.r.RemoteAddr)
 	log.Debug("c.r.Header.Get(User-Agent) %s", c.r.Header.Get("User-Agent"))
 	RemoteAddr := utils.RemoteAddrFix(c.r.RemoteAddr)
