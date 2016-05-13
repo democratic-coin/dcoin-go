@@ -11,6 +11,7 @@ func (c *Controller) Check_sign() (string, error) {
 	var checkError bool
 
 	c.r.ParseForm()
+	forsignature := []byte(c.r.FormValue("forsignature")) // для дебага
 	n := []byte(c.r.FormValue("n"))
 	e := []byte(c.r.FormValue("e"))
 	sign := []byte(c.r.FormValue("sign"))
@@ -36,6 +37,7 @@ func (c *Controller) Check_sign() (string, error) {
 	}
 
 	var hash []byte
+	log.Debug("forsignature %s", forsignature)
 	log.Debug("string(sign) %s", string(sign))
 	log.Debug("n %s", n)
 	log.Debug("e %s", e)
