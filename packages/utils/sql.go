@@ -2031,7 +2031,7 @@ func (db *DCDB) CheckCurrencyCF(currency_id int64) (bool, error) {
 }
 
 func (db *DCDB) GetUserIdByPublicKey(publicKey []byte) (string, error) {
-	userId, err := db.Single(`SELECT user_id FROM users WHERE hex(public_key_0) = ?`, publicKey).String()
+	userId, err := db.Single(`SELECT user_id FROM users WHERE hex(public_key_0) = ?`, string(publicKey)).String()
 	if err != nil {
 		return "", ErrInfo(err)
 	}

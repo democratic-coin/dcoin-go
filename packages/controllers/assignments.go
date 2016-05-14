@@ -100,13 +100,13 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	addSql := ""
+	addSqlCurrency := ""
 	currencyIds := strings.Join(currency, ",")
 	if len(currencyIds) > 0 || c.SessUserId == 1 {
 		if c.SessUserId != 1 {
-			addSql = "AND currency_id IN (" + currencyIds + ")"
+			addSqlCurrency = "AND currency_id IN (" + currencyIds + ")"
 		}
-		num, err := getCount("SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 " + addSql, `promised_amount` )
+		num, err := getCount("SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 " + addSqlCurrency, `promised_amount` )
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -120,7 +120,7 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}*/
-	addSql = ` AND sn_url_id != ''`
+	addSql := ` AND sn_url_id != ''`
 	/*if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}*/
@@ -310,7 +310,7 @@ func (c *Controller) Assignments() (string, error) {
 				FROM promised_amount
 				WHERE status =  'pending' AND
 							 del_block_id = 0
-				` + addSql + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+				` + addSqlCurrency + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
