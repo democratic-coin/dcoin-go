@@ -53,7 +53,7 @@
 Passed the test in a social network:
 {{if or (.LastTxQueueTx) (.LastTxTx)}}
 	Pending<br>
-{{else if (eq .UserSn "user")}}
+{{else if (ne .UserSn "sn_user")}}
 	<a id="upgradeUser" href="#">no</a><br>
 {{else}}
 	YES<br><button id="getCoins" class="btn btn-primary">To wallet</button>
