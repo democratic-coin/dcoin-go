@@ -352,7 +352,12 @@
 			$.post( 'ajax?controllerName=synchronizationBlockchain', {}, function (data) {
 					console.log(data.block_time);
 					console.log(data.block_id);
+					console.log( data.need_reload );
 					if (data.block_id>1) {
+						if (data.need_reload == "1" && $("#reload_db").css("display") == "none") {
+							// Блоки не обновляются. Нужно показывать Reload Error
+							$("#reload_db").show();
+						}
 						$('#blockchain_loading').css('display', 'none');
 						$('#blocks_counter').css('display', 'block');
 						var time = Number(data.block_time + '000');
@@ -426,11 +431,9 @@
 	<div class="alert alert-info alert-dismissable" id="UpdateMessage"><p>{{noescape .NewVersion}}</p></div>
 	{{end}}
 
-	{{if .RestartDb}}
-	<div class="alert alert-danger">
+	<div id="reload_db" class="alert alert-danger" style="display:{{if .RestartDb}}block{{else}}none{{end}};">
 		<strong>Error!</strong> <button id="reloadBlockchain" class="btn btn-danger">Reload blockchain</button>
 	</div>
-	{{end}}
 	<a hrep="#" id="debug">Debug</a>
 	<div id="debugDiv"></div>
 

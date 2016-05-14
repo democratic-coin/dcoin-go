@@ -6,6 +6,8 @@ import (
 )
 
 func (c *Controller) ClearDbLite() (string, error) {
+	// Обнуляем timeSynchro для Synchronization Blockchain
+	timeSynchro = 0
 
 	if !c.NodeAdmin || c.SessRestricted != 0 {
 		return "", utils.ErrInfo(errors.New("Permission denied"))
