@@ -110,7 +110,7 @@ func (c *Controller) SynchronizationBlockchain() (string, error) {
 	var needReload string
 	if ( timeSynchro == 0 ) {
 		timeSynchro = utils.Time()
-	} else if utils.Time() - timeSynchro > 1200 { // Тут можно поставить минут 20 или меньше
+	} else if utils.Time() - timeSynchro > 300 { // Тут можно поставить минут 20 или меньше
 		// Имеет смысл проверять последний блок
 		if utils.Time() - utils.StrToInt64( blockTime ) > 3600 {
 			needReload = `1`
