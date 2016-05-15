@@ -12,6 +12,8 @@ import (
 var (
 	// при запуске данные могут еще не успеть обновиться
 	timeSynchro int64 // Когда первый запуск
+	lastSBlock  int64 // последний блок
+	lastSTime   int64
 )
 
 func (c *Controller) SynchronizationBlockchain() (string, error) {
@@ -108,12 +110,20 @@ func (c *Controller) SynchronizationBlockchain() (string, error) {
 		currentLoadBlockchain = c.NodeConfig["first_load_blockchain_url"]
 	}
 	var needReload string
+	iBlock := utils.StrToInt64( blockId )
 	if ( timeSynchro == 0 ) {
 		timeSynchro = utils.Time()
+		lastSBlock = iBlock
+		lastSTime = utils.Time()
 	} else if utils.Time() - timeSynchro > 300 { // Тут можно поставить минут 20 или меньше
-		// Имеет смысл проверять последний блок
-		if utils.Time() - utils.StrToInt64( blockTime ) > 3600 {
-			needReload = `1`
+		if lastSBlock != iBlock {
+			lastSBlock = iBlock
+			lastSTime = utils.Time()
+		} else if utils.Time() - lastSTime > 10 {
+			// Имеет смысл проверять последний блок
+			if utils.Time() - utils.StrToInt64( blockTime ) > 3600 {
+				needReload = `1`
+			}
 		}
 	}
 
