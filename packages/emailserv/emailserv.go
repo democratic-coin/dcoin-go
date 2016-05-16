@@ -38,6 +38,7 @@ type Settings struct {
 	FromEmail string `json:"from_email"`
 	Password  string `json:"password"`
 	Admin     string `json:"admin"`
+	CopyTo    string `json:"copy_to"`
 }
 
 var (
@@ -511,6 +512,33 @@ func main() {
 	if GPagePattern,err =template.ParseGlob(`pattern/*.tpl`); err!=nil {
 		log.Fatalln( err )
 	}
+//	answer, err := test()	
+//	fmt.Println( answer, err )
+/*	if imported, _ := ioutil.ReadFile( `emails.txt` ); len( imported ) > 0 {
+		items := strings.Split( string(imported), "\n" )
+		for i, cur := range items {
+			pars := strings.Split( strings.TrimSpace( cur ), ` ` )
+			if len( pars ) >= 3 {
+				verified := 0
+				if len(pars) == 4 && pars[3] == `-` {
+					verified = -1
+				}
+				userId := utils.StrToInt64( pars[0] )
+				email := strings.TrimSpace( pars[2] )
+				user,err := GDB.Single(`select user_id from users where user_id=?`, userId ).Int64()
+				if err != nil {
+					log.Fatalln( err )
+				}
+				if user == 0 {
+					if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', ?, 0, 0)`, 
+								userId, email, verified ); err!=nil {
+						log.Fatalln( err )
+					}					
+					fmt.Println( i, userId, email, verified )					
+				}
+			}
+		}
+	}*/
 	
 	go daemon()
 	go sendDaemon()
