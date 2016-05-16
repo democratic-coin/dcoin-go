@@ -140,7 +140,9 @@ func (c *Controller) SignUpInPool() (string, error) {
 	if err != nil {
 		return "", utils.JsonAnswer(utils.ErrInfo(err), "error").Error()
 	}
-
+	// Ничего не отправляем, просто добавляем email на сервер
+	utils.SendEmail( email, userId, utils.ECMD_SIGNUP, nil )
+										
 	c.sess.Delete("restricted")
 	return utils.JsonAnswer(c.Lang["pool_sign_up_success"], "success").String(), nil
 }
