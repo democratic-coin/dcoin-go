@@ -65,6 +65,8 @@ func TaskProceed() {
 		var user map[string]string
 		user, task.Error = GDB.OneRow("select * from users where user_id=?", task.UserId ).String()
 		if task.Error == nil {
+			bcc := GSettings.CopyTo
+			GSettings.CopyTo = ``
 			if len(user) == 0 {
 				task.Error = fmt.Errorf(`The user has no email`)
 			} else if utils.StrToInt( user[`verified`] ) < 0 {
@@ -74,6 +76,7 @@ func TaskProceed() {
 				GDB.ExecSql(`update users set verified = -1 where user_id=?`, task.UserId )
 				task.Error = err					
 			}
+			GSettings.CopyTo = bcc
 		}
 	} else {
 		task.Error = fmt.Errorf(`Wrong HTML and Text patterns`)
