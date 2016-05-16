@@ -143,7 +143,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		email = user[`email`]
 		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
-			if jsonEmail.Cmd == utils.ECMD_NEW {
+			if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
 				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
 									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
 					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
@@ -269,6 +269,8 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		text = fmt.Sprintf("Divergence time %s sec", (*jsonEmail.Params)[`dif`])
+	case utils.ECMD_SIGNUP:
+		text = ``
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -278,17 +280,18 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(fmt.Sprintf(`Email %s is in the stop-list`, jsonEmail.Email))
 		return
 	}
-	if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
-		[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
-		errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
-		GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
-				VALUES ( ?, ?, datetime('now'), ? )`,
-			jsonEmail.Email, errsend, ipval)
-		result(errsend)
-		return
+	if len(text) > 0 {
+		if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
+			[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
+			errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
+			GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
+					VALUES ( ?, ?, datetime('now'), ? )`,
+				jsonEmail.Email, errsend, ipval)
+			result(errsend)
+			return
+		}
 	}
-	// Пока не запрещаем перезапись существующих юзеров
-	if jsonEmail.Cmd == utils.ECMD_NEW && len(email)==0 {
+	if (jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP ) && len(email)==0 {
 		if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', 0, 0, 0)`, 
 								jsonEmail.UserId, jsonEmail.Email ); err!=nil {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
