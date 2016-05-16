@@ -58,6 +58,8 @@ function freecoin_process( first ) {
 		freecoin_process( false );
 	})
 {{end}}
+	check_key_and_show_modal();
+
 </script>
 <h1 class="page-header">{{.Lang.mining}}</h1>
 {{if .MinerId}}
