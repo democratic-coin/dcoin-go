@@ -17,8 +17,8 @@ type StatisticVotingPage struct {
 	NewPctTpl               map[string]map[string]float64
 	PctVotes                map[int64]map[string]map[string]int64
 	VotesReferral           map[string][]map[int64]int64
-	VotesReduction          map[string]map[string]string
-	PromisedAmount          map[string]string
+	VotesReduction          map[int64]map[string]string
+	PromisedAmount          map[int64]string
 	NewMaxOtherCurrencies   map[int64]int64
 	MaxOtherCurrenciesVotes map[int64][]map[int64]int64
 	MaxPromisedAmountVotes  map[int64][]map[int64]int64
@@ -128,13 +128,13 @@ func (c *Controller) StatisticVoting() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	promisedAmount := make(map[string]string)
+	promisedAmount := make(map[int64]string)
 	for _, data := range promisedAmount_ {
-		promisedAmount[data["currency_id"]] = data["count"]
+		promisedAmount[utils.StrToInt64(data["currency_id"])] = data["count"]
 	}
 
 	// берем все голоса юзеров по данной валюте
-	votesReduction := make(map[string]map[string]string)
+	votesReduction := make(map[int64]map[string]string)
 	votesReduction_, err := c.GetAll(`
 			SELECT currency_id,
 					  	pct,
@@ -148,8 +148,9 @@ func (c *Controller) StatisticVoting() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	for _, data := range votesReduction_ {
-		votesReduction[data["currency_id"]] = make(map[string]string)
-		votesReduction[data["currency_id"]][data["pct"]] = data["votes"]
+		curid := utils.StrToInt64(data["currency_id"])
+		votesReduction[curid] = make(map[string]string)
+		votesReduction[curid][data["pct"]] = data["votes"]
 	}
 
 	/*
