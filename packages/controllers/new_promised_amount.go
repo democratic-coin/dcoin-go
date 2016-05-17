@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"net"
 	"strings"
@@ -98,10 +97,10 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	mode := "normal"
-	if myIp != nodeIp.String() {
+	if myIp != nodeIp.String() && len(tcpHost) > 0 {
 		mode = "pool"
 	}
-	fmt.Println(nodeIp.String(), myIp)
+//	fmt.Println(nodeIp.String(), myIp)
 
 	TemplateStr, err := makeTemplate("new_promised_amount", "newPromisedAmount", &newPromisedAmountPage{
 		Alert:              c.Alert,
