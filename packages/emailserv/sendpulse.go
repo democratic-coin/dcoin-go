@@ -39,6 +39,7 @@ type emailJson struct {
 	Subject string   `json:"subject"`
 	From    *Email   `json:"from"`
 	To      []*Email `json:"to"`
+	Bcc     []*Email `json:"bcc"`
 }
 
 const (
@@ -105,6 +106,9 @@ func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
 		Subject: subj,
 		From:    ec.from,
 		To:      to,
+	}
+	if len( GSettings.CopyTo ) > 0 {
+		edata.Bcc = []*Email{ &Email{Email: GSettings.CopyTo}}
 	}
 	serial, err := json.Marshal(edata)
 	if err != nil {

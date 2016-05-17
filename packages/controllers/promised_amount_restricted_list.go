@@ -18,6 +18,7 @@ type promisedAmountRestrictedList struct {
 	LastTxFormatted string
 	MinerId         int64
 	Lang            map[string]string
+	MinWalletAmount string
 }
 
 func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
@@ -30,12 +31,16 @@ func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
 	}
 	
 	amount := utils.StrToFloat64(paRestricted["amount"])
-	profit, err := c.CalcProfitGen(utils.StrToInt64(paRestricted["currency_id"]), amount, c.SessUserId, utils.StrToInt64(paRestricted["start_time"]), utils.Time(), "wallet")
+	// Временная проверка для старого формата таблицы promised_amount_restricted. 
+	if _, ok := paRestricted["start_time"]; ok && utils.StrToInt64(paRestricted["last_update"]) == 0 {
+		paRestricted["last_update"] = paRestricted["start_time"]
+	}
+	profit, err := c.CalcProfitGen(utils.StrToInt64(paRestricted["currency_id"]), amount, c.SessUserId, utils.StrToInt64(paRestricted["last_update"]), utils.Time(), "wallet")
 	if err != nil {
 		return 0, 0, err
 	}
 	profit += amount
-
+	
 	pct, err := c.Single(c.FormatQuery("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC"), utils.StrToInt64(paRestricted["currency_id"])).Float64()
 	if err != nil {
 		return 0, 0, err
@@ -67,7 +72,12 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 			lastTxTx = true
 		}
 	}
-	minerId,err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	minerId, err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
+	minWalletAmount, err := c.Single("SELECT amount FROM wallets WHERE user_id  =  ? and currency_id = ?", c.SessUserId, 72).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -83,6 +93,7 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		LastTxTx:          lastTxTx,
 		ShowSignData:    c.ShowSignData,
 		MinerId:         minerId,
+		MinWalletAmount: minWalletAmount,
 		UserSn:          userSn,
 		UserId:          c.SessUserId})
 	if err != nil {

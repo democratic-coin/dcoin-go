@@ -12,6 +12,9 @@ func (c *Controller) SaveHost() (string, error) {
 	}
 
 	c.r.ParseForm()
+
+	poolAdminUserId := utils.StrToInt64(c.r.FormValue("PoolAdminUserId"))
+
 	http_host := c.r.FormValue("http_host")
 	if len(http_host) > 0 && http_host[len(http_host)-1:] != "/" {
 		http_host += "/"
@@ -25,16 +28,17 @@ func (c *Controller) SaveHost() (string, error) {
 		return `{"error":"1"}`, nil
 	}
 
-	// проверим, не занял ли кто-то такой хост
-	exists, err := c.Single(`SELECT user_id FROM miners_data WHERE http_host = ? OR tcp_host = ?`, http_host, tcp_host).Int64()
-	if err != nil {
-		return `{"error":"1"}`, nil
+	if poolAdminUserId == 0 {
+		// проверим, не занял ли кто-то такой хост
+		exists, err := c.Single(`SELECT user_id FROM miners_data WHERE http_host = ? OR tcp_host = ?`, http_host, tcp_host).Int64()
+		if err != nil {
+			return `{"error":"1"}`, nil
+		}
+		if exists > 0 {
+			return `{"error":"1"}`, nil
+		}
 	}
-	if exists > 0 {
-		return `{"error":"1"}`, nil
-	}
-
-	err = c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET http_host = ?, tcp_host = ?", http_host, tcp_host)
+	err := c.ExecSql("UPDATE "+c.MyPrefix+"my_table SET http_host = ?, tcp_host = ?, pool_user_id = ?", http_host, tcp_host, poolAdminUserId)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

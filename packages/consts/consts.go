@@ -2,7 +2,7 @@
 
 
 // текущая версия
-const VERSION = "2.3.0a3"
+const VERSION = "2.3.1b8"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -22,7 +22,7 @@ const MIN_CONFIRMED_NODES = 1
 
 
 // примерный текущий крайний блок
-const LAST_BLOCK = 310000
+const LAST_BLOCK = 330000
 
 // примерный размер блокчейна
 const BLOCKCHAIN_SIZE = 77000000

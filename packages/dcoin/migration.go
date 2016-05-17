@@ -365,13 +365,15 @@ func migration() {
 			schema_.S = s
 			schema_.AddColumn = true
 			schema_.PrintSchema()
+		}
 
-			schema_ = &schema.SchemaStruct{}
+		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.1b5") {
+			schema_ := &schema.SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s := make(schema.Recmap)
+			s1 := make(schema.Recmap)
+			s2 := make(schema.Recmapi)
 			s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_promised_amount_log_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
 			s2[2] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}

@@ -2,10 +2,11 @@
 package main
 
 import (
-/*	"crypto"
-	"crypto/rsa"
+	"crypto/md5"
+/*	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"*/
+//	"golang.org/x/crypto/bcrypt"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
@@ -18,11 +19,9 @@ import (
 	"os"
 	"path/filepath"
 	"html/template"
-	
 	//	"regexp"
 	//	"net/url"
 	"strings"
-	//	"time"
 )
 
 const (
@@ -39,6 +38,7 @@ type Settings struct {
 	FromEmail string `json:"from_email"`
 	Password  string `json:"password"`
 	Admin     string `json:"admin"`
+	CopyTo    string `json:"copy_to"`
 }
 
 var (
@@ -143,15 +143,15 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		email = user[`email`]
 		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
-			if jsonEmail.Cmd == utils.ECMD_NEW {
+			if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
 				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
 									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
 					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
 				}
-			} /*else {
+			} else {
 				result(`Overwrite email`)
 				return
-			}*/
+			}
 			jsonEmail.Email = email
 		}
 	}
@@ -216,12 +216,12 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		text = fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
 			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])*/
-	case utils.ECMD_CHANGESTAT:
+/*	case utils.ECMD_CHANGESTAT:
 		if err := checkParams(`status`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = `New status: ` + (*jsonEmail.Params)[`status`]
+		text = `New status: ` + (*jsonEmail.Params)[`status`]*/
 	case utils.ECMD_DCCAME:
 		if err := checkParams(`amount`, `currency`, `comment`); err != nil {
 			result(err.Error())
@@ -269,6 +269,8 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		text = fmt.Sprintf("Divergence time %s sec", (*jsonEmail.Params)[`dif`])
+	case utils.ECMD_SIGNUP:
+		text = ``
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -278,17 +280,18 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(fmt.Sprintf(`Email %s is in the stop-list`, jsonEmail.Email))
 		return
 	}
-	if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
-		[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
-		errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
-		GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
-				VALUES ( ?, ?, datetime('now'), ? )`,
-			jsonEmail.Email, errsend, ipval)
-		result(errsend)
-		return
+	if len(text) > 0 {
+		if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
+			[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
+			errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
+			GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
+					VALUES ( ?, ?, datetime('now'), ? )`,
+				jsonEmail.Email, errsend, ipval)
+			result(errsend)
+			return
+		}
 	}
-	// Пока не запрещаем перезапись существующих юзеров
-	if jsonEmail.Cmd == utils.ECMD_NEW && len(email)==0 {
+	if (jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP ) && len(email)==0 {
 		if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', 0, 0, 0)`, 
 								jsonEmail.UserId, jsonEmail.Email ); err!=nil {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
@@ -358,6 +361,17 @@ func Send() {
 //	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NODETIME, &map[string]string{ `dif`: `7` } ))
 }
 */
+
+func checkLogin( w http.ResponseWriter, req *http.Request ) ( ip uint32, ips string, ok bool ) {
+	ip, ips = getIP( req )
+	if phash,err := req.Cookie(`admpass`); err == http.ErrNoCookie || 
+	          fmt.Sprintf("%x", md5.Sum([]byte(GSettings.Password))) != phash.Value {
+		http.Redirect(w, req, `/` + GSettings.Admin + `/login`, http.StatusFound)
+		return
+	}
+	ok = true
+	return
+}
 
 func main() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -501,6 +515,33 @@ func main() {
 	if GPagePattern,err =template.ParseGlob(`pattern/*.tpl`); err!=nil {
 		log.Fatalln( err )
 	}
+//	answer, err := test()	
+//	fmt.Println( answer, err )
+/*	if imported, _ := ioutil.ReadFile( `emails.txt` ); len( imported ) > 0 {
+		items := strings.Split( string(imported), "\n" )
+		for i, cur := range items {
+			pars := strings.Split( strings.TrimSpace( cur ), ` ` )
+			if len( pars ) >= 3 {
+				verified := 0
+				if len(pars) == 4 && pars[3] == `-` {
+					verified = -1
+				}
+				userId := utils.StrToInt64( pars[0] )
+				email := strings.TrimSpace( pars[2] )
+				user,err := GDB.Single(`select user_id from users where user_id=?`, userId ).Int64()
+				if err != nil {
+					log.Fatalln( err )
+				}
+				if user == 0 {
+					if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', ?, 0, 0)`, 
+								userId, email, verified ); err!=nil {
+						log.Fatalln( err )
+					}					
+					fmt.Println( i, userId, email, verified )					
+				}
+			}
+		}
+	}*/
 	
 	go daemon()
 	go sendDaemon()
@@ -514,6 +555,10 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/unban`, unbanHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/ban`, banHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/edit`, editHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/new`, newHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/patterns`, patternsHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)

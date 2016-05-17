@@ -9,7 +9,6 @@
 			var commission = $('#commission').val();
 			var comment = $('#comment').val();
 			var period =  86400 * parseInt($("#period").val());
-
 			$.post( 'ajax?controllerName=saveQueue', {
 				'type' : {{.TxType}},
 				'time' : '{{.TimeNow}}',
@@ -69,6 +68,8 @@
 
 		})
 	});
+	check_key_and_show_modal();
+	
 </script>
 <div id="main_div">
 	<h1 class="page-header">{{.Lang.auto_payment_creation}}</h1>
@@ -85,7 +86,7 @@
 					<label class="col-md-4 control-label" for="amount">{{.Lang.amount}}</label>
 					<div class="col-md-4">
 						<div class="input-group">
-							<input style="min-width: 100px" id="amount" name="amount" check="empty" class="form-control" type="text">
+							<input style="min-width: 100px" id="amount" name="amount" check="zero" class="form-control" type="text">
 							<div class="input-group-btn">
 								<select class="form-control" id="currency_id" style="min-width: 100px">
 									{{range $id, $name := .CurrencyList}}

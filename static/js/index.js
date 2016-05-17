@@ -557,6 +557,7 @@ function doSign_(type) {
 							'n' : e_n_sign['modulus'],
 							'e': e_n_sign['exp'],
                             'private_key': privKey,
+                            'forsignature' : forsignature,
                             'setup_password': setup_password
 						}, function (data) {
 							// залогинились

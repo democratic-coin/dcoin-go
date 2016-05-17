@@ -100,13 +100,13 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	addSql := ""
+	addSqlCurrency := ""
 	currencyIds := strings.Join(currency, ",")
 	if len(currencyIds) > 0 || c.SessUserId == 1 {
 		if c.SessUserId != 1 {
-			addSql = "AND currency_id IN (" + currencyIds + ")"
+			addSqlCurrency = "AND currency_id IN (" + currencyIds + ")"
 		}
-		num, err := getCount("SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 " + addSql, `promised_amount` )
+		num, err := getCount("SELECT count(id) FROM promised_amount as v WHERE status  =  'pending' AND del_block_id  =  0 " + addSqlCurrency, `promised_amount` )
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -116,15 +116,15 @@ func (c *Controller) Assignments() (string, error) {
 	}
 
 	// модерация акков в соц. сетях
-	mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+	/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
-	}
-	addSql = ` AND sn_url_id != ''`
-	if c.SessUserId!=1 && len(mySnType)>0 {
+	}*/
+	addSql := ` AND sn_url_id != ''`
+	/*if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
-	}
-	num, err = c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
+	}*/
+	num, err = c.Single(`SELECT count(user_id) FROM users WHERE status  =  'user'` + addSql +
 				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -134,11 +134,13 @@ func (c *Controller) Assignments() (string, error) {
 	}
 
 	log.Debug("randArr %v", randArr)
+	fmt.Println("randArr", randArr)
 
 	var AssignType int64
 	if len(randArr) > 0 {
 		AssignType = randArr[utils.RandInt(0, len(randArr))]
 	}
+	fmt.Println("AssignType", AssignType)
 
 	cloneHosts := make(map[int64][]string)
 	var photoHosts []string
@@ -308,7 +310,7 @@ func (c *Controller) Assignments() (string, error) {
 				FROM promised_amount
 				WHERE status =  'pending' AND
 							 del_block_id = 0
-				` + addSql + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+				` + addSqlCurrency + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -371,21 +373,26 @@ func (c *Controller) Assignments() (string, error) {
 
 	case 3:
 
-		mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+		/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
-		}
-		addSql = ` AND sn_url_id != ''`
-		if c.SessUserId!=1 {
+		}*/
+		addSql = ` AND sn_url_id != ""`
+		/*if c.SessUserId!=1 && len(mySnType)>0 {
 			addSql = ` AND sn_type = "`+mySnType+`"`
+		}*/
+		orderBy := " ORDER BY RAND() "
+		if c.ConfigIni["db_type"] == "sqlite" {
+			orderBy = "ORDER BY RANDOM()"
 		}
-		usersSN, err := c.OneRow("SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'" + addSql +
-							` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).String()
+		usersSN, err := c.OneRow(`SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'` + addSql +
+							` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type = ? AND time > ?) `+orderBy+` LIMIT 1`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).String()
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
+		types := map[string]string{"fb" : "facebook.com", "vk" : "vk.com"}
 		if len(usersSN)>0 {
-			sn = `<a href="http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`">http://`+usersSN["sn_type"]+`/`+usersSN["sn_url_id"]+`"</a>`
+			sn = `<a href="http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`" target="blank">http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`</a>`
 		}
 		snUserId = utils.StrToInt64(usersSN["user_id"])
 

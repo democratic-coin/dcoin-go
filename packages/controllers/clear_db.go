@@ -9,6 +9,9 @@ import (
 )
 
 func (c *Controller) ReloadDb() (string, error) {
+	// Обнуляем timeSynchro для Synchronization Blockchain
+	timeSynchro = 0
+
 	c.Logout()
 	for _, ch := range utils.DaemonsChans {
 		ch.ChBreaker<-true

@@ -19,6 +19,12 @@ func IntToIP(ip uint32) string {
 
 func sentHandler(w http.ResponseWriter, r *http.Request) {
 	
+	_,_,ok := checkLogin( w, r )
+	if !ok {
+		return
+	}
+
+	
 	data := make( map[string]interface{})
 	out := new(bytes.Buffer)
 	list,_ := GDB.GetAll(`select * from log order by id desc`, 50 )
@@ -32,7 +38,7 @@ func sentHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		cmds := []string{`UNKNOWN`, `NEW`, `TEST`, `ADMINMSG`, `CASHREQ`,
 				`CHANGESTAT`, `DCCAME`, `DCSENT`, `UPDPRIMARY`, `UPDEMAIL`,
-				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`}
+				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`, `SIGNUP`}
 	
 		cmd := utils.StrToInt(item[`cmd`]) 
 		if cmd < len( cmds ) {

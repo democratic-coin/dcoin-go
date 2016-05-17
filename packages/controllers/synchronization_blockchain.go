@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+var (
+	// при запуске данные могут еще не успеть обновиться
+	timeSynchro int64 // Когда первый запуск
+	lastSBlock  int64 // последний блок
+	lastSTime   int64
+)
+
 func (c *Controller) SynchronizationBlockchain() (string, error) {
 
 	if c.DCDB == nil || c.DCDB.DB == nil {
@@ -102,8 +109,27 @@ func (c *Controller) SynchronizationBlockchain() (string, error) {
 	if c.NodeConfig["current_load_blockchain"] == "file" {
 		currentLoadBlockchain = c.NodeConfig["first_load_blockchain_url"]
 	}
+	var needReload string
+	iBlock := utils.StrToInt64( blockId )
+	if ( timeSynchro == 0 ) {
+		timeSynchro = utils.Time()
+		lastSBlock = iBlock
+		lastSTime = utils.Time()
+	} else if utils.Time() - timeSynchro > 300 { // Тут можно поставить минут 20 или меньше
+		if lastSBlock != iBlock {
+			lastSBlock = iBlock
+			lastSTime = utils.Time()
+		} else if utils.Time() - lastSTime > 30 {
+			// Имеет смысл проверять последний блок
+			if utils.Time() - utils.StrToInt64( blockTime ) > 3600 {
+				needReload = `1`
+			}
+		}
+	}
 
-	result := map[string]string{"block_id": blockId, "confirmed_block_id": utils.Int64ToStr(confirmedBlockId), "block_time": blockTime, "connections": connections, "current_load_blockchain": currentLoadBlockchain}
+	result := map[string]string{"block_id": blockId, "confirmed_block_id": utils.Int64ToStr(confirmedBlockId), 
+	     "block_time": blockTime, "connections": connections, "current_load_blockchain": currentLoadBlockchain,
+		 "need_reload": needReload}
 	resultJ, _ := json.Marshal(result)
 
 	return string(resultJ), nil

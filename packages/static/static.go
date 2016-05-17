@@ -33,7 +33,6 @@
 // static/fonts/fontawesome-webfont.ttf
 // static/fonts/fontawesome-webfont.woff
 // static/fonts/luxisr.ttf
-// static/img/.directory
 // static/img/alert.png
 // static/img/anonim.png
 // static/img/blank.png
@@ -168,7 +167,6 @@
 // static/sass/pages/_new_user.scss
 // static/sass/style.scss
 // static/swf/sAS3Cam.swf
-// static/templates/.directory
 // static/templates/abuse.html
 // static/templates/add_cf_project_data.html
 // static/templates/admin_variables.html
@@ -894,24 +892,6 @@ func staticFontsFontawesomeWebfontWoff() (*asset, error) {
 func staticFontsLuxisrTtf() (*asset, error) {
 	path := "static/fonts/luxisr.ttf"
 	name := "static/fonts/luxisr.ttf"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
-// staticImgDirectory reads file data from disk. It returns an error on failure.
-func staticImgDirectory() (*asset, error) {
-	path := "static/img/.directory"
-	name := "static/img/.directory"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3338,24 +3318,6 @@ func staticSwfSas3camSwf() (*asset, error) {
 	return a, err
 }
 
-// staticTemplatesDirectory reads file data from disk. It returns an error on failure.
-func staticTemplatesDirectory() (*asset, error) {
-	path := "static/templates/.directory"
-	name := "static/templates/.directory"
-	bytes, err := bindataRead(path, name)
-	if err != nil {
-		return nil, err
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
-	}
-
-	a := &asset{bytes: bytes, info: fi}
-	return a, err
-}
-
 // staticTemplatesAbuseHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesAbuseHtml() (*asset, error) {
 	path := "static/templates/abuse.html"
@@ -5583,7 +5545,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/fonts/fontawesome-webfont.ttf": staticFontsFontawesomeWebfontTtf,
 	"static/fonts/fontawesome-webfont.woff": staticFontsFontawesomeWebfontWoff,
 	"static/fonts/luxisr.ttf": staticFontsLuxisrTtf,
-	"static/img/.directory": staticImgDirectory,
 	"static/img/alert.png": staticImgAlertPng,
 	"static/img/anonim.png": staticImgAnonimPng,
 	"static/img/blank.png": staticImgBlankPng,
@@ -5718,7 +5679,6 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/pages/_new_user.scss": staticSassPages_new_userScss,
 	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
-	"static/templates/.directory": staticTemplatesDirectory,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
 	"static/templates/add_cf_project_data.html": staticTemplatesAdd_cf_project_dataHtml,
 	"static/templates/admin_variables.html": staticTemplatesAdmin_variablesHtml,
@@ -5956,8 +5916,6 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			}},
 		}},
 		"img": &bintree{nil, map[string]*bintree{
-			".directory": &bintree{staticImgDirectory, map[string]*bintree{
-			}},
 			"alert.png": &bintree{staticImgAlertPng, map[string]*bintree{
 			}},
 			"anonim.png": &bintree{staticImgAnonimPng, map[string]*bintree{
@@ -6250,8 +6208,6 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			}},
 		}},
 		"templates": &bintree{nil, map[string]*bintree{
-			".directory": &bintree{staticTemplatesDirectory, map[string]*bintree{
-			}},
 			"abuse.html": &bintree{staticTemplatesAbuseHtml, map[string]*bintree{
 			}},
 			"add_cf_project_data.html": &bintree{staticTemplatesAdd_cf_project_dataHtml, map[string]*bintree{

@@ -38,6 +38,7 @@ const (
 	ECMD_VOTETIME   // Уведомление voting_time
 	ECMD_NEWVER     // Уведомление new_version
 	ECMD_NODETIME   // Уведомление node_time
+	ECMD_SIGNUP     // Сообщаем Email с новой заявкой майнера, ничего не отправляется
 )
 
 type Answer struct {

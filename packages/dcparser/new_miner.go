@@ -114,7 +114,7 @@ func (p *Parser) NewMinerFront() error {
 				return p.ErrInfo("host exists")
 			}
 		}
-		if (p.TxMaps.String["http_host"]!="0" || p.TxMaps.String["tcp_host"]!="0") && p.TxMaps.Int64["pool_user_id"] == 0 {
+		if (p.TxMaps.String["http_host"]=="0" || p.TxMaps.String["tcp_host"]=="0") && p.TxMaps.Int64["pool_user_id"] == 0 {
 			return p.ErrInfo("host and pool empty")
 		}
 		if p.TxMaps.Int64["pool_user_id"] > 0 {

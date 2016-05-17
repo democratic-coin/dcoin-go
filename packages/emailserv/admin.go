@@ -4,10 +4,20 @@ package main
 import (
 	"net/http"
 	"bytes"
+	//"fmt"
+	//"github.com/democratic-coin/dcoin-go/packages/consts"
+
 )
 
 func adminHandler(w http.ResponseWriter, r *http.Request) {
 	
+	_, _,ok := checkLogin( w, r )
+	if !ok {
+		return
+	}
+/*	for i, name := range consts.Countries {
+		fmt.Println( i, name )
+	}*/
 	data := make( map[string]interface{})
 	out := new(bytes.Buffer)
 	data[`Path`] = GSettings.Admin

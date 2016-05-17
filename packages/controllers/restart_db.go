@@ -7,7 +7,8 @@ import (
 )
 
 func (c *Controller) RestartDb() (string, error) {
-
+	// Обнуляем timeSynchro для Synchronization Blockchain
+	timeSynchro = 0
 	if ok, _ := regexp.MatchString(`(\:\:)|(127\.0\.0\.1)`, c.r.RemoteAddr); ok {
 		err := daemons.ClearDb(nil, "")
 		if err != nil {

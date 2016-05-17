@@ -83,9 +83,13 @@ func (c *Controller) SignUpInPool() (string, error) {
 		return "", utils.JsonAnswer(utils.ErrInfo(err), "error").Error()
 	}
 	if len(c.CommunityUsers) >= pool_max_users {
-		err = c.ExecSql("INSERT INTO pool_waiting_list ( email, time, user_id ) VALUES ( ?, ?, ? )", email, utils.Time(), userId)
-		if err != nil {
-			return "", utils.JsonAnswer(utils.ErrInfo(err), "error").Error()
+		if existId,err := c.Single(`SELECT user_id FROM pool_waiting_list WHERE email=?`, email ).Int64(); existId == 0 {
+			if err == nil {
+				err = c.ExecSql("INSERT INTO pool_waiting_list ( email, time, user_id ) VALUES ( ?, ?, ? )", email, utils.Time(), userId)
+			}
+			if err != nil {
+				return "", utils.JsonAnswer(utils.ErrInfo(err), "error").Error()
+			}
 		}
 		return "", utils.JsonAnswer(c.Lang["pool_is_full"], "error").Error()
 	}
@@ -140,7 +144,9 @@ func (c *Controller) SignUpInPool() (string, error) {
 	if err != nil {
 		return "", utils.JsonAnswer(utils.ErrInfo(err), "error").Error()
 	}
-
+	// Ничего не отправляем, просто добавляем email на сервер
+	utils.SendEmail( email, userId, utils.ECMD_SIGNUP, nil )
+										
 	c.sess.Delete("restricted")
 	return utils.JsonAnswer(c.Lang["pool_sign_up_success"], "success").String(), nil
 }
