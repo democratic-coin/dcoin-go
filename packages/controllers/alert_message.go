@@ -166,10 +166,19 @@ func (c *Controller) AlertMessage() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		if (len(myNodePrivateKey) == 0 && minerId > 0) || (string(nodePublicKey) != myNodePublicKey && len(nodePublicKey) > 0) {
-			result += `<div class="alert alert-danger alert-dismissable" style='margin-top: 30px'><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			// Смотрим отправлен ли запрос на смену ключа
+			var last_tx []map[string]string
+			if last_tx, err = c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeNodeKey"}), 
+		                    1, c.TimeFormat); err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			// Транзакции завершились успешно или с ошибкой
+			if len(last_tx) == 0 || last_tx[0][`block_id`] != `0` || len( last_tx[0][`txerror`] ) > 0 {
+				result += `<div class="alert alert-danger alert-dismissable" style='margin-top: 30px'><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 				     <h4>Warning!</h4>
 				     <div>` + c.Lang["alert_change_node_key"] + `</div>
 				     </div>`
+			}
 		}
 	}
 
