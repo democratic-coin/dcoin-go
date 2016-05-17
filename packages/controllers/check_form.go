@@ -68,6 +68,10 @@ func (c *Controller) CheckForm() (string, error) {
 			if len(item.Value) == 0 {
 				text = fmt.Sprintf(c.Lang[`chform_empty`], item.Label)
 			}
+		case `zero`:
+			if utils.StrToFloat64(item.Value) == 0 {
+				text = fmt.Sprintf(c.Lang[`chform_zero`], item.Label)
+			}
 		case `interval`:
 			if len(pars) == 3 {
 				val := utils.StrToInt64(item.Value)
