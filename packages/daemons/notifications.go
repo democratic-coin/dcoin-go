@@ -636,62 +636,6 @@ BEGIN:
 					}
 				}
 
-			case "new_version":
-
-				newVersion, err := d.Single("SELECT version FROM new_version WHERE notification  =  0 AND alert  =  1").String()
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {
-						break BEGIN
-					}
-					continue BEGIN
-				}
-
-				err = d.ExecSql("UPDATE new_version SET notification = 1 WHERE version = ?", newVersion)
-				if err != nil {
-					if d.dPrintSleep(err, d.sleepTime) {
-						break BEGIN
-					}
-					continue BEGIN
-				}
-
-				if myBlockId > blockId {
-					if d.dPrintSleep(err, d.sleepTime) {
-						break BEGIN
-					}
-					continue BEGIN
-				}
-
-				// в пуле это лишняя инфа
-				if community {
-					if d.dPrintSleep(err, d.sleepTime) {
-						break BEGIN
-					}
-					continue BEGIN
-				}
-				if len(newVersion) > 0 {
-					for userId, emailSms := range notificationInfo {
-						text := "New version: " + newVersion
-
-						if notificationsArray[name][userId]["mobile"] == "1" {
-							sendnotif.SendMobileNotification(subj, text)
-						}
-						if emailSms["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_NEWVER, 
-							             &map[string]string{ `version`: newVersion } )
-							// err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
-						}
-						if emailSms["sms"] == "1" {
-							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
-						}
-					}
-				}
-
 			case "node_time": // Расхождение времени сервера более чем на 5 сек
 
 				var adminUserId int64
