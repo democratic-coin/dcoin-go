@@ -176,14 +176,8 @@ BEGIN:
 						}
 						if emailSms["email"] == "1" {
 //							err = d.SendMail("From Admin: "+data["message"], subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_ADMINMSG, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_ADMINMSG, 
 							             &map[string]string{ `msg`: data["message"] } )
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if emailSms["sms"] == "1" {
 							_, err = utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], userEmailSmsData[userId]["text"])
@@ -217,15 +211,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_CASHREQ, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_CASHREQ, 
 							             &map[string]string{ `amount`: data["amount"], `currency`:  currencyList[utils.StrToInt64(data["currency_id"])] } )
-//							err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -261,15 +248,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_CHANGESTAT, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_CHANGESTAT, 
 							             &map[string]string{ `status`: status } )
-							//	err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -318,17 +298,9 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_DCCAME, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_DCCAME, 
 							             &map[string]string{ `amount`: data["amount"], `currency`: currencyList[utils.StrToInt64(data["currency_id"])], 
 										     `comment`: comment } )
-							//err = d.SendMail(`<br><span style="font-size:16px">`+text+`</span>`, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							//err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -372,15 +344,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_DCSENT, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_DCSENT, 
 							             &map[string]string{ `amount`: data["amount"], `currency`:  currencyList[utils.StrToInt64(data["currency_id"])] } )
-							//	err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -416,14 +381,7 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDPRIMARY, nil )
-							//	err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDPRIMARY, nil )
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -459,15 +417,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDEMAIL, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDEMAIL, 
 							             &map[string]string{ `email`: myNewEmail } )
-							//	err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -503,15 +454,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDSMS, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_UPDSMS, 
 							             &map[string]string{ `sms`: smsHttpGetRequest } )
-//							err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -577,15 +521,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if emailSms["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_VOTERES, 
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_VOTERES, 
 							             &map[string]string{ `text`: text } )
-							// err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if emailSms["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -614,14 +551,7 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if notificationsArray[name][userId]["email"] == "1" {
-							err = utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_VOTETIME, nil )
-							//err = d.SendMail(text, subj, userEmailSmsData[userId]["email"], userEmailSmsData[userId], community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
+							utils.SendEmail( userEmailSmsData[userId]["email"], userId, utils.ECMD_VOTETIME, nil )
 						}
 						if notificationsArray[name][userId]["sms"] == "1" {
 							utils.SendSms(userEmailSmsData[userId]["sms_http_get_request"], text)
@@ -679,15 +609,8 @@ BEGIN:
 							sendnotif.SendMobileNotification(subj, text)
 						}
 						if emailSms["email"] == "1" && len( text ) > 0 {
-							err = utils.SendEmail( myData["email"], adminUserId, utils.ECMD_NODETIME, 
+							utils.SendEmail( myData["email"], adminUserId, utils.ECMD_NODETIME, 
 							             &map[string]string{ `dif`: utils.Int64ToStr(diff) } )
-							//	err = d.SendMail(text, subj, myData["email"], myData, community, poolAdminUserId)
-							if err != nil {
-								if d.dPrintSleep(err, d.sleepTime) {
-									break BEGIN
-								}
-								continue BEGIN
-							}
 						}
 						if emailSms["sms"] == "1" {
 							utils.SendSms(myData["sms_http_get_request"], text)
