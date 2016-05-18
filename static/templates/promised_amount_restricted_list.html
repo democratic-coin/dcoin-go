@@ -52,7 +52,7 @@
 {{end}}
 Passed the test in a social network:
 {{if or (.LastTxQueueTx) (.LastTxTx)}}
-	Pending<br>
+	{{if (ne .UserSn "sn_user")}}Pending{{else}}YES{{end}}<br>
 {{else if (ne .UserSn "sn_user")}}
 	<a id="upgradeUser" href="#">no</a><br>
 {{else}}
