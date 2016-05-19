@@ -45,6 +45,16 @@ func (p *Parser) UpgradeUserFront() error {
 		return p.ErrInfo(`attempts > consts.SN_USER_ATTEMPTS`)
 	}
 
+	if p.BlockData == nil || p.BlockData.BlockId > 322674 {
+		exists, err := p.Single("SELECT user_id FROM users WHERE sn_type = ? AND sn_url_id = ?", p.TxMaps.String["sn_type"], p.TxMaps.String["sn_url_id"]).Int64()
+		if err != nil {
+			return p.ErrInfo(err)
+		}
+		if exists > 0 {
+			return p.ErrInfo(`exists SN`)
+		}
+	}
+
 	forSign := fmt.Sprintf("%s,%s,%s,%s,%s", p.TxMap["type"], p.TxMap["time"], p.TxMap["user_id"], p.TxMap["sn_type"], p.TxMap["sn_url_id"])
 	CheckSignResult, err := utils.CheckSign(p.PublicKeys, forSign, p.TxMap["sign"], false)
 	if err != nil {
