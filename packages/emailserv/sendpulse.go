@@ -129,10 +129,7 @@ func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 	var ret map[string]bool
-	err = json.Unmarshal(body, &ret)
-	if err != nil {
-		return err
-	}
+	json.Unmarshal(body, &ret)
 	if ret[`result`] {
 		return nil
 	}
