@@ -2,7 +2,7 @@
 
 
 // текущая версия
-const VERSION = "2.3.1b8"
+const VERSION = "2.3.2b9"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
