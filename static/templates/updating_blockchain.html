@@ -347,17 +347,25 @@
 </script>
 
 <script>
+	var curblock = 0;  // Текущий блок
+	
 	$(document).ready(function() 	{
 		var refreshId = setInterval( function() {
 			$.post( 'ajax?controllerName=synchronizationBlockchain', {}, function (data) {
 					console.log(data.block_time);
 					console.log(data.block_id);
-					console.log( data.need_reload );
 					if (data.block_id>1) {
-						if (data.need_reload == "1" && $("#reload_db").css("display") == "none") {
+						reload_status = $("#reload_db").css("display");
+						if (data.need_reload == "1" && reload_status == "none") {
 							// Блоки не обновляются. Нужно показывать Reload Error
 							$("#reload_db").show();
-						}
+						} {{if not .RestartDb}}	else if (curblock != data.block_id) {
+							// вдруг у нас пошла скачка блоков после timeout
+							curblock = data.block_id;
+							if (reload_status != "none") {
+								$("#reload_db").hide();
+							}
+						} {{end}}
 						$('#blockchain_loading').css('display', 'none');
 						$('#blocks_counter').css('display', 'block');
 						var time = Number(data.block_time + '000');
