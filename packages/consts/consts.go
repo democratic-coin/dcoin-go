@@ -1,4 +1,4 @@
-﻿package consts
+package consts
 
 
 // текущая версия
@@ -100,7 +100,7 @@ const LIMIT_SN_VOTES_0 = 5
 const LIMIT_SN_VOTES_1 = 5
 const LIMIT_SN_VOTES_PERIOD = 86400
 
-const SN_USER_ATTEMPTS = 3600 * 24 * 2
+const SN_USER_ATTEMPTS = 3
 
 const CRON_CHECKED_TIME_SEC = 86400 * 3
 
