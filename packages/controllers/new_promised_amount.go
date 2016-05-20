@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"net"
 	"strings"
 	"time"
@@ -76,6 +77,13 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 	maxPromisedAmountsMaxBlock, err := c.GetMap(`SELECT currency_id, amount FROM max_promised_amounts WHERE block_id = (SELECT max(block_id) FROM max_promised_amounts ) OR block_id = 0`, "currency_id", "amount")
 	for k, v := range maxPromisedAmountsMaxBlock {
 		maxPromisedAmounts[k] = v
+	}
+	for k, v := range maxPromisedAmounts {
+		if countMiners,err := c.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", k ).Int64(); err == nil {
+			if countMiners < 1000 && utils.StrToFloat64(v) > float64(consts.MaxGreen[utils.StrToInt64(k)]) {
+				maxPromisedAmounts[k] = utils.Int64ToStr(consts.MaxGreen[utils.StrToInt64(k)])
+			}
+		}
 	}
 
 	// валюта, которая выбрана в селект-боксе
