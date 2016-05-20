@@ -63,7 +63,6 @@ func sendEmail( pattern string, cmd int, userId int64, data *map[string]interfac
 	if err := GEmail.SendEmail( html.String(), text.String(), subject.String(),
 		[]*Email{&Email{``, user[`email`] }}); err != nil {
 		GDB.ExecSql(`UPDATE users SET verified=? WHERE user_id=?`, -1, userId )
-//		fmt.Println(`Error:`, err.Error())
 		return result( fmt.Sprintf(`SendPulse %s`, err.Error()))
 	}
 	log.Println( `Daemon Sent:`, cmd, user[`email`], userId )
@@ -85,7 +84,7 @@ func daemon() {
 		log.Fatalln( err )
 	}
 //	sendEmail( `cashreq`, utils.ECMD_CASHREQ, utils.StrToInt64( `0` ), 
-//			       &map[string]interface{}{ `Amount`: `2.34`, `Currency`: `72`, `FromUserId`: `0` })		
+//			       &map[string]interface{}{ `Amount`: `2.34`, `Currency`: `USD`, `FromUserId`: `0` })		
 	
 	for {
 		if cash, err := utils.DB.OneRow(`SELECT cash.id, cur.name as currency, from_user_id, to_user_id, currency_id, amount FROM cash_requests as cash

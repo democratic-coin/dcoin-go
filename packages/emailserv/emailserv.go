@@ -71,6 +71,26 @@ func getIP(r *http.Request) (uint32, string) {
 	return ipval,remoteAddr
 }
 
+func AddToStopList( email string, userId int64 ) error {
+	if userId == 0 {
+		userId,_ = GDB.Single(`select user_id from users where email=?`, email ).Int64()
+	}
+	if userId > 0 {
+//		return fmt.Errorf(`Unknown user_id for `.email )
+		GDB.ExecSql(`UPDATE users SET verified=? WHERE user_id=?`, -1, userId )
+	}
+
+	isStop, _ := GDB.Single(`SELECT id FROM stoplist where email=?`, email).Int64()
+	if isStop == 0 {
+		log.Println( `Auto ban: `, email, userId )
+		GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
+					VALUES ( ?, ?, datetime('now'), ? )`,
+				   email, `Auto ban`, 1 )
+	}
+	
+	return nil
+}
+
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	var (
 		jsonEmail             utils.JsonEmail
