@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"strings"
 	"time"
 )
@@ -67,6 +68,16 @@ func (c *Controller) PromisedAmountList() (string, error) {
 							break IDB
 						}
 					}
+				}
+			}
+		}
+	}
+	for i, ipromise := range promisedAmountListAccepted {
+		if ipromise.CurrencyId > 1 {
+			if countMiners,err := c.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", 
+			               ipromise.CurrencyId ).Int64(); err == nil {
+				if countMiners < 1000 && ipromise.MaxAmount > float64(consts.MaxGreen[ipromise.CurrencyId]) {
+					promisedAmountListAccepted[i].MaxAmount = float64(consts.MaxGreen[ipromise.CurrencyId])
 				}
 			}
 		}
