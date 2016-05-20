@@ -58,7 +58,7 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	user, err := c.OneRow(`SELECT status, sn_attempts FROM users WHERE user_id = ?`, c.SessUserId).String()
+	user, err := c.OneRow(`SELECT status, sn_attempts, sn_url_id FROM users WHERE user_id = ?`, c.SessUserId).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
@@ -90,6 +90,10 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 			    utils.StrToInt( tx[`block_id`] ) == 0 && len(tx[`txerror`]) == 0 {
 				isUpgrading = true
 			}
+		}
+		if userSn == "user" && len(user[`sn_url_id`]) > 0 {
+			// идет проверка соц аккаунта
+			isUpgrading = true
 		}
 	}
 
