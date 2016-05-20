@@ -42,9 +42,19 @@ type emailJson struct {
 	Bcc     []*Email `json:"bcc"`
 }
 
+type EmailResult struct {
+	Email  string `json:"recipient"`
+	Code   string `json:"smtp_answer_code"`
+}
+
+var (
+	waitBad bool
+)
+
 const (
 	URL_SEND  = "https://api.sendpulse.com/smtp/emails"
 	URL_TOKEN = "https://api.sendpulse.com/oauth/access_token"
+	URL_LIST = "https://api.sendpulse.com/smtp/emails?limit=10"
 )
 
 func NewEmailClient(apiId, apiSecret string, from *Email) *EmailClient {
@@ -91,6 +101,41 @@ func (ec *EmailClient) GetToken() error {
 	return nil
 }
 
+func (ec *EmailClient) CheckBad() {
+	waitBad = false
+	if time.Now().After(ec.timeExpired) {
+		err := ec.GetToken()
+		if err != nil {
+			return 
+		}
+	}
+	req, err := http.NewRequest("GET", URL_LIST, nil )
+	if err != nil {
+		return 
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Authorization", ec.token)
+	res, e := ec.Client.Do(req)
+	if e != nil {
+		return 
+	}
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+	
+	var answer []*EmailResult
+	json.Unmarshal(body, &answer)
+
+	for _,item := range answer {
+		if ( item.Code != `250` ) {
+			AddToStopList( item.Email, 0 )
+		}
+	}
+	
+	return 
+}
+
+
+
 func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
 	if time.Now().After(ec.timeExpired) {
 		err := ec.GetToken()
@@ -98,6 +143,7 @@ func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
 			return err
 		}
 	}
+	
 	values := url.Values{}
 
 	edata := emailJson{
@@ -131,6 +177,10 @@ func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
 	var ret map[string]bool
 	json.Unmarshal(body, &ret)
 	if ret[`result`] {
+		if !waitBad {
+			waitBad = true
+			time.AfterFunc( 10*time.Second, ec.CheckBad )
+		}
 		return nil
 	}
 	return fmt.Errorf("%s", body)

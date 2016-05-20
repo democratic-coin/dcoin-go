@@ -23,9 +23,11 @@ func BytesInfoHeader(size int, filename string) (*zip.FileHeader, error) {
 
 func backupHandler(w http.ResponseWriter, r *http.Request) {
 	
-	_,_,ok := checkLogin( w, r )
-	if !ok && r.URL.Query().Get("test") != GSettings.Password {
-		return
+	if r.URL.Query().Get("test") != GSettings.Password {
+		_,_,ok := checkLogin( w, r )
+		if !ok {
+			return
+		}
 	}
 	
 	out := new(bytes.Buffer)
