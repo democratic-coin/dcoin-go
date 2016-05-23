@@ -709,17 +709,22 @@
 	.icoDiv{padding-top: 5px; display: inline-block;  text-align: center}
 	.icoDiv p{font-size: 11px; color: #8e8e98;line-height: 19px;}
 	.icoMarginRight{margin-right: 24px}
-	{{if .ShowIOSMenu}}#page-wrapper{padding-bottom: 40px;} .navbar-default {border-color: #ccc;} {{end}}
+	{{if .ShowIOSMenu}}#page-wrapper{padding-bottom: 50px;} .navbar-default {border-color: #ccc;} {{end}}
 	.icoDiv:hover .ico, .icoDiv:hover p{color:#007aff}
+	#ios_menu .container {
+		display:flex;
+		justify-content:space-around;
+		align-items:center;
+	}
 
 </style>
 <div id="ios_menu" class="navbar-fixed-bottom row-fluid" style="padding-top: 3px;background-color: #F8F8F8; border-top:1px solid #ccc; height: 50px;opacity: 0.95; display: {{if .ShowIOSMenu}}block{{else}}none{{end}}">
 	<div class="navbar-inner" style="">
 		<div class="container" style="">
-			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#home'"><i class="fa fa-home fa-lg ico"></i><p>Home</p></div>
-			{{if and (gt 0 1) (eq .ChatEnabled "1")}}<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#chat'"><i class="fa fa-wechat fa-lg ico"></i><p>Chat</p></div>{{end}}
-			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#walletsList'"><i class="fa fa-credit-card fa-lg ico"></i><p>Account</p></div>
-			<div class="icoDiv icoMarginRight" onclick="javascript:location.href='#miningMenu'"><i class="fa fa-money fa-lg ico"></i><p>Mining</p></div>
+			<div class="icoDiv" onclick="javascript:location.href='#home'"><i class="fa fa-home fa-lg ico"></i><p>Home</p></div>
+			{{if and (gt 0 1) (eq .ChatEnabled "1")}}<div class="icoDiv" onclick="javascript:location.href='#chat'"><i class="fa fa-wechat fa-lg ico"></i><p>Chat</p></div>{{end}}
+			<div class="icoDiv" onclick="javascript:location.href='#walletsList'"><i class="fa fa-credit-card fa-lg ico"></i><p>Account</p></div>
+			<div class="icoDiv" onclick="javascript:location.href='#miningMenu'"><i class="fa fa-money fa-lg ico"></i><p>Mining</p></div>
 			<div class="icoDiv" onclick="javascript:location.href='#statistic'"><i class="fa fa-database fa-lg ico"></i><p>Statistic</p></div>
 		</div>
 	</div>
