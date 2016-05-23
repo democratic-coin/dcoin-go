@@ -34,6 +34,16 @@
 	setTimeout( coins_counter, 200 );
 
 </script>
+<style>
+	#morecoins {
+		margin-left:10px;
+	}
+	@media screen and (max-width: 640px) {
+		#tdc {
+			font-size:38px !important;
+		}
+	}
+</style>
 <h1 class="page-header">{{.Lang.mining}}</h1>
 {{if .MinerId}}
 	<ol class="breadcrumb" style="position: relative;">
@@ -46,18 +56,19 @@
 <div id="message"></div>
 {{template "alertSuccess".}}
 <div id="tdc" style="font-size:60px"></div>
-1 dUSD = 1$<br>
-{{if and (not .MinerId) .MinWalletAmount}}
-	<button class="btn btn-primary" id="morecoins" onclick="dc_navigate('upgrade1')">{{.Lang.want_more}}</button><br>
-{{end}}
-Passed the test in a social network:
+1 dUSD = 1$
+<p style="margin-top:10px; margin-bottom:20px;">Passed the test in a social network:
 {{if or (.LastTxQueueTx) (.LastTxTx)}}
 	{{if (ne .UserSn "sn_user")}}Pending{{else}}YES{{end}}<br>
 {{else if (ne .UserSn "sn_user")}}
 	{{if .IsUpgrading}}Pending
-	{{else if .Attempts}}<a id="upgradeUser" href="#">no</a> ({{.Attempts}} attempts){{else}}no{{end}}<br>
+	{{else if .Attempts}}<a id="upgradeUser" href="#">no</a> ({{.Attempts}}&nbsp;attempts){{else}}no{{end}}</p>
 {{else}}
-	YES<br><button id="getCoins" class="btn btn-primary">To wallet</button>
+	YES</p>
+	<button id="getCoins" class="btn btn-primary">To wallet</button>
+	{{if and (not .MinerId) .MinWalletAmount}}
+		<button class="btn btn-primary" id="morecoins" onclick="dc_navigate('upgrade1')">{{.Lang.want_more}}</button>
+	{{end}}
 {{end}}
 
 <!--<button class="btn btn-primary" onclick="dc_navigate('upgrade1')">Upgrade Now</button>-->
