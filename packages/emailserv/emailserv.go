@@ -570,6 +570,7 @@ func main() {
 	
 	go daemon()
 	go sendDaemon()
+	go balanceDaemon()
 
 	GEmail = NewEmailClient(GSettings.ApiId, GSettings.ApiSecret,
 		&Email{GSettings.FromName, GSettings.FromEmail})
@@ -587,6 +588,7 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/backup`, backupHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/balance`, balanceHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
 	http.HandleFunc( `/unsubscribe`, unsubscribeHandler)
 	http.HandleFunc( `/`, emailHandler)

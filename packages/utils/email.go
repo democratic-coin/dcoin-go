@@ -39,6 +39,7 @@ const (
 	ECMD_NEWVER     // Уведомление new_version
 	ECMD_NODETIME   // Уведомление node_time
 	ECMD_SIGNUP     // Сообщаем Email с новой заявкой майнера, ничего не отправляется
+	ECMD_BALANCE    // Отправляем информацию о балансе
 )
 
 type Answer struct {
