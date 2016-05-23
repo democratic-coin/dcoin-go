@@ -46,7 +46,7 @@ func (p *Parser) UpgradeUserFront() error {
 	}
 
 	if p.BlockData == nil || p.BlockData.BlockId > 322674 {
-		exists, err := p.Single("SELECT user_id FROM users WHERE sn_type = ? AND sn_url_id = ?", p.TxMaps.String["sn_type"], p.TxMaps.String["sn_url_id"]).Int64()
+		exists, err := p.Single(`SELECT user_id FROM users WHERE sn_type = ? AND sn_url_id = ? and status != 'rejected_sn_user'`, p.TxMaps.String["sn_type"], p.TxMaps.String["sn_url_id"]).Int64()
 		if err != nil {
 			return p.ErrInfo(err)
 		}
