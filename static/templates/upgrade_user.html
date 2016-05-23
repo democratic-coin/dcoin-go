@@ -30,7 +30,56 @@
 		check_key_and_show_modal();
 
 </script>
-
+<style>
+	#change_host p {
+		margin-bottom:20px;
+	}
+	form {
+		font-size:0px;
+	}
+	#sn_type {
+		display:inline-block;
+		width:180px;
+		box-sizing:border-box;
+		vertical-align:top;
+		border-radius:5px 0px 0px 5px;
+		border-right:0px;
+	}
+	#sn_url_id {
+		display:inline-block;
+		width:200px;
+		box-sizing:border-box;
+		vertical-align:top;
+		border-radius:0px;
+		border-left:0px;
+		border-right-width:0px;
+	}
+	#save {
+		box-sizing:border-box;
+		vertical-align:top;
+		border-radius:0px 5px 5px 0px;
+		margin:0px !important;
+	}
+	@media screen and (max-width: 480px) {
+		form {
+			text-align:right;
+		}
+		#sn_type {
+			width:50%;
+			font-size:11px;
+		}
+		#sn_url_id {
+			width:50%;
+			border-radius:0px 5px 5px 0px;
+			border-right-width:1px;
+			font-size:11px;
+		}
+		#save {
+			border-radius:5px;
+			margin-top:10px !important;
+		}
+	}
+</style>
 
 
 <h1 class="page-header">upgradeUser</h1>
@@ -41,16 +90,14 @@
 {{template "alertSuccess".}}
 
 <div id="change_host">
-	{{.Lang.upgrade_user_text}}
+	<p>{{.Lang.upgrade_user_text}}</p>
 	<form>
-		<fieldset>
-			<select id="sn_type">
-				<option value="fb" selected>http://facebook.com/</option>
-				<option value="vk">http://vk.com/</option>
-			</select>
-			<input type="text" id="sn_url_id">
-			<button type="submit" class="btn" id="save">{{.Lang.next}}</button>
-		</fieldset>
+		<select id="sn_type" class="form-control">
+			<option value="fb" selected>http://facebook.com/</option>
+			<option value="vk">http://vk.com/</option>
+		</select>
+		<input type="text" id="sn_url_id" class="form-control">
+		<button type="submit" class="btn btn-primary" id="save">{{.Lang.next}}</button>
 	</form>
 
 </div>
