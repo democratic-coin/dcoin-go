@@ -83,6 +83,10 @@
   </script>
   <style>
     #page-wrapper {min-height: 600px; {{if not .UserId}} width:100%; margin-right: auto; margin-left: auto;border-right: 1px solid #E7E7E7;{{end}}}
+	
+	.modal_password_label {
+		display:block;
+	}
 
     {{if not .UserId}}
     @media (min-width:1200px) {
@@ -493,7 +497,7 @@
             </div>
           </div>
           <textarea rows="3" id="modal_key" class="form-control" style="display:none"></textarea><br>
-          <label>{{.Lang.key_password}}</label>
+          <label class="modal_password_label">{{.Lang.key_password}}</label>
           <input type="password" id="modal_password" class="form-control">
         </fieldset>
       </div>

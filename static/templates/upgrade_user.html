@@ -35,6 +35,7 @@
 		margin-bottom:20px;
 	}
 	form {
+		display:flex;
 		font-size:0px;
 	}
 	#sn_type {
@@ -46,6 +47,7 @@
 		border-right:0px;
 	}
 	#sn_url_id {
+		flex-grow:1;
 		display:inline-block;
 		width:200px;
 		box-sizing:border-box;
@@ -62,7 +64,8 @@
 	}
 	@media screen and (max-width: 480px) {
 		form {
-			text-align:right;
+			flex-flow:row wrap;
+			justify-content: flex-end;
 		}
 		#sn_type {
 			width:50%;
