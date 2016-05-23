@@ -58,6 +58,7 @@ func TaskProceed() {
 		if queue[i].Error == nil && queue[i].UserId == task.UserId && queue[i].Pattern == task.Pattern {
 			task.Error = fmt.Errorf(`It has already been sent`)
 			qCurrent++
+			qMutex.Unlock()
 			return
 		}
 	}
