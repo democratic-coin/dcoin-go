@@ -6,6 +6,8 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 //	"html/template"
 	"bytes"
+	"hash/crc32"
+	"strconv"
 //	"io"
 	"fmt"
 	"strings"
@@ -59,11 +61,17 @@ func TaskProceed() {
 			return
 		}
 	}
-	GPagePattern.ExecuteTemplate(html, task.Pattern + `HTML`, nil )
-	GPagePattern.ExecuteTemplate(text, task.Pattern + `Text`, nil )
+	var user map[string]string
+
+	data := make(map[string]string)
+	user, task.Error = GDB.OneRow("select * from users where user_id=?", task.UserId ).String()
+
+	data[`Unsubscribe`] = fmt.Sprintf( `%s/unsubscribe?uid=%d-%s`, 
+	 	utils.EMAIL_SERVER, task.UserId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(user[`email`]))), 32 ))
+
+	GPagePattern.ExecuteTemplate(html, task.Pattern + `HTML`, data )
+//	GPagePattern.ExecuteTemplate(text, task.Pattern + `Text`, data )
 	if len(html.String()) > 0 || len(text.String()) > 0 {
-		var user map[string]string
-		user, task.Error = GDB.OneRow("select * from users where user_id=?", task.UserId ).String()
 		if task.Error == nil {
 			bcc := GSettings.CopyTo
 			GSettings.CopyTo = ``
@@ -107,10 +115,15 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 		if len(pattern) == 0 {
 			data[`message`] = `Не указан шаблон`
 		} else {
+			dup := make(map[string]uint32)
 			if users[0] == `*` {
-				if list, err := GDB.GetAll("select user_id from users where verified >= 0", -1); err == nil {
+				if list, err := GDB.GetAll("select user_id, email from users where verified >= 0", -1); err == nil {
 					users = users[:0]
 					for _, icur := range list {
+						if _,ok := dup[ icur[`email`]]; ok {
+							continue
+						}
+						dup[ icur[`email`]] = 1
 						users = append( users, icur[`user_id`])
 					}
 				}

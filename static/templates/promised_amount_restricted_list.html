@@ -52,9 +52,10 @@
 {{end}}
 Passed the test in a social network:
 {{if or (.LastTxQueueTx) (.LastTxTx)}}
-	Pending<br>
+	{{if (ne .UserSn "sn_user")}}Pending{{else}}YES{{end}}<br>
 {{else if (ne .UserSn "sn_user")}}
-	<a id="upgradeUser" href="#">no</a><br>
+	{{if .IsUpgrading}}Pending
+	{{else if .Attempts}}<a id="upgradeUser" href="#">no</a> ({{.Attempts}} attempts){{else}}no{{end}}<br>
 {{else}}
 	YES<br><button id="getCoins" class="btn btn-primary">To wallet</button>
 {{end}}

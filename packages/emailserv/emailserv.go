@@ -19,6 +19,8 @@ import (
 	"os"
 	"path/filepath"
 	"html/template"
+	"hash/crc32"
+	"strconv"
 	//	"regexp"
 	//	"net/url"
 	"strings"
@@ -67,6 +69,26 @@ func getIP(r *http.Request) (uint32, string) {
 			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
 	}
 	return ipval,remoteAddr
+}
+
+func AddToStopList( email string, userId int64 ) error {
+	if userId == 0 {
+		userId,_ = GDB.Single(`select user_id from users where email=?`, email ).Int64()
+	}
+	if userId > 0 {
+//		return fmt.Errorf(`Unknown user_id for `.email )
+		GDB.ExecSql(`UPDATE users SET verified=? WHERE user_id=?`, -1, userId )
+	}
+
+	isStop, _ := GDB.Single(`SELECT id FROM stoplist where email=?`, email).Int64()
+	if isStop == 0 {
+		log.Println( `Auto ban: `, email, userId )
+		GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
+					VALUES ( ?, ?, datetime('now'), ? )`,
+				   email, `Auto ban`, 1 )
+	}
+	
+	return nil
 }
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
@@ -280,8 +302,11 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(fmt.Sprintf(`Email %s is in the stop-list`, jsonEmail.Email))
 		return
 	}
+	
 	if len(text) > 0 {
-		if err = GEmail.SendEmail("<p>"+text+"</p>", text, subject,
+		footer := fmt.Sprintf( `<p>Service of Dcoin notifications<br><br><a href="%s/unsubscribe?uid=%d-%s">Unsubscribe Dcoin notifications</a></p>`, 
+		 utils.EMAIL_SERVER, jsonEmail.UserId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(jsonEmail.Email))), 32 ))
+		if err = GEmail.SendEmail("<p>"+text+"</p>" + footer, ``, subject,
 			[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
 			errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
 			GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
@@ -561,7 +586,9 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/patterns`, patternsHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/backup`, backupHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
+	http.HandleFunc( `/unsubscribe`, unsubscribeHandler)
 	http.HandleFunc( `/`, emailHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
 	log.Println("Finish")

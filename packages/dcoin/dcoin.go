@@ -211,7 +211,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-
 		migration()
 
 		if *utils.OldFileName != "" {
@@ -219,20 +218,20 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
-			fmt.Println("DB Closed")
 			err = os.Remove(filepath.Join(*utils.Dir, "dcoin.pid"))
 			if err != nil {
 				log.Error("%v", utils.ErrInfo(err))
 			}
-
-			log.Debug("dc.tmp %v", os.Args[0]) //*utils.Dir+`/dc.tmp`)
+	
+			if thrustWindowLoder != nil {
+				thrustWindowLoder.Close()
+			}
 			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 			if err != nil {
 				log.Debug("%v", os.Stderr)
 				log.Debug("%v", utils.ErrInfo(err))
 			}
-			log.Debug("OldFileName %v", *utils.OldFileName)
-			Exit(1)
+			os.Exit(1)
 		}
 	}
 

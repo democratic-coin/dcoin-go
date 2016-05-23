@@ -6,9 +6,11 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"log"
 	"bytes"
+	"strconv"
+	"hash/crc32"
 )
 
-func sendEmail( pattern string, cmd int, userId int64, data *map[string]string ) bool {
+func sendEmail( pattern string, cmd int, userId int64, data *map[string]interface{} ) bool {
 	
 	result := func( msg string ) bool {
 		log.Println( fmt.Sprintf( `Daemon Error: user_id=%d %s`, userId, msg ))
@@ -31,7 +33,9 @@ func sendEmail( pattern string, cmd int, userId int64, data *map[string]string )
 				lang = 42
 		}	
 	}
-	
+	(*data)[`Unsubscribe`] = fmt.Sprintf( `%s/unsubscribe?uid=%d-%s`, 
+		 	utils.EMAIL_SERVER, userId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(user[`email`]))), 32 ))
+ 
 	subject := new(bytes.Buffer)
 	html := new(bytes.Buffer)
 	text := new(bytes.Buffer)
@@ -58,9 +62,7 @@ func sendEmail( pattern string, cmd int, userId int64, data *map[string]string )
 	}
 	if err := GEmail.SendEmail( html.String(), text.String(), subject.String(),
 		[]*Email{&Email{``, user[`email`] }}); err != nil {
-		if err = GDB.ExecSql(`UPDATE users SET verified=? WHERE id=?`, -1, userId ); err!=nil {
-			return result( err.Error() )
-		}
+		GDB.ExecSql(`UPDATE users SET verified=? WHERE user_id=?`, -1, userId )
 		return result( fmt.Sprintf(`SendPulse %s`, err.Error()))
 	}
 	log.Println( `Daemon Sent:`, cmd, user[`email`], userId )
@@ -81,6 +83,9 @@ func daemon() {
 	} else {
 		log.Fatalln( err )
 	}
+//	sendEmail( `cashreq`, utils.ECMD_CASHREQ, utils.StrToInt64( `0` ), 
+//			       &map[string]interface{}{ `Amount`: `2.34`, `Currency`: `USD`, `FromUserId`: `0` })		
+	
 	for {
 		if cash, err := utils.DB.OneRow(`SELECT cash.id, cur.name as currency, from_user_id, to_user_id, currency_id, amount FROM cash_requests as cash
 					LEFT JOIN currency as cur ON cur.id=cash.currency_id
@@ -90,11 +95,8 @@ func daemon() {
 			if err = GDB.ExecSql(`UPDATE latest SET latest=? WHERE cmd_id=?`, last, utils.ECMD_CASHREQ ); err!=nil {
 				log.Println( err )
 			}
-			
-//			text := fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
-//			           cash[`amount`], cash[`currency`])
 			sendEmail( `cashreq`, utils.ECMD_CASHREQ, utils.StrToInt64( cash[`to_user_id`] ), 
-			       &map[string]string{ `Amount`: cash[`amount`], `Currency`: cash[`currency`], `FromUserId`: cash[`from_user_id`] })		
+			       &map[string]interface{}{ `Amount`: cash[`amount`], `Currency`: cash[`currency`], `FromUserId`: cash[`from_user_id`] })		
 			latest[utils.ECMD_CASHREQ] = last
 		}
 		utils.Sleep( 10 )

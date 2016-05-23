@@ -119,7 +119,7 @@ func (c *Controller) SynchronizationBlockchain() (string, error) {
 		if lastSBlock != iBlock {
 			lastSBlock = iBlock
 			lastSTime = utils.Time()
-		} else if utils.Time() - lastSTime > 30 {
+		} else if utils.Time() - lastSTime > 60 { // Ставим timeout на очередной блок в 60 секунд
 			// Имеет смысл проверять последний блок
 			if utils.Time() - utils.StrToInt64( blockTime ) > 3600 {
 				needReload = `1`

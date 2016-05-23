@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"math"
 	"time"
 )
@@ -12,6 +13,7 @@ type StatisticPage struct {
 	UserInfoId                 int64
 	CurrencyList               map[int64]string
 	SumWallets                 map[int64]float64
+	MaxAmount                  map[int64]float64
 	SumPromisedAmount          map[string]string
 	PromisedAmountMiners       map[string]string
 	WalletsUsers               map[string]string
@@ -166,6 +168,19 @@ func (c *Controller) Statistic() (string, error) {
 		t := time.Unix(utils.StrToInt64(reduction[i]["time"]), 0)
 		reduction[i]["time"] = t.Format(c.TimeFormat)
 	}
+	
+	maxAmount := make( map[int64]float64 )
+	for icur,_ := range sumWallets {
+		max, err := c.Single("SELECT amount FROM max_promised_amounts WHERE currency_id  =  ? ORDER BY block_id DESC", icur ).Float64()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		maxAmount[icur] = max
+		countMiners, err := c.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", icur ).Int64()
+		if countMiners < 1000 && maxAmount[icur] > float64(consts.MaxGreen[icur]) {
+			maxAmount[icur] = float64(consts.MaxGreen[icur])
+		}
+	}
 
 	TemplateStr, err := makeTemplate("statistic", "statistic", &StatisticPage{
 		Lang:                       c.Lang,
@@ -178,6 +193,7 @@ func (c *Controller) Statistic() (string, error) {
 		UserInfoWallets:            userInfoWallets,
 		Credits:                    credits,
 		PromisedAmountListAccepted: promisedAmountListAccepted,
+		MaxAmount:                  maxAmount,
 		CountUsers:                 countUsers,
 		CurrencyPct:                currencyPct,
 		Reduction:                  reduction,

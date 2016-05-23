@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 )
 
 type promisedAmountRestrictedList struct {
@@ -17,6 +18,8 @@ type promisedAmountRestrictedList struct {
 	LastTxTx          bool
 	LastTxFormatted string
 	MinerId         int64
+	Attempts        int
+	IsUpgrading     bool
 	Lang            map[string]string
 	MinWalletAmount string
 }
@@ -55,10 +58,11 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	userSn, err := c.Single(`SELECT status FROM users WHERE user_id = ?`, c.SessUserId).String()
+	user, err := c.OneRow(`SELECT status, sn_attempts, sn_url_id FROM users WHERE user_id = ?`, c.SessUserId).String()
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+	userSn := user[`status`]
 
 	var lastTxQueueTx, lastTxTx bool
 	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"UpgradeUser", "MiningSn"}), 1, c.TimeFormat)
@@ -72,6 +76,28 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 			lastTxTx = true
 		}
 	}
+	var ( attempts int
+		isUpgrading bool
+	)
+	attempts = consts.SN_USER_ATTEMPTS - utils.StrToInt( user[`sn_attempts`] )
+	if attempts < 0 {
+		attempts = 0
+	}
+	if userSn != "sn_user" {
+		// Есть ли в процессе транзакция UpgradeUser
+		for _, tx := range lastTx {
+			if consts.TxTypes[ utils.StrToInt(tx[`type`])] == "UpgradeUser" &&
+			    utils.StrToInt( tx[`block_id`] ) == 0 && len(tx[`txerror`]) == 0 {
+				isUpgrading = true
+			}
+		}
+		if userSn == "user" && len(user[`sn_url_id`]) > 0 {
+			// идет проверка соц аккаунта
+			isUpgrading = true
+		}
+	}
+
+	
 	minerId, err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
 	if err != nil {
 		return "", utils.ErrInfo(err)
@@ -95,6 +121,8 @@ func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 		MinerId:         minerId,
 		MinWalletAmount: minWalletAmount,
 		UserSn:          userSn,
+		Attempts:        attempts,
+		IsUpgrading:     isUpgrading,
 		UserId:          c.SessUserId})
 	if err != nil {
 		return "", utils.ErrInfo(err)
