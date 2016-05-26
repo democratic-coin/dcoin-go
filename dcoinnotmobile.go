@@ -36,7 +36,7 @@ func main() {
 		thrust.Start()
 		thrustWindow = thrust.NewWindow(thrust.WindowOptions{
 			RootUrl:  "http://localhost:8989/loader.html",
-//			HasFrame: true,
+			HasFrame: winVer() != 6,
 			Title : "Dcoin",
 			Size: commands.SizeHW{Width:width, Height:height},
 		})
