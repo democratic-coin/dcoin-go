@@ -14,13 +14,18 @@ int w_ver() {
 	DWORD dwMajorVersion = 0;
 	DWORD dwVersion = 0;
 	dwVersion = GetVersion();
-	dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
-	return dwMajorVersion;
+	//dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
+	//return dwMajorVersion;
+	return dwVersion;
 }*/
 import "C"
 
 func winVer() int {
-	return int(C.w_ver())
+	ver := int(C.w_ver())
+	if ver & 0xff == 6 && ( ver & 0xff00 ) >> 8 <= 1 {
+		return 6
+	}
+	return 7
 }
 
 func tray() {
