@@ -59,6 +59,8 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	if len(pattern) == 0 {
 		pattern = data[`pattern`].(string)
 	}
+	data[`UserId`] = userId
+	data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
 	
 	subject := new(bytes.Buffer)
 	html := new(bytes.Buffer)
