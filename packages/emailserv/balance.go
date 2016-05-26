@@ -55,8 +55,13 @@ func BalanceProceed() {
 		task.Error = err
 	} else {
 		getBalance( task.UserId, &data )
-		if len(data[`List`].(map[int64]*infoBalance)) <= 1 {
-			task.Error = fmt.Errorf(`No dcoins`)
+		data[`Money`] = len(data[`List`].(map[int64]*infoBalance))
+		if data[`Money`].(int) != 1 {
+			if data[`Money`].(int) == 0 {
+				task.Error = fmt.Errorf(`No dcoins`)
+			} else if data[`Money`].(int) > 1 {
+				task.Error = fmt.Errorf(`Sent yesterday`)
+			}
 			bCurrent++
 			bMutex.Unlock()
 			return	
@@ -75,10 +80,10 @@ func BalanceProceed() {
 				}
 			}
 			if data[`List`].(map[int64]*infoBalance)[icur] != nil {
-				task.Error = fmt.Errorf(`Sent Currency=%d Wallet=%f Tdc=%f Promised=%f`, icur,
+				task.Error = fmt.Errorf(`Sent Currency=%d Wallet=%f Tdc=%f Summary=%f`, icur,
 					data[`List`].(map[int64]*infoBalance)[icur].Wallet,
 					data[`List`].(map[int64]*infoBalance)[icur].Tdc,
-					data[`List`].(map[int64]*infoBalance)[icur].Promised )
+					data[`List`].(map[int64]*infoBalance)[icur].Summary )
 			}
 		} else {
 			task.Error = fmt.Errorf(`Error sending`)
