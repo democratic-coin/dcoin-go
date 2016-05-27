@@ -377,7 +377,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				})
 				thrustWindow.HandleRemote(func(er commands.EventResult, this *window.Window) {
 					fmt.Println("RemoteMessage Recieved:", er.Message.Payload)
-					openBrowser(er.Message.Payload)
+					if er.Message.Payload[:7] == `mailto:` && runtime.GOOS == `windows` {
+						utils.ShellExecute(er.Message.Payload)	
+					} else {
+						openBrowser(er.Message.Payload)
+					}
 					// Keep in mind once we have the message, lets say its json of some new type we made,
 					// We can unmarshal it to that type.
 					// Same goes for the other way around.
