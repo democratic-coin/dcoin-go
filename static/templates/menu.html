@@ -163,7 +163,7 @@ static/img/logo-small.png
 	</ul>
 	<!-- /.navbar-top-links -->
 
-	<div class="navbar-default navbar-static-side" role="navigation">
+	<div id="leftnavbar" class="navbar-default navbar-static-side" style="overflow-y:auto;overflow-x:hidden;" role="navigation">
 		<div id="menu-collapse" class="sidebar-collapse collapse" style="height: 0px">
 			<ul class="nav" id="side-menu">
 				{{if not .Mobile}}
@@ -329,6 +329,17 @@ static/img/logo-small.png
 		setTimeout( money_counter, 200 );
 	{{end}}	
 
+	function nav_height() {
+	    h = $(window).height() - 51;
+		if($(window).width() > 730) {
+			$("#leftnavbar").css( 'height', h + 'px' );
+		} else {
+			$("#leftnavbar").css( 'height', 'inherit' );
+			$("#leftnavbar").css( 'max-height', h + 'px' );
+		}
+	}
+	
+	$(window).resize( nav_height );
 
 	$( document ).ready(function() {
 		console.log($('#key').html().length);
@@ -343,6 +354,7 @@ static/img/logo-small.png
 		}else{
 			$('#menu-collapse').addClass('collapse');
 		}
+		nav_height();
 	});
 
 </script>
