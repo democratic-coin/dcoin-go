@@ -77,7 +77,7 @@ func (p *Parser) VotesMinerFront() error {
 }
 
 func (p *Parser) VotesMiner() error {
-
+	var notify bool
 	// начисляем баллы
 	p.points(p.Variables.Int64["miner_points"])
 
@@ -128,6 +128,7 @@ func (p *Parser) VotesMiner() error {
 			if err != nil {
 				return p.ErrInfo(err)
 			}
+			notify = true
 			if minersData["user_id"] == myUserId {
 				minerData, err := p.OneRow("SELECT * FROM miners_data WHERE user_id  =  ?", minersData["user_id"]).String()
 				if err != nil {
@@ -182,7 +183,9 @@ func (p *Parser) VotesMiner() error {
 			return p.ErrInfo(err)
 		}
 	}
-
+	if notify {
+		p.nfyStatus(minersData["user_id"], `miner`)
+	}
 	return nil
 }
 
