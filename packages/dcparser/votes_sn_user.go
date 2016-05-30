@@ -75,7 +75,7 @@ func (p *Parser) VotesSnUserFront() error {
 }
 
 func (p *Parser) VotesSnUser() error {
-
+	var  notify bool
 	// начисляем баллы
 	p.points(p.Variables.Int64["miner_points"])
 	// логируем, чтобы юзер {$this->tx_data['user_id']} не смог повторно проголосовать
@@ -123,6 +123,7 @@ func (p *Parser) VotesSnUser() error {
 		// перевесили голоса "за" или 1 голос от админа
 		if p.checkTrueVotes(data) {
 			err = p.selectiveLoggingAndUpd([]string{"status"}, []interface{}{"sn_user"}, "users", []string{"user_id"}, []string{utils.Int64ToStr(p.TxMaps.Int64["sn_user_id"])})
+			notify = true
 			if err != nil {
 				return p.ErrInfo(err)
 			}
@@ -145,7 +146,9 @@ func (p *Parser) VotesSnUser() error {
 			return p.ErrInfo(err)
 		}
 	}
-	
+	if notify {
+		p.nfyStatus(data["user_id"], `sn_user`)
+	}
 	return nil
 }
 
