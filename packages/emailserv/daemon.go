@@ -4,6 +4,7 @@ package main
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"log"
+	"encoding/json"
 )
 
 /*func sendEmail( pattern string, cmd int, userId int64, data *map[string]interface{} ) bool {
@@ -72,6 +73,15 @@ import (
 
 func daemon() {
 	latest := make(map[int]int64)
+	
+/*	if nfy_id, err := utils.DB.Single(`SELECT max(id) FROM notifications` ).Int64(); err==nil {
+		if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_DCCAME, nfy_id ); err!=nil {
+				log.Fatalln( err )
+		}
+	} else {
+		log.Fatalln( err )
+	}*/
+	
 	if curlatest, err := GDB.GetAll(`SELECT * FROM latest`, -1 ); err == nil {
 		for _, curi := range curlatest {
 			latest[ utils.StrToInt(curi[`cmd_id`])] = utils.StrToInt64(curi[`latest`])
@@ -81,8 +91,13 @@ func daemon() {
 	}
 //	sendEmail( `cashreq`, utils.ECMD_CASHREQ, utils.StrToInt64( `0` ), 
 //			       &map[string]interface{}{ `Amount`: `2.34`, `Currency`: `USD`, `FromUserId`: `0` })		
+	startBlock, err := utils.DB.Single(`select max(id) from block_chain`).Int64() 
+	if err != nil {
+		log.Fatalln( err )
+	}
 	
 	for {
+		utils.Sleep( 10 )
 		if cash, err := utils.DB.OneRow(`SELECT cash.id, cur.name as currency, from_user_id, to_user_id, currency_id, amount FROM cash_requests as cash
 					LEFT JOIN currency as cur ON cur.id=cash.currency_id
 		            WHERE cash.id>? order by cash.id`, 
@@ -100,7 +115,46 @@ func daemon() {
 				EmailUser( userId, data, utils.ECMD_CASHREQ )
 			}
 			latest[utils.ECMD_CASHREQ] = last
+			continue			
 		}
-		utils.Sleep( 10 )
+		if nfy, err := utils.DB.OneRow(`SELECT * FROM notifications 
+		            WHERE id>? && block_id>? order by id`, 
+		                 latest[utils.ECMD_DCCAME], startBlock ).String(); err==nil && len(nfy) > 0 {
+            last := utils.StrToInt64( nfy[`id`])							
+			if err = GDB.ExecSql(`UPDATE latest SET latest=? WHERE cmd_id=?`, last, utils.ECMD_DCCAME ); err!=nil {
+				log.Println( err )
+			}
+			userId := utils.StrToInt64( nfy[`user_id`] )
+			data, err := CheckUser( userId ) 
+			if err == nil {
+				cmd := utils.StrToInt( nfy[`cmd_id`] )
+				data[`BlockId`] = nfy[`block_id`]
+				switch cmd {
+					case utils.ECMD_CHANGESTAT:
+						var param utils.TypeNfyStatus
+						err = json.Unmarshal( []byte(nfy[`params`]), param )
+						data[`Status`] = param
+					case utils.ECMD_DCCAME:
+						var param utils.TypeNfyCame
+						err = json.Unmarshal( []byte(nfy[`params`]), param )
+						if err == nil {
+							data[`Currency`] = Currency( param.CurrencyId )
+						    data[`DCCame`] = param
+						}
+					case utils.ECMD_DCSENT:
+						var param utils.TypeNfySent
+						err = json.Unmarshal( []byte(nfy[`params`]), param )
+						if err == nil {
+							data[`Currency`] = Currency( param.CurrencyId )
+					    	data[`DCSent`] = param
+						}
+				}
+				if err == nil {
+					EmailUser( userId, data, cmd )
+				}
+			}
+			latest[utils.ECMD_DCCAME] = last
+			continue			
+		}
 	}
 }
