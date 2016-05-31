@@ -73,6 +73,10 @@ type TypeNfySent struct {
 	CommentStatus string
 }
 
+type TypeNfyStatus struct {
+	Status     string  `json:"status"`
+}
+
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
 	var (
 //		community         []int64

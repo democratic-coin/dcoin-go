@@ -11,6 +11,11 @@ import (
 	"html/template"
 )
 
+func Currency(currency int64) string {
+	ret,_ := utils.DB.Single(`SELECT name FROM currency where id=?`,currency ).String()
+	return ret
+}
+
 func CheckUser( userId int64 ) (map[string]interface{}, error) {
 
 	user, err := GDB.OneRow("select * from users where user_id=?", userId ).String()
@@ -60,8 +65,11 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 		pattern = data[`pattern`].(string)
 	}
 	data[`UserId`] = userId
-	data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
-	
+
+	data[`Status`],_ = utils.DB.Single(`select status from miners_data where user_id=?`, userId ).String()
+	if len(data[`Status`].(string)) == 0 {
+		data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
+	}
 	subject := new(bytes.Buffer)
 	html := new(bytes.Buffer)
 	lang := utils.Int64ToStr( data[`lang`].(int64) )
