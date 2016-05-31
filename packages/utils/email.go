@@ -54,6 +54,25 @@ type JsonEmail struct {
 	Params *map[string]string
 }
 
+type TypeNfyCame struct {
+	TypeTx     string  
+	FromUserId   int64
+	Amount     float64
+    CurrencyId int64 
+	Comment    string
+	CommentStatus string
+}
+
+type TypeNfySent struct {
+	TypeTx     string  
+	ToUserId   int64
+	Amount     float64
+	Commission float64 
+    CurrencyId int64 
+	Comment    string
+	CommentStatus string
+}
+
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
 	var (
 //		community         []int64
