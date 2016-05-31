@@ -35,6 +35,12 @@
 				$("#" + id).val(amount_);
 			}
 		}
+		if ( id.substr( 0, 6 ) == 'amount') {
+			var amount_max = Number($("#max-"+id).html());
+			if (amount >= amount_max) {
+				$("#" + id).val(amount_max);
+			}
+		}
 	}
 
 
@@ -86,7 +92,7 @@
 			{{if or (eq $data.CurrencyId 1) (eq $data.Status "repaid")}}
 				<td style='text-align: center'>{{$data.Amount}}</td>
 			{{else}}
-				<td style='text-align: center'><input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='amount' id='amount-input-{{$data.Id}}' onkeyup="clear_amount('amount-input-{{$data.Id}}')" value='{{$data.Amount}}'><button {{if $data.InProcess}}style="display:none;"{{end}} onclick="change_amount_click({{$data.Id}})" class='btn' >{{$.Lang.change}}</button>(max: {{$data.MaxAmount}})</td>
+				<td style='text-align: center'><input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='amount' id='amount-input-{{$data.Id}}' onkeyup="clear_amount('amount-input-{{$data.Id}}')" value='{{$data.Amount}}'><button {{if $data.InProcess}}style="display:none;"{{end}} onclick="change_amount_click({{$data.Id}})" class='btn' >{{$.Lang.change}}</button>(max: <span id="max-amount-input-{{$data.Id}}">{{$data.MaxAmount}}</span>)</td>
 			{{end}}
 			{{$color:="green"}}
 			{{if eq $data.CurrencyId 1}}{{$color:="#428BCA"}}{{end}}

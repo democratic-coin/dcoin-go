@@ -127,6 +127,8 @@
 					'signature3': $('#signature3').val()
 				}, function(data) {
 					//alert(data);
+					if ( $('#currency_id').val() == '72' ) 
+						$('#tdcr').hide();
 					dc_navigate ('{{.Navigate}}', {'alert': '{{.Lang.promised_amount_add_wait_24h}}'} );
 				});
 			});

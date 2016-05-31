@@ -133,6 +133,8 @@ func (p *Parser) AdminUnbanMiners() error {
 				}
 			}
 		}
+		p.nfyStatus(userId, `miner`)
+
 	}
 
 	return nil

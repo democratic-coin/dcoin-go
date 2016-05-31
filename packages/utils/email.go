@@ -39,6 +39,7 @@ const (
 	ECMD_NEWVER     // Уведомление new_version
 	ECMD_NODETIME   // Уведомление node_time
 	ECMD_SIGNUP     // Сообщаем Email с новой заявкой майнера, ничего не отправляется
+	ECMD_BALANCE    // Отправляем информацию о балансе
 )
 
 type Answer struct {
@@ -51,6 +52,25 @@ type JsonEmail struct {
 	UserId int64  `json:"user_id"`
 	Cmd    uint   `json:"cmd"`
 	Params *map[string]string
+}
+
+type TypeNfyCame struct {
+	TypeTx     string  
+	FromUserId   int64
+	Amount     float64
+    CurrencyId int64 
+	Comment    string
+	CommentStatus string
+}
+
+type TypeNfySent struct {
+	TypeTx     string  
+	ToUserId   int64
+	Amount     float64
+	Commission float64 
+    CurrencyId int64 
+	Comment    string
+	CommentStatus string
 }
 
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {

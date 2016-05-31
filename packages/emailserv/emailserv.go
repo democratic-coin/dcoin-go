@@ -19,8 +19,6 @@ import (
 	"os"
 	"path/filepath"
 	"html/template"
-	"hash/crc32"
-	"strconv"
 	//	"regexp"
 	//	"net/url"
 	"strings"
@@ -210,34 +208,38 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(err.Error())
 		return
 	}*/
-	var (
+/*	var (
 		params        []byte
-		text, subject string
-	)
+	)*/
 	if jsonEmail.Params == nil {
 		jsonEmail.Params = &map[string]string{}
 	}
-	if len(*jsonEmail.Params) > 0 {
+/*	if len(*jsonEmail.Params) > 0 {
 		params, _ = json.Marshal(jsonEmail.Params)
-	}
-	subject = `DCoin notifications`
+	}*/
 	switch jsonEmail.Cmd {
-	case utils.ECMD_NEW, utils.ECMD_TEST:
-		text = `Test`
-		subject = `Test`
+	case utils.ECMD_NEW, utils.ECMD_TEST, utils.ECMD_SIGNUP, utils.ECMD_UPDPRIMARY, utils.ECMD_VOTETIME:
+	case utils.ECMD_UPDEMAIL:
+		if err := checkParams(`email`); err != nil {
+			result(err.Error())
+			return
+		}
 	case utils.ECMD_ADMINMSG:
 		if err := checkParams(`msg`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = `From Admin: ` + (*jsonEmail.Params)[`msg`]
-/*	case utils.ECMD_CASHREQ:
-		if err := checkParams(`amount`, `currency`); err != nil {
+	case utils.ECMD_VOTERES:
+		if err := checkParams(`text`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = fmt.Sprintf(`You"ve got the request for %s %s. It has to be repaid within the next 48 hours.`,
-			(*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])*/
+	case utils.ECMD_UPDSMS:
+		if err := checkParams(`sms`); err != nil {
+			result(err.Error())
+			return
+		}
+		(*jsonEmail.Params)[`sms`] = `New sms_http_get_request ` + (*jsonEmail.Params)[`sms`]
 /*	case utils.ECMD_CHANGESTAT:
 		if err := checkParams(`status`); err != nil {
 			result(err.Error())
@@ -249,50 +251,16 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result(err.Error())
 			return
 		}
-		text = fmt.Sprintf(`You've got %s D%s %s`, (*jsonEmail.Params)[`amount`],
-			(*jsonEmail.Params)[`currency`], (*jsonEmail.Params)[`comment`])
 	case utils.ECMD_DCSENT:
 		if err := checkParams(`amount`, `currency`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = fmt.Sprintf(`Debiting %s D%s`, (*jsonEmail.Params)[`amount`], (*jsonEmail.Params)[`currency`])
-	case utils.ECMD_UPDPRIMARY:
-		text = `Update primary key`
-	case utils.ECMD_UPDEMAIL:
-		if err := checkParams(`email`); err != nil {
-			result(err.Error())
-			return
-		}
-		text = `New email: ` + (*jsonEmail.Params)[`email`]
-	case utils.ECMD_UPDSMS:
-		if err := checkParams(`sms`); err != nil {
-			result(err.Error())
-			return
-		}
-		text = `New sms_http_get_request ` + (*jsonEmail.Params)[`sms`]
-	case utils.ECMD_VOTERES:
-		if err := checkParams(`text`); err != nil {
-			result(err.Error())
-			return
-		}
-		text = (*jsonEmail.Params)[`text`]
-	case utils.ECMD_VOTETIME:
-		text = `It's 2 weeks from the moment you voted.`
-	case utils.ECMD_NEWVER:
-		if err := checkParams(`version`); err != nil {
-			result(err.Error())
-			return
-		}
-		text = `New version: ` + (*jsonEmail.Params)[`version`]
 	case utils.ECMD_NODETIME:
 		if err := checkParams(`dif`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = fmt.Sprintf("Divergence time %s sec", (*jsonEmail.Params)[`dif`])
-	case utils.ECMD_SIGNUP:
-		text = ``
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -302,39 +270,39 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		result(fmt.Sprintf(`Email %s is in the stop-list`, jsonEmail.Email))
 		return
 	}
-	
-	if len(text) > 0 {
-		footer := fmt.Sprintf( `<p>Service of Dcoin notifications<br><br><a href="%s/unsubscribe?uid=%d-%s">Unsubscribe Dcoin notifications</a></p>`, 
-		 utils.EMAIL_SERVER, jsonEmail.UserId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(jsonEmail.Email))), 32 ))
-		if err = GEmail.SendEmail("<p>"+text+"</p>" + footer, ``, subject,
-			[]*Email{&Email{``, jsonEmail.Email}}); err != nil {
-			errsend := fmt.Sprintf(`SendPulse %s`, err.Error())
-			GDB.ExecSql(`INSERT INTO stoplist ( email, error, uptime, ip )
-					VALUES ( ?, ?, datetime('now'), ? )`,
-				jsonEmail.Email, errsend, ipval)
-			result(errsend)
-			return
-		}
-	}
 	if (jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP ) && len(email)==0 {
 		if err = GDB.ExecSql(`INSERT INTO users (user_id, email, newemail, verified, code, lang ) VALUES(?,?,'', 0, 0, 0)`, 
 								jsonEmail.UserId, jsonEmail.Email ); err!=nil {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
 		}
 	}
-	GDB.ExecSql(`INSERT INTO log ( user_id, email, cmd, params, uptime, ip )
-				VALUES ( ?, ?, ?, ?, datetime('now'), ? )`,
-		jsonEmail.UserId, jsonEmail.Email, jsonEmail.Cmd, string(params), ipval)
-	/*	if err != nil {
-		result( fmt.Sprintf(`SQL error %v`, err))
-		return
-	}*/
+	
+	if jsonEmail.Cmd != utils.ECMD_SIGNUP {
+		data, err := CheckUser( jsonEmail.UserId )
+		if err != nil {
+			result( fmt.Sprintf(`EmailCheck %s`, err))
+			return
+		}
+		for key, value := range *jsonEmail.Params {
+			data[strings.ToUpper(key[:1]) + key[1:]] = value
+		}
+		if _,ok := data[`Msg`]; ok {
+			data[`Msg`] = template.HTML(data[`Msg`].(string))
+		}
+		if _,ok := data[`Text`]; ok {
+			data[`Text`] = template.HTML(data[`Text`].(string))
+		}
+		if !EmailUser( jsonEmail.UserId, data, int(jsonEmail.Cmd) ) {
+			result( `EmailUser`)
+			return
+		}
+	}
 	answer.Success = true
 
 	result(``)
 }
-
-/*func Send() {
+/*
+func Send() {
 	time.Sleep( 5 * time.Second )
 
 	Client := &http.Client{
@@ -370,20 +338,21 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 
 func Send() {
 	time.Sleep(5 * time.Second)
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_TEST, nil /*&map[string]string{}))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_ADMINMSG, &map[string]string{`msg`: `<h1>Header</h1>`}))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CASHREQ, &map[string]string{`amount`: `<h1>Header</h1>`, `currency`: `USD`}))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CHANGESTAT, &map[string]string{`status`: `miner`}))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_DCCAME, &map[string]string{ `amount`: `10`,
-//	                                  `currency`: `USD`, `comment`: `<h1>Header</h1>` }))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_DCSENT, &map[string]string{`amount`: `111`, `currency`: `USD`}))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDPRIMARY, nil ))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDEMAIL, &map[string]string{ `email`: `my@newemail.com` }))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_UPDSMS, &map[string]string{ `sms`: `my SMS` }))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_VOTERES, &map[string]string{ `text`: `Voting result` }))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_VOTETIME, nil ))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NEWVER, &map[string]string{ `version`: `2.1.3` } ))
-//	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_NODETIME, &map[string]string{ `dif`: `7` } ))
+	emailhere := ``
+	var userId int64 = 0
+	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_TEST, nil ))
+	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_ADMINMSG, &map[string]string{`msg`: `<h1>Header</h1>`}))
+	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CASHREQ, &map[string]string{`amount`: `<h1>Header</h1>`, `currency`: `USD`}))
+	fmt.Println("Result", utils.SendEmail(`emailhere`, 3, utils.ECMD_CHANGESTAT, &map[string]string{`status`: `miner`}))
+	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_DCCAME, &map[string]string{ `amount`: `10`,
+	                                  `currency`: `USD`, `comment`: `<h1>Header</h1>` }))
+	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_DCSENT, &map[string]string{`amount`: `111`, `currency`: `USD`}))
+	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_UPDPRIMARY, nil ))
+//	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_UPDEMAIL, &map[string]string{ `email`: `my@newemail.com` }))
+//	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_UPDSMS, &map[string]string{ `sms`: `my SMS` }))
+//	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_VOTERES, &map[string]string{ `text`: `Voting result` }))
+//	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_VOTETIME, nil ))
+//	fmt.Println("Result", utils.SendEmail(emailhere, userId, utils.ECMD_NODETIME, &map[string]string{ `dif`: `7` } ))
 }
 */
 
@@ -533,6 +502,20 @@ func main() {
 			log.Fatalln(err)
 		}
 	}
+	if !utils.InSliceString(`balance`, list ) || len(list) == 0 {
+		if err = GDB.ExecSql(`CREATE TABLE balance (
+	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	user_id	INTEGER NOT NULL,
+	balance	TEXT NOT NULL,
+	uptime	INTEGER NOT NULL
+	)`); err != nil {
+			log.Fatalln(err)
+		}
+		if err = GDB.ExecSql(`CREATE INDEX balanceind ON balance (user_id,uptime)`); err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	os.Chdir(dir)	
 	if GPageTpl,err =template.ParseGlob(`template/*.tpl`); err!=nil {
 		log.Fatalln( err )
@@ -570,12 +553,13 @@ func main() {
 	
 	go daemon()
 	go sendDaemon()
+	go balanceDaemon()
 
 	GEmail = NewEmailClient(GSettings.ApiId, GSettings.ApiSecret,
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
-
-	//	go Send()
+//	go Send()
+	
 
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
@@ -587,6 +571,7 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/list`, listHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/backup`, backupHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/balance`, balanceHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
 	http.HandleFunc( `/unsubscribe`, unsubscribeHandler)
 	http.HandleFunc( `/`, emailHandler)

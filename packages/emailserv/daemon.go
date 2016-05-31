@@ -2,15 +2,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"log"
-	"bytes"
-	"strconv"
-	"hash/crc32"
 )
 
-func sendEmail( pattern string, cmd int, userId int64, data *map[string]interface{} ) bool {
+/*func sendEmail( pattern string, cmd int, userId int64, data *map[string]interface{} ) bool {
 	
 	result := func( msg string ) bool {
 		log.Println( fmt.Sprintf( `Daemon Error: user_id=%d %s`, userId, msg ))
@@ -72,7 +68,7 @@ func sendEmail( pattern string, cmd int, userId int64, data *map[string]interfac
 					return result( err.Error() )
 			}
 	return true
-}
+}*/
 
 func daemon() {
 	latest := make(map[int]int64)
@@ -95,8 +91,14 @@ func daemon() {
 			if err = GDB.ExecSql(`UPDATE latest SET latest=? WHERE cmd_id=?`, last, utils.ECMD_CASHREQ ); err!=nil {
 				log.Println( err )
 			}
-			sendEmail( `cashreq`, utils.ECMD_CASHREQ, utils.StrToInt64( cash[`to_user_id`] ), 
-			       &map[string]interface{}{ `Amount`: cash[`amount`], `Currency`: cash[`currency`], `FromUserId`: cash[`from_user_id`] })		
+			userId := utils.StrToInt64( cash[`to_user_id`] )
+			data, err := CheckUser( userId ) 
+			if err == nil {
+			    data[`Amount`] = cash[`amount`]
+				data[`Currency`] = cash[`currency`]
+				data[`FromUserId`] = cash[`from_user_id`]
+				EmailUser( userId, data, utils.ECMD_CASHREQ )
+			}
 			latest[utils.ECMD_CASHREQ] = last
 		}
 		utils.Sleep( 10 )
