@@ -56,12 +56,10 @@ func BalanceProceed() {
 	} else {
 		getBalance( task.UserId, &data )
 		data[`Money`] = len(data[`List`].(map[int64]*infoBalance))
-		if data[`Money`].(int) != 1 {
-			if data[`Money`].(int) == 0 {
-				task.Error = fmt.Errorf(`No dcoins`)
-			} else if data[`Money`].(int) > 1 {
-				task.Error = fmt.Errorf(`Sent yesterday`)
-			}
+		if data[`Money`].(int) == 0 {
+//	    	if data[`Money`].(int) != 1 {
+//			} else if data[`Money`].(int) > 1 {	task.Error = fmt.Errorf(`Sent yesterday`) }
+			task.Error = fmt.Errorf(`No dcoins`)
 			bCurrent++
 			bMutex.Unlock()
 			return	
@@ -102,6 +100,7 @@ type infoBalance struct {
 	Promised   float64
 	Restricted float64
 	Top        float64
+	Dif        float64
 }
 
 func getBalance( userId int64, data *map[string]interface{} ) error {
@@ -149,21 +148,21 @@ func getBalance( userId int64, data *map[string]interface{} ) error {
 		}
 	}
 	forjson := make( map[string]float64 )
+	prevjson := make( map[string]float64 )
+
+	prev,_ := GDB.Single(`select balance from balance where user_id=? order by id desc`, userId ).String()
+	if len(prev) > 0 {
+		json.Unmarshal( []byte(prev), &prevjson )
+	}
 	for i := range list {
 		list[i].Currency,_ = utils.DB.Single(`select name from currency where id=?`, list[i].CurrencyId ).String()
 		list[i].Summary = utils.Round( list[i].Wallet + list[i].Tdc + list[i].Restricted, 6 )
-		forjson[ utils.Int64ToStr(list[i].CurrencyId) ] = list[i].Summary
-		off := float64(10)
-		for k:=0; k<5; k++ {
-			if list[i].Summary < off {
-				list[i].Top = utils.Round( list[i].Summary, 4 - k )
-				break
-			}
-			off *= 10
+		curstr := utils.Int64ToStr(list[i].CurrencyId)
+		forjson[ curstr ] = list[i].Summary
+		if dif, ok := prevjson[curstr]; ok {
+			list[i].Dif = RoundMoney(list[i].Summary - dif)
 		}
-		if list[i].Top == 0 {
-			list[i].Top = utils.Round( list[i].Summary, 0 )
-		}
+		list[i].Top = RoundMoney(list[i].Summary)
 	}
 	out,_ := json.Marshal( forjson )
 	if len(out) > 0 {
