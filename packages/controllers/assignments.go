@@ -120,7 +120,7 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}*/
-	addSql := ` AND sn_url_id != ''`
+	addSql := ` AND sn_url_id != '' AND user_id != ` + utils.Int64ToStr( c.SessUserId )
 	/*if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}*/

@@ -90,9 +90,7 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	lang := utils.Int64ToStr( data[`lang`].(int64) )
 	if data[`lang`].(int64) > 1 {
 		GPagePattern.ExecuteTemplate(subject, pattern + `Subject` + lang, data )
-		if err := GPagePattern.ExecuteTemplate(html, pattern + `HTML` + lang, data ); err!=nil {
-			return result( err.Error() )
-		}
+		GPagePattern.ExecuteTemplate(html, pattern + `HTML` + lang, data )
 	}
 	if len( subject.String()) == 0 {
 		GPagePattern.ExecuteTemplate(subject, pattern + `Subject`, data )
