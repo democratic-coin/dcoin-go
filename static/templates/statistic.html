@@ -135,14 +135,17 @@
 {{if $.CurrencyPct}}
 	<div class="table_fix">
 	<table class="table table-bordered" style="width:500px">
-	<thead><tr><th>{{.Lang.currency}}</th><th>{{.Lang.pct_block}} miner</th><th>{{.Lang.pct_block}} user</th></tr></thead>
+	<thead><tr><th>{{.Lang.currency}}</th><th>{{.Lang.pct_block}} miner</th><th>{{.Lang.pct_year}} miner</th>
+	     <th>{{.Lang.pct_block}} user</th><th>{{.Lang.pct_year}} user</th></tr></thead>
 	<tbody>
 	{{range $currencyId, $data := .CurrencyPct}}
 		{{if or (ne $data.miner "0.0000000000000") (ne $data.user "0.0000000000000")}}
 		<tr>
 			<td>d{{$data.name}}</td>
 			<td>{{$data.miner}}</td>
+			<td>{{$data.miner_year}}</td>
 			<td>{{$data.user}}</td>
+			<td>{{$data.user_year}}</td>
 		</tr>
 		{{end}}
 	{{end}}
