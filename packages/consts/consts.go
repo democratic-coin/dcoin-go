@@ -2,7 +2,7 @@ package consts
 
 
 // текущая версия
-const VERSION = "2.3.3b1"
+const VERSION = "2.3.4b1"
 
 // чтобы не выдавать одно и тоже голосование
 const ASSIGN_TIME = 86400
@@ -362,6 +362,8 @@ var MaxGreen = map[int64]int64{
 	75:2000000,
 	76:20000,
 	77:1000,
+	78:0.2,
+	79:20,
 }
 
 
