@@ -572,6 +572,7 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/backup`, backupHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/balance`, balanceHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/notifications`, notificationsHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
 	http.HandleFunc( `/unsubscribe`, unsubscribeHandler)
 	http.HandleFunc( `/`, emailHandler)

@@ -49,6 +49,7 @@ You can sell and buy dcoins on the stock exchange
 {{range .List}}{{if .Summary}}
 	<tr>
   		<td height="35" align="right" valign="middle" style="color:#0071B1; font-size:28px; vertical-align:middle; padding-bottom:10px;">{{.Top}}</td>
+		<td height="35" align="left" valign="top" style="color:#{{if gt .Dif 0.0}}007f66{{else}}c0392b{{end}}; font-size:14px; vertical-align:top; padding-bottom:10px;">&nbsp;{{if ne .Dif 0.0}}({{if gt .Dif 0.0}}+{{else}}-{{end}}{{.Dif}}){{end}}</td>
 		<td height="35" align="left" valign="middle" style="color:#0071B1; font-size:28px; vertical-align:middle; padding-bottom:10px;">&nbsp;<font size="4px">d{{.Currency}}</font></td>
 	</tr>{{end}}{{end}}
 </table>

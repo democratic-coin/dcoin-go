@@ -16,6 +16,21 @@ func Currency(currency int64) string {
 	return ret
 }
 
+func RoundMoney(in float64) (out float64) {
+	off := float64(10)
+	for k:=0; k<5; k++ {
+		if in < off {
+			out = utils.Round( in, 4 - k )
+			break
+		}
+		off *= 10
+	}
+	if out == 0 {
+		out = utils.Round( in, 0 )
+	}
+	return
+}
+
 func CheckUser( userId int64 ) (map[string]interface{}, error) {
 
 	user, err := GDB.OneRow("select * from users where user_id=?", userId ).String()
@@ -75,13 +90,17 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	lang := utils.Int64ToStr( data[`lang`].(int64) )
 	if data[`lang`].(int64) > 1 {
 		GPagePattern.ExecuteTemplate(subject, pattern + `Subject` + lang, data )
-		GPagePattern.ExecuteTemplate(html, pattern + `HTML` + lang, data )
+		if err := GPagePattern.ExecuteTemplate(html, pattern + `HTML` + lang, data ); err!=nil {
+			return result( err.Error() )
+		}
 	}
 	if len( subject.String()) == 0 {
 		GPagePattern.ExecuteTemplate(subject, pattern + `Subject`, data )
 	}
 	if len( html.String()) == 0 {
-		GPagePattern.ExecuteTemplate(html, pattern + `HTML`, data )
+		if err := GPagePattern.ExecuteTemplate(html, pattern + `HTML`, data ); err!=nil {
+			return result( err.Error() )
+		}
 	}
 	if len( html.String()) == 0 {
 		return result( `Empty pattern ` + pattern )
