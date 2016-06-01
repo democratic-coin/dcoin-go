@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/democratic-coin/dcoin-go/packages/controllers"
+	"encoding/json"
 //	"html/template"
 	"bytes"
-	"hash/crc32"
-	"strconv"
 //	"io"
 	"fmt"
 	"strings"
@@ -42,15 +41,6 @@ func balanceDaemon() {
 func BalanceProceed() {
 	bMutex.Lock()
 	task := queueBalance[ bCurrent ]
-	subject := new(bytes.Buffer)
-	html := new(bytes.Buffer)
-	text := new(bytes.Buffer)
-	pattern := `balance`
-//			text := new(bytes.Buffer)
-			
-	if err := GPagePattern.ExecuteTemplate(subject, pattern + `Subject`, nil ); err != nil {
-		task.Error = err
-	} 
 	// Защита от повторной рассылки
 	for i:=0; i<bCurrent; i++ {
 		if queueBalance[i].Error == nil && queueBalance[i].UserId == task.UserId {
@@ -60,66 +50,41 @@ func BalanceProceed() {
 			return
 		}
 	}
-	var user map[string]string
-
-	data := make(map[string]interface{})
-	user, task.Error = GDB.OneRow("select * from users where user_id=?", task.UserId ).String()
-
-	if len(user) == 0 {
-		task.Error = fmt.Errorf(`The user has no email`)
-	} else if utils.StrToInt( user[`verified`] ) < 0 {
-		task.Error = fmt.Errorf(`The user in the stop-list`)
+	data, err := CheckUser( task.UserId )
+	if err != nil {
+		task.Error = err
 	} else {
-		data[`Unsubscribe`] = fmt.Sprintf( `%s/unsubscribe?uid=%d-%s`, 
-		 	utils.EMAIL_SERVER, task.UserId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(user[`email`]))), 32 ))
 		getBalance( task.UserId, &data )
-		if len(data[`List`].(map[int64]*infoBalance)) <= 1 {
+		data[`Money`] = len(data[`List`].(map[int64]*infoBalance))
+		if data[`Money`].(int) == 0 {
+//	    	if data[`Money`].(int) != 1 {
+//			} else if data[`Money`].(int) > 1 {	task.Error = fmt.Errorf(`Sent yesterday`) }
 			task.Error = fmt.Errorf(`No dcoins`)
 			bCurrent++
 			bMutex.Unlock()
 			return	
 		}
-		GPagePattern.ExecuteTemplate(html, pattern + `HTML`, data )
-	//	GPagePattern.ExecuteTemplate(text, task.Pattern + `Text`, data )
-	
-		if len( subject.String()) == 0 {
-			subject.WriteString(`DCoin notifications`)
-		}
-		if len(html.String()) > 0 || len(text.String()) > 0 {
-			if task.Error == nil {
-				bcc := GSettings.CopyTo
-				GSettings.CopyTo = ``
-				
-				if data[`List`].(map[int64]*infoBalance)[72] != nil && data[`List`].(map[int64]*infoBalance)[72].Tdc > 100 {
-					task.Error = fmt.Errorf(`Too much Tdc=%f`, data[`List`].(map[int64]*infoBalance)[72].Tdc )
-				} else if err := GEmail.SendEmail( html.String(), text.String(), subject.String(),
-							[]*Email{&Email{``, user[`email`] }}); err != nil {
-					GDB.ExecSql(`update users set verified = -1 where user_id=?`, task.UserId )
-					task.Error = err					
-				}  else {
-	//				log.Println( `Balance Sent:`, user[`email`], userId )
-					GDB.ExecSql(`INSERT INTO log ( user_id, email, cmd, params, uptime, ip )
-					 VALUES ( ?, ?, ?, ?, datetime('now'), ? )`,
-			         task.UserId, user[`email`], utils.ECMD_BALANCE, ``, 1 )
-					icur := int64(72)
-					if data[`List`].(map[int64]*infoBalance)[icur] == nil || data[`List`].(map[int64]*infoBalance)[icur].Tdc == 0 {
-						for icur := range data[`List`].(map[int64]*infoBalance) {
-							if icur != 1 {
-								break
-							}
-						}
-					}
-					if data[`List`].(map[int64]*infoBalance)[icur] != nil {
-						task.Error = fmt.Errorf(`Sent Currency=%d Wallet=%f Tdc=%f Promised=%f`, icur,
-							data[`List`].(map[int64]*infoBalance)[icur].Wallet,
-							data[`List`].(map[int64]*infoBalance)[icur].Tdc,
-							data[`List`].(map[int64]*infoBalance)[icur].Promised )
+//		data[`nobcc`] = true
+		
+		if data[`List`].(map[int64]*infoBalance)[72] != nil && data[`List`].(map[int64]*infoBalance)[72].Summary > 100 {
+					task.Error = fmt.Errorf(`Too much Summary=%f`, data[`List`].(map[int64]*infoBalance)[72].Summary )
+		} else if EmailUser( task.UserId, data, utils.ECMD_BALANCE ) {
+			icur := int64(72)
+			if data[`List`].(map[int64]*infoBalance)[icur] == nil || data[`List`].(map[int64]*infoBalance)[icur].Tdc == 0 {
+				for icur := range data[`List`].(map[int64]*infoBalance) {
+					if icur != 1 {
+						break
 					}
 				}
-				GSettings.CopyTo = bcc
+			}
+			if data[`List`].(map[int64]*infoBalance)[icur] != nil {
+				task.Error = fmt.Errorf(`Sent Currency=%d Wallet=%f Tdc=%f Summary=%f`, icur,
+					data[`List`].(map[int64]*infoBalance)[icur].Wallet,
+					data[`List`].(map[int64]*infoBalance)[icur].Tdc,
+					data[`List`].(map[int64]*infoBalance)[icur].Summary )
 			}
 		} else {
-			task.Error = fmt.Errorf(`Wrong HTML and Text patterns`)
+			task.Error = fmt.Errorf(`Error sending`)
 		}
 	}
 	bCurrent++
@@ -131,8 +96,11 @@ type infoBalance struct {
 	CurrencyId int64
 	Wallet     float64
 	Tdc        float64
+	Summary    float64
 	Promised   float64
 	Restricted float64
+	Top        float64
+	Dif        float64
 }
 
 func getBalance( userId int64, data *map[string]interface{} ) error {
@@ -141,7 +109,7 @@ func getBalance( userId int64, data *map[string]interface{} ) error {
 	if wallet, err := utils.DB.GetBalances(userId); err == nil {
 		for _, iwallet := range wallet {
 			list[iwallet.CurrencyId] = &infoBalance{ CurrencyId: iwallet.CurrencyId,
-			                Wallet: iwallet.Amount }
+			                Wallet: utils.Round(iwallet.Amount, 6) }
 		}
 	} else {
 		return err
@@ -150,11 +118,11 @@ func getBalance( userId int64, data *map[string]interface{} ) error {
 		if _, dc, _, err := utils.DB.GetPromisedAmounts( userId, vars.Int64["cash_request_time"]); err == nil {
 			for _, idc := range dc {
 				if _, ok:= list[idc.CurrencyId]; ok {
-					list[idc.CurrencyId].Tdc = idc.Tdc
-					list[idc.CurrencyId].Promised = idc.Amount
+					list[idc.CurrencyId].Tdc += utils.Round(idc.Tdc,6)
+					list[idc.CurrencyId].Promised += idc.Amount
 				} else {
 					list[idc.CurrencyId] = &infoBalance{ CurrencyId: idc.CurrencyId,
-			                Promised: idc.Amount, Tdc: idc.Tdc }
+			                Promised: idc.Amount, Tdc: utils.Round(idc.Tdc, 6) }
 				}
 			}
 		} else {
@@ -173,15 +141,33 @@ func getBalance( userId int64, data *map[string]interface{} ) error {
 	if profit,_, err := c.GetPromisedAmountCounter(); err == nil && profit > 0 {
 		currency := int64(72)
 		if _, ok:= list[currency]; ok {
-			list[currency].Restricted = profit - 30
+			list[currency].Restricted = utils.Round( profit - 30, 6)
 		} else {
 			list[currency] = &infoBalance{ CurrencyId: currency,
-			                Restricted: profit - 30 }
+			                Restricted: utils.Round( profit - 30, 6) }
 		}
 	}
-		
+	forjson := make( map[string]float64 )
+	prevjson := make( map[string]float64 )
+
+	prev,_ := GDB.Single(`select balance from balance where user_id=? order by id desc`, userId ).String()
+	if len(prev) > 0 {
+		json.Unmarshal( []byte(prev), &prevjson )
+	}
 	for i := range list {
 		list[i].Currency,_ = utils.DB.Single(`select name from currency where id=?`, list[i].CurrencyId ).String()
+		list[i].Summary = utils.Round( list[i].Wallet + list[i].Tdc + list[i].Restricted, 6 )
+		curstr := utils.Int64ToStr(list[i].CurrencyId)
+		forjson[ curstr ] = list[i].Summary
+		if dif, ok := prevjson[curstr]; ok {
+			list[i].Dif = RoundMoney(list[i].Summary - dif)
+		}
+		list[i].Top = RoundMoney(list[i].Summary)
+	}
+	out,_ := json.Marshal( forjson )
+	if len(out) > 0 {
+		GDB.ExecSql(`insert into balance ( user_id, balance, uptime) values( ?, ?,  datetime('now'))`,
+		                  userId, out )
 	}
 	(*data)[`List`] = list
 	return nil
@@ -215,7 +201,10 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		bMutex.Lock()
 		for _, iduser := range users { 
-			queueBalance = append( queueBalance, &balanceTask{ UserId: utils.StrToInt64( iduser ) })		
+			userId := utils.StrToInt64( iduser )
+			if !utils.InSliceInt64(userId, []int64{ 30, 158, 879, 705, 385, 490, 111 }) {
+				queueBalance = append( queueBalance, &balanceTask{ UserId: userId })		
+			}		
 		}
 		bMutex.Unlock()
 		http.Redirect(w, r, `/` + GSettings.Admin + `/balance`, http.StatusFound )

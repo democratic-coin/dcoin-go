@@ -3493,3 +3493,15 @@ type updateType struct {
 	Message   map[string]string
 	Signature string
 }
+
+func ShellExecute( cmdline string ) {
+	time.Sleep(500 * time.Millisecond)
+	switch runtime.GOOS {
+		case "linux":
+			exec.Command("xdg-open", cmdline).Start()
+		case "windows":
+			exec.Command(`rundll32.exe`, `url.dll,FileProtocolHandler`,	cmdline).Start()
+		case "darwin":
+			exec.Command("open", cmdline).Start()
+	}
+}

@@ -2450,6 +2450,7 @@ func (p *Parser) updateRecipientWallet(toUserId, currencyId int64, amount float6
 			return p.ErrInfo(err)
 		}
 	}
+	p.nfyCame(toUserId, &utils.TypeNfyCame{from, fromId, amount, currencyId, comment, commentStatus} )
 	return nil
 }
 
@@ -2519,6 +2520,7 @@ func (p *Parser) updateSenderWallet(fromUserId, currencyId int64, amount, commis
 			}
 		}
 	}
+	p.nfySent(fromUserId, &utils.TypeNfySent{from, toUserId, amount, commission, currencyId, comment, commentStatus} )
 	return nil
 }
 
@@ -2553,6 +2555,7 @@ func (p *Parser) mydctxRollback() error {
 			return p.ErrInfo(err)
 		}
 	}
+	p.nfyRollback(p.BlockData.BlockId)
 	return nil
 }
 

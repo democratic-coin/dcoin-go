@@ -150,6 +150,8 @@ func (c *Controller) Statistic() (string, error) {
 		currencyPct[currencyId]["name"] = name
 		currencyPct[currencyId]["miner"] = utils.Float64ToStr(utils.Round((math.Pow(1+pct["miner"], 120)-1)*100, 6))
 		currencyPct[currencyId]["user"] = utils.Float64ToStr(utils.Round((math.Pow(1+pct["user"], 120)-1)*100, 6))
+		currencyPct[currencyId]["miner_year"] = utils.Float64ToStrPct(utils.Round((math.Pow(1+pct["miner"], 3600*24*365)-1)*100, 2))
+		currencyPct[currencyId]["user_year"] = utils.Float64ToStrPct(utils.Round((math.Pow(1+pct["user"], 3600*24*365)-1)*100, 2))
 	}
 
 	/*
