@@ -86,6 +86,11 @@ func daemon() {
 		for _, curi := range curlatest {
 			latest[ utils.StrToInt(curi[`cmd_id`])] = utils.StrToInt64(curi[`latest`])
 		}
+		if _, ok := latest[utils.ECMD_DCCAME]; !ok {
+			if err = GDB.ExecSql(`INSERT INTO latest (latest,cmd_id) VALUES(0,?)`, utils.ECMD_DCCAME ); err!=nil {
+				log.Println( err )
+			}
+		}
 	} else {
 		log.Fatalln( err )
 	}
@@ -95,7 +100,6 @@ func daemon() {
 	if err != nil {
 		log.Fatalln( err )
 	}
-	
 	for {
 		utils.Sleep( 10 )
 		if cash, err := utils.DB.OneRow(`SELECT cash.id, cur.name as currency, from_user_id, to_user_id, currency_id, amount FROM cash_requests as cash
@@ -118,7 +122,7 @@ func daemon() {
 			continue			
 		}
 		if nfy, err := utils.DB.OneRow(`SELECT * FROM notifications 
-		            WHERE id>? && block_id>? order by id`, 
+		            WHERE id>? AND block_id>? order by id`, 
 		                 latest[utils.ECMD_DCCAME], startBlock ).String(); err==nil && len(nfy) > 0 {
             last := utils.StrToInt64( nfy[`id`])							
 			if err = GDB.ExecSql(`UPDATE latest SET latest=? WHERE cmd_id=?`, last, utils.ECMD_DCCAME ); err!=nil {
@@ -132,18 +136,20 @@ func daemon() {
 				switch cmd {
 					case utils.ECMD_CHANGESTAT:
 						var param utils.TypeNfyStatus
-						err = json.Unmarshal( []byte(nfy[`params`]), param )
-						data[`Status`] = param
+						err = json.Unmarshal( []byte(nfy[`params`]), &param )
+						if err == nil {
+							data[`NewStatus`] = param
+						}
 					case utils.ECMD_DCCAME:
 						var param utils.TypeNfyCame
-						err = json.Unmarshal( []byte(nfy[`params`]), param )
+						err = json.Unmarshal( []byte(nfy[`params`]), &param )
 						if err == nil {
 							data[`Currency`] = Currency( param.CurrencyId )
 						    data[`DCCame`] = param
 						}
 					case utils.ECMD_DCSENT:
 						var param utils.TypeNfySent
-						err = json.Unmarshal( []byte(nfy[`params`]), param )
+						err = json.Unmarshal( []byte(nfy[`params`]), &param )
 						if err == nil {
 							data[`Currency`] = Currency( param.CurrencyId )
 					    	data[`DCSent`] = param
