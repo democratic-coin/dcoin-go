@@ -168,6 +168,13 @@ func (c *Controller) Check_sign() (string, error) {
 			}
 		}
 	} else {
+		if userId, err := c.DCDB.GetMyUserId(""); err != nil {
+				return "{\"result\":0}", err
+		} else if userId == 0 {
+			// Пока не ясно, но иногда в my_keys имеется public key при user_id==0 в my_table
+			// Что не дает залогиниться. Как вариант решения.
+			c.DCDB.ExecSql(`delete from my_keys`)
+		}
 		// получим открытый ключ юзера
 		publicKey, err := c.DCDB.GetMyPublicKey("")
 		if err != nil {
