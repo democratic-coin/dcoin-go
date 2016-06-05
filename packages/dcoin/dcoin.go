@@ -12,6 +12,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/static"
 	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/system"
 	"github.com/go-bindata-assetfs"
 	"github.com/go-thrust/lib/bindings/window"
 	"github.com/go-thrust/lib/commands"
@@ -226,6 +227,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			if thrustWindowLoder != nil {
 				thrustWindowLoder.Close()
 			}
+			system.Finish(0)
 			err = exec.Command(*utils.OldFileName, "-dir", *utils.Dir).Start()
 			if err != nil {
 				log.Debug("%v", os.Stderr)

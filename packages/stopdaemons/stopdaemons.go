@@ -3,9 +3,9 @@ package stopdaemons
 import (
 	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"github.com/go-thrust/thrust"
 	"github.com/op/go-logging"
 	"os"
+	"github.com/democratic-coin/dcoin-go/packages/system"
 )
 
 var log = logging.MustGetLogger("stop_daemons")
@@ -50,8 +50,7 @@ func WaitStopTime() {
 				panic(err)
 			}
 			fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
-			thrust.Exit()
-			os.Exit(1)
+			system.FinishThrust(1)
 		}
 		utils.Sleep(1)
 	}
