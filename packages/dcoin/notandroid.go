@@ -7,10 +7,11 @@ import (
 	//"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/tcpserver"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/system"
 	_ "github.com/mattn/go-sqlite3"
 	"net"
 	"net/http"
-	"os"
+	//"os"
 	//"regexp"
 	"time"
 )
@@ -57,7 +58,7 @@ func httpListener(ListenHttpHost, BrowserHttpHost string) {
 			openBrowser(BrowserHttpHost)
 		}
 		log.Error(utils.ErrInfo(err).Error())
-		os.Exit(1)
+		system.Finish(1)
 	}
 
 	go func() {

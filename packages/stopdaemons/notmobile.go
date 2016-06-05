@@ -8,6 +8,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"fmt"
 	"os/signal"
+	"github.com/democratic-coin/dcoin-go/packages/system"
 )
 
 /*
@@ -74,6 +75,6 @@ func Signals() {
 			panic(err)
 		}
 		fmt.Println("removed " + *utils.Dir + "/dcoin.pid")
-		os.Exit(1)
+		system.Finish(1)
 	}()
 }
