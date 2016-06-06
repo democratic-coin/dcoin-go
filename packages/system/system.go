@@ -7,16 +7,23 @@ import (
 	"github.com/go-thrust/thrust"
 )
 
-func Finish(exit int) {
+func finish( exit int, isthrust bool ) {
 	killChildProc()
+	if isthrust {
+		thrust.Exit()
+	}
 //	time.Sleep(1*time.Second)
 	if exit != 0 {
 		os.Exit(exit)
 	}
+	
+}
+
+func Finish(exit int) {
+	finish(exit, false)
 }
 
 func FinishThrust(exit int) {
-	thrust.Exit()
-	Finish(exit)
+	finish(exit, true)
 }
 
