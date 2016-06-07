@@ -143,6 +143,10 @@ func daemon() {
 					case utils.ECMD_DCCAME:
 						var param utils.TypeNfyCame
 						err = json.Unmarshal( []byte(nfy[`params`]), &param )
+						if param.Amount == 0 || ( param.TypeTx != `from_user` && param.TypeTx != `from_mining_id` ) {
+							latest[utils.ECMD_DCCAME] = last
+							continue
+						}
 						if err == nil {
 							data[`Currency`] = Currency( param.CurrencyId )
 						    data[`DCCame`] = param
@@ -150,6 +154,10 @@ func daemon() {
 					case utils.ECMD_DCSENT:
 						var param utils.TypeNfySent
 						err = json.Unmarshal( []byte(nfy[`params`]), &param )
+						if param.Amount == 0 || ( param.TypeTx != `from_user` && param.TypeTx != `from_mining_id` ) {
+							latest[utils.ECMD_DCCAME] = last
+							continue
+						}						
 						if err == nil {
 							data[`Currency`] = Currency( param.CurrencyId )
 					    	data[`DCSent`] = param
