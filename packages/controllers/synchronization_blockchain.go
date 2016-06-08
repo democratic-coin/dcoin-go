@@ -25,29 +25,30 @@ func (c *Controller) SynchronizationBlockchain() (string, error) {
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
 
-		var downloadFile string
-		var fileSize int64
+		var ( downloadFile, blockUrl string
+			fileSize int64
+		)
 		if len(utils.SqliteDbUrl) > 0 {
 			downloadFile = *utils.Dir + "/litedb.db"
-			resp, err := http.Get(utils.SqliteDbUrl)
-			if err != nil {
-				return "", err
-			}
-			fileSize = resp.ContentLength
-			resp.Body.Close()
+			blockUrl = utils.SqliteDbUrl
 		} else {
 			downloadFile = *utils.Dir + "/public/blockchain"
 			nodeConfig, err := c.GetNodeConfig()
-			blockchain_url := nodeConfig["first_load_blockchain_url"]
-			if len(blockchain_url) == 0 {
-				blockchain_url = consts.BLOCKCHAIN_URL
-			}
-			resp, err := http.Get(blockchain_url)
 			if err != nil {
 				return "", err
 			}
-			fileSize = resp.ContentLength
+			blockUrl = nodeConfig["first_load_blockchain_url"]
+			if len(blockUrl) == 0 {
+				blockUrl = consts.BLOCKCHAIN_URL
+			}
 		}
+		resp, err := http.Get(blockUrl)
+		if err != nil {
+			return "", err
+		}
+		fileSize = resp.ContentLength
+		resp.Body.Close()
+
 		// качается блок
 		file, err := os.Open(downloadFile)
 		if err != nil {
