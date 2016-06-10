@@ -173,7 +173,7 @@ func (c *Controller) AlertMessage() (string, error) {
 				return "", utils.ErrInfo(err)
 			}
 			// Транзакции завершились успешно или с ошибкой
-			if len(last_tx) == 0 || last_tx[0][`block_id`] != `0` || len( last_tx[0][`txerror`] ) > 0 {
+			if len(last_tx) == 0 || last_tx[0][`block_id`] != `0` || len( last_tx[0][`error`] ) > 0 {
 				result += `<div class="alert alert-danger alert-dismissable" style='margin-top: 30px'><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 				     <h4>Warning!</h4>
 				     <div>` + c.Lang["alert_change_node_key"] + `</div>
@@ -221,7 +221,7 @@ func (c *Controller) AlertMessage() (string, error) {
 		}
 		if len(lastTx) == 0 { // юзер еще не начинал смену ключа
 			text = c.Lang["alert_change_primary_key"]
-		} else if len(lastTx[0]["error"]) > 0 || len(lastTx[0]["queue_tx"]) > 0 || len(lastTx[0]["tx"]) > 0 || utils.Time()-utils.StrToInt64(lastTx[0]["time_int"]) > 3600 {
+		} else if len(lastTx[0]["error"]) > 0 || utils.Time()-utils.StrToInt64(lastTx[0]["time_int"]) > 3600 {
 			text = c.Lang["please_try_again_change_key"]
 		} else {
 			text = c.Lang["please_wait_changing_key"]
