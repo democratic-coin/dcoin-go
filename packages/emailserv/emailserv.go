@@ -240,12 +240,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		(*jsonEmail.Params)[`sms`] = `New sms_http_get_request ` + (*jsonEmail.Params)[`sms`]
-/*	case utils.ECMD_CHANGESTAT:
+/*	Отправляем через daemon - notifications
+	case utils.ECMD_CHANGESTAT:
 		if err := checkParams(`status`); err != nil {
 			result(err.Error())
 			return
 		}
-		text = `New status: ` + (*jsonEmail.Params)[`status`]*/
+		text = `New status: ` + (*jsonEmail.Params)[`status`]
 	case utils.ECMD_DCCAME:
 		if err := checkParams(`amount`, `currency`, `comment`); err != nil {
 			result(err.Error())
@@ -255,7 +256,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		if err := checkParams(`amount`, `currency`); err != nil {
 			result(err.Error())
 			return
-		}
+		}*/
 	case utils.ECMD_NODETIME:
 		if err := checkParams(`dif`); err != nil {
 			result(err.Error())
@@ -572,6 +573,7 @@ func main() {
 	http.HandleFunc( `/` + GSettings.Admin + `/login`, loginHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/backup`, backupHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/balance`, balanceHandler)
+	http.HandleFunc( `/` + GSettings.Admin + `/notifications`, notificationsHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/`, adminHandler)
 	http.HandleFunc( `/unsubscribe`, unsubscribeHandler)
 	http.HandleFunc( `/`, emailHandler)

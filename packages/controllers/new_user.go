@@ -134,7 +134,7 @@ func (c *Controller) NewUser() (string, error) {
 	}
 	for refUserId, refData := range myRefsKeys {
 		md5 := string(utils.Md5(refData["private_key"]))
-		myRefs[refUserId] = myRefsType{Key: refData["private_key"], KeyUrl: c.NodeConfig["pool_url"] + "public/" + md5[0:16]}
+		myRefs[refUserId] = myRefsType{Key: refData["private_key"], KeyUrl: "public/" + md5[0:16]}
 	}
 
 	/*

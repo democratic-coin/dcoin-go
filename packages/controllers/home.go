@@ -171,14 +171,14 @@ func (c *Controller) Home() (string, error) {
 		}
 	}
 	// модерация акков в соц. сетях
-	mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
+/*	mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
 	if err != nil {
 		return "", err
-	}
-	addSql := ` AND sn_url_id != ''`
-	if c.SessUserId!=1 && len(mySnType)>0 {
+	}*/
+	addSql := ` AND sn_url_id != '' AND user_id != ` + utils.Int64ToStr( c.SessUserId )
+/*	if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
-	}
+	}*/
 	num, err := c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
 				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 	if err != nil {

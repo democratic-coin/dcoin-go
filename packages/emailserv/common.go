@@ -11,6 +11,26 @@ import (
 	"html/template"
 )
 
+func Currency(currency int64) string {
+	ret,_ := utils.DB.Single(`SELECT name FROM currency where id=?`,currency ).String()
+	return ret
+}
+
+func RoundMoney(in float64) (out float64) {
+	off := float64(10)
+	for k:=0; k<5; k++ {
+		if in < off {
+			out = utils.Round( in, 4 - k )
+			break
+		}
+		off *= 10
+	}
+	if out == 0 {
+		out = utils.Round( in, 0 )
+	}
+	return
+}
+
 func CheckUser( userId int64 ) (map[string]interface{}, error) {
 
 	user, err := GDB.OneRow("select * from users where user_id=?", userId ).String()
@@ -60,8 +80,11 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 		pattern = data[`pattern`].(string)
 	}
 	data[`UserId`] = userId
-	data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
-	
+
+	data[`Status`],_ = utils.DB.Single(`select status from miners_data where user_id=?`, userId ).String()
+	if len(data[`Status`].(string)) == 0 {
+		data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
+	}
 	subject := new(bytes.Buffer)
 	html := new(bytes.Buffer)
 	lang := utils.Int64ToStr( data[`lang`].(int64) )
@@ -73,7 +96,9 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 		GPagePattern.ExecuteTemplate(subject, pattern + `Subject`, data )
 	}
 	if len( html.String()) == 0 {
-		GPagePattern.ExecuteTemplate(html, pattern + `HTML`, data )
+		if err := GPagePattern.ExecuteTemplate(html, pattern + `HTML`, data ); err!=nil {
+			return result( err.Error() )
+		}
 	}
 	if len( html.String()) == 0 {
 		return result( `Empty pattern ` + pattern )

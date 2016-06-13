@@ -13,7 +13,9 @@ import (
 	"os"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"runtime"
+	"github.com/democratic-coin/dcoin-go/packages/system"
 )
+
 func main_loader(w http.ResponseWriter, r *http.Request) {
 	data, _ := static.Asset("static/img/main_loader.gif")
 	fmt.Fprint(w, string(data))
@@ -23,7 +25,6 @@ func main_loader_html(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, html)
 }
 func main() {
-
 	runtime.LockOSThread()
 
 	var width uint = 800
@@ -47,7 +48,7 @@ func main() {
 				if utils.DB != nil && utils.DB.DB != nil {
 					utils.DB.ExecSql(`INSERT INTO stop_daemons(stop_time) VALUES (?)`, utils.Time())
 				} else {
-					thrust.Exit()
+					system.FinishThrust(0)
 					os.Exit(0)
 				}
 			}
@@ -65,5 +66,5 @@ func main() {
 	go dcoin.Start("", thrustWindow)
 
 	enterLoop()
-
+	system.Finish(0)
 }

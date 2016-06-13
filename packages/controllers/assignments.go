@@ -120,7 +120,7 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}*/
-	addSql := ` AND sn_url_id != ''`
+	addSql := ` AND sn_url_id != '' AND user_id != ` + utils.Int64ToStr( c.SessUserId )
 	/*if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}*/
@@ -392,7 +392,8 @@ func (c *Controller) Assignments() (string, error) {
 		}
 		types := map[string]string{"fb" : "facebook.com", "vk" : "vk.com"}
 		if len(usersSN)>0 {
-			sn = `<a href="http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`" target="blank">http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]+`</a>`
+			url := `http://`+types[usersSN["sn_type"]]+`/`+usersSN["sn_url_id"]
+			sn = `<a href="` + url + `" onclick='THRUST.remote.send("` + url + `")' target="blank">`+ url +`</a>`
 		}
 		snUserId = utils.StrToInt64(usersSN["user_id"])
 
