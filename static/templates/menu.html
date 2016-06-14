@@ -184,21 +184,21 @@ static/img/logo-small.png
 				</li>
 				{{end}}
 
-				<li>
+				<!--<li>
 					<a href="#home"><i class="fa  fa-home  fa-fw"></i> Home</a>
-				</li>
-				<li>
-					<a href="#walletsList"><i class="fa   fa-credit-card   fa-fw"></i> {{.Lang.wallets}}</a>
-				</li>
+				</li>-->
 				<li>
 					<a href="#miningMenu"><i class="fa  fa-money  fa-fw"></i> {{.Lang.mining}} {{if not .MinerId}}<i class="fa fa-arrow-left"></i>{{end}}</a>
 					{{if .IsRestricted}}
 						<div id="tdcr" style="font-size:20px;text-align:right;padding-right: 1em;"></div>
 					{{end}}	
 				</li>
-				{{if .MinerId}}
+				<li>
+					<a href="#walletsList"><i class="fa   fa-credit-card   fa-fw"></i> {{.Lang.wallets}}</a>
+				</li>
+				<!--{{if .MinerId}}
 					<li><a href="#newUser"><i class="fa  fa-smile-o  fa-fw"></i> {{.Lang.my_referrals}}</a></li>
-				{{end}}
+				{{end}}-->
 				<!--<li>
 					<a href="#"><i class="fa  fa-users  fa-fw"></i> CrowdFunding<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
@@ -212,16 +212,16 @@ static/img/logo-small.png
 				</li>-->
 
 
-				<li>
+				<!--<li>
 					<a href="#"><i class="fa  fa-info-circle -o fa-fw"></i> {{.Lang.information}}<span class="fa arrow"></span></a>
-					<ul class="nav nav-second-level">
+					<ul class="nav nav-second-level">-->
 						<!--<li>
 							<a href="#pct">{{.Lang.pct}}</a>
 						</li>
 						<li>
 							<a href="#reduction">{{.Lang.reduction}}</a>
 						</li>-->
-						<li>
+						<!--<li>
 							<a href="#statisticVoting">{{.Lang.voting}}</a>
 						</li>
 						<li>
@@ -238,7 +238,7 @@ static/img/logo-small.png
 						</li>
 
 					</ul>
-				</li>
+				</li>-->
 
 
 				<li>
