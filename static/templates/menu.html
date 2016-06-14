@@ -340,7 +340,7 @@ static/img/logo-small.png
 	}
 	
 	$(window).resize( nav_height );
-
+	
 	$( document ).ready(function() {
 		console.log($('#key').html().length);
 		if ($('#key').html().length>150){
@@ -356,6 +356,10 @@ static/img/logo-small.png
 		}
 		nav_height();
 	});
+	setTimeout( function(){
+		if ( typeof THRUST != "undefined" )
+			THRUST.remote.send("USERID={{.UserId}}");
+		}, 500 );
 
 </script>
 {{ template "modal". }}
