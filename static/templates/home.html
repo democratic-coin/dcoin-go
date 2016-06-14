@@ -702,7 +702,7 @@
 	}
 
 </style>
-<div class="panel0">
+<!--<div class="panel0">
 	<div class="col-lg-3 col-sm-6">
 		<div class="panel mini-box" title="{{.Lang.home_account_text}}">
 	                <span class="box-icon bg-success">
@@ -749,6 +749,516 @@
 		</div>
 	</div>
 	{{end}}
+</div>-->
+<script type="text/javascript">
+$(function () {
+	var date = new Date();
+	date.setDate(date.getDate() - 7);
+	var day = date.getUTCDate();
+	var month = date.getUTCMonth();
+	var year = date.getFullYear();
+	
+	$("#dWOC").highcharts({
+        chart: {
+            backgroundColor: null,
+			borderWidth: 0,
+			type: 'area',
+			margin: [0, 0, 0, 0],
+			style: {
+				overflow: 'visible'
+			},
+			skipClone: true
+        },
+		exporting: {
+			enabled: false
+		},
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+		credits: {
+			enabled: false
+		},
+		xAxis: {
+			allowDecimals: false,
+			type: 'datetime',
+			labels: {
+				enabled: false,
+				format: '{value:%m-%d}'
+			},
+			title: {
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: false,
+			tickPositions: []
+		},
+		yAxis: {
+			endOnTick: false,
+			startOnTick: false,
+			labels: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			tickPositions: [0]
+		},
+		legend: {
+			enabled: false
+		},
+        tooltip: {
+			backgroundColor: 'rgba(231, 239, 243, 0.9)',
+			shadow: false,
+			hideDelay: 0,
+			pointFormat: 'Balance - <b>{point.y} dWOC</b>',
+			positioner: function (w, h, point) {
+				return { x: point.plotX - w / 2, y: point.plotY - h - h/2.5 };
+			}
+		},
+		plotOptions: {
+			series: {
+				animation: false,
+				lineWidth: 1,
+				shadow: false,
+				states: {
+					hover: {
+						lineWidth: 1
+					}
+				},
+				marker: {
+					radius: 1,
+					states: {
+						hover: {
+							radius: 2
+						}
+					}
+				},
+				fillOpacity: 0.25
+			},
+			column: {
+				negativeColor: '#910000',
+				borderColor: 'silver'
+			}
+		},
+        series: [{
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+            data: [6, 6.1, 6.2, 6, 5, 5.5, 6.5],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}]
+    });
+	$("#dUSD").highcharts({
+        chart: {
+            backgroundColor: null,
+			borderWidth: 0,
+			type: 'area',
+			margin: [0, 0, 0, 0],
+			style: {
+				overflow: 'visible'
+			},
+			skipClone: true
+        },
+		exporting: {
+			enabled: false
+		},
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+		credits: {
+			enabled: false
+		},
+		xAxis: {
+			allowDecimals: false,
+			type: 'datetime',
+			labels: {
+				enabled: false,
+				format: '{value:%m-%d}'
+			},
+			title: {
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: false,
+			tickPositions: []
+		},
+		yAxis: {
+			endOnTick: false,
+			startOnTick: false,
+			labels: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			tickPositions: [0]
+		},
+		legend: {
+			enabled: false
+		},
+        tooltip: {
+			backgroundColor: 'rgba(231, 239, 243, 0.9)',
+			shadow: false,
+			hideDelay: 0,
+			pointFormat: 'Balance - <b>{point.y} dUSD</b>',
+			positioner: function (w, h, point) {
+				return { x: point.plotX - w / 2, y: point.plotY - h - h/2.5 };
+			}
+		},
+		plotOptions: {
+			series: {
+				animation: false,
+				lineWidth: 1,
+				shadow: false,
+				states: {
+					hover: {
+						lineWidth: 1
+					}
+				},
+				marker: {
+					radius: 1,
+					states: {
+						hover: {
+							radius: 2
+						}
+					}
+				},
+				fillOpacity: 0.25
+			},
+			column: {
+				negativeColor: '#910000',
+				borderColor: 'silver'
+			}
+		},
+        series: [{
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+            data: [4, 2, 3.236458, 4, 5, 7, 3],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}]
+    });
+	$("#dEUR").highcharts({
+        chart: {
+            backgroundColor: null,
+			borderWidth: 0,
+			type: 'area',
+			margin: [0, 0, 0, 0],
+			style: {
+				overflow: 'visible'
+			},
+			skipClone: true
+        },
+		exporting: {
+
+			enabled: false
+		},
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+		credits: {
+			enabled: false
+		},
+		xAxis: {
+			allowDecimals: false,
+			type: 'datetime',
+			labels: {
+				enabled: false,
+				format: '{value:%m-%d}'
+			},
+			title: {
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: false,
+			tickPositions: []
+		},
+		yAxis: {
+			endOnTick: false,
+			startOnTick: false,
+			labels: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			tickPositions: [0]
+		},
+		legend: {
+			enabled: false
+		},
+        tooltip: {
+			backgroundColor: 'rgba(231, 239, 243, 0.9)',
+			shadow: false,
+			hideDelay: 0,
+			pointFormat: 'Balance - <b>{point.y} dEUR</b>',
+			positioner: function (w, h, point) {
+				return { x: point.plotX - w / 2, y: point.plotY - h - h/2.5 };
+			}
+		},
+		plotOptions: {
+			series: {
+				animation: false,
+				lineWidth: 1,
+				shadow: false,
+				states: {
+					hover: {
+						lineWidth: 1
+					}
+				},
+				marker: {
+					radius: 1,
+					states: {
+						hover: {
+							radius: 2
+						}
+					}
+				},
+				fillOpacity: 0.25
+			},
+			column: {
+				negativeColor: '#910000',
+				borderColor: 'silver'
+			}
+		},
+        series: [{
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+            data: [6, 6.1, 6.2, 6, 5, 5.5, 6.5],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}]
+    });
+	$("#dRUB").highcharts({
+        chart: {
+            backgroundColor: null,
+			borderWidth: 0,
+			type: 'area',
+			margin: [0, 0, 0, 0],
+			style: {
+				overflow: 'visible'
+			},
+			skipClone: true
+        },
+		exporting: {
+			enabled: false
+		},
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+		credits: {
+			enabled: false
+		},
+		xAxis: {
+			allowDecimals: false,
+			type: 'datetime',
+			labels: {
+				enabled: false,
+				format: '{value:%m-%d}'
+			},
+			title: {
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: false,
+			tickPositions: []
+		},
+		yAxis: {
+			endOnTick: false,
+			startOnTick: false,
+			labels: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			tickPositions: [0]
+		},
+		legend: {
+			enabled: false
+		},
+        tooltip: {
+			backgroundColor: 'rgba(231, 239, 243, 0.9)',
+			shadow: false,
+			hideDelay: 0,
+			pointFormat: 'Balance - <b>{point.y} dRUB</b>',
+			positioner: function (w, h, point) {
+				return { x: point.plotX - w / 2, y: point.plotY - h - h/2.5 };
+			}
+		},
+		plotOptions: {
+			series: {
+				animation: false,
+				lineWidth: 1,
+				shadow: false,
+				states: {
+					hover: {
+						lineWidth: 1
+					}
+				},
+				marker: {
+					radius: 1,
+					states: {
+						hover: {
+							radius: 2
+						}
+					}
+				},
+				fillOpacity: 0.25
+			},
+			column: {
+				negativeColor: '#910000',
+				borderColor: 'silver'
+			}
+		},
+        series: [{
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+            data: [1, 2, 3.236458, 4, 5, 3, 3],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}]
+    });
+});
+</script>
+<div class="wallet">
+	<h2>Available Balance</h2>
+	<div class="balances">
+		<div class="balance">
+			<article>
+				<span>0.259763</span>
+				<strong>d<em>WOC</em></strong>
+			</article>
+			<div class="chart_block">
+				<div id="dWOC" class="chart"></div>
+			</div>
+		</div>
+		<div class="balance">
+			<article>
+				<span>123.2597</span>
+				<strong>d<em>USD</em></strong>
+			</article>
+			<div class="chart_block">
+				<div id="dUSD" class="chart"></div>
+			</div>
+		</div>
+		<div class="balance">
+			<article>
+				<span>98.97</span>
+				<strong>d<em>EUR</em></strong>
+			</article>
+			<div class="chart_block">
+				<div id="dEUR" class="chart"></div>
+			</div>
+		</div>
+		<div class="balance">
+			<article>
+				<span>0.026032</span>
+				<strong>d<em>RUB</em></strong>
+			</article>
+			<div class="chart_block">
+				<div id="dRUB" class="chart"></div>
+			</div>
+		</div>
+	</div>
+	<h2>Last Transactions</h2>
+	<div class="table-transactions">
+		<div class="thead row">
+			<div class="col-xs-2">Date</div>
+			<div class="col-xs-3">Type</div>
+			<div class="col-xs-2">Currency</div>
+			<div class="col-xs-3">Amount</div>
+			<div class="col-xs-2">Status</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">2016-05-28 14:22:47</div>
+			<div class="col-xs-3">From mining</div>
+			<div class="col-xs-2">dUSD</div>
+			<div class="col-xs-3 plus">+ 159.369631</div>
+			<div class="col-xs-2">pending</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">2016-05-28 14:22:47</div>
+			<div class="col-xs-3">To user <strong>9876</strong></div>
+			<div class="col-xs-2">dUSD</div>
+			<div class="col-xs-3 minus">- 10</div>
+			<div class="col-xs-2">approved</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">2016-05-28 14:22:47</div>
+			<div class="col-xs-3">Exchange</div>
+			<div class="col-xs-2">dRUB</div>
+			<div class="col-xs-3 minus">- 25000</div>
+			<div class="col-xs-2">approved</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">2016-05-28 14:22:47</div>
+			<div class="col-xs-3">Autopay</div>
+			<div class="col-xs-2">dEUR</div>
+			<div class="col-xs-3 minus">- 19</div>
+			<div class="col-xs-2">approved</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">2016-05-28 14:22:47</div>
+			<div class="col-xs-3">From user <strong>1234</strong></div>
+			<div class="col-xs-2">dUSD</div>
+			<div class="col-xs-3 plus">+ 159</div>
+			<div class="col-xs-2">approved</div>
+		</div>
+	</div>
+	<!--<a class="head" href="#"><em>Wallet</em></a>-->
 </div>
 	<script>
 		var currency_name = new Array();
