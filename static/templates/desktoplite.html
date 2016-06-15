@@ -1,0 +1,254 @@
+{{define "DesktopLite"}}
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Democratic Coin</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MetisMenu CSS -->
+<link href="static/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="static/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="static/css/font-awesome.css" rel="stylesheet">
+
+<!-- All styles -->
+<link href="static/css/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.static/js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+	<script language="JavaScript" type="text/javascript" src="static/js/md5.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/jsbn.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/jsbn2.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsa.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsa2.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/sha1.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/sha256.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/base64.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsapem-1.1.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/rsasign-1.2.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/asn1hex-1.1.min.js"></script>
+
+
+	<script src="static/js/sha256.js"></script>
+
+	<script type="text/javascript" src="static/js/rijndael.js"></script>
+	<script type="text/javascript" src="static/js/mcrypt.js"></script>
+
+
+<script src="static/js/index.js"></script>
+
+	<script src="static/js/jquery-1.11.0.js"></script>
+	<script src="static/js/js.js"></script>
+
+	<script src="static/js/aes.js"></script>
+	<script src="static/js/enc-base64-min.js"></script>
+
+	<script src="static/js/crypto-js-aes.js"></script>
+	<script src="static/js/crypto-js-mode-ecb.js"></script>
+	<script src="static/js/crypto-js-pad-iso10126.js"></script>
+</head>
+<body>
+	<p>Укажите ваш ключ, если вы уже являетесь зарегистрированным пользователем Dcoin.</p>
+	<!--input type="file" name="upload" id="change_pkey_upload_hidden"><br>
+	<textarea rows="3" id="change_pkey_private_key" class="form-control" stylex="display:none"></textarea><br-->
+	<div id="confirm_key" style="display: block; max-width: 600px; margin: auto">
+	<fieldset>
+		<div id="change_pkey_alert"></div>
+		<span id="change_pkey_key_selector" style="float:right"><a href="#" onclick="change_pkey_show_text_key();return false;">{{.Lang.text}}</a></span>
+		<div class="clearfix"></div>
+		<input multiple type="file" name="upload" id="change_pkey_upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
+		<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
+			<div style="margin:auto; text-align:center; line-height:22px">
+				<p style="margin-bottom:0px"  id="change_pkey_key_file_name" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
+				<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();">{{.Lang.select_key}}</button>
+				<p>{{.Lang.or_drag_and_drop_key}}</p>
+			</div>
+		</div>
+			<textarea rows="3" id="change_pkey_private_key" class="form-control" style="display:none"></textarea><br>
+		<label>{{.Lang.password}}</label>
+		<input type="password" id="change_pkey_password" class="form-control"><Br>
+		<button class="btn btn-outline btn-primary" type="submit" onclick="send_key()">SEND</button>
+	</fieldset>
+	</div>
+	<input type="hidden" id="public_key_1">
+	
+
+	<a href="" onclick='THRUST.remote.send("next")'>Next</a>
+	<div style="display: none;">
+		<input id="incorrect_key_or_password" value="{{.Lang.incorrect_key_or_password}}" type="hidden">
+		<div id="key">key</div>
+		<div id="password">password</div>
+		<div id="setup_password">setup_password</div>
+		<div id="save_key">save_key</div>
+		<img  id="image_key">
+		<canvas  id="canvas_key"></canvas>
+	</div>
+	<script src="static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/js/jquery-ui.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="static/js/spin.js"></script>
+
+	
+	<script language="JavaScript" type="text/javascript">
+		(function ($) {
+		$.fn.spin = function (opts, color) {
+			var presets = {
+				"tiny": {
+					lines: 8,
+					length: 2,
+					width: 2,
+					radius: 3
+				},
+				"small": {
+					lines: 8,
+					length: 4,
+					width: 3,
+					radius: 5
+				},
+				"large": {
+					lines: 10,
+					length: 8,
+					width: 4,
+					radius: 8
+				}
+			};
+			if (Spinner) {
+				return this.each(function () {
+					var $this = $(this),
+							data = $this.data();
+
+					if (data.spinner) {
+						data.spinner.stop();
+						delete data.spinner;
+					}
+					if (opts !== false) {
+						if (typeof opts === "string") {
+							if (opts in presets) {
+								opts = presets[opts];
+							} else {
+								opts = {};
+							}
+							if (color) {
+								opts.color = color;
+							}
+						}
+						data.spinner = new Spinner($.extend({
+							color: $this.css('color')
+						}, opts)).spin(this);
+					}
+				});
+			} else {
+				throw "Spinner class not available.";
+			}
+		};
+	})(jQuery);
+
+			function send_key() {
+				var e_n_sign = get_e_n_sign($("#change_pkey_private_key").val(), $("#change_pkey_password").val(), '', 'change_pkey_alert');
+				console.log( 'esign', e_n_sign );
+				var public_key = make_public_key(e_n_sign['modulus'], e_n_sign['exp']);
+				$("#public_key_1").val( public_key );
+				console.log( public_key );
+			}
+		
+			function change_pkey_show_text_key () {
+				$("#change_pkey_private_key").css("display", "block");
+				$("#change_pkey_key_div").css("display", "none");
+				$("#change_pkey_key_selector").html('<a href="#" onclick="change_pkey_show_file_key();return false;">{{.Lang.from_file}}</a>');
+			}
+
+			function change_pkey_show_file_key () {
+				$("#change_pkey_private_key").css("display", "none");
+				$("#change_pkey_key_div").css("display", "block");
+				$("#change_pkey_key_selector").html('<a href="#" onclick="change_pkey_show_text_key();return false;">{{.Lang.text}}</a>');
+			}
+	
+			function change_handleFileSelect(f) {
+				$('#change_pkey_key_file_name').html(f.name);
+				var reader = new FileReader();
+				if (f.type.substr(0,5) =='image') {
+					reader.onload = (function(theFile) {
+						return function(e) {
+							img2key(e.target.result, 'change_pkey_private_key');
+						};
+					})(f);
+					reader.readAsDataURL(f);
+				}
+				else {
+					reader.onload = (function(theFile) {
+						return function(e) {
+							console.log(e.target.result);
+							$('#change_pkey_private_key').val(e.target.result);
+						};
+					})(f);
+					reader.readAsText(f);
+				}
+			}
+
+	
+			$( document ).ready(function() {
+				if (window.FileReader === undefined) {
+					$("#change_pkey_private_key").css("display", "block");
+					$("#change_pkey_key_file").css("display", "none");
+					$("#change_pkey_key_selector").css("display", "none");
+				}
+//				$("#tx_history").css("display", "block");
+//				show_steps('simple_protection_mode');
+
+				document.getElementById('change_pkey_upload_hidden').addEventListener('change', change_handleFileSelect2, false);
+//				check_key_and_show_modal();
+
+			});
+
+			function change_handleFileSelect2(evt) {
+				$('#change_pkey_key_file_name').html(this.value);
+				var f = evt.target.files[0];
+				change_handleFileSelect(f);
+			}
+
+			$('#change_pkey_key_div').on(
+					'dragover',
+					function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+					}
+			)
+			$('#change_pkey_key_div').on(
+					'dragenter',
+					function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+					}
+			)
+			$('#change_pkey_key_div').on(
+					'drop',
+					function(e){
+						if(e.originalEvent.dataTransfer){
+							if(e.originalEvent.dataTransfer.files.length) {
+								e.preventDefault();
+								e.stopPropagation();
+								change_handleFileSelect(e.originalEvent.dataTransfer.files[0]);
+							}
+						}
+					}
+			);
+	</script>
+
+</body></html>
+{{end}}
