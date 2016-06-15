@@ -9,6 +9,18 @@ import (
 	"time"
 )
 
+type infoBalance struct {
+	Currency   string
+	CurrencyId int64
+	Wallet     float64
+	Tdc        float64
+	Summary    float64
+	Promised   float64
+	Restricted float64
+	Top        float64
+//	Dif        float64
+}
+
 type homePage struct {
 	Community             bool
 	Lang                  map[string]string
@@ -48,10 +60,72 @@ type homePage struct {
 	Miner                 bool
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
+	ListBalance           map[int64]*infoBalance
 	Chart					string
 	DCTarget int64
 }
 
+func RoundMoney(in float64) (out float64) {
+	off := float64(10)
+	for k:=0; k<6; k++ {
+		if in < off {
+			out = utils.Round( in, 5 - k )
+			break
+		}
+		off *= 10
+	}
+	if out == 0 {
+		out = utils.Round( in, 0 )
+	}
+	return
+}
+
+
+func (c *Controller) getBalance() (map[int64]*infoBalance, error) {
+	
+	userId := c.SessUserId
+	list := make(map[int64]*infoBalance)
+	if wallet, err := utils.DB.GetBalances(userId); err == nil {
+		for _, iwallet := range wallet {
+			list[iwallet.CurrencyId] = &infoBalance{ CurrencyId: iwallet.CurrencyId,
+			                Wallet: utils.Round(iwallet.Amount, 6) }
+		}
+	} else {
+		return nil,err
+	}
+	if vars, err := utils.DB.GetAllVariables(); err == nil {
+		if _, dc, _, err := utils.DB.GetPromisedAmounts( userId, vars.Int64["cash_request_time"]); err == nil {
+			for _, idc := range dc {
+				if _, ok:= list[idc.CurrencyId]; ok {
+					list[idc.CurrencyId].Tdc += utils.Round(idc.Tdc,6)
+					list[idc.CurrencyId].Promised += idc.Amount
+				} else {
+					list[idc.CurrencyId] = &infoBalance{ CurrencyId: idc.CurrencyId,
+			                Promised: idc.Amount, Tdc: utils.Round(idc.Tdc, 6) }
+				}
+			}
+		} else {
+			return nil,err
+		}
+	} else {
+		return nil,err
+	}
+	if profit,_, err := c.GetPromisedAmountCounter(); err == nil && profit > 0 {
+		currency := int64(72)
+		if _, ok:= list[currency]; ok {
+			list[currency].Restricted = utils.Round( profit - 30, 6)
+		} else {
+			list[currency] = &infoBalance{ CurrencyId: currency,
+			                Restricted: utils.Round( profit - 30, 6) }
+		}
+	}
+	for i := range list {
+		list[i].Currency,_ = utils.DB.Single(`select name from currency where id=?`, list[i].CurrencyId ).String()
+		list[i].Summary = utils.Round( list[i].Wallet + list[i].Tdc + list[i].Restricted, 6 )
+		list[i].Top = RoundMoney(list[i].Summary)
+	}
+	return list, nil
+}
 
 
 func (c *Controller) Home() (string, error) {
@@ -375,7 +449,7 @@ func (c *Controller) Home() (string, error) {
 	}
 
 	DCTarget := consts.DCTarget[72]
-
+	listBalance,_ := c.getBalance()
 
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		DCTarget: DCTarget,
@@ -417,7 +491,8 @@ func (c *Controller) Home() (string, error) {
 		ChatEnabled:           c.NodeConfig["chat_enabled"],
 		Miner:                 miner,
 		Token:                 token,
-		ExchangeUrl:           exchangeUrl})
+		ExchangeUrl:           exchangeUrl,
+		ListBalance:           listBalance})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
