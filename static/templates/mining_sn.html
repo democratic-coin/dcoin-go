@@ -1,8 +1,7 @@
 {{define "miningSn"}}
 <script>
 
-	$('#send_to_net').bind('click', function () {
-
+	function mining_sn() {
 		$.post( 'ajax?controllerName=saveQueue', {
 			'type' : '{{.TxType}}',
 			'time' : '{{.TimeNow}}',
@@ -13,7 +12,9 @@
 		}, function (data) {
 			dc_navigate ('PromisedAmountRestrictedList', {'alert': '{{.Lang.sent_to_the_net}}'} );
 		} );
-	} );
+	}
+
+	$('#send_to_net').bind('click', mining_sn );
 	check_key_and_show_modal();
 
 </script>
@@ -24,7 +25,10 @@
 {{template "signatures".}}
 
 <script>
-	doSign();
-	{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+	setTimeout( function() {
+		{{if .ShowSignData}}$("#sign").css("display", "block");{{end}}
+		doSign();
+		{{if not .ShowSignData}}mining_sn();{{end}}
+	}, 500 );
 </script>
 {{end}}
