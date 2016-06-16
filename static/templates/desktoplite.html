@@ -65,7 +65,7 @@
 	<script src="static/js/crypto-js-pad-iso10126.js"></script>
 </head>
 <body>
-	<p>Укажите ваш ключ, если вы уже являетесь зарегистрированным пользователем Dcoin.</p>
+	<p style="text-align: center;padding: 0px 50px;">{{.Lang.enter_key}}</p>
 	<!--input type="file" name="upload" id="change_pkey_upload_hidden"><br>
 	<textarea rows="3" id="change_pkey_private_key" class="form-control" stylex="display:none"></textarea><br-->
 	<div id="confirm_key" style="display: block; max-width: 600px; margin: auto">
@@ -83,14 +83,17 @@
 		</div>
 			<textarea rows="3" id="change_pkey_private_key" class="form-control" style="display:none"></textarea><br>
 		<label>{{.Lang.password}}</label>
-		<input type="password" id="change_pkey_password" class="form-control"><Br>
-		<button class="btn btn-outline btn-primary" type="submit" onclick="send_key()">SEND</button>
+		<input type="password" id="change_pkey_password" class="form-control">
+		<div style="margin-top: 15px; text-align:center;">
+		<button class="btn btn-lg btn-primary" type="submit" onclick="send_key()">{{.Lang.send}}</button>
+		<a href="" style="margin-left: 40px;" class="btn btn-lg btn-primary" onclick='THRUST.remote.send("next")'>{{.Lang.skip}}</a>
+		</div>
 	</fieldset>
 	</div>
 	<input type="hidden" id="public_key_1">
 	
 
-	<a href="" onclick='THRUST.remote.send("next")'>Next</a>
+	
 	<div style="display: none;">
 		<input id="incorrect_key_or_password" value="{{.Lang.incorrect_key_or_password}}" type="hidden">
 		<div id="key">key</div>
@@ -161,10 +164,14 @@
 
 			function send_key() {
 				var e_n_sign = get_e_n_sign($("#change_pkey_private_key").val(), $("#change_pkey_password").val(), '', 'change_pkey_alert');
-				console.log( 'esign', e_n_sign );
-				var public_key = make_public_key(e_n_sign['modulus'], e_n_sign['exp']);
-				$("#public_key_1").val( public_key );
-				console.log( public_key );
+				if ( e_n_sign['modulus'] != '' || e_n_sign['exp']!='' ) {
+					var public_key = make_public_key(e_n_sign['modulus'], e_n_sign['exp']);
+					$.post( {{.PoolUrl}}, {
+						'public_key' : public_key
+					}, function(data) {
+						THRUST.remote.send( 'PUBLIC=' + data );
+					});
+				}
 			}
 		
 			function change_pkey_show_text_key () {
