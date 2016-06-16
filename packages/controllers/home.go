@@ -201,9 +201,13 @@ func (c *Controller) Home() (string, error) {
 	getCount := func( query, qtype string ) (err error)  {
 		var ret int64
 		
+		vid := `v.id`
+		if qtype == `sn` {
+			vid = `v.user_id`
+		}
 		if c.SessRestricted == 0 {
 			ret, err = c.Single( query +
-				` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype, time.Now().Unix()-consts.ASSIGN_TIME ).Int64()
+				` AND `+vid+` NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype, time.Now().Unix()-consts.ASSIGN_TIME ).Int64()
 		} else {
 			ret, err = c.Single( query ).Int64()
 		}				
@@ -249,16 +253,14 @@ func (c *Controller) Home() (string, error) {
 	if err != nil {
 		return "", err
 	}*/
-	addSql := ` AND sn_url_id != '' AND user_id != ` + utils.Int64ToStr( c.SessUserId )
+	addSql := ` AND v.sn_url_id != '' AND v.user_id != ` + utils.Int64ToStr( c.SessUserId )
 /*	if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}*/
-	num, err := c.Single("SELECT count(user_id) FROM users WHERE status  =  'user'" + addSql + 
-				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
-	if err != nil {
+	
+	if err := getCount( `SELECT count(v.user_id) FROM users as v WHERE v.status  =  'user'` + addSql, `sn` ); err !=nil {
 		return "", err
 	}
-	assignments += num
 
 	// баллы
 	points, err := c.Single("SELECT points FROM points WHERE user_id  =  ?", c.SessUserId).Int64()

@@ -18,8 +18,12 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/static"	
 )
 
+//const GETPOOLURL = `http://localhost:8089/getpool/`
+const GETPOOLURL = `http://getpool.dcoin.club/`
+
 type Pool struct {
 	Pool string `json:"pool"`
+	UserId int64 `json:"user_id"`
 }
 
 func main() {
@@ -58,13 +62,23 @@ func main() {
 			Size:    commands.SizeHW{Width: 1024, Height: 600},
 		})
 		introWindow.HandleRemote(func(er commands.EventResult, this *window.Window) {
-			if er.Message.Payload == "next" {
+			if  len(er.Message.Payload) > 7 && er.Message.Payload[:7]==`PUBLIC=` {
+				json.Unmarshal( []byte(er.Message.Payload[7:]), &pool )
+				if pool.UserId != 0 {
+					err := ioutil.WriteFile( userfile, []byte(utils.Int64ToStr(pool.UserId)), 0644 )
+					if err != nil {
+						fmt.Println( `Error`, err )
+					}
+				}
+				fmt.Println(`Answer`, pool )
+				chIntro <- true
+			} else if er.Message.Payload == "next" {
 				chIntro <- true
 			}
 		})
 		introWindow.Show()
 		introWindow.Focus()
-		introWindow.OpenDevtools()
+//		introWindow.OpenDevtools()
 		
 		go func() {
 			http.HandleFunc("/", introLoader )
@@ -76,17 +90,18 @@ func main() {
 	} else {
 		mainWin = true
 	}
-//	resp, err := http.Get(`http://getpool.dcoin.club/?user_id=` + utils.Int64ToStr(idUser))
-	resp, err := http.Get(`http://localhost:8089/getpool/?user_id=` + utils.Int64ToStr(idUser))
-	if err!=nil {
-		os.Exit(1)
+	if len(pool.Pool) == 0 {
+		resp, err := http.Get( GETPOOLURL + `?user_id=` + utils.Int64ToStr(idUser))
+		if err!=nil {
+			os.Exit(1)
+		}
+		jsonPool, err := ioutil.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err!=nil {
+			os.Exit(1)
+		}
+		json.Unmarshal(jsonPool, &pool)
 	}
-	jsonPool, err := ioutil.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err!=nil {
-		os.Exit(1)
-	}
-	json.Unmarshal(jsonPool, &pool)
 	if pool.Pool == `0` || len(pool.Pool) == 0 {
 		pool.Pool = `http://pool.dcoin.club`
 	}
@@ -103,7 +118,7 @@ func main() {
 	})*/
 	thrustWindow.HandleRemote(func(er commands.EventResult, this *window.Window) {
 		fmt.Println("RemoteMessage Recieved:", er.Message.Payload)
-		if er.Message.Payload[:7]==`USERID=` {
+		if len(er.Message.Payload) > 7 && er.Message.Payload[:7]==`USERID=` {
 			err := ioutil.WriteFile( userfile, []byte(er.Message.Payload[7:]), 0644 )
 			if err != nil {
 				fmt.Println( `Error`, err )
