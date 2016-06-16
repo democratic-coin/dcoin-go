@@ -1174,45 +1174,22 @@ $(function () {
 });
 </script>
 <div class="wallet">
+	{{if .ListBalance}}
 	<h2>Available Balance</h2>
 	<div class="balances">
+		{{range .ListBalance}}
 		<div class="balance">
 			<article>
-				<span>0.259763</span>
-				<strong>d<em>WOC</em></strong>
+				<span>{{.Top}}</span>
+				<strong>d<em>{{.Currency}}</em></strong>
 			</article>
 			<div class="chart_block">
-				<div id="dWOC" class="chart"></div>
+				<!--div id="d{{.Currency}}" class="chart"></div-->
 			</div>
 		</div>
-		<div class="balance">
-			<article>
-				<span>123.2597</span>
-				<strong>d<em>USD</em></strong>
-			</article>
-			<div class="chart_block">
-				<div id="dUSD" class="chart"></div>
-			</div>
-		</div>
-		<div class="balance">
-			<article>
-				<span>98.97</span>
-				<strong>d<em>EUR</em></strong>
-			</article>
-			<div class="chart_block">
-				<div id="dEUR" class="chart"></div>
-			</div>
-		</div>
-		<div class="balance">
-			<article>
-				<span>0.026032</span>
-				<strong>d<em>RUB</em></strong>
-			</article>
-			<div class="chart_block">
-				<div id="dRUB" class="chart"></div>
-			</div>
-		</div>
+		{{end}}
 	</div>
+	{{end}}
 	<h2>Last Transactions</h2>
 	<div class="table-transactions">
 		<div class="thead row">
