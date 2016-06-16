@@ -14,6 +14,7 @@ import (
 
 type introData struct {
 	Lang             map[string]string
+	PoolUrl          string
 }
 
 var (
@@ -56,7 +57,7 @@ func introLoader(w http.ResponseWriter, r *http.Request) {
 	t = template.Must(t.Parse(string(alert_success)))	
 	b := new(bytes.Buffer)
 	
-	var idata introData
+	idata := introData{ PoolUrl: GETPOOLURL }
 	idata.Lang = globalLangReadOnly[1]
 	err = t.ExecuteTemplate(b, `DesktopLite`, idata )
 	if err != nil {
