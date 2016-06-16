@@ -60,9 +60,13 @@ func (c *Controller) Assignments() (string, error) {
 	// берем тех, кто прошел проверку нодов (type='node_voting')
 	
 	getCount := func( query, qtype string ) (ret int64, err error)  {
+		vid := `v.id`
+		if qtype == `sn` {
+			vid = `v.user_id`
+		}
 		if c.SessRestricted == 0 {
 			ret, err = c.Single( query +
-				` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype,  utils.Time()-consts.ASSIGN_TIME ).Int64()
+				` AND `+vid+` NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, qtype,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 		} else {
 			ret, err = c.Single( query ).Int64()
 		}				
@@ -120,15 +124,17 @@ func (c *Controller) Assignments() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}*/
-	addSql := ` AND sn_url_id != '' AND user_id != ` + utils.Int64ToStr( c.SessUserId )
+	addSql := ` AND v.sn_url_id != '' AND v.user_id != ` + utils.Int64ToStr( c.SessUserId )
 	/*if c.SessUserId!=1 && len(mySnType)>0 {
 		addSql = ` AND sn_type = "`+mySnType+`"`
 	}*/
-	num, err = c.Single(`SELECT count(user_id) FROM users WHERE status  =  'user'` + addSql +
-				` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
+	num,err = getCount( `SELECT count(v.user_id) FROM users as v WHERE v.status  =  'user'` + addSql, `sn` );
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+
+//	num, err = c.Single(`SELECT count(user_id) FROM users WHERE status  =  'user'` + addSql +
+//  ` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type=? AND time > ?)`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).Int64()
 	if num > 0 {
 		randArr = append(randArr, 3)
 	}
@@ -153,8 +159,8 @@ func (c *Controller) Assignments() (string, error) {
 	var timeNow int64
 	var snUserId int64
 	var myRace, myCountry, mainQuestion, newPromiseAmount, videoHost string
-	var promisedAmountData, userInfo map[string]string
-	var sn string
+	var promisedAmountData, userInfo, usersSN map[string]string
+	var sn, mainQuery string
 	switch AssignType {
 	case 1:
 
@@ -164,9 +170,7 @@ func (c *Controller) Assignments() (string, error) {
 		txType = "VotesMiner"
 		txTypeId = utils.TypeInt(txType)
 		timeNow = utils.Time()
-
-		userInfo, err = c.OneRow(`
-			SELECT miners_data.user_id,
+		mainQuery = `SELECT miners_data.user_id,
 						 v.id as vote_id,
 						 face_coords,
 						 profile_coords,
@@ -178,8 +182,13 @@ func (c *Controller) Assignments() (string, error) {
 						 http_host,
 						 pool_user_id
 			FROM votes_miners as v ` + query +
-			`LEFT JOIN miners_data ON miners_data.user_id = v.user_id ` + where + 
+			`LEFT JOIN miners_data ON miners_data.user_id = v.user_id ` + where
+		if c.SessRestricted == 0 {
+			userInfo, err = c.OneRow( mainQuery+ 
 			` AND v.id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='miner' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+		} else {
+			userInfo, err = c.OneRow( mainQuery ).String()
+		}
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -301,8 +310,7 @@ func (c *Controller) Assignments() (string, error) {
 		tplTitle = "assignmentsNewMiner"
 
 	case 2:
-		promisedAmountData, err = c.OneRow(`
-				SELECT id, currency_id,
+		mainQuery = `SELECT id, currency_id,
 							 amount,
 							 user_id,
 							 video_type,
@@ -310,7 +318,13 @@ func (c *Controller) Assignments() (string, error) {
 				FROM promised_amount
 				WHERE status =  'pending' AND
 							 del_block_id = 0
-				` + addSqlCurrency + ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+				` + addSqlCurrency
+		if c.SessRestricted == 0 {
+			promisedAmountData, err = c.OneRow( mainQuery + 
+			 ` AND id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type='promised_amount' AND time > ?)`,  utils.Time()-consts.ASSIGN_TIME ).String()
+		} else {
+			promisedAmountData, err = c.OneRow( mainQuery ).String()
+		}
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -385,8 +399,13 @@ func (c *Controller) Assignments() (string, error) {
 		if c.ConfigIni["db_type"] == "sqlite" {
 			orderBy = "ORDER BY RANDOM()"
 		}
-		usersSN, err := c.OneRow(`SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'` + addSql +
+		mainQuery = `SELECT user_id, sn_type, sn_url_id FROM users WHERE status  =  'user'` + addSql
+		if c.SessRestricted == 0 {
+			usersSN, err = c.OneRow( mainQuery +
 							` AND user_id NOT IN ( SELECT id FROM `+c.MyPrefix+`my_tasks WHERE type = ? AND time > ?) `+orderBy+` LIMIT 1`, `sn`,  utils.Time()-consts.ASSIGN_TIME ).String()
+		} else {
+			usersSN, err = c.OneRow( mainQuery ).String()
+		}							
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
