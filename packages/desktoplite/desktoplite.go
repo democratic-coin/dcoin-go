@@ -42,10 +42,11 @@ func main() {
 	idUser := utils.StrToInt64(string(txtUser))
 
 	chIntro := make(chan bool)
+	var  isClosed bool
 	
 	thrust.NewEventHandler("*", func(cr commands.CommandResponse) {
 		if cr.Type == "closed" {
-			if mainWin {
+			if mainWin || !isClosed {
 				system.FinishThrust(0)
 				os.Exit(0)
 			} else {
@@ -86,6 +87,7 @@ func main() {
 			http.ListenAndServe(":8990", nil)
 		}()
 		<- chIntro
+		isClosed = true
 		introWindow.Close()
 	} else {
 		mainWin = true
@@ -133,5 +135,5 @@ func main() {
 	for {
 		utils.Sleep(3600)
 	}
-	system.Finish(0)
+	system.FinishThrust(0)
 }
