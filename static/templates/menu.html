@@ -72,10 +72,10 @@ static/img/logo-2.png
 static/img/logo-small.png
 -->
 <style>
-	#settings_menu_left{display: none}
+	#settings_menu_left, #settings_menu_left1{display: none}
 	#lng_menu_left{display: none}
 	@media (max-width: 768px) {
-		#settings_menu_left{display: block}
+		#settings_menu_left, #settings_menu_left1{display: block}
 		#lng_menu_left{display: block}
 		#settings_menu{display: none}
 		body{padding-top: 50px}
@@ -136,6 +136,21 @@ static/img/logo-small.png
 		{{if eq .Restricted 0}}<li><a href="#interface">{{.Lang.interface}}</a></li>{{end}}
 		{{if .PoolAdmin}}<li><a href="#nodeConfigControl">{{.Lang.config_node}}</a></li>{{end}}
 		{{if .ExchangeEnable}}<li><a href="#exchangeAdmin">Exchange admin</a></li>{{end}}
+		<li>
+			<a href="#statisticVoting">{{.Lang.voting}}</a>
+		</li>
+		<li>
+			<a href="#statistic">{{.Lang.statistic}}</a>
+		</li>
+		<li>
+			<a href="#blockExplorer">Block explorer</a>
+		</li>
+		<li>
+			<a href="#information">{{.Lang.information}}</a>
+		</li>
+		<li>
+			<a href="#dbInfo">{{.Lang.db_info}}</a>
+		</li>
 		<li class="divider"></li>
 		<li><a href="#" onclick="logout()"><i class="fa fa-sign-out fa-lg"></i> {{.Lang.logout}} (user_id: {{.UserId}})</a>
 		</li>
@@ -196,9 +211,9 @@ static/img/logo-small.png
 				<li>
 					<a href="#walletsList"><i class="fa   fa-credit-card   fa-fw"></i> {{.Lang.wallets}}</a>
 				</li>
-				<!--{{if .MinerId}}
+				{{if .MinerId}}
 					<li><a href="#newUser"><i class="fa  fa-smile-o  fa-fw"></i> {{.Lang.my_referrals}}</a></li>
-				{{end}}-->
+				{{end}}
 				<!--<li>
 					<a href="#"><i class="fa  fa-users  fa-fw"></i> CrowdFunding<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
@@ -272,6 +287,33 @@ static/img/logo-small.png
 						</li>
 						<li><a href="" class="lng" data-id="42">Русский</a>
 						</li>
+					</ul>
+				</li>
+				<li id="settings_menu_left1">
+					<a href="#"><i class="fa  fa-info-circle -o fa-fw"></i> {{.Lang.information}}<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<!--<li>
+							<a href="#pct">{{.Lang.pct}}</a>
+						</li>
+						<li>
+							<a href="#reduction">{{.Lang.reduction}}</a>
+						</li>-->
+						<li>
+							<a href="#statisticVoting">{{.Lang.voting}}</a>
+						</li>
+						<li>
+							<a href="#statistic">{{.Lang.statistic}}</a>
+						</li>
+						<li>
+							<a href="#blockExplorer">Block explorer</a>
+						</li>
+						<li>
+							<a href="#information">{{.Lang.information}}</a>
+						</li>
+						<li>
+							<a href="#dbInfo">{{.Lang.db_info}}</a>
+						</li>
+
 					</ul>
 				</li>
 				<li id="settings_menu_left">
