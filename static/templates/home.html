@@ -1193,22 +1193,23 @@ $(function () {
 	{{if .MyDcTransactions}}
 		<h2>{{.Lang.last_operation}}</h2>
 		<div class="table-transactions">
-		<div class="thead row">
-			<div class="col-xs-2">{{.Lang.time}}</div>
-			<div class="col-xs-3">{{.Lang.type}}</div>
-			<div class="col-xs-2">{{.Lang.currency}}</div>
-			<div class="col-xs-3">{{.Lang.amount}}</div>
-			<div class="col-xs-2">{{.Lang.status}}</div>
-		</div>
-		{{range $key, $data := .MyDcTransactions}}
-		<div class="row">
-			<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
-			<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
-			<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
-			<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
-			<div class="col-xs-2">{{$data.status}}</div>
-		</div>
+			<div class="thead row">
+				<div class="col-xs-2">{{.Lang.time}}</div>
+				<div class="col-xs-3">{{.Lang.type}}</div>
+				<div class="col-xs-2">{{.Lang.currency}}</div>
+				<div class="col-xs-3">{{.Lang.amount}}</div>
+				<div class="col-xs-2">{{.Lang.status}}</div>
+			</div>
+			{{range $key, $data := .MyDcTransactions}}
+			<div class="row">
+				<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
+				<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
+				<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
+				<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
+				<div class="col-xs-2">{{$data.status}}</div>
+			</div>
 		{{end}}
+		</div>
 	{{end}}
 	<!--<a class="head" href="#"><em>Wallet</em></a>-->
 </div>
