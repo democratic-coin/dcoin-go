@@ -166,6 +166,20 @@
 <style>
 	.form-control-fix{display: inline; width: 100px}
 	td{padding: 3px}
+	.orders-table{max-height: 500px; overflow: auto}
+	.table1 td{padding:10px}
+	#table2 td{padding-top: 1px; padding-bottom: 1px; }
+	table caption{font-weight:bold}
+	{{if not .UserId}}
+	.row { margin-right: auto; margin-left: auto;}
+	#page-wrapper {width:900px}
+	{{end}}
+	.cols {
+		display:inline-block;
+		float:none;
+		width:360px;
+		vertical-align:top;
+	}
 </style>
 
 <div id="main_div">
@@ -180,8 +194,8 @@
 
 
 	<div id="main" style="padding-top: 10px">
-		<p>{{.Lang.forex_alert}}</p>
-		<div style="text-align: center; max-width: 700px">
+		<p style="text-align: center;">{{.Lang.forex_alert}}</p>
+		<div style="text-align: center;">
 			<div style="padding-bottom: 10px; display: inline-block">{{.Lang.order_buy}}
 				<select id="buy_currency_id" style="width: 100px; display: inline-block" class="form-control" >
 					{{range $id, $name := .CurrencyListName}}
@@ -208,58 +222,72 @@
 		</div>
 		<br>
 
-		<div style="float: left">
-			<table>
-				<caption><strong>{{.Lang.buy}} d{{.BuyCurrencyName}}</strong></caption>
-				<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_amount" class="input-mini form-control"></td></tr>
-				<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
-				<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="buy_total">0</span> d{{.SellCurrencyName}}</td></tr>
-				<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="buy_commission" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
-				<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .SellCurrencyId}} d{{.SellCurrencyName}}</td></tr>
-			</table>
-			<button class="btn" id="buy_button">{{.Lang.buy}} d{{.BuyCurrencyName}}</button>
-			<br><br>
-
-			<div style="width: 290px; max-height: 500px; overflow: auto;">
-				<table class="table" style="width: 330px"><caption>{{.Lang.sell_orders}}</caption>
-					<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
-					<tbody>
-					{{if .SellOrders}}
-						{{range $data := .SellOrders}}
-							<tr><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{mult $data.amount $data.sell_rate}}</td></tr>
-						{{end}}
-					{{end}}
-					</tbody>
-				</table>
+		<center>
+		<div class="col-md-6 cols">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-arrow-circle-down"></i> {{.Lang.buy}} {{.BuyCurrencyName}}</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table1">
+						<caption><strong>{{.Lang.buy}} d{{.BuyCurrencyName}}</strong></caption>
+						<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_amount" class="input-mini form-control"></td></tr>
+						<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+						<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="buy_total">0</span> d{{.SellCurrencyName}}</td></tr>
+						<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="buy_commission" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+						<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .SellCurrencyId}} d{{.SellCurrencyName}}</td></tr>
+					</table>
+					<button class="btn" id="buy_button">{{.Lang.buy}} d{{.BuyCurrencyName}}</button>
+					<br><br>
+		
+					<div style="width: 290px; max-height: 500px; overflow: auto;">
+						<table class="table" style="width: 330px"><caption>{{.Lang.sell_orders}}</caption>
+							<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
+							<tbody>
+							{{if .SellOrders}}
+								{{range $data := .SellOrders}}
+									<tr><td>{{$data.sell_rate}}</td><td>{{$data.amount}}</td><td>{{mult $data.amount $data.sell_rate}}</td></tr>
+								{{end}}
+							{{end}}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-
 		</div>
-		<div style="float: left">
-			<table>
-				<caption><strong>{{.Lang.sell}} d{{.BuyCurrencyName}}</strong></caption>
-				<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_amount" class="input-mini form-control"></td></tr>
-				<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
-				<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="sell_total">0</span> d{{.SellCurrencyName}}</td></tr>
-				<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="sell_commission" class="input-mini form-control"> d{{.BuyCurrencyName}}</td></tr>
-				<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .BuyCurrencyId}} d{{.BuyCurrencyName}}</td></tr>
-			</table>
-			<button class="btn" id="sell_button">{{.Lang.sell}} d{{.BuyCurrencyName}}</button>
-			<br><br>
-
-			<div style="width: 290px; max-height: 500px; overflow: auto;">
-				<table class="table" style="width: 330px"><caption>{{.Lang.buy_orders}}</caption>
-					<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
-					<tbody>
-					{{if .BuyOrders}}
-						{{range $data := .BuyOrders}}
-							<tr><td>{{round (div 1 $data.sell_rate) 6}}</td><td>{{round (mult $data.amount $data.sell_rate) 2}}</td><td>{{$data.amount}}</td></tr>
-						{{end}}
-					{{end}}
-					</tbody>
-				</table>
+		<div class="col-md-6 cols">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-arrow-circle-up"></i> {{.Lang.sell}} {{.BuyCurrencyName}}</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table1">
+						<caption><strong>{{.Lang.sell}} d{{.BuyCurrencyName}}</strong></caption>
+						<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_amount" class="input-mini form-control"></td></tr>
+						<tr><td>{{.Lang.price_per}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_price" class="input-mini form-control"> d{{.SellCurrencyName}}</td></tr>
+						<tr style="height: 40px"><td>{{.Lang.total}}: </td><td><span id="sell_total">0</span> d{{.SellCurrencyName}}</td></tr>
+						<tr><td>{{.Lang.commission}}: </td><td><input type="text" id="sell_commission" class="input-mini form-control"> d{{.BuyCurrencyName}}</td></tr>
+						<tr style="height: 40px"><td>Your balance: </td><td>{{index .WalletsAmounts .BuyCurrencyId}} d{{.BuyCurrencyName}}</td></tr>
+					</table>
+					<button class="btn" id="sell_button">{{.Lang.sell}} d{{.BuyCurrencyName}}</button>
+					<br><br>
+		
+					<div style="width: 290px; max-height: 500px; overflow: auto;">
+						<table class="table" style="width: 330px"><caption>{{.Lang.buy_orders}}</caption>
+							<thead><tr><th>{{.Lang.price}}</th><th>d{{.BuyCurrencyName}}</th><th>d{{.SellCurrencyName}}</th></tr></thead>
+							<tbody>
+							{{if .BuyOrders}}
+								{{range $data := .BuyOrders}}
+									<tr><td>{{round (div 1 $data.sell_rate) 6}}</td><td>{{round (mult $data.amount $data.sell_rate) 2}}</td><td>{{$data.amount}}</td></tr>
+								{{end}}
+							{{end}}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-
 		</div>
+		</center>
 		<div class="clearfix"></div>
 
 		{{noescape .LastTxFormatted}}
