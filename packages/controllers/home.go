@@ -61,6 +61,8 @@ type homePage struct {
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
 	ListBalance           map[int64]*infoBalance
+	MyDcTransactions     []map[string]string	
+	Names                map[string]string	
 	Chart					string
 	DCTarget int64
 }
@@ -452,6 +454,33 @@ func (c *Controller) Home() (string, error) {
 
 	DCTarget := consts.DCTarget[72]
 	listBalance,_ := c.getBalance()
+	var myDcTransactions []map[string]string
+	if c.SessRestricted == 0 {
+		myDcTransactions, err = c.GetAll("SELECT * FROM "+c.MyPrefix+"my_dc_transactions ORDER BY id DESC", 10)
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		for id, data := range myDcTransactions {
+			t := time.Unix(utils.StrToInt64(data["time"]), 0)
+			timeFormatted := t.Format(c.TimeFormat)
+			myDcTransactions[id]["timeFormatted"] = timeFormatted
+			if utils.StrToInt64( data[`to_user_id`] ) ==  c.SessUserId {
+				data[`sign`] = `+`
+			} else {
+				data[`sign`] = `-`
+			}
+		}
+	}
+	names := make(map[string]string)
+	names["cash_request"] = c.Lang["cash"]
+	names["from_mining_id"] = c.Lang["from_mining"]
+	names["from_repaid"] = c.Lang["from_repaid_mining"]
+	names["from_user"] = c.Lang["from_user"]
+	names["node_commission"] = c.Lang["node_commission"]
+	names["system_commission"] = c.Lang["system_commission"]
+	names["referral"] = c.Lang["referral"]
+	names["cf_project"] = "Crowd funding"
+	names["cf_project_refund"] = "Crowd funding refund"
 
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		DCTarget: DCTarget,
@@ -494,7 +523,9 @@ func (c *Controller) Home() (string, error) {
 		Miner:                 miner,
 		Token:                 token,
 		ExchangeUrl:           exchangeUrl,
-		ListBalance:           listBalance})
+		ListBalance:           listBalance,
+		MyDcTransactions:      myDcTransactions,
+		Names:                 names })
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

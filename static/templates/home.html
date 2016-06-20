@@ -1190,52 +1190,27 @@ $(function () {
 		{{end}}
 	</div>
 	{{end}}
-	<!--<h2>Last Transactions</h2>
-	<div class="table-transactions">
+	{{if .MyDcTransactions}}
+		<h2>{{.Lang.last_operation}}</h2>
+		<div class="table-transactions">
 		<div class="thead row">
-			<div class="col-xs-2">Date</div>
-			<div class="col-xs-3">Type</div>
-			<div class="col-xs-2">Currency</div>
-			<div class="col-xs-3">Amount</div>
-			<div class="col-xs-2">Status</div>
+			<div class="col-xs-2">{{.Lang.time}}</div>
+			<div class="col-xs-3">{{.Lang.type}}</div>
+			<div class="col-xs-2">{{.Lang.currency}}</div>
+			<div class="col-xs-3">{{.Lang.amount}}</div>
+			<div class="col-xs-2">{{.Lang.status}}</div>
 		</div>
+		{{range $key, $data := .MyDcTransactions}}
 		<div class="row">
-			<div class="col-xs-2">2016-05-28 14:22:47</div>
-			<div class="col-xs-3">From mining</div>
-			<div class="col-xs-2">dUSD</div>
-			<div class="col-xs-3 plus">+ 159.369631</div>
-			<div class="col-xs-2">pending</div>
+			<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
+			<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
+			<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
+			<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
+			<div class="col-xs-2">{{$data.status}}</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-2">2016-05-28 14:22:47</div>
-			<div class="col-xs-3">To user <strong>9876</strong></div>
-			<div class="col-xs-2">dUSD</div>
-			<div class="col-xs-3 minus">- 10</div>
-			<div class="col-xs-2">approved</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-2">2016-05-28 14:22:47</div>
-			<div class="col-xs-3">Exchange</div>
-			<div class="col-xs-2">dRUB</div>
-			<div class="col-xs-3 minus">- 25000</div>
-			<div class="col-xs-2">approved</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-2">2016-05-28 14:22:47</div>
-			<div class="col-xs-3">Autopay</div>
-			<div class="col-xs-2">dEUR</div>
-			<div class="col-xs-3 minus">- 19</div>
-			<div class="col-xs-2">approved</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-2">2016-05-28 14:22:47</div>
-			<div class="col-xs-3">From user <strong>1234</strong></div>
-			<div class="col-xs-2">dUSD</div>
-			<div class="col-xs-3 plus">+ 159</div>
-			<div class="col-xs-2">approved</div>
-		</div>
-	</div>
-	<a class="head" href="#"><em>Wallet</em></a>-->
+		{{end}}
+	{{end}}
+	<!--<a class="head" href="#"><em>Wallet</em></a>-->
 </div>
 	<script>
 		var currency_name = new Array();
