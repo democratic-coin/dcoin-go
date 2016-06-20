@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/config"
+	"github.com/democratic-coin/dcoin-go/packages/stat"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"io/ioutil"
 	"log"
-//	"net"
+	"strings"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -22,8 +24,9 @@ const (
 )
 
 type Settings struct {
-	Port      uint32 `json:"port"`
-	Path      string `json:"path"`
+	Port uint32 `json:"port"`
+	Path string `json:"path"`
+	Period uint32 `json:"period"`
 }
 
 var (
@@ -31,50 +34,63 @@ var (
 	GDB       *utils.DCDB
 )
 
-func statHandler(w http.ResponseWriter, r *http.Request) {
-	answer := utils.Answer{false, ``}
+func getIP(r *http.Request) (uint32, string) {
+	var ipval uint32
 
-	result := func(msg string) {
+	remoteAddr := r.RemoteAddr
+	var ip string
+	if ip = r.Header.Get(XRealIP); len(ip) > 6 {
+		remoteAddr = ip
+	} else if ip = r.Header.Get(XForwardedFor); len(ip) > 6 {
+		remoteAddr = ip
+	}
+	if strings.Contains(remoteAddr, ":") {
+		remoteAddr, _, _ = net.SplitHostPort(remoteAddr)
+	}
+	if ipb := net.ParseIP(remoteAddr).To4(); ipb != nil {
+		ipval = uint32(ipb[3]) | (uint32(ipb[2]) << 8) |
+			(uint32(ipb[1]) << 16) | (uint32(ipb[0]) << 24)
+	}
+	return ipval,remoteAddr
+}
 
-/*		answer.Error = msg
-		if !answer.Success {
-			if len(jsonEmail.Email) == 0 {
-				jsonEmail.Email = r.FormValue(`email`)
+func historyBalance(userId int64, history *stat.HistoryBalance) error {
+	data, err := GDB.GetAll(`select * from balance where user_id=? AND date( uptime ) < date('now') order by uptime desc`,
+		10, userId)
+	if err == nil {
+		for _, idata := range data {
+			var ib stat.InfoBalance
+			if err = json.Unmarshal([]byte(idata[`data`]), &ib); err == nil {
+				history.History = append(history.History, &ib)
 			}
-			log.Println(remoteAddr, `Error:`, jsonEmail.Cmd, answer.Error, jsonEmail.Email, jsonEmail.UserId)
-		} else {
-			log.Println(remoteAddr, `Sent:`, jsonEmail.Cmd, jsonEmail.Email, jsonEmail.UserId)
 		}
-*/
-		ret, err := json.Marshal(answer)
-		if err != nil {
-			ret = []byte(`{"success": false,
-"error":"Unknown error"}`)
-		}
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		//	w.WriteHeader(200)
-		w.Write(ret)
 	}
-/*	iplog, err := GDB.Single(`select count(id) from log where ip=? AND date( uptime, '+1 hour' ) > datetime('now')`, 
-	                     ipval ).Int64()
-	if err!=nil {
-		log.Println("SQL Error", err )
-	} else if iplog > 10 {
-		result(`Anti-spam`)
-		return
+	return err
+}
+
+func balanceHandler(w http.ResponseWriter, r *http.Request) {
+
+	answer := stat.HistoryBalance{true, ``, make([]*stat.InfoBalance, 0)}
+
+	userId := utils.StrToInt64(r.FormValue(`user_id`))
+	if userId > 0 {
+		ipval,_ := getIP( r )
+		historyBalance(userId, &answer)
+		GDB.ExecSql(`insert into req_balance ( user_id, ip, uptime) values( ?, ?,  datetime('now'))`,
+							userId, ipval)
 	}
-	
-	r.ParseForm()
-
-	if len(r.URL.Path[1:]) > 0 || r.Method != `POST` {
-		result(`Wrong method or path`)
-		return
+	ret, err := json.Marshal(answer)
+	if err != nil {
+		ret = []byte(`{"success": false,
+					   "error":"Unknown error"}`)
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(ret)
+}
 
-*/
-	answer.Success = true
-
-	result(``)
+func statHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write([]byte(`{"success": true}`))
 }
 
 func main() {
@@ -117,7 +133,7 @@ func main() {
 	if utils.DB, err = utils.NewDbConnect(configIni); err != nil {
 		log.Fatalln(`Utils connect`, err)
 	}
-	
+
 	var list []string
 	if list, err = GDB.GetAllTables(); err == nil && len(list) == 0 {
 		if err = GDB.ExecSql(`CREATE TABLE balance (
@@ -143,13 +159,13 @@ func main() {
 			log.Fatalln(err)
 		}
 	}
-	os.Chdir(dir)	
+	os.Chdir(dir)
 	go daemon()
 
 	log.Println("Start")
-	
 
-	http.HandleFunc( `/`, statHandler)
+	http.HandleFunc(`/`, statHandler)
+	http.HandleFunc(`/balance`, balanceHandler)
 	http.ListenAndServe(fmt.Sprintf(":%d", GSettings.Port), nil)
 	log.Println("Finish")
 }
