@@ -38,7 +38,11 @@ func IndexGetPool(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		if _, err := w.Write([]byte(`{"pool":"`+poolHttpHost+`", "user_id":`+utils.Int64ToStr(getUserId)+`}`) ); err != nil {
+		answer := `{"pool":"`+poolHttpHost+`"}`
+		if len( publicKey ) > 0 {
+			answer = `{"pool":"`+poolHttpHost+`", "user_id":`+utils.Int64ToStr(getUserId)+`}`
+		}
+		if _, err := w.Write([]byte(answer)); err != nil {
 			log.Error("%v", err)
 		}
 
