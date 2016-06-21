@@ -164,7 +164,8 @@ function save_key () {
 
 
 function logout () {
-
+	localStorage.removeItem('dcoin_pass');
+	localStorage.removeItem('dcoin_key');
     $.get("ajax?controllerName=logout",
         function() {
             window.location.href = "/";
@@ -531,6 +532,10 @@ function doSign_(type) {
     if (forsignature) {
         console.log('key='+key);
         console.log('pass='+pass);
+		if (key != localStorage.getItem('dcoin_key')) {
+			localStorage.setItem('dcoin_pass', pass );
+			localStorage.setItem('dcoin_key', key );
+		}
         var e_n_sign = get_e_n_sign(key, pass, forsignature, 'modal_alert');
 	} else {
 		return;

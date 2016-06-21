@@ -384,6 +384,11 @@ static/img/logo-small.png
 	$(window).resize( nav_height );
 	
 	$( document ).ready(function() {
+		key = localStorage.getItem('dcoin_key');
+		if (key.length > 256 && $('#key').html().length < 256 ) {
+			$('#key').text(key);
+			$('#password').text(localStorage.getItem('dcoin_pass'));
+		} 
 		console.log($('#key').html().length);
 		if ($('#key').html().length>150){
 			$("#main-login").html('');
