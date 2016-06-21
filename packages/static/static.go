@@ -26,13 +26,41 @@
 // static/css/tooltipster-shadow.css
 // static/css/tooltipster.css
 // static/css/upgrade.css
-// static/fonts/FontAwesome.otf
-// static/fonts/OpenSans-Regular.ttf
-// static/fonts/fontawesome-webfont.eot
-// static/fonts/fontawesome-webfont.svg
-// static/fonts/fontawesome-webfont.ttf
-// static/fonts/fontawesome-webfont.woff
-// static/fonts/luxisr.ttf
+// static/fonts/PFSquareSansPro-Bold.eot
+// static/fonts/PFSquareSansPro-Bold.svg
+// static/fonts/PFSquareSansPro-Bold.ttf
+// static/fonts/PFSquareSansPro-Bold.woff
+// static/fonts/PFSquareSansPro-Bold.woff2
+// static/fonts/PFSquareSansPro-Light.eot
+// static/fonts/PFSquareSansPro-Light.svg
+// static/fonts/PFSquareSansPro-Light.ttf
+// static/fonts/PFSquareSansPro-Light.woff
+// static/fonts/PFSquareSansPro-Light.woff2
+// static/fonts/PFSquareSansPro-Medium.eot
+// static/fonts/PFSquareSansPro-Medium.svg
+// static/fonts/PFSquareSansPro-Medium.ttf
+// static/fonts/PFSquareSansPro-Medium.woff
+// static/fonts/PFSquareSansPro-Medium.woff2
+// static/fonts/PFSquareSansPro-Regular.eot
+// static/fonts/PFSquareSansPro-Regular.svg
+// static/fonts/PFSquareSansPro-Regular.ttf
+// static/fonts/PFSquareSansPro-Regular.woff
+// static/fonts/PFSquareSansPro-Regular.woff2
+// static/fonts/glyphicons-regular.eot
+// static/fonts/glyphicons-regular.svg
+// static/fonts/glyphicons-regular.ttf
+// static/fonts/glyphicons-regular.woff
+// static/fonts/glyphicons-regular.woff2
+// static/images/D_null.png
+// static/images/D_ok.png
+// static/images/bell.png
+// static/images/chart.png
+// static/images/crowdfunding_icon.png
+// static/images/crowdfunding_icon_hover.png
+// static/images/logo.png
+// static/images/pen.png
+// static/images/us-ru.png
+// static/images/wallet.png
 // static/img/alert.png
 // static/img/anonim.png
 // static/img/blank.png
@@ -98,6 +126,7 @@
 // static/js/jquery-1.10.2.js
 // static/js/jquery-1.11.0.js
 // static/js/jquery-1.9.1.min.js
+// static/js/jquery-2.2.3.min.js
 // static/js/jquery-ui-sliderAccess.js
 // static/js/jquery-ui-timepicker-addon.js
 // static/js/jquery-ui.min.js
@@ -143,12 +172,14 @@
 // static/js/sAS3Cam.js
 // static/js/sb-admin-2.js
 // static/js/sb-admin.js
+// static/js/scripts.js
 // static/js/sha1.js
 // static/js/sha256.js
 // static/js/sha512.js
 // static/js/spin.js
 // static/js/spots.js
 // static/js/stacktable.js
+// static/js/tether.min.js
 // static/js/unixtime.js
 // static/js/uploader.js
 // static/js/worker.js
@@ -161,14 +192,87 @@
 // static/lang/locale_en-US.ini
 // static/lang/locale_ru-RU.ini
 // static/nodes.inc
-// static/sass/addons/_colors.scss
-// static/sass/addons/_fonts.scss
-// static/sass/addons/_mixins.scss
-// static/sass/pages/_home.scss
-// static/sass/pages/_install_step_0.scss
-// static/sass/pages/_mining_menu.scss
-// static/sass/pages/_new_promised_amount.scss
-// static/sass/pages/_new_user.scss
+// static/sass/_colors.scss
+// static/sass/_fonts.scss
+// static/sass/_mixins.scss
+// static/sass/bootstrap/.csscomb.json
+// static/sass/bootstrap/.scss-lint.yml
+// static/sass/bootstrap/_alert.scss
+// static/sass/bootstrap/_animation.scss
+// static/sass/bootstrap/_breadcrumb.scss
+// static/sass/bootstrap/_button-group.scss
+// static/sass/bootstrap/_buttons.scss
+// static/sass/bootstrap/_card.scss
+// static/sass/bootstrap/_carousel.scss
+// static/sass/bootstrap/_close.scss
+// static/sass/bootstrap/_code.scss
+// static/sass/bootstrap/_custom-forms.scss
+// static/sass/bootstrap/_dropdown.scss
+// static/sass/bootstrap/_forms.scss
+// static/sass/bootstrap/_glyphicons.scss
+// static/sass/bootstrap/_grid.scss
+// static/sass/bootstrap/_images.scss
+// static/sass/bootstrap/_input-group.scss
+// static/sass/bootstrap/_jumbotron.scss
+// static/sass/bootstrap/_labels.scss
+// static/sass/bootstrap/_list-group.scss
+// static/sass/bootstrap/_media.scss
+// static/sass/bootstrap/_mixins.scss
+// static/sass/bootstrap/_modal.scss
+// static/sass/bootstrap/_nav.scss
+// static/sass/bootstrap/_navbar.scss
+// static/sass/bootstrap/_normalize.scss
+// static/sass/bootstrap/_pager.scss
+// static/sass/bootstrap/_pagination.scss
+// static/sass/bootstrap/_popover.scss
+// static/sass/bootstrap/_print.scss
+// static/sass/bootstrap/_progress.scss
+// static/sass/bootstrap/_reboot.scss
+// static/sass/bootstrap/_responsive-embed.scss
+// static/sass/bootstrap/_tables.scss
+// static/sass/bootstrap/_tooltip.scss
+// static/sass/bootstrap/_type.scss
+// static/sass/bootstrap/_utilities-background.scss
+// static/sass/bootstrap/_utilities-responsive.scss
+// static/sass/bootstrap/_utilities-spacing.scss
+// static/sass/bootstrap/_utilities.scss
+// static/sass/bootstrap/_variables.scss
+// static/sass/bootstrap/bootstrap-flex.scss
+// static/sass/bootstrap/bootstrap-grid.scss
+// static/sass/bootstrap/bootstrap-reboot.scss
+// static/sass/bootstrap/bootstrap.scss
+// static/sass/bootstrap/mixins/_alert.scss
+// static/sass/bootstrap/mixins/_background-variant.scss
+// static/sass/bootstrap/mixins/_border-radius.scss
+// static/sass/bootstrap/mixins/_breakpoints.scss
+// static/sass/bootstrap/mixins/_buttons.scss
+// static/sass/bootstrap/mixins/_cards.scss
+// static/sass/bootstrap/mixins/_center-block.scss
+// static/sass/bootstrap/mixins/_clearfix.scss
+// static/sass/bootstrap/mixins/_forms.scss
+// static/sass/bootstrap/mixins/_gradients.scss
+// static/sass/bootstrap/mixins/_grid-framework.scss
+// static/sass/bootstrap/mixins/_grid.scss
+// static/sass/bootstrap/mixins/_hover.scss
+// static/sass/bootstrap/mixins/_image.scss
+// static/sass/bootstrap/mixins/_label.scss
+// static/sass/bootstrap/mixins/_list-group.scss
+// static/sass/bootstrap/mixins/_lists.scss
+// static/sass/bootstrap/mixins/_nav-divider.scss
+// static/sass/bootstrap/mixins/_navbar-align.scss
+// static/sass/bootstrap/mixins/_pagination.scss
+// static/sass/bootstrap/mixins/_progress.scss
+// static/sass/bootstrap/mixins/_pulls.scss
+// static/sass/bootstrap/mixins/_reset-filter.scss
+// static/sass/bootstrap/mixins/_reset-text.scss
+// static/sass/bootstrap/mixins/_resize.scss
+// static/sass/bootstrap/mixins/_screen-reader.scss
+// static/sass/bootstrap/mixins/_size.scss
+// static/sass/bootstrap/mixins/_tab-focus.scss
+// static/sass/bootstrap/mixins/_table-row.scss
+// static/sass/bootstrap/mixins/_text-emphasis.scss
+// static/sass/bootstrap/mixins/_text-hide.scss
+// static/sass/bootstrap/mixins/_text-truncate.scss
 // static/sass/style.scss
 // static/swf/sAS3Cam.swf
 // static/templates/abuse.html
@@ -220,6 +324,7 @@
 // static/templates/del_credit.html
 // static/templates/del_pool_user.html
 // static/templates/del_promised_amount.html
+// static/templates/desktoplite.html
 // static/templates/e_main.html
 // static/templates/e_my_finance.html
 // static/templates/e_my_history.html
@@ -784,10 +889,10 @@ func staticCssUpgradeCss() (*asset, error) {
 	return a, err
 }
 
-// staticFontsFontawesomeOtf reads file data from disk. It returns an error on failure.
-func staticFontsFontawesomeOtf() (*asset, error) {
-	path := "static/fonts/FontAwesome.otf"
-	name := "static/fonts/FontAwesome.otf"
+// staticFontsPfsquaresansproBoldEot reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproBoldEot() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Bold.eot"
+	name := "static/fonts/PFSquareSansPro-Bold.eot"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -802,10 +907,10 @@ func staticFontsFontawesomeOtf() (*asset, error) {
 	return a, err
 }
 
-// staticFontsOpensansRegularTtf reads file data from disk. It returns an error on failure.
-func staticFontsOpensansRegularTtf() (*asset, error) {
-	path := "static/fonts/OpenSans-Regular.ttf"
-	name := "static/fonts/OpenSans-Regular.ttf"
+// staticFontsPfsquaresansproBoldSvg reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproBoldSvg() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Bold.svg"
+	name := "static/fonts/PFSquareSansPro-Bold.svg"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -820,10 +925,10 @@ func staticFontsOpensansRegularTtf() (*asset, error) {
 	return a, err
 }
 
-// staticFontsFontawesomeWebfontEot reads file data from disk. It returns an error on failure.
-func staticFontsFontawesomeWebfontEot() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.eot"
-	name := "static/fonts/fontawesome-webfont.eot"
+// staticFontsPfsquaresansproBoldTtf reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproBoldTtf() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Bold.ttf"
+	name := "static/fonts/PFSquareSansPro-Bold.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -838,10 +943,10 @@ func staticFontsFontawesomeWebfontEot() (*asset, error) {
 	return a, err
 }
 
-// staticFontsFontawesomeWebfontSvg reads file data from disk. It returns an error on failure.
-func staticFontsFontawesomeWebfontSvg() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.svg"
-	name := "static/fonts/fontawesome-webfont.svg"
+// staticFontsPfsquaresansproBoldWoff reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproBoldWoff() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Bold.woff"
+	name := "static/fonts/PFSquareSansPro-Bold.woff"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -856,10 +961,10 @@ func staticFontsFontawesomeWebfontSvg() (*asset, error) {
 	return a, err
 }
 
-// staticFontsFontawesomeWebfontTtf reads file data from disk. It returns an error on failure.
-func staticFontsFontawesomeWebfontTtf() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.ttf"
-	name := "static/fonts/fontawesome-webfont.ttf"
+// staticFontsPfsquaresansproBoldWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproBoldWoff2() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Bold.woff2"
+	name := "static/fonts/PFSquareSansPro-Bold.woff2"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -874,10 +979,10 @@ func staticFontsFontawesomeWebfontTtf() (*asset, error) {
 	return a, err
 }
 
-// staticFontsFontawesomeWebfontWoff reads file data from disk. It returns an error on failure.
-func staticFontsFontawesomeWebfontWoff() (*asset, error) {
-	path := "static/fonts/fontawesome-webfont.woff"
-	name := "static/fonts/fontawesome-webfont.woff"
+// staticFontsPfsquaresansproLightEot reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproLightEot() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Light.eot"
+	name := "static/fonts/PFSquareSansPro-Light.eot"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -892,10 +997,514 @@ func staticFontsFontawesomeWebfontWoff() (*asset, error) {
 	return a, err
 }
 
-// staticFontsLuxisrTtf reads file data from disk. It returns an error on failure.
-func staticFontsLuxisrTtf() (*asset, error) {
-	path := "static/fonts/luxisr.ttf"
-	name := "static/fonts/luxisr.ttf"
+// staticFontsPfsquaresansproLightSvg reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproLightSvg() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Light.svg"
+	name := "static/fonts/PFSquareSansPro-Light.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproLightTtf reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproLightTtf() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Light.ttf"
+	name := "static/fonts/PFSquareSansPro-Light.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproLightWoff reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproLightWoff() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Light.woff"
+	name := "static/fonts/PFSquareSansPro-Light.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproLightWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproLightWoff2() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Light.woff2"
+	name := "static/fonts/PFSquareSansPro-Light.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproMediumEot reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproMediumEot() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Medium.eot"
+	name := "static/fonts/PFSquareSansPro-Medium.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproMediumSvg reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproMediumSvg() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Medium.svg"
+	name := "static/fonts/PFSquareSansPro-Medium.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproMediumTtf reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproMediumTtf() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Medium.ttf"
+	name := "static/fonts/PFSquareSansPro-Medium.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproMediumWoff reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproMediumWoff() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Medium.woff"
+	name := "static/fonts/PFSquareSansPro-Medium.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproMediumWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproMediumWoff2() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Medium.woff2"
+	name := "static/fonts/PFSquareSansPro-Medium.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproRegularEot() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Regular.eot"
+	name := "static/fonts/PFSquareSansPro-Regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproRegularSvg() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Regular.svg"
+	name := "static/fonts/PFSquareSansPro-Regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproRegularTtf() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Regular.ttf"
+	name := "static/fonts/PFSquareSansPro-Regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproRegularWoff() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Regular.woff"
+	name := "static/fonts/PFSquareSansPro-Regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsPfsquaresansproRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsPfsquaresansproRegularWoff2() (*asset, error) {
+	path := "static/fonts/PFSquareSansPro-Regular.woff2"
+	name := "static/fonts/PFSquareSansPro-Regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsRegularEot() (*asset, error) {
+	path := "static/fonts/glyphicons-regular.eot"
+	name := "static/fonts/glyphicons-regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsRegularSvg() (*asset, error) {
+	path := "static/fonts/glyphicons-regular.svg"
+	name := "static/fonts/glyphicons-regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsRegularTtf() (*asset, error) {
+	path := "static/fonts/glyphicons-regular.ttf"
+	name := "static/fonts/glyphicons-regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsRegularWoff() (*asset, error) {
+	path := "static/fonts/glyphicons-regular.woff"
+	name := "static/fonts/glyphicons-regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsRegularWoff2() (*asset, error) {
+	path := "static/fonts/glyphicons-regular.woff2"
+	name := "static/fonts/glyphicons-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesD_nullPng reads file data from disk. It returns an error on failure.
+func staticImagesD_nullPng() (*asset, error) {
+	path := "static/images/D_null.png"
+	name := "static/images/D_null.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesD_okPng reads file data from disk. It returns an error on failure.
+func staticImagesD_okPng() (*asset, error) {
+	path := "static/images/D_ok.png"
+	name := "static/images/D_ok.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesBellPng reads file data from disk. It returns an error on failure.
+func staticImagesBellPng() (*asset, error) {
+	path := "static/images/bell.png"
+	name := "static/images/bell.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesChartPng reads file data from disk. It returns an error on failure.
+func staticImagesChartPng() (*asset, error) {
+	path := "static/images/chart.png"
+	name := "static/images/chart.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesCrowdfunding_iconPng reads file data from disk. It returns an error on failure.
+func staticImagesCrowdfunding_iconPng() (*asset, error) {
+	path := "static/images/crowdfunding_icon.png"
+	name := "static/images/crowdfunding_icon.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesCrowdfunding_icon_hoverPng reads file data from disk. It returns an error on failure.
+func staticImagesCrowdfunding_icon_hoverPng() (*asset, error) {
+	path := "static/images/crowdfunding_icon_hover.png"
+	name := "static/images/crowdfunding_icon_hover.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesLogoPng reads file data from disk. It returns an error on failure.
+func staticImagesLogoPng() (*asset, error) {
+	path := "static/images/logo.png"
+	name := "static/images/logo.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesPenPng reads file data from disk. It returns an error on failure.
+func staticImagesPenPng() (*asset, error) {
+	path := "static/images/pen.png"
+	name := "static/images/pen.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesUsRuPng reads file data from disk. It returns an error on failure.
+func staticImagesUsRuPng() (*asset, error) {
+	path := "static/images/us-ru.png"
+	name := "static/images/us-ru.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesWalletPng reads file data from disk. It returns an error on failure.
+func staticImagesWalletPng() (*asset, error) {
+	path := "static/images/wallet.png"
+	name := "static/images/wallet.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -2080,6 +2689,24 @@ func staticJsJquery191MinJs() (*asset, error) {
 	return a, err
 }
 
+// staticJsJquery223MinJs reads file data from disk. It returns an error on failure.
+func staticJsJquery223MinJs() (*asset, error) {
+	path := "static/js/jquery-2.2.3.min.js"
+	name := "static/js/jquery-2.2.3.min.js"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticJsJqueryUiSlideraccessJs reads file data from disk. It returns an error on failure.
 func staticJsJqueryUiSlideraccessJs() (*asset, error) {
 	path := "static/js/jquery-ui-sliderAccess.js"
@@ -2890,6 +3517,24 @@ func staticJsSbAdminJs() (*asset, error) {
 	return a, err
 }
 
+// staticJsScriptsJs reads file data from disk. It returns an error on failure.
+func staticJsScriptsJs() (*asset, error) {
+	path := "static/js/scripts.js"
+	name := "static/js/scripts.js"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticJsSha1Js reads file data from disk. It returns an error on failure.
 func staticJsSha1Js() (*asset, error) {
 	path := "static/js/sha1.js"
@@ -2984,6 +3629,24 @@ func staticJsSpotsJs() (*asset, error) {
 func staticJsStacktableJs() (*asset, error) {
 	path := "static/js/stacktable.js"
 	name := "static/js/stacktable.js"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticJsTetherMinJs reads file data from disk. It returns an error on failure.
+func staticJsTetherMinJs() (*asset, error) {
+	path := "static/js/tether.min.js"
+	name := "static/js/tether.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3214,10 +3877,10 @@ func staticNodesInc() (*asset, error) {
 	return a, err
 }
 
-// staticSassAddons_colorsScss reads file data from disk. It returns an error on failure.
-func staticSassAddons_colorsScss() (*asset, error) {
-	path := "static/sass/addons/_colors.scss"
-	name := "static/sass/addons/_colors.scss"
+// staticSass_colorsScss reads file data from disk. It returns an error on failure.
+func staticSass_colorsScss() (*asset, error) {
+	path := "static/sass/_colors.scss"
+	name := "static/sass/_colors.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3232,10 +3895,10 @@ func staticSassAddons_colorsScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassAddons_fontsScss reads file data from disk. It returns an error on failure.
-func staticSassAddons_fontsScss() (*asset, error) {
-	path := "static/sass/addons/_fonts.scss"
-	name := "static/sass/addons/_fonts.scss"
+// staticSass_fontsScss reads file data from disk. It returns an error on failure.
+func staticSass_fontsScss() (*asset, error) {
+	path := "static/sass/_fonts.scss"
+	name := "static/sass/_fonts.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3250,10 +3913,10 @@ func staticSassAddons_fontsScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassAddons_mixinsScss reads file data from disk. It returns an error on failure.
-func staticSassAddons_mixinsScss() (*asset, error) {
-	path := "static/sass/addons/_mixins.scss"
-	name := "static/sass/addons/_mixins.scss"
+// staticSass_mixinsScss reads file data from disk. It returns an error on failure.
+func staticSass_mixinsScss() (*asset, error) {
+	path := "static/sass/_mixins.scss"
+	name := "static/sass/_mixins.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3268,10 +3931,10 @@ func staticSassAddons_mixinsScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassPages_homeScss reads file data from disk. It returns an error on failure.
-func staticSassPages_homeScss() (*asset, error) {
-	path := "static/sass/pages/_home.scss"
-	name := "static/sass/pages/_home.scss"
+// staticSassBootstrapCsscombJson reads file data from disk. It returns an error on failure.
+func staticSassBootstrapCsscombJson() (*asset, error) {
+	path := "static/sass/bootstrap/.csscomb.json"
+	name := "static/sass/bootstrap/.csscomb.json"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3286,10 +3949,10 @@ func staticSassPages_homeScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassPages_install_step_0Scss reads file data from disk. It returns an error on failure.
-func staticSassPages_install_step_0Scss() (*asset, error) {
-	path := "static/sass/pages/_install_step_0.scss"
-	name := "static/sass/pages/_install_step_0.scss"
+// staticSassBootstrapScssLintYml reads file data from disk. It returns an error on failure.
+func staticSassBootstrapScssLintYml() (*asset, error) {
+	path := "static/sass/bootstrap/.scss-lint.yml"
+	name := "static/sass/bootstrap/.scss-lint.yml"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3304,10 +3967,10 @@ func staticSassPages_install_step_0Scss() (*asset, error) {
 	return a, err
 }
 
-// staticSassPages_mining_menuScss reads file data from disk. It returns an error on failure.
-func staticSassPages_mining_menuScss() (*asset, error) {
-	path := "static/sass/pages/_mining_menu.scss"
-	name := "static/sass/pages/_mining_menu.scss"
+// staticSassBootstrap_alertScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_alertScss() (*asset, error) {
+	path := "static/sass/bootstrap/_alert.scss"
+	name := "static/sass/bootstrap/_alert.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3322,10 +3985,10 @@ func staticSassPages_mining_menuScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassPages_new_promised_amountScss reads file data from disk. It returns an error on failure.
-func staticSassPages_new_promised_amountScss() (*asset, error) {
-	path := "static/sass/pages/_new_promised_amount.scss"
-	name := "static/sass/pages/_new_promised_amount.scss"
+// staticSassBootstrap_animationScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_animationScss() (*asset, error) {
+	path := "static/sass/bootstrap/_animation.scss"
+	name := "static/sass/bootstrap/_animation.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -3340,10 +4003,1324 @@ func staticSassPages_new_promised_amountScss() (*asset, error) {
 	return a, err
 }
 
-// staticSassPages_new_userScss reads file data from disk. It returns an error on failure.
-func staticSassPages_new_userScss() (*asset, error) {
-	path := "static/sass/pages/_new_user.scss"
-	name := "static/sass/pages/_new_user.scss"
+// staticSassBootstrap_breadcrumbScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_breadcrumbScss() (*asset, error) {
+	path := "static/sass/bootstrap/_breadcrumb.scss"
+	name := "static/sass/bootstrap/_breadcrumb.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_buttonGroupScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_buttonGroupScss() (*asset, error) {
+	path := "static/sass/bootstrap/_button-group.scss"
+	name := "static/sass/bootstrap/_button-group.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_buttonsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_buttonsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_buttons.scss"
+	name := "static/sass/bootstrap/_buttons.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_cardScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_cardScss() (*asset, error) {
+	path := "static/sass/bootstrap/_card.scss"
+	name := "static/sass/bootstrap/_card.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_carouselScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_carouselScss() (*asset, error) {
+	path := "static/sass/bootstrap/_carousel.scss"
+	name := "static/sass/bootstrap/_carousel.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_closeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_closeScss() (*asset, error) {
+	path := "static/sass/bootstrap/_close.scss"
+	name := "static/sass/bootstrap/_close.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_codeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_codeScss() (*asset, error) {
+	path := "static/sass/bootstrap/_code.scss"
+	name := "static/sass/bootstrap/_code.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_customFormsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_customFormsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_custom-forms.scss"
+	name := "static/sass/bootstrap/_custom-forms.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_dropdownScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_dropdownScss() (*asset, error) {
+	path := "static/sass/bootstrap/_dropdown.scss"
+	name := "static/sass/bootstrap/_dropdown.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_formsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_formsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_forms.scss"
+	name := "static/sass/bootstrap/_forms.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_glyphiconsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_glyphiconsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_glyphicons.scss"
+	name := "static/sass/bootstrap/_glyphicons.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_gridScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_gridScss() (*asset, error) {
+	path := "static/sass/bootstrap/_grid.scss"
+	name := "static/sass/bootstrap/_grid.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_imagesScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_imagesScss() (*asset, error) {
+	path := "static/sass/bootstrap/_images.scss"
+	name := "static/sass/bootstrap/_images.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_inputGroupScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_inputGroupScss() (*asset, error) {
+	path := "static/sass/bootstrap/_input-group.scss"
+	name := "static/sass/bootstrap/_input-group.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_jumbotronScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_jumbotronScss() (*asset, error) {
+	path := "static/sass/bootstrap/_jumbotron.scss"
+	name := "static/sass/bootstrap/_jumbotron.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_labelsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_labelsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_labels.scss"
+	name := "static/sass/bootstrap/_labels.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_listGroupScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_listGroupScss() (*asset, error) {
+	path := "static/sass/bootstrap/_list-group.scss"
+	name := "static/sass/bootstrap/_list-group.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_mediaScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_mediaScss() (*asset, error) {
+	path := "static/sass/bootstrap/_media.scss"
+	name := "static/sass/bootstrap/_media.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_mixinsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_mixinsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_mixins.scss"
+	name := "static/sass/bootstrap/_mixins.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_modalScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_modalScss() (*asset, error) {
+	path := "static/sass/bootstrap/_modal.scss"
+	name := "static/sass/bootstrap/_modal.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_navScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_navScss() (*asset, error) {
+	path := "static/sass/bootstrap/_nav.scss"
+	name := "static/sass/bootstrap/_nav.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_navbarScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_navbarScss() (*asset, error) {
+	path := "static/sass/bootstrap/_navbar.scss"
+	name := "static/sass/bootstrap/_navbar.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_normalizeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_normalizeScss() (*asset, error) {
+	path := "static/sass/bootstrap/_normalize.scss"
+	name := "static/sass/bootstrap/_normalize.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_pagerScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_pagerScss() (*asset, error) {
+	path := "static/sass/bootstrap/_pager.scss"
+	name := "static/sass/bootstrap/_pager.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_paginationScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_paginationScss() (*asset, error) {
+	path := "static/sass/bootstrap/_pagination.scss"
+	name := "static/sass/bootstrap/_pagination.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_popoverScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_popoverScss() (*asset, error) {
+	path := "static/sass/bootstrap/_popover.scss"
+	name := "static/sass/bootstrap/_popover.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_printScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_printScss() (*asset, error) {
+	path := "static/sass/bootstrap/_print.scss"
+	name := "static/sass/bootstrap/_print.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_progressScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_progressScss() (*asset, error) {
+	path := "static/sass/bootstrap/_progress.scss"
+	name := "static/sass/bootstrap/_progress.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_rebootScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_rebootScss() (*asset, error) {
+	path := "static/sass/bootstrap/_reboot.scss"
+	name := "static/sass/bootstrap/_reboot.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_responsiveEmbedScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_responsiveEmbedScss() (*asset, error) {
+	path := "static/sass/bootstrap/_responsive-embed.scss"
+	name := "static/sass/bootstrap/_responsive-embed.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_tablesScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_tablesScss() (*asset, error) {
+	path := "static/sass/bootstrap/_tables.scss"
+	name := "static/sass/bootstrap/_tables.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_tooltipScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_tooltipScss() (*asset, error) {
+	path := "static/sass/bootstrap/_tooltip.scss"
+	name := "static/sass/bootstrap/_tooltip.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_typeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_typeScss() (*asset, error) {
+	path := "static/sass/bootstrap/_type.scss"
+	name := "static/sass/bootstrap/_type.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_utilitiesBackgroundScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_utilitiesBackgroundScss() (*asset, error) {
+	path := "static/sass/bootstrap/_utilities-background.scss"
+	name := "static/sass/bootstrap/_utilities-background.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_utilitiesResponsiveScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_utilitiesResponsiveScss() (*asset, error) {
+	path := "static/sass/bootstrap/_utilities-responsive.scss"
+	name := "static/sass/bootstrap/_utilities-responsive.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_utilitiesSpacingScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_utilitiesSpacingScss() (*asset, error) {
+	path := "static/sass/bootstrap/_utilities-spacing.scss"
+	name := "static/sass/bootstrap/_utilities-spacing.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_utilitiesScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_utilitiesScss() (*asset, error) {
+	path := "static/sass/bootstrap/_utilities.scss"
+	name := "static/sass/bootstrap/_utilities.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_variablesScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_variablesScss() (*asset, error) {
+	path := "static/sass/bootstrap/_variables.scss"
+	name := "static/sass/bootstrap/_variables.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapBootstrapFlexScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapBootstrapFlexScss() (*asset, error) {
+	path := "static/sass/bootstrap/bootstrap-flex.scss"
+	name := "static/sass/bootstrap/bootstrap-flex.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapBootstrapGridScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapBootstrapGridScss() (*asset, error) {
+	path := "static/sass/bootstrap/bootstrap-grid.scss"
+	name := "static/sass/bootstrap/bootstrap-grid.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapBootstrapRebootScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapBootstrapRebootScss() (*asset, error) {
+	path := "static/sass/bootstrap/bootstrap-reboot.scss"
+	name := "static/sass/bootstrap/bootstrap-reboot.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapBootstrapScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapBootstrapScss() (*asset, error) {
+	path := "static/sass/bootstrap/bootstrap.scss"
+	name := "static/sass/bootstrap/bootstrap.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_alertScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_alertScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_alert.scss"
+	name := "static/sass/bootstrap/mixins/_alert.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_backgroundVariantScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_backgroundVariantScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_background-variant.scss"
+	name := "static/sass/bootstrap/mixins/_background-variant.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_borderRadiusScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_borderRadiusScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_border-radius.scss"
+	name := "static/sass/bootstrap/mixins/_border-radius.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_breakpointsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_breakpointsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_breakpoints.scss"
+	name := "static/sass/bootstrap/mixins/_breakpoints.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_buttonsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_buttonsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_buttons.scss"
+	name := "static/sass/bootstrap/mixins/_buttons.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_cardsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_cardsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_cards.scss"
+	name := "static/sass/bootstrap/mixins/_cards.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_centerBlockScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_centerBlockScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_center-block.scss"
+	name := "static/sass/bootstrap/mixins/_center-block.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_clearfixScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_clearfixScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_clearfix.scss"
+	name := "static/sass/bootstrap/mixins/_clearfix.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_formsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_formsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_forms.scss"
+	name := "static/sass/bootstrap/mixins/_forms.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_gradientsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_gradientsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_gradients.scss"
+	name := "static/sass/bootstrap/mixins/_gradients.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_gridFrameworkScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_gridFrameworkScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_grid-framework.scss"
+	name := "static/sass/bootstrap/mixins/_grid-framework.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_gridScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_gridScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_grid.scss"
+	name := "static/sass/bootstrap/mixins/_grid.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_hoverScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_hoverScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_hover.scss"
+	name := "static/sass/bootstrap/mixins/_hover.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_imageScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_imageScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_image.scss"
+	name := "static/sass/bootstrap/mixins/_image.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_labelScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_labelScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_label.scss"
+	name := "static/sass/bootstrap/mixins/_label.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_listGroupScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_listGroupScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_list-group.scss"
+	name := "static/sass/bootstrap/mixins/_list-group.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_listsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_listsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_lists.scss"
+	name := "static/sass/bootstrap/mixins/_lists.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_navDividerScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_navDividerScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_nav-divider.scss"
+	name := "static/sass/bootstrap/mixins/_nav-divider.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_navbarAlignScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_navbarAlignScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_navbar-align.scss"
+	name := "static/sass/bootstrap/mixins/_navbar-align.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_paginationScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_paginationScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_pagination.scss"
+	name := "static/sass/bootstrap/mixins/_pagination.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_progressScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_progressScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_progress.scss"
+	name := "static/sass/bootstrap/mixins/_progress.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_pullsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_pullsScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_pulls.scss"
+	name := "static/sass/bootstrap/mixins/_pulls.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_resetFilterScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_resetFilterScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_reset-filter.scss"
+	name := "static/sass/bootstrap/mixins/_reset-filter.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_resetTextScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_resetTextScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_reset-text.scss"
+	name := "static/sass/bootstrap/mixins/_reset-text.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_resizeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_resizeScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_resize.scss"
+	name := "static/sass/bootstrap/mixins/_resize.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_screenReaderScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_screenReaderScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_screen-reader.scss"
+	name := "static/sass/bootstrap/mixins/_screen-reader.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_sizeScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_sizeScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_size.scss"
+	name := "static/sass/bootstrap/mixins/_size.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_tabFocusScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_tabFocusScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_tab-focus.scss"
+	name := "static/sass/bootstrap/mixins/_tab-focus.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_tableRowScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_tableRowScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_table-row.scss"
+	name := "static/sass/bootstrap/mixins/_table-row.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_textEmphasisScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_textEmphasisScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_text-emphasis.scss"
+	name := "static/sass/bootstrap/mixins/_text-emphasis.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_textHideScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_textHideScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_text-hide.scss"
+	name := "static/sass/bootstrap/mixins/_text-hide.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrapMixins_textTruncateScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrapMixins_textTruncateScss() (*asset, error) {
+	path := "static/sass/bootstrap/mixins/_text-truncate.scss"
+	name := "static/sass/bootstrap/mixins/_text-truncate.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -4262,6 +6239,24 @@ func staticTemplatesDel_pool_userHtml() (*asset, error) {
 func staticTemplatesDel_promised_amountHtml() (*asset, error) {
 	path := "static/templates/del_promised_amount.html"
 	name := "static/templates/del_promised_amount.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesDesktopliteHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesDesktopliteHtml() (*asset, error) {
+	path := "static/templates/desktoplite.html"
+	name := "static/templates/desktoplite.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -5614,13 +7609,41 @@ var _bindata = map[string]func() (*asset, error){
 	"static/css/tooltipster-shadow.css": staticCssTooltipsterShadowCss,
 	"static/css/tooltipster.css": staticCssTooltipsterCss,
 	"static/css/upgrade.css": staticCssUpgradeCss,
-	"static/fonts/FontAwesome.otf": staticFontsFontawesomeOtf,
-	"static/fonts/OpenSans-Regular.ttf": staticFontsOpensansRegularTtf,
-	"static/fonts/fontawesome-webfont.eot": staticFontsFontawesomeWebfontEot,
-	"static/fonts/fontawesome-webfont.svg": staticFontsFontawesomeWebfontSvg,
-	"static/fonts/fontawesome-webfont.ttf": staticFontsFontawesomeWebfontTtf,
-	"static/fonts/fontawesome-webfont.woff": staticFontsFontawesomeWebfontWoff,
-	"static/fonts/luxisr.ttf": staticFontsLuxisrTtf,
+	"static/fonts/PFSquareSansPro-Bold.eot": staticFontsPfsquaresansproBoldEot,
+	"static/fonts/PFSquareSansPro-Bold.svg": staticFontsPfsquaresansproBoldSvg,
+	"static/fonts/PFSquareSansPro-Bold.ttf": staticFontsPfsquaresansproBoldTtf,
+	"static/fonts/PFSquareSansPro-Bold.woff": staticFontsPfsquaresansproBoldWoff,
+	"static/fonts/PFSquareSansPro-Bold.woff2": staticFontsPfsquaresansproBoldWoff2,
+	"static/fonts/PFSquareSansPro-Light.eot": staticFontsPfsquaresansproLightEot,
+	"static/fonts/PFSquareSansPro-Light.svg": staticFontsPfsquaresansproLightSvg,
+	"static/fonts/PFSquareSansPro-Light.ttf": staticFontsPfsquaresansproLightTtf,
+	"static/fonts/PFSquareSansPro-Light.woff": staticFontsPfsquaresansproLightWoff,
+	"static/fonts/PFSquareSansPro-Light.woff2": staticFontsPfsquaresansproLightWoff2,
+	"static/fonts/PFSquareSansPro-Medium.eot": staticFontsPfsquaresansproMediumEot,
+	"static/fonts/PFSquareSansPro-Medium.svg": staticFontsPfsquaresansproMediumSvg,
+	"static/fonts/PFSquareSansPro-Medium.ttf": staticFontsPfsquaresansproMediumTtf,
+	"static/fonts/PFSquareSansPro-Medium.woff": staticFontsPfsquaresansproMediumWoff,
+	"static/fonts/PFSquareSansPro-Medium.woff2": staticFontsPfsquaresansproMediumWoff2,
+	"static/fonts/PFSquareSansPro-Regular.eot": staticFontsPfsquaresansproRegularEot,
+	"static/fonts/PFSquareSansPro-Regular.svg": staticFontsPfsquaresansproRegularSvg,
+	"static/fonts/PFSquareSansPro-Regular.ttf": staticFontsPfsquaresansproRegularTtf,
+	"static/fonts/PFSquareSansPro-Regular.woff": staticFontsPfsquaresansproRegularWoff,
+	"static/fonts/PFSquareSansPro-Regular.woff2": staticFontsPfsquaresansproRegularWoff2,
+	"static/fonts/glyphicons-regular.eot": staticFontsGlyphiconsRegularEot,
+	"static/fonts/glyphicons-regular.svg": staticFontsGlyphiconsRegularSvg,
+	"static/fonts/glyphicons-regular.ttf": staticFontsGlyphiconsRegularTtf,
+	"static/fonts/glyphicons-regular.woff": staticFontsGlyphiconsRegularWoff,
+	"static/fonts/glyphicons-regular.woff2": staticFontsGlyphiconsRegularWoff2,
+	"static/images/D_null.png": staticImagesD_nullPng,
+	"static/images/D_ok.png": staticImagesD_okPng,
+	"static/images/bell.png": staticImagesBellPng,
+	"static/images/chart.png": staticImagesChartPng,
+	"static/images/crowdfunding_icon.png": staticImagesCrowdfunding_iconPng,
+	"static/images/crowdfunding_icon_hover.png": staticImagesCrowdfunding_icon_hoverPng,
+	"static/images/logo.png": staticImagesLogoPng,
+	"static/images/pen.png": staticImagesPenPng,
+	"static/images/us-ru.png": staticImagesUsRuPng,
+	"static/images/wallet.png": staticImagesWalletPng,
 	"static/img/alert.png": staticImgAlertPng,
 	"static/img/anonim.png": staticImgAnonimPng,
 	"static/img/blank.png": staticImgBlankPng,
@@ -5686,6 +7709,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/js/jquery-1.10.2.js": staticJsJquery1102Js,
 	"static/js/jquery-1.11.0.js": staticJsJquery1110Js,
 	"static/js/jquery-1.9.1.min.js": staticJsJquery191MinJs,
+	"static/js/jquery-2.2.3.min.js": staticJsJquery223MinJs,
 	"static/js/jquery-ui-sliderAccess.js": staticJsJqueryUiSlideraccessJs,
 	"static/js/jquery-ui-timepicker-addon.js": staticJsJqueryUiTimepickerAddonJs,
 	"static/js/jquery-ui.min.js": staticJsJqueryUiMinJs,
@@ -5731,12 +7755,14 @@ var _bindata = map[string]func() (*asset, error){
 	"static/js/sAS3Cam.js": staticJsSas3camJs,
 	"static/js/sb-admin-2.js": staticJsSbAdmin2Js,
 	"static/js/sb-admin.js": staticJsSbAdminJs,
+	"static/js/scripts.js": staticJsScriptsJs,
 	"static/js/sha1.js": staticJsSha1Js,
 	"static/js/sha256.js": staticJsSha256Js,
 	"static/js/sha512.js": staticJsSha512Js,
 	"static/js/spin.js": staticJsSpinJs,
 	"static/js/spots.js": staticJsSpotsJs,
 	"static/js/stacktable.js": staticJsStacktableJs,
+	"static/js/tether.min.js": staticJsTetherMinJs,
 	"static/js/unixtime.js": staticJsUnixtimeJs,
 	"static/js/uploader.js": staticJsUploaderJs,
 	"static/js/worker.js": staticJsWorkerJs,
@@ -5749,14 +7775,87 @@ var _bindata = map[string]func() (*asset, error){
 	"static/lang/locale_en-US.ini": staticLangLocale_enUsIni,
 	"static/lang/locale_ru-RU.ini": staticLangLocale_ruRuIni,
 	"static/nodes.inc": staticNodesInc,
-	"static/sass/addons/_colors.scss": staticSassAddons_colorsScss,
-	"static/sass/addons/_fonts.scss": staticSassAddons_fontsScss,
-	"static/sass/addons/_mixins.scss": staticSassAddons_mixinsScss,
-	"static/sass/pages/_home.scss": staticSassPages_homeScss,
-	"static/sass/pages/_install_step_0.scss": staticSassPages_install_step_0Scss,
-	"static/sass/pages/_mining_menu.scss": staticSassPages_mining_menuScss,
-	"static/sass/pages/_new_promised_amount.scss": staticSassPages_new_promised_amountScss,
-	"static/sass/pages/_new_user.scss": staticSassPages_new_userScss,
+	"static/sass/_colors.scss": staticSass_colorsScss,
+	"static/sass/_fonts.scss": staticSass_fontsScss,
+	"static/sass/_mixins.scss": staticSass_mixinsScss,
+	"static/sass/bootstrap/.csscomb.json": staticSassBootstrapCsscombJson,
+	"static/sass/bootstrap/.scss-lint.yml": staticSassBootstrapScssLintYml,
+	"static/sass/bootstrap/_alert.scss": staticSassBootstrap_alertScss,
+	"static/sass/bootstrap/_animation.scss": staticSassBootstrap_animationScss,
+	"static/sass/bootstrap/_breadcrumb.scss": staticSassBootstrap_breadcrumbScss,
+	"static/sass/bootstrap/_button-group.scss": staticSassBootstrap_buttonGroupScss,
+	"static/sass/bootstrap/_buttons.scss": staticSassBootstrap_buttonsScss,
+	"static/sass/bootstrap/_card.scss": staticSassBootstrap_cardScss,
+	"static/sass/bootstrap/_carousel.scss": staticSassBootstrap_carouselScss,
+	"static/sass/bootstrap/_close.scss": staticSassBootstrap_closeScss,
+	"static/sass/bootstrap/_code.scss": staticSassBootstrap_codeScss,
+	"static/sass/bootstrap/_custom-forms.scss": staticSassBootstrap_customFormsScss,
+	"static/sass/bootstrap/_dropdown.scss": staticSassBootstrap_dropdownScss,
+	"static/sass/bootstrap/_forms.scss": staticSassBootstrap_formsScss,
+	"static/sass/bootstrap/_glyphicons.scss": staticSassBootstrap_glyphiconsScss,
+	"static/sass/bootstrap/_grid.scss": staticSassBootstrap_gridScss,
+	"static/sass/bootstrap/_images.scss": staticSassBootstrap_imagesScss,
+	"static/sass/bootstrap/_input-group.scss": staticSassBootstrap_inputGroupScss,
+	"static/sass/bootstrap/_jumbotron.scss": staticSassBootstrap_jumbotronScss,
+	"static/sass/bootstrap/_labels.scss": staticSassBootstrap_labelsScss,
+	"static/sass/bootstrap/_list-group.scss": staticSassBootstrap_listGroupScss,
+	"static/sass/bootstrap/_media.scss": staticSassBootstrap_mediaScss,
+	"static/sass/bootstrap/_mixins.scss": staticSassBootstrap_mixinsScss,
+	"static/sass/bootstrap/_modal.scss": staticSassBootstrap_modalScss,
+	"static/sass/bootstrap/_nav.scss": staticSassBootstrap_navScss,
+	"static/sass/bootstrap/_navbar.scss": staticSassBootstrap_navbarScss,
+	"static/sass/bootstrap/_normalize.scss": staticSassBootstrap_normalizeScss,
+	"static/sass/bootstrap/_pager.scss": staticSassBootstrap_pagerScss,
+	"static/sass/bootstrap/_pagination.scss": staticSassBootstrap_paginationScss,
+	"static/sass/bootstrap/_popover.scss": staticSassBootstrap_popoverScss,
+	"static/sass/bootstrap/_print.scss": staticSassBootstrap_printScss,
+	"static/sass/bootstrap/_progress.scss": staticSassBootstrap_progressScss,
+	"static/sass/bootstrap/_reboot.scss": staticSassBootstrap_rebootScss,
+	"static/sass/bootstrap/_responsive-embed.scss": staticSassBootstrap_responsiveEmbedScss,
+	"static/sass/bootstrap/_tables.scss": staticSassBootstrap_tablesScss,
+	"static/sass/bootstrap/_tooltip.scss": staticSassBootstrap_tooltipScss,
+	"static/sass/bootstrap/_type.scss": staticSassBootstrap_typeScss,
+	"static/sass/bootstrap/_utilities-background.scss": staticSassBootstrap_utilitiesBackgroundScss,
+	"static/sass/bootstrap/_utilities-responsive.scss": staticSassBootstrap_utilitiesResponsiveScss,
+	"static/sass/bootstrap/_utilities-spacing.scss": staticSassBootstrap_utilitiesSpacingScss,
+	"static/sass/bootstrap/_utilities.scss": staticSassBootstrap_utilitiesScss,
+	"static/sass/bootstrap/_variables.scss": staticSassBootstrap_variablesScss,
+	"static/sass/bootstrap/bootstrap-flex.scss": staticSassBootstrapBootstrapFlexScss,
+	"static/sass/bootstrap/bootstrap-grid.scss": staticSassBootstrapBootstrapGridScss,
+	"static/sass/bootstrap/bootstrap-reboot.scss": staticSassBootstrapBootstrapRebootScss,
+	"static/sass/bootstrap/bootstrap.scss": staticSassBootstrapBootstrapScss,
+	"static/sass/bootstrap/mixins/_alert.scss": staticSassBootstrapMixins_alertScss,
+	"static/sass/bootstrap/mixins/_background-variant.scss": staticSassBootstrapMixins_backgroundVariantScss,
+	"static/sass/bootstrap/mixins/_border-radius.scss": staticSassBootstrapMixins_borderRadiusScss,
+	"static/sass/bootstrap/mixins/_breakpoints.scss": staticSassBootstrapMixins_breakpointsScss,
+	"static/sass/bootstrap/mixins/_buttons.scss": staticSassBootstrapMixins_buttonsScss,
+	"static/sass/bootstrap/mixins/_cards.scss": staticSassBootstrapMixins_cardsScss,
+	"static/sass/bootstrap/mixins/_center-block.scss": staticSassBootstrapMixins_centerBlockScss,
+	"static/sass/bootstrap/mixins/_clearfix.scss": staticSassBootstrapMixins_clearfixScss,
+	"static/sass/bootstrap/mixins/_forms.scss": staticSassBootstrapMixins_formsScss,
+	"static/sass/bootstrap/mixins/_gradients.scss": staticSassBootstrapMixins_gradientsScss,
+	"static/sass/bootstrap/mixins/_grid-framework.scss": staticSassBootstrapMixins_gridFrameworkScss,
+	"static/sass/bootstrap/mixins/_grid.scss": staticSassBootstrapMixins_gridScss,
+	"static/sass/bootstrap/mixins/_hover.scss": staticSassBootstrapMixins_hoverScss,
+	"static/sass/bootstrap/mixins/_image.scss": staticSassBootstrapMixins_imageScss,
+	"static/sass/bootstrap/mixins/_label.scss": staticSassBootstrapMixins_labelScss,
+	"static/sass/bootstrap/mixins/_list-group.scss": staticSassBootstrapMixins_listGroupScss,
+	"static/sass/bootstrap/mixins/_lists.scss": staticSassBootstrapMixins_listsScss,
+	"static/sass/bootstrap/mixins/_nav-divider.scss": staticSassBootstrapMixins_navDividerScss,
+	"static/sass/bootstrap/mixins/_navbar-align.scss": staticSassBootstrapMixins_navbarAlignScss,
+	"static/sass/bootstrap/mixins/_pagination.scss": staticSassBootstrapMixins_paginationScss,
+	"static/sass/bootstrap/mixins/_progress.scss": staticSassBootstrapMixins_progressScss,
+	"static/sass/bootstrap/mixins/_pulls.scss": staticSassBootstrapMixins_pullsScss,
+	"static/sass/bootstrap/mixins/_reset-filter.scss": staticSassBootstrapMixins_resetFilterScss,
+	"static/sass/bootstrap/mixins/_reset-text.scss": staticSassBootstrapMixins_resetTextScss,
+	"static/sass/bootstrap/mixins/_resize.scss": staticSassBootstrapMixins_resizeScss,
+	"static/sass/bootstrap/mixins/_screen-reader.scss": staticSassBootstrapMixins_screenReaderScss,
+	"static/sass/bootstrap/mixins/_size.scss": staticSassBootstrapMixins_sizeScss,
+	"static/sass/bootstrap/mixins/_tab-focus.scss": staticSassBootstrapMixins_tabFocusScss,
+	"static/sass/bootstrap/mixins/_table-row.scss": staticSassBootstrapMixins_tableRowScss,
+	"static/sass/bootstrap/mixins/_text-emphasis.scss": staticSassBootstrapMixins_textEmphasisScss,
+	"static/sass/bootstrap/mixins/_text-hide.scss": staticSassBootstrapMixins_textHideScss,
+	"static/sass/bootstrap/mixins/_text-truncate.scss": staticSassBootstrapMixins_textTruncateScss,
 	"static/sass/style.scss": staticSassStyleScss,
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
@@ -5808,6 +7907,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/del_credit.html": staticTemplatesDel_creditHtml,
 	"static/templates/del_pool_user.html": staticTemplatesDel_pool_userHtml,
 	"static/templates/del_promised_amount.html": staticTemplatesDel_promised_amountHtml,
+	"static/templates/desktoplite.html": staticTemplatesDesktopliteHtml,
 	"static/templates/e_main.html": staticTemplatesE_mainHtml,
 	"static/templates/e_my_finance.html": staticTemplatesE_my_financeHtml,
 	"static/templates/e_my_history.html": staticTemplatesE_my_historyHtml,
@@ -5954,13 +8054,43 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"upgrade.css": &bintree{staticCssUpgradeCss, map[string]*bintree{}},
 		}},
 		"fonts": &bintree{nil, map[string]*bintree{
-			"FontAwesome.otf": &bintree{staticFontsFontawesomeOtf, map[string]*bintree{}},
-			"OpenSans-Regular.ttf": &bintree{staticFontsOpensansRegularTtf, map[string]*bintree{}},
-			"fontawesome-webfont.eot": &bintree{staticFontsFontawesomeWebfontEot, map[string]*bintree{}},
-			"fontawesome-webfont.svg": &bintree{staticFontsFontawesomeWebfontSvg, map[string]*bintree{}},
-			"fontawesome-webfont.ttf": &bintree{staticFontsFontawesomeWebfontTtf, map[string]*bintree{}},
-			"fontawesome-webfont.woff": &bintree{staticFontsFontawesomeWebfontWoff, map[string]*bintree{}},
-			"luxisr.ttf": &bintree{staticFontsLuxisrTtf, map[string]*bintree{}},
+			"PFSquareSansPro-Bold.eot": &bintree{staticFontsPfsquaresansproBoldEot, map[string]*bintree{}},
+			"PFSquareSansPro-Bold.svg": &bintree{staticFontsPfsquaresansproBoldSvg, map[string]*bintree{}},
+			"PFSquareSansPro-Bold.ttf": &bintree{staticFontsPfsquaresansproBoldTtf, map[string]*bintree{}},
+			"PFSquareSansPro-Bold.woff": &bintree{staticFontsPfsquaresansproBoldWoff, map[string]*bintree{}},
+			"PFSquareSansPro-Bold.woff2": &bintree{staticFontsPfsquaresansproBoldWoff2, map[string]*bintree{}},
+			"PFSquareSansPro-Light.eot": &bintree{staticFontsPfsquaresansproLightEot, map[string]*bintree{}},
+			"PFSquareSansPro-Light.svg": &bintree{staticFontsPfsquaresansproLightSvg, map[string]*bintree{}},
+			"PFSquareSansPro-Light.ttf": &bintree{staticFontsPfsquaresansproLightTtf, map[string]*bintree{}},
+			"PFSquareSansPro-Light.woff": &bintree{staticFontsPfsquaresansproLightWoff, map[string]*bintree{}},
+			"PFSquareSansPro-Light.woff2": &bintree{staticFontsPfsquaresansproLightWoff2, map[string]*bintree{}},
+			"PFSquareSansPro-Medium.eot": &bintree{staticFontsPfsquaresansproMediumEot, map[string]*bintree{}},
+			"PFSquareSansPro-Medium.svg": &bintree{staticFontsPfsquaresansproMediumSvg, map[string]*bintree{}},
+			"PFSquareSansPro-Medium.ttf": &bintree{staticFontsPfsquaresansproMediumTtf, map[string]*bintree{}},
+			"PFSquareSansPro-Medium.woff": &bintree{staticFontsPfsquaresansproMediumWoff, map[string]*bintree{}},
+			"PFSquareSansPro-Medium.woff2": &bintree{staticFontsPfsquaresansproMediumWoff2, map[string]*bintree{}},
+			"PFSquareSansPro-Regular.eot": &bintree{staticFontsPfsquaresansproRegularEot, map[string]*bintree{}},
+			"PFSquareSansPro-Regular.svg": &bintree{staticFontsPfsquaresansproRegularSvg, map[string]*bintree{}},
+			"PFSquareSansPro-Regular.ttf": &bintree{staticFontsPfsquaresansproRegularTtf, map[string]*bintree{}},
+			"PFSquareSansPro-Regular.woff": &bintree{staticFontsPfsquaresansproRegularWoff, map[string]*bintree{}},
+			"PFSquareSansPro-Regular.woff2": &bintree{staticFontsPfsquaresansproRegularWoff2, map[string]*bintree{}},
+			"glyphicons-regular.eot": &bintree{staticFontsGlyphiconsRegularEot, map[string]*bintree{}},
+			"glyphicons-regular.svg": &bintree{staticFontsGlyphiconsRegularSvg, map[string]*bintree{}},
+			"glyphicons-regular.ttf": &bintree{staticFontsGlyphiconsRegularTtf, map[string]*bintree{}},
+			"glyphicons-regular.woff": &bintree{staticFontsGlyphiconsRegularWoff, map[string]*bintree{}},
+			"glyphicons-regular.woff2": &bintree{staticFontsGlyphiconsRegularWoff2, map[string]*bintree{}},
+		}},
+		"images": &bintree{nil, map[string]*bintree{
+			"D_null.png": &bintree{staticImagesD_nullPng, map[string]*bintree{}},
+			"D_ok.png": &bintree{staticImagesD_okPng, map[string]*bintree{}},
+			"bell.png": &bintree{staticImagesBellPng, map[string]*bintree{}},
+			"chart.png": &bintree{staticImagesChartPng, map[string]*bintree{}},
+			"crowdfunding_icon.png": &bintree{staticImagesCrowdfunding_iconPng, map[string]*bintree{}},
+			"crowdfunding_icon_hover.png": &bintree{staticImagesCrowdfunding_icon_hoverPng, map[string]*bintree{}},
+			"logo.png": &bintree{staticImagesLogoPng, map[string]*bintree{}},
+			"pen.png": &bintree{staticImagesPenPng, map[string]*bintree{}},
+			"us-ru.png": &bintree{staticImagesUsRuPng, map[string]*bintree{}},
+			"wallet.png": &bintree{staticImagesWalletPng, map[string]*bintree{}},
 		}},
 		"img": &bintree{nil, map[string]*bintree{
 			"alert.png": &bintree{staticImgAlertPng, map[string]*bintree{}},
@@ -6032,6 +8162,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"jquery-1.10.2.js": &bintree{staticJsJquery1102Js, map[string]*bintree{}},
 			"jquery-1.11.0.js": &bintree{staticJsJquery1110Js, map[string]*bintree{}},
 			"jquery-1.9.1.min.js": &bintree{staticJsJquery191MinJs, map[string]*bintree{}},
+			"jquery-2.2.3.min.js": &bintree{staticJsJquery223MinJs, map[string]*bintree{}},
 			"jquery-ui-sliderAccess.js": &bintree{staticJsJqueryUiSlideraccessJs, map[string]*bintree{}},
 			"jquery-ui-timepicker-addon.js": &bintree{staticJsJqueryUiTimepickerAddonJs, map[string]*bintree{}},
 			"jquery-ui.min.js": &bintree{staticJsJqueryUiMinJs, map[string]*bintree{}},
@@ -6087,12 +8218,14 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"sAS3Cam.js": &bintree{staticJsSas3camJs, map[string]*bintree{}},
 			"sb-admin-2.js": &bintree{staticJsSbAdmin2Js, map[string]*bintree{}},
 			"sb-admin.js": &bintree{staticJsSbAdminJs, map[string]*bintree{}},
+			"scripts.js": &bintree{staticJsScriptsJs, map[string]*bintree{}},
 			"sha1.js": &bintree{staticJsSha1Js, map[string]*bintree{}},
 			"sha256.js": &bintree{staticJsSha256Js, map[string]*bintree{}},
 			"sha512.js": &bintree{staticJsSha512Js, map[string]*bintree{}},
 			"spin.js": &bintree{staticJsSpinJs, map[string]*bintree{}},
 			"spots.js": &bintree{staticJsSpotsJs, map[string]*bintree{}},
 			"stacktable.js": &bintree{staticJsStacktableJs, map[string]*bintree{}},
+			"tether.min.js": &bintree{staticJsTetherMinJs, map[string]*bintree{}},
 			"unixtime.js": &bintree{staticJsUnixtimeJs, map[string]*bintree{}},
 			"uploader.js": &bintree{staticJsUploaderJs, map[string]*bintree{}},
 			"worker.js": &bintree{staticJsWorkerJs, map[string]*bintree{}},
@@ -6109,17 +8242,90 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		}},
 		"nodes.inc": &bintree{staticNodesInc, map[string]*bintree{}},
 		"sass": &bintree{nil, map[string]*bintree{
-			"addons": &bintree{nil, map[string]*bintree{
-				"_colors.scss": &bintree{staticSassAddons_colorsScss, map[string]*bintree{}},
-				"_fonts.scss": &bintree{staticSassAddons_fontsScss, map[string]*bintree{}},
-				"_mixins.scss": &bintree{staticSassAddons_mixinsScss, map[string]*bintree{}},
-			}},
-			"pages": &bintree{nil, map[string]*bintree{
-				"_home.scss": &bintree{staticSassPages_homeScss, map[string]*bintree{}},
-				"_install_step_0.scss": &bintree{staticSassPages_install_step_0Scss, map[string]*bintree{}},
-				"_mining_menu.scss": &bintree{staticSassPages_mining_menuScss, map[string]*bintree{}},
-				"_new_promised_amount.scss": &bintree{staticSassPages_new_promised_amountScss, map[string]*bintree{}},
-				"_new_user.scss": &bintree{staticSassPages_new_userScss, map[string]*bintree{}},
+			"_colors.scss": &bintree{staticSass_colorsScss, map[string]*bintree{}},
+			"_fonts.scss": &bintree{staticSass_fontsScss, map[string]*bintree{}},
+			"_mixins.scss": &bintree{staticSass_mixinsScss, map[string]*bintree{}},
+			"bootstrap": &bintree{nil, map[string]*bintree{
+				".csscomb.json": &bintree{staticSassBootstrapCsscombJson, map[string]*bintree{}},
+				".scss-lint.yml": &bintree{staticSassBootstrapScssLintYml, map[string]*bintree{}},
+				"_alert.scss": &bintree{staticSassBootstrap_alertScss, map[string]*bintree{}},
+				"_animation.scss": &bintree{staticSassBootstrap_animationScss, map[string]*bintree{}},
+				"_breadcrumb.scss": &bintree{staticSassBootstrap_breadcrumbScss, map[string]*bintree{}},
+				"_button-group.scss": &bintree{staticSassBootstrap_buttonGroupScss, map[string]*bintree{}},
+				"_buttons.scss": &bintree{staticSassBootstrap_buttonsScss, map[string]*bintree{}},
+				"_card.scss": &bintree{staticSassBootstrap_cardScss, map[string]*bintree{}},
+				"_carousel.scss": &bintree{staticSassBootstrap_carouselScss, map[string]*bintree{}},
+				"_close.scss": &bintree{staticSassBootstrap_closeScss, map[string]*bintree{}},
+				"_code.scss": &bintree{staticSassBootstrap_codeScss, map[string]*bintree{}},
+				"_custom-forms.scss": &bintree{staticSassBootstrap_customFormsScss, map[string]*bintree{}},
+				"_dropdown.scss": &bintree{staticSassBootstrap_dropdownScss, map[string]*bintree{}},
+				"_forms.scss": &bintree{staticSassBootstrap_formsScss, map[string]*bintree{}},
+				"_glyphicons.scss": &bintree{staticSassBootstrap_glyphiconsScss, map[string]*bintree{}},
+				"_grid.scss": &bintree{staticSassBootstrap_gridScss, map[string]*bintree{}},
+				"_images.scss": &bintree{staticSassBootstrap_imagesScss, map[string]*bintree{}},
+				"_input-group.scss": &bintree{staticSassBootstrap_inputGroupScss, map[string]*bintree{}},
+				"_jumbotron.scss": &bintree{staticSassBootstrap_jumbotronScss, map[string]*bintree{}},
+				"_labels.scss": &bintree{staticSassBootstrap_labelsScss, map[string]*bintree{}},
+				"_list-group.scss": &bintree{staticSassBootstrap_listGroupScss, map[string]*bintree{}},
+				"_media.scss": &bintree{staticSassBootstrap_mediaScss, map[string]*bintree{}},
+				"_mixins.scss": &bintree{staticSassBootstrap_mixinsScss, map[string]*bintree{}},
+				"_modal.scss": &bintree{staticSassBootstrap_modalScss, map[string]*bintree{}},
+				"_nav.scss": &bintree{staticSassBootstrap_navScss, map[string]*bintree{}},
+				"_navbar.scss": &bintree{staticSassBootstrap_navbarScss, map[string]*bintree{}},
+				"_normalize.scss": &bintree{staticSassBootstrap_normalizeScss, map[string]*bintree{}},
+				"_pager.scss": &bintree{staticSassBootstrap_pagerScss, map[string]*bintree{}},
+				"_pagination.scss": &bintree{staticSassBootstrap_paginationScss, map[string]*bintree{}},
+				"_popover.scss": &bintree{staticSassBootstrap_popoverScss, map[string]*bintree{}},
+				"_print.scss": &bintree{staticSassBootstrap_printScss, map[string]*bintree{}},
+				"_progress.scss": &bintree{staticSassBootstrap_progressScss, map[string]*bintree{}},
+				"_reboot.scss": &bintree{staticSassBootstrap_rebootScss, map[string]*bintree{}},
+				"_responsive-embed.scss": &bintree{staticSassBootstrap_responsiveEmbedScss, map[string]*bintree{}},
+				"_tables.scss": &bintree{staticSassBootstrap_tablesScss, map[string]*bintree{}},
+				"_tooltip.scss": &bintree{staticSassBootstrap_tooltipScss, map[string]*bintree{}},
+				"_type.scss": &bintree{staticSassBootstrap_typeScss, map[string]*bintree{}},
+				"_utilities-background.scss": &bintree{staticSassBootstrap_utilitiesBackgroundScss, map[string]*bintree{}},
+				"_utilities-responsive.scss": &bintree{staticSassBootstrap_utilitiesResponsiveScss, map[string]*bintree{}},
+				"_utilities-spacing.scss": &bintree{staticSassBootstrap_utilitiesSpacingScss, map[string]*bintree{}},
+				"_utilities.scss": &bintree{staticSassBootstrap_utilitiesScss, map[string]*bintree{}},
+				"_variables.scss": &bintree{staticSassBootstrap_variablesScss, map[string]*bintree{}},
+				"bootstrap-flex.scss": &bintree{staticSassBootstrapBootstrapFlexScss, map[string]*bintree{}},
+				"bootstrap-grid.scss": &bintree{staticSassBootstrapBootstrapGridScss, map[string]*bintree{}},
+				"bootstrap-reboot.scss": &bintree{staticSassBootstrapBootstrapRebootScss, map[string]*bintree{}},
+				"bootstrap.scss": &bintree{staticSassBootstrapBootstrapScss, map[string]*bintree{}},
+				"mixins": &bintree{nil, map[string]*bintree{
+					"_alert.scss": &bintree{staticSassBootstrapMixins_alertScss, map[string]*bintree{}},
+					"_background-variant.scss": &bintree{staticSassBootstrapMixins_backgroundVariantScss, map[string]*bintree{}},
+					"_border-radius.scss": &bintree{staticSassBootstrapMixins_borderRadiusScss, map[string]*bintree{}},
+					"_breakpoints.scss": &bintree{staticSassBootstrapMixins_breakpointsScss, map[string]*bintree{}},
+					"_buttons.scss": &bintree{staticSassBootstrapMixins_buttonsScss, map[string]*bintree{}},
+					"_cards.scss": &bintree{staticSassBootstrapMixins_cardsScss, map[string]*bintree{}},
+					"_center-block.scss": &bintree{staticSassBootstrapMixins_centerBlockScss, map[string]*bintree{}},
+					"_clearfix.scss": &bintree{staticSassBootstrapMixins_clearfixScss, map[string]*bintree{}},
+					"_forms.scss": &bintree{staticSassBootstrapMixins_formsScss, map[string]*bintree{}},
+					"_gradients.scss": &bintree{staticSassBootstrapMixins_gradientsScss, map[string]*bintree{}},
+					"_grid-framework.scss": &bintree{staticSassBootstrapMixins_gridFrameworkScss, map[string]*bintree{}},
+					"_grid.scss": &bintree{staticSassBootstrapMixins_gridScss, map[string]*bintree{}},
+					"_hover.scss": &bintree{staticSassBootstrapMixins_hoverScss, map[string]*bintree{}},
+					"_image.scss": &bintree{staticSassBootstrapMixins_imageScss, map[string]*bintree{}},
+					"_label.scss": &bintree{staticSassBootstrapMixins_labelScss, map[string]*bintree{}},
+					"_list-group.scss": &bintree{staticSassBootstrapMixins_listGroupScss, map[string]*bintree{}},
+					"_lists.scss": &bintree{staticSassBootstrapMixins_listsScss, map[string]*bintree{}},
+					"_nav-divider.scss": &bintree{staticSassBootstrapMixins_navDividerScss, map[string]*bintree{}},
+					"_navbar-align.scss": &bintree{staticSassBootstrapMixins_navbarAlignScss, map[string]*bintree{}},
+					"_pagination.scss": &bintree{staticSassBootstrapMixins_paginationScss, map[string]*bintree{}},
+					"_progress.scss": &bintree{staticSassBootstrapMixins_progressScss, map[string]*bintree{}},
+					"_pulls.scss": &bintree{staticSassBootstrapMixins_pullsScss, map[string]*bintree{}},
+					"_reset-filter.scss": &bintree{staticSassBootstrapMixins_resetFilterScss, map[string]*bintree{}},
+					"_reset-text.scss": &bintree{staticSassBootstrapMixins_resetTextScss, map[string]*bintree{}},
+					"_resize.scss": &bintree{staticSassBootstrapMixins_resizeScss, map[string]*bintree{}},
+					"_screen-reader.scss": &bintree{staticSassBootstrapMixins_screenReaderScss, map[string]*bintree{}},
+					"_size.scss": &bintree{staticSassBootstrapMixins_sizeScss, map[string]*bintree{}},
+					"_tab-focus.scss": &bintree{staticSassBootstrapMixins_tabFocusScss, map[string]*bintree{}},
+					"_table-row.scss": &bintree{staticSassBootstrapMixins_tableRowScss, map[string]*bintree{}},
+					"_text-emphasis.scss": &bintree{staticSassBootstrapMixins_textEmphasisScss, map[string]*bintree{}},
+					"_text-hide.scss": &bintree{staticSassBootstrapMixins_textHideScss, map[string]*bintree{}},
+					"_text-truncate.scss": &bintree{staticSassBootstrapMixins_textTruncateScss, map[string]*bintree{}},
+				}},
 			}},
 			"style.scss": &bintree{staticSassStyleScss, map[string]*bintree{}},
 		}},
@@ -6176,6 +8382,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"del_credit.html": &bintree{staticTemplatesDel_creditHtml, map[string]*bintree{}},
 			"del_pool_user.html": &bintree{staticTemplatesDel_pool_userHtml, map[string]*bintree{}},
 			"del_promised_amount.html": &bintree{staticTemplatesDel_promised_amountHtml, map[string]*bintree{}},
+			"desktoplite.html": &bintree{staticTemplatesDesktopliteHtml, map[string]*bintree{}},
 			"e_main.html": &bintree{staticTemplatesE_mainHtml, map[string]*bintree{}},
 			"e_my_finance.html": &bintree{staticTemplatesE_my_financeHtml, map[string]*bintree{}},
 			"e_my_history.html": &bintree{staticTemplatesE_my_historyHtml, map[string]*bintree{}},
