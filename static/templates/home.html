@@ -1,31 +1,124 @@
 {{ define "home" }}
-<div class="dc_home">
 
-<!--<link rel="stylesheet" type="text/css" href="static/css/tooltipster.css" />
-<link rel="stylesheet" type="text/css" href="static/css/tooltipster-shadow.css" />
-<script type="text/javascript" src="static/js/jquery.tooltipster.min.js"></script>-->
-<style>
-	@media (min-width: 1024px) {
-		.qtip-close{display: none}
-	}
-
-	@media (min-width: 768px) {
-		.col-sm-6 {
-			width: 100%;
-		}
-	}
-	@media (min-width: 840px) {
-			.col-sm-6 {
-				width: 50%;
-			}
-	}
-	@media  (min-width: 1350px) {
-		.col-lg-3 {
-			width: 25%;
-		}
-	}
-</style>
-
+<div class="main row">
+	<div class="pull-lg-right col-xs-12 col-lg-6">
+		<div class="col-xs-6">
+			<a class="menu" href="#">
+				<span class="amount">1</span>
+				<span class="icon bell"></span>
+				<span class="head"><em>Incoming Requests</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#">
+				<span class="amount">26</span>
+				<span class="icon pen"></span>
+				<span class="head"><em>Assignments</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#">
+				<span class="text">Points</span>
+				<span class="amount">3145</span>
+				<span class="icon chart"></span>
+				<span class="head"><em>Voting</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#">
+				<span class="icon exchange"></span>
+				<span class="head"><em>Exchange for cash</em></span>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-12 col-lg-6">
+		<div class="wallet">
+			{{if .ListBalance}}
+			<h2>Available Balance</h2>
+			<div class="balances">
+				{{range .ListBalance}}
+				<div class="balance">
+					<article>
+						<span>{{.Top}}</span>
+						<strong>d<em>{{.Currency}}</em></strong>
+					</article>
+					<div class="chart_block">
+						<!--div id="d{{.Currency}}" class="chart"></div-->
+					</div>
+				</div>
+				{{end}}
+			</div>
+			{{end}}
+			{{if .MyDcTransactions}}
+				<h2>{{.Lang.last_operation}}</h2>
+				<div class="table-transactions">
+					<div class="thead row">
+						<div class="col-xs-2">{{.Lang.time}}</div>
+						<div class="col-xs-3">{{.Lang.type}}</div>
+						<div class="col-xs-2">{{.Lang.currency}}</div>
+						<div class="col-xs-3">{{.Lang.amount}}</div>
+						<div class="col-xs-2">{{.Lang.status}}</div>
+					</div>
+					{{range $key, $data := .MyDcTransactions}}
+					<div class="row">
+						<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
+						<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
+						<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
+						<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
+						<div class="col-xs-2">{{$data.status}}</div>
+					</div>
+				{{end}}
+				</div>
+			{{end}}
+			<a class="head" href="#"><em>Wallet</em></a>
+		</div>
+	</div>
+</div>
+<div class="graph">
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#WOC" role="tab">dWOC</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#USD" role="tab">dUSD</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#EUR" role="tab">dEUR</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#RUB" role="tab">dRUB</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div id="WOC" class="chart tab-pane fade in active" role="tabpanel"></div>
+		<div id="USD" class="chart tab-pane fade" role="tabpanel"></div>
+		<div id="EUR" class="chart tab-pane fade" role="tabpanel"></div>
+		<div id="RUB" class="chart tab-pane fade" role="tabpanel"></div>
+	</div>
+</div>
+<h2>{{.Lang.statistic_cash_requests}}</h2>
+<table class="table table-bordered">
+	<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>{{.Lang.from_user_id}}</th><th>{{.Lang.to_user_id}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
+	<tbody>
+	{{if .LastCashRequests}}
+	{{range $k, $data := .LastCashRequests}}
+	<tr>
+		<td align="center"><strong>{{$data.id}}</strong></td>
+		<td>{{$data.time}}</td>
+		<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
+		<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}} </td>
+		<td align="center">{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
+		<td align="center">{{$data.amount}}</td>
+		{{if ne $data.del_block_id "0"}}
+		<td title='{{.Lang.reduction_closed}}'>{{$data.status}}</td>
+		{{else}}
+		<td>{{$data.status}}<br>{{if eq $data.status "rejected"}}(user holded){{end}}</td>
+		{{end}}
+	</tr>
+	{{end}}
+	{{end}}
+	</tbody>
+</table>
 
 <script>
 	if (typeof intervalIdArray != "undefined") {
@@ -34,42 +127,6 @@
 	}
 	$(function() {
 		check_key_and_show_modal();
-		/*$('[title!=""]').qtip( {
-			position: {target: 'mouse', adjust: { x: 5, y: 5 }},
-			style: { classes: 'qtip-blue qtip-bootstrap qtip-shadow' },
-			content: {	button: true }
-			}
-		);*/
-
-		/*$.ajax({
-			url: "http://dcoinsimple.com/api.php",
-			type: 'GET',
-			dataType: "json",
-			crossDomain: true,
-			success: function (data) {
-				console.log(data);
-				if(typeof data.total_buy[1] != "undefined")
-					$('#dwoc_ex_buy_sum').html('$'+Math.round(data.total_buy[1]*100)/100);
-				if(typeof data.max_buy_rate[1] != "undefined")
-					$('#dwoc_ex_buy_rate').html('1 dWOC = $'+Math.round(data.max_buy_rate[1]*100)/100);
-
-				if(typeof data.total_buy[72] != "undefined")
-					$('#dusd_ex_buy_sum').html('$'+Math.round(data.total_buy[72]*100)/100);
-				if(typeof data.max_buy_rate[72] != "undefined")
-					$('#dusd_ex_buy_rate').html('1 dUSD = $'+Math.round(data.max_buy_rate[72]*100)/100);
-
-				if(typeof data.total_buy[23] != "undefined")
-					$('#deur_ex_buy_sum').html('$'+Math.round(data.total_buy[23]*100)/100);
-				if(typeof data.max_buy_rate[23] != "undefined")
-					$('#deur_ex_buy_rate').html('1 dEUR = $'+Math.round(data.max_buy_rate[23]*100)/100);
-
-				if(typeof data.total_buy[58] != "undefined")
-					$('#drub_ex_buy_sum').html('$'+Math.round(data.total_buy[58]*100)/100);
-				if(typeof data.max_buy_rate[58] != "undefined")
-					$('#drub_ex_buy_rate').html('1 dRUB = $'+Math.round(data.max_buy_rate[58]*1000)/1000);
-			}
-		});*/
-
 	});
 	{{if and (or (eq .MyNotice.account_status "user") (eq .MyNotice.account_status "miner") ) (not .UserId)}}
 		$("#main-login").html('<a href="#myModal" data-backdrop="static" data-toggle="modal" role="button" class="btn btn-danger  btn-block "><i class="fa fa-sign-in fa-lg"></i> Login</a><div style="margin: 2px 10px; font-size: 11px">{{.Lang.login_alert}}</div>');
@@ -106,168 +163,6 @@
 <div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
 <div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
 {{ template "alertSuccess". }}
-
-<style>
-	.fd-tile.detail .content {
-		background: none repeat scroll 0% 0% transparent;
-		padding: 10px 10px 13px;
-		display: inline-block;
-		position: relative;
-		z-index: 3;
-	}
-	.fd-tile .content p {
-		margin-bottom: 0px;
-		font-size: 14px;
-	}
-	.fd-tile .content h1 {
-		margin: 0px;
-		font-weight: 300;
-		font-size: 40px;
-	}
-	.tab-content h3, h2, h1:first-child {
-		margin-top: 0px;
-	}
-	.cl-mcont h1 {
-		line-height: 1.3em;
-	}
-	.text-left {
-		text-align: left;
-	}
-	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-		font-family: "Open Sans",sans-serif;
-		font-weight: 300;
-	}
-	h1, .h1 {
-		font-size: 36px;
-	}
-	h1, .h1, h2, .h2, h3, .h3 {
-		margin-top: 20px;
-		margin-bottom: 10px;
-	}
-	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-		font-family: inherit;
-		font-weight: 500;
-		line-height: 1.1;
-		color: inherit;
-	}
-	p {
-		font-size: 13px;
-		line-height: 22px;
-	}
-	p {
-		margin: 0px 0px 10px;
-	}
-	.fd-tile.clean {
-		color: #888;
-	}
-	.cl-mcont {
-		color: inherit;
-		font-size: 13px;
-		font-weight: 200;
-		line-height: 21px;
-	}
-
-	.ex {
-		font-family: "Open Sans",sans-serif;
-		font-size: 12px;
-		color: #555;
-	}
-	.fa-flag:before {
-		content: "";
-	}
-
-	.fd-tile.detail .icon i {
-		color: rgba(0, 0, 0, 0.05);
-		font-size: 100px;
-		line-height: 65px;
-	}
-	.fd-tile.clean .icon i {
-		color: #E5E5E5;
-	}
-	/*.fa {
-		display: inline-block;
-		font-family: FontAwesome;
-		font-style: normal;
-		font-weight: normal;
-		line-height: 1;
-	}*/
-	.fd-tile.detail .icon {
-		display: block;
-		float: right;
-		height: 80px;
-		margin-bottom: 10px;
-		padding-left: 15px;
-		padding-top: 10px;
-		width: 80px;
-	}
-	.fd-tile.detail .icon {
-		display: block;
-		float: right;
-		height: 80px;
-		margin-bottom: 10px;
-		padding-left: 15px;
-		padding-top: 10px;
-		position: absolute;
-		right: 10px;
-		top: 0px;
-		width: 80px;
-	}
-	.fd-tile.clean.tile-purple .details {
-		background-color: #5D9CEC;
-	}
-	.fd-tile.detail {
-		position: relative;
-		overflow: hidden;
-	}
-	.fd-tile.detail .details {
-		clear: both;
-		display: block;
-		padding: 5px 10px;
-		color: #FFF;
-		text-transform: uppercase;
-		background-color: rgba(0, 0, 0, 0.1);
-	}
-	.ex a {
-		color: #23C0A2;
-		text-decoration: none;
-		outline: 0px none;
-	}
-	.ex a {
-		color: #428BCA;
-		text-decoration: none;
-	}
-	.ex a {
-		background: none repeat scroll 0% 0% transparent;
-	}
-	.ex a:focus, .ex a:hover, .ex a:active {
-		outline: 0px none;
-		text-decoration: none;
-		color: #0FAC8E;
-	}
-	.fd-tile.detail .details i {
-		font-size: 18px;
-		color: rgba(255, 255, 255, 0.4);
-	}
-	.fa.pull-right {
-		margin-left: 0.3em;
-	}
-	.fd-tile.detail .icon i {
-		color: rgba(0, 0, 0, 0.05);
-		font-size: 100px;
-		line-height: 65px;
-	}
-	.fd-tile.clean.tile-green .details {
-		background-color: #37BC9B;
-	}
-	.fd-tile.clean.tile-prusia .details {
-		background-color: #AD4B84;
-	}
-	.fd-tile.clean.tile-red .details {
-		background-color: #EA6153;
-	}
-</style>
-
-
 
 <div id="message"></div>
 <script>
@@ -1173,46 +1068,6 @@ $(function () {
     });
 });
 </script>
-<div class="wallet">
-	{{if .ListBalance}}
-	<h2>Available Balance</h2>
-	<div class="balances">
-		{{range .ListBalance}}
-		<div class="balance">
-			<article>
-				<span>{{.Top}}</span>
-				<strong>d<em>{{.Currency}}</em></strong>
-			</article>
-			<div class="chart_block">
-				<!--div id="d{{.Currency}}" class="chart"></div-->
-			</div>
-		</div>
-		{{end}}
-	</div>
-	{{end}}
-	{{if .MyDcTransactions}}
-		<h2>{{.Lang.last_operation}}</h2>
-		<div class="table-transactions">
-			<div class="thead row">
-				<div class="col-xs-2">{{.Lang.time}}</div>
-				<div class="col-xs-3">{{.Lang.type}}</div>
-				<div class="col-xs-2">{{.Lang.currency}}</div>
-				<div class="col-xs-3">{{.Lang.amount}}</div>
-				<div class="col-xs-2">{{.Lang.status}}</div>
-			</div>
-			{{range $key, $data := .MyDcTransactions}}
-			<div class="row">
-				<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
-				<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
-				<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
-				<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
-				<div class="col-xs-2">{{$data.status}}</div>
-			</div>
-		{{end}}
-		</div>
-	{{end}}
-	<!--<a class="head" href="#"><em>Wallet</em></a>-->
-</div>
 	<script>
 		var currency_name = new Array();
 		{{range $id, $currencyName := .CurrencyList}}
@@ -1654,31 +1509,6 @@ $(function () {
 	{{end}}
 
 
-<h3>{{.Lang.statistic_cash_requests}}</h3>
-<div class="dc_home__coins_exchange">
-	<table class="table table-bordered">
-		<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>{{.Lang.from_user_id}}</th><th>{{.Lang.to_user_id}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
-		<tbody>
-		{{if .LastCashRequests}}
-		{{range $k, $data := .LastCashRequests}}
-		<tr>
-			<td align="center"><strong>{{$data.id}}</strong></td>
-			<td>{{$data.time}}</td>
-			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.from_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.from_user_id}}</td>
-			<td style='text-align:center;vertical-align:middle'><div class='img_{{$data.to_user_id}}' style='width:60px;height:60px; border-radius:50%;margin:auto'></div>{{$data.to_user_id}} </td>
-			<td align="center">{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td>
-			<td align="center">{{$data.amount}}</td>
-			{{if ne $data.del_block_id "0"}}
-			<td title='{{.Lang.reduction_closed}}'>{{$data.status}}</td>
-			{{else}}
-			<td>{{$data.status}}<br>{{if eq $data.status "rejected"}}(user holded){{end}}</td>
-			{{end}}
-		</tr>
-		{{end}}
-		{{end}}
-		</tbody>
-	</table>
-</div>
 <script>
 	{{range $userId, $hosts := .RefPhotos}}
 	var hosts = []
@@ -1759,8 +1589,6 @@ $(function () {
 </script>
 
 <div style="clear: both; margin-bottom: 25px"></div>
-
-</div>
 
 
 {{ template "signatures". }}
