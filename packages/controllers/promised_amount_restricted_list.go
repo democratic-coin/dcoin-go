@@ -23,7 +23,7 @@ type promisedAmountRestrictedList struct {
 	Lang            map[string]string
 	MinWalletAmount string
 }
-
+/*
 func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
 	paRestricted, err := c.OneRow("SELECT * FROM promised_amount_restricted WHERE user_id = ?", c.SessUserId).String()
 	if err != nil {
@@ -49,11 +49,11 @@ func (c *Controller) GetPromisedAmountCounter() ( float64, float64, error) {
 		return 0, 0, err
 	}
 	return profit, pct, nil
-}
+}*/
 
 func (c *Controller) PromisedAmountRestrictedList() (string, error) {
 
-	profit, pct, err := c.GetPromisedAmountCounter()
+	profit, pct, err := c.GetPromisedAmountCounter(c.SessUserId)
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

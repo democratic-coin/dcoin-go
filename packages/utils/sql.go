@@ -2713,3 +2713,30 @@ func (db *DCDB) CheckChatMessage(message string, sender, receiver, lang, room, s
 
 	return nil
 }
+
+func (db *DCDB) GetPromisedAmountCounter(userId int64) ( float64, float64, error) {
+	paRestricted, err := db.OneRow("SELECT * FROM promised_amount_restricted WHERE user_id = ?", userId).String()
+	if err != nil {
+		return 0, 0, err
+	}
+	if _, ok := paRestricted[`user_id`]; !ok {
+		return 0, 0, nil
+	}
+	
+	amount := StrToFloat64(paRestricted["amount"])
+	// Временная проверка для старого формата таблицы promised_amount_restricted. 
+	if _, ok := paRestricted["start_time"]; ok && StrToInt64(paRestricted["last_update"]) == 0 {
+		paRestricted["last_update"] = paRestricted["start_time"]
+	}
+	profit, err := db.CalcProfitGen(StrToInt64(paRestricted["currency_id"]), amount, userId, StrToInt64(paRestricted["last_update"]), Time(), "wallet")
+	if err != nil {
+		return 0, 0, err
+	}
+	profit += amount
+	
+	pct, err := db.Single(db.FormatQuery("SELECT user FROM pct WHERE currency_id  =  ? ORDER BY block_id DESC"), StrToInt64(paRestricted["currency_id"])).Float64()
+	if err != nil {
+		return 0, 0, err
+	}
+	return profit, pct, nil
+}

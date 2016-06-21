@@ -56,12 +56,14 @@ func getIP(r *http.Request) (uint32, string) {
 
 func historyBalance(userId int64, history *stat.HistoryBalance) error {
 	data, err := GDB.GetAll(`select * from balance where user_id=? AND date( uptime ) < date('now') order by uptime desc`,
-		10, userId)
+		7, userId)
 	if err == nil {
 		for _, idata := range data {
 			var ib stat.InfoBalance
 			if err = json.Unmarshal([]byte(idata[`data`]), &ib); err == nil {
 				history.History = append(history.History, &ib)
+			} else {
+				return err
 			}
 		}
 	}
@@ -75,7 +77,10 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 	userId := utils.StrToInt64(r.FormValue(`user_id`))
 	if userId > 0 {
 		ipval,_ := getIP( r )
-		historyBalance(userId, &answer)
+		err := historyBalance(userId, &answer)
+		if err!=nil {
+			log.Println(err)
+		}
 		GDB.ExecSql(`insert into req_balance ( user_id, ip, uptime) values( ?, ?,  datetime('now'))`,
 							userId, ipval)
 	}

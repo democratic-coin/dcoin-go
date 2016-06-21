@@ -4,22 +4,11 @@ import (
 	"fmt"
 	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
+	"github.com/democratic-coin/dcoin-go/packages/stat"
 	"math"
 	"strings"
 	"time"
 )
-
-type infoBalance struct {
-	Currency   string
-	CurrencyId int64
-	Wallet     float64
-	Tdc        float64
-	Summary    float64
-	Promised   float64
-	Restricted float64
-	Top        float64
-//	Dif        float64
-}
 
 type homePage struct {
 	Community             bool
@@ -60,75 +49,13 @@ type homePage struct {
 	Miner                 bool
 	ChatEnabled           string
 	TopExMap              map[int64]*topEx
-	ListBalance           map[int64]*infoBalance
+	ListBalance           *stat.ListBalance
+	StatDays              int
 	MyDcTransactions     []map[string]string	
 	Names                map[string]string	
 	Chart					string
 	DCTarget int64
 }
-
-func RoundMoney(in float64) (out float64) {
-	off := float64(10)
-	for k:=0; k<6; k++ {
-		if in < off {
-			out = utils.Round( in, 5 - k )
-			break
-		}
-		off *= 10
-	}
-	if out == 0 {
-		out = utils.Round( in, 0 )
-	}
-	return
-}
-
-
-func (c *Controller) getBalance() (map[int64]*infoBalance, error) {
-	
-	userId := c.SessUserId
-	list := make(map[int64]*infoBalance)
-	if wallet, err := utils.DB.GetBalances(userId); err == nil {
-		for _, iwallet := range wallet {
-			list[iwallet.CurrencyId] = &infoBalance{ CurrencyId: iwallet.CurrencyId,
-			                Wallet: utils.Round(iwallet.Amount, 6) }
-		}
-	} else {
-		return nil,err
-	}
-	if vars, err := utils.DB.GetAllVariables(); err == nil {
-		if _, dc, _, err := utils.DB.GetPromisedAmounts( userId, vars.Int64["cash_request_time"]); err == nil {
-			for _, idc := range dc {
-				if _, ok:= list[idc.CurrencyId]; ok {
-					list[idc.CurrencyId].Tdc += utils.Round(idc.Tdc,6)
-					list[idc.CurrencyId].Promised += idc.Amount
-				} else {
-					list[idc.CurrencyId] = &infoBalance{ CurrencyId: idc.CurrencyId,
-			                Promised: idc.Amount, Tdc: utils.Round(idc.Tdc, 6) }
-				}
-			}
-		} else {
-			return nil,err
-		}
-	} else {
-		return nil,err
-	}
-	if profit,_, err := c.GetPromisedAmountCounter(); err == nil && profit > 0 {
-		currency := int64(72)
-		if _, ok:= list[currency]; ok {
-			list[currency].Restricted = utils.Round( profit - 30, 6)
-		} else {
-			list[currency] = &infoBalance{ CurrencyId: currency,
-			                Restricted: utils.Round( profit - 30, 6) }
-		}
-	}
-	for i := range list {
-		list[i].Currency,_ = utils.DB.Single(`select name from currency where id=?`, list[i].CurrencyId ).String()
-		list[i].Summary = utils.Round( list[i].Wallet + list[i].Tdc + list[i].Restricted, 6 )
-		list[i].Top = RoundMoney(list[i].Summary)
-	}
-	return list, nil
-}
-
 
 func (c *Controller) Home() (string, error) {
 
@@ -453,7 +380,12 @@ func (c *Controller) Home() (string, error) {
 	}
 
 	DCTarget := consts.DCTarget[72]
-	listBalance,_ := c.getBalance()
+	listBalance,_ := stat.TodayBalance( c.SessUserId )
+	var statDays int
+	if len(*listBalance) > 0 {
+		statDays,_ = stat.GetHistoryBalance(listBalance, c.SessUserId)
+	}
+	//fmt.Println(`Stat`, statDays, err )
 	var myDcTransactions []map[string]string
 	if c.SessRestricted == 0 {
 		myDcTransactions, err = c.GetAll("SELECT * FROM "+c.MyPrefix+"my_dc_transactions ORDER BY id DESC", 10)
@@ -524,6 +456,7 @@ func (c *Controller) Home() (string, error) {
 		Token:                 token,
 		ExchangeUrl:           exchangeUrl,
 		ListBalance:           listBalance,
+		StatDays:              statDays,
 		MyDcTransactions:      myDcTransactions,
 		Names:                 names })
 	if err != nil {
