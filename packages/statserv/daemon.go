@@ -68,8 +68,8 @@ func daemon() {
 		}
 		cur++
 		if time.Now().Sub( timeClear ).Hours() > 12 {
-			GDB.ExecSql(`delete from balance where date( uptime, '+14 day' ) < datetime('now')`)
-			GDB.ExecSql(`delete from req_balance where date( uptime, '+14 day' ) < datetime('now')`)
+			GDB.ExecSql(`delete from balance where date( uptime, '+14 day' ) < date('now')`)
+			GDB.ExecSql(`delete from req_balance where date( uptime, '+14 day' ) < date('now')`)
 			cbal,_ := GDB.Single(`select count(id) from balance`).Int64()
 			creq,_ := GDB.Single(`select count(id) from req_balance`).Int64()
 			log.Println(`Delete old records: Balance`, cbal, `/ Req_balance`, creq)
