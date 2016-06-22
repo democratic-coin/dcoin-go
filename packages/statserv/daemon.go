@@ -14,8 +14,10 @@ func daemon() {
 	var (
 		cur, max int64
 		err      error
+		first    bool = true
 		iBalance *stat.InfoBalance
 		pause    uint32 = 10
+		timeClear  time.Time
 	)
 	
 	for {
@@ -24,6 +26,14 @@ func daemon() {
 				log.Println(`Error`, err)
 			}
 			cur = 1
+			if first {
+				if last,err := GDB.Single(`select user_id from balance where date(uptime)=date('now') order by id desc`).Int64(); 
+				      err == nil && last > 0 {
+					cur = last
+				}
+				first = false
+				timeClear = time.Now()
+			}
 			if err = stat.SetCashReqTime(); err != nil {
 				log.Println(`Error`, err)
 			}
@@ -31,7 +41,7 @@ func daemon() {
 			if pause == 0 {
 				pause = 1
 			}
-			log.Println(`Start loop`, max, `/`, pause, `sec`)
+			log.Println(`Start loop`, cur, `/`, max, `/`, pause, `sec`)
 //			max = 20
 		}
 		if iBalance, err = stat.GetBalance(cur); err != nil {
@@ -57,6 +67,14 @@ func daemon() {
 			}
 		}
 		cur++
+		if time.Now().Sub( timeClear ).Hours() > 12 {
+			GDB.ExecSql(`delete from balance where date( uptime, '+14 day' ) < date('now')`)
+			GDB.ExecSql(`delete from req_balance where date( uptime, '+14 day' ) < date('now')`)
+			cbal,_ := GDB.Single(`select count(id) from balance`).Int64()
+			creq,_ := GDB.Single(`select count(id) from req_balance`).Int64()
+			log.Println(`Delete old records: Balance`, cbal, `/ Req_balance`, creq)
+			timeClear = time.Now()
+		}
 		time.Sleep(time.Duration(pause) * time.Second)
 	}
 }
