@@ -21,6 +21,7 @@ $(document).ready(function(){
 	ResizeHeader();
 	
 	$("header .menu").on('click', function(){
+		alert("");
 		if ($("header").hasClass("on")) {
 			$("header").removeClass("on");
 		} else {

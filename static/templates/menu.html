@@ -44,8 +44,7 @@
 		if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
 			image.src = urls[i];
 			image.onload = function(){
-				$('#img_avatar').css("background", "url('"+urls[i]+"')  50% 50%");
-				$('#img_avatar').css("background-size", "100px Auto");
+				$('#img_avatar').css("background-image", "url('"+urls[i]+"')");
 			};
 			// handle failure
 			image.onerror = function(){
@@ -55,29 +54,26 @@
 		}
 		else {
 			//$('#img_avatar').attr('src', '<?php echo $tpl['no_avatar']?>');
-			$('#img_avatar').css("background", "url('{{.NoAvatar}}') 0 0");
+			$('#img_avatar').css("background-image", "url('{{.NoAvatar}}')");
 		}
 	}
 
 	{{if .Avatar}}
-		$("#img_avatar").css("background", "url('{{.Avatar}}') 50% 50%");
-		$("#img_avatar").css("background-size", "100px Auto");
+		$("#img_avatar").css("background-image", "url('{{.Avatar}}')");
 	{{else}}
 		get_img(0);
 	{{end}}
 
 </script>
-<div class="logo"><a href="#"></a></div>
+<div class="logo"><a href="#home"></a></div>
 <div class="menu">
 	<div class="patty"></div>
 </div>
 <nav class="navbar-nav">
 	<ul>
-		<li><a href="#"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-wallet"></span>My account</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-money"></span>Mining</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-referrals"></span>My referrals</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-crowdfunding"></span>CrowdFunding</a></li>
+		<li><a href="#walletsList"><span class="glyphicon glyphicon-wallet"></span>{{.Lang.wallets}}</a></li>
+		<li><a href="#miningMenu"><span class="glyphicon glyphicon-money"></span>{{.Lang.mining}}</a></li>
+		<li><a href="#newUser"><span class="glyphicon glyphicon-referrals"></span>{{.Lang.my_referrals}}</a></li>
 		<li><a href="#"><span class="glyphicon glyphicon-info"></span>Information</a></li>
 		<li><a href="#"><span class="glyphicon glyphicon-settings"></span>Settings</a></li>
 		<li><a href="#"><span class="glyphicon glyphicon-question-sign"></span>Help</a></li>
@@ -93,17 +89,23 @@
 		<li><a class="item" href="#"><span class="glyphicon glyphicon-headset"></span><i>Support</i></a></li>
 		<li class="login">
 			<div class="dropdown">
-				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span style="background-image:url(images/avatar.jpg)"></span>Yuriy Lomakin</a>
+				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
 				<div class="dropdown-menu" aria-labelledby="Login">
-					<div class="dropdown-header">Account number: <strong>1792</strong></div>
-					<a class="dropdown-item" href="#">Status: <strong>Miner</strong></a>
-					<a class="dropdown-item" href="#">Block explorer: <strong>331297</strong></a>
+					<div class="dropdown-header">Account number: <strong>{{.UserId}}</strong></div>
+					<a class="dropdown-item" href="#points">Status: <strong>Miner</strong></a>
+					<a class="dropdown-item" href="#blockExplorer">Block explorer:
+						{{if not .MyNotice.main_status_complete}}
+							<strong style="color:#c53f40;">{{.BlockId}}</strong>
+						{{else}}
+							<strong>{{.BlockId}}</strong>
+						{{end}}
+					</a>
 					<div class="language dropdown-item"><span class="flag flag_1">&nbsp;</span>English</div>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="#">English</a>
 						<a class="dropdown-item" href="#">Русский</a>
 					</div>
-					<a class="dropdown-item" href="#"><span class="glyphicon glyphicon-exit"></span>LogOut</a>
+					<a class="dropdown-item" href="#" onclick="logout()"><span class="glyphicon glyphicon-exit"></span>{{.Lang.logout}}</a>
 				</div>
 			</div>
 		</li>
@@ -389,18 +391,6 @@
 		setTimeout( money_counter, 200 );
 	{{end}}	
 
-	function nav_height() {
-	    h = $(window).height() - 51;
-		if($(window).width() > 730) {
-			$("#leftnavbar").css( 'height', h + 'px' );
-		} else {
-			$("#leftnavbar").css( 'height', 'inherit' );
-			$("#leftnavbar").css( 'max-height', h + 'px' );
-		}
-	}
-	
-	$(window).resize( nav_height );
-	
 	$( document ).ready(function() {
 		key = localStorage.getItem('dcoin_key');
 		if (key.length > 256 && $('#key').html().length < 256 ) {
@@ -419,7 +409,6 @@
 		}else{
 			$('#menu-collapse').addClass('collapse');
 		}
-		nav_height();
 	});
 	setTimeout( function(){
 		if ( typeof THRUST != "undefined" )

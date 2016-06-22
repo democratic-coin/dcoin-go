@@ -1,25 +1,24 @@
 {{ define "login" }}
 <style>
-	#page-wrapper{
-		margin: 0px 10% 0px 10%;
-		border: 1px solid #E7E7E7;
-		padding: 0;
+	body {
+		display:flex;
+	}
+	.container-fluid {
+		display:flex;
+		left:0px;
+		flex-flow:row wrap;
+		align-items:center;
+		align-content:center;
 	}
 	#dc_content{
 		vertical-align: middle;
-	}
-	.row, .col-lg-12, #dc_content {
-		height: 100%;
-	}
-	.row{
-		margin-top:15%
 	}
 
 	#show_login, #show_signup{
 		float:left
 	}
 	#show_login{
-		margin-right:3px;
+		margin-right:5px;
 	}
 	@media(max-width:360px) {
 		#show_login, #show_signup{
@@ -30,43 +29,32 @@
 			margin-bottom:3px;
 		}
 	}
-	.row{
-		display: table-cell;
-	}
-	#page-wrapper{
-		display: table;
-		width: 80%;
-		height: 100%;
-		border: none;
-	}
 </style>
 
 {{if not .UserID}}
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-	<div class="navbar-header">
-		<a class="navbar-brand" href="#" style="display: block; padding-left: 0px;  padding-top: 6px; margin-left: 15px; margin-right: 50px" onclick="dc_navigate('home')"><img src="static/img/logo.png" height="40"></a>
-	</div>
-</nav>
+<header class="nologin navbar-fixed-top">
+	<div class="logo"><a href="#home"></a></div>
+</header>
 {{end}}
 
 {{if .PoolTechWorks}}
 	<div class="alert alert-info" style="max-width: 540px; text-align: center; position: relative; top: 35%; bottom: 0px; margin: auto">{{.Lang.pool_tech_works}}</div><div id="show_login" style="width: 40px; height:40px"></div>
 {{else}}
-	<div style="margin:0 auto; display: table; position: relative; top: 35%;" id="login_div">
-		<span style="display: inline-block">
-			<button type="button" class="btn btn-primary btn-lg" id="show_login" style="position: relative; display: table;">{{.Lang.login}}</button>
-			{{if .SignUp}}<button type="button" class="btn btn-primary btn-lg" id="show_signup" style="position: relative; display: table;  ">{{.Lang.sign_up}}</button>{{end}}
+	<div id="login_div" style="width:100%; text-align:center; padding-top:50px;">
+		<span style="display:inline-block;">
+			<button type="button" class="btn btn-primary btn-lg" id="show_login" style="vertical-align:top;">{{.Lang.login}}</button>
+			{{if .SignUp}}<button type="button" class="btn btn-primary btn-lg" id="show_signup" style="vertical-align:top;">{{.Lang.sign_up}}</button>{{end}}
 		</span>
 	</div>
 {{end}}
 
-<div style="margin:0 auto; display: none; position: relative; top: 35%;" id="loading_div">
+<div style="display:none; width:100%; text-align:center;" id="loading_div">
 		<span style="display: inline-block; text-align: center">
 			<div id="available_key_alert"></div>
 			{{.Lang.please_wait_free_key}}
 		</span>
 </div>
-<div style="margin:0 auto; display: table; position: relative; top: 45%;">
+<div style="width:100%; text-align:center; padding-top:50px;">
 	<span style="display: inline-block; text-align: center">
 		<a href="mailto:darwin@dcoin.club">help</a>
 	</span>
