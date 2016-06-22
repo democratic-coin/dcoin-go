@@ -163,7 +163,7 @@ func (c *Controller) Menu() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		if idPromised == 0 {
-			profit, pct, err = c.GetPromisedAmountCounter()
+			profit, pct, err = c.GetPromisedAmountCounter(c.SessUserId)
 			if err != nil {
 				return "", utils.ErrInfo(err)
 			}
