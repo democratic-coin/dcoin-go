@@ -3,31 +3,31 @@
 <div class="main row">
 	<div class="pull-lg-right col-xs-12 col-lg-6">
 		<div class="col-xs-6">
-			<a class="menu" href="#">
-				<span class="amount">1</span>
+			<a class="menu" href="#cashRequestIn">
+				<span class="amount">{{.CashRequests}}</span>
 				<span class="icon bell"></span>
-				<span class="head"><em>Incoming Requests</em></span>
+				<span class="head"><em>{{.Lang.inbox}}</em></span>
 			</a>
 		</div>
 		<div class="col-xs-6">
-			<a class="menu" href="#">
-				<span class="amount">26</span>
+			<a class="menu" href="#assignments">
+				<span class="amount">{{.Assignments}}</span>
 				<span class="icon pen"></span>
-				<span class="head"><em>Assignments</em></span>
+				<span class="head"><em>{{.Lang.tasks}}</em></span>
 			</a>
 		</div>
 		<div class="col-xs-6">
 			<a class="menu" href="#voting">
-				<span class="text">Points</span>
-				<span class="amount">3145</span>
+				<span class="text">{{.Lang.points}}</span>
+				<span class="amount">{{.Points}}</span>
 				<span class="icon chart"></span>
-				<span class="head"><em>Voting</em></span>
+				<span class="head"><em>{{.Lang.voting}}</em></span>
 			</a>
 		</div>
 		<div class="col-xs-6">
-			<a class="menu" href="#">
+			<a class="menu" href="#cashRequestOut">
 				<span class="icon exchange"></span>
-				<span class="head"><em>Exchange for cash</em></span>
+				<span class="head"><em>{{.Lang.outgoing}}</em></span>
 			</a>
 		</div>
 	</div>

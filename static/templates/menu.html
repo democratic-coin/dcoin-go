@@ -44,7 +44,7 @@
 		if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
 			image.src = urls[i];
 			image.onload = function(){
-				$('#img_avatar').css("background-image", "url('"+urls[i]+"')");
+				$('#img_avatar').css({"background-image": "url('"+urls[i]+"')", "background-color":"transparent"});
 			};
 			// handle failure
 			image.onerror = function(){
@@ -59,7 +59,7 @@
 	}
 
 	{{if .Avatar}}
-		$("#img_avatar").css("background-image", "url('{{.Avatar}}')");
+		$("#img_avatar").css({"background-image": "url('{{.Avatar}}')", "background-color":"transparent"});
 	{{else}}
 		get_img(0);
 	{{end}}
@@ -414,6 +414,16 @@
 		if ( typeof THRUST != "undefined" )
 			THRUST.remote.send("USERID={{.UserId}}");
 		}, 500 );
+		
+	ResizeHeader();
+	
+	$("header .menu").on('click', function(){
+		if ($("header").hasClass("on")) {
+			$("header").removeClass("on");
+		} else {
+			$("header").addClass("on");
+		}
+	});
 
 </script>
 {{ template "modal". }}
