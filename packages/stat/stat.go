@@ -96,7 +96,7 @@ func GetBalance(userId int64) (*InfoBalance,error) {
 	if _, dc, _, err := utils.DB.GetPromisedAmounts(userId, cashReqTime); err == nil {
 		for _, idc := range dc {
 			currency := utils.Int64ToStr(idc.CurrencyId)
-			if _, ok:= ret.Currencies[currency]; ok {
+			if _, ok:= list[currency]; ok {
 				list[currency].Tdc += utils.Round(idc.Tdc,6)
 				list[currency].Promised += idc.Amount
 			} else {
