@@ -379,8 +379,10 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				})
 				thrustWindow.HandleRemote(func(er commands.EventResult, this *window.Window) {
 					fmt.Println("RemoteMessage Recieved:", er.Message.Payload)
-					if er.Message.Payload[:7] == `mailto:` && runtime.GOOS == `windows` {
+					if len(er.Message.Payload) > 7 && er.Message.Payload[:7] == `mailto:` && runtime.GOOS == `windows` {
 						utils.ShellExecute(er.Message.Payload)	
+					} else if len(er.Message.Payload) >= 7 && er.Message.Payload[:7]==`USERID=` {
+						// for Lite version - do nothing 
 					} else {
 						openBrowser(er.Message.Payload)
 					}

@@ -96,7 +96,7 @@ func GetBalance(userId int64) (*InfoBalance,error) {
 	if _, dc, _, err := utils.DB.GetPromisedAmounts(userId, cashReqTime); err == nil {
 		for _, idc := range dc {
 			currency := utils.Int64ToStr(idc.CurrencyId)
-			if _, ok:= ret.Currencies[currency]; ok {
+			if _, ok:= list[currency]; ok {
 				list[currency].Tdc += utils.Round(idc.Tdc,6)
 				list[currency].Promised += idc.Amount
 			} else {
@@ -173,11 +173,10 @@ func GetHistoryBalance(list *ListBalance, userId int64) (int, error) {
 	}
 	if  info.History != nil && len(info.History) > 0 {
 		for key := range *list {
-			var result ResultBalance
-			
 			cur := utils.Int64ToStr(key)
 			for _,ihist := range info.History {
 				if icur,ok:=ihist.Currencies[cur]; ok {
+					var result ResultBalance
 					currencyToResult( icur, &result )
 					(*list)[key] = append((*list)[key], &result)
 				}
