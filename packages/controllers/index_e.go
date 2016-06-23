@@ -74,9 +74,12 @@ func IndexE(w http.ResponseWriter, r *http.Request) {
 			}
 			re := regexp.MustCompile(`^https?:\/\/([0-9a-z\_\.\-:]+)\/?`)
 			match := re.FindStringSubmatch(http_host)
+			catalog := strings.Replace(c.EConfig["catalog"], "/", "", -1)
 			if len(match) != 0 {
-				c.EConfig["catalog"] = strings.Replace(c.EConfig["catalog"], "/", "", -1)
-				eHost = match[1] + "/" + c.EConfig["catalog"] + "/"
+				c.EConfig["catalog"] = catalog
+				eHost = match[1] + "/" + catalog + "/"
+			} else if len(http_host) == 0 {
+				eHost = r.Host + "/" + catalog + "/"
 			}
 		}
 		analyticsDisabled, err := utils.DB.Single(`SELECT analytics_disabled FROM config`).String()
