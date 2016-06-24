@@ -44,20 +44,31 @@
 				'comment' :  $("#comment").val()
 
 			}, function (data) {
-
-				//alert(data);
-
-				$("#comment_encrypted").val(data);
-
-				$("#wallets").css("display", "none");
-				$("#onmap").css("display", "none");
-				$("#sign").css("display", "block");
-				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').val()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
-				doSign();
-				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-				});
-			}
-		} );
+				$.post( 'ajaxjson?controllerName=CheckPromised', { user_id: to_user_id, amount: $('#send_amount').val(),
+				          currency_id : currency_id, }, 
+					function( data ) {
+						if (data.result || !data.success) {
+							$("#message").html('');
+//							alert(data);
+							$("#comment_encrypted").val(data);
+				
+							$("#wallets").css("display", "none");
+							$("#onmap").css("display", "none");
+							$("#sign").css("display", "block");
+							$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').val()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
+							doSign();
+							{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+						}
+						else {
+							$('#available').html( data.data );
+							$('#send_amount').val( data.data );
+							$('#amount_due').html( data.data );
+							$("#message").html( '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>{{.Lang.not_enough_promised}}</div>' );
+						}
+				})
+			})
+		}
+	});
 
 		$('#send_to_net').bind('click', function () {
 
