@@ -3,21 +3,19 @@ package stat
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"github.com/democratic-coin/dcoin-go/packages/controllers"
 	"time"
-//	"encoding/json"
-/*	"io/ioutil"
 	"net/http"
-	"net/url"
-	"strings"
-	"time"
+	"encoding/json"
+	"io/ioutil"
+/*	"strings"
+	"time"*/
 
-	"fmt"*/
+//	"fmt"
 )
 
 const (
-	STAT_SERVER = `http://localhost:8091`
-//	STAT_SERVER = `http://stat.dcoin.club:8201`
+//	STAT_SERVER = `http://localhost:8091`
+	STAT_SERVER = `http://pool.dcoin.club:8201`
 )
 
 type CurrencyBalance struct {
@@ -40,8 +38,17 @@ type HistoryBalance struct {
 	History  []*InfoBalance  `json:"history"`
 }
 
+type ResultBalance struct {
+	CurrencyBalance
+	Currency   string
+	Top        float64
+}
+
+type ListBalance map[int64][]*ResultBalance
+
 var (
 	cashReqTime  int64
+	currencies   map[int64]string = make(map[int64]string)
 )
 
 func SetCashReqTime() error {
@@ -51,6 +58,21 @@ func SetCashReqTime() error {
 		cashReqTime = vars.Int64["cash_request_time"]
 	}
 	return nil
+}
+
+func RoundMoney(in float64, num int ) (out float64) {
+	off := float64(10)
+	for k:=0; k<num + 1; k++ {
+		if in < off {
+			out = utils.Round( in, num - k )
+			break
+		}
+		off *= 10
+	}
+	if out == 0 {
+		out = utils.Round( in, 0 )
+	}
+	return
 }
 
 func GetBalance(userId int64) (*InfoBalance,error) {
@@ -74,22 +96,19 @@ func GetBalance(userId int64) (*InfoBalance,error) {
 	if _, dc, _, err := utils.DB.GetPromisedAmounts(userId, cashReqTime); err == nil {
 		for _, idc := range dc {
 			currency := utils.Int64ToStr(idc.CurrencyId)
-			if _, ok:= ret.Currencies[currency]; ok {
+			if _, ok:= list[currency]; ok {
 				list[currency].Tdc += utils.Round(idc.Tdc,6)
 				list[currency].Promised += idc.Amount
 			} else {
 				list[currency] = &CurrencyBalance{ CurrencyId: idc.CurrencyId,
 			                Promised: idc.Amount, Tdc: utils.Round(idc.Tdc, 6) }
-				}
 			} 
-		} else {
-			return ret,err
 		}
+	} else {
+		return ret,err
+	}
 
-	c := new(controllers.Controller)
-	c.SessUserId = userId
-	c.DCDB = utils.DB
-	if profit,_, err := c.GetPromisedAmountCounter(); err == nil && profit > 0 {
+	if profit,_, err := utils.DB.GetPromisedAmountCounter(userId); err == nil && profit > 0 {
 		currency := `72`
 		if _, ok:= list[currency]; ok {
 			list[currency].Restricted = utils.Round( profit - 30, 6)
@@ -106,3 +125,77 @@ func GetBalance(userId int64) (*InfoBalance,error) {
 	return ret,nil
 }
 
+func currencyToResult(cur *CurrencyBalance, result *ResultBalance ) {
+	result.CurrencyId = cur.CurrencyId
+	result.Wallet = cur.Wallet
+	result.Tdc = cur.Tdc
+	result.Promised = cur.Promised
+	result.Restricted = cur.Restricted
+	result.Summary = cur.Summary
+	if _,ok := currencies[cur.CurrencyId];!ok {
+		currencies[cur.CurrencyId],_ = utils.DB.Single(`select name from currency where id=?`, cur.CurrencyId ).String()
+	}
+	result.Currency = currencies[cur.CurrencyId]
+	result.Summary = utils.Round( cur.Wallet + cur.Tdc + cur.Restricted, 6 )
+	result.Top = RoundMoney(cur.Summary, 5)
+}
+
+func TodayBalance(userId int64) (*ListBalance, error) {
+	list := make( ListBalance )
+	
+	info,err := GetBalance(userId)
+	if err == nil {
+		for _,icur := range info.Currencies {
+			var result ResultBalance 
+			
+			currencyToResult( icur, &result )
+			list[icur.CurrencyId] = make([]*ResultBalance, 1)
+			list[icur.CurrencyId][0] = &result
+		}
+	}
+	return &list, err
+}
+
+
+func GetHistoryBalance(list *ListBalance, userId int64) (int, error) {
+	var info HistoryBalance
+	resp, err := http.Get( STAT_SERVER + `/balance?user_id=` + utils.Int64ToStr(userId))
+	if err != nil {
+		return 0,err
+	}
+	defer resp.Body.Close()
+	history, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 0,err
+	}
+	if err = json.Unmarshal(history, &info); err != nil {
+		return 0,err
+	}
+	if  info.History != nil && len(info.History) > 0 {
+		for key := range *list {
+			cur := utils.Int64ToStr(key)
+			for _,ihist := range info.History {
+				if icur,ok:=ihist.Currencies[cur]; ok {
+					var result ResultBalance
+					currencyToResult( icur, &result )
+					(*list)[key] = append((*list)[key], &result)
+				}
+			}
+		}
+	}
+	max := 2
+	for key := range *list {
+		if count := len( (*list)[key] ); count > max {
+			max = count
+		}
+	}	
+	for key := range *list {
+		if count := len( (*list)[key] ); count < max {
+			for ;count < max; count++ {
+				(*list)[key] = append((*list)[key], &ResultBalance{})
+			}
+		}
+	}	
+	
+	return max-1,nil
+}
