@@ -1,0 +1,51 @@
+{{define "eMySupport"}}
+<style>
+</style>
+<script>
+
+function new_ticket() {
+	var subject = $("#subject").val();
+	var topic = $("#stopic").val();
+	
+	$("#msg").hide();
+	if (subject == '') {
+		$("#msg").html('Subject cannot be empty');
+		$("#msg").show();
+	} else if (topic == '') {
+		$("#msg").html('Message cannot be empty');
+		$("#msg").show();
+	} else {
+		$.post( 'ajax?controllerName=ETicket', {
+			'subject': subject,
+			'topic': topic
+		}, function(data) {
+			alert( data );
+			if (data == '1')
+				dc_navigate('EMySupport');
+			else {
+				$("#err").html(data);
+				$("#msg").show();
+			}
+		}, 'JSON');
+	}
+	return false;
+}
+
+</script>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">{{.Lang.support}}</h1>
+	</div>
+	<div class="col-lg-12">
+		<div id="msg" class="alert alert-danger" style="display:none"></div>
+
+		<div class="panel-group" style="max-width: 600px">
+			{{.Lang.subject}}: <input type="text" id="subject" value="" class="form-control"><br>
+			<textarea rows="4" id="stopic" class="form-control"></textarea><br>
+			<button type="button" class="btn btn-primary" href="#" onclick="return new_ticket()">{{.Lang.send}}</button>
+	</div>
+</div>
+
+<script src="/static/js/unixtime.js"></script>
+
+{{end}}
