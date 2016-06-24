@@ -4,6 +4,7 @@
 
 .alert {
   padding: $alert-padding;
+  margin-top: 0px !important;
   margin-bottom: $spacer-y;
   border: $alert-border-width solid transparent;
   @include border-radius($alert-border-radius);

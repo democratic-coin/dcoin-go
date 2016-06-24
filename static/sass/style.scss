@@ -455,6 +455,24 @@ header {
 				}
 			}
 		}
+		.language {
+			position:relative;
+			.languages {
+				cursor:default;
+				right:100%;
+				top:0px;
+				min-width:50px;
+				&:before {
+					right:-4px;
+					top:9px;
+				}
+			}
+			&:hover {
+				.languages {
+					display:block;
+				}
+			}
+		}
 	}
 	.logo {
 		position:absolute;

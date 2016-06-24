@@ -1,5 +1,125 @@
 {{ define "home" }}
 
+<script type="text/javascript">
+{{if .StatDays}}
+$(function () {
+	var date = new Date();
+	date.setDate(date.getDate() - {{.StatDays}});
+	var day = date.getUTCDate();
+	var month = date.getUTCMonth();
+	var year = date.getFullYear();
+
+	{{range $key, $data := .ListBalance}}
+	$("#d{{(index $data 0).Currency}}").highcharts({
+        chart: {
+            backgroundColor: null,
+			borderWidth: 0,
+			type: 'area',
+			margin: [0, 0, 0, 0],
+			style: {
+				overflow: 'visible'
+			},
+			skipClone: true
+        },
+		exporting: {
+			enabled: false
+		},
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+		credits: {
+			enabled: false
+		},
+		xAxis: {
+			allowDecimals: false,
+			type: 'datetime',
+			labels: {
+				enabled: false,
+				format: '{value:%m-%d}'
+			},
+			title: {
+				text: null
+			},
+			startOnTick: false,
+			endOnTick: false,
+			tickPositions: []
+		},
+		yAxis: {
+			endOnTick: false,
+			startOnTick: false,
+			labels: {
+				enabled: false
+			},
+			title: {
+				text: null
+			},
+			tickPositions: [0]
+		},
+		legend: {
+			enabled: false
+		},
+        tooltip: {
+			backgroundColor: 'rgba(231, 239, 243, 0.9)',
+			shadow: false,
+			hideDelay: 0,
+			pointFormat: 'Balance - <b>{point.y} d{{(index $data 0).Currency}}</b>',
+			positioner: function (w, h, point) {
+				return { x: point.plotX - w / 2, y: point.plotY - h - h/2.5 };
+			}
+		},
+		plotOptions: {
+			series: {
+				animation: false,
+				lineWidth: 1,
+				shadow: false,
+				states: {
+					hover: {
+						lineWidth: 1
+					}
+				},
+				marker: {
+					radius: 1,
+					states: {
+						hover: {
+							radius: 2
+						}
+					}
+				},
+				fillOpacity: 0.25
+			},
+			column: {
+				negativeColor: '#910000',
+				borderColor: 'silver'
+			}
+		},
+        series: [{
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+            data: [{{range $data}}
+				{{.Top}},
+			{{end}}].reverse(),
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 *  36e5
+		}]
+    });
+	{{end}}
+});
+{{end}}
+</script>
+
 <div class="main row">
 	<div class="pull-lg-right col-xs-12 col-lg-6">
 		<div class="col-xs-6">
@@ -36,14 +156,14 @@
 			{{if .ListBalance}}
 			<h2>Available Balance</h2>
 			<div class="balances">
-				{{range .ListBalance}}
+				{{range $key, $data := .ListBalance}}
 				<div class="balance">
 					<article>
-						<span>{{.Top}}</span>
-						<strong>d<em>{{.Currency}}</em></strong>
+						<span>{{(index $data 0).Top}}</span>
+						<strong>d<em>{{(index $data 0).Currency}}</em></strong>
 					</article>
 					<div class="chart_block">
-						<!--div id="d{{.Currency}}" class="chart"></div-->
+						<div id="d{{(index $data 0).Currency}}" class="chart"></div>
 					</div>
 				</div>
 				{{end}}
@@ -70,7 +190,7 @@
 				{{end}}
 				</div>
 			{{end}}
-			<a class="head" href="#"><em>Wallet</em></a>
+			<a class="head" href="#walletsList"><em>{{.Lang.wallets}}</em></a>
 		</div>
 	</div>
 </div>
@@ -1551,8 +1671,6 @@ $(function () {
 	});
 </script>
 <div id="curve_chart"></div>
-<p><a href="static/img/reduction.png" target="_blank">About graphic</a></p>
-<p>Target: {{.DCTarget}} dUSD</p>
 {{end}}
 
 <script>

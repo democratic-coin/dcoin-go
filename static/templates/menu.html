@@ -74,7 +74,7 @@
 		<li><a href="#walletsList"><span class="glyphicon glyphicon-wallet"></span>{{.Lang.wallets}}</a></li>
 		<li><a href="#miningMenu"><span class="glyphicon glyphicon-money"></span>{{.Lang.mining}}</a></li>
 		<li><a href="#newUser"><span class="glyphicon glyphicon-referrals"></span>{{.Lang.my_referrals}}</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-info"></span>Information</a></li>
+		<li><a href="#"><span class="glyphicon glyphicon-info"></span>{{.Lang.information}}</a></li>
 		<li><a href="#"><span class="glyphicon glyphicon-settings"></span>Settings</a></li>
 		<li><a href="#"><span class="glyphicon glyphicon-question-sign"></span>Help</a></li>
 	</ul>
@@ -83,16 +83,16 @@
 	<ul>
 		<li><a class="item" href="#"><span class="glyphicon glyphicon-map-marker"></span><i>Miners map</i></a></li>
 		<li><a class="item" href="#"><span class="glyphicon glyphicon-chat"></span><i>Chat</i></a></li>
-		<li><a class="item" href="#"><span class="glyphicon glyphicon-bell"></span><i>Notifications</i></a></li>
-		<li><a class="item" href="#"><span class="glyphicon glyphicon-charts"></span><i>Statistic</i></a></li>
-		<li><a class="item" href="#"><span class="glyphicon glyphicon-newspaper"></span><i>Wiki</i></a></li>
-		<li><a class="item" href="#"><span class="glyphicon glyphicon-headset"></span><i>Support</i></a></li>
+		<li><a class="item" href="#Notifications"><span class="glyphicon glyphicon-bell"></span><i>{{.Lang.sms_and_email_notifications}}</i></a></li>
+		<li><a class="item" href="#statistic"><span class="glyphicon glyphicon-charts"></span><i>{{.Lang.statistic}}</i></a></li>
+		<li><a class="item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank"><span class="glyphicon glyphicon-newspaper"></span><i>Wiki</i></a></li>
+		<li><a class="item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'><span class="glyphicon glyphicon-headset"></span><i>Support</i></a></li>
 		<li class="login">
 			<div class="dropdown">
 				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
 				<div class="dropdown-menu" aria-labelledby="Login">
 					<div class="dropdown-header">Account number: <strong>{{.UserId}}</strong></div>
-					<a class="dropdown-item" href="#points">Status: <strong>Miner</strong></a>
+					<a class="dropdown-item" href="#points">{{.Lang.status}}: <strong>Miner</strong></a>
 					<a class="dropdown-item" href="#blockExplorer">Block explorer:
 						{{if not .MyNotice.main_status_complete}}
 							<strong style="color:#c53f40;">{{.BlockId}}</strong>
@@ -100,10 +100,12 @@
 							<strong>{{.BlockId}}</strong>
 						{{end}}
 					</a>
-					<div class="language dropdown-item"><span class="flag flag_1">&nbsp;</span>English</div>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">English</a>
-						<a class="dropdown-item" href="#">Русский</a>
+					<div class="language dropdown-item">
+						<span class="flag flag_{{.LangInt}}">&nbsp;</span>English
+						<div class="languages dropdown-menu">
+							<a class="lng dropdown-item" href="#" data-id="1"><span class="flag flag_1">&nbsp;</span>English</a>
+							<a class="lng dropdown-item" href="#" data-id="42"><span class="flag flag_42">&nbsp;</span>Русский</a>
+						</div>
 					</div>
 					<a class="dropdown-item" href="#" onclick="logout()"><span class="glyphicon glyphicon-exit"></span>{{.Lang.logout}}</a>
 				</div>
