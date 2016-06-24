@@ -78,10 +78,10 @@ func AjaxE(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Error("%v", err)
 	}
-	if ok, _ := regexp.MatchString(`^(?i)EGateCP|EPayeerSign|EGatePayeer|EDelOrder|EWithdraw|EGetBalance|ESaveOrder|ESignUp|ELogin|ELogout|ESignLogin|ECheckSign|ERedirect|EInfo|EData|EGatePm|EGateIk$`, controllerName); !ok {
+	if ok, _ := regexp.MatchString(`^(?i)ETicket|EGateCP|EPayeerSign|EGatePayeer|EDelOrder|EWithdraw|EGetBalance|ESaveOrder|ESignUp|ELogin|ELogout|ESignLogin|ECheckSign|ERedirect|EInfo|EData|EGatePm|EGateIk$`, controllerName); !ok {
 		html = "Access denied 0"
 	} else {
-		if ok, _ := regexp.MatchString(`^(?i)EPayeerSign|ESaveOrder|ESignUp|ELogin|ESignLogin|ECheckSign|ERedirect|EInfo|EData|EGatePm|EGateCP|EGateIk|EGatePayeer$`, controllerName); !ok && c.SessUserId <= 0 {
+		if ok, _ := regexp.MatchString(`^(?i)ETicket|EPayeerSign|ESaveOrder|ESignUp|ELogin|ESignLogin|ECheckSign|ERedirect|EInfo|EData|EGatePm|EGateCP|EGateIk|EGatePayeer$`, controllerName); !ok && c.SessUserId <= 0 {
 			html = "Access denied 1"
 		} else {
 			// вызываем контроллер в зависимости от шаблона
