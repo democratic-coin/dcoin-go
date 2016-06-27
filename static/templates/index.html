@@ -118,6 +118,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
 
 	<!-- Bootstrap Core JavaScript -->
+	<script src="static/js/tether.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
 
 
@@ -186,7 +187,7 @@
 		};
 	})(jQuery);
 
-	//$('#wrapper').spin();
+	//$('#loader').spin();
 
 
 </script>
@@ -261,7 +262,8 @@
 		animation: load7 1.8s infinite ease-in-out;
 	}
 	.blockchain_loader {
-		margin: 8em auto;
+		margin: 3em auto;
+		margin-top:0px;
 		font-size: 10px;
 		position: relative;
 		text-indent: -9999em;
@@ -336,37 +338,37 @@
 				console.log("loading_db none /"+response+"/"+status) ;
 			})
 		{{else if .Upgrade3}}
-			$("#wrapper").spin();
+			$("#loader").spin();
 			$( "#dc_menu" ).load( "ajax?controllerName=menu", { }, function() {
 				$.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
 					$.getScript("static/js/sb-admin.js");
 				});
 				$("#dc_content").load( "content", { "tpl_name": "upgrade3" }, function() {
 					$("#key").text("{{.Key}}");
-					doSign('login');$('#wrapper').spin(false);
+					doSign('login');$('#loader').spin(false);
 				})
 			});
 		{{else if .Upgrade4}}
-			$("#wrapper").spin();
+			$("#loader").spin();
 			$( "#dc_menu" ).load( "ajax?controllerName=menu", { }, function() {
 				$.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
 					$.getScript("static/js/sb-admin.js");
 				});
 				$("#dc_content").load( "content", { "tpl_name": "upgrade4" }, function() {
 					$("#key").text("{{.Key}}");
-					doSign('login');$('#wrapper').spin(false);
+					doSign('login');$('#loader').spin(false);
 				})
 			});
 		{{else if .Key}}
-			$("#wrapper").spin();
+			$("#loader").spin();
 			$("#dc_content").load( "content", { {{if .SetLang}}"parameters": {"lang":{{.SetLang}} }{{end}} }, function() {
 				$("#key").text("{{.Key}}");
-				doSign('login');$('#wrapper').spin(false);
+				doSign('login');$('#loader').spin(false);
 			})
 			load_menu({{if .SetLang}}{{.SetLang}}{{end}});
 		{{else}}
-			$("#wrapper").spin();
-			$("#dc_content").load( "content", function() {$("#wrapper").spin(false);});
+			$("#loader").spin();
+			$("#dc_content").load( "content", function() {$("#loader").spin(false);});
 			load_menu();
 		{{end}}
 	});

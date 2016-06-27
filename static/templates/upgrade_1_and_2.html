@@ -148,7 +148,7 @@
 	var first_load = true;
 
 	function change_handleFileSelect(f) {
-		$('#wrapper').spin();
+		$('#loader').spin();
 		$('#change_pkey_key_file_name').html(f.name);
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
@@ -173,7 +173,7 @@
 					}
 					crop_img ('#{{.PhotoType}}_photo');
 					first_load = false;
-					$('#wrapper').spin(false);
+					$('#loader').spin(false);
 					$("#msg_upload_2_photo").remove();
 				}
 			};

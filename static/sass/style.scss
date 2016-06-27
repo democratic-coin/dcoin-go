@@ -36,6 +36,15 @@ a {
 		text-decoration:none;
 	}
 }
+h1 {
+	@include text($reg, 40px, $black, 50px, none);
+	font-weight:normal;
+	margin-bottom:1rem;
+	@include max($mobile) {
+		font-size:25px;
+		line-height:25px;
+	}
+}
 h2 {
 	@include text($reg, 30px, $black, 40px, none);
 	font-weight:normal;
@@ -61,22 +70,14 @@ h2 {
 /* Loader
 ----------------------------------------- */
 .synchronization {
-	display:flex;
 	width:290px;
-	min-height:480px;
-	position:absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	margin:auto;
-	flex-flow:row wrap;
-	align-items:center;
-	align-content:center;
+	margin:0px auto;
 	h2 {
 		width:100%;
 		font-size:24px;
+		line-height:30px;
 		text-align:center;
+		margin-bottom:1rem;
 	}
 	p {
 		width:100%;
@@ -202,7 +203,7 @@ h2 {
 			left:0px;
 			top:0px;
 			width:100%;
-			height:65%;
+			height:100%;
 			background-image:url(../images/D_null.png);
 			background-repeat:no-repeat;
 			background-position:center top;
@@ -213,7 +214,6 @@ h2 {
 			left:0px;
 			bottom:0px;
 			width:100%;
-			height:35%;
 			max-height:100%;
 			background-image:url(../images/D_ok.png);
 			background-repeat:no-repeat;
@@ -225,6 +225,57 @@ h2 {
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
+	}
+}
+/* Start
+----------------------------------------- */
+.start_type {
+	width:600px;
+	text-align:center;
+	margin:0px auto;
+	* {
+		box-sizing:border-box;
+	}
+	#standard {
+		cursor:pointer;
+		display:inline-block;
+	}
+	#extended {
+		cursor:pointer;
+		display:inline-block;
+		margin-bottom:15px;
+	}
+	#extended_div {
+		margin-top:15px;
+	}
+	.extended_form {
+		text-align:left;
+		margin-top:-15px;
+		.form-group {
+			.control-label {
+				padding-left:0px;
+				padding-top:7px;
+				padding-bottom:7px;
+				margin-bottom:15px;
+				@include max($mobile) {
+					width:100%;
+					padding-right:0px;
+					padding-top:0px;
+					padding-bottom:2px;
+					margin-bottom:0px;
+				}
+			}
+			.col-sm-9 {
+				padding-left:0px;
+				padding-right:0px;
+				margin-bottom:15px;
+				div {
+					input {
+						margin-top:15px;
+					}
+				}
+			}
+		}
 	}
 }
 /* Tables
@@ -356,7 +407,7 @@ header {
 			width:100%;
 			height:50px;
 			z-index:3;
-			a {
+			i {
 				left:50%;
 				width:30px;
 				height:30px;
@@ -485,7 +536,7 @@ header {
 			duration:.2s;
 		}
 		z-index:1;
-		a {
+		a, i {
 			display:block;
 			position:relative;
 			left:0px;

@@ -33,10 +33,10 @@
 
 		$('#newCfProject').bind('click', function () {
 
-			$('#wrapper').spin();
+			$('#loader').spin();
 			$( "#dc_content" ).load( "content", { tpl_name: "newCfProject" }, function() {
 				$.getScript("https://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize", function(){
-					$('#wrapper').spin(false);
+					$('#loader').spin(false);
 				});
 			});
 

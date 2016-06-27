@@ -1,48 +1,19 @@
 {{ define "installStep0" }}
-<div class="dc_install_step_0">
 	<style>
-		body{
-			height:100%;
-			padding-top: 30px;
-			padding-bottom:30px;
+		header {
+			display:none;
 		}
-		#page-wrapper{
-			margin: 0px 10% 0px 10%;
-			border: 1px solid #E7E7E7;
-			width:80%;
-			height:100%;
-		}
-		@media screen and (max-width: 767px){
-			body{
-				padding-top: 15px;
-				padding-bottom:15px;
-			}
-			#page-wrapper {
-				width:auto;
-				margin-left:15px;
-				margin-right:15px;
-			}
-		}
-		#page-wrapper .row {
-			display:table;
-			width:100%;
-			height:100%;
-			margin-left:0px;
-			margin-right:0px;
-		}
-		#page-wrapper .row .col-lg-12 {
-			display:table-row;
-			float:none;
-			height:100%;
-			vertical-align:middle;
-		}
-		#wrapper{height: 100%;}
 		#dc_content{
-			display:table-cell;
-			width:100%;
-			height:100%;
-			text-align:center;
-			vertical-align: middle;
+			display:flex;
+			left:0px;
+			width:auto;
+			min-height:100%;
+			flex-flow:row wrap;
+			align-items:center;
+			align-content:center;
+			padding-top:15px;
+			padding-bottom:15px;
+			margin:auto;
 		}
 	</style>
 	<script>
@@ -103,7 +74,7 @@
 	
 		$('#next').bind('click', function () {
 			$('#next').prop('disabled', true);
-			$('#wrapper').spin();
+			$('#loader').spin();
 			$.post( 'content', {
 				'tpl_name' : 'installStep1',
 				'type' : $('input[name=settings]:checked').val(),
@@ -118,38 +89,38 @@
 				'password' : $('#password').val(),
 				'setup_password' : $('#setup_password').val(),
 				'key_password' : $('#key_password').val()
-			}, function (data) { $('#dc_content').html( data );  $('#wrapper').spin(false); }, 'html' );
+			}, function (data) { $('#dc_content').html( data );  $('#loader').spin(false); }, 'html' );
 		} );
 	
 	</script>
 	
-	<div style="max-width: 600px; margin: auto;">
+	<div class="start_type">
 	
 		<!--<ul class="nav nav-tabs" style="margin-bottom: 20px">
 			<li class="active"><a href="#installStep0">Step 0</a></li>
 			<li><a href="#installStep1">Step 1</a></li>
 		</ul>-->
 		<h3>Settings</h3>
-		<lebel id="standard"><input id="settings_standard" type="radio" name="settings" value="standard" checked> Standard</lebel><br>
-		<lebel id="extended"><input id="settings_extended" type="radio" name="settings" id="extended" value="extended"> Extended</lebel>
+		<label id="standard" class="settings"><input id="settings_standard" type="radio" name="settings" value="standard" checked> Standard</label><br />
+		<label id="extended" class="settings"><input id="settings_extended" type="radio" name="settings" id="extended" value="extended"> Extended</label>
 		<div id="extended_div" style="display: none">
 			<form class="extended_form">
-				<div class="form-group setup_password">
+				<fieldset class="form-group setup_password">
 					<label class="col-sm-3 control-label" for="setup_password">Setup password</label>
 					<div class="col-sm-9">
 						<input id="setup_password" class="form-control" type="password">
 					</div>
-				</div>
-				<div class="form-group user_id">
+				</fieldset>
+				<fieldset class="form-group user_id">
 					<label class="col-sm-3 control-label" for="user_id">Your user ID</label>
 					<div class="col-sm-9">
 						<input id="user_id" class="form-control" type="text">
 					</div>
-				</div>
-				<div class="form-group">
+				</fieldset>
+				<fieldset class="form-group">
 					<label class="col-sm-3 control-label" for="first_load">First load</label>
 					<div class="col-sm-9">
-						<select id="first_load" class="form-control">
+						<select id="first_load" class="form-control c-select">
 							<option value="file">Url</option>
 							<option value="nodes">Nodes</option>
 						</select>
@@ -157,53 +128,53 @@
 							<input class="form-control" type="text" id="url" value="http://dcoin.club/blockchain">
 						</div>
 					</div>
-				</div>
-				<div class="form-group">
+				</fieldset>
+				<fieldset class="form-group">
 					<label class="col-sm-3 control-label" for="db_type">DB type</label>
 					<div class="col-sm-9">
-						<select id="db_type" class="form-control">
+						<select id="db_type" class="form-control c-select">
 							<option value="sqlite">Sqlite</option>
 							<option value="postgresql">Postgresql</option>
 							<option value="mysql">Mysql</option>
 						</select>
 					</div>
-				</div>
-				<div class="form-group db_settings">
+				</fieldset>
+				<fieldset class="form-group db_settings">
 					<label class="col-sm-3 control-label" for="host">Host</label>
 					<div class="col-sm-9">
 						<input id="host" class="form-control" type="text">
 					</div>
-				</div>
-				<div class="form-group db_settings">
+				</fieldset>
+				<fieldset class="form-group db_settings">
 					<label class="col-sm-3 control-label" for="port">Port</label>
 					<div class="col-sm-9">
 						<input id="port" class="form-control" type="text">
 					</div>
-				</div>
-				<div class="form-group db_settings">
+				</fieldset>
+				<fieldset class="form-group db_settings">
 					<label class="col-sm-3 control-label" for="db_name">DB name</label>
 					<div class="col-sm-9">
 						<input id="db_name" class="form-control" type="text">
 					</div>
-				</div>
-				<div class="form-group db_settings">
+				</fieldset>
+				<fieldset class="form-group db_settings">
 					<label class="col-sm-3 control-label" for="username">Username</label>
 					<div class="col-sm-9">
 						<input id="username" class="form-control" type="text">
 					</div>
-				</div>
-				<div class="form-group db_settings">
+				</fieldset>
+				<fieldset class="form-group db_settings">
 					<label class="col-sm-3 control-label" for="password">Password</label>
 					<div class="col-sm-9">
 						<input id="password" class="form-control" type="password">
 					</div>
-				</div>
-				<div class="form-group sqlite_settings">
+				</fieldset>
+				<fieldset class="form-group sqlite_settings">
 					<label class="col-sm-3 control-label" for="sqlite_db_url">DB url</label>
 					<div class="col-sm-9">
 						<input id="sqlite_db_url" class="form-control" type="text" value="http://dcoin.club/mlitedb.db">
 					</div>
-				</div>
+				</fieldset>
 			</form>
 			<!--<table class="table">
 	
@@ -227,5 +198,4 @@
 		</div>
 		<button class="btn btn-outline btn-primary btn-block" id="next">{{.Lang.next}}</button>
 	</div>
-</div>
 {{end}}

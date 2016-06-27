@@ -6,7 +6,7 @@
 	});
 
 	function my_notice() {
-		$('#wrapper').spin();
+		$('#loader').spin();
 		$.post('ajax?controllerName=myNoticeData', function(data) {
 			//poll_time = Date.now();
 			//i++;
@@ -36,7 +36,7 @@
 				$('#bar_alert').css("display", "none");
 
 			//setTimeout(doPoll,30000);
-			$('#wrapper').spin(false);
+			$('#loader').spin(false);
 
 		}, 'json' );
 	}

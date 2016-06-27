@@ -1,216 +1,23 @@
 <style>
-	body{padding-top: 30px; padding-bottom:30px;}
-	#page-wrapper{
-		margin: 0px 10% 0px 10%;
-		border: 1px solid #E7E7E7;
-		width:80%;
-		height:100%;
+	header {
+		display:none;
 	}
-	#page-wrapper .row {
-		display:table;
-		width:100%;
-		height:100%;
-		margin-left:0px;
-		margin-right:0px;
-	}
-	#page-wrapper .row .col-lg-12 {
-		display:table-row;
-		float:none;
-		height:100%;
-		vertical-align:middle;
-	}
-	#wrapper{height: 100%;}
 	#dc_content{
-		display:table-cell;
-		width:100%;
-		height:100%;
-		text-align:center;
-		vertical-align: middle;
-	}
-	#dc_menu{display: none}
-
-	@-webkit-keyframes ui-spinner-rotate-right {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
-		25% {
-			-webkit-transform: rotate(180deg);
-		}
-		50% {
-			-webkit-transform: rotate(180deg);
-		}
-		75% {
-			-webkit-transform: rotate(360deg);
-		}
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
-	@-webkit-keyframes ui-spinner-rotate-left {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
-		25% {
-			-webkit-transform: rotate(0deg);
-		}
-		50% {
-			-webkit-transform: rotate(180deg);
-		}
-		75% {
-			-webkit-transform: rotate(180deg);
-		}
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
-	@-moz-keyframes ui-spinner-rotate-right {
-		0% {
-			-moz-transform: rotate(0deg);
-		}
-		25% {
-			-moz-transform: rotate(180deg);
-		}
-		50% {
-			-moz-transform: rotate(180deg);
-		}
-		75% {
-			-moz-transform: rotate(360deg);
-		}
-		100% {
-			-moz-transform: rotate(360deg);
-		}
-	}
-	@-moz-keyframes ui-spinner-rotate-left {
-		0% {
-			-moz-transform: rotate(0deg);
-		}
-		25% {
-			-moz-transform: rotate(0deg);
-		}
-		50% {
-			-moz-transform: rotate(180deg);
-		}
-		75% {
-			-moz-transform: rotate(180deg);
-		}
-		100% {
-			-moz-transform: rotate(360deg);
-		}
-	}
-	@keyframes ui-spinner-rotate-right {
-		0% {
-			transform: rotate(0deg);
-		}
-		25% {
-			transform: rotate(180deg);
-		}
-		50% {
-			transform: rotate(180deg);
-		}
-		75% {
-			transform: rotate(360deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-	@keyframes ui-spinner-rotate-left {
-		0% {
-			transform: rotate(0deg);
-		}
-		25% {
-			transform: rotate(0deg);
-		}
-		50% {
-			transform: rotate(180deg);
-		}
-		75% {
-			transform: rotate(180deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-	.ui-spinner {
-		position: relative;
-		border-radius: 100%;
-	}
-	.ui-spinner .side {
-		width: 50%;
-		height: 100%;
-		overflow: hidden;
-		position: absolute;
-	}
-	.ui-spinner .side .fill {
-		border-radius: 999px;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		-webkit-animation-iteration-count: infinite;
-		-moz-animation-iteration-count: infinite;
-		animation-iteration-count: infinite;
-		-webkit-animation-timing-function: linear;
-		-moz-animation-timing-function: linear;
-		animation-timing-function: linear;
-	}
-	.ui-spinner .side-left {
-		left: 0;
-	}
-	.ui-spinner .side-left .fill {
-		left: 100%;
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-		-webkit-animation-name: ui-spinner-rotate-left;
-		-moz-animation-name: ui-spinner-rotate-left;
-		animation-name: ui-spinner-rotate-left;
-		-webkit-transform-origin: 0 50%;
-		-moz-transform-origin: 0 50%;
-		transform-origin: 0 50%;
-	}
-	.ui-spinner .side-right {
-		left: 50%;
-	}
-	.ui-spinner .side-right .fill {
-		left: -100%;
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-		-webkit-animation-name: ui-spinner-rotate-right;
-		-moz-animation-name: ui-spinner-rotate-right;
-		animation-name: ui-spinner-rotate-right;
-		-webkit-transform-origin: 100% 50%;
-		-moz-transform-origin: 100% 50%;
-		transform-origin: 100% 50%;
-	}
-
-	.example-hole .ui-spinner {
-		width: 226px;
-		height: 226px;
-		background: #ddd;
-	}
-
-	.example-hole .ui-spinner .side .fill {
-		background: #3c76ca;
-		-webkit-animation-duration: 5s;
-		-moz-animation-duration: 5s;
-		animation-duration: 5s;
-		opacity: 0.8;
-	}
-
-	.example-hole .ui-spinner:after {
-		content: "";
-		background: #fff;
-		position: absolute;
-		width: 140px;
-		height: 140px;
-		border-radius: 50%;
-		top: 45px;
-		left: 45px;
-		display: block;
+		display:flex;
+		left:0px;
+		width:auto;
+		min-height:100%;
+		flex-flow:row wrap;
+		align-items:center;
+		align-content:center;
+		padding-top:15px;
+		margin:auto;
 	}
 /*------------------------------------------*/
 
 	.meter1 {
-		height: 20px;
+		height:20px;
+		overflow:hidden;
 		position: relative;
 		margin: 20px 0 20px 0;
 		background: #f0f0f0;
@@ -224,6 +31,7 @@
 	}
 	.meter1 > span {
 		display: block;
+		text-align:center;
 		-webkit-border-top-right-radius: 8px;
 		-webkit-border-bottom-right-radius: 8px;
 		-moz-border-radius-topright: 8px;
@@ -352,8 +160,8 @@
 	$(document).ready(function() 	{
 		var refreshId = setInterval( function() {
 			$.post( 'ajax?controllerName=synchronizationBlockchain', {}, function (data) {
-					console.log(data.block_time);
-					console.log(data.block_id);
+					//console.log(data.block_time);
+					//console.log(data.block_id);
 					if (data.block_id>1) {
 						reload_status = $("#reload_db").css("display");
 						if (data.need_reload == "1" && reload_status == "none") {
@@ -376,7 +184,7 @@
 						$('#confirmed_block_id').text(data.confirmed_block_id);
 						if (data.current_load_blockchain=="nodes") {
 							if (data.connections == "0") {
-								$('#current_load_blockchain').html("Connections: "+data.connections + " <img src='/static/img/rolling.gif'>");
+								$('#current_load_blockchain').html("Connections: "+data.connections + " <span class='loader'></span>");
 							} else {
 								$('#current_load_blockchain').html("Connections: "+data.connections);
 							}
@@ -385,8 +193,7 @@
 						}
 						console.log(d);
 						var pct = Math.round(data.block_id/{{.LastBlock}}*100) - 1;
-						$('#meter').width(pct+'%');
-						$('#meter').text(pct+'%');
+						$('#meter').height(pct+'%');
 					} else if (data.block_id==-1) {
 						window.clearInterval(refreshId);
 						window.location.href = "/";
@@ -404,7 +211,50 @@
 		}, {{.SleepTime}});
 	});
 </script>
-<div style="max-width: 600px; margin: auto; text-align: center">
+<div id="blockchain_loading" class="synchronization" style="display:{{if .WaitText}} block {{else}} none {{end}}">
+	<div class="blockchain_loader" >Loading...</div>
+	<p>{{.WaitText}}</p>
+	<div class="meter1">
+		<span style="width:0%; height:20px; color:#fff" id="meter0">{{.BlockMeter}}%</span>
+	</div>
+</div>
+<div id="blocks_counter" class="synchronization" style="display:{{if .WaitText}} none {{else}} block {{end}}">
+	<h2>{{.Lang.synchronization_blockchain}}</h2>
+	<p id="current_load_blockchain" class="connections">Connections: 0</p>
+	<div id="cur_block_id" class="block_id">{{.BlockId}}</div>
+	<div class="loader">
+		<div id="confirmed_block_id" class="block_id">0</div>
+		<div class="logo">
+			<div class="null"></div>
+			<div id="meter" class="ok" style="height:{{.BlockMeter}}%;"></div>
+		</div>
+		<div id="AlertMessage" class="alerts">
+			<div class="alert alert-danger alert-dismissable">
+				<p></p>
+			</div>
+		</div>
+		{{if .NewVersion}}
+		<div id="UpdateMessage">
+			<div class="alert alert-info alert-dismissable">{{noescape .NewVersion}}</div>
+		</div>
+		{{end}}
+		<div id="reload_db" class="alerts">
+			<div class="alert alert-danger" style="display:{{if .RestartDb}}block{{else}}none{{end}};">
+				<strong>Error!</strong>
+				<button id="reloadBlockchain" class="btn btn-danger">Reload blockchain</button>
+			</div>
+		</div>
+	</div>
+	<textarea class="form-control debug" readonly></textarea>
+	{{if not .Mobile}}
+	<p id="check_time" class="time">{{.AlertTime}} {{noescape .CheckTime}}</p>
+	{{else}}
+	<p id="check_time" class="time">{{.AlertTime}}</p>
+	{{end}}
+	<p class="help"><a href="mailto:darwin@dcoin.club" onclick='THRUST.remote.send("mailto: darwin@dcoin.club")'>Help</a></p>
+</div>
+
+<div style="max-width: 600px; margin: auto; text-align: center; display:none !important;">
 	<div id="blockchain_loading" style="display: {{if .WaitText}} block {{else}} none {{end}}"><div class="blockchain_loader" >Loading...</div>
 	<br>
 	{{.WaitText}}
@@ -459,7 +309,7 @@
 		$('#reloadBlockchain').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
 		$('#reloadBlockchain').prop('disabled', true);
 		$.get('ajax?controllerName=' + {{if .StandardInstall}}'ReloadDb'{{else}}'RestartDb'{{end}}, function (data) {
-			$('#wrapper').spin( false );
+			$('#loader').spin( false );
 			window.location.href = "/";
 		});
 	});
@@ -477,6 +327,23 @@
 				$('#AlertMessage p').html(data.success);
 			}
 		}, 'JSON');
+	});
+	
+	$(document).keydown(function(e){
+		'use strict';
+		if (e.shiftKey === true && e.keyCode === 68) {
+			var debug = $(".synchronization .debug");
+			var blocks = $(".synchronization .loader .block_id");
+			if (debug.is(":hidden")) {
+				$.get('ajax?controllerName=DebugInfo', function (data) {
+					debug.val(data).show();
+					blocks.css({"visibility":"visible"});
+				});
+			} else {
+				debug.blur().hide();
+				blocks.css({"visibility":"hidden"});
+			}
+		}
 	});
 </script>
 <script src="static/js/unixtime.js"></script>

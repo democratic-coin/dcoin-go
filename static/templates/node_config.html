@@ -52,11 +52,11 @@
 
 
 	$('#full').bind('click', function () {
-		$('#wrapper').spin( true );
+		$('#loader').spin( true );
 		$('#wait').text('{{.Lang.please_wait}}');
 		$.post( 'ajax?controllerName=clearDb', { } ,
 				function () {
-					$('#wrapper').spin( false );
+					$('#loader').spin( false );
 					window.location = '/';
 //					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
 				});

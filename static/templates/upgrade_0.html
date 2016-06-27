@@ -7,13 +7,13 @@
 		if(typeof sel == "undefined" || typeof country == "undefined") {
 			$('#alert').html('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Please select race.</div>')
 		} else {
-			$('#wrapper').spin(false);
+			$('#loader').spin(false);
 			$.post('ajax?controllerName=saveRaceCountry', {
 						'race': $('input:radio[name=race]:checked').val(),
 						'country': country
 					},
 					function (data) {
-						$('#wrapper').spin(false);
+						$('#loader').spin(false);
 						user_photo_navigate('upgrade1');
 						window.scrollTo(0, 0);
 					});
