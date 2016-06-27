@@ -401,7 +401,7 @@ func Migration() {
 			schema_.S = s
 			schema_.PrintSchema()
 		}
-		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.4b2") {
+		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.4b3") {
 			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
@@ -415,6 +415,7 @@ func Migration() {
 			s2[4] = map[string]string{"name": "idroot", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[5] = map[string]string{"name": "time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[6] = map[string]string{"name": "status", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
+			s2[7] = map[string]string{"name": "uptime", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 
 			s1["fields"] = s2
 			s1["PRIMARY"] = []string{"id"}
@@ -424,7 +425,8 @@ func Migration() {
 			schema_.S = s
 			schema_.PrintSchema()
 			
-			schema_.DCDB.Exec(`CREATE INDEX idroot ON e_tickets (idroot)`)
+			schema_.DB.Exec(`CREATE INDEX e_ticket_idroot ON e_tickets (idroot)`)
+			schema_.DB.Exec(`CREATE INDEX e_ticket_uptime ON e_tickets (uptime)`)
 		}
 
 		err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
