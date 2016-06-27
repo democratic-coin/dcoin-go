@@ -42,6 +42,9 @@ func (c *Controller) ETicket() (string, error) {
 	                 values(?,?,?,?,datetime('now'), ?,datetime('now'))`, userId, subject, topic, idroot, status )
 	if err == nil && idroot>0 {
 		c.ExecSql(`update e_tickets set uptime=datetime('now') where id=?`, idroot )
-	}			
+	}
+	if err!=nil {
+		return "", utils.ErrInfo(err)
+	}
 	return `1`, nil
 }
