@@ -1,6 +1,4 @@
-{{define "eMySupport"}}
-<style>
-</style>
+{{define "exchangeSupport"}}
 <script>
 
 function new_ticket() {
@@ -8,6 +6,12 @@ function new_ticket() {
 	
 	$("#msg").hide();
 	{{if not .IdRoot}}
+		var userid = $("#userid").val();
+		if (userid == '') {
+			$("#msg").html('Enter User ID');
+			$("#msg").show();
+			return false;
+		}
 		var subject = $("#subject").val();
 		if (subject == '') {
 			$("#msg").html('Subject cannot be empty');
@@ -16,6 +20,7 @@ function new_ticket() {
 		} 
 	{{else}}
 	   var subject = '';
+	   var userid = {{.ToUserId}};
 	{{end}}
 	
 	if (topic == '') {
@@ -25,11 +30,13 @@ function new_ticket() {
 		$.post( 'ajax?controllerName=ETicket', {
 			'subject': subject,
 			'idroot': {{.IdRoot}},
+			'userid': userid,
 			'topic': topic
 		}, function(data) {
 			if (data == '1')
-				dc_navigate('EMySupport');
+				dc_navigate('ExchangeSupport');
 			else {
+				alert(data);
 				$("#msg").html(data);
 				$("#msg").show();
 			}
@@ -39,18 +46,18 @@ function new_ticket() {
 }
 
 function open_topic( id ) {
-	dc_navigate('EMySupport', {idroot: id});
+	dc_navigate('ExchangeSupport', {idroot: id});
 	return false;
 }
-
 </script>
+
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">{{.Lang.support}}</h1>
+		<h1 class="page-header">Exchange support</h1>
 	</div>
 	{{if .IdRoot}}
 			<div class="col-lg-12">
-			<a href="#" onclick="dc_navigate('EMySupport'); return false;">{{.Lang.support}}</a> - <strong>#{{.IdRoot}} {{.Topic}}</strong>
+			<a href="#" onclick="dc_navigate('ExchangeSupport'); return false;">{{.Lang.support}}</a> - <strong>#{{.IdRoot}} {{.Topic}}</strong>
 			</div>
 		<div class="col-lg-12">
 			{{range $id, $data := .List}}
@@ -68,6 +75,7 @@ function open_topic( id ) {
 
 		<div class="panel-group" style="max-width: 600px">
 	{{if not .IdRoot}}
+			User ID: <input type="text" id="userid" value="" class="form-control" style="width: 70px;"><br>
 			{{.Lang.subject}}: <input type="text" id="subject" value="" class="form-control"><br>
 	{{end}}
 			<textarea rows="4" id="stopic" class="form-control"></textarea><br>
@@ -105,6 +113,10 @@ function open_topic( id ) {
 	{{end}}
 </div>
 
-<script src="/static/js/unixtime.js"></script>
+<script>
+
+</script>
+
+<script src="static/js/unixtime.js"></script>
 
 {{end}}
