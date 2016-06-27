@@ -7,7 +7,9 @@
 .dropdown-toggle {
   // Generate the caret automatically
   &::after {
+	position:relative;
     display: inline-block;
+	top:-1px;
     width: 0;
     height: 0;
     margin-right: 0px;

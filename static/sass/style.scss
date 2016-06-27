@@ -41,8 +41,17 @@ h1 {
 	font-weight:normal;
 	margin-bottom:1rem;
 	@include max($mobile) {
-		font-size:25px;
-		line-height:25px;
+		position:fixed;
+		left:0px;
+		top:0px;
+		width:100%;
+		height:0px;
+		font-size:20px;
+		line-height:50px;
+		color:$lgray;
+		text-align:center;
+		margin:0px;
+		z-index:1031;
 	}
 }
 h2 {
@@ -504,6 +513,9 @@ header {
 				&_1 {
 					background-position:0px -16px;
 				}
+				&_42 {
+					background-position:0px 0px;
+				}
 			}
 		}
 		.language {
@@ -626,7 +638,7 @@ header {
 				}
 				span {
 					border:1px solid $white;
-					background-color:rgba(45, 57, 64, 0.75);
+					background-color:transparent;
 				}
 			}
 			.dropdown-menu {
@@ -644,6 +656,18 @@ header {
 				}
 				.dropdown-item {
 					border:0px;
+					&.language {
+						.languages {
+							left:50%;
+							right:auto;
+							top:100%;
+							width:140px;
+							margin-left:-70px;
+							&:before {
+								top:-4px;
+							}
+						}
+					}
 				}
 				.dropdown-item:last-child {
 					border-top:1px solid #f8fafb;
@@ -669,7 +693,7 @@ header {
 			li {
 				list-style:none;
 				&:hover {
-					a {
+					.main_link {
 						background-color:lighten($lgray, 5%);
 						color:$blue;
 						.glyphicon {
@@ -687,7 +711,7 @@ header {
 						}
 					}
 				}
-				a {
+				.main_link {
 					position:relative;
 					display:block;
 					height:50px;
@@ -735,6 +759,21 @@ header {
 								duration:.2s;
 							}
 						}
+					}
+				}
+				.dropdown-menu {
+					left:5px;
+					width:230px;
+					background-color:$lgray;
+					box-shadow:0 0px 15px rgba(0, 0, 0, 0.5);
+					outline:none;
+					@include max($tablet) {
+						top:auto;
+						bottom:40px;
+					}
+					.dropdown-item {
+						font-family:$med;
+						text-transform:uppercase;
 					}
 				}
 			}
@@ -838,6 +877,7 @@ header {
 		}
 	}
 	&.on {
+		z-index:1032;
 		.menu {
 			.patty {
 				background:none !important;

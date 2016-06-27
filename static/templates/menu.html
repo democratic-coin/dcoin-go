@@ -71,12 +71,63 @@
 </div>
 <nav class="navbar-nav">
 	<ul>
-		<li><a href="#walletsList"><span class="glyphicon glyphicon-wallet"></span>{{.Lang.wallets}}</a></li>
-		<li><a href="#miningMenu"><span class="glyphicon glyphicon-money"></span>{{.Lang.mining}}</a></li>
-		<li><a href="#newUser"><span class="glyphicon glyphicon-referrals"></span>{{.Lang.my_referrals}}</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-info"></span>{{.Lang.information}}</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-settings"></span>{{.Lang.settings}}</a></li>
-		<li><a href="#"><span class="glyphicon glyphicon-question-sign"></span>{{.Lang.help}}</a></li>
+		{{if .Admin}}
+		<li>
+			<div class="dropdown">
+				<a id="Admin" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-home"></span>Admin</a>
+				<div class="dropdown-menu sub" aria-labelledby="Admin">
+					<a class="dropdown-item" href="#adminVariables">Variables</a>
+				</div>
+			</div>
+		</li>
+		{{end}}
+		<li><a class="main_link" href="#walletsList"><span class="glyphicon glyphicon-wallet"></span>{{.Lang.wallets}}</a></li>
+		<li><a class="main_link" href="#miningMenu"><span class="glyphicon glyphicon-money"></span>{{.Lang.mining}}</a></li>
+		{{if .MinerId}}
+		<li><a class="main_link" href="#newUser"><span class="glyphicon glyphicon-referrals"></span>{{.Lang.my_referrals}}</a></li>
+		{{end}}
+		<li>
+			<div class="dropdown">
+				<a id="Information" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-info"></span>{{.Lang.information}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Information">
+					<!--<a class="dropdown-item" href="#pct">{{.Lang.pct}}</a>
+					<a class="dropdown-item" href="#reduction">{{.Lang.reduction}}</a>-->
+					<a class="dropdown-item" href="#statisticVoting">{{.Lang.voting}}</a>
+					<a class="dropdown-item" href="#statistic">{{.Lang.statistic}}</a>
+					<a class="dropdown-item" href="#information">{{.Lang.information}}</a>
+					<a class="dropdown-item" href="#dbInfo">{{.Lang.db_info}}</a>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="dropdown">
+				<a id="Settings" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-settings"></span>{{.Lang.settings}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Settings">
+					{{if or .PoolAdmin (not .Community)}}<a class="dropdown-item" href="#changeNodeKey">{{.Lang.change_node_key}}</a>{{end}}
+					<a class="dropdown-item" href="#changePrimaryKey">{{.Lang.change_master_key}}</a>
+					<a class="dropdown-item" href="#restoringAccess">{{.Lang.restoring_access}}</a>
+					{{if .PoolAdmin}}
+					<a class="dropdown-item" href="#poolAdminControl">Pool admin</a>
+					<a class="dropdown-item" href="#changeHost">{{.Lang.change_host_title}}</a>
+					<a class="dropdown-item" href="#nodeConfigControl">{{.Lang.config_node}}</a>
+					{{end}}
+					{{if .ExchangeEnable}}<a class="dropdown-item" href="#exchangeAdmin">Exchange admin</a>{{end}}
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="dropdown">
+				<a id="Help" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-question-sign"></span>{{.Lang.help}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Help">
+					<a class="dropdown-item" href="{{.Lang.faq_url}}" onclick='THRUST.remote.send("{{.Lang.faq_url}}")' target="_blank">{{.Lang.faq}}</a>
+					<a class="dropdown-item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank">{{.Lang.wiki}}</a>
+					<a class="dropdown-item" href="http://dcoinforum.org" onclick='THRUST.remote.send("http://dcoinforum.org")' target="_blank">{{.Lang.forum}}</a>
+					<!--<a class="dropdown-item" href="#bug_reporting">{{.Lang.bug_reporting}}</a>-->
+					<a class="dropdown-item" href="#abuse">{{.Lang.complaints_miners}}</a>
+					<a class="dropdown-item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'>{{.Lang.support}}</a>
+				</div>
+			</div>
+		</li>
 	</ul>
 </nav>
 <div class="mainmenu container-fluid">
@@ -100,6 +151,7 @@
 							<strong>{{.BlockId}}</strong>
 						{{end}}
 					</a>
+					{{if eq .Restricted 0}}<a class="dropdown-item" href="#interface">{{.Lang.interface}}</a>{{end}}
 					<div class="language dropdown-item">
 						<span class="flag flag_{{.LangInt}}">&nbsp;</span>{{.Lang.languages}}
 						<div class="languages dropdown-menu">
