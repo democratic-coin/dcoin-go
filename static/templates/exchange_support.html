@@ -36,8 +36,7 @@ function new_ticket() {
 			if (data == '1')
 				dc_navigate('ExchangeSupport');
 			else {
-				alert(data);
-				$("#msg").html(data);
+				$("#msg").html(data.error);
 				$("#msg").show();
 			}
 		}, 'JSON');
@@ -101,7 +100,7 @@ function open_topic( id ) {
 								<tr><td>{{$data.id}}</td><td>{{if eq $data.toread "1"}}<strong>{{end}}<a href="#" onclick="return open_topic({{$data.id}})">{{$data.subject}}</a>{{if eq $data.toread "1"}}</strong>{{end}}
 								{{if ne $data.count "0"}} ({{$data.count}}){{end}}</td>
 								<td>{{$data.author}}</td>
-								<td classx="unixtime">{{$data.uptime}}</td>
+								<td class="unixtime">{{$data.uptime}}</td>
 								</tr>
 							{{end}}
 						</tbody>
