@@ -497,9 +497,7 @@ function foattoupper(x) {
 						<tr><td>{{.Lang.note}}</td><td><input class="form-control" type="text" id="comment"></td></tr>
 						<tr><td>{{.Lang.arbitration}}</td><td>{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}</td></tr>
 					</table>
-					<button id="goto_confirm" class="btn btn-outline btn-primary" type="button" style="margin-left: 7px">{{.Lang.next}}</button>
-					<br><br>
-
+					<center><button id="goto_confirm" class="btn btn-outline btn-primary" type="button" style="margin-top:1rem;">{{.Lang.next}}</button></center>
 					{{if .Wallets}}
 						<h3>{{.Lang.balances}}</h3>
 						<table class="table" style="max-width:400px">

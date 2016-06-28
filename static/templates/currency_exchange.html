@@ -175,12 +175,6 @@
 	.row { margin-right: auto; margin-left: auto;}
 	#page-wrapper {width:900px}
 	{{end}}
-	.cols {
-		display:inline-block;
-		float:none;
-		width:360px;
-		vertical-align:top;
-	}
 </style>
 
 <div id="main_div">
@@ -198,7 +192,7 @@
 			<p style="text-align: center;">{{.Lang.forex_alert}}</p>
 			<div style="text-align: center;">
 				<div style="padding-bottom: 10px; display: inline-block">{{.Lang.order_buy}}
-					<select id="buy_currency_id" style="width: 100px; display: inline-block" class="form-control" >
+					<select id="buy_currency_id" style="width: 100px; display: inline-block" class="c-select form-control" >
 						{{range $id, $name := .CurrencyListName}}
 							{{if eq $id $.BuyCurrencyId}}
 								<option value='{{$id}}' selected>d{{$name}}</option>
@@ -206,8 +200,8 @@
 								<option value='{{$id}}'>d{{$name}}</option>
 							{{end}}
 						{{end}}
-					</select> <a href="#currencyExchange/buy_currency_id={{.SellCurrencyId}}/sell_currency_id={{.BuyCurrencyId}}"><i class="fa  fa-exchange  fa-fw"></i></a> {{.Lang.order_sell}}
-					<select id="sell_currency_id" style="width: 100px; display: inline-block" class="form-control" >
+					</select> <a href="#currencyExchange/buy_currency_id={{.SellCurrencyId}}/sell_currency_id={{.BuyCurrencyId}}"><i class="glyphicon glyphicon-transfer"></i></a> {{.Lang.order_sell}}
+					<select id="sell_currency_id" style="width: 100px; display: inline-block" class="c-select form-control" >
 						{{range $id, $name := .CurrencyListName}}
 							{{if eq $id $.SellCurrencyId}}
 								<option value='{{$id}}' selected>d{{$name}}</option>
@@ -225,11 +219,9 @@
 	
 			<center>
 			<div class="col-md-6 cols">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title"><i class="fa fa-arrow-circle-down"></i> {{.Lang.buy}} {{.BuyCurrencyName}}</h3>
-					</div>
-					<div class="panel-body">
+				<div class="card card-info card-inverse">
+					<div class="card-header"><i class="glyphicon glyphicon-circle-arrow-down"></i> {{.Lang.buy}} {{.BuyCurrencyName}}</div>
+					<div class="card-block">
 						<table class="table1">
 							<caption><strong>{{.Lang.buy}} d{{.BuyCurrencyName}}</strong></caption>
 							<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="buy_amount" class="input-mini form-control"></td></tr>
@@ -257,11 +249,9 @@
 				</div>
 			</div>
 			<div class="col-md-6 cols">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title"><i class="fa fa-arrow-circle-up"></i> {{.Lang.sell}} {{.BuyCurrencyName}}</h3>
-					</div>
-					<div class="panel-body">
+				<div class="card card-info card-inverse">
+					<div class="card-header"><i class="glyphicon glyphicon-circle-arrow-top"></i> {{.Lang.sell}} {{.BuyCurrencyName}}</div>
+					<div class="card-block">
 						<table class="table1">
 							<caption><strong>{{.Lang.sell}} d{{.BuyCurrencyName}}</strong></caption>
 							<tr><td>{{.Lang.amount_currency}} d{{.BuyCurrencyName}}: </td><td><input type="text" id="sell_amount" class="input-mini form-control"></td></tr>

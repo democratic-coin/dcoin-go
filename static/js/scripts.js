@@ -3,12 +3,12 @@ function ResizeHeader(){
 	'use strict';
 	
 	var w = $("body").width();
-	if (w >= 975 && w < 1500) {
+	if (w >= 976 && w < 1500) {
 		$("header .logo").prependTo($("header .navbar-nav"));
 	} else {
 		$("header .logo").prependTo($("header"));
 	}
-	if (w < 975) {
+	if (w < 976) {
 		$("header .login").insertBefore($("header .navbar-nav ul"));
 	} else {
 		$("header .login").appendTo($(".mainmenu ul"));

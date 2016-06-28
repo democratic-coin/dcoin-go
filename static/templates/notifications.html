@@ -212,7 +212,7 @@ function js_checkemail( email, strict)
 	$("#main_div input").addClass( "form-control" );
 	$("#main_div textarea").addClass( "form-control" );
 	$("#main_div textarea").width( 500 );
-	$("#main_div button").addClass( "btn-outline btn-primary" );
+	$("#main_div button").addClass( "btn-outline btn-success" );
 
 </script>
 <div id="main_div">
@@ -232,7 +232,7 @@ function js_checkemail( email, strict)
 				</style>
 				<p>{{.Lang.please_enter_email}}</p>
 				<div class="form-group">
-					<input type="email" id="simple_email" class="input-xlarge" value="{{.Data.email}}" style="margin-bottom:1rem;">
+					<input type="email" id="simple_email" class="input-xlarge" value="{{.Data.email}}">
 				</div>
 			</div>
 			<div class="card-footer">
@@ -374,8 +374,6 @@ function js_checkemail( email, strict)
 		<tr><td colspan="{{if .NodeAdmin}}3{{else}}2{{end}}" style="text-align: center"><button type="submit" class="btn" id="save2">{{.Lang.save}}</button></td></tr>
 	</table>
 </div>
-<br><br>
-
 
 <script>
 	if	($("#use_smtp").is(':checked'))
