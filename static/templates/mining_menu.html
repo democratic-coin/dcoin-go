@@ -11,7 +11,7 @@
 	{{template "alertSuccess".}}
 	<div>
 		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" style="margin-bottom: 20px">
+		<ul class="nav nav-tabs">
 			<li class="nav-item"><a class="nav-link active" aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
 			</li>
 			<li class="nav-item"><a class="nav-link" aria-expanded="false" href="#tab2" data-toggle="tab">{{.Lang.assignments}}</a>
@@ -25,56 +25,56 @@
 			<div class="tab-pane fade active in" id="tab1">
 				<div class="tabs_table">
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.promised_amounts}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_promised_amounts_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#promisedAmountList">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.outgoing}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_outgoing_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate('cashRequestOut')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.inbox}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{noescape .Lang.mining_menu_inbox_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#cashRequestIn">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.vote_for_me}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_vote_for_me_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#voteForMe">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -85,14 +85,14 @@
 			<div class="tab-pane fade" id="tab2">
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.points}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_points_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#points">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -100,14 +100,14 @@
 		
 		
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.tasks}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_tasks_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate('assignments')">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -115,14 +115,14 @@
 		
 		
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.voting}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_voting_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#voting">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -137,42 +137,42 @@
 	
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.reg_users}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_reg_users_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#newUser">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.commission}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_commission_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#changeCommission">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.holidays}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_holidays_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#holidaysList">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -180,40 +180,40 @@
 				</div>
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.geolocation}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_geolocation_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('changeGeolocation')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.sms_and_email_notifications}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.sms_and_email_notifications}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('Notifications')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								Exchange voting
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>Exchange voting</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="dc_navigate ('VotesExchange')">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -223,14 +223,14 @@
 
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								FREE COINS
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>FREE COINS</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}')">{{.Lang.goto}}</a>
 							</div>
 						</div>
