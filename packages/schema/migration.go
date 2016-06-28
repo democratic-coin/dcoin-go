@@ -1,13 +1,11 @@
-package dcoin
+package schema
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/consts"
-	"github.com/democratic-coin/dcoin-go/packages/schema"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 )
 
-func migration() {
-
+func Migration() {
 	oldDbVersion, err := utils.DB.Single(`SELECT version FROM migration_history ORDER BY id DESC LIMIT 1`).String()
 	if err != nil {
 		log.Error("%v", utils.ErrInfo(err))
@@ -79,13 +77,13 @@ func migration() {
 				log.Error("%v", utils.ErrInfo(err))
 			}
 
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
 
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "bigint(20) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint NOT NULL  default nextval('auto_payments_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "amount", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "commission", "mysql": "decimal(20,8) NOT NULL DEFAULT '0'", "sqlite": "decimal(20,8) NOT NULL DEFAULT '0'", "postgresql": "decimal(20,8) NOT NULL DEFAULT '0'", "comment": ""}
@@ -105,9 +103,9 @@ func migration() {
 			schema_.S = s
 			schema_.PrintSchema()
 
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
@@ -119,9 +117,9 @@ func migration() {
 			schema_.S = s
 			schema_.PrintSchema()
 
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_change_ca_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
@@ -143,12 +141,12 @@ func migration() {
 
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.1.0a23") {
 
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[1] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "year", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -166,12 +164,12 @@ func migration() {
 
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a1") {
 
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('stats_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "day", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "month", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -190,12 +188,12 @@ func migration() {
 
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a3") {
 
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "version", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "date_applied", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -217,12 +215,12 @@ func migration() {
 		}
 
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.3a8") {
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('migration_history_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": ""}
@@ -237,18 +235,13 @@ func migration() {
 			schema_.PrintSchema()
 		}
 
-		err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
-		if err != nil {
-			log.Error("%v", utils.ErrInfo(err))
-		}
-
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.4a1") {
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_arbitrator_conditions_log_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "last_payment_time", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -276,12 +269,12 @@ func migration() {
 		}
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.2.5b3") {
 			log.Debug("*utils.OldVersion", *utils.OldVersion)
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('log_time_user_upgrade_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "time", "mysql": "int(10) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(10)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": ""}
@@ -294,12 +287,12 @@ func migration() {
 			schema_.PrintSchema()
 
 
-			schema_ = &schema.SchemaStruct{}
+			schema_ = &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "sn_type", "mysql": "varchar(100) NOT NULL DEFAULT ''", "sqlite": "varchar(100) NOT NULL DEFAULT ''", "postgresql": "varchar(100) NOT NULL DEFAULT ''", "comment": ""}
 			s2[1] = map[string]string{"name": "sn_url_id", "mysql": "varchar(255) NOT NULL DEFAULT ''", "sqlite": "varchar(255) NOT NULL DEFAULT ''", "postgresql": "varchar(255) NOT NULL DEFAULT ''", "comment": ""}
 			s2[2] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -313,12 +306,12 @@ func migration() {
 			schema_.AddColumn = true
 			schema_.PrintSchema()
 
-			schema_ = &schema.SchemaStruct{}
+			schema_ = &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "sn_type", "mysql": "varchar(100) NOT NULL DEFAULT ''", "sqlite": "varchar(100) NOT NULL DEFAULT ''", "postgresql": "varchar(100) NOT NULL DEFAULT ''", "comment": ""}
 			s2[1] = map[string]string{"name": "sn_url_id", "mysql": "varchar(255) NOT NULL DEFAULT ''", "sqlite": "varchar(255) NOT NULL DEFAULT ''", "postgresql": "varchar(255) NOT NULL DEFAULT ''", "comment": ""}
 			s2[2] = map[string]string{"name": "votes_start_time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -332,12 +325,12 @@ func migration() {
 			schema_.AddColumn = true
 			schema_.PrintSchema()
 
-			schema_ = &schema.SchemaStruct{}
+			schema_ = &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "user_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": "Кто голосует"}
 			s2[1] = map[string]string{"name": "voting_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": "За что голосует. тут может быть id geolocation и пр"}
 			s2[2] = map[string]string{"name": "type", "mysql": "enum('null','votes_miners','promised_amount','sn_user') NOT NULL", "sqlite": "varchar(100)  NOT NULL", "postgresql": "enum('null','votes_miners','promised_amount','sn_user') NOT NULL", "comment": "Нужно для voting_id' DEFAULT 'null"}
@@ -351,12 +344,12 @@ func migration() {
 			schema_.PrintSchema()
 
 
-			schema_ = &schema.SchemaStruct{}
+			schema_ = &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s = make(schema.Recmap)
-			s1 = make(schema.Recmap)
-			s2 = make(schema.Recmapi)
+			s = make(Recmap)
+			s1 = make(Recmap)
+			s2 = make(Recmapi)
 			s2[0] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
 			s2[1] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
 			s2[2] = map[string]string{"name": "log_id", "mysql": "bigint(20) NOT NULL DEFAULT '0'", "sqlite": "bigint(20) NOT NULL DEFAULT '0'", "postgresql": "bigint NOT NULL DEFAULT '0'", "comment": ""}
@@ -368,12 +361,12 @@ func migration() {
 		}
 
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.1b5") {
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "log_id", "mysql": "bigint(20) unsigned NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "bigint  NOT NULL  default nextval('log_promised_amount_log_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "dc_amount", "mysql": "decimal(13,2) NOT NULL DEFAULT '0'", "sqlite": "decimal(13,2) NOT NULL DEFAULT '0'", "postgresql": "decimal(13,2) NOT NULL DEFAULT '0'", "comment": "Списанная сумма намайненного"}
 			s2[2] = map[string]string{"name": "last_update", "mysql": "int(11) unsigned NOT NULL DEFAULT '0'", "sqlite": "int(11)  NOT NULL DEFAULT '0'", "postgresql": "int  NOT NULL DEFAULT '0'", "comment": "Время последнего перевода намайненного на счет"}
@@ -388,12 +381,12 @@ func migration() {
 			schema_.PrintSchema()
 		}
 		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.3b2") {
-			schema_ := &schema.SchemaStruct{}
+			schema_ := &SchemaStruct{}
 			schema_.DbType = utils.DB.ConfigIni["db_type"]
 			schema_.DCDB = utils.DB
-			s := make(schema.Recmap)
-			s1 := make(schema.Recmap)
-			s2 := make(schema.Recmapi)
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
 			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('notifications_id_seq')", "comment": ""}
 			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
 			s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
@@ -407,6 +400,38 @@ func migration() {
 			s["notifications"] = s1
 			schema_.S = s
 			schema_.PrintSchema()
+		}
+		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.4b3") {
+			schema_ := &SchemaStruct{}
+			schema_.DbType = utils.DB.ConfigIni["db_type"]
+			schema_.DCDB = utils.DB
+			s := make(Recmap)
+			s1 := make(Recmap)
+			s2 := make(Recmapi)
+			s2[0] = map[string]string{"name": "id", "mysql": "int(11) NOT NULL AUTO_INCREMENT DEFAULT '0'", "sqlite": "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL", "postgresql": "int NOT NULL  default nextval('notifications_id_seq')", "comment": ""}
+			s2[1] = map[string]string{"name": "user_id", "mysql": "bigint(20) unsigned NOT NULL DEFAULT '0'", "sqlite": "bigint(20)  NOT NULL DEFAULT '0'", "postgresql": "bigint  NOT NULL DEFAULT '0'", "comment": ""}
+			s2[2] = map[string]string{"name": "subject", "mysql": "varchar(255) NOT NULL DEFAULT ''", "sqlite": "varchar(255) NOT NULL DEFAULT ''", "postgresql": "varchar(255) NOT NULL DEFAULT ''", "comment": ""}
+			s2[3] = map[string]string{"name": "topic", "mysql": "text CHARACTER SET utf8 NOT NULL DEFAULT ''", "sqlite": "text NOT NULL DEFAULT ''", "postgresql": "text NOT NULL DEFAULT ''", "comment": ""}
+			s2[4] = map[string]string{"name": "idroot", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+			s2[5] = map[string]string{"name": "time", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+			s2[6] = map[string]string{"name": "status", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
+			s2[7] = map[string]string{"name": "uptime", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
+
+			s1["fields"] = s2
+			s1["PRIMARY"] = []string{"id"}
+			s1["AI"] = "id"
+			s1["comment"] = ""
+			s["e_tickets"] = s1
+			schema_.S = s
+			schema_.PrintSchema()
+			
+			schema_.DB.Exec(`CREATE INDEX e_ticket_idroot ON e_tickets (idroot)`)
+			schema_.DB.Exec(`CREATE INDEX e_ticket_uptime ON e_tickets (uptime)`)
+		}
+
+		err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
+		if err != nil {
+			log.Error("%v", utils.ErrInfo(err))
 		}
 	}
 }

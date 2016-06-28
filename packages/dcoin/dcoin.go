@@ -13,6 +13,7 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"github.com/democratic-coin/dcoin-go/packages/system"
+	"github.com/democratic-coin/dcoin-go/packages/schema"
 	"github.com/go-bindata-assetfs"
 	"github.com/go-thrust/lib/bindings/window"
 	"github.com/go-thrust/lib/commands"
@@ -203,7 +204,6 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 				log.Debug("%v", utils.ErrInfo(err))
 			}
 		}
-
 		// ждем подключения к БД
 		for {
 			if utils.DB == nil || utils.DB.DB == nil {
@@ -212,7 +212,7 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 			}
 			break
 		}
-		migration()
+		schema.Migration()
 
 		if *utils.OldFileName != "" {
 			err = utils.DB.Close()
