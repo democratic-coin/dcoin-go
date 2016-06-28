@@ -131,7 +131,7 @@ h2 {
 		display:none;
 	}
 	.alert {
-		display:flex;
+		display:flex !important;
 		flex-flow:row wrap;
 		position:absolute;
 		left:1%;
