@@ -149,8 +149,10 @@ func TodayBalance(userId int64) (*ListBalance, error) {
 			var result ResultBalance 
 			
 			currencyToResult( icur, &result )
-			list[icur.CurrencyId] = make([]*ResultBalance, 1)
-			list[icur.CurrencyId][0] = &result
+			if result.Summary > 0 {
+				list[icur.CurrencyId] = make([]*ResultBalance, 1)
+				list[icur.CurrencyId][0] = &result
+			}
 		}
 	}
 	return &list, err
