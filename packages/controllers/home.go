@@ -386,7 +386,7 @@ func (c *Controller) Home() (string, error) {
 	}
 	
 	charts := make([]ChartCur, 0)
-	for _,icur := range [...]int64{1, 72, 23, 58} {
+	for _,icur := range [...]int64{72, 23} {
 		chartData,_ := c.GetAll(`SELECT month, day, dc, promised_amount
 				FROM stats	WHERE currency_id = ? ORDER BY id desc`, 30, icur )
 		promised := make([]string, 0, 30);
