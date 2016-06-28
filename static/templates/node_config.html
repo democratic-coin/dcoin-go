@@ -192,7 +192,9 @@
 	<input id="e_static_file_path" class="input" type="text" value="{{index .EConfig "static_file_path"}}">
 	<label>static_file</label>
 	<input id="e_static_file" class="input" type="text" value="{{index .EConfig "static_file"}}">
-
+	<label>Admin email</label>
+	<input id="e_email" class="input" type="text" value="{{index .EConfig "email"}}">
+	<br>&nbsp;<br>
 	<button class="btn" id="e_save">{{.Lang.save}}</button><br><br>
 
 	<button class="btn" onclick="dc_navigate('exchangeAdmin')">Exchange admin</button>
@@ -222,7 +224,8 @@
 			'e_pm_commission' : $('#e_pm_commission').val(),
 			'e_cp_commission' : $('#e_cp_commission').val(),
 			'e_static_file_path' : $('#e_static_file_path').val(),
-			'e_static_file' : $('#e_static_file').val()
+			'e_static_file' : $('#e_static_file').val(),
+			'e_email' : $('#e_email').val(),
 		});
 
 		$.post( 'ajax?controllerName=nodeConfigControl', {

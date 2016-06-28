@@ -13,6 +13,7 @@ import (
 type eMySupportPage struct {
 	Lang             map[string]string
 	UserId           int64
+	Email            string
 	List             []map[string]string
 	Topic            string
 	IdRoot           int64
@@ -27,11 +28,16 @@ func (c *Controller) EMySupport() (string, error) {
 	if c.SessUserId == 0 {
 		return `<script language="javascript"> window.location.href = "` + c.EURL + `"</script>If you are not redirected automatically, follow the <a href="` + c.EURL + `">` + c.EURL + `</a>`, nil
 	}
+	email,err := c.Single(`select email from e_users where id=?`, c.SessUserId ).String()
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	
 	list = make([]map[string]string, 0)
 	if idroot, ok := c.Parameters[`idroot`]; ok {
 		first, err := c.OneRow( `select * from e_tickets where id=? and user_id=?`, idroot, c.SessUserId ).String()
 		if err != nil {
-			return "", utils.ErrInfo(first)
+			return "", utils.ErrInfo(err)
 		}
 		if len(first) > 0 {
 			topic = first[`subject`]
@@ -84,6 +90,7 @@ func (c *Controller) EMySupport() (string, error) {
 	TemplateStr, err := makeTemplate("e_my_support", "eMySupport", &eMySupportPage{
 		Lang:             c.Lang,
 		UserId:           c.SessUserId,
+		Email:            email,
 		List:             list,
 		Topic:            topic,
 		IdRoot:           idRoot,
