@@ -10,6 +10,12 @@ import (
 	"time"
 )
 
+type ChartCur struct {
+	Currency  string
+	Promised  string
+	Dc        string
+}
+
 type homePage struct {
 	Community             bool
 	Lang                  map[string]string
@@ -54,6 +60,7 @@ type homePage struct {
 	MyDcTransactions     []map[string]string	
 	Names                map[string]string	
 	Chart					string
+	Charts               []ChartCur
 	DCTarget int64
 }
 
@@ -370,15 +377,26 @@ func (c *Controller) Home() (string, error) {
 			SELECT month, day, dc, promised_amount
 			FROM stats
 			WHERE currency_id = 72
-			ORDER BY id DESC
-			LIMIT 7`, 7)
+			ORDER BY id DESC LIMIT 7`, 7)
 	for i:=len(chartData)-1; i>=0; i-- {
 		chart += `['`+chartData[i]["month"]+`/`+chartData[i]["day"]+`', `+utils.ClearNull(chartData[i]["promised_amount"], 0)+`, `+utils.ClearNull(chartData[i]["dc"], 0)+`],`
 	}
 	if len(chart) > 0 {
 		chart = chart[:len(chart)-1]
 	}
-
+	
+	charts := make([]ChartCur, 0)
+	for _,icur := range [...]int64{1, 72, 23, 58} {
+		chartData,_ := c.GetAll(`SELECT month, day, dc, promised_amount
+				FROM stats	WHERE currency_id = ? ORDER BY id desc`, 30, icur )
+		promised := make([]string, 0, 30);
+		dc := make([]string, 0, 30);
+		for _, val := range chartData {
+			promised = append( promised, utils.ClearNull(val["promised_amount"], 0))
+			dc = append( dc, utils.ClearNull(val["dc"], 0))
+		}
+		charts = append( charts, ChartCur{ currencyList[icur][1:], strings.Join( promised, `,` ), strings.Join( dc, `,` )})
+	}
 	DCTarget := consts.DCTarget[72]
 	listBalance,_ := stat.TodayBalance( c.SessUserId )
 	var statDays int
@@ -417,6 +435,7 @@ func (c *Controller) Home() (string, error) {
 	TemplateStr, err := makeTemplate("home", "home", &homePage{
 		DCTarget: DCTarget,
 		Chart: 					chart,
+		Charts:                 charts,
 		Community:             c.Community,
 		CountSignArr:          c.CountSignArr,
 		CountSign:             c.CountSign,
