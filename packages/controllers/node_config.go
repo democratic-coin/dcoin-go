@@ -39,7 +39,6 @@ func (c *Controller) NodeConfigControl() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 	}
-
 	if _, ok := c.Parameters["save_e_config"]; ok {
 		err := c.ExecSql("DELETE FROM e_config")
 		if err != nil {
@@ -60,7 +59,9 @@ func (c *Controller) NodeConfigControl() (string, error) {
 				return "", utils.ErrInfo(err)
 			}
 		}
-		params := []string{"commission", "ps", "pm_s_key", "cp_s_key", "payeer_s_key", "pm_id", "cp_id", "payeer_id", "static_file", "static_file_path", "main_dc_account", "dc_commission", "pm_commission", "cp_commission"}
+
+		params := []string{"commission", "ps", "pm_s_key", "cp_s_key", "payeer_s_key", "pm_id", "cp_id", "payeer_id", 
+				"static_file", "static_file_path", "main_dc_account", "dc_commission", "pm_commission", "cp_commission", "email"}
 		for _, data := range params {
 			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, data, c.Parameters["e_"+data])
 			if err != nil {

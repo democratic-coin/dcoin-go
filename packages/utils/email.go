@@ -40,6 +40,8 @@ const (
 	ECMD_NODETIME   // Уведомление node_time
 	ECMD_SIGNUP     // Сообщаем Email с новой заявкой майнера, ничего не отправляется
 	ECMD_BALANCE    // Отправляем информацию о балансе
+	ECMD_EXREQUEST  // Уведомление о вопросе в поддержку биржи
+	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
 )
 
 type Answer struct {
@@ -144,4 +146,8 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	}
 
 	return
+}
+
+func ExchangeEmail(email, exchange string, cmd uint ) error {
+	return SendEmail(email, 0, cmd, &map[string]string{`exchange`: exchange})
 }
