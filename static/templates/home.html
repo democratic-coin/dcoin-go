@@ -118,6 +118,148 @@ $(function () {
 	{{end}}
 });
 {{end}}
+
+function initGraph(id){
+	'use strict';
+	
+	var w = $(".graph").width();
+	if ($("body").width() >= 751) {
+		var h = 450;
+	} else {
+		var h = 250;
+	}
+	var date = new Date();
+	date.setDate(date.getDate() - 30);
+	var day = date.getUTCDate();
+	var month = date.getUTCMonth();
+	var year = date.getFullYear();
+	
+	$("#" + id).width(w).height(h).highcharts({
+        chart: {
+            type: 'areaspline',
+			zoomType: 'x',
+			margin: [ 69, 0, 80, 50]
+        },
+        title: {
+            text: 'Promised amount ' + id + ' to d' + id,
+			style: {
+				"fontSize": "18px"
+			},
+			y: 30
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            allowDecimals: false,
+			type: 'datetime',
+            labels: {
+				format: '{value:%m-%d}'
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function () {
+                    return this.value / 1000 + 'k';
+                }
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name} - <b>{point.y:,.0f}</b>'
+        },
+		legend: {
+			enabled: true
+		},
+        series: [{
+            name: 'Promised amount',
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, Highcharts.Color('#55acef').setOpacity(0).get('rgba')]
+				]
+			},
+			marker : {
+				enabled : false,
+				radius : 3
+			},
+            data: [6, 11, 32, 110, 235, 369, 640, 1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126, 27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662, 26956, 27912, 28999, 28965],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}, {
+            name: 'd' + id,
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#c53f40'],
+					[1, '#c53f40']
+				]
+			},
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#c53f40'],
+					[1, Highcharts.Color('#c53f40').setOpacity(0).get('rgba')]
+				]
+			},
+			marker : {
+				enabled : false,
+				radius : 3
+			},
+            data: [5, 25, 50, 120, 150, 200, 426, 660, 869, 1060, 1605, 2471, 3322, 4238, 5221, 6129, 7089, 8339, 9399, 10538, 11643, 13092, 14478, 15915, 17385, 19055, 21205, 23044, 25393, 27935],
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+        }]
+    });
+}
+
+$(function () {
+	var id = $(".graph .nav-link.active").attr("href").substr(1);
+	initGraph(id);
+	
+	$(".graph .nav-link").on('click', function(){
+		var id = $(this).attr("href").substr(1);
+		initGraph(id);
+	});
+});
+
+$(window).resize(function(){
+	'use strict';
+	
+	var id = $(".graph .nav-link.active").attr("href").substr(1);
+	initGraph(id);
+});
+
 </script>
 
 <div class="main row">
