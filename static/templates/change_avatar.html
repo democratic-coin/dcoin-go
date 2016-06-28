@@ -2,8 +2,7 @@
 <script>
 
 	{{if ne .Avatar "0"}}
-		$("#img_avatar").css("background", "url({{if not .Avatar}}static/img/noavatar.png{{else}}{{.Avatar}}{{end}}) 50% 50%");
-		$("#img_avatar").css("background-size", "100px Auto");
+		$("#img_avatar").css("background-image", "url({{if not .Avatar}}static/img/noavatar.png{{else}}{{.Avatar}}{{end}})");
 	{{else}}
 		get_img(0);
 	{{end}}
@@ -43,6 +42,11 @@
 		check_key_and_show_modal();
 
 </script>
+<style>
+	.form-group {
+		margin-bottom:1rem;
+	}
+</style>
 
 <h1 class="page-header">{{.Lang.change_avatar_title}}</h1>
 
@@ -51,33 +55,21 @@
 <div id="main_data">
 
 	<div id="errors"></div>
-
-	<form class="form-horizontal">
-		<fieldset>
-			<div class="form-group">
-				<label class="col-md-4 control-label" for="category_id">{{.Lang.name}}</label>
-				<div class="col-md-4">
-					<input maxlength="30"  class="form-control" type="text" id="name" value="{{.Name}}">
-					<span class="help-block">{{.Lang.only_english_letters}}</span>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-md-4 control-label" for="avatar">{{.Lang.avatar}}</label>
-				<div class="col-md-4">
-					<input maxlength="100" class="form-control" type="text" id="avatar" value="{{.Avatar}}">
-					<span class="help-block">{{.Lang.avatar_url_30}}</span>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-md-4 control-label" for="singlebutton"></label>
-				<div class="col-md-4">
-					<button type="button" class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
-				</div>
-			</div>
+	<form>
+		<fieldset class="form-group">
+			<label for="category_id">{{.Lang.name}}</label>
+			<input maxlength="30" class="form-control" type="text" id="name" value="{{.Name}}">
+			<small class="text-muted">{{.Lang.only_english_letters}}</small>
+		</fieldset>
+		<fieldset class="form-group">
+			<label for="avatar">{{.Lang.avatar}}</label>
+			<input maxlength="100" class="form-control" type="url" id="avatar" value="{{.Avatar}}">
+			<small class="text-muted">{{.Lang.avatar_url_30}}</small>
+		</fieldset>
+		<fieldset class="form-group">
+			<button type="button" class="btn btn-outline btn-primary" id="save">{{.Lang.send_to_net}}</button>
 		</fieldset>
 	</form>
-
 	{{noescape .LastTxFormatted}}
 
 </div>

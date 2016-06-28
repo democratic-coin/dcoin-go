@@ -142,7 +142,7 @@
 			<div class="dropdown">
 				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
 				<div class="dropdown-menu" aria-labelledby="Login">
-					<div class="dropdown-header">{{.Lang.account_number}}: <strong>{{.UserId}}</strong></div>
+					<a class="dropdown-header" href="#changeAvatar">{{.Lang.account_number}}: <strong>{{.UserId}}</strong></a>
 					<a class="dropdown-item" href="#points">{{.Lang.status}}: <strong>Miner</strong></a>
 					<a class="dropdown-item" href="#blockExplorer">{{.Lang.block_explorer}}:
 						{{if not .MyNotice.main_status_complete}}
