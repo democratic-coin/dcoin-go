@@ -154,25 +154,26 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var email string
-	
-	user,_ := GDB.OneRow(`SELECT * FROM users WHERE user_id=?`, jsonEmail.UserId ).String()
-	if len(user[`user_id`]) > 0 {
-		if utils.StrToInt(user[`verified`]) < 0 {
-			result(`Stop list`)
-			return
-		}
-		email = user[`email`]
-		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
-			if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
-				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
-									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
-					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
-				}
-			} else {
-				result(`Overwrite email`)
+	if jsonEmail.UserId != utils.EXCHANGE_USER {
+		user,_ := GDB.OneRow(`SELECT * FROM users WHERE user_id=?`, jsonEmail.UserId ).String()
+		if len(user[`user_id`]) > 0 {
+			if utils.StrToInt(user[`verified`]) < 0 {
+				result(`Stop list`)
 				return
 			}
-			jsonEmail.Email = email
+			email = user[`email`]
+			if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
+				if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
+					if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
+										jsonEmail.Email, jsonEmail.UserId ); err!=nil {
+						log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
+					}
+				} else {
+					result(`Overwrite email`)
+					return
+				}
+				jsonEmail.Email = email
+			}
 		}
 	}
 	if len(jsonEmail.Email) == 0 && len(email) > 0 {
@@ -262,6 +263,11 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result(err.Error())
 			return
 		}
+	case utils.ECMD_EXREQUEST,utils.ECMD_EXANSWER:
+		if err := checkParams(`exchange`); err != nil {
+			result(err.Error())
+			return
+		}
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -292,6 +298,9 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if _,ok := data[`Text`]; ok {
 			data[`Text`] = template.HTML(data[`Text`].(string))
+		}
+		if jsonEmail.UserId == utils.EXCHANGE_USER {
+			data[`email`] = jsonEmail.Email
 		}
 		if !EmailUser( jsonEmail.UserId, data, int(jsonEmail.Cmd) ) {
 			result( `EmailUser`)

@@ -4,7 +4,6 @@ package main
 import (
 	"net/http"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-	"github.com/democratic-coin/dcoin-go/packages/controllers"
 	"encoding/json"
 //	"html/template"
 	"bytes"
@@ -131,14 +130,10 @@ func getBalance( userId int64, data *map[string]interface{} ) error {
 	} else {
 		return err
 	}
-	c := new(controllers.Controller)
-//	c.r = r
-//	c.w = w
-//	c.sess = sess
-//	c.SessRestricted = sessRestricted
-	c.SessUserId = userId
-	c.DCDB = utils.DB
-	if profit,_, err := c.GetPromisedAmountCounter(); err == nil && profit > 0 {
+//	c := new(controllers.Controller)
+//	c.SessUserId = userId
+//	c.DCDB = utils.DB
+	if profit,_, err := utils.DB.GetPromisedAmountCounter(userId); err == nil && profit > 0 {
 		currency := int64(72)
 		if _, ok:= list[currency]; ok {
 			list[currency].Restricted = utils.Round( profit - 30, 6)

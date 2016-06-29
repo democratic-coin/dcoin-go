@@ -5,7 +5,6 @@ import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"strings"
 	"html"
-	"fmt"
 )
 
 func (c *Controller) ETicket() (string, error) {
@@ -59,7 +58,6 @@ func (c *Controller) ETicket() (string, error) {
 		cmd = utils.ECMD_EXANSWER
 	} else { // Сообщение от юзера
 		email,_ = c.Single(`select value from e_config where name=?`, `email`).String()
-		fmt.Println(`From user`, email )
 		cmd = utils.ECMD_EXREQUEST
 	}
 	if len(email) > 0 {

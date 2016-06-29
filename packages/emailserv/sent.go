@@ -38,7 +38,7 @@ func sentHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		cmds := []string{`UNKNOWN`, `NEW`, `TEST`, `ADMINMSG`, `CASHREQ`,
 				`CHANGESTAT`, `DCCAME`, `DCSENT`, `UPDPRIMARY`, `UPDEMAIL`,
-				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`, `SIGNUP`, `BALANCE`}
+				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`, `SIGNUP`, `BALANCE`, `EXREQUEST`, `EXANSWER`}
 	
 		cmd := utils.StrToInt(item[`cmd`]) 
 		if cmd < len( cmds ) {
