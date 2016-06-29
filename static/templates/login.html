@@ -9,21 +9,14 @@
 		flex-flow:row wrap;
 		align-items:center;
 		align-content:center;
+		padding-bottom:15px;
+		margin-left:auto;
 	}
 	#show_login, #show_signup{
 		float:left
 	}
-	#show_login{
-		margin-right:5px;
-	}
-	@media(max-width:360px) {
-		#show_login, #show_signup{
-			float:none;
-			margin:10px auto;
-		}
-		#show_login{
-			margin-bottom:3px;
-		}
+	#show_signup{
+		margin-left:5px;
 	}
 </style>
 
@@ -36,7 +29,7 @@
 {{if .PoolTechWorks}}
 	<div class="alert alert-info" style="max-width: 540px; text-align: center; position: relative; top: 35%; bottom: 0px; margin: auto">{{.Lang.pool_tech_works}}</div><div id="show_login" style="width: 40px; height:40px"></div>
 {{else}}
-	<div id="login_div" style="width:100%; text-align:center; padding-top:50px;">
+	<div id="login_div" style="width:100%; text-align:center; font-size:0px;">
 		<span style="display:inline-block;">
 			<button type="button" class="btn btn-primary btn-lg" id="show_login" style="vertical-align:top;">{{.Lang.login}}</button>
 			{{if .SignUp}}<button type="button" class="btn btn-primary btn-lg" id="show_signup" style="vertical-align:top;">{{.Lang.sign_up}}</button>{{end}}
