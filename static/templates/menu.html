@@ -142,16 +142,16 @@
 			<div class="dropdown">
 				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
 				<div class="dropdown-menu" aria-labelledby="Login">
-					<a class="dropdown-header" href="#changeAvatar">{{.Lang.account_number}}: <strong>{{.UserId}}</strong></a>
-					<a class="dropdown-item" href="#points">{{.Lang.status}}: <strong>{{if .MinerId}}Miner{{else}}User{{end}}</strong></a>
-					<a class="dropdown-item" href="#blockExplorer">{{.Lang.block_explorer}}:
+					<a class="dropdown-header" href="#changeAvatar" onClick="HideMenu();">{{.Lang.account_number}}: <strong>{{.UserId}}</strong></a>
+					<a class="dropdown-item" href="#points" onClick="HideMenu();">{{.Lang.status}}: <strong>{{if .MinerId}}Miner{{else}}User{{end}}</strong></a>
+					<a class="dropdown-item" href="#blockExplorer" onClick="HideMenu();">{{.Lang.block_explorer}}:
 						{{if not .MyNotice.main_status_complete}}
 							<strong style="color:#c53f40;">{{.BlockId}}</strong>
 						{{else}}
 							<strong>{{.BlockId}}</strong>
 						{{end}}
 					</a>
-					{{if eq .Restricted 0}}<a class="dropdown-item" href="#interface">{{.Lang.interface}}</a>{{end}}
+					{{if eq .Restricted 0}}<a class="dropdown-item" href="#interface" onClick="HideMenu();">{{.Lang.interface}}</a>{{end}}
 					<div class="language dropdown-item">
 						<span class="flag flag_{{.LangInt}}">&nbsp;</span>{{.Lang.languages}}
 						<div class="languages dropdown-menu">
@@ -446,6 +446,23 @@
 	{{end}}	
 
 	$( document ).ready(function() {
+		ResizeHeader();
+		
+		$("header .menu").click(function(){
+			if ($("header").hasClass("on")) {
+				$("header").removeClass("on");
+			} else {
+				$("header").addClass("on");
+			}
+			return false;
+		});
+		
+		$(".navbar-nav").touchwipe({
+			wipeLeft: function() {
+				$("header").removeClass("on");
+			}
+		});
+		
 		key = localStorage.getItem('dcoin_key');
 		if (key && key.length > 256 && $('#key').html().length < 256 ) {
 			$('#key').text(key);
@@ -467,17 +484,7 @@
 	setTimeout( function(){
 		if ( typeof THRUST != "undefined" )
 			THRUST.remote.send("USERID={{.UserId}}");
-		}, 500 );
-		
-	ResizeHeader();
-	
-	$("header .menu").on('click', function(){
-		if ($("header").hasClass("on")) {
-			$("header").removeClass("on");
-		} else {
-			$("header").addClass("on");
-		}
-	});
+	}, 500 );
 	
 	$(window).resize(function(){
 		ResizeHeader();
