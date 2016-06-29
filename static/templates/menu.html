@@ -69,7 +69,7 @@
 <div class="menu">
 	<div class="patty"></div>
 </div>
-<nav class="navbar-nav">
+<nav id="navbar" class="navbar-nav">
 	<ul>
 		{{if .Admin}}
 		<li>
@@ -165,6 +165,8 @@
 		</li>
 	</ul>
 </div>
+
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0; display:none;">
 	<div class="navbar-header">
 		<button style="z-index: 99999;opacity: 1;" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
@@ -431,33 +433,18 @@
 	<!-- /.navbar-static-side -->
 </nav>
 <script>
-	{{if .IsRestricted}}
-		var ipct = {{.Pct}}/10;
-		var iamount = {{.Amount}};
-		var istart = new Date().getTime();
-
-		function money_counter() {
-			irest = Math.round( (new Date().getTime() - istart)/100 );
-			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
-			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
-			setTimeout( money_counter, 200 );
-		}
-		setTimeout( money_counter, 200 );
-	{{end}}	
-
 	$( document ).ready(function() {
 		ResizeHeader();
 		
-		$("header .menu").click(function(){
+		$("header .menu").bind('click', function(){
 			if ($("header").hasClass("on")) {
 				$("header").removeClass("on");
 			} else {
 				$("header").addClass("on");
 			}
-			return false;
 		});
 		
-		$(".navbar-nav").touchwipe({
+		$("#navbar").touchwipe({
 			wipeLeft: function() {
 				$("header").removeClass("on");
 			}
@@ -481,6 +468,21 @@
 			$('#menu-collapse').addClass('collapse');
 		}
 	});
+	
+	{{if .IsRestricted}}
+		var ipct = {{.Pct}}/10;
+		var iamount = {{.Amount}};
+		var istart = new Date().getTime();
+
+		function money_counter() {
+			irest = Math.round( (new Date().getTime() - istart)/100 );
+			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
+			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
+			setTimeout( money_counter, 200 );
+		}
+		setTimeout( money_counter, 200 );
+	{{end}}	
+
 	setTimeout( function(){
 		if ( typeof THRUST != "undefined" )
 			THRUST.remote.send("USERID={{.UserId}}");
