@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	//	EMAIL_SERVER = `http://localhost:8090`
+	//EMAIL_SERVER = `http://localhost:8090`
 	EMAIL_SERVER = `http://email.dcoin.club:8200`
 )
 
@@ -42,6 +42,8 @@ const (
 	ECMD_BALANCE    // Отправляем информацию о балансе
 	ECMD_EXREQUEST  // Уведомление о вопросе в поддержку биржи
 	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
+	
+	EXCHANGE_USER = 0xefffffff
 )
 
 type Answer struct {
@@ -149,5 +151,5 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 }
 
 func ExchangeEmail(email, exchange string, cmd uint ) error {
-	return SendEmail(email, 0, cmd, &map[string]string{`exchange`: exchange})
+	return SendEmail(email, EXCHANGE_USER, cmd, &map[string]string{`exchange`: exchange})
 }
