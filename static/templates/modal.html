@@ -1,6 +1,6 @@
 {{ define "modal" }}
 <script>
-$('#{{.MyModalIdName}}').modal('hide');
+$('#myModal').modal('hide');
 
 function show_text_key () {
 	$("#modal_key").css("display", "block");
@@ -91,7 +91,7 @@ $('#saveKeyAndLogin').bind('click', function () {
 		doSign('login');
 		$('#saveKeyAndLogin').html('{{.Lang.login}}');
 		$('#saveKeyAndLogin').removeClass( "disabled" );
-		$('#{{.MyModalIdName}}').modal('hide');
+		$('#myModal').modal('hide');
 	}, 500);
 });
 
