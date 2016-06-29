@@ -3,9 +3,9 @@ package controllers
 import (
 	"errors"
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-//	"strings"
+	"strings"
 	"html"
-//	"fmt"
+	"fmt"
 )
 
 func (c *Controller) ETicket() (string, error) {
@@ -18,6 +18,7 @@ func (c *Controller) ETicket() (string, error) {
 	userId := c.SessUserId
 	subject := html.EscapeString(c.r.FormValue("subject"))
 	topic := html.EscapeString(c.r.FormValue("topic"))
+	email := html.EscapeString(c.r.FormValue("email"))
 	idroot := utils.StrToInt64(c.r.FormValue("idroot"))
 	userid := utils.StrToInt64(c.r.FormValue("userid"))
 	status := 1   // not read
@@ -36,13 +37,12 @@ func (c *Controller) ETicket() (string, error) {
 		} else {
 			userId = 0
 		}
+	} else if idroot == 0 {
+		if err := c.ExecSql(`update e_users set email=? where id=?`, email, userId ); err != nil {
+			return ``, utils.ErrInfo(err)
+		}
 	}
 	
-/*	err := c.ExecSql(`insert into e_tickets (user_id, subject, topic, idroot, time, status, uptime) 
-	                 values(?,?,?,?,datetime('now'), ?,datetime('now'))`, userId, subject, topic, idroot, status )
-	if err == nil && idroot>0 {
-		c.ExecSql(`update e_tickets set uptime=datetime('now') where id=?`, idroot )
-	}			*/
 	now := utils.Time()
 	err := c.ExecSql(`insert into e_tickets (user_id, subject, topic, idroot, time, status, uptime) 
 	                 values(?,?,?,?,?,?,?)`, userId, subject, topic, idroot, now, status, now )
@@ -52,5 +52,20 @@ func (c *Controller) ETicket() (string, error) {
 	if err!=nil {
 		return ``, utils.ErrInfo(err)
 	}
+	var cmd uint
+	email = ``
+	if userid > 0 {  // Сообщение от админа
+		email,_ = c.Single(`select email from e_users where id=?`, userid).String()
+		cmd = utils.ECMD_EXANSWER
+	} else { // Сообщение от юзера
+		email,_ = c.Single(`select value from e_config where name=?`, `email`).String()
+		fmt.Println(`From user`, email )
+		cmd = utils.ECMD_EXREQUEST
+	}
+	if len(email) > 0 {
+		catalog,_ := c.Single(`select value from e_config where name=?`, `catalog`).String()
+		catalog = strings.Replace(catalog, "/", "", -1)
+		utils.ExchangeEmail(email, c.r.Host + "/" + catalog + "/", cmd )
+	}	
 	return `1`, nil
 }

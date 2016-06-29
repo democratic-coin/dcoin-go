@@ -58,18 +58,6 @@ func (c *Controller) Menu() (string, error) {
 		name, avatar = data["name"], data["avatar"]
 	}
 
-	if len(name) == 0 {
-		miner, err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		if miner > 0 {
-			name = "ID " + utils.Int64ToStr(c.SessUserId) + " (miner)"
-		} else {
-			name = "ID " + utils.Int64ToStr(c.SessUserId)
-		}
-	}
-
 	var face_urls []string
 	if len(avatar) == 0 {
 		data, err := c.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers FROM miners_data WHERE user_id  =  ?", c.SessUserId).String()
@@ -96,7 +84,13 @@ func (c *Controller) Menu() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	if len(name) == 0 {
+		if minerId > 0 {
+			name = "ID " + utils.Int64ToStr(c.SessUserId) + " (miner)"
+		} else {
+			name = "ID " + utils.Int64ToStr(c.SessUserId)
+		}
+	}
 	// ID блока вверху
 	blockId, err := c.GetBlockId()
 

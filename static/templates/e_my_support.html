@@ -14,8 +14,10 @@ function new_ticket() {
 			$("#msg").show();
 			return false;
 		} 
+		var email = $("#email").val();
 	{{else}}
 	   var subject = '';
+	   var email = '';
 	{{end}}
 	
 	if (topic == '') {
@@ -24,6 +26,7 @@ function new_ticket() {
 	} else {
 		$.post( 'ajax?controllerName=ETicket', {
 			'subject': subject,
+			'email': email,
 			'idroot': {{.IdRoot}},
 			'topic': topic
 		}, function(data) {
@@ -68,6 +71,7 @@ function open_topic( id ) {
 
 		<div class="panel-group" style="max-width: 600px">
 	{{if not .IdRoot}}
+			Email: <input type="text" id="email" value="{{.Email}}" class="form-control"><br>
 			{{.Lang.subject}}: <input type="text" id="subject" value="" class="form-control"><br>
 	{{end}}
 			<textarea rows="4" id="stopic" class="form-control"></textarea><br>
