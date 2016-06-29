@@ -15,28 +15,10 @@ function ResizeHeader(){
 	}
 }
 
-$(document).ready(function(){
+function HideMenu(){
 	'use strict';
 	
-	jQuery.os = { name: (/(win|mac|linux|sunos|solaris|iphone|ipad)/.exec(navigator.platform.toLowerCase()) || [u])[0].replace('sunos', 'solaris') };
-	if (jQuery.os.name === "mac" || jQuery.os.name === "iphone" || jQuery.os.name === "ipad") {
-		$("body").addClass("macfix");
+	if ($("header").hasClass("on")) {
+		$("header").removeClass("on");
 	}
-	if (jQuery.os.name === "linux") {
-		$("body").addClass("androidfix");
-	}
-});
-
-$(window).load(function(){
-	'use strict';
-});
-
-$(window).resize(function(){
-	'use strict';
-	
-	ResizeHeader();
-});
-
-$(window).scroll(function(){
-	'use strict';
-});
+}

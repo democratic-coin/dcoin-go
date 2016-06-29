@@ -88,7 +88,8 @@ $('#saveKeyAndLogin').bind('click', function () {
 	setTimeout(function() {
 		doSign('login');
 		$('#saveKeyAndLogin').html('{{.Lang.login}}');
-		$('#saveKeyAndLogin').removeClass( "disabled" )
+		$('#saveKeyAndLogin').removeClass( "disabled" );
+		$('#{{.MyModalIdName}}').modal('hide');
 	}, 500);
 });
 

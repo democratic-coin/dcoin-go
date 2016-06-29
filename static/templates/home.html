@@ -120,6 +120,7 @@ $(function () {
 {{end}}
 </script>
 
+<h1 class="page-header" {{if not .Mobile}}style="display:none;"{{end}}>Home</h1>
 <div class="main row">
 	<div class="pull-lg-right col-xs-12 col-lg-6">
 		<div class="col-xs-6">
@@ -251,8 +252,6 @@ $(function () {
 <style>
 	.alert-info a:link{text-decoration: underline}
 </style>
-
-<h1 class="page-header" {{if not .Mobile}}style="display: none"{{end}}>Home</h1>
 
 <link href="static/css/cf.css" rel="stylesheet">
 <script>

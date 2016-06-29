@@ -546,6 +546,9 @@ header {
 				background-size:30px 30px;
 				margin-left:-15px;
 			}
+			&.no {
+				display:block;
+			}
 		}
 	}
 	.login {
@@ -689,6 +692,9 @@ header {
 				property:all;
 				duration:.2s;
 			}
+		}
+		&.no {
+			display:none;
 		}
 		@include min($tablet) {
 			left:0px;

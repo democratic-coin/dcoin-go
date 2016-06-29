@@ -311,18 +311,6 @@
 </style>
 
 {{if not .DbOk}}
-<style>
-	#page-wrapper{
-		margin: 0px 10% 0px 10%;
-		border: 1px solid #E7E7E7;
-		min-height: 550px;
-	}
-	#wrapper{height: 100%;}
-	#dc_content{
-		height: 550px;
-		vertical-align: middle;
-	}
-</style>
 <div style="position:absolute; top:100px; left:50%; width:300px; margin-left:-150px; text-align:center" id="loading_db">
 	<div class="db_loader" >Loading...</div>
 	{{.Lang.db_setup_wait}}
@@ -604,7 +592,7 @@
 	}
 
 </style>
-<div id="ios_menu" class="navbar-fixed-bottom row-fluid" style="padding-top: 3px;background-color: #F8F8F8; border-top:1px solid #ccc; height: 50px;opacity: 0.95; display: {{if .ShowIOSMenu}}block{{else}}none{{end}}">
+<!--<div id="ios_menu" class="navbar-fixed-bottom row-fluid" style="padding-top: 3px;background-color: #F8F8F8; border-top:1px solid #ccc; height: 50px;opacity: 0.95; display: {{if .ShowIOSMenu}}block{{else}}none{{end}}">
 	<div class="navbar-inner" style="">
 		<div class="container" style="">
 			<div class="icoDiv" onclick="javascript:location.href='#home'"><i class="fa fa-home fa-lg ico"></i><p>Home</p></div>
@@ -614,7 +602,7 @@
 			<div class="icoDiv" onclick="javascript:location.href='#statistic'"><i class="fa fa-database fa-lg ico"></i><p>Statistic</p></div>
 		</div>
 	</div>
-</div>
+</div>-->
 
 <input type="hidden" id="mobileos" value="{{if .Mobile}}1{{else}}0{{end}}">
 {{if eq .AnalyticsDisabled "0"}}
