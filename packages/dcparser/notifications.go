@@ -27,6 +27,13 @@ func (p *Parser) insertNotify( userId int64, cmdId int, params string) {
 	          userId, p.BlockData.BlockId, cmdId, params )
 }
 
+func  (p *Parser) nfyRefReady( userId int64, refId int64 ) {
+	if !p.isNotify() {
+		return
+	}
+	p.insertNotify( userId, utils.ECMD_REFREADY, fmt.Sprintf( `{"refid": "%d"}`, refId ))
+}
+
 func  (p *Parser) nfyStatus( userId int64, status string ) {
 	if !p.isNotify() {
 		return

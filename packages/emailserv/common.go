@@ -79,7 +79,8 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	
 	patterns := []string{ `unknown`, `new`, `test`, `adminmsg`, `cashreq`, `changestat`,
 		`dccame`, `dcsent`, `updprimary`,`updemail`, `updsms`, `voteres`,
-		`votetime`, `newver`, `nodetime`, `signup`, `balance`, `exrequest`, `exanswer`}
+		`votetime`, `newver`, `nodetime`, `signup`, `balance`, `exrequest`, `exanswer`,
+		`refready`}
 	pattern := patterns[cmd]
 	if len(pattern) == 0 {
 		pattern = data[`pattern`].(string)

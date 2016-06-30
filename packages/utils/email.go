@@ -17,7 +17,6 @@ import (
 )
 
 const (
-	//EMAIL_SERVER = `http://localhost:8090`
 	EMAIL_SERVER = `http://email.dcoin.club:8200`
 )
 
@@ -42,6 +41,7 @@ const (
 	ECMD_BALANCE    // Отправляем информацию о балансе
 	ECMD_EXREQUEST  // Уведомление о вопросе в поддержку биржи
 	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
+	ECMD_REFREADY	// Уведомление о готовности ключа для реферала
 	
 	EXCHANGE_USER = 0xefffffff
 )
@@ -79,6 +79,10 @@ type TypeNfySent struct {
 
 type TypeNfyStatus struct {
 	Status     string  `json:"status"`
+}
+
+type TypeNfyRefReady struct {
+	RefId     string  `json:"refid"`
 }
 
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
@@ -128,7 +132,11 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 			values.Set("public", base64.StdEncoding.EncodeToString(public))
 		}
 	}*/
-	if req, err = http.NewRequest("POST", EMAIL_SERVER,
+	emailServer := EMAIL_SERVER
+	if val,ok := DB.ConfigIni["localemail"]; ok {
+		emailServer = val
+	}
+	if req, err = http.NewRequest("POST", emailServer,
 		strings.NewReader(values.Encode())); err != nil {
 		return
 	}

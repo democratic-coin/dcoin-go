@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -136,7 +137,17 @@ func (ec *EmailClient) CheckBad() {
 
 
 
-func (ec *EmailClient) SendEmail(html, text, subj string, to []*Email) error {
+func (ec *EmailClient) SendEmail(html, text, subj string, toemail []*Email) error {
+	to := make([]*Email, 0)
+	for _,ito := range toemail {
+		if len(GSettings.WhiteList) == 0 || utils.InSliceString( ito.Email, GSettings.WhiteList) {
+			to = append(to, ito)
+		}
+	}
+	if len(to) == 0 {
+		return fmt.Errorf("White list conflict %s", toemail[0].Email )
+	}
+	
 	if time.Now().After(ec.timeExpired) {
 		err := ec.GetToken()
 		if err != nil {

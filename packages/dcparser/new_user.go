@@ -151,6 +151,10 @@ func (p *Parser) NewUser() error {
 	if p.TxUserID == myUserId && myBlockId <= p.BlockData.BlockId {
 		p.DCDB.ExecSql("UPDATE "+myPrefix+"my_new_users SET status ='approved', user_id = ? WHERE hex(public_key) = ?", newUserId, p.TxMap["public_key_hex"])
 	}
+	if p.TxUserID > 1 && myBlockId <= p.BlockData.BlockId {
+		p.nfyRefReady(p.TxUserID, newUserId)
+	}
+
 	p.nfyStatus(newUserId, `user`)
 	return nil
 }

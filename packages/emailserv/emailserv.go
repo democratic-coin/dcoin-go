@@ -39,6 +39,7 @@ type Settings struct {
 	Password  string `json:"password"`
 	Admin     string `json:"admin"`
 	CopyTo    string `json:"copy_to"`
+	WhiteList []string `json:"white"`
 }
 
 var (
@@ -47,6 +48,7 @@ var (
 	GEmail    *EmailClient
 	GPageTpl  *template.Template
 	GPagePattern  *template.Template
+	GLatest    map[int]int64
 )
 
 func getIP(r *http.Request) (uint32, string) {
@@ -504,14 +506,36 @@ func main() {
 		if err = GDB.ExecSql(`CREATE INDEX cmdid ON latest (cmd_id)`); err != nil {
 			log.Fatalln(err)
 		}
-		if cash, err := utils.DB.Single(`SELECT max(id) FROM cash_requests` ).Int64(); err==nil {
-			if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_CASHREQ, cash ); err!=nil {
-				log.Fatalln( err )
-			}
-		} else {
-			log.Fatalln(err)
-		}
 	}
+	GLatest = make(map[int]int64)
+	if curlatest, err := GDB.GetAll(`SELECT * FROM latest`, -1 ); err == nil {
+		for _, curi := range curlatest {
+			GLatest[ utils.StrToInt(curi[`cmd_id`])] = utils.StrToInt64(curi[`latest`])
+		}
+		if _, ok := GLatest[utils.ECMD_CASHREQ]; !ok {
+			if cash, err := utils.DB.Single(`SELECT max(id) FROM cash_requests` ).Int64(); err==nil {
+				 GLatest[utils.ECMD_CASHREQ] = cash
+				if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_CASHREQ, cash ); err!=nil {
+					log.Fatalln( err )
+				}
+			} else {
+				log.Fatalln(err)
+			}
+		}
+		if _, ok := GLatest[utils.ECMD_DCCAME]; !ok {
+			if nfy, err := utils.DB.Single(`SELECT max(id) FROM notifications` ).Int64(); err==nil {
+    			 GLatest[utils.ECMD_DCCAME] = nfy
+				if err = GDB.ExecSql(`INSERT INTO latest (cmd_id, latest) VALUES(?,?)`, utils.ECMD_DCCAME, nfy ); err!=nil {
+					log.Fatalln( err )
+				}
+			} else {
+					log.Fatalln(err)
+			}
+		}
+	} else {
+		log.Fatalln( err )
+	}
+	
 	if !utils.InSliceString(`balance`, list ) || len(list) == 0 {
 		if err = GDB.ExecSql(`CREATE TABLE balance (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
