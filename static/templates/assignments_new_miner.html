@@ -17,11 +17,11 @@
 				image = null;
 				console.log('#face_coords_mouse = url('+photo_hosts[i]+'public/profile_{{.UserInfo.user_id}}.jpg)');
 				$('#face_coords_mouse,#main_face,#step_3_face').css("background", "url('"+photo_hosts[i]+"public/face_{{.UserInfo.user_id}}.jpg')  no-repeat 50% 50%");
-				$('#face_coords_mouse').css("background-size", "350px Auto");
+				$('#face_coords_mouse').css("background-size", "290px Auto");
 				$('#profile_coords_mouse,#main_profile,#step_3_profile').css("background", "url('"+photo_hosts[i]+"public/profile_{{.UserInfo.user_id}}.jpg') no-repeat 50% 50%");
-				$('#profile_coords_mouse').css("background-size", "350px Auto");
-				$('#main_face,#step_3_face').css("background-size", "150px Auto");
-				$('#main_profile,#step_3_profile').css("background-size", "150px Auto");
+				$('#profile_coords_mouse').css("background-size", "290px Auto");
+				$('#main_face,#step_3_face').css("background-size", "145px Auto");
+				$('#main_profile,#step_3_profile').css("background-size", "145px Auto");
 				//$('#clone_photo_profile['+user_id+']').html("<img src='"+photo_hosts[user_id][i]+"' width=150 >");
 			};
 			// handle failure
@@ -72,9 +72,9 @@
 				image = null;
 				console.log('#clone_photo_face['+user_id+'] = url('+clone_hosts[user_id][i]+'public/profile_'+user_id+'.jpg)');
 				$('#clone_photo_face\\['+user_id+'\\]').css("background", "url('"+clone_hosts[user_id][i]+"public/face_"+user_id+".jpg')  no-repeat 50% 50%");
-				$('#clone_photo_face\\['+user_id+'\\]').css("background-size", "150px Auto");
+				$('#clone_photo_face\\['+user_id+'\\]').css("background-size", "145px Auto");
 				$('#clone_photo_profile\\['+user_id+'\\]').css("background", "url('"+clone_hosts[user_id][i]+"public/profile_"+user_id+".jpg') no-repeat 50% 50%");
-				$('#clone_photo_profile\\['+user_id+'\\]').css("background-size", "150px Auto");
+				$('#clone_photo_profile\\['+user_id+'\\]').css("background-size", "145px Auto");
 				//$('#clone_photo_profile['+user_id+']').html("<img src='"+clone_hosts[user_id][i]+"' width=150 >");
 			};
 			// handle failure
@@ -247,27 +247,32 @@
 
 	{{.Lang.accounted_country}}: {{if .MyCountry}}{{.MyCountry}}{{else}}{{.Lang.all}}{{end}} {{.Lang.and_race}}: {{if .MyRace}}{{.MyRace}}{{else}}{{.Lang.all}}{{end}} <a href="#changeCountryRace">{{.Lang.change}}</a><br>
 	<input type="hidden" id="candidate-id" value="{{.UserInfo.user_id}}">
-
-	<canvas id="example_face" style="position: absolute; background-image: url('static/img/face.jpg'); background-size: 350px;" width="350" height="500"></canvas>
-	<canvas style="position: relative; top:0px; left:0px;" width="350" height="500"></canvas>
-
-	<canvas  id="face_coords_mouse" style="position: absolute;" width="350" height="500"></canvas>
-	<canvas id="face" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
+	<div style="font-size:0px;">
+		<canvas id="example_face" style="position: absolute; background-image: url('static/img/face.jpg'); background-size: 290px;" width="290" height="414"></canvas>
+		<canvas style="position: relative; top:0px; left:0px;" width="290" height="414"></canvas>
+	
+		<canvas  id="face_coords_mouse" style="position: absolute;" width="290" height="414"></canvas>
+		<canvas id="face" style="position: relative; top:0px; left:0px; height:414px" width="290" height="414"></canvas>
+	</div>
 
 	<br><br>
 <div class="is_profile">
-	<canvas id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg'); background-size: 350px;" width="350" height="500"></canvas>
-	<canvas style="position: relative; top:0px; left:0px;" width="350" height="500"></canvas>
-
-	<canvas  id="profile_coords_mouse" style="position: absolute;" width="350" height="500"></canvas>
-	<canvas id="profile" style="position: relative; top:0px; left:0px; height:500px" width="350" height="500"></canvas>
+	<div style="font-size:0px;">
+		<canvas id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg'); background-size: 290px;" width="290" height="414"></canvas>
+		<canvas style="position: relative; top:0px; left:0px;" width="290" height="414"></canvas>
+	
+		<canvas  id="profile_coords_mouse" style="position: absolute;" width="290" height="414"></canvas>
+		<canvas id="profile" style="position: relative; top:0px; left:0px; height:414px" width="290" height="414"></canvas>
+	</div>
 
 	<br><br>
 </div>
 	{{.Lang.attention}}
-	<br>
-	Comment: <input type="text" id="comment_step_1" value="">English only<br>
-	<button class="btn btn-inverse" id="btn-bad">{{.Lang.errors}}</button>
+	<br><br>
+	Comment:
+	<input type="text" id="comment_step_1" class="form-control" value="">
+	<small class="text-muted">English only</small><br><br>
+	<button class="btn btn-danger" id="btn-bad">{{.Lang.errors}}</button>
 	<button class="btn btn-success" id="btn-step2">{{.Lang.all_right}}</button>
 
 
@@ -322,24 +327,26 @@
 <!-- S T E P   2 -->
 
 <div id="step_2" style="display:none; ">
-	<div id="xx1" style="width:300px; position:fixed;">
-		<div style="float:left;width:150px; height:220px" id="main_face"></div>
-		<div class="is_profile" style="float:left;width:150px; height:220px" id="main_profile"></div>
+	<div id="xx1" style="width:290px; position:fixed;">
+		<div style="float:left;width:145px; height:220px" id="main_face"></div>
+		<div class="is_profile" style="float:left;width:145px; height:220px" id="main_profile"></div>
 	</div>
 
 	<div style="padding-top:220px">
 		{{range $cloneUserId, $hosts := .CloneHosts}}
-			<div style='width: 300px; height:220px'>
-			<div style='width: 150px; height: 220px; float:left' id='clone_photo_face[{{$cloneUserId}}]'></div>
-			<div class="is_profile" style='width: 150px; height: 220px; float:left' id='clone_photo_profile[{{$cloneUserId}}]'></div>
+			<div style='width: 290px; height:220px'>
+			<div style='width: 145px; height: 220px; float:left' id='clone_photo_face[{{$cloneUserId}}]'></div>
+			<div class="is_profile" style='width: 145px; height: 220px; float:left' id='clone_photo_profile[{{$cloneUserId}}]'></div>
 			</div>
 		{{end}}
 	</div>
 
 	<div style="margin-top: 15px; ">
-		Comment: <input type="text" id="comment_step_2" value="">English only<br>
+		Comment:
+		<input type="text" id="comment_step_2" class="form-control" value="">
+		<small class="text-muted">English only</small><br><br>
 		<button class="btn btn-success" id="btn-step1-back">{{.Lang.back}}</button>
-		<button class="btn btn-inverse" id="btn-bad2">{{.Lang.errors}}</button>
+		<button class="btn btn-danger" id="btn-bad2">{{.Lang.errors}}</button>
 		<button class="btn btn-success" id="btn-step3">{{.Lang.all_right}}</button>
 	</div>
 
@@ -352,21 +359,22 @@
 
 <div id="step_3" style="display:none;">
 	<p>{{.Lang.tasks_new_miner_video}}</p>
-	<div style="width:300px;float: left;">
-		<div style="float: left;width:150px; height:220px;" id="step_3_face"></div>
-		<div class="is_profile" style="float: left;width:150px; height:220px;" id="step_3_profile"></div>
+	<div style="width:290px;float: left;">
+		<div style="float: left;width:145px; height:220px;" id="step_3_face"></div>
+		<div class="is_profile" style="float: left;width:145px; height:220px;" id="step_3_profile"></div>
 	</div>
 	<div>
 		{{if ne .UserInfo.video_url_id "null"}}
-			<iframe width="320" height="240" src="http://www.youtube.com/embed/{{.UserInfo.video_url_id}}" frameborder="0" allowfullscreen></iframe>
+			<iframe width="290" height="220" src="http://www.youtube.com/embed/{{.UserInfo.video_url_id}}" frameborder="0" allowfullscreen></iframe>
 		{{else}}
-			<video class="video-js vjs-default-skin" controls preload="none" width="320" height="240" data-setup="{}"><source src="{{.UserInfo.http_host}}public/{{.UserInfo.user_id}}_user_video.mp4" type="video/mp4" /></video>
+			<video class="video-js vjs-default-skin" controls preload="none" width="290" height="220" data-setup="{}"><source src="{{.UserInfo.http_host}}public/{{.UserInfo.user_id}}_user_video.mp4" type="video/mp4" /></video>
 		{{end}}
 	</div>
 
-	Comment: <input type="text" id="comment_step_3" value=""><br>
+	Comment:
+	<input type="text" id="comment_step_3" class="form-control" value=""><br><br>
 	<button class="btn btn-success" id="btn-step2-back">{{.Lang.back}}</button>
-	<button class="btn btn-inverse" id="btn-bad3">{{.Lang.errors}}</button>
+	<button class="btn btn-danger" id="btn-bad3">{{.Lang.errors}}</button>
 	<button class="btn btn-success" id="btn-step4">{{.Lang.all_right}}</button>
 
 </div>
@@ -376,7 +384,7 @@
 <div id="sign" style="display:none">
 
 	<label>{{.Lang.data}}</label>
-		<textarea id="for-signature" style="width:500px;" rows="4" class="form-control"></textarea><br>
+		<textarea id="for-signature" rows="4" class="form-control"></textarea><br>
 		{{range $i := .CountSignArr}}
 		<div class="form-group"><label>{{$.Lang.sign}} {{if gt $i 0}}{{$i}}{{end}}</label><textarea class="form-control" id="signature{{sum $i 1}}" style="" rows="4">-</textarea></div>
 		{{end}}

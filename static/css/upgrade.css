@@ -29,11 +29,6 @@
 .seven-cols{margin: 0 5px}
 
 
-@media  (max-width: 320px) {
-    .breadcrumb {
-        margin-top: 10px;
-    }
-}
 .race_photo {
     display: inline-block;
     text-align: center

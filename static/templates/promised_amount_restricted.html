@@ -1,4 +1,12 @@
 {{define "PromisedAmountRestricted"}}
+<style>
+	.alert-info {
+		width:290px;
+		background-color:#ffffff;
+		text-align:center;
+		margin:0px auto;
+	}
+</style>
 <script>
 
 function freecoin_reload( err ) {
@@ -75,9 +83,12 @@ function freecoin_process( first ) {
 {{else}}
 <div id="freeerr" style="display: none;" class="alert alert-danger"></div>
 <div id="freewait" {{if not .Started}}style="display: none;"{{end}}>
-<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
-<h3>{{.Lang.please_wait}}</h3>
-<center><img src="/static/img/load.gif"></center></div>
+	<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>{{.Lang.sent_to_the_net}}</div>
+	<div class="alert alert-info" role="alert">
+		<h3>{{.Lang.please_wait}}</h3>
+		<center><img src="/static/img/load.gif"></center>
+	</div>
+</div>
 <button id="getCoins" class="btn btn-primary" {{if .Started}}style="display: none;"{{end}}>{{.Lang.get_free_coins}}</button>
 {{end}}
 {{template "signatures".}}
