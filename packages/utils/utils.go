@@ -1372,7 +1372,10 @@ func GetHttpTextAnswer(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(htmlData), nil
+	if resp.StatusCode == 404 {
+		err = fmt.Errorf(`404`)
+	}
+	return string(htmlData), err
 }
 
 func RemoteAddrFix(addr string) string {

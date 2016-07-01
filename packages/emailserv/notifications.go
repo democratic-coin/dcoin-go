@@ -21,7 +21,8 @@ func notificationsHandler(w http.ResponseWriter, r *http.Request) {
 		item := list[i]
 		cmds := []string{`UNKNOWN`, `NEW`, `TEST`, `ADMINMSG`, `CASHREQ`,
 				`CHANGESTAT`, `DCCAME`, `DCSENT`, `UPDPRIMARY`, `UPDEMAIL`,
-				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`, `SIGNUP`, `BALANCE`}
+				`UPDSMS`, `VOTERES`, `VOTETIME`, `NEWVER`, `NODETIME`, `SIGNUP`, `BALANCE`, 
+				`EXREQUEST`, `EXANSWER`, `REFREADY`}
 	
 		cmd := utils.StrToInt(item[`cmd_id`]) 
 		if cmd < len( cmds ) {

@@ -428,7 +428,14 @@ func Migration() {
 			schema_.DB.Exec(`CREATE INDEX e_ticket_idroot ON e_tickets (idroot)`)
 			schema_.DB.Exec(`CREATE INDEX e_ticket_uptime ON e_tickets (uptime)`)
 		}
-
+		if utils.VersionOrdinal(*utils.OldVersion) < utils.VersionOrdinal("2.3.4b4") {
+			if err = utils.DB.ExecSql(`ALTER TABLE notifications ADD COLUMN isread tinyint(3) NOT NULL DEFAULT '0'`); err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
+			if err = utils.DB.ExecSql(`CREATE INDEX notifications_ur ON notifications (user_id,isread)`); err != nil {
+				log.Error("%v", utils.ErrInfo(err))
+			}
+		}
 		err = utils.DB.ExecSql(`INSERT INTO migration_history (version, date_applied) VALUES (?, ?)`, consts.VERSION, utils.Time())
 		if err != nil {
 			log.Error("%v", utils.ErrInfo(err))

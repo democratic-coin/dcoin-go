@@ -73,6 +73,9 @@ func (a *AvailablekeyStruct) GetAvailableKey() (int64, string, error) {
 	for i:=0; i<10; i++ {
 		keysStr, err := utils.GetHttpTextAnswer("http://dcoin.club/keys")
 		if err != nil {
+			if err.Error() == `404` {
+				break
+			}
 			return 0, "", utils.ErrInfo(err)
 		}
 		//keysStr = strings.Replace(keysStr, "\n", "", -1)
