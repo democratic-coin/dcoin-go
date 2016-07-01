@@ -2740,3 +2740,7 @@ func (db *DCDB) GetPromisedAmountCounter(userId int64) ( float64, float64, error
 	}
 	return profit, pct, nil
 }
+
+func (db *DCDB) GetNotificationsCount(userId int64) (int64, error) {
+	return db.Single("SELECT count(id) FROM notifications WHERE user_id=? AND isread=1", userId ).Int64()
+}
