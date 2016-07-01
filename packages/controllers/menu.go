@@ -166,7 +166,12 @@ func (c *Controller) Menu() (string, error) {
 			}
 		}
 	}
-	t := template.Must(template.New("template").Parse(string(data)))
+	funcMap := template.FuncMap{
+		"noescape": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	}
+	t := template.Must(template.New("template").Funcs(funcMap).Parse(string(data)))
 	t = template.Must(t.Parse(string(modal)))
 	b := new(bytes.Buffer)
 	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, 
