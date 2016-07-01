@@ -3,8 +3,6 @@ function ResizeHeader(){
 	'use strict';
 	
 	var w = $("body").width();
-	var h = document.documentElement.clientHeight;
-	$(".navbar-nav").css({"height":h + "px"});
 	if (w >= 992 && w < 1500) {
 		$("header .logo").prependTo($("header .navbar-nav"));
 	} else {
@@ -12,10 +10,10 @@ function ResizeHeader(){
 	}
 	if (w < 992) {
 		$("header .login").insertBefore($("header .navbar-nav ul"));
-		$(".mainmenu").css({"top":h - 50 + "px"});
+		$(".mainmenu").insertAfter($("header"));
 	} else {
 		$("header .login").appendTo($(".mainmenu ul"));
-		$(".mainmenu").css({"top":"0px"});
+		$(".mainmenu").insertAfter($("header .navbar-nav"));
 	}
 }
 
