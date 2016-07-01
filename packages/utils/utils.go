@@ -3048,7 +3048,7 @@ func MakeUpgradeMenu(cur int) ( result string, full bool, next string ) {
 		result += `
 			<div class="col-xs-2 col-md-2 bs-wizard-step ` + active + `">
 				<div class="text-xs-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
-				<progress class="progress" value="100" max="100"></progress>
+				<div class="progress"><span class="progress-bar"></span></div>
 				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
 			</div>`
 	}
