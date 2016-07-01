@@ -57,7 +57,7 @@
 .glyphicon-upload                 { &:before { content: "\e027"; } }
 .glyphicon-inbox                  { &:before { content: "\e028"; } }
 .glyphicon-play-circle            { &:before { content: "\e029"; } }
-.glyphicon-repeat                 { &:before { content: "\e030"; } }
+.glyphicon-repeat                 { &:before { content: "\e086"; } }
 .glyphicon-refresh                { &:before { content: "\e031"; } }
 .glyphicon-list-alt               { &:before { content: "\e032"; } }
 .glyphicon-lock                   { &:before { content: "\e033"; } }
@@ -303,5 +303,6 @@
 .glyphicon-newspaper              { &:before { content: "\e609"; } }
 .glyphicon-headset                { &:before { content: "\e078"; } }
 .glyphicon-exit                   { &:before { content: "\e389"; } }
-.glyphicon-circle-arrow-top      { &:before { content: "\e219"; } }
-.glyphicon-circle-arrow-down     { &:before { content: "\e220"; } }
+.glyphicon-circle-arrow-top       { &:before { content: "\e219"; } }
+.glyphicon-circle-arrow-down      { &:before { content: "\e220"; } }
+.glyphicon-camera                 { &:before { content: "\e012"; } }
