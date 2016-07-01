@@ -77,6 +77,12 @@ type TypeNfySent struct {
 	CommentStatus string
 }
 
+type TypeNfyCashRequest struct {
+	FromUserId int64    `json:"from_user"`
+	Amount     float64  `json:"amount"`
+    CurrencyId int64    `json:"currency_id"`
+}
+
 type TypeNfyStatus struct {
 	Status     string  `json:"status"`
 }

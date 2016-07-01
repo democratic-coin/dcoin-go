@@ -3343,7 +3343,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s2[2] = map[string]string{"name": "block_id", "mysql": "int(11) NOT NULL DEFAULT '0'", "sqlite": "int(11) NOT NULL DEFAULT '0'", "postgresql": "int NOT NULL DEFAULT '0'", "comment": ""}
 	s2[3] = map[string]string{"name": "cmd_id", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
 	s2[4] = map[string]string{"name": "params", "mysql": "text CHARACTER SET utf8 NOT NULL DEFAULT ''", "sqlite": "text NOT NULL DEFAULT ''", "postgresql": "text NOT NULL DEFAULT ''", "comment": ""}
-
+	s2[5] = map[string]string{"name": "isread", "mysql": "tinyint(3) unsigned NOT NULL DEFAULT '0'", "sqlite": "tinyint(3)  NOT NULL DEFAULT '0'", "postgresql": "smallint  NOT NULL DEFAULT '0'", "comment": ""}
 
 	s1["fields"] = s2
 	s1["PRIMARY"] = []string{"id"}
@@ -3352,6 +3352,7 @@ func (schema *SchemaStruct) GetSchema() {
 	s["notifications"] = s1
 	schema.S = s
 	schema.PrintSchema()
+	schema.DB.Exec(`CREATE INDEX notifications_ur ON notifications (user_id,isread)`)
 
 	s = make(Recmap)
 	s1 = make(Recmap)
