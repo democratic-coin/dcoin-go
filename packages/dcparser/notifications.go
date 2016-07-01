@@ -32,7 +32,7 @@ func  (p *Parser) nfyRollback( blockId int64 ) {
 
 
 func (p *Parser) insertNotify( userId int64, cmdId int, params string) {
-	p.ExecSql("insert into notifications (user_id, block_id, cmd_id, params) VALUES (?, ?, ?, ?)", 
+	p.ExecSql("insert into notifications (user_id, block_id, cmd_id, params, isread) VALUES (?, ?, ?, ?,1)", 
 	          userId, p.BlockData.BlockId, cmdId, params )
 }
 
