@@ -219,7 +219,6 @@ func (p *Parser) CashRequestOut() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-
 	// а может быть наш юзер - получатель запроса
 	myUserId, myBlockId, myPrefix, _, err := p.GetMyUserId(p.TxMaps.Int64["to_user_id"])
 	if err != nil {
@@ -274,6 +273,7 @@ func (p *Parser) CashRequestOut() error {
 			}
 		}
 	}
+	p.nfyCashRequest( p.TxMaps.Int64["to_user_id"], &utils.TypeNfyCashRequest{ FromUserId: p.TxUserID, Amount: p.TxMaps.Money["amount"], CurrencyId: p.TxMaps.Int64["currency_id"]} ) 
 	return nil
 }
 
@@ -343,6 +343,7 @@ func (p *Parser) CashRequestOutRollback() error {
 			}
 		}
 	}
+	p.nfyRollback(p.BlockData.BlockId)
 
 	return nil
 }

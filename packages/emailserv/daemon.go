@@ -144,6 +144,9 @@ func daemon() {
 						if err == nil {
 							data[`RefReady`] = param
 						}
+					default:
+						GLatest[utils.ECMD_DCCAME] = last
+						continue
 				}
 				if err == nil {
 					EmailUser( userId, data, cmd )
