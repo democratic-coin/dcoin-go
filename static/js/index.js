@@ -3,11 +3,11 @@ function dc_navigate (page, parameters) {
 
     var json = JSON.stringify(parameters);
 
-    $('#wrapper').spin();
+    $('#loader').spin();
     $.post("content?page="+page, { tpl_name: page, parameters: json },
         function(data) {
-            $("#wrapper").spin(false);
-            //console.log('$("#wrapper").spin(false)');
+            $("#loader").spin(false);
+            //console.log('$("#loader").spin(false)');
             $('#dc_content').html( data );
 			if ( parameters && parameters.hasOwnProperty("lang")) {
 				load_menu();
@@ -22,11 +22,11 @@ function dc_navigate (page, parameters) {
 
 function map_navigate (page) {
 
-    $('#wrapper').spin();
+    $('#loader').spin();
     $.getScript("https://maps.googleapis.com/maps/api/js?sensor=false", function(){
 
         $( "#dc_content" ).load( "content", { tpl_name: page }, function() {
-            $('#wrapper').spin(false);
+            $('#loader').spin(false);
             window.scrollTo(0,0);
             if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
                 $('.sidebar-collapse').collapse('toggle');
@@ -38,12 +38,12 @@ function map_navigate (page) {
 
 function user_photo_navigate (page) {
 
-    $('#wrapper').spin();
+    $('#loader').spin();
     $.getScript("static/js/jquery.webcam.as3.js", function(){
 
                 $( "#dc_content" ).load( "content", { tpl_name: page }, function() {
                     $.getScript("static/js/sAS3Cam.js", function(){
-                        $('#wrapper').spin(false);
+                        $('#loader').spin(false);
                     });
                 });
 
@@ -58,9 +58,9 @@ function user_photo_navigate (page) {
 
 function user_webcam_navigate (page) {
 
-    $('#wrapper').spin();
+    $('#loader').spin();
         $( "#dc_content" ).load( "content", { tpl_name: page }, function() { });
-        $('#wrapper').spin(false);
+        $('#loader').spin(false);
         window.scrollTo(0,0);
         if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
             $('.sidebar-collapse').collapse('toggle');
@@ -113,7 +113,7 @@ function login_ok (result) {
                     $.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function() {
                         $.getScript("static/js/sb-admin.js");
                         $("#main-login").html('');
-                        $("#wrapper").spin(false);
+                        $("#loader").spin(false);
                     });
                 });
             });
@@ -122,32 +122,32 @@ function login_ok (result) {
             console.log('get_key_and_sign=sign');
             doSign('sign');
             $("#main-login").html('');
-            $("#wrapper").spin(false);
+            $("#loader").spin(false);
         }
         else if (get_key_and_sign=='send_to_net') {
             console.log('get_key_and_sign=send_to_net');
             doSign('sign');
             $("#send_to_net").trigger("click");
             $("#main-login").html('');
-            $("#wrapper").spin(false);
+            $("#loader").spin(false);
         }
 
     }
     else if (result=='not_available') {
         $("#modal_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+$('#pool_is_full').val()+'</p></div>');
-        $("#wrapper").spin(false);
+        $("#loader").spin(false);
     }
     else {
         $("#modal_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+$('#incorrect_key_or_password').val()+'</p></div>');
-        $("#wrapper").spin(false);
+        $("#loader").spin(false);
     }
 }
 
 
 function save_key () {
 
-    $('#wrapper').spin();
-    console.log("$('#wrapper').spin();");
+    $('#loader').spin();
+    console.log("$('#loader').spin();");
     $('#modal_alert').html( "" );
     $('#key').text( $("#modal_key").val() );
     $('#password').text( $("#modal_password").val() );
@@ -450,7 +450,7 @@ function get_e_n_sign(key, pass, forsignature, alert_div) {
     console.log('typeof decrypt_PEM ='+typeof decrypt_PEM );
    if (typeof decrypt_PEM != "string" || decrypt_PEM.indexOf('RSA PRIVATE KEY')==-1) {
        console.log('incorrect_key_or_password');
-        $("#wrapper").spin(false);
+        $("#loader").spin(false);
         $("#"+alert_div).html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+$('#incorrect_key_or_password').val()+'</p></div>');
        console.log(alert_div);
     }
@@ -509,7 +509,7 @@ function doSign_(type) {
 
     if (key.length < 512) {
         $("#modal_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+$('#incorrect_key_or_password').val()+'</p></div>');
-        $("#wrapper").spin(false);
+        $("#loader").spin(false);
         return false;
     }
     if (type=='sign') {
@@ -544,7 +544,7 @@ function doSign_(type) {
 
 			console.log('SIGN_LOGIN');
 
-			//$("#wrapper").spin();
+			//$("#loader").spin();
 			if (key) {
                 var privKey = "";
                 if (save_key == "1") {
@@ -591,7 +591,7 @@ function doSign_(type) {
 
 			}
 
-			//$("#wrapper").spin(false);
+			//$("#loader").spin(false);
 
 	}
 	else {

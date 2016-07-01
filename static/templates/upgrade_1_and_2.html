@@ -1,11 +1,7 @@
 {{define "upgrade1And2"}}
 <script>
-	var w = 350;
-	var h = 500;
-	if ($(window).width() <= 320) {
-		w = 290;
-		h = 428;
-	}
+	var w = 290;
+	var h = 414;
 	var jcrop_api = '';
 	window['crop_img_text'] = "{{.Lang.crop_img}}";
 	$(document).ready(function() {
@@ -24,22 +20,14 @@
 		#photo_select_method{display: none}
 	}
 
-{#	@media (max-width: 320px) {#}
 	@media (max-width: 480px) {
 		#img_face {
 			width: 100%;
 		}
 	}
 	.photo_cropper{
-		width: 350px;
-		height: 500px;
-	}
-
-	@media (max-width: 480px) {
-		.photo_cropper{
-			width: 290px !important;
-			height: 428px;
-		}
+		width: 290px;
+		height: 414px;
 	}
 </style>
 <script src="static/js/jquery.webcam.as3.js"></script>
@@ -101,20 +89,20 @@
 			<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
 				<div id="change_pkey_key_file_name" style="margin:auto; text-align:center; line-height:22px">
 					<p style="margin-bottom:0px" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
-					<button style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="fa fa-camera"></i> Select photo</button>
+					<button style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="glyphicon glyphicon-camera"></i> Select photo</button>
 					{{if not .Mobile}}<p>or drag and drop photo</p>{{end}}
 				</div>
 			</div>
 		</fieldset>
 		<div class="clearfix" style="margin-top: 20px"></div>
 
-		<img src="static/img/{{.PhotoType}}.jpg" style="float: left" id="img_face">
+		<img src="static/img/{{.PhotoType}}.jpg" style="float:left; width:290px;" id="img_face">
 		<!--<p style="text-align: center;"><strong>Example</strong></p>-->
 		<div style="float: left; text-align: center">
 			<div id="{{.PhotoType}}_photo_div" class="photo_cropper"><canvas id="{{.PhotoType}}_photo"></canvas></div>
 			<div style="display: none; text-align: center" id="crop_text">
 				<p>{{.Lang.put_your_face}}</p>
-				<button id="rotate"class="btn btn-outline btn-primary"><i class="fa fa-repeat"></i> Rotate</button>
+				<button id="rotate"class="btn btn-outline btn-primary"><i class="glyphicon glyphicon-repeat"></i> Rotate</button>
 			</div>
 		</div>
 	</div>
@@ -148,7 +136,7 @@
 	var first_load = true;
 
 	function change_handleFileSelect(f) {
-		$('#wrapper').spin();
+		$('#loader').spin();
 		$('#change_pkey_key_file_name').html(f.name);
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
@@ -173,7 +161,7 @@
 					}
 					crop_img ('#{{.PhotoType}}_photo');
 					first_load = false;
-					$('#wrapper').spin(false);
+					$('#loader').spin(false);
 					$("#msg_upload_2_photo").remove();
 				}
 			};
@@ -219,7 +207,7 @@
 		$('#crop_text').css('display', 'block');
 		if ($(window).width()>1024) {
 			$(id).cropper({
-				aspectRatio: 350 / 500,
+				aspectRatio: 290 / 414,
 				autoCropArea: 0.8, // Center 60%
 				multiple: true,
 				dragCrop: true,
@@ -236,7 +224,7 @@
 		else {
 			console.log($(window).width());
 			$(id).cropper({
-				aspectRatio: 350 / 500,
+				aspectRatio: 290 / 414,
 				autoCropArea: 0.90, // Center 60%
 				multiple: true,
 				dragCrop: false,
@@ -321,7 +309,7 @@
 </script>
 
 <input type="hidden" id="photo_type" value="{{.PhotoType}}">
-<canvas id="cropped_photo" style="display: none" class="photo_cropper" width="350" height="500"></canvas>
+<canvas id="cropped_photo" style="display: none" class="photo_cropper" width="290" height="414"></canvas>
 <a id="gotoupgrade3" href="/?upgrade3=1"></a>
 
 {{end}}

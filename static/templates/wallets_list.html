@@ -1,4 +1,5 @@
 {{define "walletsList"}}
+<div class="wallets_list">
 <style>
 	.table td {
 		vertical-align: middle;
@@ -466,22 +467,21 @@ function foattoupper(x) {
 	<div class="panel-body" style="padding: 0">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" id="myTab">
-			<li class="active"><a href="#walletsList" data-toggle="tab">{{.Lang.send_to_wallet}}</a></li>
-			<li class="" style="display:none" id="cf_tab"><a href="#send_to_cf" data-toggle="tab">{{.Lang.send_to_cf_project}}</a></li>
-			<li class=""><a href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
-			<li class=""><a href="#credits">{{.Lang.credits}}</a></li>
-			<li><a href="#autoPayments">{{.Lang.auto_payments}}</a></li>
-			<li class=""><a href="#arbitration">{{.Lang.arbitration}}</a></li>
+			<li class="nav-item"><a class="nav-link active" href="#walletsList" data-toggle="tab">{{.Lang.send_to_wallet}}</a></li>
+			<li class="nav-item" style="display:none" id="cf_tab"><a class="nav-link" href="#send_to_cf" data-toggle="tab">{{.Lang.send_to_cf_project}}</a></li>
+			<li class="nav-item"><a class="nav-link" href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+			<!--<li class="nav-item"><a class="nav-link" href="#credits">{{.Lang.credits}}</a></li>
+			<li class="nav-item"><a class="nav-link" href="#autoPayments">{{.Lang.auto_payments}}</a></li>
+			<li class="nav-item"><a class="nav-link" href="#arbitration">{{.Lang.arbitration}}</a></li>-->
 		</ul>
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div class="tab-pane fade active in" id="send_to_wallet">
-				<br>
 				<div>
 					<table class="table" style="max-width: 400px">
 						<tr><td>{{.Lang.currency}}</td><td>
 
-							<select id="currency_id" class="form-control">
+							<select id="currency_id" class="c-select form-control">
 								{{if .Wallets}}
 									{{range $id, $data := .Wallets}}
 									/{{$data.CurrencyId}}/
@@ -497,9 +497,7 @@ function foattoupper(x) {
 						<tr><td>{{.Lang.note}}</td><td><input class="form-control" type="text" id="comment"></td></tr>
 						<tr><td>{{.Lang.arbitration}}</td><td>{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}</td></tr>
 					</table>
-					<button id="goto_confirm" class="btn btn-outline btn-primary" type="button" style="margin-left: 7px">{{.Lang.next}}</button>
-					<br><br>
-
+					<center><button id="goto_confirm" class="btn btn-outline btn-primary" type="button" style="margin-top:1rem;">{{.Lang.next}}</button></center>
 					{{if .Wallets}}
 						<h3>{{.Lang.balances}}</h3>
 						<table class="table" style="max-width:400px">
@@ -516,8 +514,6 @@ function foattoupper(x) {
 						{{end}}
 						</table>
 					{{end}}
-
-					<br><br>
 				</div>
 				<div style="overflow: auto;display: none" >
 					<div class="panel panel-primary" style="margin-left: 40px; max-width: 400px">
@@ -736,5 +732,5 @@ function foattoupper(x) {
 
 </script>
 <script src="static/js/unixtime.js"></script>
-
+</div>
 {{end}}

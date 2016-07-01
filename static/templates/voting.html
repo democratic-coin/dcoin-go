@@ -166,19 +166,19 @@
 					<tr><th>{{.Lang.currency}}</th><th>{{.Lang.voting_miner_pct}}</th><th>{{.Lang.voting_user_pct}}</th><th>{{.Lang.voting_max_promised_amount}}</th><th>{{.Lang.voting_max_other_currencies}}</th><th>{{.Lang.voting_reduction}}</th></tr>
 					{{range $currency_id, $data := .PromisedAmountCurrencyList}}
 						<tr><td valign="top">D{{$data.name}}<input type='hidden' name='currency_id' value='{{$currency_id}}'></td><td valign="top">
-						<select  style='width: 150px' name='miner_pct'>
+						<select  style='width: 150px' name='miner_pct' class="c-select">
 						{{noescape (index $.MinerPctSelectBox $currency_id)}}
 						</select>
 						</td><td valign="top">
-						<select style='width: 150px' name='user_pct'>
+						<select style='width: 150px' name='user_pct' class="c-select">
 						{{noescape (index $.UserPctSelectBox $currency_id)}}
 						</select>
 						</td><td valign="top">
-						<select style='width: 150px' name='max_promised_amount'>
+						<select style='width: 150px' name='max_promised_amount' class="c-select">
 						{{noescape (index $.MaxPromisedAmountSelectBox $currency_id)}}
-						</select></td><td valign="top"><select style='width: 150px' name='max_other_currencies'>
+						</select></td><td valign="top"><select style='width: 150px' name='max_other_currencies' class="c-select">
 						{{noescape (index $.MaxOtherCurrenciesSelectBox $currency_id)}}
-						</select></td><td valign="top"><select style='width: 150px' name='reduction'><option>0</option><option>10</option><option>25</option><option>50</option><option>90</option></select></td></tr>
+						</select></td><td valign="top"><select style='width: 150px' name='reduction' class="c-select"><option>0</option><option>10</option><option>25</option><option>50</option><option>90</option></select></td></tr>
 				{{end}}
 				</table>
 				</div>
@@ -198,7 +198,7 @@
 				<h3>{{.Lang.refs}}</h3>
 				<table class="table" style="width: 200px"><tr><th>{{.Lang.ref_level}}</th><th>%</th><th></tr>
 					{{range $i, $v0 := .Refs}}
-						<tr><td>{{sum $i 1}}</td><td><select id='ref_{{$v0}}'>
+						<tr><td>{{sum $i 1}}</td><td><select id='ref_{{$v0}}' class="c-select">
 						{{range $k, $v := $.RefsNums}}
 							<option {{if eq $v  (index $.Referral $v0)}} selected {{end}}>{{$v}}</option>
 						{{end}}
