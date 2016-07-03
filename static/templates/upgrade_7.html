@@ -1,4 +1,11 @@
 {{define "upgrade7"}}
+<style>
+	#agree {
+		float:left;
+		margin-top:5px;
+		margin-right:10px;
+	}
+</style>
 <script>
 	$(document).ready(function() {
 		$( "#progress_bar" ).load( "ajax?controllerName=progressBar");
@@ -105,7 +112,7 @@
 			<div class='alert alert-danger'>{{.Lang.empty_geolocation}}</div></div>
 		{{else}}
 			<div id="errors"></div>
-			<input id="agree" type="checkbox"> {{.Lang.i_realize_that_my_photos}}<br><br>
+			<input id="agree" type="checkbox"><label for="agree" style="overflow:hidden; display:block;">{{.Lang.i_realize_that_my_photos}}</label><br><br>
 			{{if .ShowSignData}}
 				<button class="btn btn-success" id="next">{{.Lang.next}}</button>
 			{{else}}

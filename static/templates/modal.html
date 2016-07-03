@@ -1,5 +1,7 @@
 {{ define "modal" }}
 <script>
+$('#myModal').modal('hide');
+
 function show_text_key () {
 	$("#modal_key").css("display", "block");
 	$("#key_div").css("display", "none");
@@ -88,7 +90,8 @@ $('#saveKeyAndLogin').bind('click', function () {
 	setTimeout(function() {
 		doSign('login');
 		$('#saveKeyAndLogin').html('{{.Lang.login}}');
-		$('#saveKeyAndLogin').removeClass( "disabled" )
+		$('#saveKeyAndLogin').removeClass( "disabled" );
+		$('#myModal').modal('hide');
 	}, 500);
 });
 
@@ -143,8 +146,8 @@ $(document).keypress(function(e){
 						{{end}}
 						{{if not .Community}}
 						<div style="margin-top: 20px">
-							<input {{if or .Mobile .Desktop}}checked{{end}} type="checkbox" class="checkbox" id="modal_save_key" style="float: left;" >
-						<label for="modal_save_key" style="min-height: 0px; float: left; line-height: 30px; margin-left: 5px">
+							<input {{if or .Mobile .Desktop}}checked{{end}} type="checkbox" class="checkbox" id="modal_save_key" style="float:left;" >
+						<label for="modal_save_key" style="min-height: 0px; float: left; line-height: 14px; margin-left: 5px; white-space:nowrap;">
 							{{.Lang.save_key}}
 						</label>
 						</div>

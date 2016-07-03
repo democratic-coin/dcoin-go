@@ -216,12 +216,12 @@
 	<div id="onmap">
 		<h3>{{.Lang.search}}</h3>
 		<div class="form-inline" style="padding-bottom: 10px">
-			<select id="need_currency" class="span2">
+			<select id="need_currency" class="c-select span2">
 				{{range $k, $currencyId := .AvailableCurrency}}
 					<option value='{{$currencyId}}'>{{index $.CurrencyList $currencyId}}</option>
 				{{end}}
 			</select>
-			<select id="payment_system" class="span2">
+			<select id="payment_system" class="c-select span2">
 				<option value='0'>{{.Lang.cash}}</option>
 				{{range $id, $name := .PaymentSystems}}
 					<option value='{{$id}}'>{{$name}}</option>
@@ -232,7 +232,7 @@
 
 		<div id="new" style="display:none">
 
-			<div id="map_canvas" style="width: 640px; height: 320px;"></div>
+			<div id="map_canvas" style="width: 100%; height: 320px;"></div>
 			<br>
 
 		</div>

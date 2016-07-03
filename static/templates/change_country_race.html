@@ -24,7 +24,7 @@
 <div style="float: left; width: 140px; text-align: center; "><input type="radio" name="race" value="3" {{if eq .Race 3}}checked{{end}}></div>
 <br>
 <h3>Country</h3>
-<select id='country'><option value='0'></option>
+<select id='country' class="c-select form-control"><option value='0'></option>
 	{{range $i, $country := .Countries}}
 	<option value='{{$i}}' {{if eq $i $.Country}}selected{{end}}>{{$country}}</option>
 	{{end}}

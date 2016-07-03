@@ -44,8 +44,7 @@
 		if (typeof urls[i] != 'undefined' && urls[i]!='' && urls[i]!='0') {
 			image.src = urls[i];
 			image.onload = function(){
-				$('#img_avatar').css("background", "url('"+urls[i]+"')  50% 50%");
-				$('#img_avatar').css("background-size", "100px Auto");
+				$('#img_avatar').css({"background-image": "url('"+urls[i]+"')", "background-color":"transparent"});
 			};
 			// handle failure
 			image.onerror = function(){
@@ -55,43 +54,120 @@
 		}
 		else {
 			//$('#img_avatar').attr('src', '<?php echo $tpl['no_avatar']?>');
-			$('#img_avatar').css("background", "url('{{.NoAvatar}}') 0 0");
+			$('#img_avatar').css("background-image", "url('{{.NoAvatar}}')");
 		}
 	}
 
 	{{if .Avatar}}
-		$("#img_avatar").css("background", "url('{{.Avatar}}') 50% 50%");
-		$("#img_avatar").css("background-size", "100px Auto");
+		$("#img_avatar").css({"background-image": "url('{{.Avatar}}')", "background-color":"transparent"});
 	{{else}}
 		get_img(0);
 	{{end}}
 
 </script>
-<!--
-static/img/logo-2.png
-static/img/logo-small.png
--->
-<style>
-	#settings_menu_left, #settings_menu_left1{display: none}
-	#lng_menu_left{display: none}
-	@media (max-width: 768px) {
-		#settings_menu_left, #settings_menu_left1{display: block}
-		#lng_menu_left{display: block}
-		#settings_menu{display: none}
-		body{padding-top: 50px}
-	}
+<div class="logo"><a href="#home"></a></div>
+<div class="menu">
+	<div class="patty"></div>
+</div>
+<nav id="navbar" class="navbar-nav">
+	<ul>
+		{{if .Admin}}
+		<li>
+			<div class="dropdown">
+				<a id="Admin" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-home"></span>Admin</a>
+				<div class="dropdown-menu sub" aria-labelledby="Admin">
+					<a class="dropdown-item" href="#adminVariables" onClick="HideMenu();">Variables</a>
+				</div>
+			</div>
+		</li>
+		{{end}}
+		<li><a class="main_link" href="#walletsList" onClick="HideMenu();"><span class="glyphicon glyphicon-wallet"></span>{{.Lang.wallets}}</a></li>
+		<li><a class="main_link" href="#miningMenu" onClick="HideMenu();"><span class="glyphicon glyphicon-money"></span>{{.Lang.mining}}</a></li>
+		{{if .MinerId}}
+		<li><a class="main_link" href="#newUser" onClick="HideMenu();"><span class="glyphicon glyphicon-referrals"></span>{{.Lang.my_referrals}}</a></li>
+		{{end}}
+		<li>
+			<div class="dropdown">
+				<a id="Information" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-info"></span>{{.Lang.information}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Information">
+					<!--<a class="dropdown-item" href="#pct" onClick="HideMenu();">{{.Lang.pct}}</a>
+					<a class="dropdown-item" href="#reduction" onClick="HideMenu();">{{.Lang.reduction}}</a>-->
+					<a class="dropdown-item" href="#statisticVoting" onClick="HideMenu();">{{.Lang.voting}}</a>
+					<a class="dropdown-item" href="#statistic" onClick="HideMenu();">{{.Lang.statistic}}</a>
+					<a class="dropdown-item" href="#information" onClick="HideMenu();">{{.Lang.information}}</a>
+					<a class="dropdown-item" href="#dbInfo" onClick="HideMenu();">{{.Lang.db_info}}</a>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="dropdown">
+				<a id="Settings" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-settings"></span>{{.Lang.settings}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Settings">
+					{{if or .PoolAdmin (not .Community)}}<a class="dropdown-item" href="#changeNodeKey" onClick="HideMenu();">{{.Lang.change_node_key}}</a>{{end}}
+					<a class="dropdown-item" href="#changePrimaryKey" onClick="HideMenu();">{{.Lang.change_master_key}}</a>
+					<a class="dropdown-item" href="#restoringAccess" onClick="HideMenu();">{{.Lang.restoring_access}}</a>
+					{{if .PoolAdmin}}
+					<a class="dropdown-item" href="#poolAdminControl" onClick="HideMenu();">Pool admin</a>
+					<a class="dropdown-item" href="#changeHost" onClick="HideMenu();">{{.Lang.change_host_title}}</a>
+					<a class="dropdown-item" href="#nodeConfigControl" onClick="HideMenu();">{{.Lang.config_node}}</a>
+					{{end}}
+					{{if .ExchangeEnable}}<a class="dropdown-item" href="#exchangeAdmin" onClick="HideMenu();">Exchange admin</a>{{end}}
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="dropdown">
+				<a id="Help" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-question-sign"></span>{{.Lang.help}}</a>
+				<div class="dropdown-menu sub" aria-labelledby="Help">
+					<a class="dropdown-item" href="{{.Lang.faq_url}}" onclick='THRUST.remote.send("{{.Lang.faq_url}}")' target="_blank">{{.Lang.faq}}</a>
+					<a class="dropdown-item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank">{{.Lang.wiki}}</a>
+					<a class="dropdown-item" href="http://dcoinforum.org" onclick='THRUST.remote.send("http://dcoinforum.org")' target="_blank">{{.Lang.forum}}</a>
+					<!--<a class="dropdown-item" href="#bug_reporting" onClick="HideMenu();">{{.Lang.bug_reporting}}</a>-->
+					<a class="dropdown-item" href="#abuse" onClick="HideMenu();">{{.Lang.complaints_miners}}</a>
+					<a class="dropdown-item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'>{{.Lang.support}}</a>
+				</div>
+			</div>
+		</li>
+	</ul>
+</nav>
+<div class="mainmenu container-fluid">
+	<ul>
+		<!--<li><a class="item" href="#"><span class="glyphicon glyphicon-map-marker"></span><i>{{.Lang.miners_map}}</i></a></li>
+		<li><a class="item" href="#"><span class="glyphicon glyphicon-chat"></span><i>{{.Lang.chat}}</i></a></li>-->
+		<li><a class="item" href="#Notifications"><span class="glyphicon glyphicon-bell"></span><i>{{.Lang.sms_and_email_notifications}}</i></a></li>
+		<li><a class="item" href="#statistic"><span class="glyphicon glyphicon-charts"></span><i>{{.Lang.statistic}}</i></a></li>
+		<li><a class="item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank"><span class="glyphicon glyphicon-newspaper"></span><i>{{.Lang.wiki}}</i></a></li>
+		<li><a class="item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'><span class="glyphicon glyphicon-headset"></span><i>{{.Lang.support}}</i></a></li>
+		<li class="login">
+			<div class="dropdown">
+				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
+				<div class="dropdown-menu" aria-labelledby="Login">
+					<a class="dropdown-header" href="#changeAvatar" onClick="HideMenu();">{{.Lang.account_number}}: <strong>{{.UserId}}</strong></a>
+					<a class="dropdown-item" href="#points" onClick="HideMenu();">{{.Lang.status}}: <strong>{{if .MinerId}}Miner{{else}}User{{end}}</strong></a>
+					<a class="dropdown-item" href="#blockExplorer" onClick="HideMenu();">{{.Lang.block_explorer}}:
+						{{if not .MyNotice.main_status_complete}}
+							<strong style="color:#c53f40;">{{.BlockId}}</strong>
+						{{else}}
+							<strong>{{.BlockId}}</strong>
+						{{end}}
+					</a>
+					{{if eq .Restricted 0}}<a class="dropdown-item" href="#interface" onClick="HideMenu();">{{.Lang.interface}}</a>{{end}}
+					<div class="language dropdown-item">
+						<span class="flag flag_{{.LangInt}}">&nbsp;</span>{{.Lang.languages}}
+						<div class="languages dropdown-menu">
+							<a class="lng dropdown-item" href="#" data-id="1"><span class="flag flag_1">&nbsp;</span>English</a>
+							<a class="lng dropdown-item" href="#" data-id="42"><span class="flag flag_42">&nbsp;</span>Русский</a>
+						</div>
+					</div>
+					<a class="dropdown-item" href="#" onclick="logout()"><span class="glyphicon glyphicon-exit"></span>{{.Lang.logout}}</a>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
 
-	.dcoin-logo { background-image: url('static/img/logo-2.png'); width:182px; height: 40px; background-size:182px 40px}
-	@media (max-width: 600px) {
-		.dcoin-logo { background-image: url('static/img/logo-small.png'); width:42px; height: 40px; background-size:42px 40px}
-		#progress_status_text{display: none}
-	}
-	.flag_42{display:inline-block; background-image: url('static/img/us-ru.png'); background-position: 0px 0px; width: 22px; height: 16px}
-	.flag_1{display:inline-block; background-image: url('static/img/us-ru.png'); background-position: 0px 16px; width: 22px; height: 16px}
 
-	#last_block_id a:hover {background-color: inherit}
-</style>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0; display:none;">
 	<div class="navbar-header">
 		<button style="z-index: 99999;opacity: 1;" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
 			<span class="sr-only">Toggle navigation</span>
@@ -357,33 +433,23 @@ static/img/logo-small.png
 	<!-- /.navbar-static-side -->
 </nav>
 <script>
-	{{if .IsRestricted}}
-		var ipct = {{.Pct}}/10;
-		var iamount = {{.Amount}};
-		var istart = new Date().getTime();
-
-		function money_counter() {
-			irest = Math.round( (new Date().getTime() - istart)/100 );
-			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
-			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
-			setTimeout( money_counter, 200 );
-		}
-		setTimeout( money_counter, 200 );
-	{{end}}	
-
-	function nav_height() {
-	    h = $(window).height() - 51;
-		if($(window).width() > 730) {
-			$("#leftnavbar").css( 'height', h + 'px' );
-		} else {
-			$("#leftnavbar").css( 'height', 'inherit' );
-			$("#leftnavbar").css( 'max-height', h + 'px' );
-		}
-	}
-	
-	$(window).resize( nav_height );
-	
 	$( document ).ready(function() {
+		ResizeHeader();
+		
+		$("header .menu").bind('click', function(){
+			if ($("header").hasClass("on")) {
+				$("header").removeClass("on");
+			} else {
+				$("header").addClass("on");
+			}
+		});
+		
+		$("#navbar").touchwipe({
+			wipeLeft: function() {
+				$("header").removeClass("on");
+			}
+		});
+		
 		key = localStorage.getItem('dcoin_key');
 		if (key && key.length > 256 && $('#key').html().length < 256 ) {
 			$('#key').text(key);
@@ -401,12 +467,30 @@ static/img/logo-small.png
 		}else{
 			$('#menu-collapse').addClass('collapse');
 		}
-		nav_height();
 	});
+	
+	{{if .IsRestricted}}
+		var ipct = {{.Pct}}/10;
+		var iamount = {{.Amount}};
+		var istart = new Date().getTime();
+
+		function money_counter() {
+			irest = Math.round( (new Date().getTime() - istart)/100 );
+			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
+			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
+			setTimeout( money_counter, 200 );
+		}
+		setTimeout( money_counter, 200 );
+	{{end}}	
+
 	setTimeout( function(){
 		if ( typeof THRUST != "undefined" )
 			THRUST.remote.send("USERID={{.UserId}}");
-		}, 500 );
+	}, 500 );
+	
+	$(window).resize(function(){
+		ResizeHeader();
+	});
 
 </script>
 {{ template "modal". }}

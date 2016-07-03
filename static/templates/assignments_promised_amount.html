@@ -1,6 +1,5 @@
 {{define "assignmentsPromisedAmount"}}
 <script>
-
 	function write_for_signature (result) {
 		if ($('#comment').val()=='') {
 			$('#comment').val('null');
@@ -104,9 +103,9 @@
 					image = null;
 					console.log('#face_coords_mouse = url('+photo_hosts[i]+'public/profile_{{.UserInfo.user_id}}.jpg)');
 					$('#face_img').css("background", "url('"+photo_hosts[i]+"public/face_{{.UserInfo.user_id}}.jpg')  no-repeat 50% 50%");
-					$('#face_img').css("background-size", "300px Auto");
+					$('#face_img').css("background-size", "290px Auto");
 					$('#profile_img').css("background", "url('"+photo_hosts[i]+"public/profile_{{.UserInfo.user_id}}.jpg') no-repeat 50% 50%");
-					$('#profile_img').css("background-size", "300px Auto");
+					$('#profile_img').css("background-size", "290px Auto");
 				};
 				// handle failure
 				image.onerror = function(){
@@ -152,14 +151,14 @@
 
 	{{.NewPromiseAmount}}
 	<div class="clearfix"></div>
-	<div style="float:left;width:300px; height:440px" id="face_img"></div>
-	<div style="float:left;width:300px; height:440px" id="profile_img"></div>
-	<div style="float:left;width:320px; margin-left: 5px">
+	<div style="float:left;width:290px; height:440px" id="face_img"></div>
+	<div style="float:left;width:290px; height:440px" id="profile_img"></div>
+	<div style="float:left;width:290px; margin-left: 5px">
 		{{.Lang.check_video}}<br>
 		{{if ne .PromisedAmountData.video_url_id "null"}}
-			<iframe width="320" height="240" src="http://www.youtube.com/embed/{{.PromisedAmountData.video_url_id}}" frameborder="0" allowfullscreen></iframe>
+			<iframe width="290" height="220" src="http://www.youtube.com/embed/{{.PromisedAmountData.video_url_id}}" frameborder="0" allowfullscreen></iframe>
 		{{else}}
-			<video class="video-js vjs-default-skin" controls preload="none" width="320" height="240" data-setup="{}"><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.mp4" type="video/mp4" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.webm" type="video/webm" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.ogv" type="video/ogg" /></video>
+			<video class="video-js vjs-default-skin" controls preload="none" width="290" height="220" data-setup="{}"><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.mp4" type="video/mp4" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.webm" type="video/webm" /><source src="{{.VideoHost}}public/{{.UserInfo.user_id}}_promised_amount_{{.PromisedAmountData.currency_id}}.ogv" type="video/ogg" /></video>
 		{{end}}
 	</div>
 	<input type="hidden" id="candidate-id" value="{{.UserInfo.user_id}}">
@@ -168,7 +167,7 @@
 	{{.Lang.location_on_map}}
 	<br>
 	<!--<button type="hidden" class="btn btn-primary" id="show_map">{{.Lang.show_miner_on_map}}</button><br><br>-->
-	<div id="map_canvas" style="width: 100%; height: 480px;"></div>
+	<div id="map_canvas" style="width: 100%; height: 320px;"></div>
 
 	{{.MainQuestion}}<br>
 

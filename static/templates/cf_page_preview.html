@@ -84,7 +84,7 @@
 				});
 
 				$('#comment_send_to_net').find('#send_to_net').bind('click', function () {
-							$('#wrapper').spin();
+							$('#loader').spin();
 							$.post( 'ajax?controllerName=saveQueue', {
 								'type' : '{{.TxType}}',
 								'time' : '{{.TimeNow}}',
@@ -97,7 +97,7 @@
 								'signature3': $('#signature3').val()
 			}, function (data) {
 				$("#main_comment_div").html( '<div class="alert alert-success">{{.Lang.cf_new_comment}}</div>');
-				$('#wrapper').spin(false);
+				$('#loader').spin(false);
 
 			}
 	);
@@ -120,7 +120,7 @@
 
 	$('#contribute_now_step2').bind('click', function () {
 
-		$('#wrapper').spin();
+		$('#loader').spin();
 		$.post( '{{.CfUrl}}ajax?controllerName=availableCoins', {
 					'dc_currency_id' : '{{.Project.currency_id}}',
 					'currency_id' : '1001',
@@ -142,7 +142,7 @@
 						}
 
 					}
-					$('#wrapper').spin(false);
+					$('#loader').spin(false);
 				}, 'JSON'
 		);
 
