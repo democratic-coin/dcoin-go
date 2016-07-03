@@ -8,8 +8,30 @@
 <div id="main_div">
 	<h1 class="page-header">{{.Lang.notifications_title}}</h1>
 
-	{{template "alertSuccess".}}
-
+	{{if .List}}
+		<div class="col-lg-12">
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+						<tr>
+							<th>{{.Lang.block}}</th>
+							<th>{{.Lang.notifications_title}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{range .List}}{{if .txt}}
+								<tr {{if eq .isread "1"}}style="font-weight:bold;"{{end}}><td>{{.block_id}}</td><td>
+									{{.txt}}
+								</td>
+								</tr>{{end}}
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	{{end}}
 </div>
 
 {{end}}
