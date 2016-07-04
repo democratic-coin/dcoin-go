@@ -10,9 +10,9 @@
 		$.post('ajax?controllerName=saveVideo', {'video_url' : video_url },
 				function(data) {
 					if (data.url != '') {
-						console.log('<iframe width=640 height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
+						console.log('<iframe width=100% height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
 						//$('#video_url_src').attr('src') = $('#video_url').val();
-						$('#video_url_iframe').html('<iframe width=640 height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
+						$('#video_url_iframe').html('<iframe width=100% height=480  src="'+data.url+'" frameborder=0 allowfullscreen></iframe>');
 					}
 
 				}, "json");
@@ -35,16 +35,17 @@
 	$('#del_mp4').bind('click', function () {
 		$.post('ajax?controllerName=deleteVideo', {'type' : 'mp4' },
 				function(data) {
-					$('#video_mp4_ok').css("display", "none");
-					$('#del_mp4').css("display", "none");
+					$('#video_mp4_ok').hide();
+					$('#del_mp4').hide();
+					$('#video').hide();
 				});
 	});
 
 	$('#del_webm_ogg').bind('click', function () {
 		$.post('ajax?controllerName=deleteVideo', {'type' : 'webm_ogg' },
 				function(data) {
-					$('#video_webm_ogg_ok').css("display", "none");
-					$('#del_webm_ogg').css("display", "none");
+					$('#video_webm_ogg_ok').hide();
+					$('#del_webm_ogg').hide();
 				});
 	});
 /*	$( "#from_webcam_show" ).click(function() {
@@ -75,17 +76,14 @@
 
 </script>
 <style>
+	ul {
+		padding-left:1rem;
+	}
 	.videosize {
-		width: 640px;
-		height: 480px;
+		width:100%;
+		height:480px;
 	}
 
-	@media (max-width: 800px) {
-		.videosize{
-			width: 500px;
-			height: 375px;
-		}
-	}
 	@media (max-width: 640px) {
 		.videosize{
 			width: 100%;
@@ -129,63 +127,60 @@
 {{noescape .Lang.upload_face_video_rules}}
 {{noescape .Lang.upload_face_video_rules2}}
 
-<p id="selectType"><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
+<p id="selectType" align="center"><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
 
 <div id="from_youtube">
-
-	<table class="table table-bordered">
-		<tr><td style="padding:0px !important;">
-			<span class="btn btn-file"><input id="video_url" type="text" value="{{.VideoUrl}}" ><button id="save_youtube">{{.Lang.save}}</button><button id="clear_youtube">{{.Lang.clear}}</button></span>
-			<span style=" display:block; padding:10px;">Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU</span>
-			<div id="video_url_iframe" style="font-size:0px; margin:10px;">{{if .VideoUrl}}<iframe class="videosize"  src='{{.VideoUrl}}' frameborder=0 allowfullscreen></iframe>{{end}}</div>
-		</td></tr>
-	</table>
-
+	<div style="border:2px dashed black; padding:1rem;">
+		<input id="video_url" class="form-control" type="url" value="{{.VideoUrl}}">
+		<small class="text-muted" style="display:block; margin-bottom:1rem;">Example: http://www.youtube.com/watch?v=ZSt9tm3RoUU</small>
+		<div style="font-size:0px; text-align:center;">
+			<button id="save_youtube" class="btn btn-success" style="margin-right:5px;">{{.Lang.save}}</button>
+			<button id="clear_youtube" class="btn btn-warning">{{.Lang.clear}}</button>
+		</div>
+	</div>
+	<div id="video_url_iframe" style="font-size:0px; margin-top:1rem; margin-bottom:1rem;">{{if .VideoUrl}}<iframe class="videosize" src='{{.VideoUrl}}' width="100%" frameborder=0 allowfullscreen></iframe>{{end}}</div>
 </div>
-
 <div id="from_file">
 	<fieldset id="from_file_form">
 		<input accept="video/mov,video/mp4"  capture="camera" type="file" name="upload" id="video_mp4" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
-		<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
+		<div style="width:100%; border:2px dashed black; height:100px; padding:1rem;" id="change_pkey_key_div">
 			<div style="margin:auto; text-align:center; line-height:22px">
 				<p style="margin-bottom:0px" onclick="document.getElementById('video_mp4').click();"></p>
 				<button id="key_btn" style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('video_mp4').click();"><i class="glyphicon glyphicon-camera"></i> Select video</button>
-				{{if not .Mobile}}<p>or drag and drop file</p>{{end}}
+				{{if not .Mobile}}<p style="margin-bottom:0px">or drag and drop file</p>{{end}}
 			</div>
 		</div>
 	</fieldset>
-	<div class="clearfix" style="margin-top: 20px"></div>
-	<div id="video_mp4_progress" class="my_progress">0%</div><br>
-	<div id="video_mp4_ok" class="alert alert-success" style="display: none"></div>
-	<div id="video_mp4_err" class="alert alert-danger" style="display: none">{{.Lang.file_size_limit}}</div>
+	<div class="clearfix"></div>
+	<div id="video_mp4_progress" class="my_progress">0%</div>
+	<div id="video_mp4_ok" class="alert alert-success" style="display:none; margin-top:1rem;"></div>
+	<div id="video_mp4_err" class="alert alert-danger" style="display:none; margin-top:1rem;">{{.Lang.file_size_limit}}</div>
 
-	<button id="del_mp4" style="display: none">Delete</button>
+	<button id="del_mp4" class="btn btn-danger" style="display:none;">Delete</button>
 
-	<div id="video" style="display: none">
-		<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
+	<div id="video" style="display:none; font-size:0px; margin-bottom:1rem;">
+		<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type="video/mp4" /><source src="public/{{.UserId}}_user_video.webm" type="video/webm" /><source src="public/{{.UserId}}_user_video.ogv" type="video/ogg" /></video>
 	</div>
 
 </div>
 
 <script>
 	{{if ne .UserVideoMp4 ""}}
-		$('#video_mp4_ok').css("display", "block");
+		$('#video_mp4_ok').show();
 		$('#video_mp4_ok').html('{{.Lang.file_successfully_downloaded}}');
-		$('#del_mp4').css("display", "block");
-		$('#video').css("display", "block");
+		$('#del_mp4').css({"display":"inline-block"});
+		$('#video').show();
 	{{end}}
 
 	{{if or (ne .UserVideoWebm "") (ne .UserVideoOgg "")}}
-		$('#video_webm_ogg_ok').css("display", "block");
+		$('#video_webm_ogg_ok').show();
 		$('#video_webm_ogg_ok').html('{{.Lang.file_successfully_downloaded}}');
-		$('#del_webm_ogg').css("display", "block");
-		$('#video').css("display", "block");
+		$('#del_webm_ogg').show();
+		$('#video').show();
 	{{end}}
 </script>
 
-<br>
-
-<button class="btn btn-success" onclick="$('#save_youtube').trigger('click');map_navigate('upgrade5');">{{.SaveAndGotoStep}}</button>
+<center><button class="btn btn-success" onclick="$('#save_youtube').trigger('click');map_navigate('upgrade5');">{{.SaveAndGotoStep}}</button></center>
 <div class="for-signature"></div>
 
 {{end}}

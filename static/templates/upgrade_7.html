@@ -112,12 +112,14 @@
 			<div class='alert alert-danger'>{{.Lang.empty_geolocation}}</div></div>
 		{{else}}
 			<div id="errors"></div>
-			<input id="agree" type="checkbox"><label for="agree" style="overflow:hidden; display:block;">{{.Lang.i_realize_that_my_photos}}</label><br><br>
-			{{if .ShowSignData}}
-				<button class="btn btn-success" id="next">{{.Lang.next}}</button>
-			{{else}}
-				<button class="btn btn-success" id="send_to_net">{{.Lang.send_to_net}}</button>
-			{{end}}
+			<input id="agree" type="checkbox"><label for="agree" style="overflow:hidden; display:block; margin-bottom:1rem;">{{.Lang.i_realize_that_my_photos}}</label>
+			<center>
+				{{if .ShowSignData}}
+					<button class="btn btn-success" id="next">{{.Lang.next}}</button>
+				{{else}}
+					<button class="btn btn-success" id="send_to_net">{{.Lang.send_to_net}}</button>
+				{{end}}
+			</center>
 			</div>
 			{{template "signatures".}}
 		{{end}}
