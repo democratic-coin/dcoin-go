@@ -29,6 +29,7 @@ type menuPage struct {
 	Mobile         bool
 	ExchangeEnable bool
 	Admin          bool
+	Notifications  int64
 	Desktop bool
 	Pct               float64
 	Amount            float64
@@ -166,6 +167,11 @@ func (c *Controller) Menu() (string, error) {
 			}
 		}
 	}
+	notifications,err := c.GetNotificationsCount(c.SessUserId)
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+
 	funcMap := template.FuncMap{
 		"noescape": func(s string) template.HTML {
 			return template.HTML(s)
@@ -181,6 +187,7 @@ func (c *Controller) Menu() (string, error) {
 			UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, 
 			MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, 
 			FaceUrls: strings.Join(face_urls, ","),
+			Notifications:     notifications,
 			IsRestricted:      isRestricted,
 			Amount:            profit,
 			Pct:               pct })
