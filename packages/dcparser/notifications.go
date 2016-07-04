@@ -73,7 +73,7 @@ func  (p *Parser) nfySent( userId int64, tns *utils.TypeNfySent ) {
 }
 
 func  (p *Parser) nfyCame( userId int64, tnc *utils.TypeNfyCame ) {
-	if !p.isNotify(userId) {
+	if !p.isNotify(userId) || tnc.Amount == 0.0 {
 		return
 	}
 	params,err := json.Marshal( tnc ) 

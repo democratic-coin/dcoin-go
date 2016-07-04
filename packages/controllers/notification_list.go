@@ -12,19 +12,29 @@ type notificationListPage struct {
 	List            []map[string]string
 }
 
+var (
+	nlCurrency map[int64]string = make(map[int64]string)
+)
+
 func Currency(currency int64) string {
+	if ret,ok := nlCurrency[currency]; ok {
+		return ret
+	}
 	ret,_ := utils.DB.Single(`SELECT name FROM currency where id=?`,currency ).String()
+	if len(ret) > 0 {
+		nlCurrency[currency] = ret
+	}
 	return ret
 }
 
 
 func (c *Controller) NotificationList() (string, error) {
-
 	list, err := c.GetAll("SELECT * FROM notifications WHERE user_id = ? ORDER BY id DESC", 30, c.SessUserId )
-//	list, err := c.GetAll("SELECT * FROM notifications ORDER BY id DESC", 30 )
+//	list, err := c.GetAll("SELECT * FROM notifications ORDER BY id DESC", 150 )
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
+	
 	for key,val := range list {
 		var txt string
 		switch utils.StrToInt64(val[`cmd_id`]) {
@@ -40,7 +50,7 @@ func (c *Controller) NotificationList() (string, error) {
 			case utils.ECMD_CHANGESTAT:
 				var params utils.TypeNfyStatus
 				json.Unmarshal([]byte(val[`params`]),&params)
-				txt = fmt.Sprintf(`Youк new status is %s.`, params.Status )
+				txt = fmt.Sprintf(`Your new status is %s.`, params.Status )
 			case utils.ECMD_DCSENT:
 				var params utils.TypeNfySent
 				json.Unmarshal([]byte(val[`params`]),&params)
@@ -57,6 +67,7 @@ func (c *Controller) NotificationList() (string, error) {
 			list[key][pk] = pv
 		}*/
 	}
+	c.ExecSql("UPDATE notifications SET isread=0 WHERE user_id = ?", c.SessUserId )
 	
 	TemplateStr, err := makeTemplate("notification_list", "notification_list", &notificationListPage{
 		Lang:            c.Lang,
