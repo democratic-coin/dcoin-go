@@ -1,19 +1,12 @@
 {{define "upgrade5"}}
 <style>
 	#map_canvas {
-		width: 640px;
+		width: 100%;
 		height: 480px;
-	}
-	@media  (max-width: 1024px) {
-		#map_canvas {
-			width: 100%;
-			height: 300px;
-		}
 	}
 	@media  (max-width: 320px) {
 		#map_canvas {
-			width: 100%;
-			height: 200px;
+			height: 320px;
 		}
 	}
 
@@ -135,12 +128,12 @@
 	</div>
 
 	<h3>{{.Lang.your_location}}</h3>
-	<div id="map_canvas" style="margin-bottom:20px; display:none"></div>
+	<div id="map_canvas" style="margin-bottom:1rem; display:none"></div>
 	<input id="latitude" class="input" type="hidden" placeholder="latitude" value="{{.GeolocationLat}}"><input id="longitude" class="input" type="hidden" placeholder="longitude" value="{{.GeolocationLon}}">
-	<br>
-
-    <button class="btn btn-info" id="geo" onclick="geoFindMe()">My location</button>
-	<button class="btn btn-success" id="save">{{ .SaveAndGotoStep }}</button>
+	<center style="font-size:0px;">
+		<button class="btn btn-info" id="geo" onclick="geoFindMe()" style="margin-right:5px;">My location</button>
+		<button class="btn btn-success" id="save">{{ .SaveAndGotoStep }}</button>
+	</center>
 
 </div>
 

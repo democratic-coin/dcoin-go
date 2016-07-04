@@ -29,6 +29,9 @@
 		width: 290px;
 		height: 414px;
 	}
+	ul {
+		padding-left:1rem;
+	}
 </style>
 <script src="static/js/jquery.webcam.as3.js"></script>
 <script src="static/js/sAS3Cam.js"></script>
@@ -53,10 +56,10 @@
 	<h3>{{.Lang.upload_2_photo}}</h3>
 	<div style="display: none">Please upgrade your browser to latest version</div>
 	{{noescape .Lang.upload_2_photo_rules}}
-	<p id="photo_select_method"><a href="#" id="from_webcam_show">{{ .Lang.from_webcam }}</a> {{.Lang.or}} <a href="#" id="from_file_show">{{.Lang.from_file}}</a></p>
-	<div id="from_webcam">
+	<p id="photo_select_method" align="center"><a href="#" id="from_webcam_show">{{ .Lang.from_webcam }}</a> {{.Lang.or}} <a href="#" id="from_file_show">{{.Lang.from_file}}</a></p>
+	<div id="from_webcam" style="font-size:0px;">
 
-		<table border="0" cellspacing="0" cellpadding="0">
+		<table border="0" cellspacing="0" cellpadding="0" align="center" style="margin:0px auto;">
 			<tr>
 				<td class="webcam-container size640x480">
 					<div id="webcam" class="size640x480"></div>
@@ -80,25 +83,22 @@
 				</td>
 			</tr>
 		</table>
-		<br/>
-
 	</div>
-	<div id="from_file">
-		<fieldset id="from_file_form">
-			<input accept="image/*"  capture="camera" type="file" name="upload" id="change_pkey_upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
-			<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
-				<div id="change_pkey_key_file_name" style="margin:auto; text-align:center; line-height:22px">
-					<p style="margin-bottom:0px" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
-					<button style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="glyphicon glyphicon-camera"></i> Select photo</button>
-					{{if not .Mobile}}<p>or drag and drop photo</p>{{end}}
-				</div>
+	<fieldset id="from_file_form">
+		<input accept="image/*"  capture="camera" type="file" name="upload" id="change_pkey_upload_hidden" style="position: absolute; display: block; overflow: hidden; width: 0; height: 0; border: 0; padding: 0;" />
+		<div style="width:100%;  border:2px dashed black; height: 100px; padding: 15px 0px 15px 0px" id="change_pkey_key_div">
+			<div id="change_pkey_key_file_name" style="margin:auto; text-align:center; line-height:22px">
+				<p style="margin-bottom:0px" onclick="document.getElementById('change_pkey_upload_hidden').click();"></p>
+				<button style="margin-top:0px"  class="btn btn-outline btn-primary" onclick="document.getElementById('change_pkey_upload_hidden').click();"><i class="glyphicon glyphicon-camera"></i> Select photo</button>
+				{{if not .Mobile}}<p>or drag and drop photo</p>{{end}}
 			</div>
-		</fieldset>
-		<div class="clearfix" style="margin-top: 20px"></div>
-
-		<img src="static/img/{{.PhotoType}}.jpg" style="float:left; width:290px;" id="img_face">
+		</div>
+	</fieldset>
+	<div id="from_file" style="max-width:580px; margin:0px auto; clear:both; overflow:hidden;">
+		<div class="clearfix" style="margin-top:15px;"></div>
+		<img src="static/img/{{.PhotoType}}.jpg" style="float:left; width:290px;" id="img_face" alt="">
 		<!--<p style="text-align: center;"><strong>Example</strong></p>-->
-		<div style="float: left; text-align: center">
+		<div style="float:left; width:290px; text-align:center; overflow:hidden;">
 			<div id="{{.PhotoType}}_photo_div" class="photo_cropper"><canvas id="{{.PhotoType}}_photo"></canvas></div>
 			<div style="display: none; text-align: center" id="crop_text">
 				<p>{{.Lang.put_your_face}}</p>
@@ -107,7 +107,7 @@
 		</div>
 	</div>
 <div class="clearfix"></div>
-	<button class="btn btn-success" id="next_step" style="margin-top: 50px; margin-bottom: 10px">{{.SaveAndGotoStep}}</button>
+	<center><button class="btn btn-success" id="next_step" style="margin-top:15px;">{{.SaveAndGotoStep}}</button></center>
 	<input type="hidden" id="img_type" value="{{.PhotoType}}">
 
 	<div class="for-signature"></div>
