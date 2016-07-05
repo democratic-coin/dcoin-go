@@ -293,10 +293,14 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if (jsonEmail.Cmd == utils.ECMD_SENDKEY) {
+		bcc := GSettings.CopyTo
+		GSettings.CopyTo = ``
 		files := make( map[string][]byte )
 		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = []byte( (*jsonEmail.Params)[`txt_key`])
 		err := GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
 		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
+		GSettings.CopyTo = bcc
+
 		if err != nil {
 			result(err.Error())
 			return
