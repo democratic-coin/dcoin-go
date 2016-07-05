@@ -26,6 +26,8 @@
 // static/css/tooltipster-shadow.css
 // static/css/tooltipster.css
 // static/css/upgrade.css
+// static/fonts/FontAwesome.otf
+// static/fonts/OpenSans-Regular.ttf
 // static/fonts/PFSquareSansPro-Bold.eot
 // static/fonts/PFSquareSansPro-Bold.svg
 // static/fonts/PFSquareSansPro-Bold.ttf
@@ -46,11 +48,26 @@
 // static/fonts/PFSquareSansPro-Regular.ttf
 // static/fonts/PFSquareSansPro-Regular.woff
 // static/fonts/PFSquareSansPro-Regular.woff2
+// static/fonts/fontawesome-webfont.eot
+// static/fonts/fontawesome-webfont.svg
+// static/fonts/fontawesome-webfont.ttf
+// static/fonts/fontawesome-webfont.woff
+// static/fonts/glyphicons-filetypes-regular.eot
+// static/fonts/glyphicons-filetypes-regular.svg
+// static/fonts/glyphicons-filetypes-regular.ttf
+// static/fonts/glyphicons-filetypes-regular.woff
+// static/fonts/glyphicons-filetypes-regular.woff2
 // static/fonts/glyphicons-regular.eot
 // static/fonts/glyphicons-regular.svg
 // static/fonts/glyphicons-regular.ttf
 // static/fonts/glyphicons-regular.woff
 // static/fonts/glyphicons-regular.woff2
+// static/fonts/glyphicons-social-regular.eot
+// static/fonts/glyphicons-social-regular.svg
+// static/fonts/glyphicons-social-regular.ttf
+// static/fonts/glyphicons-social-regular.woff
+// static/fonts/glyphicons-social-regular.woff2
+// static/fonts/luxisr.ttf
 // static/images/D_null.png
 // static/images/D_ok.png
 // static/images/bell.png
@@ -208,6 +225,7 @@
 // static/sass/bootstrap/_code.scss
 // static/sass/bootstrap/_custom-forms.scss
 // static/sass/bootstrap/_dropdown.scss
+// static/sass/bootstrap/_filetypes.scss
 // static/sass/bootstrap/_forms.scss
 // static/sass/bootstrap/_glyphicons.scss
 // static/sass/bootstrap/_grid.scss
@@ -229,6 +247,7 @@
 // static/sass/bootstrap/_progress.scss
 // static/sass/bootstrap/_reboot.scss
 // static/sass/bootstrap/_responsive-embed.scss
+// static/sass/bootstrap/_social.scss
 // static/sass/bootstrap/_tables.scss
 // static/sass/bootstrap/_tooltip.scss
 // static/sass/bootstrap/_type.scss
@@ -277,6 +296,7 @@
 // static/swf/sAS3Cam.swf
 // static/templates/abuse.html
 // static/templates/add_cf_project_data.html
+// static/templates/admin_spots.html
 // static/templates/admin_variables.html
 // static/templates/alert_success.html
 // static/templates/arbitration.html
@@ -329,9 +349,11 @@
 // static/templates/e_my_finance.html
 // static/templates/e_my_history.html
 // static/templates/e_my_orders.html
+// static/templates/e_my_support.html
 // static/templates/e_pages.html
 // static/templates/e_redirect.html
 // static/templates/exchange_admin.html
+// static/templates/exchange_support.html
 // static/templates/first_select.html
 // static/templates/for_repaid_fix.html
 // static/templates/holidays_list.html
@@ -360,6 +382,7 @@
 // static/templates/new_promised_amount.html
 // static/templates/new_user.html
 // static/templates/node_config.html
+// static/templates/notification_list.html
 // static/templates/notifications.html
 // static/templates/points.html
 // static/templates/pool_admin.html
@@ -889,6 +912,42 @@ func staticCssUpgradeCss() (*asset, error) {
 	return a, err
 }
 
+// staticFontsFontawesomeOtf reads file data from disk. It returns an error on failure.
+func staticFontsFontawesomeOtf() (*asset, error) {
+	path := "static/fonts/FontAwesome.otf"
+	name := "static/fonts/FontAwesome.otf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsOpensansRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsOpensansRegularTtf() (*asset, error) {
+	path := "static/fonts/OpenSans-Regular.ttf"
+	name := "static/fonts/OpenSans-Regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticFontsPfsquaresansproBoldEot reads file data from disk. It returns an error on failure.
 func staticFontsPfsquaresansproBoldEot() (*asset, error) {
 	path := "static/fonts/PFSquareSansPro-Bold.eot"
@@ -1249,6 +1308,168 @@ func staticFontsPfsquaresansproRegularWoff2() (*asset, error) {
 	return a, err
 }
 
+// staticFontsFontawesomeWebfontEot reads file data from disk. It returns an error on failure.
+func staticFontsFontawesomeWebfontEot() (*asset, error) {
+	path := "static/fonts/fontawesome-webfont.eot"
+	name := "static/fonts/fontawesome-webfont.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsFontawesomeWebfontSvg reads file data from disk. It returns an error on failure.
+func staticFontsFontawesomeWebfontSvg() (*asset, error) {
+	path := "static/fonts/fontawesome-webfont.svg"
+	name := "static/fonts/fontawesome-webfont.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsFontawesomeWebfontTtf reads file data from disk. It returns an error on failure.
+func staticFontsFontawesomeWebfontTtf() (*asset, error) {
+	path := "static/fonts/fontawesome-webfont.ttf"
+	name := "static/fonts/fontawesome-webfont.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsFontawesomeWebfontWoff reads file data from disk. It returns an error on failure.
+func staticFontsFontawesomeWebfontWoff() (*asset, error) {
+	path := "static/fonts/fontawesome-webfont.woff"
+	name := "static/fonts/fontawesome-webfont.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsFiletypesRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsFiletypesRegularEot() (*asset, error) {
+	path := "static/fonts/glyphicons-filetypes-regular.eot"
+	name := "static/fonts/glyphicons-filetypes-regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsFiletypesRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsFiletypesRegularSvg() (*asset, error) {
+	path := "static/fonts/glyphicons-filetypes-regular.svg"
+	name := "static/fonts/glyphicons-filetypes-regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsFiletypesRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsFiletypesRegularTtf() (*asset, error) {
+	path := "static/fonts/glyphicons-filetypes-regular.ttf"
+	name := "static/fonts/glyphicons-filetypes-regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsFiletypesRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsFiletypesRegularWoff() (*asset, error) {
+	path := "static/fonts/glyphicons-filetypes-regular.woff"
+	name := "static/fonts/glyphicons-filetypes-regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsFiletypesRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsFiletypesRegularWoff2() (*asset, error) {
+	path := "static/fonts/glyphicons-filetypes-regular.woff2"
+	name := "static/fonts/glyphicons-filetypes-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticFontsGlyphiconsRegularEot reads file data from disk. It returns an error on failure.
 func staticFontsGlyphiconsRegularEot() (*asset, error) {
 	path := "static/fonts/glyphicons-regular.eot"
@@ -1325,6 +1546,114 @@ func staticFontsGlyphiconsRegularWoff() (*asset, error) {
 func staticFontsGlyphiconsRegularWoff2() (*asset, error) {
 	path := "static/fonts/glyphicons-regular.woff2"
 	name := "static/fonts/glyphicons-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularEot() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.eot"
+	name := "static/fonts/glyphicons-social-regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularSvg() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.svg"
+	name := "static/fonts/glyphicons-social-regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularTtf() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.ttf"
+	name := "static/fonts/glyphicons-social-regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularWoff() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.woff"
+	name := "static/fonts/glyphicons-social-regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularWoff2() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.woff2"
+	name := "static/fonts/glyphicons-social-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsLuxisrTtf reads file data from disk. It returns an error on failure.
+func staticFontsLuxisrTtf() (*asset, error) {
+	path := "static/fonts/luxisr.ttf"
+	name := "static/fonts/luxisr.ttf"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -4165,6 +4494,24 @@ func staticSassBootstrap_dropdownScss() (*asset, error) {
 	return a, err
 }
 
+// staticSassBootstrap_filetypesScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_filetypesScss() (*asset, error) {
+	path := "static/sass/bootstrap/_filetypes.scss"
+	name := "static/sass/bootstrap/_filetypes.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSassBootstrap_formsScss reads file data from disk. It returns an error on failure.
 func staticSassBootstrap_formsScss() (*asset, error) {
 	path := "static/sass/bootstrap/_forms.scss"
@@ -4529,6 +4876,24 @@ func staticSassBootstrap_rebootScss() (*asset, error) {
 func staticSassBootstrap_responsiveEmbedScss() (*asset, error) {
 	path := "static/sass/bootstrap/_responsive-embed.scss"
 	name := "static/sass/bootstrap/_responsive-embed.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_socialScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_socialScss() (*asset, error) {
+	path := "static/sass/bootstrap/_social.scss"
+	name := "static/sass/bootstrap/_social.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -5393,6 +5758,24 @@ func staticTemplatesAbuseHtml() (*asset, error) {
 func staticTemplatesAdd_cf_project_dataHtml() (*asset, error) {
 	path := "static/templates/add_cf_project_data.html"
 	name := "static/templates/add_cf_project_data.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesAdmin_spotsHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesAdmin_spotsHtml() (*asset, error) {
+	path := "static/templates/admin_spots.html"
+	name := "static/templates/admin_spots.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -6343,6 +6726,24 @@ func staticTemplatesE_my_ordersHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesE_my_supportHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesE_my_supportHtml() (*asset, error) {
+	path := "static/templates/e_my_support.html"
+	name := "static/templates/e_my_support.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesE_pagesHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_pagesHtml() (*asset, error) {
 	path := "static/templates/e_pages.html"
@@ -6383,6 +6784,24 @@ func staticTemplatesE_redirectHtml() (*asset, error) {
 func staticTemplatesExchange_adminHtml() (*asset, error) {
 	path := "static/templates/exchange_admin.html"
 	name := "static/templates/exchange_admin.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesExchange_supportHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesExchange_supportHtml() (*asset, error) {
+	path := "static/templates/exchange_support.html"
+	name := "static/templates/exchange_support.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -6887,6 +7306,24 @@ func staticTemplatesNew_userHtml() (*asset, error) {
 func staticTemplatesNode_configHtml() (*asset, error) {
 	path := "static/templates/node_config.html"
 	name := "static/templates/node_config.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticTemplatesNotification_listHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesNotification_listHtml() (*asset, error) {
+	path := "static/templates/notification_list.html"
+	name := "static/templates/notification_list.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -7609,6 +8046,8 @@ var _bindata = map[string]func() (*asset, error){
 	"static/css/tooltipster-shadow.css": staticCssTooltipsterShadowCss,
 	"static/css/tooltipster.css": staticCssTooltipsterCss,
 	"static/css/upgrade.css": staticCssUpgradeCss,
+	"static/fonts/FontAwesome.otf": staticFontsFontawesomeOtf,
+	"static/fonts/OpenSans-Regular.ttf": staticFontsOpensansRegularTtf,
 	"static/fonts/PFSquareSansPro-Bold.eot": staticFontsPfsquaresansproBoldEot,
 	"static/fonts/PFSquareSansPro-Bold.svg": staticFontsPfsquaresansproBoldSvg,
 	"static/fonts/PFSquareSansPro-Bold.ttf": staticFontsPfsquaresansproBoldTtf,
@@ -7629,11 +8068,26 @@ var _bindata = map[string]func() (*asset, error){
 	"static/fonts/PFSquareSansPro-Regular.ttf": staticFontsPfsquaresansproRegularTtf,
 	"static/fonts/PFSquareSansPro-Regular.woff": staticFontsPfsquaresansproRegularWoff,
 	"static/fonts/PFSquareSansPro-Regular.woff2": staticFontsPfsquaresansproRegularWoff2,
+	"static/fonts/fontawesome-webfont.eot": staticFontsFontawesomeWebfontEot,
+	"static/fonts/fontawesome-webfont.svg": staticFontsFontawesomeWebfontSvg,
+	"static/fonts/fontawesome-webfont.ttf": staticFontsFontawesomeWebfontTtf,
+	"static/fonts/fontawesome-webfont.woff": staticFontsFontawesomeWebfontWoff,
+	"static/fonts/glyphicons-filetypes-regular.eot": staticFontsGlyphiconsFiletypesRegularEot,
+	"static/fonts/glyphicons-filetypes-regular.svg": staticFontsGlyphiconsFiletypesRegularSvg,
+	"static/fonts/glyphicons-filetypes-regular.ttf": staticFontsGlyphiconsFiletypesRegularTtf,
+	"static/fonts/glyphicons-filetypes-regular.woff": staticFontsGlyphiconsFiletypesRegularWoff,
+	"static/fonts/glyphicons-filetypes-regular.woff2": staticFontsGlyphiconsFiletypesRegularWoff2,
 	"static/fonts/glyphicons-regular.eot": staticFontsGlyphiconsRegularEot,
 	"static/fonts/glyphicons-regular.svg": staticFontsGlyphiconsRegularSvg,
 	"static/fonts/glyphicons-regular.ttf": staticFontsGlyphiconsRegularTtf,
 	"static/fonts/glyphicons-regular.woff": staticFontsGlyphiconsRegularWoff,
 	"static/fonts/glyphicons-regular.woff2": staticFontsGlyphiconsRegularWoff2,
+	"static/fonts/glyphicons-social-regular.eot": staticFontsGlyphiconsSocialRegularEot,
+	"static/fonts/glyphicons-social-regular.svg": staticFontsGlyphiconsSocialRegularSvg,
+	"static/fonts/glyphicons-social-regular.ttf": staticFontsGlyphiconsSocialRegularTtf,
+	"static/fonts/glyphicons-social-regular.woff": staticFontsGlyphiconsSocialRegularWoff,
+	"static/fonts/glyphicons-social-regular.woff2": staticFontsGlyphiconsSocialRegularWoff2,
+	"static/fonts/luxisr.ttf": staticFontsLuxisrTtf,
 	"static/images/D_null.png": staticImagesD_nullPng,
 	"static/images/D_ok.png": staticImagesD_okPng,
 	"static/images/bell.png": staticImagesBellPng,
@@ -7791,6 +8245,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/bootstrap/_code.scss": staticSassBootstrap_codeScss,
 	"static/sass/bootstrap/_custom-forms.scss": staticSassBootstrap_customFormsScss,
 	"static/sass/bootstrap/_dropdown.scss": staticSassBootstrap_dropdownScss,
+	"static/sass/bootstrap/_filetypes.scss": staticSassBootstrap_filetypesScss,
 	"static/sass/bootstrap/_forms.scss": staticSassBootstrap_formsScss,
 	"static/sass/bootstrap/_glyphicons.scss": staticSassBootstrap_glyphiconsScss,
 	"static/sass/bootstrap/_grid.scss": staticSassBootstrap_gridScss,
@@ -7812,6 +8267,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/bootstrap/_progress.scss": staticSassBootstrap_progressScss,
 	"static/sass/bootstrap/_reboot.scss": staticSassBootstrap_rebootScss,
 	"static/sass/bootstrap/_responsive-embed.scss": staticSassBootstrap_responsiveEmbedScss,
+	"static/sass/bootstrap/_social.scss": staticSassBootstrap_socialScss,
 	"static/sass/bootstrap/_tables.scss": staticSassBootstrap_tablesScss,
 	"static/sass/bootstrap/_tooltip.scss": staticSassBootstrap_tooltipScss,
 	"static/sass/bootstrap/_type.scss": staticSassBootstrap_typeScss,
@@ -7860,6 +8316,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/swf/sAS3Cam.swf": staticSwfSas3camSwf,
 	"static/templates/abuse.html": staticTemplatesAbuseHtml,
 	"static/templates/add_cf_project_data.html": staticTemplatesAdd_cf_project_dataHtml,
+	"static/templates/admin_spots.html": staticTemplatesAdmin_spotsHtml,
 	"static/templates/admin_variables.html": staticTemplatesAdmin_variablesHtml,
 	"static/templates/alert_success.html": staticTemplatesAlert_successHtml,
 	"static/templates/arbitration.html": staticTemplatesArbitrationHtml,
@@ -7912,9 +8369,11 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/e_my_finance.html": staticTemplatesE_my_financeHtml,
 	"static/templates/e_my_history.html": staticTemplatesE_my_historyHtml,
 	"static/templates/e_my_orders.html": staticTemplatesE_my_ordersHtml,
+	"static/templates/e_my_support.html": staticTemplatesE_my_supportHtml,
 	"static/templates/e_pages.html": staticTemplatesE_pagesHtml,
 	"static/templates/e_redirect.html": staticTemplatesE_redirectHtml,
 	"static/templates/exchange_admin.html": staticTemplatesExchange_adminHtml,
+	"static/templates/exchange_support.html": staticTemplatesExchange_supportHtml,
 	"static/templates/first_select.html": staticTemplatesFirst_selectHtml,
 	"static/templates/for_repaid_fix.html": staticTemplatesFor_repaid_fixHtml,
 	"static/templates/holidays_list.html": staticTemplatesHolidays_listHtml,
@@ -7943,6 +8402,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/new_promised_amount.html": staticTemplatesNew_promised_amountHtml,
 	"static/templates/new_user.html": staticTemplatesNew_userHtml,
 	"static/templates/node_config.html": staticTemplatesNode_configHtml,
+	"static/templates/notification_list.html": staticTemplatesNotification_listHtml,
 	"static/templates/notifications.html": staticTemplatesNotificationsHtml,
 	"static/templates/points.html": staticTemplatesPointsHtml,
 	"static/templates/pool_admin.html": staticTemplatesPool_adminHtml,
@@ -8054,6 +8514,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"upgrade.css": &bintree{staticCssUpgradeCss, map[string]*bintree{}},
 		}},
 		"fonts": &bintree{nil, map[string]*bintree{
+			"FontAwesome.otf": &bintree{staticFontsFontawesomeOtf, map[string]*bintree{}},
+			"OpenSans-Regular.ttf": &bintree{staticFontsOpensansRegularTtf, map[string]*bintree{}},
 			"PFSquareSansPro-Bold.eot": &bintree{staticFontsPfsquaresansproBoldEot, map[string]*bintree{}},
 			"PFSquareSansPro-Bold.svg": &bintree{staticFontsPfsquaresansproBoldSvg, map[string]*bintree{}},
 			"PFSquareSansPro-Bold.ttf": &bintree{staticFontsPfsquaresansproBoldTtf, map[string]*bintree{}},
@@ -8074,11 +8536,26 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"PFSquareSansPro-Regular.ttf": &bintree{staticFontsPfsquaresansproRegularTtf, map[string]*bintree{}},
 			"PFSquareSansPro-Regular.woff": &bintree{staticFontsPfsquaresansproRegularWoff, map[string]*bintree{}},
 			"PFSquareSansPro-Regular.woff2": &bintree{staticFontsPfsquaresansproRegularWoff2, map[string]*bintree{}},
+			"fontawesome-webfont.eot": &bintree{staticFontsFontawesomeWebfontEot, map[string]*bintree{}},
+			"fontawesome-webfont.svg": &bintree{staticFontsFontawesomeWebfontSvg, map[string]*bintree{}},
+			"fontawesome-webfont.ttf": &bintree{staticFontsFontawesomeWebfontTtf, map[string]*bintree{}},
+			"fontawesome-webfont.woff": &bintree{staticFontsFontawesomeWebfontWoff, map[string]*bintree{}},
+			"glyphicons-filetypes-regular.eot": &bintree{staticFontsGlyphiconsFiletypesRegularEot, map[string]*bintree{}},
+			"glyphicons-filetypes-regular.svg": &bintree{staticFontsGlyphiconsFiletypesRegularSvg, map[string]*bintree{}},
+			"glyphicons-filetypes-regular.ttf": &bintree{staticFontsGlyphiconsFiletypesRegularTtf, map[string]*bintree{}},
+			"glyphicons-filetypes-regular.woff": &bintree{staticFontsGlyphiconsFiletypesRegularWoff, map[string]*bintree{}},
+			"glyphicons-filetypes-regular.woff2": &bintree{staticFontsGlyphiconsFiletypesRegularWoff2, map[string]*bintree{}},
 			"glyphicons-regular.eot": &bintree{staticFontsGlyphiconsRegularEot, map[string]*bintree{}},
 			"glyphicons-regular.svg": &bintree{staticFontsGlyphiconsRegularSvg, map[string]*bintree{}},
 			"glyphicons-regular.ttf": &bintree{staticFontsGlyphiconsRegularTtf, map[string]*bintree{}},
 			"glyphicons-regular.woff": &bintree{staticFontsGlyphiconsRegularWoff, map[string]*bintree{}},
 			"glyphicons-regular.woff2": &bintree{staticFontsGlyphiconsRegularWoff2, map[string]*bintree{}},
+			"glyphicons-social-regular.eot": &bintree{staticFontsGlyphiconsSocialRegularEot, map[string]*bintree{}},
+			"glyphicons-social-regular.svg": &bintree{staticFontsGlyphiconsSocialRegularSvg, map[string]*bintree{}},
+			"glyphicons-social-regular.ttf": &bintree{staticFontsGlyphiconsSocialRegularTtf, map[string]*bintree{}},
+			"glyphicons-social-regular.woff": &bintree{staticFontsGlyphiconsSocialRegularWoff, map[string]*bintree{}},
+			"glyphicons-social-regular.woff2": &bintree{staticFontsGlyphiconsSocialRegularWoff2, map[string]*bintree{}},
+			"luxisr.ttf": &bintree{staticFontsLuxisrTtf, map[string]*bintree{}},
 		}},
 		"images": &bintree{nil, map[string]*bintree{
 			"D_null.png": &bintree{staticImagesD_nullPng, map[string]*bintree{}},
@@ -8259,6 +8736,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				"_code.scss": &bintree{staticSassBootstrap_codeScss, map[string]*bintree{}},
 				"_custom-forms.scss": &bintree{staticSassBootstrap_customFormsScss, map[string]*bintree{}},
 				"_dropdown.scss": &bintree{staticSassBootstrap_dropdownScss, map[string]*bintree{}},
+				"_filetypes.scss": &bintree{staticSassBootstrap_filetypesScss, map[string]*bintree{}},
 				"_forms.scss": &bintree{staticSassBootstrap_formsScss, map[string]*bintree{}},
 				"_glyphicons.scss": &bintree{staticSassBootstrap_glyphiconsScss, map[string]*bintree{}},
 				"_grid.scss": &bintree{staticSassBootstrap_gridScss, map[string]*bintree{}},
@@ -8280,6 +8758,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				"_progress.scss": &bintree{staticSassBootstrap_progressScss, map[string]*bintree{}},
 				"_reboot.scss": &bintree{staticSassBootstrap_rebootScss, map[string]*bintree{}},
 				"_responsive-embed.scss": &bintree{staticSassBootstrap_responsiveEmbedScss, map[string]*bintree{}},
+				"_social.scss": &bintree{staticSassBootstrap_socialScss, map[string]*bintree{}},
 				"_tables.scss": &bintree{staticSassBootstrap_tablesScss, map[string]*bintree{}},
 				"_tooltip.scss": &bintree{staticSassBootstrap_tooltipScss, map[string]*bintree{}},
 				"_type.scss": &bintree{staticSassBootstrap_typeScss, map[string]*bintree{}},
@@ -8335,6 +8814,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		"templates": &bintree{nil, map[string]*bintree{
 			"abuse.html": &bintree{staticTemplatesAbuseHtml, map[string]*bintree{}},
 			"add_cf_project_data.html": &bintree{staticTemplatesAdd_cf_project_dataHtml, map[string]*bintree{}},
+			"admin_spots.html": &bintree{staticTemplatesAdmin_spotsHtml, map[string]*bintree{}},
 			"admin_variables.html": &bintree{staticTemplatesAdmin_variablesHtml, map[string]*bintree{}},
 			"alert_success.html": &bintree{staticTemplatesAlert_successHtml, map[string]*bintree{}},
 			"arbitration.html": &bintree{staticTemplatesArbitrationHtml, map[string]*bintree{}},
@@ -8387,9 +8867,11 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"e_my_finance.html": &bintree{staticTemplatesE_my_financeHtml, map[string]*bintree{}},
 			"e_my_history.html": &bintree{staticTemplatesE_my_historyHtml, map[string]*bintree{}},
 			"e_my_orders.html": &bintree{staticTemplatesE_my_ordersHtml, map[string]*bintree{}},
+			"e_my_support.html": &bintree{staticTemplatesE_my_supportHtml, map[string]*bintree{}},
 			"e_pages.html": &bintree{staticTemplatesE_pagesHtml, map[string]*bintree{}},
 			"e_redirect.html": &bintree{staticTemplatesE_redirectHtml, map[string]*bintree{}},
 			"exchange_admin.html": &bintree{staticTemplatesExchange_adminHtml, map[string]*bintree{}},
+			"exchange_support.html": &bintree{staticTemplatesExchange_supportHtml, map[string]*bintree{}},
 			"first_select.html": &bintree{staticTemplatesFirst_selectHtml, map[string]*bintree{}},
 			"for_repaid_fix.html": &bintree{staticTemplatesFor_repaid_fixHtml, map[string]*bintree{}},
 			"holidays_list.html": &bintree{staticTemplatesHolidays_listHtml, map[string]*bintree{}},
@@ -8418,6 +8900,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"new_promised_amount.html": &bintree{staticTemplatesNew_promised_amountHtml, map[string]*bintree{}},
 			"new_user.html": &bintree{staticTemplatesNew_userHtml, map[string]*bintree{}},
 			"node_config.html": &bintree{staticTemplatesNode_configHtml, map[string]*bintree{}},
+			"notification_list.html": &bintree{staticTemplatesNotification_listHtml, map[string]*bintree{}},
 			"notifications.html": &bintree{staticTemplatesNotificationsHtml, map[string]*bintree{}},
 			"points.html": &bintree{staticTemplatesPointsHtml, map[string]*bintree{}},
 			"pool_admin.html": &bintree{staticTemplatesPool_adminHtml, map[string]*bintree{}},
