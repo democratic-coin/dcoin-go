@@ -37,7 +37,7 @@ func AjaxJson(w http.ResponseWriter, r *http.Request) {
 
 	answer := []byte(`{"success": false, "error": "", "result": false, "data": ""}`)
 
-	if controllerName == `CheckForm` || controllerName == `CheckPromised` || controllerName == `NotifyCounter` {
+	if utils.InSliceString( controllerName, []string{ `CheckForm`,`CheckPromised`,`NotifyCounter`, `SendKey` }) {
 		if ret, err := CallController(c, controllerName); err == nil {
 			answer = []byte(ret)
 		}

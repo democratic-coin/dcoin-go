@@ -270,6 +270,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result(err.Error())
 			return
 		}
+	case utils.ECMD_SENDKEY:
+		if err := checkParams(`subject`,`text`, `txt_key`, `refid`); err != nil || 
+			len((*jsonEmail.Params)[`subject`]) == 0 || len((*jsonEmail.Params)[`text`]) == 0 ||
+			len((*jsonEmail.Params)[`txt_key`]) == 0 || utils.StrToInt64((*jsonEmail.Params)[`refid`]) == 0 {
+			result( `Wrong email parameters` )
+			return
+		}
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -285,8 +292,16 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
 		}
 	}
-	
-	if jsonEmail.Cmd != utils.ECMD_SIGNUP {
+	if (jsonEmail.Cmd == utils.ECMD_SENDKEY) {
+		files := make( map[string][]byte )
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = []byte( (*jsonEmail.Params)[`txt_key`])
+		err := GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
+		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
+		if err != nil {
+			result(err.Error())
+			return
+		}
+	} else if jsonEmail.Cmd != utils.ECMD_SIGNUP {
 		data, err := CheckUser( jsonEmail.UserId )
 		if err != nil {
 			result( fmt.Sprintf(`EmailCheck %s`, err))
