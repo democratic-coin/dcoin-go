@@ -1,5 +1,4 @@
 // notify_counter
-// check_promised
 package controllers
 
 import (

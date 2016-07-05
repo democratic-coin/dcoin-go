@@ -41,6 +41,7 @@ type emailJson struct {
 	From    *Email   `json:"from"`
 	To      []*Email `json:"to"`
 	Bcc     []*Email `json:"bcc"`
+	Files   map[string]string  `json:"attachments"`
 }
 
 type EmailResult struct {
@@ -135,9 +136,7 @@ func (ec *EmailClient) CheckBad() {
 	return 
 }
 
-
-
-func (ec *EmailClient) SendEmail(html, text, subj string, toemail []*Email) error {
+func (ec *EmailClient) SendEmailAttach(html, text, subj string, toemail []*Email, files *map[string][]byte) error {
 	to := make([]*Email, 0)
 	for _,ito := range toemail {
 		if len(GSettings.WhiteList) == 0 || utils.InSliceString( ito.Email, GSettings.WhiteList) {
@@ -167,6 +166,12 @@ func (ec *EmailClient) SendEmail(html, text, subj string, toemail []*Email) erro
 	if len( GSettings.CopyTo ) > 0 {
 		edata.Bcc = []*Email{ &Email{Email: GSettings.CopyTo}}
 	}
+	if files!=nil && len(*files) > 0 {
+		edata.Files = make(map[string]string)
+		for key,val := range *files {
+			edata.Files[key] = string(val)//base64.StdEncoding.EncodeToString(val)
+		}
+	}
 	serial, err := json.Marshal(edata)
 	if err != nil {
 		return err
@@ -195,4 +200,8 @@ func (ec *EmailClient) SendEmail(html, text, subj string, toemail []*Email) erro
 		return nil
 	}
 	return fmt.Errorf("%s", body)
+}
+
+func (ec *EmailClient) SendEmail(html, text, subj string, toemail []*Email) error {
+	return ec.SendEmailAttach(html, text, subj, toemail, nil)
 }
