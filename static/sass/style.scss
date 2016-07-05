@@ -546,6 +546,7 @@ header {
 				height:30px;
 				background-size:30px 30px;
 				margin-left:-15px;
+				z-index:1;
 			}
 			&.no {
 				display:block;
@@ -657,11 +658,11 @@ header {
 					top:9px;
 				}
 			}
-			&:hover {
+			/*&:hover {
 				.languages {
 					display:block;
 				}
-			}
+			}*/
 		}
 	}
 	.logo {
@@ -670,11 +671,11 @@ header {
 		top:0px;
 		width:30px;
 		height:50px;
+		z-index:1;
 		transition: {
 			property:width;
 			duration:.2s;
 		}
-		z-index:1;
 		a, i {
 			display:block;
 			position:relative;
@@ -689,6 +690,7 @@ header {
 			background-size:30px 30px;
 			border-radius:50%;
 			margin-left:0px;
+			z-index:2;
 			transition: {
 				property:all;
 				duration:.2s;
@@ -1003,6 +1005,21 @@ header {
 				}
 				.glyphicon {
 					position:relative;
+					top:3px;
+					display:inline-block;
+					height:100%;
+					font-size:24px;
+					vertical-align:top;
+					padding-right:10px;
+					&:before {
+						display:block;
+						height:100%;
+						line-height:44px;
+					}
+				}
+				.social {
+					position:relative;
+					top:3px;
 					display:inline-block;
 					height:100%;
 					font-size:24px;
@@ -1015,10 +1032,12 @@ header {
 					}
 				}
 				i {
+					position:relative;
+					top:1px;
 					font-style:normal;
 				}
-				.glyphicon-bell {
-					top:3px;
+				.glyphicon-headset {
+					top:0px;
 				}
 				.unread {
 					font-size:34px;
@@ -1037,6 +1056,9 @@ header {
 				}
 				@include max($mobile) {
 					.glyphicon {
+						padding-right:0px;
+					}
+					.social {
 						padding-right:0px;
 					}
 					i {
