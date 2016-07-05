@@ -62,6 +62,11 @@
 // static/fonts/glyphicons-regular.ttf
 // static/fonts/glyphicons-regular.woff
 // static/fonts/glyphicons-regular.woff2
+// static/fonts/glyphicons-social-regular.eot
+// static/fonts/glyphicons-social-regular.svg
+// static/fonts/glyphicons-social-regular.ttf
+// static/fonts/glyphicons-social-regular.woff
+// static/fonts/glyphicons-social-regular.woff2
 // static/fonts/luxisr.ttf
 // static/images/D_null.png
 // static/images/D_ok.png
@@ -242,6 +247,7 @@
 // static/sass/bootstrap/_progress.scss
 // static/sass/bootstrap/_reboot.scss
 // static/sass/bootstrap/_responsive-embed.scss
+// static/sass/bootstrap/_social.scss
 // static/sass/bootstrap/_tables.scss
 // static/sass/bootstrap/_tooltip.scss
 // static/sass/bootstrap/_type.scss
@@ -1540,6 +1546,96 @@ func staticFontsGlyphiconsRegularWoff() (*asset, error) {
 func staticFontsGlyphiconsRegularWoff2() (*asset, error) {
 	path := "static/fonts/glyphicons-regular.woff2"
 	name := "static/fonts/glyphicons-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularEot() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.eot"
+	name := "static/fonts/glyphicons-social-regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularSvg() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.svg"
+	name := "static/fonts/glyphicons-social-regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularTtf() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.ttf"
+	name := "static/fonts/glyphicons-social-regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularWoff() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.woff"
+	name := "static/fonts/glyphicons-social-regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsSocialRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsSocialRegularWoff2() (*asset, error) {
+	path := "static/fonts/glyphicons-social-regular.woff2"
+	name := "static/fonts/glyphicons-social-regular.woff2"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -4794,6 +4890,24 @@ func staticSassBootstrap_responsiveEmbedScss() (*asset, error) {
 	return a, err
 }
 
+// staticSassBootstrap_socialScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_socialScss() (*asset, error) {
+	path := "static/sass/bootstrap/_social.scss"
+	name := "static/sass/bootstrap/_social.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticSassBootstrap_tablesScss reads file data from disk. It returns an error on failure.
 func staticSassBootstrap_tablesScss() (*asset, error) {
 	path := "static/sass/bootstrap/_tables.scss"
@@ -7968,6 +8082,11 @@ var _bindata = map[string]func() (*asset, error){
 	"static/fonts/glyphicons-regular.ttf": staticFontsGlyphiconsRegularTtf,
 	"static/fonts/glyphicons-regular.woff": staticFontsGlyphiconsRegularWoff,
 	"static/fonts/glyphicons-regular.woff2": staticFontsGlyphiconsRegularWoff2,
+	"static/fonts/glyphicons-social-regular.eot": staticFontsGlyphiconsSocialRegularEot,
+	"static/fonts/glyphicons-social-regular.svg": staticFontsGlyphiconsSocialRegularSvg,
+	"static/fonts/glyphicons-social-regular.ttf": staticFontsGlyphiconsSocialRegularTtf,
+	"static/fonts/glyphicons-social-regular.woff": staticFontsGlyphiconsSocialRegularWoff,
+	"static/fonts/glyphicons-social-regular.woff2": staticFontsGlyphiconsSocialRegularWoff2,
 	"static/fonts/luxisr.ttf": staticFontsLuxisrTtf,
 	"static/images/D_null.png": staticImagesD_nullPng,
 	"static/images/D_ok.png": staticImagesD_okPng,
@@ -8148,6 +8267,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/bootstrap/_progress.scss": staticSassBootstrap_progressScss,
 	"static/sass/bootstrap/_reboot.scss": staticSassBootstrap_rebootScss,
 	"static/sass/bootstrap/_responsive-embed.scss": staticSassBootstrap_responsiveEmbedScss,
+	"static/sass/bootstrap/_social.scss": staticSassBootstrap_socialScss,
 	"static/sass/bootstrap/_tables.scss": staticSassBootstrap_tablesScss,
 	"static/sass/bootstrap/_tooltip.scss": staticSassBootstrap_tooltipScss,
 	"static/sass/bootstrap/_type.scss": staticSassBootstrap_typeScss,
@@ -8430,6 +8550,11 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"glyphicons-regular.ttf": &bintree{staticFontsGlyphiconsRegularTtf, map[string]*bintree{}},
 			"glyphicons-regular.woff": &bintree{staticFontsGlyphiconsRegularWoff, map[string]*bintree{}},
 			"glyphicons-regular.woff2": &bintree{staticFontsGlyphiconsRegularWoff2, map[string]*bintree{}},
+			"glyphicons-social-regular.eot": &bintree{staticFontsGlyphiconsSocialRegularEot, map[string]*bintree{}},
+			"glyphicons-social-regular.svg": &bintree{staticFontsGlyphiconsSocialRegularSvg, map[string]*bintree{}},
+			"glyphicons-social-regular.ttf": &bintree{staticFontsGlyphiconsSocialRegularTtf, map[string]*bintree{}},
+			"glyphicons-social-regular.woff": &bintree{staticFontsGlyphiconsSocialRegularWoff, map[string]*bintree{}},
+			"glyphicons-social-regular.woff2": &bintree{staticFontsGlyphiconsSocialRegularWoff2, map[string]*bintree{}},
 			"luxisr.ttf": &bintree{staticFontsLuxisrTtf, map[string]*bintree{}},
 		}},
 		"images": &bintree{nil, map[string]*bintree{
@@ -8633,6 +8758,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				"_progress.scss": &bintree{staticSassBootstrap_progressScss, map[string]*bintree{}},
 				"_reboot.scss": &bintree{staticSassBootstrap_rebootScss, map[string]*bintree{}},
 				"_responsive-embed.scss": &bintree{staticSassBootstrap_responsiveEmbedScss, map[string]*bintree{}},
+				"_social.scss": &bintree{staticSassBootstrap_socialScss, map[string]*bintree{}},
 				"_tables.scss": &bintree{staticSassBootstrap_tablesScss, map[string]*bintree{}},
 				"_tooltip.scss": &bintree{staticSassBootstrap_tooltipScss, map[string]*bintree{}},
 				"_type.scss": &bintree{staticSassBootstrap_typeScss, map[string]*bintree{}},
