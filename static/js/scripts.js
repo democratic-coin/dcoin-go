@@ -3,16 +3,16 @@ function ResizeHeader(){
 	'use strict';
 	
 	var w = $("body").width();
-	if (w >= 992 && w < 1500) {
-		$("header .logo").prependTo($("header .navbar-nav"));
-	} else {
-		$("header .logo").prependTo($("header"));
-	}
 	if (w < 992) {
+		$("header .logo").prependTo($("header"));
 		$("header .login").insertBefore($("header .navbar-nav ul"));
 		$(".mainmenu").insertAfter($("header"));
+		if ($(".mainmenu").next().hasClass("mainmenu")) {
+			$(".mainmenu:first").next().remove();
+		}
 	} else {
-		$("header .login").appendTo($(".mainmenu ul"));
+		$("header .logo").prependTo($("header .navbar-nav"));
+		$("header .login").insertAfter($(".mainmenu ul li:last"));
 		$(".mainmenu").insertAfter($("header .navbar-nav"));
 	}
 }
@@ -26,6 +26,8 @@ function HideMenu(){
 }
 
 (function($) { 
+   'use strict';
+	
    $.fn.touchwipe = function(settings) {
      var config = {
     		min_move_x: 50,
