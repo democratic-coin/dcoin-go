@@ -135,9 +135,9 @@
 	<ul>
 		<!--<li><a class="item" href="#"><span class="glyphicon glyphicon-map-marker"></span><i>{{.Lang.miners_map}}</i></a></li>
 		<li><a class="item" href="#"><span class="glyphicon glyphicon-chat"></span><i>{{.Lang.chat}}</i></a></li>-->
-		<li><a class="item" href="#notificationList"><span class="glyphicon glyphicon-bell"></span><i>{{.Lang.sms_and_email_notifications}}</i><span id="nfy_counter">{{if .Notifications}} ({{.Notifications}}){{end}}</span></a></li>
+		<li><a class="item" href="#notificationList"><span class="glyphicon glyphicon-bell{{if .Notifications}} unread{{end}}"></span><i>{{.Lang.sms_and_email_notifications}}</i><span id="nfy_counter" class="notifications">{{if .Notifications}}{{.Notifications}}{{end}}</span></a></li>
 		<li><a class="item" href="#statistic"><span class="glyphicon glyphicon-charts"></span><i>{{.Lang.statistic}}</i></a></li>
-		<li><a class="item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank"><span class="glyphicon glyphicon-newspaper"></span><i>{{.Lang.wiki}}</i></a></li>
+		<li><a class="item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank"><span class="social social-wikipedia"></span><i>{{.Lang.wiki}}</i></a></li>
 		<li><a class="item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'><span class="glyphicon glyphicon-headset"></span><i>{{.Lang.support}}</i></a></li>
 		<li class="login">
 			<div class="dropdown">
@@ -490,10 +490,13 @@
 	function notify_counter() {
 		$.post('ajaxjson?controllerName=NotifyCounter', {user_id: {{.UserId}}}, function (data) {
 			if (typeof data.success !== 'undefined') {
-				if (data.data != '0') 
-					$("#nfy_counter").html(' (' +data.data+')' );
-				else
+				if (data.data != '0') {
+					$("#nfy_counter").html(data.data);
+					$(".mainmenu .glyphicon-bell").addClass("unread");
+				} else {
 					$("#nfy_counter").html('');
+					$(".mainmenu .glyphicon-bell").removeClass("unread");
+				}
 			}
 		});
 		setTimeout( notify_counter, 10000 );

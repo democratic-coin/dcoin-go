@@ -10,6 +10,17 @@
     font-style: normal;
 }
 @font-face {
+    font-family: 'Glyphicons Social';
+    src: url('../fonts/glyphicons-social-regular.eot');
+    src: url('../fonts/glyphicons-social-regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/glyphicons-social-regular.woff2') format('woff2'),
+         url('../fonts/glyphicons-social-regular.woff') format('woff'),
+         url('../fonts/glyphicons-social-regular.ttf') format('truetype'),
+         url('../fonts/glyphicons-social-regular.svg#Glyphicons Social') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'Glyphicons Filetypes';
     src: url('../fonts/glyphicons-filetypes-regular.eot');
     src: url('../fonts/glyphicons-filetypes-regular.eot?#iefix') format('embedded-opentype'),

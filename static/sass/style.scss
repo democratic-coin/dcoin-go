@@ -996,11 +996,13 @@ header {
 		li {
 			line-height:50px;
 			.item {
+				position:relative;
 				@include text($med, 18px, $lgray, 18px, none);
 				&:hover {
 					color:$lblue;
 				}
 				.glyphicon {
+					position:relative;
 					display:inline-block;
 					height:100%;
 					font-size:24px;
@@ -1014,6 +1016,24 @@ header {
 				}
 				i {
 					font-style:normal;
+				}
+				.glyphicon-bell {
+					top:3px;
+				}
+				.unread {
+					font-size:34px;
+					color:$red;
+				}
+				.notifications {
+					position:absolute;
+					left:0px;
+					top:2px;
+					display:inline-block;
+					width:34px;
+					height:20px;
+					font-size:14px;
+					line-height:20px;
+					text-align:center;
 				}
 				@include max($mobile) {
 					.glyphicon {
