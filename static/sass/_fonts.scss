@@ -10,6 +10,17 @@
     font-style: normal;
 }
 @font-face {
+    font-family: 'Glyphicons Filetypes';
+    src: url('../fonts/glyphicons-filetypes-regular.eot');
+    src: url('../fonts/glyphicons-filetypes-regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/glyphicons-filetypes-regular.woff2') format('woff2'),
+         url('../fonts/glyphicons-filetypes-regular.woff') format('woff'),
+         url('../fonts/glyphicons-filetypes-regular.ttf') format('truetype'),
+         url('../fonts/glyphicons-filetypes-regular.svg#Glyphicons Filetypes') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'PFSquareSansPro-Light';
     src: url('../fonts/PFSquareSansPro-Light.eot');
     src: url('../fonts/PFSquareSansPro-Light.eot?#iefix') format('embedded-opentype'),
