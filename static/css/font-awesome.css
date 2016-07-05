@@ -5,13 +5,13 @@
 /* FONT PATH
  * -------------------------- */
 @font-face {
-  font-family: 'Glyphicons Halflings';
+  font-family: 'Glyphicons Regular';
   font-weight: normal;
   font-style: normal;
 }
 .fa {
   display: inline-block;
-  font: normal normal normal 14px/1 Glyphicons Halflings;
+  font: normal normal normal 14px/1 Glyphicons Regular;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;

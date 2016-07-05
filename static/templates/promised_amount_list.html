@@ -99,7 +99,7 @@
 			<td id='currency_{{$data.CurrencyId}}_{{$data.Status}}' style='color: {{$color}}; font-weight: bold; font-size: 15px'>{{$data.Tdc}}</td>
 			<td style='text-align: center'><input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='input-mini' id='repaid-input-{{$data.Id}}' onkeyup="clear_amount('repaid-input-{{$data.Id}}')" value='{{$to_wallet}}'><button  {{if $data.InProcess}}style="display:none;"{{end}} onclick="mining_click({{$data.Id}})" class='btn put_in_the_wallet' >{{$.Lang.put_in_the_wallet}}</button></td>
 			{{if gt $data.CurrencyId 1}}
-				<td><a class="btn btn-outline btn-danger" {{if $data.InProcess}}style="display:none;"{{end}} href="#" onclick="delete_amount_click('{{$data.Id}}')"><i class="fa fa-trash-o fa-lg"></i> {{$.Lang.delete}}</a></td>
+				<td><a class="btn btn-outline btn-danger" {{if $data.InProcess}}style="display:none;"{{end}} href="#" onclick="delete_amount_click('{{$data.Id}}')"><i class="halflings halflings-trash"></i> {{$.Lang.delete}}</a></td>
 			{{else}}
 				<td></td>
 			{{end}}

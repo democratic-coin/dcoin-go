@@ -57,6 +57,11 @@
 // static/fonts/glyphicons-filetypes-regular.ttf
 // static/fonts/glyphicons-filetypes-regular.woff
 // static/fonts/glyphicons-filetypes-regular.woff2
+// static/fonts/glyphicons-halflings-regular.eot
+// static/fonts/glyphicons-halflings-regular.svg
+// static/fonts/glyphicons-halflings-regular.ttf
+// static/fonts/glyphicons-halflings-regular.woff
+// static/fonts/glyphicons-halflings-regular.woff2
 // static/fonts/glyphicons-regular.eot
 // static/fonts/glyphicons-regular.svg
 // static/fonts/glyphicons-regular.ttf
@@ -229,6 +234,7 @@
 // static/sass/bootstrap/_forms.scss
 // static/sass/bootstrap/_glyphicons.scss
 // static/sass/bootstrap/_grid.scss
+// static/sass/bootstrap/_halflings.scss
 // static/sass/bootstrap/_images.scss
 // static/sass/bootstrap/_input-group.scss
 // static/sass/bootstrap/_jumbotron.scss
@@ -1456,6 +1462,96 @@ func staticFontsGlyphiconsFiletypesRegularWoff() (*asset, error) {
 func staticFontsGlyphiconsFiletypesRegularWoff2() (*asset, error) {
 	path := "static/fonts/glyphicons-filetypes-regular.woff2"
 	name := "static/fonts/glyphicons-filetypes-regular.woff2"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsHalflingsRegularEot reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsHalflingsRegularEot() (*asset, error) {
+	path := "static/fonts/glyphicons-halflings-regular.eot"
+	name := "static/fonts/glyphicons-halflings-regular.eot"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsHalflingsRegularSvg reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsHalflingsRegularSvg() (*asset, error) {
+	path := "static/fonts/glyphicons-halflings-regular.svg"
+	name := "static/fonts/glyphicons-halflings-regular.svg"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsHalflingsRegularTtf reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsHalflingsRegularTtf() (*asset, error) {
+	path := "static/fonts/glyphicons-halflings-regular.ttf"
+	name := "static/fonts/glyphicons-halflings-regular.ttf"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsHalflingsRegularWoff reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsHalflingsRegularWoff() (*asset, error) {
+	path := "static/fonts/glyphicons-halflings-regular.woff"
+	name := "static/fonts/glyphicons-halflings-regular.woff"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticFontsGlyphiconsHalflingsRegularWoff2 reads file data from disk. It returns an error on failure.
+func staticFontsGlyphiconsHalflingsRegularWoff2() (*asset, error) {
+	path := "static/fonts/glyphicons-halflings-regular.woff2"
+	name := "static/fonts/glyphicons-halflings-regular.woff2"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -4552,6 +4648,24 @@ func staticSassBootstrap_glyphiconsScss() (*asset, error) {
 func staticSassBootstrap_gridScss() (*asset, error) {
 	path := "static/sass/bootstrap/_grid.scss"
 	name := "static/sass/bootstrap/_grid.scss"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticSassBootstrap_halflingsScss reads file data from disk. It returns an error on failure.
+func staticSassBootstrap_halflingsScss() (*asset, error) {
+	path := "static/sass/bootstrap/_halflings.scss"
+	name := "static/sass/bootstrap/_halflings.scss"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -8077,6 +8191,11 @@ var _bindata = map[string]func() (*asset, error){
 	"static/fonts/glyphicons-filetypes-regular.ttf": staticFontsGlyphiconsFiletypesRegularTtf,
 	"static/fonts/glyphicons-filetypes-regular.woff": staticFontsGlyphiconsFiletypesRegularWoff,
 	"static/fonts/glyphicons-filetypes-regular.woff2": staticFontsGlyphiconsFiletypesRegularWoff2,
+	"static/fonts/glyphicons-halflings-regular.eot": staticFontsGlyphiconsHalflingsRegularEot,
+	"static/fonts/glyphicons-halflings-regular.svg": staticFontsGlyphiconsHalflingsRegularSvg,
+	"static/fonts/glyphicons-halflings-regular.ttf": staticFontsGlyphiconsHalflingsRegularTtf,
+	"static/fonts/glyphicons-halflings-regular.woff": staticFontsGlyphiconsHalflingsRegularWoff,
+	"static/fonts/glyphicons-halflings-regular.woff2": staticFontsGlyphiconsHalflingsRegularWoff2,
 	"static/fonts/glyphicons-regular.eot": staticFontsGlyphiconsRegularEot,
 	"static/fonts/glyphicons-regular.svg": staticFontsGlyphiconsRegularSvg,
 	"static/fonts/glyphicons-regular.ttf": staticFontsGlyphiconsRegularTtf,
@@ -8249,6 +8368,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/sass/bootstrap/_forms.scss": staticSassBootstrap_formsScss,
 	"static/sass/bootstrap/_glyphicons.scss": staticSassBootstrap_glyphiconsScss,
 	"static/sass/bootstrap/_grid.scss": staticSassBootstrap_gridScss,
+	"static/sass/bootstrap/_halflings.scss": staticSassBootstrap_halflingsScss,
 	"static/sass/bootstrap/_images.scss": staticSassBootstrap_imagesScss,
 	"static/sass/bootstrap/_input-group.scss": staticSassBootstrap_inputGroupScss,
 	"static/sass/bootstrap/_jumbotron.scss": staticSassBootstrap_jumbotronScss,
@@ -8545,6 +8665,11 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"glyphicons-filetypes-regular.ttf": &bintree{staticFontsGlyphiconsFiletypesRegularTtf, map[string]*bintree{}},
 			"glyphicons-filetypes-regular.woff": &bintree{staticFontsGlyphiconsFiletypesRegularWoff, map[string]*bintree{}},
 			"glyphicons-filetypes-regular.woff2": &bintree{staticFontsGlyphiconsFiletypesRegularWoff2, map[string]*bintree{}},
+			"glyphicons-halflings-regular.eot": &bintree{staticFontsGlyphiconsHalflingsRegularEot, map[string]*bintree{}},
+			"glyphicons-halflings-regular.svg": &bintree{staticFontsGlyphiconsHalflingsRegularSvg, map[string]*bintree{}},
+			"glyphicons-halflings-regular.ttf": &bintree{staticFontsGlyphiconsHalflingsRegularTtf, map[string]*bintree{}},
+			"glyphicons-halflings-regular.woff": &bintree{staticFontsGlyphiconsHalflingsRegularWoff, map[string]*bintree{}},
+			"glyphicons-halflings-regular.woff2": &bintree{staticFontsGlyphiconsHalflingsRegularWoff2, map[string]*bintree{}},
 			"glyphicons-regular.eot": &bintree{staticFontsGlyphiconsRegularEot, map[string]*bintree{}},
 			"glyphicons-regular.svg": &bintree{staticFontsGlyphiconsRegularSvg, map[string]*bintree{}},
 			"glyphicons-regular.ttf": &bintree{staticFontsGlyphiconsRegularTtf, map[string]*bintree{}},
@@ -8740,6 +8865,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				"_forms.scss": &bintree{staticSassBootstrap_formsScss, map[string]*bintree{}},
 				"_glyphicons.scss": &bintree{staticSassBootstrap_glyphiconsScss, map[string]*bintree{}},
 				"_grid.scss": &bintree{staticSassBootstrap_gridScss, map[string]*bintree{}},
+				"_halflings.scss": &bintree{staticSassBootstrap_halflingsScss, map[string]*bintree{}},
 				"_images.scss": &bintree{staticSassBootstrap_imagesScss, map[string]*bintree{}},
 				"_input-group.scss": &bintree{staticSassBootstrap_inputGroupScss, map[string]*bintree{}},
 				"_jumbotron.scss": &bintree{staticSassBootstrap_jumbotronScss, map[string]*bintree{}},
