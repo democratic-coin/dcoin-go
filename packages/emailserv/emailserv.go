@@ -4,8 +4,8 @@ package main
 import (
 	"crypto/md5"
 /*	"crypto/rsa"
-	"crypto/x509"
-	"encoding/base64"*/
+	"crypto/x509"*/
+	"encoding/base64"
 //	"golang.org/x/crypto/bcrypt"
 	"encoding/json"
 	"fmt"
@@ -296,8 +296,19 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		bcc := GSettings.CopyTo
 		GSettings.CopyTo = ``
 		files := make( map[string][]byte )
-		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = []byte( (*jsonEmail.Params)[`txt_key`])
-		err := GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
+		decoded, err := base64.StdEncoding.DecodeString((*jsonEmail.Params)[`txt_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = decoded
+		decoded, err = base64.StdEncoding.DecodeString((*jsonEmail.Params)[`png_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.png`] = decoded
+		err = GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
 		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
 		GSettings.CopyTo = bcc
 
@@ -612,7 +623,6 @@ func main() {
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
 //	go Send()
-	
 
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
