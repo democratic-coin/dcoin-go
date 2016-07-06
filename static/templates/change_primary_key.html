@@ -1,4 +1,26 @@
 {{define "changePrimaryKey"}}
+<style>
+	.nav-link {
+		padding-left:0.75rem;
+		padding-right:0.75rem;
+	}
+	#password_div .col-xs-12 {
+		padding-left:0px;
+		padding-right:0px;
+	}
+	#mode_div, #password_div, #confirm_key, #two_keys {
+		border-radius:0px 5px 5px 5px;
+		background-color:#ffffff;
+		padding:1rem;
+	}
+	small {
+		display:block;
+		line-height:16px;
+	}
+	.clear {
+		clear:both;
+	}
+</style>
 <script>
 
 	var progress_pct_width = $('#progress_pct').width()/$('#progress_pct').parent().width()*100;
@@ -63,9 +85,9 @@
 		$("#password_div").css("display", "none");
 		$("#confirm_key").css("display", "block");
 
-		$("#step0").attr('class', '');
-		$("#step1").attr('class', '');
-		$("#step2").attr('class', 'active');
+		$("#step0").attr('class', 'nav-link');
+		$("#step1").attr('class', 'nav-link');
+		$("#step2").attr('class', 'nav-link active');
 
 		if (mode=='enhanced_protection_mode') {
 			console.log('goto_step_3_or_sign');
@@ -85,8 +107,8 @@
 		$("#tx_history").css("display", "none");
 		$("#mode_div").css("display", "none");
 		$("#password_div").css("display", "block");
-		$("#step0").attr('class', '');
-		$("#step1").attr('class', 'active');
+		$("#step0").attr('class', 'nav-link');
+		$("#step1").attr('class', 'nav-link active');
 		$("#tx_history").css("display", "none");
 	} );
 
@@ -99,7 +121,7 @@
 		{{if .ShowSignData}}$("#sign").css("display", "block");{{end}}
 		doSign();
 		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-		{{if .ShowSignData}}$("#step0,#step1,#step2,#step3").attr('class', '');$("#step4").attr('class', 'active');{{end}}
+		{{if .ShowSignData}}$("#step0,#step1,#step2,#step3").attr('class', 'nav-link');$("#step4").attr('class', 'nav-link active');{{end}}
 
 		} );
 
@@ -125,8 +147,8 @@
 
 				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#public_key_1").val()+',,');
 				$("#confirm_key").css("display", "none");
-				$("#step2").attr('class', '');
-				$("#step3").attr('class', 'active');
+				$("#step2").attr('class', 'nav-link');
+				$("#step3").attr('class', 'nav-link active');
 				{{if .ShowSignData}}$("#sign").css("display", "block");{{end}}
 				doSign();
 				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
@@ -134,8 +156,8 @@
 			else {
 					$("#two_keys").css("display", "block");
 					$("#confirm_key").css("display", "none");
-					$("#step0,#step1,#step2").attr('class', '');
-					$("#step3").attr('class', 'active');
+					$("#step0,#step1,#step2").attr('class', 'nav-link');
+					$("#step3").attr('class', 'nav-link active');
 					{{if .ShowSignData}}$("#goto_sign").text("{{.Lang.next}}");{{end}}
 
 				}
@@ -183,10 +205,10 @@
 					count_steps++
 				for (var i=0; i<=count_steps; i++) {
 					if (i==0)
-						var active = 'active';
+						var active = 'nav-link active';
 					else
-						var active = '';
-					steps = steps + '<li class="'+active+'" id="step'+i+'"><a aria-expanded="false" href="#" onclick="step'+i+'()">step '+i+'</a></li>';
+						var active = 'nav-link ';
+					steps = steps + '<li class="nav-item"><a id="step'+i+'" class="'+active+'" aria-expanded="false" href="#" onclick="step'+i+'()">step '+parseInt(i+1)+'</a></li>';
 				}
 				$( "#steps" ).html( steps );
 			}
@@ -254,7 +276,7 @@
 			{{else}}
 			$( "#download_div" ).css("display", "none");
 			{{end}}
-			$( "#goto_confirm_key" ).css("display", "block");
+			$( "#goto_confirm_key" ).css({"display":"inline-block", "margin-top:":"1rem"});
 		});
 		$('#goto_confirm_key').bind('click', function () {
 			if (progress_pct_width<20) {
@@ -267,9 +289,9 @@
 			$("#password_div").css("display", "none");
 			$("#confirm_key").css("display", "block");
 
-			$("#step0").attr('class', '');
-			$("#step1").attr('class', '');
-			$("#step2").attr('class', 'active');
+			$("#step0").attr('class', 'nav-link');
+			$("#step1").attr('class', 'nav-link');
+			$("#step2").attr('class', 'nav-link active');
 
 			if (mode=='enhanced_protection_mode') {
 				console.log('goto_step_3_or_sign');
@@ -282,8 +304,8 @@
 				$("#password_div").css("display", "none");
 				$("#confirm_key").css("display", "none");
 				$("#two_keys").css("display", "none");
-				$("#step0").attr('class', 'active');
-				$("#step1,#step2,#step3").attr('class', '');
+				$("#step0").attr('class', 'nav-link active');
+				$("#step1,#step2,#step3").attr('class', 'nav-link');
 				$("#tx_history").css("display", "block");
 				return false;
 			}
@@ -293,8 +315,8 @@
 				$("#password_div").css("display", "block");
 				$("#confirm_key").css("display", "none");
 				$("#two_keys").css("display", "none");
-				$("#step0,#step2,#step3").attr('class', '');
-				$("#step1").attr('class', 'active');
+				$("#step0,#step2,#step3").attr('class', 'nav-link');
+				$("#step1").attr('class', 'nav-link active');
 				$("#tx_history").css("display", "none");
 				return false;
 			}
@@ -304,8 +326,8 @@
 				$("#password_div").css("display", "none");
 				$("#confirm_key").css("display", "block");
 				$("#two_keys").css("display", "none");
-				$("#step0,#step1,#step3").attr('class', '');
-				$("#step2").attr('class', 'active');
+				$("#step0,#step1,#step3").attr('class', 'nav-link');
+				$("#step2").attr('class', 'nav-link active');
 				$("#tx_history").css("display", "none");
 				return false;
 			}
@@ -341,61 +363,55 @@
 		<div class="alert alert-info">{{.Lang.change_primary_key_exists_request}}</div>
 	{{else}}
 
-<div class="panel-body" style="max-width: 500px; margin: auto">
+<div class="panel-body">
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" id="steps">
 	</ul>
 </div>
 
-<div id="mode_div" style="max-width: 600px; margin: auto">
+<div id="mode_div">
 
 	<p id="mode_text">{{.Lang.normal_mode_1_key}}</p>
-	<p id="select_mode_link" style="float: right"><a href="#" onclick="enhanced_protection_mode()">{{.Lang.enhanced_protection_mode}}</a></p>
-	<div class="clearfix"></div>
-	<button id="goto_password" class="btn btn-outline btn-primary">{{.Lang.next}}</button>
+	<p id="select_mode_link" class="text-md-right"><a href="#" onclick="enhanced_protection_mode()">{{.Lang.enhanced_protection_mode}}</a></p>
+	<center><button id="goto_password" class="btn btn-info">{{.Lang.next}}</button></center>
 
 </div>
 
-<div id="password_div" style="display: none">
+<div id="password_div" style="display:none;">
 	<div class="form-horizontal">
 		<form id="main_form" method="{{if .Mobile}}get{{else}}post{{end}}" action="ajax" target="_blank">
 			<fieldset>
 				<input type="hidden" name="controllerName" value="dcoinKey">
 				<!-- Password input-->
 				<div class="form-group">
-					<label class="col-md-4 control-label"
-						   for="new_password">{{.Lang.password}}</label>
-
-					<div class="col-md-4">
+					<label class="col-xs-12 control-label" for="new_password">{{.Lang.password}}</label>
+					<div class="col-xs-12">
 						<input id="new_password" class="form-control input-md" name="password" type="password">
-						<span class="help-block">{{.Lang.choose_a_password}}</span>
+						<small class="text-muted">{{.Lang.choose_a_password}}</small>
 					</div>
+					<div class="clear"></div>
 				</div>
-
 			</fieldset>
 		</form>
-				<!-- Button -->
-				<div class="form-group" id="download_div">
-					<label class="col-md-4 control-label" for="download"></label>
-					<div class="col-md-4">
-						<button id="download" class="btn btn-default"
-								type="submit">{{.Lang.download}}</button>
-					</div>
-				</div>
+		<!-- Button -->
+		<div class="form-group" id="download_div">
+			<div class="col-xs-12">
+				<center><button id="download" class="btn btn-info" type="submit" style="margin-top:1rem;">{{.Lang.download}}</button></center>
+			</div>
+			<div class="clear"></div>
+		</div>
 
-				<!-- Button -->
-				<div class="form-group">
-					<label class="col-md-4 control-label" for="goto_confirm_key"></label>
-					<div class="col-md-4">
-						<a id="goto_confirm_key" class="btn btn-primary" style="display: none">{{.Lang.next}}</a>
-					</div>
-				</div>
-
+		<!-- Button -->
+		<div class="form-group">
+			<div class="col-xs-12">
+				<center><a id="goto_confirm_key" class="btn btn-info" style="display:none; margin-top:1rem;">{{.Lang.next}}</a></center>
+			</div>
+			<div class="clear"></div>
+		</div>
 	</div>
-
 </div>
 
-<div id="confirm_key" style="display: none; max-width: 600px; margin: auto">
+<div id="confirm_key" style="display:none;">
 	<fieldset>
 		<div id="change_pkey_alert"></div>
 		<p>{{.Lang.please_upload_new_key}}</p>
@@ -409,24 +425,21 @@
 				<p>{{.Lang.or_drag_and_drop_key}}</p>
 			</div>
 		</div>
-				<textarea rows="3" id="change_pkey_private_key" class="form-control" style="display:none"></textarea><br>
-		<label>{{.Lang.password}}</label>
-		<input type="password" id="change_pkey_password" class="form-control"><Br>
-		<button id="goto_step_3_or_sign" class="btn btn-outline btn-primary" type="submit">{{if .ShowSignData}}{{.Lang.next}}{{else}}{{.Lang.send_to_net}}{{end}}</button>
+		<textarea rows="3" id="change_pkey_private_key" class="form-control" style="display:none"></textarea>
+		<label style="margin-top:1rem;">{{.Lang.password}}</label>
+		<input type="password" id="change_pkey_password" class="form-control">
+		<center><button id="goto_step_3_or_sign" class="btn btn-info" type="submit" style="margin-top:1rem;">{{if .ShowSignData}}{{.Lang.next}}{{else}}{{.Lang.send_to_net}}{{end}}</button></center>
 	</fieldset>
 </div>
 
-<div id="two_keys" style="display: none">
-	<div style="margin: auto; max-width: 600px">
+<div id="two_keys" style="display:none;">
+	<div>
 		<p>{{noescape .Lang.generate_somewhere_two_different_pairs_of_keys}}</p>
 		<label>{{.Lang.your_public_keys_1}}</label>
-				<textarea class="form-control" rows="5" id="public_key_2"
-				          style="width:600px;text-align: justify"></textarea><br>
-				<label>{{.Lang.your_public_keys_2}}</label>
-				<textarea class="form-control" rows="5" id="public_key_3"
-				          style="width:600px;text-align: justify"></textarea>
-				<br>
-		<button id="goto_sign" class="btn btn-outline btn-primary">{{.Lang.send_to_net}}</button>
+		<textarea class="form-control" rows="5" id="public_key_2" style="text-align:justify; resize:none;"></textarea>
+		<label style="margin-top:1rem;">{{.Lang.your_public_keys_2}}</label>
+		<textarea class="form-control" rows="5" id="public_key_3" style="text-align:justify; resize:none;"></textarea>
+		<center><button id="goto_sign" class="btn btn-info" style="margin-top:1rem;">{{.Lang.send_to_net}}</button></center>
 	</div>
 </div>
 
@@ -437,7 +450,7 @@
 <input type="hidden" id="password_hash">
 {{end}}
 
-<div style="margin: auto; max-width: 600px; display: none" id="tx_history">
+<div style="margin: auto; max-width:750px; display: none" id="tx_history">
 
 	{{if .LastTxFormatted}}{{noescape .LastTxFormatted}}{{end}}
 
