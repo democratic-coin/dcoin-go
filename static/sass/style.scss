@@ -524,6 +524,113 @@ h3 {
 		}
 	}
 }
+/* Desktop
+----------------------------------------- */
+.desktop {
+	margin-right:0px;
+	margin-top:-0.9375rem;
+	.item {
+		padding-right:0px;
+		padding-top:0.9375rem;
+		.menu {
+			position:relative;
+			display:block;
+			height:250px;
+			background-color:$mblue;
+			@include max($mobile) {
+				height:125px;
+			}
+			.glyphicon {
+				position:absolute;
+				left:0px;
+				top:0px;
+				width:100%;
+				height:100%;
+				font-size:100px;
+				line-height:100px;
+				color:$lgray;
+				text-align:center;
+				transition: {
+					property:all;
+					duration:.3s;
+				}
+				&:before {
+					display:block;
+					position:relative;
+					top:50%;
+					height:100px;
+					margin-top:-75px;
+				}
+				@include max($mobile) {
+					font-size:50px;
+					line-height:50px;
+					&:before {
+						height:50px;
+						margin-top:-40px;
+					}
+				}
+			}
+			.head {
+				position:absolute;
+				left:0px;
+				bottom:0px;
+				width:100%;
+				height:50px;
+				overflow:hidden;
+				background-color:rgba(45, 57, 64, 0.75);
+				@include text($reg, 15px, $white, 50px, none);
+				white-space:nowrap;
+				padding-left:1rem;
+				z-index:2;
+				&:before {
+					content:'';
+					position:absolute;
+					right:-136%;
+					bottom:0px;
+					width:136%;
+					height:0px;
+					border-bottom:50px solid $blue;
+					border-left:50px solid transparent;
+					margin-right:20px;
+					z-index:1;
+					transition: {
+						property:all;
+						duration:.3s;
+					}
+				}
+				@include max($mobile) {
+					height:30px;
+					font-size:11px;
+					line-height:30px;
+					padding-left:0.5rem;
+				}
+				em {
+					position:relative;
+					font-style:normal;
+					z-index:2;
+				}
+				&:hover {
+					&:before {
+						right:-20px;
+					}
+				}
+			}
+			&:hover {
+				.glyphicon {
+					color:$white;
+				}
+				.head {
+					&:before {
+						right:-20px;
+					}
+				}
+			}
+		}
+		.help {
+			display:none;
+		}
+	}
+}
 /* Header
 ----------------------------------------- */
 header {
@@ -658,11 +765,6 @@ header {
 					top:9px;
 				}
 			}
-			/*&:hover {
-				.languages {
-					display:block;
-				}
-			}*/
 		}
 	}
 	.logo {

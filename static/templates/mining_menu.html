@@ -9,7 +9,83 @@
 	<h1 class="page-header">{{.Lang.mining}}</h1>
 	
 	{{template "alertSuccess".}}
-	<div>
+	<section class="desktop row">
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#promisedAmountList">
+				<span class="glyphicon glyphicon-money"></span>
+				<span class="head"><em>{{.Lang.promised_amounts}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign"></span>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}">
+				<span class="glyphicon glyphicon-coins"></span>
+				<span class="head"><em>{{.Lang.free_coins}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#cashRequestOut">
+				<span class="glyphicon glyphicon-fees-payments"></span>
+				<span class="head"><em>{{.Lang.outgoing}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#cashRequestIn">
+				<span class="glyphicon glyphicon-invoice"></span>
+				<span class="head"><em>{{.Lang.inbox}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#assignments">
+				<span class="glyphicon glyphicon-pencil"></span>
+				<span class="head"><em>{{.Lang.tasks}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#voting">
+				<span class="glyphicon glyphicon-stats"></span>
+				<span class="head"><em>{{.Lang.voting}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#newUser">
+				<span class="glyphicon glyphicon-referrals"></span>
+				<span class="head"><em>{{.Lang.reg_users}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#changeGeolocation">
+				<span class="glyphicon glyphicon-globe"></span>
+				<span class="head"><em>{{.Lang.geolocation}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#points">
+				<span class="glyphicon glyphicon-podium"></span>
+				<span class="head"><em>{{.Lang.points}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#changeCommission">
+				<span class="glyphicon glyphicon-small-payments"></span>
+				<span class="head"><em>{{.Lang.commission}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#voteForMe">
+				<span class="glyphicon glyphicon-conversation"></span>
+				<span class="head"><em>{{.Lang.vote_for_me}}</em></span>
+			</a>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#holidaysList">
+				<span class="glyphicon glyphicon-sunbath"></span>
+				<span class="head"><em>{{.Lang.holidays}}</em></span>
+			</a>
+		</div>
+	</section>
+	
+	<div style="display:none;">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs">
 			<li class="nav-item"><a class="nav-link active" aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
@@ -219,8 +295,8 @@
 						</div>
 					</div>
 				</div>
-
-
+	
+	
 				<div class="tabs_table">
 					<div class="col-lg-4">
 						<div class="card card-warning card-inverse">
@@ -236,19 +312,15 @@
 						</div>
 					</div>
 				</div>
-
-
+	
+	
 			</div>
 		</div>
-	
-	
 	</div>
-	
 	<div class="clearfix"></div>
 	<div class="table_fix">
-	{{noescape .LastTxFormatted}}
-	<script src="static/js/unixtime.js"></script>
-	
+		{{noescape .LastTxFormatted}}
+		<script src="static/js/unixtime.js"></script>
 	{{end}}
 	</div>
 </div>
