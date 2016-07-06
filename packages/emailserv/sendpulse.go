@@ -41,7 +41,7 @@ type emailJson struct {
 	From    *Email   `json:"from"`
 	To      []*Email `json:"to"`
 	Bcc     []*Email `json:"bcc"`
-	Files   map[string]string  `json:"attachments"`
+	Files   map[string][]byte  `json:"attachments"`
 }
 
 type EmailResult struct {
@@ -167,12 +167,35 @@ func (ec *EmailClient) SendEmailAttach(html, text, subj string, toemail []*Email
 		edata.Bcc = []*Email{ &Email{Email: GSettings.CopyTo}}
 	}
 	if files!=nil && len(*files) > 0 {
-		edata.Files = make(map[string]string)
+		edata.Files = make(map[string][]byte)
 		for key,val := range *files {
-			edata.Files[key] = string(val)//base64.StdEncoding.EncodeToString(val)
+			edata.Files[key] = val//base64.StdEncoding.EncodeToString(val)
 		}
 	}
-	serial, err := json.Marshal(edata)
+	var serial []byte
+	var err error
+	if len(edata.Files) > 0 {
+		data := make(map[interface{}]interface{})
+		data[`html`] = edata.Html
+		data[`subject`] = edata.Subject
+		data[`text`] = edata.Text
+		from := map[interface{}]interface{}{
+			`name`: edata.From.Name, `email`: edata.From.Email}
+		data[`from`] = from
+		to := make( map[interface{}]interface{} )
+		for i,val := range edata.To {
+			to[i] = map[interface{}]interface{}{`name`: val.Name, `email`: val.Email}
+		}
+		data[`to`] = to
+		attach := make( map[interface{}]interface{} )
+		for name,ifile := range edata.Files {
+			attach[name] = ifile
+		}
+		data[`attachments`] = attach
+		serial, err = Encode( data )
+	} else {
+		serial, err = json.Marshal(edata)
+	}
 	if err != nil {
 		return err
 	}

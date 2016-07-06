@@ -4,6 +4,7 @@ package controllers
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
 	"encoding/json"
+	"encoding/base64"
 	"io/ioutil"
 	"path"
 	"path/filepath"
@@ -27,7 +28,12 @@ func (c *Controller) SendKey() (string, error) {
 	if err != nil {
 		return result(err.Error(), ``, false)
 	}
-	params[`txt_key`] = string(txtkey)
+	params[`txt_key`] = base64.StdEncoding.EncodeToString(txtkey)
+	pngkey, err := ioutil.ReadFile( filepath.Join(*utils.Dir,`public`, path.Base(c.r.FormValue(`keyurl`)))+`.png`)
+	if err != nil {
+		return result(err.Error(), ``, false)
+	}
+	params[`png_key`] = base64.StdEncoding.EncodeToString(pngkey)
 	err = utils.SendEmail( email, utils.EXCHANGE_USER, utils.ECMD_SENDKEY, &params )
 	if err != nil {
 		return result(err.Error(), ``, false)
