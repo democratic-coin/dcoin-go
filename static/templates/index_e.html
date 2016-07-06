@@ -276,6 +276,7 @@
 <!-- /#wrapper -->
 
 <!-- Core Scripts - Include with every page -->
+<script src="static/js/tether.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/jquery.metisMenu.js"></script>
 
@@ -609,6 +610,12 @@
       $('#saveKeyAndLogin').removeClass( "disabled" )
     }, 500);
   });
+  
+  function your_balance() {
+		$("#your_balance").html('{{if .MyWallets}}{{range $id, $data := .MyWallets}}<strong>{{index $data "amount"}}</strong> {{index $data "currency_name"}}<br>{{end}}{{else}}<strong>0</strong>{{end}}');
+		setTimeout(your_balance, 5000);
+	}
+	setTimeout(your_balance, 5000);
 </script>
 <div style="display: none;">
   <div id="key">key</div>
