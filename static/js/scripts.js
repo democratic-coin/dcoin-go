@@ -26,8 +26,6 @@ function HideMenu(){
 }
 
 (function($) { 
-   'use strict';
-	
    $.fn.touchwipe = function(settings) {
      var config = {
     		min_move_x: 50,
@@ -36,7 +34,9 @@ function HideMenu(){
 			preventDefaultEvents: true
 	 };
      
-     if (settings) $.extend(config, settings);
+     if (settings) {
+		 $.extend(config, settings);
+	 }
  
      this.each(function() {
     	 var startX;
@@ -69,7 +69,7 @@ function HideMenu(){
     	 
     	 function onTouchStart(e)
     	 {
-    		 if (e.touches.length == 1) {
+    		 if (e.touches.length === 1) {
     			 startX = e.touches[0].pageX;
     			 isMoving = true;
     			 this.addEventListener('touchmove', onTouchMove, false);
