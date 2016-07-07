@@ -34,6 +34,7 @@ type menuPage struct {
 	Pct               float64
 	Amount            float64
 	IsRestricted      bool
+	Wallets           []utils.DCAmounts
 }
 
 func (c *Controller) Menu() (string, error) {
@@ -171,7 +172,11 @@ func (c *Controller) Menu() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	var wallets []utils.DCAmounts
+	if c.SessUserId > 0 {
+		wallets, err = c.GetBalances(c.SessUserId)
+	}
+		
 	funcMap := template.FuncMap{
 		"noescape": func(s string) template.HTML {
 			return template.HTML(s)
@@ -190,6 +195,7 @@ func (c *Controller) Menu() (string, error) {
 			Notifications:     notifications,
 			IsRestricted:      isRestricted,
 			Amount:            profit,
+			Wallets:           wallets,
 			Pct:               pct })
 	if err != nil {
 		log.Error("%s", utils.ErrInfo(err))
