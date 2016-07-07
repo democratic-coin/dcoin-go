@@ -1,0 +1,66 @@
+{{define "exchangeUser"}}
+<script>
+
+function user_info() {
+	var userid = $("#userid").val();
+	if (userid == '') {
+		$("#msg").html('Enter User ID');
+		$("#msg").show();
+		return false;
+	}
+	dc_navigate('ExchangeUser', {iduser: userid});
+	return false;
+}
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Exchange user information</h1>
+	</div>
+	<div class="col-lg-12">
+		<div id="msg" class="alert alert-danger" style="display:none"></div>
+
+		<div class="panel-group" style="max-width: 600px">
+			User ID: <input type="text" id="userid" value="{{.UserInfo}}" class="form-control" style="width: 70px;"> 
+			<button type="button" class="btn btn-primary" href="#" onclick="return user_info()">OK</button>
+		</div>
+	{{if .UserInfo}}
+		{{if .List}}
+		<div class="col-lg-12">
+			{{range $name,$list := .List}}
+			<h1 class="page-header">{{$name}}</h1>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+						<tr>{{range $id, $column := index $.Headers $name}}
+							<th>{{$column}}</th>
+  							{{end}}
+							</tr>
+						</thead>
+						<tbody>
+							{{range $id, $data := $list}}
+								<tr>
+									{{range $id, $column := index $.Headers $name}}
+										<td {{if issuffix $column "time"}}class="unixtime"{{end}}>{{index $data $column}}</td>
+		  							{{end}}
+								<!--td class="unixtime"></td-->
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			{{end}}
+		</div>
+		{{end}}
+	{{end}}
+</div>
+
+<script>
+
+</script>
+
+<script src="static/js/unixtime.js"></script>
+
+{{end}}
