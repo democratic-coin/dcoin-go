@@ -28,7 +28,7 @@
 .glyphicon-minus                  { &:before { content: "\2212"; } }
 .glyphicon-cloud                  { &:before { content: "\2601"; } }
 .glyphicon-envelope               { &:before { content: "\2709"; } }
-.glyphicon-pencil                 { &:before { content: "\270f"; } }
+.glyphicon-pencil                 { &:before { content: "\e031"; } }
 .glyphicon-glass                  { &:before { content: "\e001"; } }
 .glyphicon-music                  { &:before { content: "\e002"; } }
 .glyphicon-search                 { &:before { content: "\e003"; } }
@@ -157,7 +157,7 @@
 .glyphicon-circle-arrow-left      { &:before { content: "\e132"; } }
 .glyphicon-circle-arrow-up        { &:before { content: "\e133"; } }
 .glyphicon-circle-arrow-down      { &:before { content: "\e134"; } }
-.glyphicon-globe                  { &:before { content: "\e135"; } }
+.glyphicon-globe                  { &:before { content: "\e341"; } }
 .glyphicon-wrench                 { &:before { content: "\e136"; } }
 .glyphicon-tasks                  { &:before { content: "\e137"; } }
 .glyphicon-filter                 { &:before { content: "\e138"; } }
@@ -206,7 +206,7 @@
 .glyphicon-earphone               { &:before { content: "\e182"; } }
 .glyphicon-phone-alt              { &:before { content: "\e183"; } }
 .glyphicon-tower                  { &:before { content: "\e184"; } }
-.glyphicon-stats                  { &:before { content: "\e185"; } }
+.glyphicon-stats                  { &:before { content: "\e041"; } }
 .glyphicon-sd-video               { &:before { content: "\e186"; } }
 .glyphicon-hd-video               { &:before { content: "\e187"; } }
 .glyphicon-subtitles              { &:before { content: "\e188"; } }
@@ -306,3 +306,12 @@
 .glyphicon-circle-arrow-top       { &:before { content: "\e219"; } }
 .glyphicon-circle-arrow-down      { &:before { content: "\e220"; } }
 .glyphicon-camera                 { &:before { content: "\e012"; } }
+.glyphicon-fees-payments          { &:before { content: "\e617"; } }
+.glyphicon-small-payments         { &:before { content: "\e618"; } }
+.glyphicon-message-in             { &:before { content: "\e123"; } }
+.glyphicon-invoice                { &:before { content: "\e539"; } }
+.glyphicon-conversation           { &:before { content: "\e245"; } }
+.glyphicon-coins                  { &:before { content: "\e038"; } }
+.glyphicon-podium                 { &:before { content: "\e329"; } }
+.glyphicon-traveler               { &:before { content: "\e638"; } }
+.glyphicon-sunbath                { &:before { content: "\e686"; } }
