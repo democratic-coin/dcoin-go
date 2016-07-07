@@ -502,9 +502,11 @@
 			irest = Math.round( (new Date().getTime() - istart)/100 );
 			inew_amount =  (Math.pow(1+ipct, irest) * iamount);
 			$('#tdcr').html((inew_amount-30).toFixed(7) + " dUSD");
-			setTimeout( money_counter, 200 );
+			timeoutId[0] = setTimeout( money_counter, 200 );
 		}
-		setTimeout( money_counter, 200 );
+		if (timeoutId[0])
+			clearTimeout(timeoutId[0]);
+		timeoutId[0] = setTimeout( money_counter, 200 );
 	{{end}}	
 
 	function notify_counter() {
@@ -518,10 +520,12 @@
 					$(".mainmenu .glyphicon-bell").removeClass("unread");
 				}
 			}
+			timeoutId[1] = setTimeout( notify_counter, 10000 );
 		});
-		setTimeout( notify_counter, 10000 );
 	}
-	setTimeout( notify_counter, 10000 );
+	if (timeoutId[1])
+		clearTimeout(timeoutId[1]);
+	timeoutId[1] = setTimeout( notify_counter, 10000 );
 
 
 	setTimeout( function(){
