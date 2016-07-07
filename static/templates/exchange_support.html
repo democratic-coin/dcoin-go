@@ -56,7 +56,8 @@ function open_topic( id ) {
 	</div>
 	{{if .IdRoot}}
 			<div class="col-lg-12">
-			<a href="#" onclick="dc_navigate('ExchangeSupport'); return false;">{{.Lang.support}}</a> - <strong>#{{.IdRoot}} {{.Topic}}</strong>
+			<a href="#" onclick="dc_navigate('ExchangeSupport'); return false;">{{.Lang.support}}</a> -
+			<a href="#" onclick="dc_navigate('ExchangeUser', {iduser: '{{.ToUserId}}'}); return false;">User Info</a> <strong>#{{.IdRoot}} {{.Topic}}</strong>
 			</div>
 		<div class="col-lg-12">
 			{{range $id, $data := .List}}
