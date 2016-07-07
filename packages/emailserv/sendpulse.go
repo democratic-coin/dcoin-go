@@ -129,7 +129,10 @@ func (ec *EmailClient) CheckBad() {
 
 	for _,item := range answer {
 		if ( item.Code != `250` ) {
-			AddToStopList( item.Email, 0 )
+			log.Println( `SendPulse code: `, item.Email, item.Code)
+			if ( item.Code == `550` ) {
+				AddToStopList( item.Email, 0 )
+			}
 		}
 	}
 	
