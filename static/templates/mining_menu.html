@@ -1,6 +1,9 @@
 {{define "miningMenu"}}
 <div class="mining_menu">
 	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		})
 		$(document).ready(function() {
 			$( "#progress_bar" ).load( "ajax?controllerName=progressBar" );
 		});
@@ -15,73 +18,84 @@
 				<span class="glyphicon glyphicon-money"></span>
 				<span class="head"><em>{{.Lang.promised_amounts}}</em></span>
 			</a>
-			<span class="help glyphicon glyphicon-question-sign"></span>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_promised_amounts_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}">
 				<span class="glyphicon glyphicon-coins"></span>
 				<span class="head"><em>{{.Lang.free_coins}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.free_coins}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#cashRequestOut">
 				<span class="glyphicon glyphicon-fees-payments"></span>
 				<span class="head"><em>{{.Lang.outgoing}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_outgoing_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#cashRequestIn">
 				<span class="glyphicon glyphicon-invoice"></span>
 				<span class="head"><em>{{.Lang.inbox}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{noescape .Lang.mining_menu_inbox_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#assignments">
 				<span class="glyphicon glyphicon-pencil"></span>
 				<span class="head"><em>{{.Lang.tasks}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_tasks_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#voting">
 				<span class="glyphicon glyphicon-stats"></span>
 				<span class="head"><em>{{.Lang.voting}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_voting_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#newUser">
 				<span class="glyphicon glyphicon-referrals"></span>
 				<span class="head"><em>{{.Lang.reg_users}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_reg_users_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#changeGeolocation">
 				<span class="glyphicon glyphicon-globe"></span>
 				<span class="head"><em>{{.Lang.geolocation}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_geolocation_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#points">
 				<span class="glyphicon glyphicon-podium"></span>
 				<span class="head"><em>{{.Lang.points}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_points_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#changeCommission">
 				<span class="glyphicon glyphicon-small-payments"></span>
 				<span class="head"><em>{{.Lang.commission}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_commission_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#voteForMe">
 				<span class="glyphicon glyphicon-conversation"></span>
 				<span class="head"><em>{{.Lang.vote_for_me}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_vote_for_me_text}}"></span>
 		</div>
 		<div class="item col-lg-3 col-md-4 col-xs-6">
 			<a class="menu" href="#holidaysList">
 				<span class="glyphicon glyphicon-sunbath"></span>
 				<span class="head"><em>{{.Lang.holidays}}</em></span>
 			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_holidays_text}}"></span>
 		</div>
 	</section>
 	

@@ -88,6 +88,14 @@ h3 {
 		margin:0px auto;
 	}
 }
+.tooltip-inner {
+	@include max($mobile) {
+		max-width:110px;
+		font-size:11px;
+		line-height:14px;
+		padding:3px 5px 5px 5px;
+	}
+}
 .table_fix {
 	@include max($mobile) {
 		clear:both;
@@ -627,7 +635,32 @@ h3 {
 			}
 		}
 		.help {
-			display:none;
+			cursor:help;
+			position:absolute;
+			right:0px;
+			top:0.9375rem;
+			width:30px;
+			height:30px;
+			color:$black;
+			line-height:30px;
+			text-align:center;
+			&:before {
+				position:relative;
+				z-index:2;
+			}
+			&:after {
+				content:'';
+				position:absolute;
+				left:50%;
+				top:50%;
+				width:14px;
+				height:14px;
+				border-radius:50%;
+				background-color:$lgray;
+				margin-left:-7px;
+				margin-top:-7px;
+				z-index:1;
+			}
 		}
 	}
 }
