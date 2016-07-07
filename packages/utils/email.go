@@ -42,6 +42,7 @@ const (
 	ECMD_EXREQUEST  // Уведомление о вопросе в поддержку биржи
 	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
 	ECMD_REFREADY	// Уведомление о готовности ключа для реферала
+	ECMD_SENDKEY    // Отправка ключей на email
 	
 	EXCHANGE_USER = 0xefffffff
 )
@@ -90,6 +91,16 @@ type TypeNfyStatus struct {
 type TypeNfyRefReady struct {
 	RefId     string  `json:"refid"`
 }
+
+type TypeNfySendKey struct {
+	UserId    int64     `json:"user_id"`
+	Subject   string    `json:"subject"`
+	Text      string    `json:"text"`
+    TxtKey    string    `json:"txt_key"`
+    PngKey    string    `json:"png_key"`
+	RefId     int64     `json:"refid"`
+}
+
 
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
 	var (

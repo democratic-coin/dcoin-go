@@ -4,8 +4,8 @@ package main
 import (
 	"crypto/md5"
 /*	"crypto/rsa"
-	"crypto/x509"
-	"encoding/base64"*/
+	"crypto/x509"*/
+	"encoding/base64"
 //	"golang.org/x/crypto/bcrypt"
 	"encoding/json"
 	"fmt"
@@ -270,6 +270,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result(err.Error())
 			return
 		}
+	case utils.ECMD_SENDKEY:
+		if err := checkParams(`subject`,`text`, `txt_key`, `refid`); err != nil || 
+			len((*jsonEmail.Params)[`subject`]) == 0 || len((*jsonEmail.Params)[`text`]) == 0 ||
+			len((*jsonEmail.Params)[`txt_key`]) == 0 || utils.StrToInt64((*jsonEmail.Params)[`refid`]) == 0 {
+			result( `Wrong email parameters` )
+			return
+		}
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -285,8 +292,31 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
 		}
 	}
-	
-	if jsonEmail.Cmd != utils.ECMD_SIGNUP {
+	if (jsonEmail.Cmd == utils.ECMD_SENDKEY) {
+		bcc := GSettings.CopyTo
+		GSettings.CopyTo = ``
+		files := make( map[string][]byte )
+		decoded, err := base64.StdEncoding.DecodeString((*jsonEmail.Params)[`txt_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = decoded
+		decoded, err = base64.StdEncoding.DecodeString((*jsonEmail.Params)[`png_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.png`] = decoded
+		err = GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
+		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
+		GSettings.CopyTo = bcc
+
+		if err != nil {
+			result(err.Error())
+			return
+		}
+	} else if jsonEmail.Cmd != utils.ECMD_SIGNUP {
 		data, err := CheckUser( jsonEmail.UserId )
 		if err != nil {
 			result( fmt.Sprintf(`EmailCheck %s`, err))
@@ -593,7 +623,6 @@ func main() {
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
 //	go Send()
-	
 
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)
