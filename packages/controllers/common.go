@@ -442,6 +442,10 @@ func makeTemplate(html, name string, tData interface{}) (string, error) {
 		"notificationsLang": func(lang map[string]string, name string) string {
 			return lang["notifications_"+name]
 		},
+		"issuffix": func(text, name string) bool {
+			return strings.HasSuffix(text,name)
+		},
+
 	}
 	t := template.Must(template.New("template").Funcs(funcMap).Parse(string(data)))
 	t = template.Must(t.Parse(string(alert_success)))
