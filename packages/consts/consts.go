@@ -146,138 +146,161 @@ var ReductionDC = []int64{0, 10, 25, 50, 90}
 var Countries = []string{"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos [Keeling] Islands", "Colombia", "Comoros", "Congo [DRC]", "Congo [Republic]", "Cook Islands", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Côte d\"Ivoire", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands [Islas Malvinas]", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Gaza Strip", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard Island and McDonald Islands", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia [FYROM]", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar [Burma]", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "North Korea", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territories", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn Islands", "Poland", "Portugal", "Puerto Rico", "Qatar", "Romania", "Russia", "Rwanda", "Réunion", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "South Korea", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syria", "São Tomé and Príncipe", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "U.S. Minor Outlying Islands", "U.S. Virgin Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"}
 
 var TxTypes = map[int]string{
-	// новый юзер
+	// Новый юзер
 	1: "NewUser",
-	// новый майнер
+	// Новый майнер (тоже самое, что "шлюз" в Ripple)
 	2: "NewMiner",
-	// Добавление новой обещанной суммы
+	// Добавление новой обещанной суммы (тоже самое, что "лимиты" в Ripple)
 	3: "NewPromisedAmount",
+	// Изменение лимита обещанной суммы (Лимита)
 	4: "ChangePromisedAmount",
-	// голос за претендента на майнера
+	// Голос за претендента на майнера (Шлюз)
 	5: "VotesMiner",
+	// Новый ордер на продажу или покупку валюты на внутренней децентрализованной бирже
 	6: "NewForexOrder",
+	// Удаление своего ордера на бирже
 	7: "DelForexOrder",
-	//  новый набор max_other_currencies от нода-генератора блока
+	// Новый набор max_other_currencies от нода-генератора блока
 	8: "NewMaxOtherCurrencies",
-	// geolocation. Майнер изменил свои координаты
+	// Майнер изменил свои координаты
 	9: "ChangeGeolocation",
-	// votes_promised_amount.
+	// Голосование за возможность добавить новую обещанную сумму (Лимит)
 	10: "VotesPromisedAmount",
-	// del_promised_amount. Удаление обещанной суммы
+	// Удаление обещанной суммы (Лимита)
 	11: "DelPromisedAmount",
-	// send_dc
+	// Отправка монет другому пользователю
 	12: "SendDc",
+	// Отправка запроса на обмен фиата на указанную ранее майнером (Шлюзом) обещанную сумму (Лимит)
 	13: "CashRequestOut",
+	// Удовлетворение запроса CashRequestOut
 	14: "CashRequestIn",
-	// набор голосов по разным валютам
+	// Голосование за параметры по валютам, имеющимся у майнера (Шлюза)
 	15: "VotesComplex",
+	// Изменение праймари ключа
 	16: "ChangePrimaryKey",
+	// Изменение ключа ноды
 	17: "ChangeNodeKey",
+	// Исправление проблемы с зависнувшим статусом for_repaid юзера.
 	18: "ForRepaidFix",
 	// занесение в БД данных из первого блока
-	19: "Admin1Block", //
-	// админ разжаловал майнеров в юзеры
+	19: "Admin1Block",
+	// Админ разжаловал майнера в юзеры (отключил недобросовестный Шлюз)
 	20: "AdminBanMiners",
-	// админ изменил variables
+	// Админ изменил variables
 	21: "AdminVariables",
-	// админ обновил набор точек для проверки лиц
+	// Админ обновил набор точек для проверки лиц
 	22: "AdminSpots",
-	// юзер создал кредит
+	// Юзер создал кредит
 	23: "NewCredit",
-	// админ вернул майнерам звание "майнер"
+	// Админ вернул майнерам звание "майнер" (вернул отключенный Шлюз в работу)
 	24: "AdminUnbanMiners",
-	// админ отправил alert message
+	// Админ отправил alert message
 	25: "AdminMessage",
-	// майнер хочет, чтобы указаные им майнеры были разжалованы в юзеры
+	// Майнер хочет, чтобы указанные им майнеры были разжалованы в юзеры (жалобы на недобросовестные шлюзы)
 	26: "Abuses",
-	// майнер хочет, чтобы в указанные дни ему не приходили запросы на обмен DC
+	// Майнер (Шлюз) хочет, чтобы в указанные дни ему не приходили запросы на обмен DC
 	27: "NewHolidays",
+	// Актуализация обещанной суммы (шлюза)
 	28: "ActualizationPromisedAmounts",
+	// Перевод средств с обещанных сумм (Лимитов) на свой расчетный счет внутри Dcoin
 	29: "Mining",
 	// Голосование нода за фото нового майнера
 	30: "VotesNodeNewMiner",
-	// Юзер исправил проблему с отдачей фото и шлет повторный запрос на получение статуса "майнер"
+	// Юзер исправил проблему с отдачей фото и шлет повторный запрос на получение статуса "майнер" (Шлюз)
 	31: "NewMinerUpdate",
-	//  новый набор max_promised_amount от нода-генератора блока
+	//  Новый набор max_promised_amount от нода-генератора блока
 	32: "NewMaxPromisedAmounts",
-	//  новый набор % от нода-генератора блока
+	//  Новый набор % от нода-генератора блока
 	33: "NewPct",
-	// добавление новой валюты
+	// Добавление новой валюты
 	34: "AdminAddCurrency",
+	// Новый краудфандинг проект
 	35: "NewCfProject",
-	// новая версия, которая кладется каждому в диру public
+	// Новая версия ПО, которая кладется каждому в диру public
 	36: "AdminNewVersion",
-	// после того, как новая версия протестируется, выдаем сообщение, что необходимо обновиться
+	// После того, как новая версия протестируется, выдаем сообщение, что необходимо обновиться
 	37: "AdminNewVersionAlert",
-	// баг репорты
+	// Баг репорты
 	38: "MessageToAdmin",
-	// админ может ответить юзеру
+	// Админ может ответить юзеру
 	39: "AdminAnswer",
+	// Заполненение описания для краудфандинг-проекта
 	40: "CfProjectData",
-	// блог админа
+	// Блог админа
 	41: "AdminBlog",
-	// майнер меняет свой хост
+	// Майнер (Шлюз) меняет свой хост
 	42: "ChangeHost",
-	// майнер меняет комиссию, которую он хочет получать с тр-ий
+	// Майнер (Шлюз) меняет комиссию, которую он хочет получать с тр-ий
 	43: "ChangeCommission",
+	// Отмена своего взноса в краудфандинг-проект
 	44: "DelCfFunding",
-	// запуск урезания на основе голосования. генерит нод-генератор блока
+	// Запуск урезания на основе голосования или если созданных моент стало больше, чем обещанных сумм (Лимитов). Генерит нод-генератор блока
 	45: "NewReduction",
+	// Удаление своего краудфандинг проекта
 	46: "DelCfProject",
+	// Добавление коммента в краудфандинг проект
 	47: "CfComment",
+	// Отправление средства в краудфандинг проект
 	48: "CfSendDc",
+	// Смена аватарки у юзера
 	49: "UserAvatar",
+	// Изменение категории краудфандинг проекта
 	50: "CfProjectChangeCategory",
+	// Передача чужих обстоятельств другому юзеру (продажа кредита)
 	51: "ChangeCreditor",
+	// Удаление кредита (может сделать только кредитор)
 	52: "DelCredit",
+	// Погашение кредита
 	53: "RepaymentCredit",
+	// Изменение % от поступающих средств, которые будут тратиться на погашение кредита (можно только увеличить)
 	54: "ChangeCreditPart",
+	// Выборы нового Админа
 	55: "NewAdmin",
-	// по истечении 30 дней после поступления запроса о восстановлении утерянного ключа, админ может изменить ключ юзера
+	// По истечении 30 дней после поступления запроса о восстановлении утерянного ключа, админ может изменить ключ юзера
 	56: "AdminChangePrimaryKey",
-	// юзер разрешает или отменяет разрешение на смену своего ключа админом
+	// Юзер разрешает или отменяет разрешение на смену своего ключа админом
 	57: "ChangeKeyActive",
-	// юзер отменяет запрос на смену ключа
+	// Юзер отменяет запрос на смену ключа
 	58: "ChangeKeyClose",
-	// юзер отправляет с другого акка запрос на получение доступа к акку, ключ к которому он потерял
+	// Юзер отправляет с другого акка запрос на получение доступа к акку, ключ к которому он потерял
 	59: "ChangeKeyRequest",
-	// юзер решил стать арбитром или же действующий арбитр меняет комиссии
+	// Юзер решил стать арбитром или же действующий арбитр меняет комиссии
 	60: "ChangeArbitratorConditions",
-	// продавец меняет % и кол-во дней для новых сделок.
+	// Продавец меняет % и кол-во дней для новых сделок.
 	61: "ChangeSellerHoldBack",
-	// покупатель или продавец указал список арбитров, кому доверяет
+	// Покупатель или продавец указал список арбитров, кому доверяет
 	62: "ChangeArbitratorList",
-	// покупатель хочет манибэк
+	// Покупатель хочет манибэк
 	63: "MoneyBackRequest",
-	// магазин добровольно делает манибэк или же арбитр делает манибек
+	// Магазин добровольно делает манибэк или же арбитр делает манибек
 	64: "MoneyBack",
-	// арбитр увеличивает время манибэка, чтобы успеть разобраться в ситуации
+	// Арбитр увеличивает время манибэка, чтобы успеть разобраться в ситуации
 	65: "ChangeMoneyBackTime",
-	// юзер меняет url центров сертификации, где хранятся его приватные ключи
+	// Юзер меняет url центров сертификации, где хранятся его приватные ключи
 	66: "ChangeCa",
-	// бан юзера в чате
+	// Бан юзера в чате
 	67: "AdminBanUnbanChat",
-	// голосование за биржи
+	// Голосование за биржи
 	68: "VotesExchange",
-	// создание авто-платежа
+	// Создание авто-платежа
 	69: "NewAutoPayment",
-	// выполнение авто-платежа с ключем ноды
+	// Выполнение авто-платежа с ключом ноды
 	70: "AutoPayment",
-	// удаление авто-платежа
+	// Удаление авто-платежа
 	71: "DelAutoPayment",
-	// админ пула включает или выключает режим пула
+	// Админ пула включает или выключает режим пула
 	72: "SwitchPool",
-	// админ пула удаляет юзера со своего пула
+	// Админ пула удаляет юзера со своего пула
 	73: "DelUserFromPool",
-	// юзер меняет пул
+	// Юзер меняет пул
 	74: "ChangePool",
-	// новая ограниченная обещанная сумма
+	// Новая ограниченная обещанная сумма (бонус-лимит)
 	75: "NewRestrictedPromisedAmount",
-	// добавление акка соц. сети
+	// Добавление акка соц. сети
 	76: "UpgradeUser",
-	// голоса майнеров за нового с указанной соц. сетью
+	// Голоса майнеров за нового с указанной соц. сетью
 	77: "VotesSnUser",
-	// снятие набежавших dUSD с ограниченной обещанной
+	// Снятие набежавших dUSD с ограниченной обещанной (бонус-лимита)
 	78: "MiningSn",
 }
 
