@@ -75,6 +75,13 @@ h3 {
 		line-height:20px;
 	}
 }
+h4 {
+	@include text($med, 16px, $black, 22px, none);
+	font-weight:normal;
+	text-align:center;
+	margin-top:0rem;
+	margin-bottom:0rem;
+}
 @include min($tablet) {
 	.container-fluid {
 		margin-left:40px;
@@ -86,6 +93,14 @@ h3 {
 		left:120px;
 		max-width:1260px;
 		margin:0px auto;
+	}
+}
+.tooltip-inner {
+	@include max($mobile) {
+		max-width:110px;
+		font-size:11px;
+		line-height:14px;
+		padding:3px 5px 5px 5px;
 	}
 }
 .table_fix {
@@ -627,7 +642,32 @@ h3 {
 			}
 		}
 		.help {
-			display:none;
+			cursor:help;
+			position:absolute;
+			right:0px;
+			top:0.9375rem;
+			width:30px;
+			height:30px;
+			color:$black;
+			line-height:30px;
+			text-align:center;
+			&:before {
+				position:relative;
+				z-index:2;
+			}
+			&:after {
+				content:'';
+				position:absolute;
+				left:50%;
+				top:50%;
+				width:14px;
+				height:14px;
+				border-radius:50%;
+				background-color:$lgray;
+				margin-left:-7px;
+				margin-top:-7px;
+				z-index:1;
+			}
 		}
 	}
 }
@@ -849,6 +889,9 @@ header {
 				ul {
 					left:0px;
 				}
+				.wallet_balances {
+					left:0px;
+				}
 				.logo {
 					width:240px;
 					a {
@@ -859,9 +902,15 @@ header {
 					}
 				}
 			}
+			.wallet_balances {
+				left:-240px;
+			}
 		}
 		@include min($desktop) {
 			width:240px;
+			.wallet_balances {
+				left:0px;
+			}
 		}
 		.login {
 			display:block;
@@ -1169,6 +1218,42 @@ header {
 				}
 			}
 		}
+	}
+}
+.wallet_balances {
+	position:relative;
+	left:0px;
+	width:220px;
+	margin:0px auto;
+	transition: {
+		property:left;
+		duration:.2s;
+	}
+	.card {
+		border-radius:0.25rem 0.25rem 0rem 0rem;
+		margin-top:1rem;
+	}
+	.card-header {
+		padding:0px;
+		padding-top:0.25rem;
+		padding-bottom:0.25rem;
+	}
+	.card-block {
+		overflow:hidden;
+		background-color:lighten($lgray, 5%);
+		padding:0px;
+		padding-top:0.25rem;
+		padding-bottom:0.25rem;
+		@include max($mobile) {
+			font-size:14px;
+			line-height:16px;
+		}
+	}
+	.text-xs-right {
+		padding-right:0px;
+	}
+	.text-xs-left {
+		font-family:$med;
 	}
 }
 /* Content
