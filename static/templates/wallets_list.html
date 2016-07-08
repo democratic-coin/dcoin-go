@@ -152,9 +152,14 @@ $('#goto_confirm').bind('click', function () {
 	$("#confirm_commission").text($("#commission").val());
 	$("#confirm_comment").text($("#comment").val());
 	$("#wallets_confirm").css("display", "block");
-	$("#wallets").css("display", "none");
+	$("#send_to_wallet").css("display", "none");
 
 });
+$('#wallets_confirm .back').bind('click', function () {
+	$("#wallets_confirm").css("display", "none");
+	$("#send_to_wallet").css("display", "block");
+});
+
 
 
 $('#next, #cf_next').bind('click', function () {
@@ -467,18 +472,155 @@ function foattoupper(x) {
 	<div class="panel-body" style="padding: 0">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" id="myTab">
-			<li class="nav-item"><a class="nav-link active" href="#walletsList" data-toggle="tab">{{.Lang.send_to_wallet}}</a></li>
-			<li class="nav-item" style="display:none" id="cf_tab"><a class="nav-link" href="#send_to_cf" data-toggle="tab">{{.Lang.send_to_cf_project}}</a></li>
-			<li class="nav-item"><a class="nav-link" href="#currencyExchange">{{.Lang.currency_exchange1}}</a></li>
+			<li class="nav-item"><a class="nav-link active" href="#walletsList" data-toggle="tab"><span class="glyphicon glyphicon-fees-payments"></span><i>{{.Lang.send_to_wallet}}</i></a></li>
+			<!--<li class="nav-item" style="display:none" id="cf_tab"><a class="nav-link" href="#send_to_cf" data-toggle="tab">{{.Lang.send_to_cf_project}}</a></li>-->
+			<li class="nav-item"><a class="nav-link" href="#currencyExchange"><span class="glyphicon glyphicon-transfer"></span><i>{{.Lang.currency_exchange1}}</i></a></li>
 			<!--<li class="nav-item"><a class="nav-link" href="#credits">{{.Lang.credits}}</a></li>
 			<li class="nav-item"><a class="nav-link" href="#autoPayments">{{.Lang.auto_payments}}</a></li>
 			<li class="nav-item"><a class="nav-link" href="#arbitration">{{.Lang.arbitration}}</a></li>-->
 		</ul>
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div class="tab-pane fade active in" id="send_to_wallet">
+			<div class="tab-pane fade active in">
 				<div>
-					<table class="table" style="max-width: 400px">
+					<div id="send_to_wallet" class="payments">
+						<form class="form">
+							<strong class="line">*******************************</strong>
+							<div class="head">
+								<strong class="line">*<br />*<br />*</strong>
+								{{.Lang.send_to_wallet}}
+								<strong class="line">*<br />*<br />*</strong>
+							</div>
+							<strong class="line">*******************************</strong>
+							<fieldset class="form-group">
+								<label for="currency_id"><span>{{.Lang.currency}}</span><i></i></label>
+								<select id="currency_id" class="c-select form-control">
+									{{if .Wallets}}
+										{{range $id, $data := .Wallets}}
+										/{{$data.CurrencyId}}/
+											<option value='{{$data.CurrencyId}}'>{{makeCurrencyName $data.CurrencyId}}{{index $.CurrencyList $data.CurrencyId}} ({{$data.Amount}})</option>
+										{{end}}
+									{{else}}
+										<option>{{.Lang.you_do_not_have_the_coins}}</option>
+									{{end}}
+								</select>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="to_user_id"><span>{{.Lang.to_account}}</span><i></i></label>
+								<input id="to_user_id" class="form-control" type="text">
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="amount"><span>{{.Lang.amount}}</span><i></i></label>
+								<input id="amount" class="form-control" type="text">
+							</fieldset>
+							<fieldset class="form-group">
+								<label><span>{{.Lang.commission}}</span><i></i></label>
+								<input id="commission" class="form-control" type="text" disabled>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="comment"><span>{{.Lang.note}}</span><i></i></label>
+								<input id="comment" class="form-control" type="text">
+							</fieldset>
+							<strong class="line" style="margin-top:1rem;">*******************************</strong>
+							<fieldset class="form-group" style="display:none;">
+								<label for="arbitration"><span>{{.Lang.arbitration}}</span><i></i></label>
+								{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}
+							</fieldset>
+						</form>
+						<center><button id="goto_confirm" class="btn btn-info" type="button" style="margin-top:1rem;">{{.Lang.next}}</button></center>
+					</div>
+					<div id="wallets_confirm" class="payments" style="display:none;">
+						<div class="form">
+							<strong class="line">*******************************</strong>
+							<div class="head">
+								<strong class="line">*<br />*<br />*</strong>
+								{{.Lang.check_data}}
+								<strong class="line">*<br />*<br />*</strong>
+							</div>
+							<strong class="line">*******************************</strong>
+							<fieldset class="form-group">
+								<label for="to_user_id"><span>{{.Lang.currency}}</span><i></i></label>
+								<strong id="confirm_currency"></strong>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="to_user_id"><span>{{.Lang.to_account}}</span><i></i></label>
+								<strong id="confirm_to_user_id"></strong>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="amount"><span>{{.Lang.amount}}</span><i></i></label>
+								<strong id="confirm_amount"></strong>
+							</fieldset>
+							<fieldset class="form-group">
+								<label><span>{{.Lang.commission}}</span><i></i></label>
+								<strong id="confirm_commission"></strong>
+							</fieldset>
+							<fieldset class="form-group">
+								<label for="comment"><span>{{.Lang.note}}</span><i></i></label>
+								<strong id="confirm_comment"></strong>
+							</fieldset>
+							<strong class="line" style="margin-top:1rem;">*******************************</strong>
+						</div>
+						<center>
+							<button type="button" class="btn btn-info back" style="margin-top:1rem;"><span class="glyphicon glyphicon-arrow-left" style="position:relative; top:3px;"></span></button>
+							<button id="next" class="btn btn-info" type="button" style="margin-left:5px; margin-top:1rem;">{{.Lang.send_to_net}}</button>
+						</center>
+						<!--<h3>{{.Lang.check_data}}</h3>
+						<div>
+							<table class="table confirm" style="width: 300px; margin-top: 20px">
+								<tbody>
+								<tr><td>{{.Lang.currency}}</td><td id="confirm_currency"></td></tr>
+								<tr><td>{{.Lang.to_account}}</td><td id="confirm_to_user_id"></td></tr>
+								<tr><td>{{.Lang.amount}}</td><td id="confirm_amount"></td></tr>
+								<tr><td>{{.Lang.commission}}</td><td id="confirm_commission"></td></tr>
+								<tr><td>{{.Lang.note}}</td><td id="confirm_comment"></td></tr>
+								<tr class="arbitration_tr" style="display: none"><td style="vert-align: middle">{{.Lang.arbitrator}}</td><td id="arbitration_trust_list_html"></td></tr>
+								<tr id="arbitrator_tr_commission" style="display: none"><td>{{.Lang.arbitrator_commission}}</td><td id="arbitrator_commission_html" class="arbitrator_commission"></td></tr>
+								<tr id="arbitration_imposible" style="display: none"><td colspan="2">{{.Lang.arbitration_imposible}}</td></tr>
+								</tbody>
+							</table>
+					
+							<p id="arbitrator_link_add" style="display: none"><a href="#" id="add_arbitrator" style="margin-left: 8px">{{.Lang.add_arbitrator}}</a></p>
+					
+						</div>
+						<div style="float: left; margin-left: 10px; display: none" id="seller_info_div">
+							<style>
+								.seller_info td {text-align: center; padding-left:5px; padding-right:5px}
+								.seller_info {margin:auto}
+								#seller_turnover, #seller_turnover_m, #buyers_count_m, #buyers_miners_count_m, #buyers_count, #buyers_miners_count{font-size: 30px}
+								.table_line_height{line-height: 20px}
+								.table_margin{display: block; margin-top:15px}
+							</style>
+							<h4 style="text-align: center">{{.Lang.seller_info}}</h4>
+							<table class="seller_info">
+					
+								<tr><td colspan="2" style="font-weight: bold">{{.Lang.turnover}}</td></tr>
+								<tr><td>{{.Lang.month}}<br><span id="seller_turnover_m"></span></td><td>{{.Lang.entire}}<br><span id="seller_turnover"></span></td></tr>
+					
+								<tr><td colspan="2" style="font-weight: bold; padding-top:10px">{{.Lang.number_of_customers}}</td></tr>
+								<tr>
+									<td>
+										{{.Lang.month}}<br>
+										<span class="table_line_height"><span id="buyers_count_m" class="table_margin"></span>{{.Lang.anonim}}</span><br>
+										<span class="table_line_height"><span id="buyers_miners_count_m" class="table_margin"></span>{{.Lang.pers}}</span>
+									</td>
+									<td>
+										{{.Lang.entire}}<br>
+										<span class="table_line_height"><span id="buyers_count" class="table_margin"></span>{{.Lang.anonim}}</span><br>
+										<span class="table_line_height"><span id="buyers_miners_count" class="table_margin"></span>{{.Lang.pers}}</span>
+									</td>
+								</tr>
+					
+							</table>
+							<p style="margin-top: 10px">
+								{{.Lang.hold_for_money_back}}: <span id="hold_amount"></span> <span class="currency_name"></span><br>
+								{{.Lang.hold_back}}: <span id="seller_hold_back_pct"></span>% {{.Lang.for}} <span id="arbitration_days_refund"></span> {{.Lang.days}}<br>
+							</p>
+						</div>
+						<div class="clearfix"></div>
+						<div style="text-align: center; max-width: 550px; margin-top: 20px"><button type="button" class="btn btn-link" onclick="dc_navigate('walletsList')">{{.Lang.back}}</button> <button id="next" class="btn btn-outline btn-primary" type="button" style="margin-left: 7px">{{.Lang.send_to_net}}</button></div>
+						<div class="clearfix"></div>-->
+					</div>
+					<!--<table class="table" style="max-width: 400px">
 						<tr><td>{{.Lang.currency}}</td><td>
 
 							<select id="currency_id" class="c-select form-control">
@@ -496,9 +638,8 @@ function foattoupper(x) {
 						<tr><td>{{.Lang.commission}}</td><td><input class="form-control" type="text" id="commission" {{if .Community}}readonly="1"{{end}}></td></tr>
 						<tr><td>{{.Lang.note}}</td><td><input class="form-control" type="text" id="comment"></td></tr>
 						<tr><td>{{.Lang.arbitration}}</td><td>{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}</td></tr>
-					</table>
-					<center><button id="goto_confirm" class="btn btn-outline btn-primary" type="button" style="margin-top:1rem;">{{.Lang.next}}</button></center>
-					{{if .Wallets}}
+					</table>-->
+					<!--{{if .Wallets}}
 						<h3>{{.Lang.balances}}</h3>
 						<table class="table" style="max-width:400px">
 						<tr><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th></tr>
@@ -513,7 +654,7 @@ function foattoupper(x) {
 							</tr>
 						{{end}}
 						</table>
-					{{end}}
+					{{end}}-->
 				</div>
 				<div style="overflow: auto;display: none" >
 					<div class="panel panel-primary" style="margin-left: 40px; max-width: 400px">
@@ -628,64 +769,6 @@ function foattoupper(x) {
 
 </div>
 <div style="display:none;" class="alert alert-danger alert-dismissable" id="alerterror"></div>
-
-<div id="wallets_confirm" style="margin: auto; max-width: 600px; display: none">
-	<h3>{{.Lang.check_data}}</h3>
-	<div>
-		<table class="table confirm" style="width: 300px; margin-top: 20px">
-			<tbody>
-			<tr><td>{{.Lang.currency}}</td><td id="confirm_currency"></td></tr>
-			<tr><td>{{.Lang.to_account}}</td><td id="confirm_to_user_id"></td></tr>
-			<tr><td>{{.Lang.amount}}</td><td id="confirm_amount"></td></tr>
-			<tr><td>{{.Lang.commission}}</td><td id="confirm_commission"></td></tr>
-			<tr><td>{{.Lang.note}}</td><td id="confirm_comment"></td></tr>
-			<tr class="arbitration_tr" style="display: none"><td style="vert-align: middle">{{.Lang.arbitrator}}</td><td id="arbitration_trust_list_html"></td></tr>
-			<tr id="arbitrator_tr_commission" style="display: none"><td>{{.Lang.arbitrator_commission}}</td><td id="arbitrator_commission_html" class="arbitrator_commission"></td></tr>
-			<tr id="arbitration_imposible" style="display: none"><td colspan="2">{{.Lang.arbitration_imposible}}</td></tr>
-			</tbody>
-		</table>
-
-		<p id="arbitrator_link_add" style="display: none"><a href="#" id="add_arbitrator" style="margin-left: 8px">{{.Lang.add_arbitrator}}</a></p>
-
-	</div>
-	<div style="float: left; margin-left: 10px; display: none" id="seller_info_div">
-		<style>
-			.seller_info td {text-align: center; padding-left:5px; padding-right:5px}
-			.seller_info {margin:auto}
-			#seller_turnover, #seller_turnover_m, #buyers_count_m, #buyers_miners_count_m, #buyers_count, #buyers_miners_count{font-size: 30px}
-			.table_line_height{line-height: 20px}
-			.table_margin{display: block; margin-top:15px}
-		</style>
-		<h4 style="text-align: center">{{.Lang.seller_info}}</h4>
-		<table class="seller_info">
-
-			<tr><td colspan="2" style="font-weight: bold">{{.Lang.turnover}}</td></tr>
-			<tr><td>{{.Lang.month}}<br><span id="seller_turnover_m"></span></td><td>{{.Lang.entire}}<br><span id="seller_turnover"></span></td></tr>
-
-			<tr><td colspan="2" style="font-weight: bold; padding-top:10px">{{.Lang.number_of_customers}}</td></tr>
-			<tr>
-				<td>
-					{{.Lang.month}}<br>
-					<span class="table_line_height"><span id="buyers_count_m" class="table_margin"></span>{{.Lang.anonim}}</span><br>
-					<span class="table_line_height"><span id="buyers_miners_count_m" class="table_margin"></span>{{.Lang.pers}}</span>
-				</td>
-				<td>
-					{{.Lang.entire}}<br>
-					<span class="table_line_height"><span id="buyers_count" class="table_margin"></span>{{.Lang.anonim}}</span><br>
-					<span class="table_line_height"><span id="buyers_miners_count" class="table_margin"></span>{{.Lang.pers}}</span>
-				</td>
-			</tr>
-
-		</table>
-		<p style="margin-top: 10px">
-			{{.Lang.hold_for_money_back}}: <span id="hold_amount"></span> <span class="currency_name"></span><br>
-			{{.Lang.hold_back}}: <span id="seller_hold_back_pct"></span>% {{.Lang.for}} <span id="arbitration_days_refund"></span> {{.Lang.days}}<br>
-		</p>
-	</div>
-	<div class="clearfix"></div>
-	<div style="text-align: center; max-width: 550px; margin-top: 20px"><button type="button" class="btn btn-link" onclick="dc_navigate('walletsList')">{{.Lang.back}}</button> <button id="next" class="btn btn-outline btn-primary" type="button" style="margin-left: 7px">{{.Lang.send_to_net}}</button></div>
-	<div class="clearfix"></div>
-</div>
 
 {{ template "signatures". }}
 
