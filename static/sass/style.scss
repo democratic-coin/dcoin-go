@@ -75,13 +75,6 @@ h3 {
 		line-height:20px;
 	}
 }
-h4 {
-	@include text($med, 16px, $black, 22px, none);
-	font-weight:normal;
-	text-align:center;
-	margin-top:0rem;
-	margin-bottom:0rem;
-}
 @include min($tablet) {
 	.container-fluid {
 		margin-left:40px;
@@ -1234,9 +1227,14 @@ header {
 		margin-top:1rem;
 	}
 	.card-header {
+		@include text($med, 16px, $white, 22px, none);
+		font-weight:normal;
+		text-align:center;
 		padding:0px;
 		padding-top:0.25rem;
 		padding-bottom:0.25rem;
+		margin-top:0rem;
+		margin-bottom:0rem;
 	}
 	.card-block {
 		overflow:hidden;
