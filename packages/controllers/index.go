@@ -162,12 +162,28 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	setLang := r.FormValue("lang")
 
+	modal, err := static.Asset("static/templates/modal.html")
+	if err != nil {
+		log.Error("%v", err)
+	}
+	
+	funcMap := template.FuncMap{
+		"noescape": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	}
+	
 	data, err := static.Asset("static/templates/index.html")
-	t := template.New("template")
+	t := template.New("template").Funcs(funcMap)
 	t, err = t.Parse(string(data))
 	if err != nil {
 		log.Error("%v", err)
 	}
+	t, err = t.Parse(string(modal))
+	if err != nil {
+		log.Error("%v", err)
+	}
+	
 	b := new(bytes.Buffer)
 	err = t.Execute(b, &index{
 		Upgrade3:    upgrade3,
