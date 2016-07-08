@@ -11,6 +11,10 @@ func  (p *Parser) isNotify(userId int64) bool {
 	if val,ok := p.ConfigIni["notify"]; ok && val == `1`{
 		return true
 	}
+	if myBlockId, err := utils.DB.GetMyBlockId(); err != nil || myBlockId > p.BlockData.BlockId {
+		return false
+	}
+	
 	myUsersIds,_ := utils.DB.GetCommunityUsers()
 	if len(myUsersIds) == 0 {
 		if myUserId,_ := utils.DB.GetMyUserId(""); myUserId > 0 {
