@@ -83,6 +83,7 @@
 // static/images/pen.png
 // static/images/us-ru.png
 // static/images/wallet.png
+// static/images/wallet_border.png
 // static/img/alert.png
 // static/img/anonim.png
 // static/img/blank.png
@@ -360,6 +361,7 @@
 // static/templates/e_redirect.html
 // static/templates/exchange_admin.html
 // static/templates/exchange_support.html
+// static/templates/exchange_user.html
 // static/templates/first_select.html
 // static/templates/for_repaid_fix.html
 // static/templates/holidays_list.html
@@ -1930,6 +1932,24 @@ func staticImagesUsRuPng() (*asset, error) {
 func staticImagesWalletPng() (*asset, error) {
 	path := "static/images/wallet.png"
 	name := "static/images/wallet.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImagesWallet_borderPng reads file data from disk. It returns an error on failure.
+func staticImagesWallet_borderPng() (*asset, error) {
+	path := "static/images/wallet_border.png"
+	name := "static/images/wallet_border.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -6930,6 +6950,24 @@ func staticTemplatesExchange_supportHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesExchange_userHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesExchange_userHtml() (*asset, error) {
+	path := "static/templates/exchange_user.html"
+	name := "static/templates/exchange_user.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesFirst_selectHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesFirst_selectHtml() (*asset, error) {
 	path := "static/templates/first_select.html"
@@ -8217,6 +8255,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/images/pen.png": staticImagesPenPng,
 	"static/images/us-ru.png": staticImagesUsRuPng,
 	"static/images/wallet.png": staticImagesWalletPng,
+	"static/images/wallet_border.png": staticImagesWallet_borderPng,
 	"static/img/alert.png": staticImgAlertPng,
 	"static/img/anonim.png": staticImgAnonimPng,
 	"static/img/blank.png": staticImgBlankPng,
@@ -8494,6 +8533,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/e_redirect.html": staticTemplatesE_redirectHtml,
 	"static/templates/exchange_admin.html": staticTemplatesExchange_adminHtml,
 	"static/templates/exchange_support.html": staticTemplatesExchange_supportHtml,
+	"static/templates/exchange_user.html": staticTemplatesExchange_userHtml,
 	"static/templates/first_select.html": staticTemplatesFirst_selectHtml,
 	"static/templates/for_repaid_fix.html": staticTemplatesFor_repaid_fixHtml,
 	"static/templates/holidays_list.html": staticTemplatesHolidays_listHtml,
@@ -8693,6 +8733,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"pen.png": &bintree{staticImagesPenPng, map[string]*bintree{}},
 			"us-ru.png": &bintree{staticImagesUsRuPng, map[string]*bintree{}},
 			"wallet.png": &bintree{staticImagesWalletPng, map[string]*bintree{}},
+			"wallet_border.png": &bintree{staticImagesWallet_borderPng, map[string]*bintree{}},
 		}},
 		"img": &bintree{nil, map[string]*bintree{
 			"alert.png": &bintree{staticImgAlertPng, map[string]*bintree{}},
@@ -8998,6 +9039,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"e_redirect.html": &bintree{staticTemplatesE_redirectHtml, map[string]*bintree{}},
 			"exchange_admin.html": &bintree{staticTemplatesExchange_adminHtml, map[string]*bintree{}},
 			"exchange_support.html": &bintree{staticTemplatesExchange_supportHtml, map[string]*bintree{}},
+			"exchange_user.html": &bintree{staticTemplatesExchange_userHtml, map[string]*bintree{}},
 			"first_select.html": &bintree{staticTemplatesFirst_selectHtml, map[string]*bintree{}},
 			"for_repaid_fix.html": &bintree{staticTemplatesFor_repaid_fixHtml, map[string]*bintree{}},
 			"holidays_list.html": &bintree{staticTemplatesHolidays_listHtml, map[string]*bintree{}},
