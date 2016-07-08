@@ -1584,28 +1584,34 @@ header {
 .payments {
 	max-width:402px;
 	margin:0px auto;
-	&:before {
-		content:'';
-		display:block;
+	.top {
+		position:relative;
 		height:3px;
 		background-image:url(../images/wallet_border.png);
 		background-repeat:repeat-x;
 		background-position:center 0px;
+		z-index:2;
 	}
-	&:after {
-		content:'';
-		display:block;
+	.bottom {
+		position:relative;
 		height:3px;
 		background-image:url(../images/wallet_border.png);
 		background-repeat:repeat-x;
 		background-position:center -3px;
+		z-index:2;
+	}
+	center {
+		position:relative;
+		z-index:2;
 	}
 	.form {
+		position:relative;
 		box-shadow:0px 30px 50px #73756e;
 		background-color:$white;
 		padding-top:1rem;
 		padding-left:1rem;
 		padding-right:1rem;
+		z-index:1;
 		.head {
 			position:relative;
 			height:60px;
