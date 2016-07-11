@@ -40,7 +40,7 @@ h1 {
 	@include text($reg, 40px, $black, 50px, none);
 	font-weight:normal;
 	margin-bottom:1rem;
-	@include max($mobile) {
+	@include max($tablet) {
 		position:fixed;
 		left:0px;
 		top:0px;
@@ -121,7 +121,7 @@ h3 {
 	}
 }
 .tooltip-inner {
-	@include max($mobile) {
+	@include max($tablet) {
 		max-width:110px;
 		font-size:11px;
 		line-height:14px;
@@ -577,7 +577,7 @@ h3 {
 			display:block;
 			height:250px;
 			background-color:$mblue;
-			@include max($mobile) {
+			@include max($tablet) {
 				height:125px;
 			}
 			.glyphicon {
@@ -601,7 +601,7 @@ h3 {
 					height:100px;
 					margin-top:-75px;
 				}
-				@include max($mobile) {
+				@include max($tablet) {
 					font-size:50px;
 					line-height:50px;
 					&:before {
@@ -638,7 +638,7 @@ h3 {
 						duration:.3s;
 					}
 				}
-				@include max($mobile) {
+				@include max($tablet) {
 					height:30px;
 					font-size:11px;
 					line-height:30px;
