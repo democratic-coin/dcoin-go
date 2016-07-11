@@ -130,29 +130,18 @@
 			</div>
 		</li>
 	</ul>
-	{{if .Wallets}}
-		<div class="wallet_balances">
-			<div class="card card-info card-inverse">
-				<h4 class="card-header">{{.Lang.available_balance}}</h4>
-				<div class="card-block">
-					{{range $id, $data := .Wallets}}
-						<div class="col-xs-7 text-xs-right">{{$data.Amount}}</div>
-						<div class="col-xs-5 text-xs-left">d{{index $.CurrencyList $data.CurrencyId}}</div>
-					{{end}}
-				</div>
-			</div>
-		</div>
-	{{end}}
 </nav>
 <div class="mainmenu container-fluid">
 	<ul>
 		<!--<li><a class="item" href="#"><span class="glyphicon glyphicon-map-marker"></span><i>{{.Lang.miners_map}}</i></a></li>
-		<li><a class="item" href="#"><span class="glyphicon glyphicon-chat"></span><i>{{.Lang.chat}}</i></a></li>-->
-		<li><a class="item" href="#notificationList"><span class="glyphicon glyphicon-bell{{if .Notifications}} unread{{end}}"></span><i>{{.Lang.sms_and_email_notifications}}</i><span id="nfy_counter" class="notifications">{{if .Notifications}}{{.Notifications}}{{end}}</span></a></li>
+		<li><a class="item" href="#"><span class="glyphicon glyphicon-chat"></span><i>{{.Lang.chat}}</i></a></li>
+		<li><a class="item" href="#notificationList"><span class="glyphicon glyphicon-bell{{if .Notifications}} unread{{end}}"></span><i>{{.Lang.sms_and_email_notifications}}</i><span id="nfy_counter" class="notifications">{{if .Notifications}}{{.Notifications}}{{end}}</span></a></li>-->
+		<li><a class="item" href="#home"><span class="glyphicon glyphicon-home"></span><i>{{.Lang.home}}</i></a></li>
 		<li><a class="item" href="#statistic"><span class="glyphicon glyphicon-charts"></span><i>{{.Lang.statistic}}</i></a></li>
 		<li><a class="item" href="{{.Lang.wiki_url}}" onclick='THRUST.remote.send("{{.Lang.wiki_url}}")' target="_blank"><span class="social social-wikipedia"></span><i>{{.Lang.wiki}}</i></a></li>
 		<li><a class="item" href="mailto:admin@dcoin.club" onclick='THRUST.remote.send("mailto:admin@dcoin.club")'><span class="glyphicon glyphicon-headset"></span><i>{{.Lang.support}}</i></a></li>
 		<li class="login">
+			<a class="item" href="#notificationList" onClick="HideMenu();" title="{{.Lang.sms_and_email_notifications}}"><span class="glyphicon glyphicon-bell{{if .Notifications}} unread{{end}}"></span><span id="nfy_counter" class="notifications">{{if .Notifications}}{{.Notifications}}{{end}}</span></a>
 			<div class="dropdown">
 				<a id="Login" class="dropdown-toggle" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="img_avatar"></span>{{.Name}}</a>
 				<div class="dropdown-menu" aria-labelledby="Login">
@@ -169,8 +158,8 @@
 					<div class="language dropdown-item">
 						<span class="flag flag_{{.LangInt}}">&nbsp;</span>{{.Lang.languages}}
 						<div class="languages dropdown-menu">
-							<a class="lng dropdown-item" href="#" data-id="1"><span class="flag flag_1">&nbsp;</span>English</a>
-							<a class="lng dropdown-item" href="#" data-id="42"><span class="flag flag_42">&nbsp;</span>Русский</a>
+							<a class="lng dropdown-item" href="#" data-id="1" onClick="HideMenu();"><span class="flag flag_1">&nbsp;</span>English</a>
+							<a class="lng dropdown-item" href="#" data-id="42" onClick="HideMenu();"><span class="flag flag_42">&nbsp;</span>Русский</a>
 						</div>
 					</div>
 					<a class="dropdown-item" href="#" onclick="logout()"><span class="glyphicon glyphicon-exit"></span>{{.Lang.logout}}</a>

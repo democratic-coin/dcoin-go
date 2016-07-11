@@ -1,4 +1,47 @@
 {{define "statistic"}}
+<style>
+	.control-label {
+		display:block;
+		padding:0px;
+		margin-bottom:0rem;
+	}
+	.form-group {
+		display:flex;
+		font-size:0px;
+	}
+	.form-group div {
+		flex-grow:1;
+		display:inline-block;
+		box-sizing:border-box;
+		vertical-align:top;
+	}
+	.form-control {
+		border-radius:5px 0px 0px 5px;
+	}
+	#find_user_info {
+		border-radius:0px 5px 5px 0px;
+	}
+	@media screen and (max-width: 480px) {
+		form {
+			flex-flow:row wrap;
+			justify-content: flex-end;
+		}
+		#sn_type {
+			width:50%;
+			font-size:11px;
+		}
+		#sn_url_id {
+			width:50%;
+			border-radius:0px 5px 5px 0px;
+			border-right-width:1px;
+			font-size:11px;
+		}
+		#save {
+			border-radius:5px;
+			margin-top:10px !important;
+		}
+	}
+</style>
 <script>
 
 	$('#profileclose').bind('click', function () {
@@ -21,7 +64,16 @@
 </div>
 
 <h1 class="page-header">{{.Lang.statistic}}</h1>
-
+<div class="form-horizontal" style="max-width:750px; margin:0px auto;">
+	<label class="control-label" for="user_info_id">{{.Lang.user_info}}</label>
+	<div class="form-group">
+		<div>
+			<input id="user_info_id" name="user_info_id" class="form-control" type="text">
+			<small class="text-muted">{{.Lang.user_info_text}}</small>
+		</div>
+		<button id="find_user_info" name="find_user_info" class="btn btn-primary">{{.Lang.find}}</button>
+	</div>
+</div>
 {{if .UserInfoId}}
 	<h3>User ID: {{.UserInfoId}}</h3>
 	<h3>{{.Lang.balances}}</h3>
@@ -83,23 +135,6 @@
 	{{end}}
 
 {{end}}
-
-<div class="form-horizontal" style="max-width: 750px">
-	<fieldset>
-		<div class="form-group">
-			<label class="col-md-4 control-label" for="user_info_id">{{.Lang.user_info}}</label>
-			<div class="col-md-4">
-				<div class="input-group">
-					<input id="user_info_id" name="user_info_id" class="form-control" type="text">
-					<div class="input-group-btn">
-						<button id="find_user_info" name="find_user_info" class="btn btn-primary">{{.Lang.find}}</button>
-					</div>
-				</div>
-				<span class="help-block">{{.Lang.user_info_text}}</span>
-			</div>
-		</div>
-	</fieldset>
-</div>
 
 
 <h3>{{.Lang.general}}</h3>
