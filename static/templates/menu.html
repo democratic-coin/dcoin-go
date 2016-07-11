@@ -104,6 +104,10 @@
 			<div class="dropdown">
 				<a id="Settings" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-settings"></span>{{.Lang.settings}}</a>
 				<div class="dropdown-menu sub" aria-labelledby="Settings">
+					{{if .MinerId}}
+					<a class="dropdown-item" href="#changeGeolocation" onClick="HideMenu();">{{.Lang.geolocation}}</a>
+					<a class="dropdown-item" href="#holidaysList" onClick="HideMenu();">{{.Lang.holidays}}</a>
+					{{end}}
 					{{if or .PoolAdmin (not .Community)}}<a class="dropdown-item" href="#changeNodeKey" onClick="HideMenu();">{{.Lang.change_node_key}}</a>{{end}}
 					<a class="dropdown-item" href="#changePrimaryKey" onClick="HideMenu();">{{.Lang.change_master_key}}</a>
 					<a class="dropdown-item" href="#restoringAccess" onClick="HideMenu();">{{.Lang.restoring_access}}</a>
