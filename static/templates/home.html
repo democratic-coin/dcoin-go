@@ -10,6 +10,12 @@
 	}
 </style>
 <script type="text/javascript">
+$(document).ready(function() {
+	if ($(".wallet .table-transactions .row").length > 6) {
+		$(".wallet .table-transactions .row").eq(5).nextAll().remove();
+	}
+});
+
 {{if .StatDays}}
 $(function () {
 	var date = new Date();
@@ -189,17 +195,15 @@ $(function () {
 						<div class="col-xs-3">{{.Lang.amount}}</div>
 						<div class="col-xs-2">{{.Lang.status}}</div>
 					</div>
-					<div style="overflow:hidden; max-height:150px;">
-						{{range $key, $data := .MyDcTransactions}}
-						<div class="row">
-							<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
-							<div class="col-xs-3">{{index $.Names ($data.type)}} <strong>{{$data.type_id}}</strong></div>
-							<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
-							<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
-							<div class="col-xs-2">{{$data.status}}</div>
-						</div>
-						{{end}}
+					{{range $key, $data := .MyDcTransactions}}
+					<div class="row">
+						<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
+						<div class="col-xs-3">{{index $.Names ($data.type)}} <strong>{{$data.type_id}}</strong></div>
+						<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
+						<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
+						<div class="col-xs-2">{{$data.status}}</div>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 			<a class="head" href="#walletsList"><em>{{.Lang.wallets}}</em></a>
