@@ -726,10 +726,50 @@ header {
 		}
 	}
 	.login {
+		position:relative;
 		display:inline-block;
 		height:50px;
 		font-size:0px;
 		line-height:50px;
+		.item {
+			display:inline-block;
+			position:absolute !important;
+			left:-30px;
+			top:0px;
+			font-size:24px;
+			.unread {
+				color:$red !important;
+			}
+			.notifications {
+				position:absolute;
+				left:0px;
+				top:7px;
+				display:inline-block;
+				width:24px;
+				height:20px;
+				font-size:11px;
+				line-height:20px;
+				color:$lgray;
+				text-align:center;
+				@include max($tablet) {
+					top:11px;
+				}
+			}
+			.glyphicon {
+				&:before {
+					line-height:30px !important;
+				}
+			}
+			@include max($tablet) {
+				position:relative !important;
+				left:auto;
+				color:$black;
+			}
+		}
+		.dropdown {
+			position:static;
+			display:inline-block;
+		}
 		.dropdown-toggle {
 			@include text($med, 15px, $lgray, 50px, none);
 			&:hover {
@@ -1212,23 +1252,11 @@ header {
 					top:1px;
 					font-style:normal;
 				}
+				.glyphicon-home {
+					top:2px;
+				}
 				.glyphicon-headset {
 					top:0px;
-				}
-				.unread {
-					font-size:34px;
-					color:$red;
-				}
-				.notifications {
-					position:absolute;
-					left:0px;
-					top:2px;
-					display:inline-block;
-					width:34px;
-					height:20px;
-					font-size:14px;
-					line-height:20px;
-					text-align:center;
 				}
 				@include max($mobile) {
 					.glyphicon {
