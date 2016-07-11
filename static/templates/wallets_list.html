@@ -484,15 +484,7 @@ function foattoupper(x) {
 			<div class="tab-pane fade active in">
 				<div>
 					<div id="send_to_wallet" class="payments">
-						<div class="top"></div>
 						<form class="form">
-							<strong class="line">*******************************</strong>
-							<div class="head">
-								<strong class="line">*<br />*<br />*</strong>
-								{{.Lang.send_to_wallet}}
-								<strong class="line">*<br />*<br />*</strong>
-							</div>
-							<strong class="line">*******************************</strong>
 							<fieldset class="form-group">
 								<label for="currency_id"><span>{{.Lang.currency}}</span><i></i></label>
 								<select id="currency_id" class="c-select form-control">
@@ -522,25 +514,15 @@ function foattoupper(x) {
 								<label for="comment"><span>{{.Lang.note}}</span><i></i></label>
 								<input id="comment" class="form-control" type="text">
 							</fieldset>
-							<strong class="line" style="margin-top:1rem;">*******************************</strong>
 							<fieldset class="form-group" style="display:none;">
 								<label for="arbitration"><span>{{.Lang.arbitration}}</span><i></i></label>
 								{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}
 							</fieldset>
 						</form>
-						<div class="bottom"></div>
 						<center><button id="goto_confirm" class="btn btn-info" type="button" style="margin-top:1rem;">{{.Lang.next}}</button></center>
 					</div>
 					<div id="wallets_confirm" class="payments" style="display:none;">
-						<div class="top"></div>
 						<div class="form">
-							<strong class="line">*******************************</strong>
-							<div class="head">
-								<strong class="line">*<br />*<br />*</strong>
-								{{.Lang.check_data}}
-								<strong class="line">*<br />*<br />*</strong>
-							</div>
-							<strong class="line">*******************************</strong>
 							<fieldset class="form-group">
 								<label for="to_user_id"><span>{{.Lang.currency}}</span><i></i></label>
 								<strong id="confirm_currency"></strong>
@@ -561,9 +543,7 @@ function foattoupper(x) {
 								<label for="comment"><span>{{.Lang.note}}</span><i></i></label>
 								<strong id="confirm_comment"></strong>
 							</fieldset>
-							<strong class="line" style="margin-top:1rem;">*******************************</strong>
 						</div>
-						<div class="bottom"></div>
 						<center>
 							<button type="button" class="btn btn-info back" style="margin-top:1rem;"><span class="glyphicon glyphicon-arrow-left" style="position:relative; top:3px;"></span></button>
 							<button id="next" class="btn btn-info" type="button" style="margin-left:5px; margin-top:1rem;">{{.Lang.send_to_net}}</button>
