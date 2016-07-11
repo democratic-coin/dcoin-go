@@ -52,7 +52,9 @@ $( document ).ready(function() {
 		$("#key_div").css("display", "none");
 		$("#key_selector").css("display", "none");
 	}
-	document.getElementById('upload_hidden').addEventListener('change', handleFileSelect2, false);
+	var upload = document.getElementById('upload_hidden');
+	if (upload)
+		upload.addEventListener('change', handleFileSelect2, false);
 });
 
 
