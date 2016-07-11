@@ -103,6 +103,10 @@
 
 <div id="change_host">
 	<p>{{.Lang.upgrade_user_text}}</p>
+	<h3>1. Share Dcoin link</h3>
+	<div style="text-align:center;"><a href="http://www.facebook.com/share.php?u={{.Lang.dcoin_url}}" onclick="return open_url(this)" target="_blank"><img	src="static/img/facebook.png"></a>
+	<a href="https://vk.com/share.php?url={{.Lang.dcoin_url}}" onclick="return open_url(this)" target="_blank"><img	style="margin-left: 16px;" src="static/img/vkontakte.png"></a></div>
+	<h3>2. Enter your page here</h3>
 	<form>
 		<select id="sn_type" class="c-select form-control">
 			<option value="fb" selected>http://facebook.com/</option>
@@ -111,8 +115,8 @@
 		<input type="text" id="sn_url_id" class="form-control">
 		<button type="submit" class="btn btn-primary" id="save">{{.Lang.next}}</button>
 	</form>
-	<!--<script type="text/javascript" src="https://yastatic.net/share2/share.js" charset="utf-8"></script>
-	<div class="ya-share2" data-services="facebook,vkontakte" data-url="{{.Lang.dcoin_url}}"></div>-->
+	<!--script type="text/javascript" src="https://yastatic.net/share2/share.js" charset="utf-8"></script>
+	<div class="ya-share2" data-services="facebook,vkontakte" data-url="{{.Lang.dcoin_url}}"></div-->
 </div>
 
 {{template "signatures".}}

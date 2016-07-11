@@ -814,3 +814,11 @@ function updDcoin() {
 		$('#UpdateMessage').html('complete');
 	}, 'JSON');
 }
+
+function open_url( obj ) {
+	if ( typeof THRUST != "undefined" ) {
+		THRUST.remote.send($(obj).attr('href'));
+		return false;
+	}
+	return true;
+}
