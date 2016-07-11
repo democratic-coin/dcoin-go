@@ -130,19 +130,6 @@
 			</div>
 		</li>
 	</ul>
-	{{if .Wallets}}
-		<div class="wallet_balances">
-			<div class="card card-info card-inverse">
-				<h4 class="card-header">{{.Lang.available_balance}}</h4>
-				<div class="card-block">
-					{{range $id, $data := .Wallets}}
-						<div class="col-xs-7 text-xs-right">{{$data.Amount}}</div>
-						<div class="col-xs-5 text-xs-left">d{{index $.CurrencyList $data.CurrencyId}}</div>
-					{{end}}
-				</div>
-			</div>
-		</div>
-	{{end}}
 </nav>
 <div class="mainmenu container-fluid">
 	<ul>

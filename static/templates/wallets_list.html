@@ -643,7 +643,7 @@ function foattoupper(x) {
 						<tr><td>{{.Lang.note}}</td><td><input class="form-control" type="text" id="comment"></td></tr>
 						<tr><td>{{.Lang.arbitration}}</td><td>{{if .ArbitrationTrustList}}<input type="checkbox" id="arbitration">{{else}}<a href="#arbitration">{{.Lang.add_arbitrators}}</a>{{end}}</td></tr>
 					</table>-->
-					<!--{{if .Wallets}}
+					{{if .Wallets}}
 						<h3>{{.Lang.balances}}</h3>
 						<table class="table" style="max-width:400px">
 						<tr><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th></tr>
@@ -658,7 +658,7 @@ function foattoupper(x) {
 							</tr>
 						{{end}}
 						</table>
-					{{end}}-->
+					{{end}}
 				</div>
 				<div style="overflow: auto;display: none" >
 					<div class="panel panel-primary" style="margin-left: 40px; max-width: 400px">
