@@ -514,14 +514,21 @@
 			clearTimeout(timeoutId[0]);
 		timeoutId[0] = setTimeout( money_counter, 200 );
 	{{end}}	
-
+	
+	{{if .Notifications}}
+		$("title").html('(' + {{.Notifications}} + ') Democratic Coin');
+	{{else}}
+		$("title").html('Democratic Coin');
+	{{end}}
 	function notify_counter() {
 		$.post('ajaxjson?controllerName=NotifyCounter', {user_id: {{.UserId}}}, function (data) {
 			if (typeof data.success !== 'undefined') {
 				if (data.data != '0') {
+					$("title").html('(' + data.data + ') Democratic Coin');
 					$(".notifications").html(data.data);
 					$(".mainmenu .glyphicon-bell").addClass("unread");
 				} else {
+					$("title").html('Democratic Coin');
 					$(".notifications").html('');
 					$(".mainmenu .glyphicon-bell").removeClass("unread");
 				}
