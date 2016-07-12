@@ -29,6 +29,33 @@ func (c *Controller) SaveDecryptComment() (string, error) {
 	}
 	if minerId > 0 && utils.InSliceString(commentType, []string{"dc_transactions", "arbitrator", "seller"}) {
 		nodePrivateKey, err := c.GetNodePrivateKey(c.MyPrefix)
+		if len(nodePrivateKey) == 0 {
+			return `***`, nil
+		}
+		if commentType == `dc_transactions` {
+			idBlock,err := c.Single(`select block_id from `+c.MyPrefix+`my_dc_transactions where id=?`, id).Int64()
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			nodeBlock,err := c.Single(`select block_id from `+c.MyPrefix+`my_node_keys order by id desc`).Int64()
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			if idBlock <= nodeBlock {
+				return `****`, nil
+			}
+			nodePublic, err := c.GetNodePublicKey(c.SessUserId)
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			myPublic, err := c.GetMyNodePublicKey(c.MyPrefix)
+			if err != nil {
+				return "", utils.ErrInfo(err)
+			}
+			if myPublic != string(nodePublic) {
+				return `*****`, nil
+			}
+		}
 		// расшифруем коммент
 		rsaPrivateKey, err := utils.MakePrivateKey(nodePrivateKey)
 		if err != nil {
