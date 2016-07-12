@@ -89,6 +89,7 @@
 // static/img/blank.png
 // static/img/cf_blurb_img.png
 // static/img/face.jpg
+// static/img/facebook.png
 // static/img/glyphicons-halflings.png
 // static/img/k_bg.png
 // static/img/k_bg.psd
@@ -114,6 +115,7 @@
 // static/img/squares2.gif
 // static/img/stat.png
 // static/img/us-ru.png
+// static/img/vkontakte.png
 // static/js/Serpent.js
 // static/js/aes.js
 // static/js/asn1hex-1.1.js
@@ -2054,6 +2056,24 @@ func staticImgFaceJpg() (*asset, error) {
 	return a, err
 }
 
+// staticImgFacebookPng reads file data from disk. It returns an error on failure.
+func staticImgFacebookPng() (*asset, error) {
+	path := "static/img/facebook.png"
+	name := "static/img/facebook.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticImgGlyphiconsHalflingsPng reads file data from disk. It returns an error on failure.
 func staticImgGlyphiconsHalflingsPng() (*asset, error) {
 	path := "static/img/glyphicons-halflings.png"
@@ -2490,6 +2510,24 @@ func staticImgStatPng() (*asset, error) {
 func staticImgUsRuPng() (*asset, error) {
 	path := "static/img/us-ru.png"
 	name := "static/img/us-ru.png"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// staticImgVkontaktePng reads file data from disk. It returns an error on failure.
+func staticImgVkontaktePng() (*asset, error) {
+	path := "static/img/vkontakte.png"
+	name := "static/img/vkontakte.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
 		return nil, err
@@ -8261,6 +8299,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/img/blank.png": staticImgBlankPng,
 	"static/img/cf_blurb_img.png": staticImgCf_blurb_imgPng,
 	"static/img/face.jpg": staticImgFaceJpg,
+	"static/img/facebook.png": staticImgFacebookPng,
 	"static/img/glyphicons-halflings.png": staticImgGlyphiconsHalflingsPng,
 	"static/img/k_bg.png": staticImgK_bgPng,
 	"static/img/k_bg.psd": staticImgK_bgPsd,
@@ -8286,6 +8325,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/img/squares2.gif": staticImgSquares2Gif,
 	"static/img/stat.png": staticImgStatPng,
 	"static/img/us-ru.png": staticImgUsRuPng,
+	"static/img/vkontakte.png": staticImgVkontaktePng,
 	"static/js/Serpent.js": staticJsSerpentJs,
 	"static/js/aes.js": staticJsAesJs,
 	"static/js/asn1hex-1.1.js": staticJsAsn1hex11Js,
@@ -8741,6 +8781,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"blank.png": &bintree{staticImgBlankPng, map[string]*bintree{}},
 			"cf_blurb_img.png": &bintree{staticImgCf_blurb_imgPng, map[string]*bintree{}},
 			"face.jpg": &bintree{staticImgFaceJpg, map[string]*bintree{}},
+			"facebook.png": &bintree{staticImgFacebookPng, map[string]*bintree{}},
 			"glyphicons-halflings.png": &bintree{staticImgGlyphiconsHalflingsPng, map[string]*bintree{}},
 			"k_bg.png": &bintree{staticImgK_bgPng, map[string]*bintree{}},
 			"k_bg.psd": &bintree{staticImgK_bgPsd, map[string]*bintree{}},
@@ -8766,6 +8807,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"squares2.gif": &bintree{staticImgSquares2Gif, map[string]*bintree{}},
 			"stat.png": &bintree{staticImgStatPng, map[string]*bintree{}},
 			"us-ru.png": &bintree{staticImgUsRuPng, map[string]*bintree{}},
+			"vkontakte.png": &bintree{staticImgVkontaktePng, map[string]*bintree{}},
 		}},
 		"js": &bintree{nil, map[string]*bintree{
 			"Serpent.js": &bintree{staticJsSerpentJs, map[string]*bintree{}},

@@ -1,6 +1,21 @@
 {{ define "home" }}
-
+<style>
+	h1 {
+		display:none;
+	}
+	@media screen and (max-width: 991px) {
+		h1 {
+			display:block;
+		}
+	}
+</style>
 <script type="text/javascript">
+$(document).ready(function() {
+	if ($(".wallet .table-transactions .row").length > 6) {
+		$(".wallet .table-transactions .row").eq(5).nextAll().remove();
+	}
+});
+
 {{if .StatDays}}
 $(function () {
 	var date = new Date();
@@ -120,7 +135,7 @@ $(function () {
 {{end}}
 </script>
 
-<h1 class="page-header" {{if not .Mobile}}style="display:none;"{{end}}>Home</h1>
+<h1 class="page-header">Home</h1>
 <div class="main row">
 	<div class="pull-lg-right col-xs-12 col-lg-6">
 		<div class="col-xs-6">
@@ -155,7 +170,7 @@ $(function () {
 	<div class="col-xs-12 col-lg-6">
 		<div class="wallet">
 			{{if .ListBalance}}
-			<h2>{{.Lang.total_balance}}</h2>
+			<h2>{{.Lang.available_balance}}</h2>
 			<div class="balances">
 				{{range $key, $data := .ListBalance}}
 				<div class="balance">
@@ -188,7 +203,7 @@ $(function () {
 						<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
 						<div class="col-xs-2">{{$data.status}}</div>
 					</div>
-				{{end}}
+					{{end}}
 				</div>
 			{{end}}
 			<a class="head" href="#walletsList"><em>{{.Lang.wallets}}</em></a>
