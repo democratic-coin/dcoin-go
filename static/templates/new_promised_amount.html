@@ -25,7 +25,7 @@
 		var ytType = 'promised_amount';
 	
 		$('#add_promised_amount').bind('click', function () {
-	
+	/*
 			console.log(video_url_id);
 			video_url_id = $("#video_url_id").val();
 	
@@ -44,22 +44,23 @@
 					console.log(video_url_id);
 				}
 			}
-	
+	*/
 			if (!$('#amount').val() || $('#amount').val()=='0') {
 				$('#errors').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>{{.Lang.invalid_amount}}</div>');
 			}
 			else {
-				if (!video_url_id) {
+/*				if (!video_url_id) {
 					video_url_id='null';
 					video_type='null';
 				}
-				else {
+				else {*/
 					video_type = 'youtube';
-				}
+					video_url_id='none';
+//				}
 	
 	
 				var ps_id;
-				for (i = 1; i < 6; i++) {
+				for (i = 1; i < 2/*6*/; i++) {
 					ps_id = $('#ps' + i).val();
 					if (ps_id > 0) {
 						payment_systems_ids = payment_systems_ids + ps_id + ',';
@@ -174,10 +175,10 @@
 				}, 0)
 			})
 			
-			$('#video_mp4').change(function () {
+/*			$('#video_mp4').change(function () {
 				send_video('video_mp4', 'video_mp4_progress', 'promised_amount-'+currency_id, {{.UserId}});
 				//$("#source_mp4").attr('src', 'public/promised_amount_'+currency_id+'.mp4');
-			})
+			})*/
 	
 			/*$('#video_webm_ogg').change(function () {
 				send_video('video_webm_ogg', 'video_webm_ogg_progress', 'promised_amount-'+currency_id, {{.UserId}});
@@ -354,9 +355,9 @@
 	
 			<br>
 	
-			<p style="margin-top: 20px">{{.Lang.promised_amount_add_video_text}}</p>
+			<!--p style="margin-top: 20px">{{.Lang.promised_amount_add_video_text}}</p>
 	
-			<p id="selectType"><!--a href="#" id="from_webcam_show">Webcam</a> {{.Lang.or}}--><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p>
+			<p id="selectType"><a href="#" id="from_file_show">File</a> {{.Lang.or}} <a href="#" id="from_youtube_show">Youtube</a></p-->
 	
 	
 			<!--div id="from_webcam">
@@ -368,7 +369,7 @@
 				<script src="static/js/youtube_webcam.js"></script>
 			</div-->
 	
-			<div id="from_youtube">
+			<!--div id="from_youtube">
 	
 				<table class="table table-bordered">
 					<tr><td>
@@ -400,7 +401,7 @@
 					<video id="example_video_1" class="video-js vjs-default-skin videosize" controls preload="none" data-setup="{}"><source src="public/{{.UserId}}_user_video.mp4" type='video/mp4' /><source src="public/{{.UserId}}_user_video.webm" type='video/webm' /><source src="public/{{.UserId}}_user_video.ogv" type='video/ogg' /></video>
 	
 				</div>
-			</div>
+			</div-->
 			<!--
 			<div id="from_file" style="display: none">
 				<table class="table table-bordered">
