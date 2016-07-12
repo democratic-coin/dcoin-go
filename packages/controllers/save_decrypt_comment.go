@@ -32,7 +32,7 @@ func (c *Controller) SaveDecryptComment() (string, error) {
 		if len(nodePrivateKey) == 0 {
 			return `***`, nil
 		}
-		if commentType == `dc_transactions` {
+/*		if commentType == `dc_transactions` {
 			idBlock,err := c.Single(`select block_id from `+c.MyPrefix+`my_dc_transactions where id=?`, id).Int64()
 			if err != nil {
 				return "", utils.ErrInfo(err)
@@ -55,7 +55,7 @@ func (c *Controller) SaveDecryptComment() (string, error) {
 			if myPublic != string(nodePublic) {
 				return `*****`, nil
 			}
-		}
+		}*/
 		// расшифруем коммент
 		rsaPrivateKey, err := utils.MakePrivateKey(nodePrivateKey)
 		if err != nil {
@@ -63,9 +63,10 @@ func (c *Controller) SaveDecryptComment() (string, error) {
 		}
 		comment_, err := rsa.DecryptPKCS1v15(rand.Reader, rsaPrivateKey, utils.HexToBin([]byte(comment)))
 		if err != nil {
-			return "", utils.ErrInfo(err)
+			comment = c.Lang[`decrypt_impossible`]
+		} else {
+			comment = string(comment_)
 		}
-		comment = string(comment_)
 	}
 	comment = template.HTMLEscapeString(comment)
 	if len(comment) > 0 {
