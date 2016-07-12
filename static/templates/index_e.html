@@ -612,7 +612,7 @@
   });
   
   function your_balance() {
-		$("#your_balance").html('{{if .MyWallets}}{{range $id, $data := .MyWallets}}<strong>{{index $data "amount"}}</strong> {{index $data "currency_name"}}<br>{{end}}{{else}}<strong>0</strong>{{end}}');
+		get_balance();
 		setTimeout(your_balance, 5000);
 	}
 	setTimeout(your_balance, 5000);
