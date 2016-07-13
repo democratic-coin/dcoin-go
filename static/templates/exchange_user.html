@@ -11,6 +11,17 @@ function user_info() {
 	dc_navigate('ExchangeUser', {iduser: userid});
 	return false;
 }
+
+function to_support() 
+{
+	idtopic = localStorage.getItem('support_ticket');
+	if (idtopic && parseInt( idtopic) > 0) {
+		dc_navigate('ExchangeSupport', {idroot: idtopic});
+	} else {
+		dc_navigate('ExchangeSupport');
+	}
+	return false;
+}
 </script>
 
 <div class="row">
@@ -23,6 +34,7 @@ function user_info() {
 		<div class="panel-group" style="max-width: 600px">
 			User ID: <input type="text" id="userid" value="{{.UserInfo}}" class="form-control" style="width: 70px;"> 
 			<button type="button" class="btn btn-primary" href="#" onclick="return user_info()">OK</button>
+			<button style="margin-left: 50px;" class="btn" onclick="return to_support()">Support</button>
 		</div>
 	{{if .UserInfo}}
 		{{if .List}}
