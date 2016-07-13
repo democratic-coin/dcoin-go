@@ -82,6 +82,16 @@
     }
   </script>
   <style>
+  	@font-face {
+	  font-family: 'FontAwesome';
+	  src: url('/static/fonts/fontawesome-webfont.eot');
+	  src: url('/static/fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), url('/static/fonts/fontawesome-webfont.woff') format('woff'), url('/static/fonts/fontawesome-webfont.ttf') format('truetype'), url('/static/fonts/fontawesome-webfont.svg#FontAwesome') format('svg');
+	  font-weight: normal;
+	  font-style: normal;
+	}
+  	.fa {
+		font-family: 'FontAwesome' !important;
+	}
     #page-wrapper {min-height: 600px; {{if not .UserId}} width:100%; margin-right: auto; margin-left: auto;border-right: 1px solid #E7E7E7;{{end}}}
 	
 	.modal_password_label {
