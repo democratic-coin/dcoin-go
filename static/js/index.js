@@ -10,7 +10,10 @@ function dc_navigate (page, parameters) {
             //console.log('$("#loader").spin(false)');
             $('#dc_content').html( data );
 			if ( parameters && parameters.hasOwnProperty("lang")) {
-				load_menu();
+				if ( page[0] == 'E' )
+					load_emenu();
+				else
+					load_menu();
 			}
             window.scrollTo(0,0);
             if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
@@ -80,6 +83,19 @@ function load_menu(lang) {
         //});
     });
 }
+
+function load_emenu(lang) {
+    parametersJson = "";
+    if (typeof lang!='undefined') {
+        parametersJson: '{"lang":"1"}'
+    }
+    $( "#dc_emenu" ).load( "ajax?controllerName=EMenu", { parameters: parametersJson }, function() {
+            $.getScript("static/js/plugins/metisMenu/metisMenu.min.js", function(){
+                $.getScript("static/js/sb-admin.js");
+            });
+    });
+}
+
 
 function login_ok (result) {
 

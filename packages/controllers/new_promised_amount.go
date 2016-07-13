@@ -92,7 +92,7 @@ func (c *Controller) NewPromisedAmount() (string, error) {
 	limitsText := strings.Replace(c.Lang["limits_text"], "[limit]", utils.Int64ToStr(c.Variables.Int64["limit_promised_amount"]), -1)
 	limitsText = strings.Replace(limitsText, "[period]", c.Periods[c.Variables.Int64["limit_promised_amount_period"]], -1)
 
-	countPs := []int{1, 2, 3, 4, 5}
+	countPs := []int{1}//, 2, 3, 4, 5}
 
 	tcpHostPort, err := c.Single(`SELECT CASE WHEN m.pool_user_id > 0 then (SELECT tcp_host FROM miners_data WHERE user_id = m.pool_user_id) ELSE tcp_host END as tcp_host FROM miners_data as m WHERE m.user_id = ?`, c.SessUserId).String()
 	tcpHost, _, _ := net.SplitHostPort(tcpHostPort)
