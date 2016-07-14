@@ -17,5 +17,5 @@ func (c *Controller) EGetBalance() (string, error) {
 		html += fmt.Sprintf("<strong>%v</strong> %v<br>", data["amount"], data["currency_name"])
 	}
 
-	return utils.JsonAnswer("html", html).String(), nil
+	return utils.JsonAnswer(html, "html").String(), nil
 }

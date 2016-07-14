@@ -118,7 +118,6 @@ func (c *Controller) Assignments() (string, error) {
 			randArr = append(randArr, 2)
 		}
 	}
-
 	// модерация акков в соц. сетях
 	/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
 	if err != nil {
@@ -140,13 +139,11 @@ func (c *Controller) Assignments() (string, error) {
 	}
 
 	log.Debug("randArr %v", randArr)
-	fmt.Println("randArr", randArr)
 
 	var AssignType int64
 	if len(randArr) > 0 {
 		AssignType = randArr[utils.RandInt(0, len(randArr))]
 	}
-	fmt.Println("AssignType", AssignType)
 
 	cloneHosts := make(map[int64][]string)
 	var photoHosts []string
@@ -384,7 +381,6 @@ func (c *Controller) Assignments() (string, error) {
 
 		tplName = "assignments_promised_amount"
 		tplTitle = "assignmentsPromisedAmount"
-
 	case 3:
 
 		/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()

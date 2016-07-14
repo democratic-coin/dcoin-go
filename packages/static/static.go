@@ -355,6 +355,7 @@
 // static/templates/del_promised_amount.html
 // static/templates/desktoplite.html
 // static/templates/e_main.html
+// static/templates/e_menu.html
 // static/templates/e_my_finance.html
 // static/templates/e_my_history.html
 // static/templates/e_my_orders.html
@@ -6844,6 +6845,24 @@ func staticTemplatesE_mainHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesE_menuHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesE_menuHtml() (*asset, error) {
+	path := "static/templates/e_menu.html"
+	name := "static/templates/e_menu.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesE_my_financeHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesE_my_financeHtml() (*asset, error) {
 	path := "static/templates/e_my_finance.html"
@@ -8565,6 +8584,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/del_promised_amount.html": staticTemplatesDel_promised_amountHtml,
 	"static/templates/desktoplite.html": staticTemplatesDesktopliteHtml,
 	"static/templates/e_main.html": staticTemplatesE_mainHtml,
+	"static/templates/e_menu.html": staticTemplatesE_menuHtml,
 	"static/templates/e_my_finance.html": staticTemplatesE_my_financeHtml,
 	"static/templates/e_my_history.html": staticTemplatesE_my_historyHtml,
 	"static/templates/e_my_orders.html": staticTemplatesE_my_ordersHtml,
@@ -9073,6 +9093,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"del_promised_amount.html": &bintree{staticTemplatesDel_promised_amountHtml, map[string]*bintree{}},
 			"desktoplite.html": &bintree{staticTemplatesDesktopliteHtml, map[string]*bintree{}},
 			"e_main.html": &bintree{staticTemplatesE_mainHtml, map[string]*bintree{}},
+			"e_menu.html": &bintree{staticTemplatesE_menuHtml, map[string]*bintree{}},
 			"e_my_finance.html": &bintree{staticTemplatesE_my_financeHtml, map[string]*bintree{}},
 			"e_my_history.html": &bintree{staticTemplatesE_my_historyHtml, map[string]*bintree{}},
 			"e_my_orders.html": &bintree{staticTemplatesE_my_ordersHtml, map[string]*bintree{}},

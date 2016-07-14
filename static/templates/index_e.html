@@ -82,6 +82,16 @@
     }
   </script>
   <style>
+  	@font-face {
+	  font-family: 'FontAwesome';
+	  src: url('/static/fonts/fontawesome-webfont.eot');
+	  src: url('/static/fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), url('/static/fonts/fontawesome-webfont.woff') format('woff'), url('/static/fonts/fontawesome-webfont.ttf') format('truetype'), url('/static/fonts/fontawesome-webfont.svg#FontAwesome') format('svg');
+	  font-weight: normal;
+	  font-style: normal;
+	}
+  	.fa {
+		font-family: 'FontAwesome' !important;
+	}
     #page-wrapper {min-height: 600px; {{if not .UserId}} width:100%; margin-right: auto; margin-left: auto;border-right: 1px solid #E7E7E7;{{end}}}
 	
 	.modal_password_label {
@@ -111,151 +121,7 @@
 
 <div id="wrapper">
 
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-
-    <div>
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand particular-link" href="#" style="display: block; /* or inline-block; I think IE would respect it since a link is an inline-element */
-	                   background: url(/static/img/logo-small.png) center left no-repeat;
-	                   text-align: center;
-	                   background-size: 30px 30px;
-	                   padding-left: 40px; margin-left: 15px; margin-right: 50px" onclick="dc_navigate('EMain')">{{.EHost}}</a>
-      </div>
-
-      <div class="sidebar-collapse">
-        <!-- /.navbar-header -->
-
-        <ul class="nav navbar-top-links navbar-left" style="">
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EMain')">
-              <i class="fa  fa-exchange  fa-fw"></i> {{.Lang.trade}}</a>
-            </a>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'about'})">
-              <i class="fa fa-desktop"></i> {{.Lang.about_exchange}}</a>
-            </a>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'rules'})">
-              <i class="fa fa-file-text-o"></i> {{.Lang.rules}}</a>
-            </a>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'faq'})">
-              <i class="fa fa-question-circle"></i> {{.Lang.faq}}</a>
-            </a>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="dc_navigate('EPages', {'page': 'contacts'})">
-              <i class="fa  fa-envelope-o   fa-fw"></i> {{.Lang.contacts}}</a>
-            </a>
-          </li>
-
-
-        </ul>
-
-
-        <ul class="nav navbar-top-links navbar-right">
-
-
-         {{if .UserId}}
-          <!-- /.dropdown-user -->
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-              <li><a><i class="fa  fa-user  fa-fw"></i> User ID: {{.UserId}}</a></li>
-              <!--<li><a href="#" onclick="dc_navigate('my_settings')"><i class="fa fa-gear fa-fw"></i> Settings</a></li>-->
-              <li class="divider"></li>
-              <li><a href="#"  onclick="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-              </li>
-            </ul>
-            <!-- /.dropdown-user -->
-          </li>
-          {{else}}
-
-          <!--<li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSigninKeyModal">
-              <i class="fa fa-sign-in fa-fw"></i> Key</a>
-            </a>
-          </li>-->
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSigninKeyModal">
-              <i class="fa fa-sign-in fa-fw"></i> {{.Lang.sign_in}}</a>
-            </a>
-          </li>
-          <!--<li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="showSignupModal" >
-              <i class="fa  fa-pencil-square-o   fa-fw"></i> {{.Lang.sign_up}}</a>
-            </a>
-          </li>-->
-          {{end}}
-
-
-
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              Language <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-              <li><a href="#" onclick="dc_navigate('EMain', {'lang':'1'}); load_menu('1');"> English</a></li>
-              <li><a href="#" onclick="dc_navigate('EMain', {'lang':'42'}); load_menu('42');"> Русский</a></li>
-            </ul>
-          </li>
-          <!-- /.dropdown -->
-        </ul>
-
-
-        <!-- /.navbar-top-links -->
-      </div>
-    </div>
-
-    {{if .UserId}}
-    <div class="navbar-default navbar-static-side" role="navigation">
-      <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
-	        <li>
-	            <a href="#" onclick="dc_navigate('eMyOrders')"><i class="fa  fa-bars fa-fw"></i> {{.Lang.orders}} <!--<span class="badge pull-right">1</span>--> </a>
-	        </li>
-	        <li>
-	            <a href="#" onclick="dc_navigate('eMyHistory')"><i class="fa fa-history fa-fw"></i> {{.Lang.history_deals}}</a>
-	        </li>
-	        <li>
-	            <a href="#" onclick="dc_navigate('eMyFinance')"><i class="fa fa-money fa-fw"></i> {{.Lang.finance}}</a>
-	        </li>
-	    	<li>
-				<a href="#" onclick="dc_navigate('eMySupport')"><i class="fa fa-life-ring fa-fw"></i> {{.Lang.support}}</a>
-			</li>
-        </ul>
-
-
-        <div class="panel panel-success" style="margin: 15px">
-          <div class="panel-heading">
-            <i class="fa fa-money fa-fw"></i> {{.Lang.your_balance}}
-          </div>
-          <div class="panel-body" id="your_balance">
-            {{if .MyWallets}}
-              {{range $id, $data := .MyWallets}}
-                <strong>{{index $data "amount"}}</strong> {{index $data "currency_name"}}<br>
-              {{end}}
-            {{else}}
-              <strong>0</strong>
-            {{end}}
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-   {{end}}
+  <nav class="navbar navbar-default navbar-fixed-top" id="dc_emenu" role="navigation" style="margin-bottom: 0">
     <!-- /.navbar-static-side -->
   </nav>
 
@@ -305,14 +171,11 @@
   $(document).ready(function() {
     console.log("dc_navigate");
     dc_navigate('eMain');
+	load_emenu();
     console.log("dc_navigate ok");
     //$('#dataTables-example').dataTable();
   });
 
-
-  $('#showSigninKeyModal').bind('click', function () {
-    $('#SigninKeyModal').modal('show');
-  });
 
   $('#showSigninModal').bind('click', function () {
     $('#SigninModal').modal('show');
@@ -610,12 +473,13 @@
       $('#saveKeyAndLogin').removeClass( "disabled" )
     }, 500);
   });
-  
+{{if .UserId}}  
   function your_balance() {
-		$("#your_balance").html('{{if .MyWallets}}{{range $id, $data := .MyWallets}}<strong>{{index $data "amount"}}</strong> {{index $data "currency_name"}}<br>{{end}}{{else}}<strong>0</strong>{{end}}');
-		setTimeout(your_balance, 5000);
+		get_balance();
+		setTimeout(your_balance, 10000);
 	}
-	setTimeout(your_balance, 5000);
+	setTimeout(your_balance, 10000);
+{{end}}
 </script>
 <div style="display: none;">
   <div id="key">key</div>

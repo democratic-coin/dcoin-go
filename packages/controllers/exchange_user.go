@@ -53,6 +53,8 @@ func (c *Controller) ExchangeUser() (string, error) {
 				for _,hval := range headList {
 					if c.ConfigIni[`db_type`] == `sqlite` {
 						head = append(head, hval[`name`])
+					} else if field, ok := hval[`Field`]; ok {
+						head = append(head, field)
 					} else {
 						head = append(head, hval[`field`])
 					}
