@@ -48,6 +48,16 @@ function open_topic( id ) {
 	dc_navigate('ExchangeSupport', {idroot: id});
 	return false;
 }
+
+function user_info() 
+{
+	localStorage.setItem('support_ticket', '{{.IdRoot}}' );
+	dc_navigate('ExchangeUser', {iduser: '{{.ToUserId}}'}); 
+	return false;
+}
+
+localStorage.setItem('support_ticket', '' );
+
 </script>
 
 <div class="row">
@@ -57,7 +67,7 @@ function open_topic( id ) {
 	{{if .IdRoot}}
 			<div class="col-lg-12">
 			<a href="#" onclick="dc_navigate('ExchangeSupport'); return false;">{{.Lang.support}}</a> -
-			<a href="#" onclick="dc_navigate('ExchangeUser', {iduser: '{{.ToUserId}}'}); return false;">User Info</a> <strong>#{{.IdRoot}} {{.Topic}}</strong>
+			<a href="#" onclick="return user_info()">User Info</a> <strong>#{{.IdRoot}} {{.Topic}}</strong>
 			</div>
 		<div class="col-lg-12">
 			{{range $id, $data := .List}}
