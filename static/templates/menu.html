@@ -95,6 +95,9 @@
 					<a class="dropdown-item" href="#reduction" onClick="HideMenu();">{{.Lang.reduction}}</a>-->
 					<a class="dropdown-item" href="#statisticVoting" onClick="HideMenu();">{{.Lang.voting}}</a>
 					<a class="dropdown-item" href="#statistic" onClick="HideMenu();">{{.Lang.statistic}}</a>
+					{{if .MinerId}}
+					<a class="dropdown-item" href="#voteForMe" onClick="HideMenu();">{{.Lang.vote_for_me}}</a>
+					{{end}}
 					<a class="dropdown-item" href="#information" onClick="HideMenu();">{{.Lang.information}}</a>
 					<a class="dropdown-item" href="#dbInfo" onClick="HideMenu();">{{.Lang.db_info}}</a>
 				</div>
@@ -105,6 +108,8 @@
 				<a id="Settings" class="main_link dropdown-toggle" href="#" data-target="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-settings"></span>{{.Lang.settings}}</a>
 				<div class="dropdown-menu sub" aria-labelledby="Settings">
 					{{if .MinerId}}
+					<a class="dropdown-item" href="#voting" onClick="HideMenu();">{{.Lang.voting}}</a>
+					<a class="dropdown-item" href="#changeCommission" onClick="HideMenu();">{{.Lang.commission}}</a>
 					<a class="dropdown-item" href="#changeGeolocation" onClick="HideMenu();">{{.Lang.geolocation}}</a>
 					<a class="dropdown-item" href="#holidaysList" onClick="HideMenu();">{{.Lang.holidays}}</a>
 					{{end}}
