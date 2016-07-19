@@ -26,7 +26,7 @@ type VotingPage struct {
 	MaxCurrencyId              int64
 	AllMaxPromisedAmount       []int64
 	AllPct                     [391]map[string]string
-	LastTxFormatted            string
+//	LastTxFormatted            string
 	WaitVoting                 map[int64]string
 	CurrencyList               map[int64]string
 	JsPct                      string
@@ -173,11 +173,11 @@ func (c *Controller) Voting() (string, error) {
 	}
 	jsPct = jsPct[:len(jsPct)-1] + "}"
 
-	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"VotesComplex"}), 1, c.TimeFormat)
+/*	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"VotesComplex"}), 1, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(lastTx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(lastTx, c.Lang)
-	}
+	}*/
 
 	refs := []string{"first", "second", "third"}
 	refsNums := []int{0, 5, 10, 15, 20, 25, 30}
@@ -259,7 +259,7 @@ func (c *Controller) Voting() (string, error) {
 		MaxCurrencyId:              maxCurrencyId,
 		AllMaxPromisedAmount:       allMaxPromisedAmount,
 		AllPct:                     allPct,
-		LastTxFormatted:            lastTxFormatted,
+//		LastTxFormatted:            lastTxFormatted,
 		WaitVoting:                 waitVoting,
 		CurrencyList:               c.CurrencyList,
 		JsPct:                      jsPct,

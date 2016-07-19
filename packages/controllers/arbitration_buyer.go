@@ -15,7 +15,7 @@ type arbitrationBuyerPage struct {
 	Alert           string
 	Lang            map[string]string
 	CountSignArr    []int
-	LastTxFormatted string
+//	LastTxFormatted string
 	CurrencyList    map[int64]string
 	MyOrders        []map[string]string
 }
@@ -39,11 +39,11 @@ func (c *Controller) ArbitrationBuyer() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeSellerHoldBack"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeSellerHoldBack"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("arbitration_buyer", "arbitrationBuyer", &arbitrationBuyerPage{
 		Lang:            c.Lang,
@@ -54,7 +54,7 @@ func (c *Controller) ArbitrationBuyer() (string, error) {
 		TxType:          txType,
 		TxTypeId:        txTypeId,
 		SignData:        "",
-		LastTxFormatted: lastTxFormatted,
+//		LastTxFormatted: lastTxFormatted,
 		CurrencyList:    c.CurrencyList,
 		MyOrders:        myOrders})
 	if err != nil {

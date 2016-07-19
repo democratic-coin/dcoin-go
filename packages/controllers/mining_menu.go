@@ -17,7 +17,7 @@ type miningMenuPage struct {
 	CountSignArr      []int
 	CreditId          float64
 	CurrencyList      map[int64]string
-	LastTxFormatted   string
+//	LastTxFormatted   string
 	MyComments        []map[string]string
 	MinerVotesAttempt int64
 	Host              string
@@ -209,7 +209,7 @@ func (c *Controller) MiningMenu() (string, error) {
 	var minerVotesAttempt int64
 	var myComments []map[string]string
 	c.Navigate = navigate
-	lastTxFormatted := ""
+//	lastTxFormatted := ""
 	tplName := ""
 	tplTitle := ""
 	log.Debug(">result:", result)
@@ -246,13 +246,13 @@ func (c *Controller) MiningMenu() (string, error) {
 	} else if result == "full_mining_menu" {
 		tplName = "mining_menu"
 		tplTitle = "miningMenu"
-		last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewUser", "NewMiner", "NewPromisedAmount", "ChangePromisedAmount", "VotesMiner", "ChangeGeolocation", "VotesPromisedAmount", "DelPromisedAmount", "CashRequestOut", "CashRequestIn", "VotesComplex", "ForRepaidFix", "NewHolidays", "ActualizationPromisedAmounts", "Mining", "NewMinerUpdate", "ChangeHost", "ChangeCommission"}), 3, c.TimeFormat)
+/*		last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewUser", "NewMiner", "NewPromisedAmount", "ChangePromisedAmount", "VotesMiner", "ChangeGeolocation", "VotesPromisedAmount", "DelPromisedAmount", "CashRequestOut", "CashRequestIn", "VotesComplex", "ForRepaidFix", "NewHolidays", "ActualizationPromisedAmounts", "Mining", "NewMinerUpdate", "ChangeHost", "ChangeCommission"}), 3, c.TimeFormat)
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
 		if len(last_tx) > 0 {
 			lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-		}
+		}*/
 	} else {
 		// сколько у нас осталось попыток стать майнером.
 		countAttempt, err := c.CountMinerAttempt(c.SessUserId, "user_voting")
@@ -280,7 +280,7 @@ func (c *Controller) MiningMenu() (string, error) {
 		UserId:            c.SessUserId,
 		SignData:          "",
 		CurrencyList:      c.CurrencyList,
-		LastTxFormatted:   lastTxFormatted,
+//		LastTxFormatted:   lastTxFormatted,
 		MyComments:        myComments,
 		Result:            result,
 		NodePrivateKey:    nodePrivateKey,

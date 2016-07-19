@@ -666,9 +666,7 @@ $("#amount").blur(function() {
 				</div>
 				<div class="clearfix"></div>
 
-				{{if .LastTxFormatted}}
-					{{noescape .LastTxFormatted}}
-				{{end}}
+				<!--if .LastTxFormatted noescape .LastTxFormatted end -->
 
 				{{if .MyDcTransactions}}
 					<h3>{{.Lang.last_operation}}</h3>

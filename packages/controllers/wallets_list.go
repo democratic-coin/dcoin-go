@@ -28,7 +28,7 @@ type walletsListPage struct {
 	UserIdStr            string
 	Config               map[string]string
 	ConfigCommission     map[int64][]float64
-	LastTxFormatted      string
+//	LastTxFormatted      string
 	ArbitrationTrustList map[int64]map[int64][]string
 	ShowSignData         bool
 	Names                map[string]string
@@ -97,11 +97,11 @@ func (c *Controller) WalletsList() (string, error) {
 	//parameters := c.r.FormValue("parameters")
 	cfProjectId := int64(utils.StrToFloat64(c.Parameters["projectId"]))
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"SendDc"}), 1, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"SendDc"}), 1, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 	arbitrationTrustList_, err := c.GetMap(`
 			SELECT arbitrator_user_id,
 					 	conditions
@@ -153,7 +153,7 @@ func (c *Controller) WalletsList() (string, error) {
 		ConfirmedBlockId:     confirmedBlockId,
 		MinerId:              minerId,
 		Config:               c.NodeConfig,
-		LastTxFormatted:      lastTxFormatted,
+//		LastTxFormatted:      lastTxFormatted,
 		ArbitrationTrustList: arbitrationTrustList,
 		ShowSignData:         c.ShowSignData,
 		SignData:             ""})
