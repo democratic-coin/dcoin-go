@@ -19,7 +19,7 @@ type creditsPage struct {
 	I_creditor      []*credit
 	CurrencyList    map[int64]string
 	CreditPart      float64
-	LastTxFormatted string
+//	LastTxFormatted string
 }
 
 type credit struct {
@@ -65,11 +65,11 @@ func (c *Controller) Credits() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeCreditor", "DelCredit", "RepaymentCredit", "ChangeCreditPart", "NewCredit"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeCreditor", "DelCredit", "RepaymentCredit", "ChangeCreditPart", "NewCredit"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("credits", "credits", &creditsPage{
 		Alert:           c.Alert,
@@ -84,7 +84,7 @@ func (c *Controller) Credits() (string, error) {
 		CurrencyList:    c.CurrencyListCf,
 		CreditPart:      creditPart,
 		I_debtor:        I_debtor,
-		LastTxFormatted: lastTxFormatted,
+		//LastTxFormatted: lastTxFormatted,
 		I_creditor:      I_creditor})
 	if err != nil {
 		return "", utils.ErrInfo(err)

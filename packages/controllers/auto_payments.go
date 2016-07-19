@@ -17,7 +17,7 @@ type AutoPaymentsPage struct {
 	CountSignArr    []int
 	AutoPayments    []*autoPayment
 	CurrencyList    map[int64]string
-	LastTxFormatted string
+//	LastTxFormatted string
 }
 
 type autoPayment struct {
@@ -49,11 +49,11 @@ func (c *Controller) AutoPayments() (string, error) {
 		autoPayments = append(autoPayments, auto_)
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"AutoPayments", "DelAutoPayment", "NewAutoPayment"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"AutoPayments", "DelAutoPayment", "NewAutoPayment"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("auto_payments", "AutoPayments", &AutoPaymentsPage{
 		Alert:           c.Alert,
@@ -67,7 +67,8 @@ func (c *Controller) AutoPayments() (string, error) {
 		SignData:        "",
 		CurrencyList:    c.CurrencyListCf,
 		AutoPayments: autoPayments,
-		LastTxFormatted: lastTxFormatted})
+		//LastTxFormatted: lastTxFormatted
+		})
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}

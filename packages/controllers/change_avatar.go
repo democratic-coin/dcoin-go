@@ -15,7 +15,7 @@ type ChangeAvatarPage struct {
 	Alert           string
 	Lang            map[string]string
 	CountSignArr    []int
-	LastTxFormatted string
+//	LastTxFormatted string
 	Avatar          string
 	Name            string
 }
@@ -26,11 +26,11 @@ func (c *Controller) ChangeAvatar() (string, error) {
 	txTypeId := utils.TypeInt(txType)
 	timeNow := time.Now().Unix()
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"UserAvatar"}), 1, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"UserAvatar"}), 1, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	data, err := c.OneRow("SELECT name, avatar FROM users WHERE user_id =  ?", c.SessUserId).String()
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *Controller) ChangeAvatar() (string, error) {
 		TxType:          txType,
 		TxTypeId:        txTypeId,
 		SignData:        "",
-		LastTxFormatted: lastTxFormatted,
+//		LastTxFormatted: lastTxFormatted,
 		Avatar:          avatar,
 		Name:            name})
 	if err != nil {

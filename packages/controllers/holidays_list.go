@@ -11,7 +11,7 @@ type holidaysListPage struct {
 	Alert              string
 	Lang               map[string]string
 	CountSignArr       []int
-	LastTxFormatted    string
+//	LastTxFormatted    string
 	LimitsText         string
 	MyHolidaysPending  []map[string]string
 	MyHolidaysAccepted []map[string]string
@@ -32,11 +32,11 @@ func (c *Controller) HolidaysList() (string, error) {
 	limitsText := strings.Replace(c.Lang["limits_text"], "[limit]", utils.Int64ToStr(c.Variables.Int64["limit_holidays"]), -1)
 	limitsText = strings.Replace(limitsText, "[period]", c.Periods[c.Variables.Int64["limit_holidays_period"]], -1)
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewHolidays"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewHolidays"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("holidays_list", "holidaysList", &holidaysListPage{
 		Alert:              c.Alert,
@@ -44,7 +44,7 @@ func (c *Controller) HolidaysList() (string, error) {
 		CountSignArr:       c.CountSignArr,
 		ShowSignData:       c.ShowSignData,
 		SignData:           "",
-		LastTxFormatted:    lastTxFormatted,
+//		LastTxFormatted:    lastTxFormatted,
 		LimitsText:         limitsText,
 		MyHolidaysPending:  myHolidaysPending,
 		MyHolidaysAccepted: myHolidaysAccepted})
