@@ -22,7 +22,7 @@ type newUserPage struct {
 	CurrencyList    map[int64]string
 	PoolUrl         string
 	RefPhotos       map[int64][]string
-	LastTxFormatted string
+//	LastTxFormatted string
 }
 
 func (c *Controller) NewUser() (string, error) {
@@ -185,11 +185,11 @@ func (c *Controller) NewUser() (string, error) {
 		refPhotos[user_id] = hosts
 	}
 
-	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewUser"}), 1, c.TimeFormat)
+/*	lastTx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewUser"}), 1, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(lastTx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(lastTx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("new_user", "newUser", &newUserPage{
 		Alert:           c.Alert,
@@ -201,7 +201,7 @@ func (c *Controller) NewUser() (string, error) {
 		TxType:          txType,
 		TxTypeId:        txTypeId,
 		SignData:        "",
-		LastTxFormatted: lastTxFormatted,
+//		LastTxFormatted: lastTxFormatted,
 		MyRefs:          myRefs,
 		GlobalRefs:      globalRefs,
 		CurrencyList:    c.CurrencyList,

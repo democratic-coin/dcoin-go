@@ -7,7 +7,7 @@ import (
 )
 
 type currencyExchangePage struct {
-	LastTxFormatted      string
+//	LastTxFormatted      string
 	SignData             string
 	ShowSignData         bool
 	BuyCurrencyName      string
@@ -146,14 +146,14 @@ func (c *Controller) CurrencyExchange() (string, error) {
 		walletsAmounts[currency_id] = amount
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewForexOrder", "DelForexOrder"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"NewForexOrder", "DelForexOrder"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("currency_exchange", "currencyExchange", &currencyExchangePage{
-		LastTxFormatted:      lastTxFormatted,
+//		LastTxFormatted:      lastTxFormatted,
 		Lang:                 c.Lang,
 		CountSignArr:         c.CountSignArr,
 		ShowSignData:         c.ShowSignData,
