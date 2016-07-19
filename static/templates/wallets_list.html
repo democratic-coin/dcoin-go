@@ -462,6 +462,12 @@ function foattoupper(x) {
 	return (Math.ceil(x*100)/100);
 }
 
+
+
+$("#amount").blur(function() {
+	var val = parseFloat(this.value).toFixed(2);
+	this.value = val;
+});
 </script>
 <script src="static/js/js.js"></script>
 <h1 class="page-header">{{.Lang.wallets_list_title}}</h1>
