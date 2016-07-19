@@ -1,0 +1,23 @@
+{{define "transactions"}}
+<script>
+</script>
+<div id="main_div">
+	<h1 class="page-header">{{.Lang.transactions}}</h1>
+	<div class="table_fix">
+		<table id="transactions" class="table">
+		<thead><tr><th style='text-align: center'>{{.Lang.time}}</th><th style='text-align: center'>{{.Lang.type}}</th>
+		<th>{{.Lang.result}}</th></thead>
+		<tbody>
+		{{range .List}}
+		<tr><td class='unixtime'>{{.time_int}}</td>
+		<td>{{.txtype}}</td><td>{{.result}}</td>
+		</tr>{{end}}
+		</tbody>
+		</table>
+	</div>
+</div>
+
+<script>
+</script>
+<script src="static/js/unixtime.js"></script>
+{{end}}
