@@ -247,9 +247,16 @@ h3 {
 	margin:0px auto;
 	.row {
 		position:relative;
+		border-top:1px solid $mgray;
 		font-size:18px;
+		padding-top:1rem;
 		margin-bottom:1rem;
+		margin-left:0px;
+		margin-right:0px;
 		z-index:1;
+		&:first-child {
+			border-top:0px solid $mgray;
+		}
 		@include max($mobile) {
 			font-size:14px;
 		}
@@ -265,6 +272,7 @@ h3 {
 		position:relative;
 		font-family:$med;
 		text-align:right;
+		padding-left:0px;
 		.amount_edit {
 			display:none;
 			position:absolute;
@@ -370,7 +378,7 @@ h3 {
 		align-items:stretch;
 		justify-content:space-between;
 		padding-left:0rem;
-		padding-right:0.9375rem;
+		padding-right:0rem;
 		a {
 			top:2px;
 			&.edit {

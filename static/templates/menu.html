@@ -114,6 +114,7 @@
 					<a class="dropdown-item" href="#changeGeolocation" onClick="HideMenu();">{{.Lang.geolocation}}</a>
 					<a class="dropdown-item" href="#holidaysList" onClick="HideMenu();">{{.Lang.holidays}}</a>
 					{{end}}
+					<a class="dropdown-item" href="#notifications" onClick="HideMenu();">{{.Lang.sms_and_email_notifications}}</a>
 					{{if or .PoolAdmin (not .Community)}}<a class="dropdown-item" href="#changeNodeKey" onClick="HideMenu();">{{.Lang.change_node_key}}</a>{{end}}
 					<a class="dropdown-item" href="#changePrimaryKey" onClick="HideMenu();">{{.Lang.change_master_key}}</a>
 					<a class="dropdown-item" href="#restoringAccess" onClick="HideMenu();">{{.Lang.restoring_access}}</a>
