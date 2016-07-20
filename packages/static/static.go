@@ -413,6 +413,7 @@
 // static/templates/signatures.html
 // static/templates/statistic.html
 // static/templates/statistic_voting.html
+// static/templates/transactions.html
 // static/templates/updating_blockchain.html
 // static/templates/upgrade.html
 // static/templates/upgrade_0.html
@@ -7889,6 +7890,24 @@ func staticTemplatesStatistic_votingHtml() (*asset, error) {
 	return a, err
 }
 
+// staticTemplatesTransactionsHtml reads file data from disk. It returns an error on failure.
+func staticTemplatesTransactionsHtml() (*asset, error) {
+	path := "static/templates/transactions.html"
+	name := "static/templates/transactions.html"
+	bytes, err := bindataRead(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // staticTemplatesUpdating_blockchainHtml reads file data from disk. It returns an error on failure.
 func staticTemplatesUpdating_blockchainHtml() (*asset, error) {
 	path := "static/templates/updating_blockchain.html"
@@ -8642,6 +8661,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/templates/signatures.html": staticTemplatesSignaturesHtml,
 	"static/templates/statistic.html": staticTemplatesStatisticHtml,
 	"static/templates/statistic_voting.html": staticTemplatesStatistic_votingHtml,
+	"static/templates/transactions.html": staticTemplatesTransactionsHtml,
 	"static/templates/updating_blockchain.html": staticTemplatesUpdating_blockchainHtml,
 	"static/templates/upgrade.html": staticTemplatesUpgradeHtml,
 	"static/templates/upgrade_0.html": staticTemplatesUpgrade_0Html,
@@ -9151,6 +9171,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"signatures.html": &bintree{staticTemplatesSignaturesHtml, map[string]*bintree{}},
 			"statistic.html": &bintree{staticTemplatesStatisticHtml, map[string]*bintree{}},
 			"statistic_voting.html": &bintree{staticTemplatesStatistic_votingHtml, map[string]*bintree{}},
+			"transactions.html": &bintree{staticTemplatesTransactionsHtml, map[string]*bintree{}},
 			"updating_blockchain.html": &bintree{staticTemplatesUpdating_blockchainHtml, map[string]*bintree{}},
 			"upgrade.html": &bintree{staticTemplatesUpgradeHtml, map[string]*bintree{}},
 			"upgrade_0.html": &bintree{staticTemplatesUpgrade_0Html, map[string]*bintree{}},
