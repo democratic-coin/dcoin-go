@@ -93,10 +93,10 @@
 						</div>
 					</div>
 				{{end}}
-				<div class="currency col-xs-3 col"><strong>{{index $.CurrencyList $data.CurrencyId}}</strong><span class="label label-success">{{$data.StatusText}}</span></div>
-				{{$color:="green"}}
-				{{if eq $data.CurrencyId 1}}{{$color:="#428BCA"}}{{end}}
-				<div class="dc col-xs-4 col">
+				<div class="currency col-xs-3 col"><strong>{{index $.CurrencyList $data.CurrencyId}}</strong><span class="label label-info">{{$data.StatusText}}</span></div>
+				{{$color:="#2d3940"}}
+				{{if eq $data.CurrencyId 1}}{{$color:="#0071b1"}}{{end}}
+				<div class="dc col-xs-4 col-md-5 col">
 					<span id='currency_{{$data.CurrencyId}}_{{$data.Status}}' style='color:{{$color}};'>{{$data.Tdc}}</span>
 					<div class="put_to_wallet">
 						<input type='text' {{if $data.InProcess}}disabled="true"{{end}} class='input-mini' id='repaid-input-{{$data.Id}}' onkeyup="clear_amount('repaid-input-{{$data.Id}}')" value='{{$to_wallet}}'>
@@ -104,7 +104,7 @@
 						<small class="text-muted">max: <span id="max-amount-input-{{$data.Id}}">{{$data.Tdc}}</span></small>
 					</div>
 				</div>
-				<div class="icons col-xs-3 col">
+				<div class="icons col-xs-3 col-md-2 col">
 					{{if $data.InProcess}}
 					{{else}}
 						<a class="to_wallet glyphicon glyphicon-coins" href="#" title="{{$.Lang.put_in_the_wallet}}"></a>
@@ -119,10 +119,10 @@
 					{{end}}
 				</div>
 			</div>
-		{{if gt $data.PctSec 0.0}}
-			<script>dc_counter({{$data.Tdc}}, {{$data.PctSec}}, 'currency_{{$data.CurrencyId}}_{{$data.Status}}');</script>
+			{{if gt $data.PctSec 0.0}}
+				<script>dc_counter({{$data.Tdc}}, {{$data.PctSec}}, 'currency_{{$data.CurrencyId}}_{{$data.Status}}');</script>
+			{{end}}
 		{{end}}
-	{{end}}
 	</div>
 	<!--<div class="table_fix">
 		<table id="promised_amount_list" class="table" style="width:500px">
@@ -159,6 +159,7 @@
 		</table>
 	</div>-->
 	{{end}}
+	<a href="#newPromisedAmount" type="button" class="add_promised_amount"><em>{{.Lang.add_note}}</em></a>
 	{{if not .DisableNewAmount}}
 	<center><a href="#newPromisedAmount" type="button" class="btn btn-outline btn-primary">{{.Lang.add_note}}</a></center>
 	{{end}}
@@ -170,8 +171,8 @@
 	{{if .ActualizationPromisedAmounts}}
 		<button  onclick="dc_navigate('promisedAmountActualization')" class="btn">{{.Lang.actualize_promised_amounts}}</button>
 	{{end}}
-<!--<br><br><div class="alert alert-info"><strong>{{.Lang.limits}}</strong>  {{.LimitsText}}</div>-->
-<br>
+<!--<br><br><div class="alert alert-info"><strong>{{.Lang.limits}}</strong>  {{.LimitsText}}</div>
+<br>-->
 <a href="#forRepaidFix">for_repaid_fix</a>
 </div>
 
