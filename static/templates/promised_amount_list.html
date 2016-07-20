@@ -159,9 +159,10 @@
 		</table>
 	</div>-->
 	{{end}}
-	<a href="#newPromisedAmount" type="button" class="add_promised_amount"><em>{{.Lang.add_note}}</em></a>
 	{{if not .DisableNewAmount}}
-	<center><a href="#newPromisedAmount" type="button" class="btn btn-outline btn-primary">{{.Lang.add_note}}</a></center>
+		<a href="#newPromisedAmount" type="button" class="add_promised_amount"><em>{{.Lang.add_note}}</em></a>
+	{{else}}
+		<span class="add_promised_amount"><em>{{.Lang.limit_promised}}</em></span>
 	{{end}}
 	
 	<!--div class="table_fix">
