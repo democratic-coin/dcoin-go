@@ -330,7 +330,7 @@
 		<div id="add" class="form-inline">
 	
 			<label>{{.Lang.currency}}</label>
-			<select id="currency_id" style="width: 150px">
+			<select id="currency_id" class="c-select" style="width: 150px">
 				{{$selected := ""}}
 				{{range $id, $data := .CurrencyList}}
 					{{if eq $id $.CurrencyId}}{{$selected := "selected"}}{{end}}
@@ -343,7 +343,7 @@
 			<p style="margin-top: 20px">{{.Lang.promised_amount_payment_systems}}</p>
 	
 			{{range $i := .CountPs}}
-				<select id="ps{{$i}}" style="width:100px">
+				<select id="ps{{$i}}" class="c-select" style="width:100px">
 				<option value="0">----</option>
 					{{range $id, $name := $.PaymentSystems}}
 						{{if and (ne $id "57") (ne $id "44")}}
