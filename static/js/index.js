@@ -820,14 +820,14 @@ function check_form( callback ) {
 }
 
 function updDcoin() {
-	$('#UpdateMessage').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
-	$('#UpdateMessage').prop('disabled', true);
+	$('.UpdateMessage .alert').html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
+//	$('.UpdateMessage').prop('disabled', true);
 
 	$.get('ajax?controllerName=UpdateDcoin', function (data) {
 		if (typeof data.success !== 'undefined') {
-			$('#UpdateMessage').html("Download succeed");
+			$('.UpdateMessage .alert').html("Download succeed");
 		}
-		$('#UpdateMessage').html('complete');
+		$('.UpdateMessage .alert').html('complete');
 	}, 'JSON');
 }
 
