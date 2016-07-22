@@ -92,6 +92,9 @@ func GetCommunicationChannels() (*Out, *In) {
 }
 
 func Clean() {
+	if ExecCommand == nil {
+		return
+	}
 	Log.Print("Killing Thrust Core")
 	if err := ExecCommand.Process.Kill(); err != nil {
 		Log.Print("failed to kill: ", err)

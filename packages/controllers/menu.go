@@ -115,11 +115,11 @@ func (c *Controller) Menu() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	log.Debug("menu ok : %d", len(data))
-	modal, err := static.Asset("static/templates/modal.html")
+/*	modal, err := static.Asset("static/templates/modal.html")
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	log.Debug("modal ok : %d", len(modal))
+	log.Debug("modal ok : %d", len(modal))*/
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -188,7 +188,7 @@ func (c *Controller) Menu() (string, error) {
 		},
 	}
 	t := template.Must(template.New("template").Funcs(funcMap).Parse(string(data)))
-	t = template.Must(t.Parse(string(modal)))
+//	t = template.Must(t.Parse(string(modal)))
 	b := new(bytes.Buffer)
 	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, 
 			ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, 
