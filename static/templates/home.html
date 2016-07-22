@@ -135,6 +135,36 @@ $(function () {
 {{end}}
 </script>
 
+<style>
+	.alert-info a:link{text-decoration: underline}
+</style>
+
+<link href="static/css/cf.css" rel="stylesheet">
+
+<script>
+
+	$( document ).ready(function() {
+		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#AlertMessage').css("display", "block");
+				$('#AlertMessage p').html(data.success);
+			}
+		}, 'JSON');
+	
+		$.get('ajax?controllerName=Update', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#UpdateMessage').css("display", "block");
+				$('#UpdateMessage p').html(data.success);
+			}
+		}, 'JSON');
+	});
+</script>
+
+<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+<div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+{{ template "alertSuccess". }}
+<div id="message"></div>
+
 <h1 class="page-header">Home</h1>
 <div class="main row">
 	<div class="pull-lg-right col-xs-12 col-lg-6">
@@ -263,34 +293,6 @@ $(function () {
 
 	{{end}}
 </script>
-<style>
-	.alert-info a:link{text-decoration: underline}
-</style>
-
-<link href="static/css/cf.css" rel="stylesheet">
-<script>
-
-	$( document ).ready(function() {
-		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
-			if (typeof data.success !== 'undefined') {
-				$('#AlertMessage').css("display", "block");
-				$('#AlertMessage p').html(data.success);
-			}
-		}, 'JSON');
-	
-		$.get('ajax?controllerName=Update', function (data) {
-			if (typeof data.success !== 'undefined') {
-				$('#UpdateMessage').css("display", "block");
-				$('#UpdateMessage p').html(data.success);
-			}
-		}, 'JSON');
-	});
-</script>
-<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
-<div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
-{{ template "alertSuccess". }}
-
-<div id="message"></div>
 <script>
 	{{range $userId, $hosts := .RefPhotos}}
 	var hosts = []
