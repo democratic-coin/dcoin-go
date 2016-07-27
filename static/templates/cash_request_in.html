@@ -1,4 +1,54 @@
 {{define "cashRequestIn"}}
+<style>
+	#wallets {
+		position:relative;
+	}
+	#profile_window {
+		position:absolute;
+		left:50%;
+		top:50px;
+		width:500px;
+		background-color:#f8fafb;
+		outline:1px solid rgba(45,57,64,0.08);
+		box-shadow:0px 0px 0px 3px rgba(45,57,64,0.05);
+		border-radius:5px;
+		padding:10px 10px;
+		margin-left:-250px;
+	}
+	#profile_window .close {
+		position:absolute;
+		right:5px;
+		top:0px;
+	}
+	#profile_photo {
+		float:left;
+		width:200px;
+	}
+	#reloadbtn {
+		padding-left:10px;
+		margin-top:1rem;
+	}
+	.pull-md-right {
+		width:270px;
+	}
+	@media screen and (max-width: 767px) {
+		#profile_window {
+			top:50px;
+			width:290px;
+			margin-left:-145px;
+		}
+		#profile_photo {
+			float:none;
+			display:block;
+			margin:0px auto;
+			margin-top:1rem;
+			margin-bottom:1rem;
+		}
+		#reloadbtn {
+			text-align:center;
+		}
+	}
+</style>
 <script>
 
 	$('#next').bind('click', function () {
@@ -52,13 +102,6 @@
 </script>
 
 <script src="static/js/js.js"></script>
-<div id="profile_window" style="display: none; width: 500px;	padding:10px 10px; background-color: #fff; border:  1px solid black; ">
-	<button type="button" class="close" id="profileclose">×</button>
-	<div style="float: left; margin-right: 10px"><img id="profile_photo" width="200"></div>
-	{{.Lang.abuses}}: <span id="profile_abuses"></span><br>
-	{{.Lang.reg_time}}: <span id="profile_reg_time"></span>
-	<div id="reloadbtn"></div>
-</div>
 <h1 class="page-header">{{.Lang.cash_request_in_title}}</h1>
 <ol class="breadcrumb" style="position: relative;">
 	<li><a href="#miningMenu">{{.Lang.mining}}</a></li>
@@ -71,22 +114,34 @@
 
 {{if .ActualData}}
 <div id="wallets">
-
-	<table class="table" style="width:500px">
-		<tr><td><strong>User_id</strong></td><td><a href='#' onclick='show_profile({{.ActualData.from_user_id}});return false'>{{.ActualData.from_user_id}}</a></td></tr>
-		<tr><td><strong>{{.Lang.currency}}</strong></td><td>{{index .CurrencyList (strToInt64 .ActualData.currency_id)}}</td></tr>
-		<tr><td><strong>{{.Lang.amount}}</strong></td><td>{{.ActualData.amount}}</td></tr>
-		<tr><td><strong>{{.Lang.contact}}</strong></td>
-		{{if eq .ActualData.comment_status "decrypted"}}
-			<td>{{.ActualData.comment}}</td>
-		{{else}}
-			<td><div id="comment_{{.ActualData.id}}"><input type="hidden" id="encrypt_comment_{{.ActualData.id}}" value="{{.ActualData.comment}}"><button class="btn" onclick="decrypt_comment({{.ActualData.id}}, 'cash_requests')">{{.Lang.decrypt}}</button></div></td>
-		{{end}}
-		</tr>
-	</table>
-	{{.Lang.enter_code}}<br>
-	<input type="text" id="code" class="form-control"><br>
-	<button id="next" class="btn btn-primary" type="button">{{.Lang.next}}</button>
+	<div id="profile_window" style="display:none;">
+		<button type="button" class="close" id="profileclose">×</button>
+		<div class="pull-md-right">
+			<div>{{.Lang.abuses}}: <span id="profile_abuses"></span></div>
+			<div>{{.Lang.reg_time}}: <span id="profile_reg_time"></span></div>
+		</div>
+		<img id="profile_photo" width="200" alt="" />
+		<div id="reloadbtn" class="pull-md-left"></div>
+	</div>
+	<div class="table_fix">
+		<table class="table" style="max-width:750px; margin:0px auto;">
+			<tr><td width="100"><strong>User_id</strong></td><td><a href='#' onclick='show_profile({{.ActualData.from_user_id}});return false'>{{.ActualData.from_user_id}}</a></td></tr>
+			<tr><td><strong>{{.Lang.currency}}</strong></td><td>{{index .CurrencyList (strToInt64 .ActualData.currency_id)}}</td></tr>
+			<tr><td><strong>{{.Lang.amount}}</strong></td><td>{{.ActualData.amount}}</td></tr>
+			<tr><td><strong>{{.Lang.contact}}</strong></td>
+			{{if eq .ActualData.comment_status "decrypted"}}
+				<td>{{.ActualData.comment}}</td>
+			{{else}}
+				<td><div id="comment_{{.ActualData.id}}"><input type="hidden" id="encrypt_comment_{{.ActualData.id}}" value="{{.ActualData.comment}}"><button class="btn btn-primary-outline" onclick="decrypt_comment({{.ActualData.id}}, 'cash_requests')">{{.Lang.decrypt}}</button></div></td>
+			{{end}}
+			</tr>
+		</table>
+	</div>
+	<div style="max-width:750px; margin:0px auto; margin-top:1rem;">
+		{{.Lang.enter_code}}
+		<input type="text" id="code" class="form-control" style="margin-bottom:0.5rem;">
+		<button id="next" class="btn btn-primary" type="button">{{.Lang.next}}</button>
+	</div>
 </div>
 {{else}}
 	{{.Lang.no_requests}}
@@ -94,28 +149,30 @@
 
 {{template "signatures".}}
 
-<div id="list">
-	{{if .MyCashRequests}}
-		<br><br><h3>{{.Lang.list_of_requests}}</h3>
-		<table class="table" style="width:500px">
-		<tr><th>{{.Lang.time}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.recipient}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.comment}}</th><th>{{.Lang.status}}</th></tr>
-		{{range $key, $data := .MyCashRequests}}
-			<tr>
-			{{if $data.time}}
-				<td class="unixtime">{{$data.time}}</td>
-			{{else}}
-				<td></td>
+<div class="table_fix">
+	<div id="list">
+		{{if .MyCashRequests}}
+			<br><br><h3>{{.Lang.list_of_requests}}</h3>
+			<table class="table" style="max-width:750px;">
+			<tr><th>{{.Lang.time}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.recipient}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.comment}}</th><th>{{.Lang.status}}</th></tr>
+			{{range $key, $data := .MyCashRequests}}
+				<tr>
+				{{if $data.time}}
+					<td class="unixtime">{{$data.time}}</td>
+				{{else}}
+					<td></td>
+				{{end}}
+				<td>{{index $.CurrencyList (strToInt64 (index $.ActualData "currency_id"))}}</td><td>{{$data.to_user_id}}</td><td>{{$data.amount}}</td>
+				{{if eq $data.comment_status  "decrypted"}}
+					<td>{{$data.comment}}</td>
+				{{else}}
+					<td><div id="comment_{{$data.id}}"><input type="hidden" id="encrypt_comment_{{$data.id}}" value="{{$data.comment}}"><button class="btn btn-primary-outline" onclick="decrypt_comment({{$data.id}}, 'cash_requests')">{{$.Lang.decrypt}}</button></div></td>
+				{{end}}
+				<td>{{index $.CashRequestsStatus $data.status}}</td></tr>
 			{{end}}
-			<td>{{index $.CurrencyList (strToInt64 (index $.ActualData "currency_id"))}}</td><td>{{$data.to_user_id}}</td><td>{{$data.amount}}</td>
-			{{if eq $data.comment_status  "decrypted"}}
-				<td>{{$data.comment}}</td>
-			{{else}}
-				<td><div id="comment_{{$data.id}}"><input type="hidden" id="encrypt_comment_{{$data.id}}" value="{{$data.comment}}"><button class="btn" onclick="decrypt_comment({{$data.id}}, 'cash_requests')">{{$.Lang.decrypt}}</button></div></td>
-			{{end}}
-			<td>{{index $.CashRequestsStatus $data.status}}</td></tr>
+			</table>
 		{{end}}
-		</table>
-	{{end}}
+	</div>
 </div>
 
 <!--noescape .LastTxFormatted-->

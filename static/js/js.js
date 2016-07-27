@@ -74,8 +74,8 @@ function show_profile (user_id) {
         $("#profile_abuses").html(data.abuses);
         $("#profile_reg_time").html(data.reg_time);
         $("#profile_window").css("display", "block");
-        $("#profile_window").center();
-        $("#reloadbtn").html('<button onclick="reload_photo('+user_id+', \'profile_photo\');" class="btn">reload photo</button>');
+        //$("#profile_window").center();
+        $("#reloadbtn").html('<button onclick="reload_photo('+user_id+', \'profile_photo\');" class="btn btn-primary-outline">reload photo</button>');
         $('#profile_photo').attr('src', '');
         reload_photo(user_id, 'profile_photo');
     }, 'JSON' );
