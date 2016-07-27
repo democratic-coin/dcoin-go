@@ -46,8 +46,8 @@
 			}, function (data) {
 				$.post( 'ajaxjson?controllerName=CheckPromised', { user_id: to_user_id, amount: $('#send_amount').val(),
 				          currency_id : currency_id, }, 
-					function( data ) {
-						if (data.result || !data.success) {
+					function( checkdata ) {
+						if (checkdata.result || !checkdata.success) {
 							$("#message").html('');
 //							alert(data);
 							$("#comment_encrypted").val(data);
@@ -60,9 +60,9 @@
 							{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
 						}
 						else {
-							$('#available').html( data.data );
-							$('#send_amount').val( data.data );
-							$('#amount_due').html( data.data );
+							$('#available').html( checkdata.data );
+							$('#send_amount').val( checkdata.data );
+							$('#amount_due').html( checkdata.data );
 							$("#message").html( '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>{{.Lang.not_enough_promised}}</div>' );
 						}
 				})
