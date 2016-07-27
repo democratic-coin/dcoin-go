@@ -1353,7 +1353,7 @@ func (db *DCDB) GetPointsStatus(userId, pointsUpdateTime int64, BlockData *Block
 
 	// НО! При фронтальной проверке может получиться, что последний элемент miner и прошло более 30-и дней.
 	// поэтому нужно добавлять последний элемент = user, если вызов происходит не в блоке
-	if BlockData != nil && len(result) > 0 {
+	if BlockData == nil && len(result) > 0 {
 		for time_start, _ := range result[len(result)-1] {
 			if time_start < time.Now().Unix()-pointsUpdateTime {
 				result = append(result, map[int64]string{time_start + pointsUpdateTime: "user"})
