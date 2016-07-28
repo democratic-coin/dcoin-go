@@ -26,7 +26,9 @@ func (c *Controller) NewPhoto() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	if host == `0` {
+		host = `http://pool.dcoin.club/`
+	} 
 	result, err := json.Marshal(map[string]string{"face": host + "public/face_" + utils.Int64ToStr(userId) + ".jpg", "profile": host + "public/profile_" + utils.Int64ToStr(userId) + ".jpg"})
 	if err != nil {
 		return "", utils.ErrInfo(err)
