@@ -48,8 +48,6 @@ func CheckBlocks() {
 		}
 	}	
 
-	fmt.Println(`Checked`, checkId, checkTime, time.Now() )
-
 	q := "SELECT http_host FROM miners_data WHERE miner_id > 0 GROUP BY http_host"
 	if configIni["db_type"] == "postgresql" {
 		q = "SELECT DISTINCT ON (http_host) http_host FROM miners_data WHERE miner_id > 0"
@@ -74,7 +72,6 @@ func CheckBlocks() {
 			continue
 		}
 		hashes[host] = &jsonMap
-//		fmt.Println(`host`, host, jsonMap )
 	}
 	allmin := current  // последний нормальный блок
 	forks := make([]string, 0 )
@@ -90,7 +87,7 @@ func CheckBlocks() {
 			continue
 		} else if minid == current - 4  {
 			// Notification
-			forks = append(forks, fmt.Sprintf( `%s: %d`, hostname, minid ))
+			forks = append(forks, fmt.Sprintf( `%s - %d`, hostname, minid ))
 		} else {
 			if allmin > minid - 1 {
 				allmin = minid - 1 
@@ -98,6 +95,7 @@ func CheckBlocks() {
 		} 
 	}
 	if len(forks) > 0 && prevNotify.Add(2*time.Hour).Before( time.Now()) {
+		logger.Error(`Fork of Blockchain %s`, forks)
 		userId,_ := utils.DB.GetMyUserId(``)
 		email,_ := utils.DB.Single(`select pool_email from config`).String()
 		if len(email) > 0 {
