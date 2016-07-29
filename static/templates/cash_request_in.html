@@ -162,7 +162,7 @@
 				{{else}}
 					<td></td>
 				{{end}}
-				<td>{{index $.CurrencyList (strToInt64 (index $.ActualData "currency_id"))}}</td><td>{{$data.to_user_id}}</td><td>{{$data.amount}}</td>
+				<td>{{index $.CurrencyList (strToInt64 $data.currency_id)}}</td><td>{{$data.to_user_id}}</td><td>{{$data.amount}}</td>
 				{{if eq $data.comment_status  "decrypted"}}
 					<td>{{$data.comment}}</td>
 				{{else}}

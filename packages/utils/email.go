@@ -43,6 +43,7 @@ const (
 	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
 	ECMD_REFREADY	// Уведомление о готовности ключа для реферала
 	ECMD_SENDKEY    // Отправка ключей на email
+	ECMD_FORKBLOCK  // Уведомление, что имеются разные ветки блокчейна
 	
 	EXCHANGE_USER = 0xefffffff
 )
