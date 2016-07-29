@@ -17,7 +17,10 @@ type voteForMePage struct {
 func (c *Controller) VoteForMe() (string, error) {
 
 	// список отравленных нами запросов
-	myComments, err := c.GetAll("SELECT * FROM "+c.MyPrefix+"my_comments WHERE comment != 'null' AND type NOT IN ('arbitrator','seller')", -1, c.SessUserId)
+	myComments, err := c.GetAll("SELECT * FROM "+c.MyPrefix+"my_comments WHERE comment != 'null' AND type NOT IN ('arbitrator','seller')", -1)
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
 
 	TemplateStr, err := makeTemplate("vote_for_me", "voteForMe", &voteForMePage{
 		Alert:        c.Alert,
