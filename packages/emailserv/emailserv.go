@@ -277,6 +277,11 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result( `Wrong email parameters` )
 			return
 		}
+	case utils.ECMD_FORKBLOCK:
+		if err := checkParams(`forks`); err != nil || len((*jsonEmail.Params)[`forks`]) == 0  {
+			result( `Wrong email parameters` )
+			return
+		}
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -292,7 +297,7 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
 		}
 	}
-	if (jsonEmail.Cmd == utils.ECMD_SENDKEY) {
+	if jsonEmail.Cmd == utils.ECMD_SENDKEY {
 		bcc := GSettings.CopyTo
 		GSettings.CopyTo = ``
 		files := make( map[string][]byte )
@@ -312,6 +317,13 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
 		GSettings.CopyTo = bcc
 
+		if err != nil {
+			result(err.Error())
+			return
+		}
+	} else if jsonEmail.Cmd == utils.ECMD_FORKBLOCK {
+		err = GEmail.SendEmail(`<p>Fork of blockchain has been detected<br>`+(*jsonEmail.Params)[`forks`]+`</p>`, ``, 
+		     `Fork of blockchain`, []*Email{ &Email{``, jsonEmail.Email }})
 		if err != nil {
 			result(err.Error())
 			return
