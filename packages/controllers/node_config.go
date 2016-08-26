@@ -29,7 +29,8 @@ func (c *Controller) NodeConfigControl() (string, error) {
 
 	log.Debug("c.Parameters", c.Parameters)
 	if _, ok := c.Parameters["save_config"]; ok {
-		err := c.ExecSql("UPDATE config SET in_connections_ip_limit = ?, in_connections = ?, out_connections = ?, cf_url = ?, pool_url = ?, pool_admin_user_id = ?, exchange_api_url = ?, auto_reload = ?, http_host = ?, chat_enabled = ?, analytics_disabled = ?, auto_update = ?, auto_update_url = ?, stat_host = ?, getpool_host = ?", c.Parameters["in_connections_ip_limit"], c.Parameters["in_connections"], c.Parameters["out_connections"], c.Parameters["cf_url"], c.Parameters["pool_url"], c.Parameters["pool_admin_user_id"], c.Parameters["exchange_api_url"], c.Parameters["auto_reload"], c.Parameters["http_host"], c.Parameters["chat_enabled"], c.Parameters["analytics_disabled"], c.Parameters["auto_update"], c.Parameters["auto_update_url"], c.Parameters["stat_host"], c.Parameters["getpool_host"])
+		err := c.ExecSql("UPDATE config SET pool_email = ?, in_connections_ip_limit = ?, in_connections = ?, out_connections = ?, cf_url = ?, pool_url = ?, pool_admin_user_id = ?, exchange_api_url = ?, auto_reload = ?, http_host = ?, chat_enabled = ?, analytics_disabled = ?, auto_update = ?, auto_update_url = ?, stat_host = ?, getpool_host = ?", 
+			c.Parameters["pool_email"], c.Parameters["in_connections_ip_limit"], c.Parameters["in_connections"], c.Parameters["out_connections"], c.Parameters["cf_url"], c.Parameters["pool_url"], c.Parameters["pool_admin_user_id"], c.Parameters["exchange_api_url"], c.Parameters["auto_reload"], c.Parameters["http_host"], c.Parameters["chat_enabled"], c.Parameters["analytics_disabled"], c.Parameters["auto_update"], c.Parameters["auto_update_url"], c.Parameters["stat_host"], c.Parameters["getpool_host"])
 		if err != nil {
 			return "", utils.ErrInfo(err)
 		}
@@ -39,7 +40,6 @@ func (c *Controller) NodeConfigControl() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 	}
-
 	if _, ok := c.Parameters["save_e_config"]; ok {
 		err := c.ExecSql("DELETE FROM e_config")
 		if err != nil {
@@ -60,7 +60,9 @@ func (c *Controller) NodeConfigControl() (string, error) {
 				return "", utils.ErrInfo(err)
 			}
 		}
-		params := []string{"commission", "ps", "pm_s_key", "cp_s_key", "payeer_s_key", "pm_id", "cp_id", "payeer_id", "static_file", "static_file_path", "main_dc_account", "dc_commission", "pm_commission", "cp_commission"}
+
+		params := []string{"commission", "ps", "pm_s_key", "cp_s_key", "payeer_s_key", "pm_id", "cp_id", "payeer_id", 
+				"static_file", "static_file_path", "main_dc_account", "dc_commission", "pm_commission", "cp_commission", "email"}
 		for _, data := range params {
 			err = c.ExecSql(`INSERT INTO e_config (name, value) VALUES (?, ?)`, data, c.Parameters["e_"+data])
 			if err != nil {

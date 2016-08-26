@@ -2,10 +2,6 @@
 
 /* ------------------------------- */
 
-body {
-    padding-top: 50px;
-    background-color: #f8f8f8;
-}
 /*
 @media(min-width:768px) {
     body {
@@ -32,6 +28,7 @@ body {
         position: inherit;
         margin: 0 0 0 200px;
         padding: 0 30px;
+		padding-top:50px;
         /*min-height: 800px;*/
         border-left: 1px solid #e7e7e7;
     }

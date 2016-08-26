@@ -15,6 +15,8 @@ func (p *Parser) ChangePrimaryKeyInit() error {
 		return p.ErrInfo(err)
 	}
 
+	p.newPublicKeysHex = [3][]byte{}
+
 	// в 1 new_public_keys может быть от 1 до 3-х ключей
 	i := 0
 	bin_public_keys := p.TxMap["bin_public_keys"]

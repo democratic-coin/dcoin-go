@@ -35,6 +35,7 @@ type AssignmentsPage struct {
 	CloneHosts         map[int64][]string
 	SN string
 	SnUserId int64
+	Voted              map[string]int64
 }
 
 func getMyCountryRace( c *Controller ) ( country int, race int64 ) {
@@ -118,7 +119,6 @@ func (c *Controller) Assignments() (string, error) {
 			randArr = append(randArr, 2)
 		}
 	}
-
 	// модерация акков в соц. сетях
 	/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
 	if err != nil {
@@ -140,20 +140,19 @@ func (c *Controller) Assignments() (string, error) {
 	}
 
 	log.Debug("randArr %v", randArr)
-	fmt.Println("randArr", randArr)
 
 	var AssignType int64
 	if len(randArr) > 0 {
 		AssignType = randArr[utils.RandInt(0, len(randArr))]
 	}
-	fmt.Println("AssignType", AssignType)
 
 	cloneHosts := make(map[int64][]string)
 	var photoHosts []string
 	examplePoints := make(map[string]string)
 	tplName := "assignments"
 	tplTitle := "assignments"
-
+	
+	voted := make(map[string]int64)
 	var txType string
 	var txTypeId int64
 	var timeNow int64
@@ -305,7 +304,11 @@ func (c *Controller) Assignments() (string, error) {
 		if country > 0 {
 			myCountry = consts.Countries[ country ]
 		}
-		
+		voted,err = c.OneRow(`select votes_0, votes_1 from votes_miners where id=?`, userInfo["vote_id"]).Int64()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+
 		tplName = "assignments_new_miner"
 		tplTitle = "assignmentsNewMiner"
 
@@ -371,6 +374,10 @@ func (c *Controller) Assignments() (string, error) {
 				return "", utils.ErrInfo(err)
 			}
 		}
+		voted,err = c.OneRow(`select votes_0, votes_1 from promised_amount where id=?`, promisedAmountData["id"]).Int64()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
 
 		txType = "VotesPromisedAmount"
 		txTypeId = utils.TypeInt(txType)
@@ -384,7 +391,6 @@ func (c *Controller) Assignments() (string, error) {
 
 		tplName = "assignments_promised_amount"
 		tplTitle = "assignmentsPromisedAmount"
-
 	case 3:
 
 		/*mySnType, err := c.Single("SELECT sn_type FROM users WHERE user_id = ?", c.SessUserId).String()
@@ -415,7 +421,11 @@ func (c *Controller) Assignments() (string, error) {
 			sn = `<a href="` + url + `" onclick='THRUST.remote.send("` + url + `")' target="blank">`+ url +`</a>`
 		}
 		snUserId = utils.StrToInt64(usersSN["user_id"])
-
+		voted,err = c.OneRow(`select votes_0, votes_1 from users where user_id=?`, snUserId).Int64()
+		if err != nil {
+			return "", utils.ErrInfo(err)
+		}
+		
 		txType = "VotesSnUser"
 		txTypeId = utils.TypeInt(txType)
 		timeNow = utils.Time()
@@ -448,6 +458,7 @@ func (c *Controller) Assignments() (string, error) {
 		PhotoHosts:         photoHosts,
 		PromisedAmountData: promisedAmountData,
 		UserInfo:           userInfo,
+		Voted:              voted,
 		SN:           sn,
 		SnUserId: snUserId,
 		CloneHosts:         cloneHosts})

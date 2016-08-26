@@ -15,7 +15,7 @@ type changeCommissionPage struct {
 	UserId           int64
 	Lang             map[string]string
 	CountSignArr     []int
-	LastTxFormatted  string
+//	LastTxFormatted  string
 	CurrencyList     map[int64]string
 	ConfigCommission map[int64][]float64
 	Navigate         string
@@ -76,11 +76,11 @@ func (c *Controller) ChangeCommission() (string, error) {
 		commission[1000] = []float64{0.1, 0.01, 0}
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeArbitratorConditions", "MoneyBack"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeArbitratorConditions", "MoneyBack"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	//limitsText := strings.Replace(c.Lang["change_commission_limits_text"], "[limit]", utils.Int64ToStr(c.Variables.Int64["limit_commission"]), -1)
 	//limitsText = strings.Replace(limitsText, "[period]", c.Periods[c.Variables.Int64["limit_commission_period"]], -1)
@@ -97,7 +97,7 @@ func (c *Controller) ChangeCommission() (string, error) {
 		TxType:           txType,
 		TxTypeId:         txTypeId,
 		SignData:         "",
-		LastTxFormatted:  lastTxFormatted,
+//		LastTxFormatted:  lastTxFormatted,
 		CurrencyList:     c.CurrencyList,
 		ConfigCommission: c.ConfigCommission,
 		Navigate:         navigate,

@@ -1,5 +1,7 @@
 {{ define "modal" }}
 <script>
+$('#myModal').modal('hide');
+
 function show_text_key () {
 	$("#modal_key").css("display", "block");
 	$("#key_div").css("display", "none");
@@ -50,7 +52,9 @@ $( document ).ready(function() {
 		$("#key_div").css("display", "none");
 		$("#key_selector").css("display", "none");
 	}
-	document.getElementById('upload_hidden').addEventListener('change', handleFileSelect2, false);
+	var upload = document.getElementById('upload_hidden');
+	if (upload)
+		upload.addEventListener('change', handleFileSelect2, false);
 });
 
 
@@ -88,7 +92,8 @@ $('#saveKeyAndLogin').bind('click', function () {
 	setTimeout(function() {
 		doSign('login');
 		$('#saveKeyAndLogin').html('{{.Lang.login}}');
-		$('#saveKeyAndLogin').removeClass( "disabled" )
+		$('#saveKeyAndLogin').removeClass( "disabled" );
+		$('#myModal').modal('hide');
 	}, 500);
 });
 
@@ -143,8 +148,8 @@ $(document).keypress(function(e){
 						{{end}}
 						{{if not .Community}}
 						<div style="margin-top: 20px">
-							<input {{if or .Mobile .Desktop}}checked{{end}} type="checkbox" class="checkbox" id="modal_save_key" style="float: left;" >
-						<label for="modal_save_key" style="min-height: 0px; float: left; line-height: 30px; margin-left: 5px">
+							<input {{if or .Mobile .Desktop}}checked{{end}} type="checkbox" class="checkbox" id="modal_save_key" style="float:left;" >
+						<label for="modal_save_key" style="min-height: 0px; float: left; line-height: 14px; margin-left: 5px; white-space:nowrap;">
 							{{.Lang.save_key}}
 						</label>
 						</div>
@@ -166,7 +171,7 @@ $(document).keypress(function(e){
 				<h4 class="modal-title">{{.Lang.signup_title}}</h4>
 			</div>
 			<div style="margin: 15px" id="no_available_keys">
-				{{.Lang.need_key}}
+				{{noescape .Lang.need_key}}
 			</div>
 			<div style="margin: 15px" id="sign_up_in_pool">
 				<div id="available_key_alert"></div>

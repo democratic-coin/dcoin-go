@@ -1,11 +1,7 @@
 {{define "upgrade3"}}
 <script>
-	var w = 350;
-	var h = 500;
-	if ($(window).width() <= 320) {
-		w = 290;
-		h = 428;
-	}
+	var w = 290;
+	var h = 414;
 	var jcrop_api = '';
 	window['crop_img_text'] = "{{.Lang.crop_img}}";
 	$(document).ready(function() {
@@ -16,26 +12,45 @@
 
 </script>
 <style>
-
+	#main1 {
+		position:relative;
+		max-width:580px;
+		margin:0px auto;
+		margin-top:15px;
+		margin-bottom:60px;
+	}
 	.divwidth {
-		width: 350px;
+		width:290px;
+		height:414px;
+		margin-top:30px;
+	}
+	@media (max-width:610px) {
+		.divwidth {
+			margin-top:0px;
+		}
 	}
 	.bgwidth {
-		background-size: 350px;
+		background-size: 290px;
 	}
 	.divheight {
-		height: 500px;
+		height: 414px;
 	}
-
-	@media (max-width: 320px) {
-		.divwidth{
-			width: 290px;
-		}
-		.bgwidth{
-			background-size: 300px;
-		}
-		.divheight {
-			height: 428px;
+	.med {
+		position:absolute;
+		left:0px;
+		top:0px;
+		width:100%;
+		font-family: 'PFSquareSansPro-Medium';
+		font-size:18px;
+		line-height:22px;
+	}
+	@media (max-width:610px) {
+		.med {
+			position:relative;
+			float:left;
+			font-size:14px;
+			padding-top:5px;
+			padding-bottom:5px;
 		}
 	}
 </style>
@@ -57,14 +72,12 @@
 
 <h3>{{.Lang.put_points_on_photo}}</h3>
 
-<div id="main1" style="position: relative;">
-
-	<div id="comment-face" style="font-weight:bold;">1</div>
-
+<div id="main1">
 	<div class="divwidth" style="position: relative; float: left">
 		<canvas class="canvas bgwidth" id="example_face" style="position: absolute; background-image: url('static/img/face.jpg');"></canvas>
 		<canvas class="canvas" style="position: relative; top:0px; left:0px;"></canvas>
 	</div>
+	<div id="comment-face" class="med">1</div>
 	<div class="divwidth" style="position: relative; float: left; text-align: center">
 		<canvas class="canvas bgwidth"  id="face_coords_mouse" style=" top:0px; left:0px; position: absolute; background-image: url('{{.UserFace}}');"></canvas>
 		<canvas class="canvas divheight" id="face" style="position: relative; top:0px; left:0px;"></canvas>
@@ -74,11 +87,11 @@
 
 	<div class="clearfix"></div>
 {{if .Full}}
-	<div id="comment-profile" style="font-weight:bold;">2</div>
 	<div class="divwidth" style="position: relative; float: left">
 		<canvas class="canvas bgwidth" id="example_profile" style="position: absolute; background-image: url('static/img/profile.jpg');"></canvas>
 		<canvas class="canvas" style="position: relative; top:0px; left:0px;"></canvas>
 	</div>
+	<div id="comment-profile" class="med">2</div>
 	<div class="divwidth" style="position: relative; float: left; text-align: center">
 		<canvas class="canvas bgwidth"  id="profile_coords_mouse" style=" top:0px; left:0px; position: absolute; background-image: url('{{.UserProfile}}');" ></canvas>
 		<canvas class="canvas divheight" id="profile" style="position: relative; top:0px; left:0px;"></canvas>
@@ -94,8 +107,8 @@
 		]
 		if (w == 290) {
 			for (var i=0; i < example_face.length; i++) {
-				example_face[i][0] = example_face[i][0]*0.85;
-				example_face[i][1] = example_face[i][1]*0.85;
+				example_face[i][0] = example_face[i][0]*0.825;
+				example_face[i][1] = example_face[i][1]*0.825;
 			}
 		}
 		var example_profile = [
@@ -103,8 +116,8 @@
 		]
 		if (w == 290) {
 			for (var i=0; i < example_profile.length; i++) {
-				example_profile[i][0] = example_profile[i][0]*0.85;
-				example_profile[i][1] = example_profile[i][1]*0.85;
+				example_profile[i][0] = example_profile[i][0]*0.825;
+				example_profile[i][1] = example_profile[i][1]*0.825;
 			}
 		}
 		coords.getObject("face").init({
@@ -138,16 +151,16 @@
 			coords.getObject(name).clear();
 		}
 
-		$('#comment-face').text( '' );
-		$('#comment-profile').text( '' );
+		$('#comment-face').text('{{.Lang.points_face_1}}');
+		$('#comment-profile').text('{{.Lang.points_profile_1}}');
 
 
 		$('#next_step').bind('click', function () {
-			/*$('#wrapper').spin();
+			/*$('#loader').spin();
 			$( "#dc_content" ).load( "content", { tpl_name: page }, function() {
 
 			} );
-			$('#wrapper').spin(false);
+			$('#loader').spin(false);
 			window.scrollTo(0,0);
 			if ($(".sidebar-collapse").is(":visible") && $(".navbar-toggle").is(":visible")) {
 				$('.sidebar-collapse').collapse('toggle');
@@ -160,9 +173,8 @@
 		});
 	</script>
 </div>
-<br>
 
-<button class="btn btn-success" id="next_step">{{.SaveAndGotoStep}}</button>
+<center><button class="btn btn-success" id="next_step">{{.SaveAndGotoStep}}</button></center>
 
 <a id="gotoupgrade4" href="/?upgrade4=1"></a>
 

@@ -1,6 +1,57 @@
 {{define "newUser"}}
 <div class="dc_new_user">
 <script>
+	var key_url = '';
+	var ref_user = 0;
+
+	function js_checkemail( email, strict)
+	{
+	 if ( !strict ) email = email.replace(/^\s+|\s+$/g, '');
+	 return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(email);
+	}
+	
+	function send_email(keyurl, refuser) {
+		key_url = keyurl;
+		ref_user = refuser;
+		$('#emailModal').modal({ backdrop: 'static' });
+		return false;
+	}
+	
+	function send_keys() {
+		var email = $('#email_email').val();
+		var subject = $('#email_subject').val();
+		var text = $('#email_text').val();
+
+		if (email=='') {
+			alert('Email is empty');
+			return;
+		}
+		if (!js_checkemail( email, true )) {
+			alert('Email is not valid');
+			return;
+		}
+		if (subject=='') {
+			alert('Subject is empty');
+			return;
+		}
+		if (text=='') {
+			alert('Text is empty');
+			return;
+		}
+		$('#emailModal').modal('hide');
+		$('.modal-backdrop').remove();
+		$('.modal-backdrop').css('display', 'none');
+		$.post( 'ajaxjson?controllerName=SendKey', {
+				'email' : $('#email_email').val(),
+				'subject' : $('#email_subject').val(),
+				'text' : $('#email_text').val(),
+				'refuser': ref_user,
+				'keyurl': key_url
+		}, function (data) {
+			dc_navigate ('newUser', {'alert': data.success ? data.data : data.error} );
+		});
+	}
+
 	$('#new_user').bind('click', function () {
 
 		var bText = $(this).html();
@@ -72,7 +123,7 @@
 	<button id="new_user" type="button" class="btn btn-outline btn-primary">new user</button><br><br>
 	{{if .MyRefs}}
 		<div class="dc_new_user__referals">
-		<table class="table table-striped table-bordered table-hover" style="max-width:600px">
+		<table class="table table-striped table-bordered table-hover" style="max-width:750px;">
 		<thead>
 		<tr>
 			<th>User ID</th>
@@ -100,7 +151,9 @@
 			{{if not $data.Key}}
 				<td>{{$.Lang.key_has_been_changed}}</td>
 			{{else}}
-				<td style='font-size: 25px' class='ref'><a href='{{$data.KeyUrl}}.png' target='_blank'><i class='fa fa-download'></i></a> <a href='{{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-file-text-o'></i></a> <!--<a href='https://www.facebook.com/sharer/sharer.php?u={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-facebook-square'></i></a> <a href='https://twitter.com/home?status={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-twitter-square'></i></a> <a href='http://vkontakte.ru/share.php?url={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-vk'></i></a> <a href='mailto:?subject=Dcoin&amp;body={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-envelope-o'></i></a>--></td></tr>
+				<td style='font-size:30px' class='ref'><a href='{{$data.KeyUrl}}.png' target='_blank'><i class='filetypes filetypes-png' style="top:5px;"></i></a> <a href='{{$data.KeyUrl}}.txt' target='_blank'><i class='filetypes filetypes-txt' style="top:5px;"></i></a>
+				<a href="" onclick="return send_email('{{$data.KeyUrl}}', {{$refUserId}});"><i class='glyphicon glyphicon-envelope'></i></a>
+				<!--<a href='https://www.facebook.com/sharer/sharer.php?u={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-facebook-square'></i></a> <a href='https://twitter.com/home?status={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-twitter-square'></i></a> <a href='http://vkontakte.ru/share.php?url={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-vk'></i></a> <a href='mailto:?subject=Dcoin&amp;body={{$data.KeyUrl}}.txt' target='_blank'><i class='fa fa-envelope-o'></i></a>--></td></tr>
 			{{end}}
 		{{end}}
 		</tbody>
@@ -119,14 +172,14 @@
 
 <div class="clearfix"></div>
 <div class="table_fix">
-{{noescape .LastTxFormatted}}
+<!--noescape .LastTxFormatted-->
 <script src="static/js/unixtime.js"></script>
 </div>
 
 {{if .GlobalRefs}}
 	<h3>{{.Lang.leaders_dcoin}}</h3>
 	<div class="dc_new_user__leaders_dcoin">
-	<table class="table table-striped table-bordered table-hover" style="max-width:400px">
+	<table class="table table-striped table-bordered table-hover" style="max-width:750px;">
 	<thead>
 	<tr>
 		<th style="width:100px">Miner</th>
@@ -146,6 +199,51 @@
 	</table>
 	</div>
 {{end}}
+
+<div class="modal fade" id="emailModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title">Send the private key by email</h4>
+			</div>
+			<div style="margin: 15px" >
+				<div class="form-horizontal">
+					<fieldset>
+						<div id="alerts"></div>
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="email_email">E-mail</label>
+							<div class="col-md-9" style="padding-bottom: 15px;">
+								<input id="email_email" name="email" placeholder="" class="form-control input-md" type="text">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="email_subject">Subject</label>
+							<div class="col-md-9" style="padding-bottom: 15px;">
+								<input id="email_subject" name="subject" 
+								 placeholder="" class="form-control input-md" type="text" value="Dcoin private key">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="email_text">Text</label>
+							<div class="col-md-9" style="padding-bottom: 15px;">
+								<textarea rows="3" id="email_text" name="text" placeholder="" class="form-control input-md" 
+								type="text">You can find your dcoin private key as .txt and .png file in the attachments.</textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label" for="email_send"></label>
+							<div class="col-md-9">
+								<button id="email_send" name="email_send" class="btn btn-primary" onclick="send_keys()">{{.Lang.send}}</button>
+							</div>
+						</div>						
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script>
 	{{range $userId, $hosts := .RefPhotos}}

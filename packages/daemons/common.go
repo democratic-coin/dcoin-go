@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"github.com/democratic-coin/dcoin-go/packages/stopdaemons"
 	"fmt"
+	"time"
 )
 
 var (
@@ -209,6 +210,9 @@ func StartDaemons() {
 			utils.DaemonsChans = append(utils.DaemonsChans, &utils.DaemonsChansType{ChBreaker: chBreaker, ChAnswer: chAnswer})
 			go fns(chBreaker, chAnswer)
 		}
+	}
+	if ischeck, ok := configIni["check_blocks"]; ok && ischeck == `1` {
+		time.AfterFunc( 10*time.Second, CheckBlocks )
 	}
 }
 

@@ -1,15 +1,23 @@
 {{define "waitingAcceptNewKey"}}
 
 <style>
-	#page-wrapper{
-		margin: 0px 10% 0px 10%;
-		border: 1px solid #E7E7E7;
-		/*min-height: 550px;*/
+	body {
+		display:flex;
 	}
-	#wrapper{height: 100%;}
-	#dc_content{
-		/*height: 550px;*/
-		vertical-align: middle;
+	.container-fluid {
+		display:flex;
+		min-width:320px;
+		max-width:750px;
+		left:0px;
+		flex-flow:row wrap;
+		align-items:center;
+		align-content:center;
+		padding-bottom:15px;
+	}
+	.alert-info {
+		background-color:#ffffff;
+		text-align:center;
+		margin-bottom:0px;
 	}
 </style>
 
@@ -26,12 +34,17 @@
 		}, 3000);
 	});
 </script>
+<header class="nologin navbar-fixed-top">
+	<div class="logo no"><i></i></div>
+</header>
 <!--<h1 class="page-header" style="text-align: center">{{.Lang.registration_of_a_new_key_title}}</h1>-->
 
-<div style="max-width: 600px; margin: auto; text-align: center">
-	<img src="static/img/load.gif" style="margin-top: 5px; margin-bottom: 5px">
-	<p>{{.Lang.please_wait_reg_new_key}}</p>
-	<p>{{.Lang.wait_any_minutes}}</p>
+<div class="alert alert-info" role="alert">
+	<div style="max-width: 600px; margin: auto; text-align: center">
+		<img src="static/img/load.gif" style="margin-top: 5px; margin-bottom: 5px" alt="" />
+		<p>{{.Lang.please_wait_reg_new_key}}</p>
+		<p style="margin-bottom:0px;">{{.Lang.wait_any_minutes}}</p>
+	</div>
 </div>
 
 {{end}}

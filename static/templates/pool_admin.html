@@ -1,4 +1,14 @@
 {{define "poolAdmin"}}
+<style>
+	.control-label {
+		margin-top:1rem;
+		margin-bottom:0.25rem;
+	}
+	.col-xs-12 {
+		padding-left:0px;
+		padding-right:0px;
+	}
+</style>
 <script>
 	$('#sql').change(function () {
 		file_upload('sql', 'sql_progress', 'sql', 'poolAddUsers');
@@ -76,7 +86,7 @@
 			{{if .ModeError}}<div class="alert alert-danger" id="mode_error">{{.ModeError}}</div>{{end}}
 			Mode: <span id="mode">{{.MyMode}}</span><br>
 
-			<button class="btn" id="single_mode">Single mode</button> 	<button class="btn" id="pool_mode">Pool mode</button> Local: <input type="checkbox" id="isLocalSelected" checked="checked">
+			<button class="btn btn-primary" id="single_mode">Single mode</button> 	<button class="btn btn-primary" id="pool_mode">Pool mode</button> Local: <input type="checkbox" id="isLocalSelected" checked="checked">
 
 			{{template "signatures".}}
 		</div>
@@ -88,26 +98,26 @@
 	<div class="form-horizontal">
 		<fieldset>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="pool_tech_works">pool_tech_works</label>
-				<div class="col-md-4">
+				<label class="col-xs-12 control-label" for="pool_tech_works">pool_tech_works</label>
+				<div class="col-xs-12">
 					<input name="pool_tech_works" id="pool_tech_works" type="checkbox" {{if eq .Config.pool_tech_works "1"}}checked{{end}}>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="pool_max_users">pool_max_users</label>
-				<div class="col-md-4">
+				<label class="col-xs-12 control-label" for="pool_max_users">pool_max_users</label>
+				<div class="col-xs-12">
 					<input id="pool_max_users" name="pool_max_users" class="form-control input-md" type="text" value="{{.Config.pool_max_users}}">
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="commission">Commission</label>
-				<div class="col-md-4">
+				<label class="col-xs-12 control-label" for="commission">Commission</label>
+				<div class="col-xs-12">
 					    <textarea class="form-control" id="commission" name="commission">{{.Config.commission}}</textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="save"></label>
-				<div class="col-md-4">
+				<label class="col-xs-12 control-label" for="save"></label>
+				<div class="col-xs-12">
 					<button id="save" name="save" class="btn btn-primary">{{.Lang.save}}</button>
 				</div>
 			</div>
@@ -121,14 +131,15 @@
 	<div class="form-horizontal">
 		<fieldset>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="file">Import users from sql</label>
-				<div class="col-md-4">
+				<label class="control-label" for="sql">Import users from sql</label>
+				<label class="file" style="display:block;">
 					<input id="sql" name="file" class="input-file" type="file">
-				</div>
+					<span class="file-custom"></span>
+				</label>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label" for="singlebutton">Export users to sql</label>
-				<div class="col-md-4">
+				<label class="col-xs-12 control-label" for="singlebutton">Export users to sql</label>
+				<div class="col-xs-12">
 					<a type="button"  href="ajax?controllerName=poolDataBaseDump" id="singlebutton" name="singlebutton" class="btn btn-primary">Download</a>
 				</div>
 			</div>
@@ -137,20 +148,25 @@
 	</div>
 
 
-	<h3>Users</h3><table class='table' style='width: 500px'><thead><tr><th>user_id</th><th>miner_id</th><th>email</th><th>del</th></tr></thead>
-	{{range $id, $data_ := .Users}}
-		{{range $uid, $data := $data_}}
-			<tr><td><a onclick="dc_navigate('poolAdminLogin', {'userId': {{$uid}} })">{{$uid}}</a></td><td>{{$data.miner_id}}</td><td>{{$data.email}}</td><td><a class="btn btn-danger" href="#" onclick="dc_navigate('delPoolUser', {'del_user_id':'{{$uid}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i> {{.Lang.delete}}</a></td></tr>
+	<h3>Users</h3>
+	<div class="table_fix">
+		<table class='table' style='width: 500px'><thead><tr><th>user_id</th><th>miner_id</th><th>email</th><th>del</th></tr></thead>
+		{{range $id, $data_ := .Users}}
+			{{range $uid, $data := $data_}}
+				<tr><td><a onclick="dc_navigate('poolAdminLogin', {'userId': {{$uid}} })">{{$uid}}</a></td><td>{{$data.miner_id}}</td><td>{{$data.email}}</td><td><a class="btn btn-danger" href="#" onclick="dc_navigate('delPoolUser', {'del_user_id':'{{$uid}}'}); return false;"><i class="fa fa-trash-o fa-lg"></i> {{.Lang.delete}}</a></td></tr>
+			{{end}}
 		{{end}}
-	{{end}}
-	</table>
+		</table>
+	</div>
 
-	<h3>Pool waiting list</h3><table class='table' style='width: 500px'><thead><tr><th>time</th><th>email</th><th>user_id</th></tr></thead>
-	{{range $k, $data := .WaitingList}}
-		<tr><td>{{$data.time}}</td><td>{{$data.email}}</td><td>{{$data.user_id}}</td></tr>
-	{{end}}
-	</table>
-
+	<h3>Pool waiting list</h3>
+	<div class="table_fix">
+		<table class='table' style='width: 500px'><thead><tr><th>time</th><th>email</th><th>user_id</th></tr></thead>
+		{{range $k, $data := .WaitingList}}
+			<tr><td>{{$data.time}}</td><td>{{$data.email}}</td><td>{{$data.user_id}}</td></tr>
+		{{end}}
+		</table>
+	</div>
 </div>
      
 {{end}}

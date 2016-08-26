@@ -1,0 +1,49 @@
+{{define "adminSpots"}}
+<script>
+
+	$('#send_to_net').bind('click', function () {
+
+		$.post( 'ajax?controllerName=saveQueue', {
+			'type' : '{{.TxType}}',
+			'time' : '{{.TimeNow}}',
+			'user_id' : '{{.UserId}}',
+			'example_spots': '$("#example_spots").val()',
+			'segments': '$("#segments").val()',
+			'tolerances': '$("#tolerances").val()',
+			'compatibility': '$("#compatibility").val()',
+			'signature1': $('#signature1').val(),
+			'signature2': $('#signature2').val(),
+			'signature3': $('#signature3').val()
+		}, function (data) {
+			dc_navigate ('adminSpots', {'alert': '{{.Lang.sent_to_the_net}}'} );
+		} );
+
+	} );
+
+	$('#save').bind('click', function () {
+		$("#data").css("display", "none");
+		$("#sign").css("display", "block");
+		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#example_spots').val()+','+$('#segments').val()+','+$('#tolerances').val()+','+$('#compatibility').val() );
+		doSign();
+	} );
+
+	check_key_and_show_modal();
+</script>
+
+<h1 class="page-header">adminSpots</h1>
+
+{{template "alertSuccess".}}
+
+<div id="main">
+	<table>
+		<tr valign="top"><td style="padding-right: 15px;">example_spots</td><td><textarea id='example_spots' name='example_spots' style='width: 600px' rows="3"></textarea></td></tr>
+		<tr valign="top"><td style="padding-right: 15px;">segments</td><td><textarea id='segments' name='segments' style='width: 600px' rows="2"></textarea></td></tr>
+		<tr valign="top"><td style="padding-right: 15px;">tolerances</td><td><textarea id='tolerances' name='tolerances' style='width: 600px' rows="2"></textarea></td></tr>
+		<tr valign="top"><td style="padding-right: 15px;">compatibility</td><td><input type="text" id='compatibility' name='compatibility' style='width: 600px' ></td></tr>
+	</table>
+	<button class="btn" id="save">Save</button>
+</div>
+
+{{template "signatures".}}
+
+{{end}}

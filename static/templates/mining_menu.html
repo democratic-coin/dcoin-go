@@ -1,6 +1,9 @@
 {{define "miningMenu"}}
 <div class="mining_menu">
 	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		})
 		$(document).ready(function() {
 			$( "#progress_bar" ).load( "ajax?controllerName=progressBar" );
 		});
@@ -9,14 +12,66 @@
 	<h1 class="page-header">{{.Lang.mining}}</h1>
 	
 	{{template "alertSuccess".}}
-	<div>
+	<section class="desktop row">
+		<div class="item col-md-3 col-xs-6">
+			<a class="menu" href="#promisedAmountList">
+				<span class="glyphicon glyphicon-money"></span>
+				<span class="head"><em>{{.Lang.promised_amounts}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_promised_amounts_text}}"></span>
+		</div>
+		<div class="item col-md-3 col-xs-6">
+			<a class="menu" href="#{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}">
+				<span class="glyphicon glyphicon-coins"></span>
+				<span class="head"><em>{{.Lang.free_coins}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.free_coins}}"></span>
+		</div>
+		<div class="item col-md-3 col-xs-6">
+			<a class="menu" href="#cashRequestOut">
+				<span class="glyphicon glyphicon-fees-payments"></span>
+				<span class="head"><em>{{.Lang.outgoing}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_outgoing_text}}"></span>
+		</div>
+		<div class="item col-md-3 col-xs-6">
+			<a class="menu" href="#cashRequestIn">
+				<span class="glyphicon glyphicon-invoice"></span>
+				<span class="head"><em>{{.Lang.inbox}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{noescape .Lang.mining_menu_inbox_text}}"></span>
+		</div>
+		<!--<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#points">
+				<span class="glyphicon glyphicon-podium"></span>
+				<span class="head"><em>{{.Lang.points}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_points_text}}"></span>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#changeCommission">
+				<span class="glyphicon glyphicon-small-payments"></span>
+				<span class="head"><em>{{.Lang.commission}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_commission_text}}"></span>
+		</div>
+		<div class="item col-lg-3 col-md-4 col-xs-6">
+			<a class="menu" href="#voteForMe">
+				<span class="glyphicon glyphicon-conversation"></span>
+				<span class="head"><em>{{.Lang.vote_for_me}}</em></span>
+			</a>
+			<span class="help glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="{{.Lang.mining_menu_vote_for_me_text}}"></span>
+		</div>-->
+	</section>
+	
+	<div style="display:none;">
 		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" style="margin-bottom: 20px">
-			<li class="active"><a aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
+		<ul class="nav nav-tabs">
+			<li class="nav-item"><a class="nav-link active" aria-expanded="true" href="#tab1" data-toggle="tab">{{.Lang.general}}</a>
 			</li>
-			<li class=""><a aria-expanded="false" href="#tab2" data-toggle="tab">{{.Lang.assignments}}</a>
+			<li class="nav-item"><a class="nav-link" aria-expanded="false" href="#tab2" data-toggle="tab">{{.Lang.assignments}}</a>
 			</li>
-			<li class=""><a aria-expanded="false" href="#tab3" data-toggle="tab">{{.Lang.additionally}}</a>
+			<li class="nav-item"><a class="nav-link" aria-expanded="false" href="#tab3" data-toggle="tab">{{.Lang.additionally}}</a>
 			</li>
 		</ul>
 	
@@ -25,56 +80,56 @@
 			<div class="tab-pane fade active in" id="tab1">
 				<div class="tabs_table">
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.promised_amounts}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_promised_amounts_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#promisedAmountList">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.outgoing}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_outgoing_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate('cashRequestOut')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.inbox}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{noescape .Lang.mining_menu_inbox_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#cashRequestIn">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-3">
-						<div class="panel panel-info">
-							<div class="panel-heading">
+						<div class="card card-info card-inverse">
+							<div class="card-header">
 								{{.Lang.vote_for_me}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_vote_for_me_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#voteForMe">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -85,14 +140,14 @@
 			<div class="tab-pane fade" id="tab2">
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.points}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_points_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#points">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -100,14 +155,14 @@
 		
 		
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.tasks}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_tasks_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate('assignments')">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -115,14 +170,14 @@
 		
 		
 					<div class="col-lg-4">
-						<div class="panel panel-success">
-							<div class="panel-heading">
+						<div class="card card-success card-inverse">
+							<div class="card-header">
 								{{.Lang.voting}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_voting_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#voting">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -137,42 +192,42 @@
 	
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.reg_users}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_reg_users_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#newUser">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.commission}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_commission_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#changeCommission">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 		
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.holidays}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_holidays_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#holidaysList">{{.Lang.goto}}</a>
 							</div>
 						</div>
@@ -180,75 +235,71 @@
 				</div>
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.geolocation}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.mining_menu_geolocation_text}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('changeGeolocation')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								{{.Lang.sms_and_email_notifications}}
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>{{.Lang.sms_and_email_notifications}}</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('Notifications')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								Exchange voting
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>Exchange voting</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="dc_navigate ('VotesExchange')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
-
+	
+	
 				<div class="tabs_table">
 					<div class="col-lg-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="card card-warning card-inverse">
+							<div class="card-header">
 								FREE COINS
 							</div>
-							<div class="panel-body">
+							<div class="card-block">
 								<p>FREE COINS</p>
 							</div>
-							<div class="panel-footer">
+							<div class="card-footer">
 								<a href="#" onclick="map_navigate ('{{if .FreeCoin}}PromisedAmountRestrictedList{{else}}PromisedAmountRestricted{{end}}')">{{.Lang.goto}}</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
-
+	
+	
 			</div>
 		</div>
-	
-	
 	</div>
-	
 	<div class="clearfix"></div>
 	<div class="table_fix">
-	{{noescape .LastTxFormatted}}
-	<script src="static/js/unixtime.js"></script>
-	
+		<!--noescape .LastTxFormatted-->
+		<script src="static/js/unixtime.js"></script>
 	{{end}}
 	</div>
 </div>

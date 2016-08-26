@@ -32,7 +32,7 @@ function send_video (file_id, progress, type, user_id) {
         $(idname+'_err').css("display", "block");
 		return
 	}
-    $('#wrapper').spin();
+    $('#loader').spin();
     var
         $f = $(idname),
         $p = $('#'+progress),
@@ -42,11 +42,11 @@ function send_video (file_id, progress, type, user_id) {
             type:type,
             progress:function(ev){ $p.html(((ev.loaded/ev.total)*100)+'%'); $p.css('width',$p.html()); },
             error:function(ev){
-                $("#wrapper").spin(false);
+                $("#loader").spin(false);
                 alert('error ' + ev);
             },
             success:function(data){
-                $("#wrapper").spin(false);
+                $("#loader").spin(false);
                 if (data.error) {
                     alert(data.error)
                 }
@@ -74,8 +74,8 @@ function show_profile (user_id) {
         $("#profile_abuses").html(data.abuses);
         $("#profile_reg_time").html(data.reg_time);
         $("#profile_window").css("display", "block");
-        $("#profile_window").center();
-        $("#reloadbtn").html('<button onclick="reload_photo('+user_id+', \'profile_photo\');" class="btn">reload photo</button>');
+        //$("#profile_window").center();
+        $("#reloadbtn").html('<button onclick="reload_photo('+user_id+', \'profile_photo\');" class="btn btn-primary-outline">reload photo</button>');
         $('#profile_photo').attr('src', '');
         reload_photo(user_id, 'profile_photo');
     }, 'JSON' );

@@ -1,756 +1,21 @@
 {{ define "home" }}
-<div class="dc_home">
-
-<!--<link rel="stylesheet" type="text/css" href="static/css/tooltipster.css" />
-<link rel="stylesheet" type="text/css" href="static/css/tooltipster-shadow.css" />
-<script type="text/javascript" src="static/js/jquery.tooltipster.min.js"></script>-->
 <style>
-	@media (min-width: 1024px) {
-		.qtip-close{display: none}
+	h1 {
+		display:none;
 	}
-
-	@media (min-width: 768px) {
-		.col-sm-6 {
-			width: 100%;
-		}
-	}
-	@media (min-width: 840px) {
-			.col-sm-6 {
-				width: 50%;
-			}
-	}
-	@media  (min-width: 1350px) {
-		.col-lg-3 {
-			width: 25%;
+	@media screen and (max-width: 991px) {
+		h1 {
+			display:block;
 		}
 	}
 </style>
-
-
-<script>
-	if (typeof intervalIdArray != "undefined") {
-		for (i=0; i<intervalIdArray.length; i++)
-			clearInterval(intervalIdArray[i]);
-	}
-	$(function() {
-		check_key_and_show_modal();
-		/*$('[title!=""]').qtip( {
-			position: {target: 'mouse', adjust: { x: 5, y: 5 }},
-			style: { classes: 'qtip-blue qtip-bootstrap qtip-shadow' },
-			content: {	button: true }
-			}
-		);*/
-
-		/*$.ajax({
-			url: "http://dcoinsimple.com/api.php",
-			type: 'GET',
-			dataType: "json",
-			crossDomain: true,
-			success: function (data) {
-				console.log(data);
-				if(typeof data.total_buy[1] != "undefined")
-					$('#dwoc_ex_buy_sum').html('$'+Math.round(data.total_buy[1]*100)/100);
-				if(typeof data.max_buy_rate[1] != "undefined")
-					$('#dwoc_ex_buy_rate').html('1 dWOC = $'+Math.round(data.max_buy_rate[1]*100)/100);
-
-				if(typeof data.total_buy[72] != "undefined")
-					$('#dusd_ex_buy_sum').html('$'+Math.round(data.total_buy[72]*100)/100);
-				if(typeof data.max_buy_rate[72] != "undefined")
-					$('#dusd_ex_buy_rate').html('1 dUSD = $'+Math.round(data.max_buy_rate[72]*100)/100);
-
-				if(typeof data.total_buy[23] != "undefined")
-					$('#deur_ex_buy_sum').html('$'+Math.round(data.total_buy[23]*100)/100);
-				if(typeof data.max_buy_rate[23] != "undefined")
-					$('#deur_ex_buy_rate').html('1 dEUR = $'+Math.round(data.max_buy_rate[23]*100)/100);
-
-				if(typeof data.total_buy[58] != "undefined")
-					$('#drub_ex_buy_sum').html('$'+Math.round(data.total_buy[58]*100)/100);
-				if(typeof data.max_buy_rate[58] != "undefined")
-					$('#drub_ex_buy_rate').html('1 dRUB = $'+Math.round(data.max_buy_rate[58]*1000)/1000);
-			}
-		});*/
-
-	});
-	{{if and (or (eq .MyNotice.account_status "user") (eq .MyNotice.account_status "miner") ) (not .UserId)}}
-		$("#main-login").html('<a href="#myModal" data-backdrop="static" data-toggle="modal" role="button" class="btn btn-danger  btn-block "><i class="fa fa-sign-in fa-lg"></i> Login</a><div style="margin: 2px 10px; font-size: 11px">{{.Lang.login_alert}}</div>');
-	{{else}}
-
-	{{end}}
-</script>
-<style>
-	.alert-info a:link{text-decoration: underline}
-	{{if not .Mobile}}#dc_content{margin-top:30px}{{end}}
-</style>
-
-<h1 class="page-header" {{if not .Mobile}}style="display: none"{{end}}>Home</h1>
-
-<link href="static/css/cf.css" rel="stylesheet">
-<script>
-
-	$( document ).ready(function() {
-		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
-			if (typeof data.success !== 'undefined') {
-				$('#AlertMessage').css("display", "block");
-				$('#AlertMessage p').html(data.success);
-			}
-		}, 'JSON');
-	
-		$.get('ajax?controllerName=Update', function (data) {
-			if (typeof data.success !== 'undefined') {
-				$('#UpdateMessage').css("display", "block");
-				$('#UpdateMessage p').html(data.success);
-			}
-		}, 'JSON');
-	});
-</script>
-<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
-<div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
-{{ template "alertSuccess". }}
-
-<style>
-	.fd-tile.detail .content {
-		background: none repeat scroll 0% 0% transparent;
-		padding: 10px 10px 13px;
-		display: inline-block;
-		position: relative;
-		z-index: 3;
-	}
-	.fd-tile .content p {
-		margin-bottom: 0px;
-		font-size: 14px;
-	}
-	.fd-tile .content h1 {
-		margin: 0px;
-		font-weight: 300;
-		font-size: 40px;
-	}
-	.tab-content h3, h2, h1:first-child {
-		margin-top: 0px;
-	}
-	.cl-mcont h1 {
-		line-height: 1.3em;
-	}
-	.text-left {
-		text-align: left;
-	}
-	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-		font-family: "Open Sans",sans-serif;
-		font-weight: 300;
-	}
-	h1, .h1 {
-		font-size: 36px;
-	}
-	h1, .h1, h2, .h2, h3, .h3 {
-		margin-top: 20px;
-		margin-bottom: 10px;
-	}
-	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-		font-family: inherit;
-		font-weight: 500;
-		line-height: 1.1;
-		color: inherit;
-	}
-	p {
-		font-size: 13px;
-		line-height: 22px;
-	}
-	p {
-		margin: 0px 0px 10px;
-	}
-	.fd-tile.clean {
-		color: #888;
-	}
-	.cl-mcont {
-		color: inherit;
-		font-size: 13px;
-		font-weight: 200;
-		line-height: 21px;
-	}
-
-	.ex {
-		font-family: "Open Sans",sans-serif;
-		font-size: 12px;
-		color: #555;
-	}
-	.fa-flag:before {
-		content: "";
-	}
-
-	.fd-tile.detail .icon i {
-		color: rgba(0, 0, 0, 0.05);
-		font-size: 100px;
-		line-height: 65px;
-	}
-	.fd-tile.clean .icon i {
-		color: #E5E5E5;
-	}
-	/*.fa {
-		display: inline-block;
-		font-family: FontAwesome;
-		font-style: normal;
-		font-weight: normal;
-		line-height: 1;
-	}*/
-	.fd-tile.detail .icon {
-		display: block;
-		float: right;
-		height: 80px;
-		margin-bottom: 10px;
-		padding-left: 15px;
-		padding-top: 10px;
-		width: 80px;
-	}
-	.fd-tile.detail .icon {
-		display: block;
-		float: right;
-		height: 80px;
-		margin-bottom: 10px;
-		padding-left: 15px;
-		padding-top: 10px;
-		position: absolute;
-		right: 10px;
-		top: 0px;
-		width: 80px;
-	}
-	.fd-tile.clean.tile-purple .details {
-		background-color: #5D9CEC;
-	}
-	.fd-tile.detail {
-		position: relative;
-		overflow: hidden;
-	}
-	.fd-tile.detail .details {
-		clear: both;
-		display: block;
-		padding: 5px 10px;
-		color: #FFF;
-		text-transform: uppercase;
-		background-color: rgba(0, 0, 0, 0.1);
-	}
-	.ex a {
-		color: #23C0A2;
-		text-decoration: none;
-		outline: 0px none;
-	}
-	.ex a {
-		color: #428BCA;
-		text-decoration: none;
-	}
-	.ex a {
-		background: none repeat scroll 0% 0% transparent;
-	}
-	.ex a:focus, .ex a:hover, .ex a:active {
-		outline: 0px none;
-		text-decoration: none;
-		color: #0FAC8E;
-	}
-	.fd-tile.detail .details i {
-		font-size: 18px;
-		color: rgba(255, 255, 255, 0.4);
-	}
-	.fa.pull-right {
-		margin-left: 0.3em;
-	}
-	.fd-tile.detail .icon i {
-		color: rgba(0, 0, 0, 0.05);
-		font-size: 100px;
-		line-height: 65px;
-	}
-	.fd-tile.clean.tile-green .details {
-		background-color: #37BC9B;
-	}
-	.fd-tile.clean.tile-prusia .details {
-		background-color: #AD4B84;
-	}
-	.fd-tile.clean.tile-red .details {
-		background-color: #EA6153;
-	}
-</style>
-
-
-
-<div id="message"></div>
-<script>
-
-	function dc_counter(amount, pct, amount_id, characters)
-	{
-		console.log($('#'+amount_id).text());
-		var amount_str = $('#'+amount_id).text();
-		console.log('dc_counter/amount_str='+amount_str);
-		var amount = parseFloat(amount_str);
-		console.log('dc_counter/'+amount_id+'/'+amount+'/'+pct);
-		var i=0;
-		pct = pct / 3;
-
-		var intervalID = setInterval( function() {
-			 i++;
-			 //console.log(i);
-			 var new_amount =  Math.pow(1+pct, i) * amount;
-			 var number = Math.pow(10, Number(characters));
-			//console.log('characters='+characters);
-			//console.log('number='+number);
-			 if (new_amount<number) {
-				 if (parseFloat(new_amount)<1)
-					 var s = 2;
-				 else
-					 var s = 1;
-				 new_amount = new_amount.toString();
-				 new_amount = new_amount.substr(0, characters+s);
-				 //console.log('new_amount<number='+new_amount+'/'+s);
-			 }
-			 else {
-				 new_amount = new_amount.toFixed();
-				 //console.log('new_amount.toFixed='+new_amount);
-			 }
-			if (new_amount!="NaN" ) {
-				$('#'+amount_id).text(new_amount);
-				//console.log('new_amount='+new_amount);
-			}
-			else {
-				amount = parseFloat($('#'+amount_id).text());
-				//console.log('amount='+amount);
-			}
-		} , 300);
-		intervalIdArray.push(intervalID);
-	}
-
-</script>
-<script>
-	/*$(document).ready(function() {
-		$('.tooltip').tooltipster({
-			delay: 50,
-			contentAsHTML: true,
-			interactive: true,
-			theme: 'tooltipster-shadow'
-		});
-	});*/
-</script>
-
-<style>
-
-	.phoney {
-		background-color: rgba (0, 0, 0, 0.7);
-		background: rgba(0, 0, 0, 0.7);
-
-	}
-
-	.phoneytext {
-		text-shadow: 0 -1px 0 #000;
-		color: #fff;
-		font-family: Helvetica Neue, Helvetica, arial;
-		font-size: 18px;
-		line-height: 25px;
-		padding: 4px 45px 4px 15px;
-		font-weight: bold;
-		background: url(static/img/us-ru.png) 95% 50% no-repeat;
-	}
-
-	.phoneytab {
-		text-shadow: 0 -1px 0 #000;
-		color: #fff;
-		font-family: Helvetica Neue, Helvetica, arial;
-		font-size: 18px;
-		background: rgb(112,112,112) !important;
-	}
-
-	.img_face{
-		width: 80px;
-		height: 80px;
-		background-size: 80px Auto;
-		border-radius: 50%;
-		margin:auto;
-	}
-	.panel-img {
-		display: block;
-		margin: auto;
-		margin-top: -50px;
-		border-radius: 50%;
-		border: 7px solid #FFF;
-		width: 93px;
-		height: 93px;
-		line-height: 80px;
-		text-align: center;
-		text-shadow: -6px 8px 5px rgba(0, 0, 0, 0.3);
-	}
-	.profile_div{
-		padding-top: 15px;
-		border-top-left-radius: 4px;
-		border-top-right-radius: 4px;
-		height:75px;
-		background:none repeat scroll 0% 0% #5B90BF;
-	}
-	.profile_text{
-		background:none repeat scroll 0% 0% #ffffff;
-		text-align:center;
-		font-size:13px;
-	}
-	.profile_text strong {
-		font-size:25px;
-	}
-	.profile_text .dc_amount {
-		font-size:20px;
-	}
-	.profile_text .amount_1year {
-		font-size:24px;
-	}
-
-	.profile_main_div{
-		background:#ffffff;
-		padding-bottom:5px;
-		border-bottom-left-radius: 4px;
-		border-bottom-right-radius: 4px;
-		width:198px;
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-		line-height: 1.1;
-		color:#555;
-	}
-	.profile_main_div hr{
-		width:20%; margin:10px auto; border:none; height:1px; background:#ccc;
-	}
-
-</style>
-
-<script src="static/js/infobubble.js"></script>
-<!--<script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/src/infobubble-compiled.js" type="text/javascript"></script>-->
-
-
 <script type="text/javascript">
-	var infoBubble;
-
-	function get_img_home (i, user_id, urls, lnglat, html, counters, pct_sec, start) {
-		console.log('urls='+urls);
-		console.log('html='+html);
-		console.log('counters='+counters);
-		console.log('pct_sec='+pct_sec);
-		console.log('start='+start);
-		if (typeof urls == 'undefined' || typeof urls[i] == 'undefined' )
-			return 0;
-		var image = new Image();
-		image.src = urls[i]+"/public/"+user_id+"_user_face.jpg";
-		image.onload = function(){
-			console.log('OK '+urls[i]);
-			image=null;
-			infoBubble2 = new InfoBubble({
-				map: map,
-				content: '<div class="profile_main_div"><div class="profile_div"></div><div class="panel-img"><div id="img_' + user_id + '" style="width:80px; height:80px; background:  url(' + urls[i] + 'public/' + user_id + '_user_face.jpg)  50% 50%; background-size: 80px Auto; border-radius:50%"></div></div><div class="profile_text">' + html + '</div></div>',
-				position: new google.maps.LatLng(lnglat.lat, lnglat.lng),
-				shadowStyle: 1,
-				padding: 0,
-				backgroundColor: 'rgb(0,0,0,0)',
-				borderRadius: 4,
-				arrowSize: 10,
-				borderWidth: 1,
-				borderColor: '#ccc',
-				disableAutoPan: true,
-				hideCloseButton: false,
-				arrowPosition: 50,
-				backgroundClassName: 'phoney',
-				arrowStyle: 2
-			});
-			infoBubble2.open();
-
-			if (start == 1)
-				var lat = lnglat.lat + 3;
-			else
-				var lat = lnglat.lat;
-			var center = new google.maps.LatLng(lat, lnglat.lng);
-			map.panTo(center);
-
-
-			//console.log(i+'/'+user_id+'/'+urls);
-			$('#map_canvas').spin(false);
-			for (var k = 0; k < counters.length; k++) {
-				dc_counter(0, pct_sec, counters[k], 8);
-			}
-		};
-		// handle failure
-		image.onerror = function(){
-			image=null;
-			console.log('error '+urls[i]);
-			var bg = $('#img_' + user_id).css("background-image");
-			if (typeof bg == 'undefined' || bg.length<10)
-				get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
-		};
-		setTimeout
-		(
-				function()
-				{
-					if ( image!=null && (!image.complete || !image.naturalWidth) )
-					{
-						var bg = $('#img_' + user_id).css("background-image");
-						image = null;
-						console.log('error');
-						if (typeof bg == 'undefined' || bg.length<10)
-							get_img_home(i + 1, user_id, urls, lnglat, html, counters, pct_sec, start);
-					}
-				},
-				2000
-		);
+$(document).ready(function() {
+	if ($(".wallet .table-transactions .row").length > 6) {
+		$(".wallet .table-transactions .row").eq(5).nextAll().remove();
 	}
+});
 
-
-	var gMapsLoaded = false;
-	window.gMapsCallback = function(){
-		gMapsLoaded = true;
-		$(window).trigger('gMapsLoaded');
-	}
-	window.loadGoogleMaps = function(){
-		if(gMapsLoaded) return window.gMapsCallback();
-		var script_tag = document.createElement('script');
-		script_tag.setAttribute("type","text/javascript");
-		script_tag.setAttribute("src","http://maps.google.com/maps/api/js?callback=gMapsCallback");
-		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
-		var script_lib = document.createElement('script');
-		script_lib.setAttribute("type","text/javascript");
-		script_lib.setAttribute("src","static/js/oms.min.js");
-		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_lib);
-	}
-
-	$(document).ready(function(){
-		function initialize(){
-
-			console.log('-----------------------------------------------------------------------');
-			var mapOptions = {
-				zoom: 5,
-				scrollwheel: false,
-				center: new google.maps.LatLng(56.55258, 43.83508),
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				styles: [	{		featureType:'water',		stylers:[{color:'#46bcec'},{visibility:'on'}]	},{		featureType:'landscape',		stylers:[{color:'#f2f2f2'}]	},{		featureType:'road',		stylers:[{saturation:-100},{lightness:45}]	},{		featureType:'road.highway',		stylers:[{visibility:'simplified'}]	},{		featureType:'road.arterial',		elementType:'labels.icon',		stylers:[{visibility:'off'}]	},{		featureType:'administrative',		elementType:'labels.text.fill',		stylers:[{color:'#444444'}]	},{		featureType:'transit',		stylers:[{visibility:'off'}]	},{		featureType:'poi',		stylers:[{visibility:'off'}]	}]
-			};
-			map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-
-			$.get( 'ajax?controllerName=GetMinerDataMap', function (map_markers) {
-
-				console.log("map_markers", map_markers)
-
-				var markers = [];
-				/*var mapOptions = {
-					zoom: 5,
-					scrollwheel: false,
-					center: new google.maps.LatLng(56.55258, 43.83508),
-					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					styles: [	{		featureType:'water',		stylers:[{color:'#46bcec'},{visibility:'on'}]	},{		featureType:'landscape',		stylers:[{color:'#f2f2f2'}]	},{		featureType:'road',		stylers:[{saturation:-100},{lightness:45}]	},{		featureType:'road.highway',		stylers:[{visibility:'simplified'}]	},{		featureType:'road.arterial',		elementType:'labels.icon',		stylers:[{visibility:'off'}]	},{		featureType:'administrative',		elementType:'labels.text.fill',		stylers:[{color:'#444444'}]	},{		featureType:'transit',		stylers:[{visibility:'off'}]	},{		featureType:'poi',		stylers:[{visibility:'off'}]	}]
-				};
-
-				map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);*/
-
-				var gm = google.maps;
-				infowindow = new google.maps.InfoWindow();
-
-				markers.markerClickFunction = function(user_id) {
-					return function(e) {
-						e.cancelBubble = true;
-						e.returnValue = false;
-						if (e.stopPropagation) {
-							e.stopPropagation();
-							e.preventDefault();
-						}
-
-						$('#map_canvas').spin();
-						$.get( 'ajax?controllerName=GetMinerData&userId='+user_id, function (data) {
-							get_img_home (0, user_id, data.hosts, data.lnglat, data.html,  data.counters, data.pct_sec, 0);
-						}, "json" );
-
-					};
-				};
-				
-			      var oms = new OverlappingMarkerSpiderfier(map,
-					{markersWontMove: true, markersWontHide: true});
-			
-				  //var usualColor = 'eebb22';
-				  var spiderfiedColor = 'AD4B84';
-				  var iconWithColor = function(color) {
-					return 'http://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin|+|' +
-					  color + '|000000|ffff00';
-				  }
-				  /*var shadow = new gm.MarkerImage(
-					'https://www.google.com/intl/en_ALL/mapfiles/shadow50.png',
-					new gm.Size(37, 34),
-					new gm.Point(0, 0),
-					new gm.Point(10, 34)
-				  );*/
-				  
-				  oms.addListener('click', function(marker) {
-					//infowindow.open(map, marker);
-				  });
-				  oms.addListener('spiderfy', function(markers) {
-					/*for(var i = 0; i < markers.length; i ++) {
-					  markers[i].setIcon(iconWithColor(spiderfiedColor));
-					  markers[i].setShadow(null);
-					} */
-					infowindow.close();
-				  });
-				  oms.addListener('unspiderfy', function(markers) {
-					/*for(var i = 0; i < markers.length; i ++) {
-					  markers[i].setIcon(iconWithColor(usualColor));
-					  markers[i].setShadow(shadow);
-					}*/
-				  });
-
-				var bounds = new gm.LatLngBounds();
-				
-				for (var i = 0; i < map_markers.info.length; i++) {
-
-					var datainfo = map_markers.info[i];
-					var latLng = new google.maps.LatLng(datainfo.latitude, datainfo.longitude);
-					bounds.extend(latLng);
-					var marker = new google.maps.Marker({
-						position: latLng,
-						map: map,
-						//icon: iconWithColor(usualColor),
-					  	//shadow: shadow,
-						draggable: true
-					});
-					oms.addMarker(marker);
-					
-					var fn = markers.markerClickFunction(datainfo.user_id);
-					google.maps.event.addListener(marker, 'click', fn);
-
-					markers[i] = marker;
-
-				}
-
-				var markerCluster = new MarkerClusterer(map, markers, { maxZoom: 18 });
-
-				{{range $i, $minerId := .RandMiners}}
-					$.get( 'ajax?controllerName=getMinerData&userId={{$minerId}}', function (data) {
-										get_img_home (0, {{$minerId}}, data.hosts, data.lnglat, data.html, data.counters, data.pct_sec, 1);
-									}, "json" );
-				{{end}}
-
-				map.fitBounds(bounds);
-			
-				// for debugging/exploratory use in console
-				window.map = map;
-				window.oms = oms;
-			}, "JSON" );
-
-		}
-
-		$(window).unbind( 'gMapsLoaded' );
-		$(window).bind('gMapsLoaded', initialize);
-		window.loadGoogleMaps();
-	});
-</script>
-
-
-
-<div id="generate" style="margin-top: 15px">
-
-<style>
-	.mini-box {
-		min-height: 105px;
-		padding: 20px;
-	}
-	.panel {
-		margin-bottom: 20px;
-		background-color: #FFF;
-		border: 1px solid transparent;
-		border-radius: 2px;
-		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
-	}
-	.mini-box .box-icon {
-		display: block;
-		float: left;
-		margin: 0px 10px 10px 0px;
-		width: 65px;
-		height: 65px;
-		border-radius: 50%;
-		line-height: 65px;
-		vertical-align: middle;
-		text-align: center;
-		font-size: 35px;
-	}
-	.bg-success {
-		background-color: #5D9CEC;
-		color: #FFF;
-	}
-	.bg-info {
-		background-color: #37BC9B;
-		color: #FFF;
-	}
-	.bg-danger {
-		background-color: #EA6153;
-		color: #FFF;
-	}
-	.bg-warning {
-		background-color: #AD4B84;
-		color: #FFF;
-	}
-	.panel0 {
-		font-family: "Lato",Helvetica,Arial,sans-serif;
-		font-size: 14px;
-		line-height: 1.42857;
-		color: #767676;
-	}
-	.mini-box .box-info p {
-		margin: 0px;
-	}
-	.size-h2 {
-		font-size: 30px;
-		font-family: sans-serif;
-		line-height: 33px;
-	}
-	.size-h4 {
-		 font-size: 18px;
-	 }
-	.text-muted {
-		color: #777;
-		font-family: "Open Sans",sans-serif;
-		font-size: 14px;
-		line-height: 14px;
-	}
-
-</style>
-<!--<div class="panel0">
-	<div class="col-lg-3 col-sm-6">
-		<div class="panel mini-box" title="{{.Lang.home_account_text}}">
-	                <span class="box-icon bg-success">
-	                    <i class="fa fa-credit-card"></i>
-	                </span>
-			<div class="box-info">
-				<p class="size-h2">{{.UserId}}</p>
-				<p class="text-muted"><span data-i18n="Growth">{{.Lang.account_number}}</span></p>
-			</div>
-		</div>
-	</div>
-	{{if eq .MyNotice.account_status "miner" }}
-	<div class="col-lg-3 col-sm-6">
-		<div class="panel mini-box">
-	                <span class="box-icon bg-danger">
-	                    <i class="fa fa-bell"></i>
-	                </span>
-			<div class="box-info">
-				<p class="size-h2"><a href="#cashRequestIn">{{.CashRequests}}</a></p>
-				<p class="text-muted"><span data-i18n="New users">{{.Lang.inbox}}</span></p>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-3 col-sm-6">
-		<div class="panel mini-box">
-	                <span class="box-icon bg-usd">
-	                    <i class="fa fa-check"></i>
-	                </span>
-			<div class="box-info">
-				<p class="size-h2"><a href="#points">{{.Points}}</a></p>
-				<p class="text-muted"><span data-i18n="New users">{{.Lang.points}}</span></p>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-3 col-sm-6">
-		<div class="panel mini-box">
-	                <span class="box-icon bg-euro">
-	                    <i class="fa fa-camera"></i>
-	                </span>
-			<div class="box-info">
-				<p class="size-h2"><a href="#assignments">{{.Assignments}}</a></p>
-				<p class="text-muted"><span data-i18n="New users">{{.Lang.tasks}}</span></p>
-			</div>
-		</div>
-	</div>
-	{{end}}
-</div>-->
-<script type="text/javascript">
 {{if .StatDays}}
 $(function () {
 	var date = new Date();
@@ -869,489 +134,127 @@ $(function () {
 });
 {{end}}
 </script>
-<div class="wallet">
-	{{if .ListBalance}}
-	<h2>Available Balance</h2>
-	<div class="balances">
-		{{range $key, $data := .ListBalance}}
-		<div class="balance">
-			<article>
-				<span>{{(index $data 0).Top}}</span>
-				<strong>d<em>{{(index $data 0).Currency}}</em></strong>
-			</article>
-			<div class="chart_block">
-				<div id="d{{(index $data 0).Currency}}" class="chart"></div>
-			</div>
-		</div>
-		{{end}}
-	</div>
-	{{end}}
-	{{if .MyDcTransactions}}
-		<h2>{{.Lang.last_operation}}</h2>
-		<div class="table-transactions">
-			<div class="thead row">
-				<div class="col-xs-2">{{.Lang.time}}</div>
-				<div class="col-xs-3">{{.Lang.type}}</div>
-				<div class="col-xs-2">{{.Lang.currency}}</div>
-				<div class="col-xs-3">{{.Lang.amount}}</div>
-				<div class="col-xs-2">{{.Lang.status}}</div>
-			</div>
-			{{range $key, $data := .MyDcTransactions}}
-			<div class="row">
-				<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
-				<div class="col-xs-3">{{index $.Names ($data.type)}} ({{$data.type_id}})</div>
-				<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
-				<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
-				<div class="col-xs-2">{{$data.status}}</div>
-			</div>
-		{{end}}
-		</div>
-	{{end}}
-	<!--<a class="head" href="#"><em>Wallet</em></a>-->
-</div>
-	<script>
-		var currency_name = new Array();
-		{{range $id, $currencyName := .CurrencyList}}
-		currency_name[{{$id}}] = "{{$currencyName}}";
-		{{end}}
-
-		var key = $("#key").text();
-		var pass = $("#password").text();
-		if ($(window).width() <= 360) {
-			$(".exNext").addClass("btn-block");
-			$(".exNext").css("margin-top", "10px");
-		}
-
-		function selectEx(url, user_id, bId) {
-
-			$('#'+bId).html('<img src="/static/img/squares.gif" style="width:20px; margin:0px">');
-			$('#'+bId).prop('disabled', true);
-			$("#"+bId).css("background-color", "#ccc");
-
-			$.post( url+'ajax?controllerName=ESignLogin', {
-				}, function (forsignature) {
-					console.log("forsignature:", "#"+forsignature+"#");
-
-					var objEx =
-					{
-						key: key,
-						pass: pass,
-						forsign: forsignature,
-					};
-
-					var workerAjax = new Worker("/static/js/worker.js");
-					workerAjax.onmessage = function(event)	{
-						if(typeof event.data.error != "undefined") {
-							$("#wrapper").spin(false);
-							$("#ex_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>'+event.data.error+'</p></div>');
-							$('#'+bId).prop('disabled', false);
-							$('#'+bId).html('Buy');
-						} else {
-							console.log(url+'ajax?controllerName=ECheckSign');
-							$.get( url+'ajax?controllerName=ECheckSign', {
-								'sign': event.data.hSig,
-								'user_id': {{.UserId}}
-							}, function (data) {
-									console.log("ECheckSign", data);
-									if (data.result=="1") {
-										// сохраним токен у себя в БД
-										$.post('ajax?controllerName=saveToken', {
-											'token': data.token,
-											'e_owner_id': user_id
-										}, function () {
-											console.log(data);
-											$('#'+bId).prop('disabled', false);
-											$('#'+bId).html('Buy');
-											$('#sendForm').attr('action', url+'ajax');
-											$('input[name="FormExPs"]').val($("#payment_system").val());
-											$('input[name="FormExAmount"]').val($("#exAmount").val());
-											$('input[name="FormDC"]').val($("#buy_currency_id").val());
-											$('input[name="FormToken"]').val(data.token);
-											$("#sendForm").submit();
-										});
-									} else {
-										$("#ex_alert").html('<div id="alertModalPull" class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p>Incorrect Signature</p></div>');
-										$('#'+bId).prop('disabled', false);
-										$('#'+bId).html('Buy');
-									}
-									//$('#'+bId).prop('disabled', false);
-									//$('#'+bId).html('Buy');
-							}, "JSON");
-						}
-					};
-					workerAjax.onerror = function(err) {
-						alert(err.message);
-					};
-					workerAjax.postMessage(objEx);
-
-
-					//var e_n_sign = get_e_n_sign(key, pass, forsignature, 'ex_alert');
-
-			}, "JSON");
-		}
-
-		$('#exNext').bind('click', function () {
-			$('#buyDC').css("display", "none");
-			$('#eList').css("display", "block");
-		});
-
-
-		$('#refreshEx').bind('click', function () {
-			getExData()
-		});
-
-		$(document).ready(function() {
-			getExData()
-		});
-
-		var exDataDisplay = false;
-		$('#displayEx').bind('click', function () {
-			if (exDataDisplay == true) {
-				$('#exOrders').css("display", "none");
-				$('#exBalances').css("display", "none");
-				$('#exWithdraw').css("display", "none");
-				$('#refreshEx').css("display", "none");
-				$('#displayEx').html("{{.Lang.display_info_from_exchange}}");
-				exDataDisplay = false
-			} else {
-				exDataDisplay = true;
-				$('#exOrders').css("display", "inline-table");
-				$('#exBalances').css("display", "inline-table");
-				$('#exWithdraw').css("display", "inline-table");
-				$('#refreshEx').css("display", "inline-block");
-				$('#displayEx').html("{{.Lang.remove_info_from_exchange}}");
-				getExData()
-			}
-		});
-
-		var token = {{.Token}};
-
-		function getExData() {
-			if (token != "") {
-				$('#refreshEx').html('<img src="/static/img/squares2.gif" style="width:20px; margin:0px">');
-				$.post( '{{.ExchangeUrl}}ajax?controllerName=EInfo', {
-					'token': token
-				}, function (data) {
-					$('#refreshEx').html('<i class="fa fa-refresh"></i>');
-					if (typeof data.Token !== "undefined") {
-						$('#tokens').css("display", "block");
-						$('#tokensTable').html("<tr><td>{{.Lang.purchase}} " + data.Token.amount_fiat + " " + currency_name[data.Token.buy_currency_id] + "</td><td>" + data.Token.status + "</td></tr>");
-					}
-					$('#balancesTable').html("");
-					if (typeof data.Wallets !== "undefined") {
-						for (var i = 0; i < data.Wallets.length; i++) {
-							$('#balancesTable').append("<tr><td>" + currency_name[data.Wallets[i].currency_id] + "</td><td>" + data.Wallets[i].amount + "</td></tr>");
-						}
-					}
-					$('#ordersTable').html("");
-					if (typeof data.Orders !== "undefined") {
-						for (var i=0; i < data.Orders.length; i++) {
-							$('#ordersTable').append("<tr><td>"+currency_name[data.Orders[i].buy_currency_id]+"/"+currency_name[data.Orders[i].sell_currency_id]+"</td><td>"+parseFloat(data.Orders[i].sell_rate, 2).toFixed(2)+"</td><td>"+parseFloat(data.Orders[i].begin_amount * (1/data.Orders[i].sell_rate), 2).toFixed(2)+"</td><td>"+parseFloat(data.Orders[i].begin_amount, 2).toFixed(2)+"</td><td>"+parseFloat(100-(data.Orders[i].amount/data.Orders[i].begin_amount)*100, 2).toFixed(2)+"%</td></tr>");
-						}
-					}
-					$('#withdrawTable').html("");
-					if (typeof data.Withdraw !== "undefined") {
-						for (var i = 0; i < data.Withdraw.length; i++) {
-							var status = "wait"
-							if (typeof data.Withdraw[i].close_time != "undefined") {
-								status = "complete"
-							}
-							$('#withdrawTable').append("<tr><td>" + data.Withdraw[i].open_time + "</td><td>" + data.Withdraw[i].amount + "</td><td>" + status + "</td></tr>");
-						}
-					}
-				}, 'JSON');
-			}
-		}
-
-
-	</script>
-	<div style="clear: both"></div>
-<!--
-<div style="display: inline-table" class="col-sm-6">
-	<div id="ex_alert"></div>
-
-	<div style="display: none" id="eList">
-		<table class="table">
-			<tbody><tr>
-				<th>Payment systems</th>
-				<th>Buy</th>
-				<th>Url</th>
-				<th>Owner</th>
-				<th>+</th>
-				<th>-</th>
-				<th style="min-width: 100px">In stock</th>
-				{{if .Miner}}<th>Voting</th>{{end}}
-			</tr></tbody>
-			{{range $id, $data := .TopExMap}}
-			<tr>
-				<td id="ps-{{$id}}"></td>
-				<td id="btnbuy-{{$id}}"><button onclick="selectEx('{{$data.Host}}', '{{$data.UserId}}', 'btn-{{$id}}')" id="btn-{{$id}}" class="btn btn-default">Buy</button></td>
-				<td>{{$data.Host}}</td>
-				<td>{{$data.UserId}}</td>
-				<td>{{$data.Vote1}}</td>
-				<td>{{$data.Vote0}}</td>
-				<td id="values-{{$id}}"></td>
-				{{if $.Miner}}<td><button class="btn btn-default btn-xs" onclick="dc_navigate('votesExchange', {'result':'1', 'e_owner_id':'{{$data.UserId}}'})">+</button><button class="btn btn-default btn-xs" onclick="dc_navigate('votesExchange', {'result':'0', 'e_owner_id':'{{$data.UserId}}'})">-</button></td>
-				{{end}}
-			</tr>
-			<script>
-				$.get( '{{$data.Host}}ajax?controllerName=EData', {}, function (data) {
-					var patt = /^([\w,\.\s:]+)$/i;
-					if (patt.test(data.values)) {
-						$('#values-{{$id}}').html(data.values);
-					}
-					if (patt.test(data.ps)) {
-						$('#ps-{{$id}}').html(data.ps);
-					}
-				}, 'JSON').fail(function() { $('#ps-{{$id}}').html("Unavailable"); $('#btnbuy-{{$id}}').html(""); });
-			</script>
-			{{end}}
-		</table>
-	</div>
-	<div class="panel0" id="buyDC">
-		Buy on exchange <input type="text" style="width: 60px;display: inline-block" class="form-control" id="exAmount">
-		<select id="buy_currency_id" style="width: {{if .Mobile}}80{{else}}100{{end}}px; display: inline-block" class="form-control" >
-			<option value='72'>dUSD</option>
-		</select>
-		<button class="btn btn-primary exNext" id="exNext" style="vertical-align: top;">Next</button>
-	</div>
-	<script>
-		$('#exAmount').bind("keyup change", function(e) {
-
-			var amount = $("#exAmount").val();
-			if (amount > 0) {
-				amount_ = parseFloat(amount.replace(",", "."));
-				amount_ = amount_.toFixed(2);
-
-				$("#exAmount").val(amount_);
-			}
-		});
-
-	</script>
-	<form method="get" id="sendForm">
-		<input type="hidden" name="FormExAmount">
-		<input type="hidden" name="FormDC">
-		<input type="hidden" name="FormToken">
-		<input type="hidden" name="controllerName" value="ERedirect">
-	</form>
-	<div style="clear: both; margin-bottom: 20px"></div>
-	<div>
-		<table class="table" style="max-width: 340px; display: none" id="tokens">
-			<tbody><tr><th>{{.Lang.operation}}</th><th>{{.Lang.status}}</th></tr></tbody>
-			<tbody id="tokensTable"></tbody>
-		</table>
-		<button class="btn btn-outline btn-primary" id="displayEx">{{.Lang.display_info_from_exchange}}</button>
-		<button class="btn btn-outline btn-primary" id="refreshEx" style="display: none"><i class="fa fa-refresh"></i></button>
-	</div>
-</div>
--->
-
-<div style="display: none" id="exOrders" class="col-sm-6">
-
-	<h3>Orders</h3>
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
-		<tr>
-			<th>{{.Lang.pair}}</th>
-			<th>{{.Lang.price}}</th>
-			<th>{{.Lang.qty}}</th>
-			<th>{{.Lang.total}}</th>
-			<th>{{.Lang.ready}}</th>
-		</tr>
-		</thead>
-		<tbody id="ordersTable">
-		</tbody>
-	</table>
-</div>
-<div style="display: none" id="exBalances" class="col-sm-6">
-	<h3>Balances</h3>
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
-		<tr>
-			<th>Currency</th>
-			<th>Amount</th>
-		</tr>
-		</thead>
-		<tbody id="balancesTable">
-		</tbody>
-	</table>
-
-</div>
-<div style="display: none" id="exWithdraw" class="col-sm-6">
-	<h3>{{.Lang.tx_history}}</h3>
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
-		<tr>
-			<th>{{.Lang.time}}</th>
-			<th>{{.Lang.quantity}}</th>
-			<th>{{.Lang.status}}</th>
-		</tr>
-		</thead>
-		<tbody id="withdrawTable">
-		</tbody>
-	</table>
-</div>
-
-<div style="clear: both"></div>
-
-	<script>
-		var userId = {{.UserId}}
-		$(document).keypress(function(e){
-			if(e.keyCode == 13){
-				if ($("#myChatMessage").is(":focus")) {
-					$("#sendToChat").click();
-				}
-			}
-		});
-	</script>
-	<script src="/static/js/chat.js"></script>
-
-	{{if and (gt 0 1) (eq .ChatEnabled "1") (not .Mobile)}}
-	<style>
-		#chat img{width: 50px; float: left; margin-right: 10px}
-		#chatLock { padding: 3px 7px; font-size: 20px; }
-		#chatLockIco{}
-	</style>
-	<h3 style="margin-top: 20px" id="chatTitle">Chat <span style='color:#EA6153'><i class='fa fa-power-off'></i></span></h3>
-	<div id="chat" class="col-lg-12">
-		<div id="chat_alert"></div>
-		<div style="max-height: 300px; overflow-y: auto; margin-bottom: 5px" id="chatwindow">
-			<table class="table table-striped table-bordered table-hover">
-			<tbody id="chatMessages">
-			</tbody>
-			</table>
-		</div>
-		<div class="chat_control">
-			<input type="hidden" id="chatUserIdReceiver" value="0">
-			{{if not .Community}}<button id="chatLock" class="btn btn-default"  onclick="lock_unlock(); return false"><i id="chatLockIco" class="fa fa-unlock fa-lg"></i></button>{{end}}
-			<span id="selectReceiver">Please, select receiver</span>
-			<input id="myChatMessage" type="text" class="form-control" placeholder="{{.MyChatName}}:" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{.MyChatName}}:'">
-			<button id="sendToChat" class="btn btn-primary">Send</button>
-		</div>
-	</div>
-	{{end}}
 
 <style>
-	.panel {
-		margin-bottom: 21px;
-		background-color: #FFF;
-		border: 1px solid transparent;
-		border-radius: 4px;
-		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
-	}
-	.widget.panel, .widget .panel {
-		overflow: hidden;
-	}
-	.widget {
-		margin-bottom: 20px;
-		border: 0px none;
-	}
-	.row-table > [class*="col-"] {
-		display: table-cell;
-		float: none;
-		table-layout: fixed;
-		vertical-align: middle;
-	}
-
-	.pv-lg {
-		padding-top: 15px !important;
-		padding-bottom: 15px !important;
-	}
-	.bg-primary-dark {
-		color: #FFF !important;
-	}
-	.text-center {
-		text-align: center;
-	}
-	.pv-lg {
-		padding-top: 15px !important;
-		padding-bottom: 15px !important;
-	}
-	.mt0 {
-		margin-top: 0px !important;
-	}
-	.dc_promised {
-		font-size: 28px;
-		font-weight: 600;
-	}
-	.text-uppercase {
-		text-transform: uppercase;
-	}
-	.bg-primary {
-		color: #FFF !important;
-	}
-
-	.bg-primary-dark {
-		background-color: #2F80E7;
-		color: #FFF !important;
-	}
-	.bg-primary {
-		background-color: #5D9CEC;
-		color: #FFF !important;
-	}
-	.bg-red {
-		background-color: #F27B56;
-		color: #FFF !important;
-	}
-	.bg-red-dark {
-		background-color: #D66543;
-		color: #FFF !important;
-	}
-
-	.pct small{color: #ffffff}
-
-	.bg-usd {
-		background-color: #37BC9B;
-		color: #FFF !important;
-	}
-	.bg-usd-dark {
-		background-color: #2B957A;
-		color: #FFF !important;
-	}
-
-	.bg-woc {
-		background-color: #5D9CEC;
-		color: #FFF !important;
-	}
-	.bg-woc-dark {
-		background-color: #2F80E7;
-		color: #FFF !important;
-	}
-
-	.bg-euro {
-		background-color: #AD4B84;
-		color: #FFF !important;
-	}
-	.bg-euro-dark {
-		background-color: #89456C;
-		color: #FFF !important;
-	}
-
-	.bg-rub {
-		background-color: #EA6153;
-		color: #FFF !important;
-	}
-	.bg-rub-dark {
-		background-color: #BC5247;
-		color: #FFF !important;
-	}
-	.col-xs-8{width:66.6667%; float:none}
-	.col-xs-4{width:33.3333%; float:none}
-
+	.alert-info a:link{text-decoration: underline}
 </style>
-<div style="clear: both"></div>
-	{{if .ShowMap}}
-	<h3 style="margin-bottom: 0px;"
-		title="">{{.Lang.miners_on_the_map}}</h3>
-	<a href="#interface/show_map=0">Hide map</a></div>
-	<div class="clearfix"></div>
-	<div id="map_canvas" style="width: 100%; height:500px; display: block"></div>
-	<div style="clear: both"></div>
-	{{end}}
 
+<link href="static/css/cf.css" rel="stylesheet">
 
-<h3>{{.Lang.statistic_cash_requests}}</h3>
-<div class="dc_home__coins_exchange">
+<script>
+
+	$( document ).ready(function() {
+		$.get('ajax?controllerName=AlertFromAdmin', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#AlertMessage').css("display", "block");
+				$('#AlertMessage p').html(data.success);
+			}
+		}, 'JSON');
+	
+		$.get('ajax?controllerName=Update', function (data) {
+			if (typeof data.success !== 'undefined') {
+				$('#UpdateMessage').css("display", "block");
+				$('#UpdateMessage p').html(data.success);
+			}
+		}, 'JSON');
+	});
+</script>
+
+<div style="display: none" class="alert alert-danger alert-dismissable" id="AlertMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+<div style="display: none" class="alert alert-info alert-dismissable" id="UpdateMessage"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><p></p></div>
+{{ template "alertSuccess". }}
+<div id="message"></div>
+
+<h1 class="page-header">Home</h1>
+<div class="main row">
+	<div class="pull-lg-right col-xs-12 col-lg-6">
+		<div class="col-xs-6">
+			<a class="menu" href="#cashRequestIn">
+				<span class="amount">{{.CashRequests}}</span>
+				<span class="icon bell"></span>
+				<span class="head"><em>{{.Lang.inbox}}</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#assignments">
+				<span class="amount">{{.Assignments}}</span>
+				<span class="icon pen"></span>
+				<span class="head"><em>{{.Lang.tasks}}</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#points">
+				<span class="amount">{{.Points}}</span>
+				<span class="icon chart"></span>
+				<span class="head"><em>{{.Lang.points}}</em></span>
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a class="menu" href="#cashRequestOut">
+				<span class="icon exchange"></span>
+				<span class="head"><em>{{.Lang.outgoing}}</em></span>
+			</a>
+		</div>
+	</div>
+	<div class="col-xs-12 col-lg-6">
+		<div class="wallet">
+			{{if .ListBalance}}
+			<h2>{{.Lang.available_balance}}</h2>
+			<div class="balances">
+				{{range $key, $data := .ListBalance}}
+				<div class="balance">
+					<article>
+						<span>{{(index $data 0).Top}}</span>
+						<strong>d<em>{{(index $data 0).Currency}}</em></strong>
+					</article>
+					<div class="chart_block">
+						<div id="d{{(index $data 0).Currency}}" class="chart"></div>
+					</div>
+				</div>
+				{{end}}
+			</div>
+			{{end}}
+			{{if .MyDcTransactions}}
+				<h2>{{.Lang.last_operation}}</h2>
+				<div class="table-transactions">
+					<div class="thead row">
+						<div class="col-xs-2">{{.Lang.time}}</div>
+						<div class="col-xs-3">{{.Lang.type}}</div>
+						<div class="col-xs-2">{{.Lang.currency}}</div>
+						<div class="col-xs-3">{{.Lang.amount}}</div>
+						<div class="col-xs-2">{{.Lang.status}}</div>
+					</div>
+					{{range $key, $data := .MyDcTransactions}}
+					<div class="row">
+						<div class="col-xs-2">{{if ($data.timeFormatted)}}{{$data.timeFormatted}}{{end}}</div>
+						<div class="col-xs-3">{{index $.Names ($data.type)}} <strong>{{$data.type_id}}</strong></div>
+						<div class="col-xs-2">{{ index $.CurrencyList (strToInt64 ($data.currency_id)) }}</div>
+						<div class="col-xs-3 {{if eq $data.sign "+"}}plus{{else}}minus{{end}}">{{$data.sign}} {{$data.amount}}</div>
+						<div class="col-xs-2">{{$data.status}}</div>
+					</div>
+					{{end}}
+				</div>
+			{{end}}
+			<a class="head" href="#walletsList"><em>{{.Lang.wallets}}</em></a>
+		</div>
+	</div>
+</div>
+<div class="graph">
+	<ul class="nav nav-tabs" role="tablist">
+		{{range $key, $data := .Charts}}
+		<li class="nav-item">
+			<a class="nav-link{{if eq $key 0}} active{{end}}" onclick="return change_graph('{{$data.Currency}}');" data-toggle="tab" href="" role="tab">d{{$data.Currency}}</a>
+		</li>
+		{{end}}
+	</ul>
+	<div class="tab-content">
+		{{range $key, $data := .Charts}}
+			<div id="{{$data.Currency}}" class="chart tab-pane fade{{if eq $key 0}} in active{{end}}" role="tabpanel"></div>
+		{{end}}
+	</div>
+</div>
+<h2>{{.Lang.statistic_cash_requests}}</h2>
+<div class="table_fix">
 	<table class="table table-bordered">
 		<thead><tr><th>ID</th><th>{{.Lang.time}}</th><th>{{.Lang.from_user_id}}</th><th>{{.Lang.to_user_id}}</th><th>{{.Lang.currency}}</th><th>{{.Lang.amount}}</th><th>{{.Lang.status}}</th></tr></thead>
 		<tbody>
@@ -1375,6 +278,21 @@ $(function () {
 		</tbody>
 	</table>
 </div>
+
+<script>
+	if (typeof intervalIdArray != "undefined") {
+		for (i=0; i<intervalIdArray.length; i++)
+			clearInterval(intervalIdArray[i]);
+	}
+	$(function() {
+		check_key_and_show_modal();
+	});
+	{{if and (or (eq .MyNotice.account_status "user") (eq .MyNotice.account_status "miner") ) (not .UserId)}}
+		$("#main-login").html('<a href="#myModal" data-backdrop="static" data-toggle="modal" role="button" class="btn btn-danger  btn-block "><i class="fa fa-sign-in fa-lg"></i> Login</a><div style="margin: 2px 10px; font-size: 11px">{{.Lang.login_alert}}</div>');
+	{{else}}
+
+	{{end}}
+</script>
 <script>
 	{{range $userId, $hosts := .RefPhotos}}
 	var hosts = []
@@ -1385,41 +303,161 @@ $(function () {
 	{{end}}
 </script>
 
-
 {{if .Chart}}
 <script type="text/javascript">
-	google.charts.setOnLoadCallback(drawChart);
 
-	function drawChart() {
-		var data = google.visualization.arrayToDataTable([
-			['Date', 'Promised amounts', 'dUSD'],
-			{{js .Chart}}
-		]);
+var charts = {
+	{{range .Charts}}	
+	   {{.Currency}}: {
+			promised: [{{js .Promised}}].reverse(),
+			dc: [{{js .Dc}}].reverse(),
+		},
+	{{end}}
+}
 
-		var options = {
-			title: 'dUSD/USD',
-			curveType: 'function',
-			legend: { position: 'bottom' }
-		};
 
-		var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-		chart.draw(data, options);
+function initGraph(id){
+	'use strict';
+	
+	var w = $(".graph").width();
+	if ($("body").width() >= 751) {
+		var h = 450;
+	} else {
+		var h = 250;
 	}
+	var date = new Date();
+	date.setDate(date.getDate() - 30);
+	var day = date.getUTCDate();
+	var month = date.getUTCMonth();
+	var year = date.getFullYear();
 	
-	$(window).resize(function() {
-		if(this.resizeTO) clearTimeout(this.resizeTO);
-		this.resizeTO = setTimeout(function() {
-			$(this).trigger('resizeEnd');
-		}, 500);
-	});
-	
-	$(window).on('resizeEnd', function() {
-		drawChart();
-	});
+	$("#" + id).width(w).height(h).highcharts({
+        chart: {
+            type: 'areaspline',
+			zoomType: 'x',
+			margin: [ 69, 0, 80, 50]
+        },
+        title: {
+            text: 'Promised amount ' + id + ' to d' + id,
+			style: {
+				"fontSize": "18px"
+			},
+			y: 30
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            allowDecimals: false,
+			type: 'datetime',
+            labels: {
+				format: '{value:%m-%d}'
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function () {
+                    return this.value / 1000 + 'k';
+                }
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name} - <b>{point.y:,.0f}</b>'
+        },
+		legend: {
+			enabled: true
+		},
+        series: [{
+            name: 'Promised amount',
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, '#55acef']
+				]
+			},
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#55acef'],
+					[1, Highcharts.Color('#55acef').setOpacity(0).get('rgba')]
+				]
+			},
+			marker : {
+				enabled : false,
+				radius : 3
+			},
+            data: charts[id].promised,
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+		}, {
+            name: 'd' + id,
+			color: {
+				linearGradient: {
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#c53f40'],
+					[1, '#c53f40']
+				]
+			},
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, '#c53f40'],
+					[1, Highcharts.Color('#c53f40').setOpacity(0).get('rgba')]
+				]
+			},
+			marker : {
+				enabled : false,
+				radius : 3
+			},
+            data: charts[id].dc,
+			pointStart: Date.UTC(year, month, day),
+        	pointInterval: 24 * 36e5
+        }]
+    });
+}
+
+var prevgraph = $(".graph .nav-link.active").html().substr(1);
+initGraph(prevgraph);
+
+function change_graph(id) {
+	$("#" + prevgraph).removeClass('in active');
+	initGraph(id);
+	prevgraph = id;
+	$("#" + id).addClass('in active');
+	return false;
+}
+
+$(window).resize(function() {
+	if(this.resizeTO) clearTimeout(this.resizeTO);
+	this.resizeTO = setTimeout(function() {
+		$(this).trigger('resizeEnd');
+	}, 500);
+});
 </script>
-<div id="curve_chart"></div>
-<p><a href="static/img/reduction.png" target="_blank">About graphic</a></p>
-<p>Target: {{.DCTarget}} dUSD</p>
 {{end}}
 
 <script>
@@ -1453,11 +491,6 @@ $(function () {
 		$('#calc_total').text('+'+new_amount+' d'+currency_list[$('#calc_currency_id').val()]['name']);
 	});
 </script>
-
-<div style="clear: both; margin-bottom: 25px"></div>
-
-</div>
-
 
 {{ template "signatures". }}
 

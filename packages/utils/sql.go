@@ -1255,6 +1255,10 @@ func (db *DCDB) SendTxChangePkey(userId int64) error {
 // последние тр-ии от данного юзера
 func (db *DCDB) GetLastTx(userId int64, types []int64, limit int64, timeFormat string) ([]map[string]string, error) {
 	var result []map[string]string
+	var sqltypes string
+	if types != nil {
+		sqltypes = ` AND transactions_status.type IN (`+strings.Join(SliceInt64ToString(types), ",")+`)`
+	}
 	rows, err := db.Query(db.FormatQuery(`
 			SELECT  transactions_status.hash,
 						 transactions_status.time,
@@ -1267,8 +1271,7 @@ func (db *DCDB) GetLastTx(userId int64, types []int64, limit int64, timeFormat s
 			FROM transactions_status
 			LEFT JOIN transactions ON transactions.hash = transactions_status.hash
 			LEFT JOIN queue_tx ON queue_tx.hash = transactions_status.hash
-			WHERE  transactions_status.user_id = ? AND
-						 transactions_status.type IN (`+strings.Join(SliceInt64ToString(types), ",")+`)
+			WHERE  transactions_status.user_id = ? ` + sqltypes + `
 			ORDER BY time DESC
 			LIMIT ?
 			`), userId, limit)
@@ -1350,7 +1353,7 @@ func (db *DCDB) GetPointsStatus(userId, pointsUpdateTime int64, BlockData *Block
 
 	// НО! При фронтальной проверке может получиться, что последний элемент miner и прошло более 30-и дней.
 	// поэтому нужно добавлять последний элемент = user, если вызов происходит не в блоке
-	if BlockData != nil && len(result) > 0 {
+	if BlockData == nil && len(result) > 0 {
 		for time_start, _ := range result[len(result)-1] {
 			if time_start < time.Now().Unix()-pointsUpdateTime {
 				result = append(result, map[int64]string{time_start + pointsUpdateTime: "user"})
@@ -2739,4 +2742,8 @@ func (db *DCDB) GetPromisedAmountCounter(userId int64) ( float64, float64, error
 		return 0, 0, err
 	}
 	return profit, pct, nil
+}
+
+func (db *DCDB) GetNotificationsCount(userId int64) (int64, error) {
+	return db.Single("SELECT count(id) FROM notifications WHERE user_id=? AND isread=1", userId ).Int64()
 }

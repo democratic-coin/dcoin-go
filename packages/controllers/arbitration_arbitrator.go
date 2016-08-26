@@ -15,7 +15,7 @@ type arbitrationArbitratorPage struct {
 	UserId          int64
 	Lang            map[string]string
 	CountSignArr    []int
-	LastTxFormatted string
+//	LastTxFormatted string
 	CurrencyList    map[int64]string
 	MinerId         int64
 	MyOrders        []map[string]string
@@ -59,11 +59,11 @@ func (c *Controller) ArbitrationArbitrator() (string, error) {
 		myOrders[k] = data
 	}
 
-	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeArbitratorConditions", "MoneyBack"}), 3, c.TimeFormat)
+/*	last_tx, err := c.GetLastTx(c.SessUserId, utils.TypesToIds([]string{"ChangeArbitratorConditions", "MoneyBack"}), 3, c.TimeFormat)
 	lastTxFormatted := ""
 	if len(last_tx) > 0 {
 		lastTxFormatted, _ = utils.MakeLastTx(last_tx, c.Lang)
-	}
+	}*/
 
 	TemplateStr, err := makeTemplate("arbitration_arbitrator", "arbitrationArbitrator", &arbitrationArbitratorPage{
 		Alert:           c.Alert,
@@ -75,7 +75,7 @@ func (c *Controller) ArbitrationArbitrator() (string, error) {
 		TxType:          txType,
 		TxTypeId:        txTypeId,
 		SignData:        "",
-		LastTxFormatted: lastTxFormatted,
+//		LastTxFormatted: lastTxFormatted,
 		CurrencyList:    c.CurrencyList,
 		MinerId:         c.MinerId,
 		MyOrders:        myOrders})

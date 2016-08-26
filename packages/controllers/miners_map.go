@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/democratic-coin/dcoin-go/packages/utils"
-
+	"github.com/democratic-coin/dcoin-go/packages/consts"
 	"errors"
 	"fmt"
 )
@@ -30,9 +30,15 @@ func (c *Controller) MinersMap() (string, error) {
 		return "", errors.New("Incorrect payment_system_id")
 	}
 
-	maxPromisedAmounts, err := c.Single("SELECT amount FROM max_promised_amounts WHERE currency_id  =  ? ORDER BY time DESC", currencyId).Float64()
+//	maxPromisedAmounts, err := c.Single("SELECT amount FROM max_promised_amounts WHERE currency_id  =  ? ORDER BY time DESC", currencyId).Float64()
+	maxPromisedAmounts, err := c.GetMaxPromisedAmount(currencyId)
 	if err != nil {
 		return "", utils.ErrInfo(err)
+	}
+	// пока нет хотя бы 1000 майнеров по этой валюте, ограничиваем размер обещанной суммы
+	countMiners, err := c.Single("SELECT count(id) FROM promised_amount where currency_id = ? AND status='mining'", currencyId).Int64()
+	if countMiners < 1000 {
+		maxPromisedAmounts = float64(consts.MaxGreen[currencyId])
 	}
 
 	addSql := ""

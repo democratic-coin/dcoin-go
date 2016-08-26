@@ -44,20 +44,31 @@
 				'comment' :  $("#comment").val()
 
 			}, function (data) {
-
-				//alert(data);
-
-				$("#comment_encrypted").val(data);
-
-				$("#wallets").css("display", "none");
-				$("#onmap").css("display", "none");
-				$("#sign").css("display", "block");
-				$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').val()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
-				doSign();
-				{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-				});
-			}
-		} );
+				$.post( 'ajaxjson?controllerName=CheckPromised', { user_id: to_user_id, amount: $('#send_amount').val(),
+				          currency_id : currency_id, }, 
+					function( checkdata ) {
+						if (checkdata.result || !checkdata.success) {
+							$("#message").html('');
+//							alert(data);
+							$("#comment_encrypted").val(data);
+				
+							$("#wallets").css("display", "none");
+							$("#onmap").css("display", "none");
+							$("#sign").css("display", "block");
+							$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$('#to_user_id').val()+','+$('#send_amount').val()+','+data+','+$('#currency_id').val()+','+$('#hash_code').val() );
+							doSign();
+							{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+						}
+						else {
+							$('#available').html( checkdata.data );
+							$('#send_amount').val( checkdata.data );
+							$('#amount_due').html( checkdata.data );
+							$("#message").html( '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button>{{.Lang.not_enough_promised}}</div>' );
+						}
+				})
+			})
+		}
+	});
 
 		$('#send_to_net').bind('click', function () {
 
@@ -205,12 +216,12 @@
 	<div id="onmap">
 		<h3>{{.Lang.search}}</h3>
 		<div class="form-inline" style="padding-bottom: 10px">
-			<select id="need_currency" class="span2">
+			<select id="need_currency" class="c-select span2">
 				{{range $k, $currencyId := .AvailableCurrency}}
 					<option value='{{$currencyId}}'>{{index $.CurrencyList $currencyId}}</option>
 				{{end}}
 			</select>
-			<select id="payment_system" class="span2">
+			<select id="payment_system" class="c-select span2">
 				<option value='0'>{{.Lang.cash}}</option>
 				{{range $id, $name := .PaymentSystems}}
 					<option value='{{$id}}'>{{$name}}</option>
@@ -221,7 +232,7 @@
 
 		<div id="new" style="display:none">
 
-			<div id="map_canvas" style="width: 640px; height: 320px;"></div>
+			<div id="map_canvas" style="width: 100%; height: 320px;"></div>
 			<br>
 
 		</div>

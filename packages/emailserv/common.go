@@ -32,7 +32,13 @@ func RoundMoney(in float64) (out float64) {
 }
 
 func CheckUser( userId int64 ) (map[string]interface{}, error) {
-
+	data := make(map[string]interface{})
+	if userId == utils.EXCHANGE_USER {
+		data[`lang`] = int64(1)
+		data[`nobcc`] = 1
+		return data, nil
+	}
+	
 	user, err := GDB.OneRow("select * from users where user_id=?", userId ).String()
 	if err != nil {
 		return nil, err
@@ -42,7 +48,6 @@ func CheckUser( userId int64 ) (map[string]interface{}, error) {
 	} else if utils.StrToInt( user[`verified`] ) < 0 {
 		return nil, fmt.Errorf(`The user in the stop-list`)
 	}
-	data := make(map[string]interface{})
 	data[`email`] = user[`email`]
 	data[`Unsubscribe`] = fmt.Sprintf( `%s/unsubscribe?uid=%d-%s`, 
 		 	utils.EMAIL_SERVER, userId, strconv.FormatUint( uint64( crc32.ChecksumIEEE([]byte(user[`email`]))), 32 ))
@@ -74,16 +79,22 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	
 	patterns := []string{ `unknown`, `new`, `test`, `adminmsg`, `cashreq`, `changestat`,
 		`dccame`, `dcsent`, `updprimary`,`updemail`, `updsms`, `voteres`,
-		`votetime`, `newver`, `nodetime`, `signup`, `balance`}
+		`votetime`, `newver`, `nodetime`, `signup`, `balance`, `exrequest`, `exanswer`,
+		`refready`}
 	pattern := patterns[cmd]
 	if len(pattern) == 0 {
 		pattern = data[`pattern`].(string)
 	}
-	data[`UserId`] = userId
+	common := `common`
+	if userId != utils.EXCHANGE_USER {
+		data[`UserId`] = userId
 
-	data[`Status`],_ = utils.DB.Single(`select status from miners_data where user_id=?`, userId ).String()
-	if len(data[`Status`].(string)) == 0 {
-		data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
+		data[`Status`],_ = utils.DB.Single(`select status from miners_data where user_id=?`, userId ).String()
+		if len(data[`Status`].(string)) == 0 {
+			data[`Status`],_ = utils.DB.Single(`select status from users where user_id=?`, userId ).String()
+		}
+	} else {
+		common = `exchange`
 	}
 	subject := new(bytes.Buffer)
 	html := new(bytes.Buffer)
@@ -107,15 +118,15 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	html.Reset()
 	if data[`lang`].(int64) > 1 {
 		if len( subject.String()) == 0 {
-			GPagePattern.ExecuteTemplate(subject, `commonSubject` + lang, data )
+			GPagePattern.ExecuteTemplate(subject, common + `Subject` + lang, data )
 		}
-		GPagePattern.ExecuteTemplate(html, `commonHTML` + lang, data )
+		GPagePattern.ExecuteTemplate(html, common + `HTML` + lang, data )
 	}
 	if len( subject.String()) == 0 {
-		GPagePattern.ExecuteTemplate(subject, `commonSubject`, data )
+		GPagePattern.ExecuteTemplate(subject, common + `Subject`, data )
 	}
 	if len( html.String()) == 0 {
-		GPagePattern.ExecuteTemplate(html, `commonHTML`, data )
+		GPagePattern.ExecuteTemplate(html, common + `HTML`, data )
 	}
 	if len( subject.String()) == 0 {
 		subject.WriteString(`DCoin notifications`)
@@ -129,7 +140,7 @@ func EmailUser( userId int64, data map[string]interface{}, cmd int ) bool {
 	if _, ok := data[`nobcc`]; ok {
 		GSettings.CopyTo = bcc
 	}
-	if err != nil {
+	if err != nil && userId != utils.EXCHANGE_USER {
 		GDB.ExecSql(`UPDATE users SET verified=? WHERE user_id=?`, -1, userId )
 		return result( fmt.Sprintf(`SendPulse %s`, err.Error()))
 	}

@@ -29,10 +29,13 @@ type menuPage struct {
 	Mobile         bool
 	ExchangeEnable bool
 	Admin          bool
+	Notifications  int64
 	Desktop bool
 	Pct               float64
 	Amount            float64
 	IsRestricted      bool
+	Wallets           []utils.DCAmounts
+	CurrencyList       map[int64]string
 }
 
 func (c *Controller) Menu() (string, error) {
@@ -56,18 +59,6 @@ func (c *Controller) Menu() (string, error) {
 			return "", utils.ErrInfo(err)
 		}
 		name, avatar = data["name"], data["avatar"]
-	}
-
-	if len(name) == 0 {
-		miner, err := c.Single("SELECT miner_id FROM miners_data WHERE user_id  =  ?", c.SessUserId).Int64()
-		if err != nil {
-			return "", utils.ErrInfo(err)
-		}
-		if miner > 0 {
-			name = "ID " + utils.Int64ToStr(c.SessUserId) + " (miner)"
-		} else {
-			name = "ID " + utils.Int64ToStr(c.SessUserId)
-		}
 	}
 
 	var face_urls []string
@@ -96,7 +87,13 @@ func (c *Controller) Menu() (string, error) {
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-
+	if len(name) == 0 {
+		if minerId > 0 {
+			name = "ID " + utils.Int64ToStr(c.SessUserId) + " (miner)"
+		} else {
+			name = "ID " + utils.Int64ToStr(c.SessUserId)
+		}
+	}
 	// ID блока вверху
 	blockId, err := c.GetBlockId()
 
@@ -118,11 +115,11 @@ func (c *Controller) Menu() (string, error) {
 		return "", utils.ErrInfo(err)
 	}
 	log.Debug("menu ok : %d", len(data))
-	modal, err := static.Asset("static/templates/modal.html")
+/*	modal, err := static.Asset("static/templates/modal.html")
 	if err != nil {
 		return "", utils.ErrInfo(err)
 	}
-	log.Debug("modal ok : %d", len(modal))
+	log.Debug("modal ok : %d", len(modal))*/
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -172,8 +169,26 @@ func (c *Controller) Menu() (string, error) {
 			}
 		}
 	}
-	t := template.Must(template.New("template").Parse(string(data)))
-	t = template.Must(t.Parse(string(modal)))
+	notifications,err := c.GetNotificationsCount(c.SessUserId)
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	currencyList,err := c.GetCurrencyList(true)
+	if err != nil {
+		return "", utils.ErrInfo(err)
+	}
+	var wallets []utils.DCAmounts
+	if c.SessUserId > 0 {
+		wallets, err = c.GetBalances(c.SessUserId)
+	}
+		
+	funcMap := template.FuncMap{
+		"noescape": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	}
+	t := template.Must(template.New("template").Funcs(funcMap).Parse(string(data)))
+//	t = template.Must(t.Parse(string(modal)))
 	b := new(bytes.Buffer)
 	err = t.ExecuteTemplate(b, "menu", &menuPage{Desktop: utils.Desktop(), Admin: admin, 
 			ExchangeEnable: exchangeEnable, Mobile: mobile, SetupPassword: false, 
@@ -182,8 +197,11 @@ func (c *Controller) Menu() (string, error) {
 			UserId: c.SessUserId, Restricted: c.SessRestricted, DaemonsStatus: daemonsStatus, 
 			MyNotice: c.MyNotice, BlockId: blockId, Avatar: avatar, NoAvatar: noAvatar, 
 			FaceUrls: strings.Join(face_urls, ","),
+			Notifications:     notifications,
 			IsRestricted:      isRestricted,
 			Amount:            profit,
+			Wallets:           wallets,
+			CurrencyList:      currencyList,
 			Pct:               pct })
 	if err != nil {
 		log.Error("%s", utils.ErrInfo(err))

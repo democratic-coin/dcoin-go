@@ -261,7 +261,7 @@ func (p *Parser) VotesNodeNewMinerRollback() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
+	minersData, err := p.OneRow("SELECT photo_block_id, photo_max_miner_id, miners_keepers, pool_user_id, log_id FROM miners_data WHERE user_id = ?", votesData["user_id"]).String()
 	if err != nil {
 		return p.ErrInfo(err)
 	}

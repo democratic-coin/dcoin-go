@@ -17,7 +17,6 @@ import (
 )
 
 const (
-	//	EMAIL_SERVER = `http://localhost:8090`
 	EMAIL_SERVER = `http://email.dcoin.club:8200`
 )
 
@@ -40,6 +39,13 @@ const (
 	ECMD_NODETIME   // Уведомление node_time
 	ECMD_SIGNUP     // Сообщаем Email с новой заявкой майнера, ничего не отправляется
 	ECMD_BALANCE    // Отправляем информацию о балансе
+	ECMD_EXREQUEST  // Уведомление о вопросе в поддержку биржи
+	ECMD_EXANSWER   // Уведомление об ответе из поддержки биржи
+	ECMD_REFREADY	// Уведомление о готовности ключа для реферала
+	ECMD_SENDKEY    // Отправка ключей на email
+	ECMD_FORKBLOCK  // Уведомление, что имеются разные ветки блокчейна
+	
+	EXCHANGE_USER = 0xefffffff
 )
 
 type Answer struct {
@@ -73,9 +79,29 @@ type TypeNfySent struct {
 	CommentStatus string
 }
 
+type TypeNfyCashRequest struct {
+	FromUserId int64    `json:"from_user"`
+	Amount     float64  `json:"amount"`
+    CurrencyId int64    `json:"currency_id"`
+}
+
 type TypeNfyStatus struct {
 	Status     string  `json:"status"`
 }
+
+type TypeNfyRefReady struct {
+	RefId     string  `json:"refid"`
+}
+
+type TypeNfySendKey struct {
+	UserId    int64     `json:"user_id"`
+	Subject   string    `json:"subject"`
+	Text      string    `json:"text"`
+    TxtKey    string    `json:"txt_key"`
+    PngKey    string    `json:"png_key"`
+	RefId     int64     `json:"refid"`
+}
+
 
 func SendEmail(email string, userId int64, cmd uint, params *map[string]string) (err error) {
 	var (
@@ -124,7 +150,11 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 			values.Set("public", base64.StdEncoding.EncodeToString(public))
 		}
 	}*/
-	if req, err = http.NewRequest("POST", EMAIL_SERVER,
+	emailServer := EMAIL_SERVER
+	if val,ok := DB.ConfigIni["localemail"]; ok {
+		emailServer = val
+	}
+	if req, err = http.NewRequest("POST", emailServer,
 		strings.NewReader(values.Encode())); err != nil {
 		return
 	}
@@ -144,4 +174,8 @@ func SendEmail(email string, userId int64, cmd uint, params *map[string]string) 
 	}
 
 	return
+}
+
+func ExchangeEmail(email, exchange string, cmd uint ) error {
+	return SendEmail(email, EXCHANGE_USER, cmd, &map[string]string{`exchange`: exchange})
 }

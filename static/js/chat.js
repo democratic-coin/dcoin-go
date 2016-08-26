@@ -84,7 +84,7 @@
 		function scrollToBottom() {
 			var objDiv = document.getElementById("chatwindow");
 			//console.log(objDiv.scrollHeight-67-objDiv.scrollTop)
-			if (objDiv.scrollTop == 0 || objDiv.scrollHeight-67-objDiv.scrollTop == objDiv.clientHeight) {
+			if (objDiv && ( objDiv.scrollTop == 0 || objDiv.scrollHeight-67-objDiv.scrollTop == objDiv.clientHeight )) {
 				objDiv.scrollTop = objDiv.scrollHeight;
 			}
 		}

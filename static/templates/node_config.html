@@ -19,6 +19,7 @@
 				'chat_enabled' : $('#chat_enabled').val(),
 				'analytics_disabled' : $('#analytics_disabled').val(),
 				'stat_host' : $('#stat_host').val(),
+				'pool_email' : $('#pool_email').val(),
 				'getpool_host' : $('#getpool_host').val(),
 				'config_ini' : $('#config_ini').val()
 			});
@@ -52,11 +53,11 @@
 
 
 	$('#full').bind('click', function () {
-		$('#wrapper').spin( true );
+		$('#loader').spin( true );
 		$('#wait').text('{{.Lang.please_wait}}');
 		$.post( 'ajax?controllerName=clearDb', { } ,
 				function () {
-					$('#wrapper').spin( false );
+					$('#loader').spin( false );
 					window.location = '/';
 //					dc_navigate ('nodeConfigControl', {'alert': 'Complete! Press F5'} );
 				});
@@ -120,6 +121,8 @@
 		<input id="getpool_host" class="input" type="text" value="{{.Config.getpool_host}}">
 		<label>Stat host</label>
 		<input id="stat_host" class="input" type="text" value="{{.Config.stat_host}}">
+		<label>Pool email</label>
+		<input id="pool_email" class="input" type="text" value="{{.Config.pool_email}}">
 		<br>
 
 		<textarea style="width: 300px; height: 150px" id="config_ini">{{.ConfigIni}}</textarea>
@@ -192,10 +195,14 @@
 	<input id="e_static_file_path" class="input" type="text" value="{{index .EConfig "static_file_path"}}">
 	<label>static_file</label>
 	<input id="e_static_file" class="input" type="text" value="{{index .EConfig "static_file"}}">
-
+	<label>Admin email</label>
+	<input id="e_email" class="input" type="text" value="{{index .EConfig "email"}}">
+	<br>&nbsp;<br>
 	<button class="btn" id="e_save">{{.Lang.save}}</button><br><br>
 
 	<button class="btn" onclick="dc_navigate('exchangeAdmin')">Exchange admin</button>
+	<button class="btn" onclick="dc_navigate('exchangeSupport')">Exchange support</button>
+	<button class="btn" onclick="dc_navigate('exchangeUser')">Exchange user info</button>
 
 
 
@@ -221,7 +228,8 @@
 			'e_pm_commission' : $('#e_pm_commission').val(),
 			'e_cp_commission' : $('#e_cp_commission').val(),
 			'e_static_file_path' : $('#e_static_file_path').val(),
-			'e_static_file' : $('#e_static_file').val()
+			'e_static_file' : $('#e_static_file').val(),
+			'e_email' : $('#e_email').val(),
 		});
 
 		$.post( 'ajax?controllerName=nodeConfigControl', {

@@ -1372,7 +1372,10 @@ func GetHttpTextAnswer(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(htmlData), nil
+	if resp.StatusCode == 404 {
+		err = fmt.Errorf(`404`)
+	}
+	return string(htmlData), err
 }
 
 func RemoteAddrFix(addr string) string {
@@ -3044,8 +3047,8 @@ func MakeUpgradeMenu(cur int) ( result string, full bool, next string ) {
 		}	
 		result += `
 			<div class="col-xs-2 col-md-2 bs-wizard-step ` + active + `">
-				<div class="text-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
-				<div class="progress"><div class="progress-bar"></div></div>
+				<div class="text-xs-center bs-wizard-stepnum">` + IntToStr(ind) + `</div>
+				<div class="progress"><span class="progress-bar"></span></div>
 				<a href="#upgrade` + IntToStr(i+1) + `" class="bs-wizard-dot"></a>
 			</div>`
 	}

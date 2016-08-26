@@ -235,12 +235,12 @@ coords.fc.prototype = {
 		var drawingCanvas = document.getElementById( this.main_area );
 		if (drawingCanvas && drawingCanvas.getContext) {
 			var context = drawingCanvas.getContext('2d');
-			context.clearRect(0, 0, 350, 500);
+			context.clearRect(0, 0, 290, 414);
 		}
 		var drawingCanvas = document.getElementById( this.example_area );
 		if (drawingCanvas && drawingCanvas.getContext) {
 			var context = drawingCanvas.getContext('2d');
-			context.clearRect(0, 0, 350, 500);
+			context.clearRect(0, 0, 290, 414);
 		}
 
 		this.user_coords = [];
@@ -272,7 +272,7 @@ coords.fc.prototype = {
 			var drawingCanvas = document.getElementById( this.for_mouse_move );
 			if(drawingCanvas && drawingCanvas.getContext) {
 				var context = drawingCanvas.getContext('2d');
-				context.clearRect(0, 0, 350, 500);
+				context.clearRect(0, 0, 290, 414);
 				context.beginPath()
 				context.moveTo(x,y);
 				context.lineWidth=1;

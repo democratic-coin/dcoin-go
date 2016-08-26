@@ -30,13 +30,14 @@ func AjaxJson(w http.ResponseWriter, r *http.Request) {
 	lang := GetLang(w, r, c.Parameters)
 	c.Lang = globalLangReadOnly[lang]
 	c.LangInt = int64(lang)
+	c.Variables,_ = c.GetAllVariables()
 
 	r.ParseForm()
 	controllerName := r.FormValue("controllerName")
 
 	answer := []byte(`{"success": false, "error": "", "result": false, "data": ""}`)
 
-	if controllerName == `CheckForm` {
+	if utils.InSliceString( controllerName, []string{ `CheckHash`, `CheckForm`,`CheckPromised`,`NotifyCounter`, `SendKey` }) {
 		if ret, err := CallController(c, controllerName); err == nil {
 			answer = []byte(ret)
 		}

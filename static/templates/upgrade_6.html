@@ -115,19 +115,19 @@
 	<div id='node_PoolAdminUserId'><input type='hidden' id='PoolAdminUserId' value='{{.PoolAdminUserId}}'></div>
 
 	<br>
-	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
+	<center><button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button></center>
 {{else if eq .HostType "normal"}}
 	<div id='node_http_host'><input type='hidden' id='http_host' value='{{.HttpHost}}'><p><strong>{{.HttpHost}}</strong><br>[<a href='#' id='change_node_http_host'>change</a>]</p></div><br>
 	<div id='node_tcp_host'><input type='hidden' id='tcp_host' value='{{.TcpHost}}'><p><strong>{{.TcpHost}}</strong><br>[<a href='#' id='change_node_tcp_host'>change</a>]</p></div>
 	<br>
-	<button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button>
+	<center><button class="btn btn-success" id="save">{{.SaveAndGotoStep}}</button></center>
 {{else if eq .HostType "findPool"}}
 	{{if not .Pools}}
 		Sorry, no free pools
 	{{else}}
 		{{.Lang.enter_your_email}}<br>
-		<input class="form-control" style="width:100%; max-width:350px" type="text" id="email" value=""><br>
-		<button class="btn btn-success" id="findPool">{{.Lang.next}}</button>
+		<input class="form-control" style="width:100%; margin-bottom:1rem;" type="email" id="email" value="">
+		<center><button class="btn btn-success" id="findPool">{{.Lang.next}}</button></center>
 	{{end}}
 {{end}}
 

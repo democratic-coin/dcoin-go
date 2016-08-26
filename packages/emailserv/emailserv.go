@@ -4,8 +4,8 @@ package main
 import (
 	"crypto/md5"
 /*	"crypto/rsa"
-	"crypto/x509"
-	"encoding/base64"*/
+	"crypto/x509"*/
+	"encoding/base64"
 //	"golang.org/x/crypto/bcrypt"
 	"encoding/json"
 	"fmt"
@@ -39,6 +39,7 @@ type Settings struct {
 	Password  string `json:"password"`
 	Admin     string `json:"admin"`
 	CopyTo    string `json:"copy_to"`
+	WhiteList []string `json:"white"`
 }
 
 var (
@@ -47,6 +48,7 @@ var (
 	GEmail    *EmailClient
 	GPageTpl  *template.Template
 	GPagePattern  *template.Template
+	GLatest    map[int]int64
 )
 
 func getIP(r *http.Request) (uint32, string) {
@@ -154,25 +156,26 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var email string
-	
-	user,_ := GDB.OneRow(`SELECT * FROM users WHERE user_id=?`, jsonEmail.UserId ).String()
-	if len(user[`user_id`]) > 0 {
-		if utils.StrToInt(user[`verified`]) < 0 {
-			result(`Stop list`)
-			return
-		}
-		email = user[`email`]
-		if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
-			if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
-				if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
-									jsonEmail.Email, jsonEmail.UserId ); err!=nil {
-					log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
-				}
-			} else {
-				result(`Overwrite email`)
+	if jsonEmail.UserId != utils.EXCHANGE_USER {
+		user,_ := GDB.OneRow(`SELECT * FROM users WHERE user_id=?`, jsonEmail.UserId ).String()
+		if len(user[`user_id`]) > 0 {
+			if utils.StrToInt(user[`verified`]) < 0 {
+				result(`Stop list`)
 				return
 			}
-			jsonEmail.Email = email
+			email = user[`email`]
+			if len(jsonEmail.Email) > 0 && len(email)>0 && email != jsonEmail.Email {
+				if jsonEmail.Cmd == utils.ECMD_NEW || jsonEmail.Cmd == utils.ECMD_SIGNUP {
+					if err = GDB.ExecSql(`update users set newemail = '*' + email, email=?, verified=0 where user_id=?`, 
+										jsonEmail.Email, jsonEmail.UserId ); err!=nil {
+						log.Println(remoteAddr, `Error re-email user:`, err, jsonEmail.Email)
+					}
+				} else {
+					result(`Overwrite email`)
+					return
+				}
+				jsonEmail.Email = email
+			}
 		}
 	}
 	if len(jsonEmail.Email) == 0 && len(email) > 0 {
@@ -262,6 +265,23 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			result(err.Error())
 			return
 		}
+	case utils.ECMD_EXREQUEST,utils.ECMD_EXANSWER:
+		if err := checkParams(`exchange`); err != nil {
+			result(err.Error())
+			return
+		}
+	case utils.ECMD_SENDKEY:
+		if err := checkParams(`subject`,`text`, `txt_key`, `refid`); err != nil || 
+			len((*jsonEmail.Params)[`subject`]) == 0 || len((*jsonEmail.Params)[`text`]) == 0 ||
+			len((*jsonEmail.Params)[`txt_key`]) == 0 || utils.StrToInt64((*jsonEmail.Params)[`refid`]) == 0 {
+			result( `Wrong email parameters` )
+			return
+		}
+	case utils.ECMD_FORKBLOCK:
+		if err := checkParams(`forks`); err != nil || len((*jsonEmail.Params)[`forks`]) == 0  {
+			result( `Wrong email parameters` )
+			return
+		}
 	default:
 		result(fmt.Sprintf(`Unknown command %d`, jsonEmail.Cmd))
 		return
@@ -277,8 +297,38 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(remoteAddr, `Error new user:`, err, jsonEmail.Email)
 		}
 	}
-	
-	if jsonEmail.Cmd != utils.ECMD_SIGNUP {
+	if jsonEmail.Cmd == utils.ECMD_SENDKEY {
+		bcc := GSettings.CopyTo
+		GSettings.CopyTo = ``
+		files := make( map[string][]byte )
+		decoded, err := base64.StdEncoding.DecodeString((*jsonEmail.Params)[`txt_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.txt`] = decoded
+		decoded, err = base64.StdEncoding.DecodeString((*jsonEmail.Params)[`png_key`])
+		if err != nil {
+			result(err.Error())
+			return
+		}
+		files[`dcoin-private-key-`+(*jsonEmail.Params)[`refid`]+`.png`] = decoded
+		err = GEmail.SendEmailAttach(`<p>`+(*jsonEmail.Params)[`text`]+`</p>`, ``, (*jsonEmail.Params)[`subject`],
+		      []*Email{ &Email{``, jsonEmail.Email }}, &files )
+		GSettings.CopyTo = bcc
+
+		if err != nil {
+			result(err.Error())
+			return
+		}
+	} else if jsonEmail.Cmd == utils.ECMD_FORKBLOCK {
+		err = GEmail.SendEmail(`<p>Fork of blockchain has been detected<br>`+(*jsonEmail.Params)[`forks`]+`</p>`, ``, 
+		     `Fork of blockchain`, []*Email{ &Email{``, jsonEmail.Email }})
+		if err != nil {
+			result(err.Error())
+			return
+		}
+	} else if jsonEmail.Cmd != utils.ECMD_SIGNUP {
 		data, err := CheckUser( jsonEmail.UserId )
 		if err != nil {
 			result( fmt.Sprintf(`EmailCheck %s`, err))
@@ -292,6 +342,9 @@ func emailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if _,ok := data[`Text`]; ok {
 			data[`Text`] = template.HTML(data[`Text`].(string))
+		}
+		if jsonEmail.UserId == utils.EXCHANGE_USER {
+			data[`email`] = jsonEmail.Email
 		}
 		if !EmailUser( jsonEmail.UserId, data, int(jsonEmail.Cmd) ) {
 			result( `EmailUser`)
@@ -495,14 +548,36 @@ func main() {
 		if err = GDB.ExecSql(`CREATE INDEX cmdid ON latest (cmd_id)`); err != nil {
 			log.Fatalln(err)
 		}
-		if cash, err := utils.DB.Single(`SELECT max(id) FROM cash_requests` ).Int64(); err==nil {
-			if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_CASHREQ, cash ); err!=nil {
-				log.Fatalln( err )
-			}
-		} else {
-			log.Fatalln(err)
-		}
 	}
+	GLatest = make(map[int]int64)
+	if curlatest, err := GDB.GetAll(`SELECT * FROM latest`, -1 ); err == nil {
+		for _, curi := range curlatest {
+			GLatest[ utils.StrToInt(curi[`cmd_id`])] = utils.StrToInt64(curi[`latest`])
+		}
+		if _, ok := GLatest[utils.ECMD_CASHREQ]; !ok {
+			if cash, err := utils.DB.Single(`SELECT max(id) FROM cash_requests` ).Int64(); err==nil {
+				 GLatest[utils.ECMD_CASHREQ] = cash
+				if err = GDB.ExecSql(`INSERT INTO latest ( cmd_id, latest ) VALUES(?,?)`, utils.ECMD_CASHREQ, cash ); err!=nil {
+					log.Fatalln( err )
+				}
+			} else {
+				log.Fatalln(err)
+			}
+		}
+		if _, ok := GLatest[utils.ECMD_DCCAME]; !ok {
+			if nfy, err := utils.DB.Single(`SELECT max(id) FROM notifications` ).Int64(); err==nil {
+    			 GLatest[utils.ECMD_DCCAME] = nfy
+				if err = GDB.ExecSql(`INSERT INTO latest (cmd_id, latest) VALUES(?,?)`, utils.ECMD_DCCAME, nfy ); err!=nil {
+					log.Fatalln( err )
+				}
+			} else {
+					log.Fatalln(err)
+			}
+		}
+	} else {
+		log.Fatalln( err )
+	}
+	
 	if !utils.InSliceString(`balance`, list ) || len(list) == 0 {
 		if err = GDB.ExecSql(`CREATE TABLE balance (
 	id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -560,7 +635,6 @@ func main() {
 		&Email{GSettings.FromName, GSettings.FromEmail})
 	log.Println("Start")
 //	go Send()
-	
 
 	http.HandleFunc( `/` + GSettings.Admin + `/sent`, sentHandler)
 	http.HandleFunc( `/` + GSettings.Admin + `/send`, sendHandler)

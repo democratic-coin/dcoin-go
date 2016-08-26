@@ -1,17 +1,19 @@
 {{define "upgradeUser"}}
 <script>
-
+	$("#sn_url_id").focus();
 	$('#save').bind('click', function () {
-
-		$("#upgradeUser").css("display", "none");
-		$("#sign").css("display", "block");
-		$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#sn_type").val()+','+$("#sn_url_id").val());
-		doSign();
-		{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
-		});
-
-		$('#send_to_net').bind('click', function () {
-
+		if ($("#sn_url_id").val() === "") {
+			$("form").addClass("has-danger");
+			return false;
+		} else {
+			$("#upgradeUser").css("display", "none");
+			$("#sign").css("display", "block");
+			$("#for-signature").val( '{{.TxTypeId}},{{.TimeNow}},{{.UserId}},'+$("#sn_type").val()+','+$("#sn_url_id").val());
+			doSign();
+			{{if not .ShowSignData}}$("#send_to_net").trigger("click");{{end}}
+		}
+	});
+	$('#send_to_net').bind('click', function () {
 			$.post( 'ajax?controllerName=saveQueue', {
 						'type' : '{{.TxType}}',
 						'time' : '{{.TimeNow}}',
@@ -25,10 +27,11 @@
 						dc_navigate ('PromisedAmountRestrictedList', {'alert': '{{.Lang.sent_to_the_net}}'} );
 					}
 			);
-
-		} );
-		check_key_and_show_modal();
-
+	});
+	$('#sn_url_id').bind('keyup', function () {
+		$("form").removeClass("has-danger");
+	});
+	check_key_and_show_modal();
 </script>
 <style>
 	#change_host p {
@@ -38,13 +41,19 @@
 		display:flex;
 		font-size:0px;
 	}
+	.form-control {
+		position:relative;
+		z-index:1;
+	}
 	#sn_type {
 		display:inline-block;
 		width:180px;
 		box-sizing:border-box;
 		vertical-align:top;
 		border-radius:5px 0px 0px 5px;
-		border-right:0px;
+	}
+	#sn_type:focus {
+		z-index:2;
 	}
 	#sn_url_id {
 		flex-grow:1;
@@ -53,8 +62,8 @@
 		box-sizing:border-box;
 		vertical-align:top;
 		border-radius:0px;
-		border-left:0px;
 		border-right-width:0px;
+		margin-left:-1px;
 	}
 	#save {
 		box-sizing:border-box;
@@ -94,15 +103,20 @@
 
 <div id="change_host">
 	<p>{{.Lang.upgrade_user_text}}</p>
+	<h3>1. Share Dcoin link</h3>
+	<div style="text-align:center;"><a href="http://www.facebook.com/share.php?u={{.Lang.dcoin_url}}" onclick="return open_url(this)" target="_blank"><img	src="static/img/facebook.png"></a>
+	<a href="https://vk.com/share.php?url={{.Lang.dcoin_url}}" onclick="return open_url(this)" target="_blank"><img	style="margin-left: 16px;" src="static/img/vkontakte.png"></a></div>
+	<h3>2. Enter your page here</h3>
 	<form>
-		<select id="sn_type" class="form-control">
+		<select id="sn_type" class="c-select form-control">
 			<option value="fb" selected>http://facebook.com/</option>
 			<option value="vk">http://vk.com/</option>
 		</select>
 		<input type="text" id="sn_url_id" class="form-control">
 		<button type="submit" class="btn btn-primary" id="save">{{.Lang.next}}</button>
 	</form>
-
+	<!--script type="text/javascript" src="https://yastatic.net/share2/share.js" charset="utf-8"></script>
+	<div class="ya-share2" data-services="facebook,vkontakte" data-url="{{.Lang.dcoin_url}}"></div-->
 </div>
 
 {{template "signatures".}}
