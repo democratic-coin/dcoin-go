@@ -179,7 +179,7 @@ BEGIN:
 		if d.dPrintSleep(utils.ErrInfo(err), d.sleepTime) {
 			break BEGIN
 		}
-		if ((mainLock > 0 && utils.Time()-autoReload > mainLock) || infoBlockRestart) && len(community)==0 && *utils.SkipInfoBlockRestart=0 {
+		if ((mainLock > 0 && utils.Time()-autoReload > mainLock) || infoBlockRestart) && len(community)==0 && *utils.SkipInfoBlockRestart==0 {
 
 			// ClearDb - убивает демонов, чистит БД, а потом заново запускает демонов
 			// не забываем, что это тоже демон и он должен отчитаться о завершении
