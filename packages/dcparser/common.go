@@ -1048,10 +1048,12 @@ func (p *Parser) RollbackToBlockId(blockId int64) error {
 			rows.Close()
 			return p.ErrInfo(err)
 		}
+		log.Debug("block_id: %d", id)
 		blocks = append(blocks, map[string][]byte{"id": id, "data": data})
 	}
 	rows.Close()
 	for _, block := range blocks {
+		log.Debug("block_id: %d", block["id"])
 		// Откатываем наши блоки до блока blockId
 		parser.BinaryData = block["data"]
 		err = parser.ParseDataRollback()
