@@ -124,7 +124,13 @@ func (p *Parser) NewMinerFront() error {
 				return p.ErrInfo(err)
 			}
 			if iAmPool == 0 {
-				return p.ErrInfo("incorrect pool_user_id")
+				// БАГ в 388052
+				if (p.BlockData != nil && p.BlockData.BlockId == 388052) {
+
+				} else {
+					return p.ErrInfo("incorrect pool_user_id")
+				}
+
 			}
 		}
 	}
