@@ -192,7 +192,8 @@ func (p *Parser) NewReduction() error {
 			return p.ErrInfo(err)
 		}
 
-		err = p.ExecSql("UPDATE wallets SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+		//err = p.ExecSql("UPDATE wallets SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+		err = p.ExecSql("UPDATE wallets SET amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -207,7 +208,8 @@ func (p *Parser) NewReduction() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		err = p.ExecSql("UPDATE promised_amount SET tdc_amount_backup = tdc_amount, tdc_amount = round(tdc_amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+		//err = p.ExecSql("UPDATE promised_amount SET tdc_amount_backup = tdc_amount, tdc_amount = round(tdc_amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+		err = p.ExecSql("UPDATE promised_amount SET tdc_amount = round(tdc_amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -241,7 +243,8 @@ func (p *Parser) NewReduction() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		err = p.ExecSql("UPDATE forex_orders SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
+		//err = p.ExecSql("UPDATE forex_orders SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
+		err = p.ExecSql("UPDATE forex_orders SET amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -255,7 +258,8 @@ func (p *Parser) NewReduction() error {
 		if err != nil {
 			return p.ErrInfo(err)
 		}
-		err = p.ExecSql("UPDATE cf_funding SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE currency_id = ?", p.TxMaps.Int64["currency_id"])
+		//err = p.ExecSql("UPDATE forex_orders SET amount_backup = amount, amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
+		err = p.ExecSql("UPDATE forex_orders SET amount = round(amount*"+utils.Float64ToStr(d)+"+"+utils.Float64ToStr(consts.ROUND_FIX)+", 2) WHERE sell_currency_id = ?", p.TxMaps.Int64["currency_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
