@@ -84,11 +84,15 @@ func (p *Parser) MessageToAdmin() error {
 	}
 
 	// админ
-	admin, err := p.GetAdminUserId()
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	if myUserId == admin {
+	if myUserId == p.AdminUserId {
 		err = p.ExecSql("INSERT INTO x_my_admin_messages ( encrypted, type, user_id ) VALUES ( [hex], 'from_user', ? )", p.TxMap["encrypted_message"], p.TxUserID)
 		if err != nil {
 			return p.ErrInfo(err)
@@ -113,11 +117,15 @@ func (p *Parser) MessageToAdminRollback() error {
 	}
 
 	// админ
-	admin, err := p.GetAdminUserId()
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	if myUserId == admin {
+	if myUserId == p.AdminUserId {
 		err = p.ExecSql("DELETE FROM x_my_admin_messages WHERE hex(encrypted) = ? AND type = 'from_user' AND user_id = ?", p.TxMap["encrypted_message"], p.TxUserID)
 		if err != nil {
 			return p.ErrInfo(err)

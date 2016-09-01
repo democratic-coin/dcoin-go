@@ -63,7 +63,11 @@ func (p *Parser) NewUserFront() error {
 	if num > 0 {
 		return p.ErrInfo("exists public_key")
 	}
-	err = p.getAdminUserId()
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}

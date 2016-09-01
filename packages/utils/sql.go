@@ -1390,6 +1390,9 @@ func (db *DCDB) GetAdminUserId() (int64, error) {
 	if err != nil {
 		return 0, ErrInfo(err)
 	}
+	if result == 1 {
+		result = consts.NEW_ADMIN_USER_ID
+	}
 	return result, nil
 }
 

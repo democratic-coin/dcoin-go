@@ -127,7 +127,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	minerData.adminUserId, err = p.GetAdminUserId()
+	err = p.getAdminUserId(p.BlockData.BlockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
@@ -135,7 +135,7 @@ func (p *Parser) VotesNodeNewMiner() error {
 	minerData.votes0 = votes[0]
 	minerData.votes1 = votes[1]
 	minerData.minMinersKeepers = p.Variables.Int64["min_miners_keepers"]
-	log.Debug("minerData.adminUserId %v", minerData.adminUserId)
+	log.Debug("minerData.adminUserId %v", p.AdminUserId)
 	log.Debug("minerData.myMinersIds %v", minerData.myMinersIds)
 	log.Debug("minerData.minersIds %v", minerData.minersIds)
 	log.Debug("minerData.votes0 %v", minerData.votes0)

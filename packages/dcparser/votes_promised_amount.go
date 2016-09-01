@@ -47,7 +47,7 @@ func (p *Parser) VotesPromisedAmountFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	p.getAdminUserId()
+	p.getAdminUserId(p.BlockData.BlockId)
 	if num > 0 && p.TxUserID != p.AdminUserId { // админу можно
 		return p.ErrInfo("double voting")
 	}
@@ -109,7 +109,7 @@ func (p *Parser) VotesPromisedAmount() error {
 	// если голос решающий или голос админа
 	// голос админа - решающий только при <1000 майнеров.
 	// -----------------------------------------------------------------------------
-	err = p.getAdminUserId()
+	err = p.getAdminUserId(p.BlockData.BlockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}

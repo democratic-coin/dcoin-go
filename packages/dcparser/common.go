@@ -576,23 +576,28 @@ func (p *Parser) limitRequest(limit_ interface{}, txType string, period_ interfa
 	return nil
 }
 
-func (p *Parser) getAdminUserId() error {
+func (p *Parser) getAdminUserId(blockId int64) error {
 	AdminUserId, err := p.Single("SELECT user_id FROM admin").Int64()
 	if err != nil {
 		return utils.ErrInfo(err)
+	}
+	if AdminUserId == 1 && blockId > 404100 {
+		AdminUserId = consts.NEW_ADMIN_USER_ID
 	}
 	p.AdminUserId = AdminUserId
 	return nil
 }
 func (p *Parser) checkMinerNewbie() error {
 	var time int64
+	var blockId int64
 	if p.BlockData != nil {
 		time = p.BlockData.Time
+		blockId = p.BlockData.BlockId
 	} else {
 		time = utils.BytesToInt64(p.TxMap["time"])
 	}
 	regTime, err := p.Single("SELECT reg_time FROM miners_data WHERE user_id = ?", p.TxUserID).Int64()
-	err = p.getAdminUserId()
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return utils.ErrInfo(err)
 	}
@@ -1629,8 +1634,12 @@ func (p *Parser) generalCheckAdmin() error {
 	if !utils.CheckInputData(p.TxMap["user_id"], "int") {
 		return utils.ErrInfoFmt("user_id")
 	}
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
 	// точно ли это текущий админ
-	err := p.getAdminUserId()
+	err := p.getAdminUserId(blockId)
 	if err != nil {
 		return utils.ErrInfo(err)
 	}

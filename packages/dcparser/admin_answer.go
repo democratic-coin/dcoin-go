@@ -60,11 +60,12 @@ func (p *Parser) AdminAnswer() error {
 	}
 
 	// админ
-	admin, err := p.GetAdminUserId()
-	if err != nil {
-		return p.ErrInfo(err)
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
 	}
-	if myUserId == admin {
+	err = p.getAdminUserId(blockId)
+	if myUserId == p.AdminUserId {
 		err = p.ExecSql("UPDATE x_my_admin_messages SET status = 'approved' WHERE hex(encrypted) = ? AND status = 'my_pending'", p.TxMaps.Bytes["encrypted_message"])
 		if err != nil {
 			return p.ErrInfo(err)
@@ -92,11 +93,12 @@ func (p *Parser) AdminAnswerRollback() error {
 	}
 
 	// админ
-	admin, err := p.GetAdminUserId()
-	if err != nil {
-		return p.ErrInfo(err)
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
 	}
-	if myUserId == admin {
+	err = p.getAdminUserId(blockId)
+	if myUserId == p.AdminUserId {
 		err = p.ExecSql("UPDATE x_my_admin_messages SET status = 'approved' WHERE hex(encrypted) = ? AND status = 'my_pending'", p.TxMaps.Bytes["encrypted_message"])
 		if err != nil {
 			return p.ErrInfo(err)
