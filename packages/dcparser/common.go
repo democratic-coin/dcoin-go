@@ -581,7 +581,7 @@ func (p *Parser) getAdminUserId(blockId int64) error {
 	if err != nil {
 		return utils.ErrInfo(err)
 	}
-	if AdminUserId == 1 && blockId > 404100 {
+	if (AdminUserId == 1 && blockId > 404100) || blockId == 0  {
 		AdminUserId = consts.NEW_ADMIN_USER_ID
 	}
 	p.AdminUserId = AdminUserId
