@@ -624,8 +624,13 @@ func (p *Parser) checkMiner(userId int64) error {
 	if err != nil {
 		return err
 	}
+
+	err = p.getAdminUserId(blockId)
+	if err != nil {
+		return err
+	}
 	// если есть бан в этом же блоке, то будет miner_id = 0, но условно считаем, что проверка пройдена
-	if (minerId > 0) || (minerId == 0 && blockId > 0) {
+	if (minerId > 0) || (minerId == 0 && blockId > 0) || (p.TxUserID == p.AdminUserId) {
 		return nil
 	} else {
 		return utils.ErrInfoFmt("incorrect miner id. user_id = %d", userId)
