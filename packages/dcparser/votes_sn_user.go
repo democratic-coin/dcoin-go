@@ -51,7 +51,11 @@ func (p *Parser) VotesSnUserFront() error {
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	p.getAdminUserId(p.BlockData.BlockId)
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
+	p.getAdminUserId(blockId)
 	if num > 0 && p.TxUserID != p.AdminUserId { // админу можно
 		return p.ErrInfo("double voting")
 	}
