@@ -115,7 +115,7 @@ func (p *Parser) VotesMiner() error {
 	// если голос решающий или голос админа
 	// голос админа решающий только при <1000 майнеров.
 	// -----------------------------------------------------------------------------
-	p.getAdminUserId()
+	p.getAdminUserId(p.BlockData.BlockId)
 	if p.check24hOrAdminVote(minersData) {
 		// перевесили голоса "за" или 1 голос от админа
 		if p.checkTrueVotes(minersData) {

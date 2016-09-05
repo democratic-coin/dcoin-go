@@ -85,6 +85,7 @@ var (
 	EndBlockId = flag.Int64("endBlockId", 0, "End block for blockCollection daemon")
 	RollbackToBlockId = flag.Int64("rollbackToBlockId", 0, "Rollback to block_id")
 	ListenHttpHost = flag.String("listenHttpHost", "8089", "ListenHttpHost")
+	SkipInfoBlockRestart = flag.Int64("skipInfoBlockRestart", 0, "SkipInfoBlockRestart")
 	DaemonsChans []*DaemonsChansType
 	eWallets = &sync.Mutex{}
 )

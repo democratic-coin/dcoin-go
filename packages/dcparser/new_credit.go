@@ -63,11 +63,15 @@ func (p *Parser) NewCreditFront() error {
 		return p.ErrInfo("incorrect sign")
 	}
 
-	admin, err := p.GetAdminUserId()
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return p.ErrInfo(err)
 	}
-	if p.TxUserID == admin {
+	if p.TxUserID == p.AdminUserId {
 		err = p.limitRequest(500, "new_credit", consts.NEW_CREDIT_PERIOD)
 	} else {
 		err = p.limitRequest(consts.LIMIT_NEW_CREDIT, "new_credit", consts.NEW_CREDIT_PERIOD)

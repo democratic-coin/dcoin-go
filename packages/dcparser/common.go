@@ -576,23 +576,28 @@ func (p *Parser) limitRequest(limit_ interface{}, txType string, period_ interfa
 	return nil
 }
 
-func (p *Parser) getAdminUserId() error {
+func (p *Parser) getAdminUserId(blockId int64) error {
 	AdminUserId, err := p.Single("SELECT user_id FROM admin").Int64()
 	if err != nil {
 		return utils.ErrInfo(err)
+	}
+	if (AdminUserId == 1 && blockId > 404100) || blockId == 0  {
+		AdminUserId = consts.NEW_ADMIN_USER_ID
 	}
 	p.AdminUserId = AdminUserId
 	return nil
 }
 func (p *Parser) checkMinerNewbie() error {
 	var time int64
+	var blockId int64
 	if p.BlockData != nil {
 		time = p.BlockData.Time
+		blockId = p.BlockData.BlockId
 	} else {
 		time = utils.BytesToInt64(p.TxMap["time"])
 	}
 	regTime, err := p.Single("SELECT reg_time FROM miners_data WHERE user_id = ?", p.TxUserID).Int64()
-	err = p.getAdminUserId()
+	err = p.getAdminUserId(blockId)
 	if err != nil {
 		return utils.ErrInfo(err)
 	}
@@ -619,8 +624,13 @@ func (p *Parser) checkMiner(userId int64) error {
 	if err != nil {
 		return err
 	}
+
+	err = p.getAdminUserId(blockId)
+	if err != nil {
+		return err
+	}
 	// если есть бан в этом же блоке, то будет miner_id = 0, но условно считаем, что проверка пройдена
-	if (minerId > 0) || (minerId == 0 && blockId > 0) {
+	if (minerId > 0) || (minerId == 0 && blockId > 0) || (p.TxUserID == p.AdminUserId) {
 		return nil
 	} else {
 		return utils.ErrInfoFmt("incorrect miner id. user_id = %d", userId)
@@ -994,18 +1004,22 @@ func (p *Parser) ParseDataRollback() error {
 			}
 			p.dataType = utils.BytesToInt(p.TxSlice[1])
 			MethodName := consts.TxTypes[p.dataType]
+			log.Debug(MethodName+"Init")
 			err_ := utils.CallMethod(p, MethodName+"Init")
 			if _, ok := err_.(error); ok {
 				return p.ErrInfo(err_.(error))
 			}
+			log.Debug(MethodName+"Rollback")
 			err_ = utils.CallMethod(p, MethodName+"Rollback")
 			if _, ok := err_.(error); ok {
 				return p.ErrInfo(err_.(error))
 			}
+			log.Debug(MethodName+"RollbackFront start")
 			err_ = utils.CallMethod(p, MethodName+"RollbackFront")
 			if _, ok := err_.(error); ok {
 				return p.ErrInfo(err_.(error))
 			}
+			log.Debug(MethodName+"RollbackFront end")
 		}
 	}
 	return nil
@@ -1048,10 +1062,13 @@ func (p *Parser) RollbackToBlockId(blockId int64) error {
 			rows.Close()
 			return p.ErrInfo(err)
 		}
+		log.Debug("block_id: %s", id)
 		blocks = append(blocks, map[string][]byte{"id": id, "data": data})
 	}
 	rows.Close()
 	for _, block := range blocks {
+		log.Debug("block_id: %d", block["id"])
+		fmt.Println(utils.BytesToInt64(block["id"]))
 		// Откатываем наши блоки до блока blockId
 		parser.BinaryData = block["data"]
 		err = parser.ParseDataRollback()
@@ -1622,8 +1639,12 @@ func (p *Parser) generalCheckAdmin() error {
 	if !utils.CheckInputData(p.TxMap["user_id"], "int") {
 		return utils.ErrInfoFmt("user_id")
 	}
+	var blockId int64
+	if p.BlockData != nil {
+		blockId = p.BlockData.BlockId
+	}
 	// точно ли это текущий админ
-	err := p.getAdminUserId()
+	err := p.getAdminUserId(blockId)
 	if err != nil {
 		return utils.ErrInfo(err)
 	}
@@ -2370,8 +2391,9 @@ func (p *Parser) updateRecipientWallet(toUserId, currencyId int64, amount float6
 		return p.ErrInfo("currencyId == 0")
 	}
 	walletWhere := "user_id = " + utils.Int64ToStr(toUserId) + " AND currency_id = " + utils.Int64ToStr(currencyId)
-	walletData, err := p.OneRow("SELECT amount, amount_backup, last_update, log_id FROM wallets WHERE " + walletWhere).String()
-	log.Debug("SELECT amount, amount_backup, last_update, log_id FROM wallets WHERE " + walletWhere)
+	//walletData, err := p.OneRow("SELECT amount, amount_backup, last_update, log_id FROM wallets WHERE " + walletWhere).String()
+	walletData, err := p.OneRow("SELECT amount, last_update, log_id FROM wallets WHERE " + walletWhere).String()
+	log.Debug("SELECT amount, last_update, log_id FROM wallets WHERE " + walletWhere)
 	log.Debug("walletData", walletData)
 	if err != nil {
 		return p.ErrInfo(err)
@@ -2389,7 +2411,8 @@ func (p *Parser) updateRecipientWallet(toUserId, currencyId int64, amount float6
 		}
 
 		// нужно залогировать текущие значения для to_user_id
-		logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, amount_backup, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["amount_backup"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
+		//logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, amount_backup, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["amount_backup"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
+		logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
 		if err != nil {
 			return p.ErrInfo(err)
 		}
@@ -2457,13 +2480,15 @@ func (p *Parser) updateRecipientWallet(toUserId, currencyId int64, amount float6
 func (p *Parser) updateSenderWallet(fromUserId, currencyId int64, amount, commission float64, from string, fromId, toUserId int64, comment, commentStatus string) error {
 	// получим инфу о текущих значениях таблицы wallets для юзера from_user_id
 	walletWhere := "user_id = " + utils.Int64ToStr(fromUserId) + " AND currency_id = " + utils.Int64ToStr(currencyId)
-	walletData, err := p.OneRow("SELECT amount, amount_backup, last_update, log_id FROM wallets WHERE " + walletWhere).String()
+	//walletData, err := p.OneRow("SELECT amount, amount_backup, last_update, log_id FROM wallets WHERE " + walletWhere).String()
+	walletData, err := p.OneRow("SELECT amount, last_update, log_id FROM wallets WHERE " + walletWhere).String()
 	if err != nil {
 		return p.ErrInfo(err)
 	}
 	// перед тем, как менять значения на кошельках юзеров, нужно залогировать текущие значения для юзера from_user_id
 
-	logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, amount_backup, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["amount_backup"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
+	//logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, amount_backup, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["amount_backup"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
+	logId, err := p.ExecSqlGetLastInsertId("INSERT INTO log_wallets ( amount, last_update, block_id, prev_log_id ) VALUES ( ?, ?, ?, ? )", "log_id", walletData["amount"], walletData["last_update"], p.BlockData.BlockId, walletData["log_id"])
 	if err != nil {
 		return p.ErrInfo(err)
 	}

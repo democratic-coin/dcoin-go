@@ -254,7 +254,11 @@ func Start(dir string, thrustWindowLoder *window.Window) {
 	// откат БД до указанного блока
 	if *utils.RollbackToBlockId > 0 {
 		utils.DB, err = utils.NewDbConnect(configIni)
-
+		if err != nil {
+			fmt.Println(err)
+			panic(err)
+		}
+		fmt.Println("RollbackToBlockId")
 		parser := new(dcparser.Parser)
 		parser.DCDB = utils.DB
 		err = parser.RollbackToBlockId(*utils.RollbackToBlockId)
